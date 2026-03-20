@@ -38,7 +38,12 @@ const STAGES: PipelineStage[] = [
   'soft-commit',
   'committed',
   'closed',
+  'passed',
+  'unqualified',
 ]
+
+// Stages that count toward probability-weighted totals
+const ACTIVE_STAGES = new Set<PipelineStage>(['prospect', 'contacted', 'interested', 'soft-commit', 'committed', 'closed'])
 
 const STAGE_LABELS: Record<PipelineStage, string> = {
   prospect: 'Prospect',
@@ -47,6 +52,8 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
   'soft-commit': 'Soft Commit',
   committed: 'Committed',
   closed: 'Closed',
+  passed: 'Passed',
+  unqualified: 'Unqualified',
 }
 
 const STAGE_COLORS: Record<PipelineStage, string> = {
@@ -56,6 +63,8 @@ const STAGE_COLORS: Record<PipelineStage, string> = {
   'soft-commit': 'bg-orange-100 text-orange-700',
   committed: 'bg-green-100 text-green-700',
   closed: 'bg-primary/10 text-primary',
+  passed: 'bg-zinc-200 text-zinc-500',
+  unqualified: 'bg-red-50 text-red-400',
 }
 
 type SortKey = keyof PipelineLead
@@ -93,9 +102,9 @@ interface InlineEdit {
   value: string
 }
 
-// ── Kanban card ───────────────────────────────────────────────────────────────
+// ── Board card ───────────────────────────────────────────────────────────────
 
-function KanbanCard({
+function BoardCard({
   lead,
   onEdit,
   onDragStart,
@@ -130,9 +139,9 @@ function KanbanCard({
   )
 }
 
-// ── Kanban column ─────────────────────────────────────────────────────────────
+// ── Board column ─────────────────────────────────────────────────────────────
 
-function KanbanColumn({
+function BoardColumn({
   stage,
   leads,
   onEdit,
@@ -160,7 +169,7 @@ function KanbanColumn({
         onDrop={() => { setIsDragOver(false); onDrop(stage) }}
       >
         {leads.map((lead) => (
-          <KanbanCard key={lead.id} lead={lead} onEdit={onEdit} onDragStart={onDragStart} />
+          <BoardCard key={lead.id} lead={lead} onEdit={onEdit} onDragStart={onDragStart} />
         ))}
         {total > 0 && (
           <div className="text-xs text-muted-foreground text-right pt-1 border-t border-muted mt-auto">
@@ -230,7 +239,7 @@ function InlineCell({
 export default function AdminPipelinePage() {
   const [leads, setLeads] = useState<PipelineLead[]>([])
   const [loading, setLoading] = useState(true)
-  const [view, setView] = useState<'table' | 'kanban'>('table')
+  const [view, setView] = useState<'table' | 'board'>('table')
   const [assetFilter, setAssetFilter] = useState('all')
   const [stageFilter, setStageFilter] = useState('all')
   const [search, setSearch] = useState('')
@@ -444,7 +453,9 @@ export default function AdminPipelinePage() {
   // pipeline totals
   const totalTarget = filtered.reduce((s, l) => s + l.target_amount, 0)
   const totalActual = filtered.reduce((s, l) => s + l.actual_amount, 0)
-  const weightedProbable = filtered.reduce((s, l) => s + l.actual_amount * (l.probability / 100), 0)
+  const weightedProbable = filtered
+    .filter((l) => ACTIVE_STAGES.has(l.stage))
+    .reduce((s, l) => s + l.actual_amount * (l.probability / 100), 0)
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -479,10 +490,10 @@ export default function AdminPipelinePage() {
             Table
           </button>
           <button
-            className={`px-4 py-1.5 text-sm border-l transition-colors ${view === 'kanban' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
-            onClick={() => setView('kanban')}
+            className={`px-4 py-1.5 text-sm border-l transition-colors ${view === 'board' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
+            onClick={() => setView('board')}
           >
-            Kanban
+            Board
           </button>
         </div>
 
@@ -524,11 +535,11 @@ export default function AdminPipelinePage() {
 
       {loading ? (
         <p className="text-sm text-muted-foreground">Loading…</p>
-      ) : view === 'kanban' ? (
-        /* ── Kanban ─────────────────────────────────────────────────────── */
+      ) : view === 'board' ? (
+        /* ── Board ─────────────────────────────────────────────────────── */
         <div className="flex gap-4 overflow-x-auto pb-4">
           {STAGES.map((stage) => (
-            <KanbanColumn
+            <BoardColumn
               key={stage}
               stage={stage}
               leads={filtered.filter((l) => l.stage === stage)}

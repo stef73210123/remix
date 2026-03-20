@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -53,7 +53,26 @@ const emptyForm = (): FormState => ({
   sort_order: '0',
 })
 
-// ─── Group combobox ──────────────────────────────────────────────────────────
+// ─── Group combobox with localStorage persistence ─────────────────────────────
+
+const LS_KEY = 'circular_budget_groups'
+
+function loadSavedGroups(): string[] {
+  if (typeof window === 'undefined') return []
+  try {
+    return JSON.parse(localStorage.getItem(LS_KEY) || '[]')
+  } catch {
+    return []
+  }
+}
+
+function saveGroup(name: string) {
+  if (!name) return
+  const existing = loadSavedGroups()
+  if (!existing.includes(name)) {
+    localStorage.setItem(LS_KEY, JSON.stringify([...existing, name]))
+  }
+}
 
 function GroupSelect({
   value,
@@ -66,16 +85,35 @@ function GroupSelect({
 }) {
   const [addingNew, setAddingNew] = useState(false)
   const [newVal, setNewVal] = useState('')
+  const [savedGroups, setSavedGroups] = useState<string[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setSavedGroups(loadSavedGroups())
+  }, [])
+
+  // Merge sheet-derived groups and locally saved ones, deduplicated
+  const allGroups = Array.from(new Set([...groups, ...savedGroups])).sort()
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === '__new__') {
       setAddingNew(true)
       setNewVal('')
       onChange('')
+      setTimeout(() => inputRef.current?.focus(), 0)
     } else {
       setAddingNew(false)
       onChange(e.target.value)
     }
+  }
+
+  const confirmNew = (val: string) => {
+    if (val) {
+      saveGroup(val)
+      setSavedGroups(loadSavedGroups())
+      onChange(val)
+    }
+    setAddingNew(false)
   }
 
   return (
@@ -86,20 +124,23 @@ function GroupSelect({
         onChange={handleSelect}
       >
         <option value="">No group</option>
-        {groups.map((g) => (
+        {allGroups.map((g) => (
           <option key={g} value={g}>{g}</option>
         ))}
         <option value="__new__">+ Add new group…</option>
       </select>
       {addingNew && (
-        <Input
-          autoFocus
+        <input
+          ref={inputRef}
           placeholder="New group name"
           value={newVal}
-          onChange={(e) => {
-            setNewVal(e.target.value)
-            onChange(e.target.value)
+          onChange={(e) => setNewVal(e.target.value)}
+          onBlur={() => confirmNew(newVal)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') { e.preventDefault(); confirmNew(newVal) }
+            if (e.key === 'Escape') { setAddingNew(false) }
           }}
+          className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         />
       )}
     </div>

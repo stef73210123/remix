@@ -7,6 +7,8 @@ export type PipelineStage =
   | 'soft-commit'
   | 'committed'
   | 'closed'
+  | 'passed'
+  | 'unqualified'
 
 export interface PipelineLead {
   id: string
