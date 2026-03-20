@@ -141,6 +141,23 @@ export interface ParsedDoc {
   fullHtml: string
 }
 
+// ─── Asset Media ─────────────────────────────────────────────────────────────
+
+export type AssetMediaType = 'image' | 'youtube'
+
+export interface AssetMedia {
+  id: string
+  asset: string
+  type: AssetMediaType
+  url: string
+  caption?: string
+  sort_order: number
+}
+
+export interface AssetMediaWithRow extends AssetMedia {
+  _rowIndex: number
+}
+
 // ─── Assets ──────────────────────────────────────────────────────────────────
 
 export type AssetSlug = 'livingstonfarm' | 'wrenofthewoods'

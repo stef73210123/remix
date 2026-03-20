@@ -81,6 +81,9 @@ export default async function AdminDashboardPage() {
         <Link href="/admin/config">
           <Button variant="outline">Asset Config</Button>
         </Link>
+        <Link href="/admin/media">
+          <Button variant="outline">Property Media</Button>
+        </Link>
         <Link href="/admin/timeline">
           <Button variant="outline">Timeline</Button>
         </Link>

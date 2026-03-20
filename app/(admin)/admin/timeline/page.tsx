@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
@@ -65,6 +65,11 @@ export default function AdminTimelinePage() {
   const [form, setForm] = useState<FormState>(emptyForm())
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<TimelineMilestoneWithRow | null>(null)
+  const [savingOrder, setSavingOrder] = useState(false)
+
+  // Drag state
+  const dragFromIdx = useRef<number | null>(null)
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -81,9 +86,76 @@ export default function AdminTimelinePage() {
 
   useEffect(() => { load() }, [load])
 
+  // ── Drag-and-drop handlers ──────────────────────────────────────────────────
+
+  const handleDragStart = (e: React.DragEvent, idx: number) => {
+    dragFromIdx.current = idx
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleDragOver = (e: React.DragEvent, idx: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    setDragOverIdx(idx)
+  }
+
+  const handleDrop = (e: React.DragEvent, toIdx: number) => {
+    e.preventDefault()
+    const fromIdx = dragFromIdx.current
+    if (fromIdx === null || fromIdx === toIdx) {
+      setDragOverIdx(null)
+      return
+    }
+    const reordered = [...milestones]
+    const [item] = reordered.splice(fromIdx, 1)
+    reordered.splice(toIdx, 0, item)
+    // Assign new sort_order values
+    const updated = reordered.map((m, i) => ({ ...m, sort_order: i }))
+    setMilestones(updated)
+    setDragOverIdx(null)
+    dragFromIdx.current = null
+    saveOrder(updated)
+  }
+
+  const handleDragEnd = () => {
+    dragFromIdx.current = null
+    setDragOverIdx(null)
+  }
+
+  const saveOrder = async (ordered: TimelineMilestoneWithRow[]) => {
+    setSavingOrder(true)
+    try {
+      await Promise.all(
+        ordered.map((m) =>
+          fetch('/api/admin/timeline', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              asset,
+              rowIndex: m._rowIndex,
+              milestone: m.milestone,
+              planned_date: m.planned_date,
+              actual_date: m.actual_date || '',
+              status: m.status,
+              notes: m.notes || '',
+              sort_order: String(m.sort_order),
+            }),
+          })
+        )
+      )
+      toast.success('Order saved')
+    } catch {
+      toast.error('Failed to save order')
+    } finally {
+      setSavingOrder(false)
+    }
+  }
+
+  // ── Form handlers ───────────────────────────────────────────────────────────
+
   const openCreate = () => {
     setEditingRow(null)
-    setForm(emptyForm())
+    setForm({ ...emptyForm(), sort_order: String(milestones.length) })
     setDialogOpen(true)
   }
 
@@ -151,7 +223,9 @@ export default function AdminTimelinePage() {
     <div className="container mx-auto max-w-5xl px-4 py-12">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight">Timeline</h1>
-        <p className="text-muted-foreground mt-1">Manage project milestones for each asset</p>
+        <p className="text-muted-foreground mt-1">
+          Manage project milestones. <span className="inline-flex items-center gap-1">Drag <GripIcon /> to reorder.</span>
+        </p>
       </div>
 
       <div className="flex items-center justify-between gap-4 mb-6">
@@ -167,7 +241,10 @@ export default function AdminTimelinePage() {
             </Button>
           ))}
         </div>
-        <Button onClick={openCreate}>Add Milestone</Button>
+        <div className="flex items-center gap-2">
+          {savingOrder && <span className="text-xs text-muted-foreground">Saving order…</span>}
+          <Button onClick={openCreate}>Add Milestone</Button>
+        </div>
       </div>
 
       {loading ? (
@@ -179,7 +256,7 @@ export default function AdminTimelinePage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/50">
-                <th className="px-4 py-2 text-left font-medium">Order</th>
+                <th className="px-2 py-2 w-8" />
                 <th className="px-4 py-2 text-left font-medium">Milestone</th>
                 <th className="px-4 py-2 text-left font-medium">Planned</th>
                 <th className="px-4 py-2 text-left font-medium">Actual</th>
@@ -189,9 +266,21 @@ export default function AdminTimelinePage() {
               </tr>
             </thead>
             <tbody>
-              {milestones.map((m) => (
-                <tr key={m._rowIndex} className="border-b last:border-0">
-                  <td className="px-4 py-2 text-muted-foreground">{m.sort_order}</td>
+              {milestones.map((m, idx) => (
+                <tr
+                  key={m._rowIndex}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDrop={(e) => handleDrop(e, idx)}
+                  onDragEnd={handleDragEnd}
+                  className={`border-b last:border-0 transition-colors ${
+                    dragOverIdx === idx ? 'bg-primary/10' : 'hover:bg-muted/20'
+                  }`}
+                >
+                  <td className="px-2 py-2 cursor-grab active:cursor-grabbing text-muted-foreground">
+                    <GripIcon />
+                  </td>
                   <td className="px-4 py-2 font-medium">{m.milestone}</td>
                   <td className="px-4 py-2 text-muted-foreground whitespace-nowrap">{formatDate(m.planned_date)}</td>
                   <td className="px-4 py-2 text-muted-foreground whitespace-nowrap">
@@ -254,10 +343,6 @@ export default function AdminTimelinePage() {
               <Label>Notes</Label>
               <Input value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} placeholder="Optional" />
             </div>
-            <div className="space-y-1">
-              <Label>Sort Order</Label>
-              <Input type="number" value={form.sort_order} onChange={(e) => setForm((f) => ({ ...f, sort_order: e.target.value }))} />
-            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
@@ -281,5 +366,18 @@ export default function AdminTimelinePage() {
         </DialogContent>
       </Dialog>
     </div>
+  )
+}
+
+function GripIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="opacity-40">
+      <circle cx="5" cy="4" r="1.2" />
+      <circle cx="5" cy="8" r="1.2" />
+      <circle cx="5" cy="12" r="1.2" />
+      <circle cx="11" cy="4" r="1.2" />
+      <circle cx="11" cy="8" r="1.2" />
+      <circle cx="11" cy="12" r="1.2" />
+    </svg>
   )
 }

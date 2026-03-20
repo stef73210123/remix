@@ -19,7 +19,7 @@ export default function Navbar({ userRole }: NavbarProps) {
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-3">
           <Image src="/seed-of-life-white.png" alt="Circular" width={32} height={32} />
-          <span className="text-white text-sm font-semibold tracking-[0.2em] uppercase" style={{ fontFamily: 'var(--font-josefin)' }}>
+          <span className="text-white font-bold tracking-[0.2em] uppercase leading-none" style={{ fontFamily: 'var(--font-josefin)', fontSize: '28px' }}>
             Circular
           </span>
         </Link>

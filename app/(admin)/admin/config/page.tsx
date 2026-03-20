@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -30,6 +31,7 @@ const ASSET_FIELDS = [
   { key: 'minimum', label: 'Minimum Investment ($)', type: 'number' },
   { key: 'asset_type', label: 'Asset Type', type: 'text' },
   { key: 'location', label: 'Location', type: 'text' },
+  { key: 'description', label: 'Property Description (shown on public page)', type: 'textarea' },
 ]
 
 export default function AdminConfigPage() {
@@ -119,6 +121,13 @@ export default function AdminConfigPage() {
                           ))}
                         </SelectContent>
                       </Select>
+                    ) : field.type === 'textarea' ? (
+                      <Textarea
+                        value={getValue(fullKey)}
+                        onChange={(e) => setValue(fullKey, e.target.value)}
+                        rows={4}
+                        placeholder="Write a brief overview of the property…"
+                      />
                     ) : (
                       <Input
                         type={field.type}

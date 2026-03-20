@@ -7,10 +7,11 @@ import Footer from '@/components/layout/Footer'
 import RaiseProgressBar from '@/components/deal-room/RaiseProgressBar'
 import DocRenderer from '@/components/shared/DocRenderer'
 import { getAssetContent } from '@/lib/gdocs/assets'
-import { getAssetConfig } from '@/lib/sheets/config'
+import { getAssetConfig, getConfig } from '@/lib/sheets/config'
+import { getAssetMedia } from '@/lib/sheets/media'
 import { formatCurrency } from '@/lib/utils/format'
 import { ASSET_NAMES } from '@/types'
-import type { AssetSlug } from '@/types'
+import type { AssetSlug, AssetMedia } from '@/types'
 
 export const revalidate = 60
 
@@ -18,6 +19,82 @@ const VALID_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods']
 
 export async function generateStaticParams() {
   return VALID_SLUGS.map((slug) => ({ slug }))
+}
+
+function youtubeId(url: string): string | null {
+  const m = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/
+  )
+  return m ? m[1] : null
+}
+
+function MediaGallery({ media }: { media: AssetMedia[] }) {
+  const images = media.filter((m) => m.type === 'image')
+  const videos = media.filter((m) => m.type === 'youtube')
+
+  if (media.length === 0) return null
+
+  return (
+    <section className="border-b">
+      <div className="container mx-auto max-w-6xl px-4 py-10">
+        {images.length > 0 && (
+          <div
+            className={`grid gap-3 mb-6 ${
+              images.length === 1
+                ? 'grid-cols-1 max-w-2xl'
+                : images.length === 2
+                ? 'grid-cols-2'
+                : 'grid-cols-2 md:grid-cols-3'
+            }`}
+          >
+            {images.map((img, i) => (
+              <div
+                key={img.id}
+                className={`overflow-hidden rounded-lg bg-muted ${
+                  images.length >= 3 && i === 0 ? 'col-span-2 md:col-span-1' : ''
+                }`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={img.url}
+                  alt={img.caption || ''}
+                  className="w-full h-64 object-cover"
+                />
+                {img.caption && (
+                  <p className="px-2 py-1 text-xs text-muted-foreground">{img.caption}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {videos.length > 0 && (
+          <div className={`grid gap-4 ${videos.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-2xl'}`}>
+            {videos.map((vid) => {
+              const id = youtubeId(vid.url)
+              if (!id) return null
+              return (
+                <div key={vid.id}>
+                  <div className="relative aspect-video rounded-lg overflow-hidden bg-black">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${id}`}
+                      title={vid.caption || 'Property video'}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full"
+                    />
+                  </div>
+                  {vid.caption && (
+                    <p className="mt-1 text-xs text-muted-foreground">{vid.caption}</p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  )
 }
 
 export default async function AssetPage({
@@ -31,14 +108,19 @@ export default async function AssetPage({
     notFound()
   }
 
-  const [contentResult, configResult] = await Promise.allSettled([
+  const [contentResult, configResult, configMapResult, mediaResult] = await Promise.allSettled([
     getAssetContent(slug, 'public'),
     getAssetConfig(slug),
+    getConfig(),
+    getAssetMedia(slug),
   ])
 
   const content = contentResult.status === 'fulfilled' ? contentResult.value : null
   const cfg = configResult.status === 'fulfilled' ? configResult.value : null
+  const configMap = configMapResult.status === 'fulfilled' ? configMapResult.value : {}
+  const media = mediaResult.status === 'fulfilled' ? mediaResult.value : []
   const assetName = ASSET_NAMES[slug as AssetSlug] || slug
+  const description = configMap[`${slug}_description`] || ''
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -107,7 +189,19 @@ export default async function AssetPage({
         </section>
       )}
 
-      {/* Content sections */}
+      {/* Property description */}
+      {description && (
+        <section className="border-b">
+          <div className="container mx-auto max-w-4xl px-4 py-10">
+            <p className="text-lg leading-relaxed text-foreground whitespace-pre-line">{description}</p>
+          </div>
+        </section>
+      )}
+
+      {/* Photo gallery + videos */}
+      <MediaGallery media={media} />
+
+      {/* Google Doc content sections */}
       {content && content.sections.length > 0 ? (
         <section>
           <div className="container mx-auto max-w-4xl px-4 py-12 space-y-12">
@@ -118,16 +212,16 @@ export default async function AssetPage({
             ))}
           </div>
         </section>
-      ) : (
+      ) : !description && media.length === 0 ? (
         <section>
           <div className="container mx-auto max-w-4xl px-4 py-12">
             <p className="text-muted-foreground">Asset details are being prepared.</p>
           </div>
         </section>
-      )}
+      ) : null}
 
       {/* CTA */}
-      <section className="border-t bg-muted/20">
+      <section className="border-t bg-muted/20 mt-auto">
         <div className="container mx-auto max-w-4xl px-4 py-12 text-center">
           <h2 className="text-xl font-semibold mb-3">Interested in investing?</h2>
           <p className="text-muted-foreground mb-6 text-sm">
