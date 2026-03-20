@@ -99,6 +99,9 @@ export default async function AdminDashboardPage() {
         <Link href="/admin/documents">
           <Button variant="outline">Documents</Button>
         </Link>
+        <Link href="/admin/writeup">
+          <Button variant="outline">Property Write-up</Button>
+        </Link>
         <Link href="/admin/content">
           <Button variant="outline">Preview Content</Button>
         </Link>

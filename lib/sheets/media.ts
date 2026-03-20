@@ -3,12 +3,23 @@ import type { AssetMedia, AssetMediaType, AssetMediaWithRow } from '@/types'
 
 const TAB = 'AssetMedia'
 
+/**
+ * Media items uploaded via the admin (file upload) are stored in R2 with a
+ * "r2:" prefix in the URL column. Resolve these to the /api/media proxy route.
+ */
+function resolveUrl(url: string): string {
+  if (url.startsWith('r2:')) {
+    return `/api/media?key=${encodeURIComponent(url.slice(3))}`
+  }
+  return url
+}
+
 function rowToMedia(row: string[]): AssetMedia {
   return {
     id: row[0] || '',
     asset: row[1] || '',
     type: (row[2] || 'image') as AssetMediaType,
-    url: row[3] || '',
+    url: resolveUrl(row[3] || ''),
     caption: row[4] || '',
     sort_order: parseInt(row[5] || '0', 10),
   }

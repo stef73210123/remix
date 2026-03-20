@@ -8,6 +8,7 @@ import {
 } from '@/lib/sheets/media'
 import { getUser } from '@/lib/sheets/users'
 import { appendSheetRow } from '@/lib/sheets/client'
+import { uploadToR2 } from '@/lib/storage/r2'
 import type { AssetMediaType } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -55,6 +56,37 @@ export async function POST(req: NextRequest) {
   const auth = await requireAdmin()
   if (auth instanceof NextResponse) return auth
   try {
+    const contentType = req.headers.get('content-type') || ''
+
+    // File upload via multipart form data
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await req.formData()
+      const file = formData.get('file') as File | null
+      const asset = formData.get('asset') as string
+      const caption = (formData.get('caption') as string) || ''
+      const sortOrder = parseInt((formData.get('sort_order') as string) || '0', 10)
+
+      if (!file || !asset) {
+        return NextResponse.json({ error: 'file and asset are required' }, { status: 400 })
+      }
+
+      const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+      const r2Key = `media/${asset}/${Date.now()}-${sanitizedName}`
+      const buffer = Buffer.from(await file.arrayBuffer())
+      await uploadToR2(r2Key, buffer, file.type || 'image/jpeg')
+
+      const media = await appendMedia({
+        asset,
+        type: 'image',
+        url: `r2:${r2Key}`,
+        caption,
+        sort_order: sortOrder,
+      })
+      await logActivity(auth.email, 'media.upload', media.id, { asset, filename: file.name })
+      return NextResponse.json({ message: 'Photo uploaded', media }, { status: 201 })
+    }
+
+    // URL entry via JSON
     const body = await req.json()
     if (!body.asset || !body.url) {
       return NextResponse.json({ error: 'asset and url are required' }, { status: 400 })

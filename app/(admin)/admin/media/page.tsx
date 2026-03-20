@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -32,6 +32,8 @@ interface FormState {
   url: string
   caption: string
   sort_order: string
+  uploadMode: 'url' | 'file'
+  file: File | null
 }
 
 const emptyForm = (): FormState => ({
@@ -40,6 +42,8 @@ const emptyForm = (): FormState => ({
   url: '',
   caption: '',
   sort_order: '0',
+  uploadMode: 'url',
+  file: null,
 })
 
 function youtubeId(url: string): string | null {
@@ -56,6 +60,7 @@ export default function AdminMediaPage() {
   const [form, setForm] = useState<FormState>(emptyForm())
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<AssetMediaWithRow | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -86,26 +91,50 @@ export default function AdminMediaPage() {
       url: item.url,
       caption: item.caption || '',
       sort_order: String(item.sort_order),
+      uploadMode: 'url',
+      file: null,
     })
     setDialogOpen(true)
   }
 
   const handleSave = async () => {
-    if (!form.url) { toast.error('URL is required'); return }
     setSaving(true)
     try {
-      const method = editingRow ? 'PATCH' : 'POST'
-      const body = editingRow
-        ? { rowIndex: editingRow, asset, ...form }
-        : { asset, ...form }
-      const res = await fetch('/api/admin/media', {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      })
-      const data = await res.json()
-      if (!res.ok) { toast.error(data.error || 'Save failed'); return }
-      toast.success(editingRow ? 'Updated' : 'Added')
+      if (editingRow) {
+        // Edit: always JSON
+        if (!form.url) { toast.error('URL is required'); setSaving(false); return }
+        const res = await fetch('/api/admin/media', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rowIndex: editingRow, asset, ...form }),
+        })
+        const data = await res.json()
+        if (!res.ok) { toast.error(data.error || 'Save failed'); return }
+        toast.success('Updated')
+      } else if (form.uploadMode === 'file') {
+        // Upload file to R2
+        if (!form.file) { toast.error('Please select a file'); setSaving(false); return }
+        const fd = new FormData()
+        fd.append('file', form.file)
+        fd.append('asset', asset)
+        fd.append('caption', form.caption)
+        fd.append('sort_order', form.sort_order)
+        const res = await fetch('/api/admin/media', { method: 'POST', body: fd })
+        const data = await res.json()
+        if (!res.ok) { toast.error(data.error || 'Upload failed'); return }
+        toast.success('Photo uploaded')
+      } else {
+        // URL entry
+        if (!form.url) { toast.error('URL is required'); setSaving(false); return }
+        const res = await fetch('/api/admin/media', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ asset, ...form }),
+        })
+        const data = await res.json()
+        if (!res.ok) { toast.error(data.error || 'Save failed'); return }
+        toast.success('Added')
+      }
       setDialogOpen(false)
       load()
     } catch {
@@ -227,35 +256,78 @@ export default function AdminMediaPage() {
             <DialogTitle>{editingRow ? 'Edit Media' : 'Add Photo / Video'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
+            {/* Type selector */}
             <div className="space-y-1">
               <Label>Type</Label>
-              <Select value={form.type} onValueChange={(v) => setForm((f) => ({ ...f, type: v as AssetMediaType }))}>
+              <Select value={form.type} onValueChange={(v) => setForm((f) => ({ ...f, type: v as AssetMediaType, uploadMode: v === 'youtube' ? 'url' : f.uploadMode }))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="image">Photo (image URL)</SelectItem>
+                  <SelectItem value="image">Photo</SelectItem>
                   <SelectItem value="youtube">YouTube Video</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-1">
-              <Label>
-                {form.type === 'youtube' ? 'YouTube URL' : 'Image URL'}
-              </Label>
-              <Input
-                value={form.url}
-                onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
-                placeholder={
-                  form.type === 'youtube'
-                    ? 'https://www.youtube.com/watch?v=…'
-                    : 'https://example.com/photo.jpg'
-                }
-              />
-              {form.type === 'image' && (
-                <p className="text-xs text-muted-foreground">
-                  Must be a publicly accessible image URL. You can host images on any service (Squarespace, Dropbox public link, etc.).
-                </p>
-              )}
-            </div>
+
+            {/* Photo: upload mode toggle */}
+            {form.type === 'image' && !editingRow && (
+              <div className="flex gap-2 rounded-md border p-1 w-fit">
+                <button
+                  onClick={() => setForm((f) => ({ ...f, uploadMode: 'file', url: '' }))}
+                  className={`rounded px-3 py-1 text-sm font-medium transition-colors ${form.uploadMode === 'file' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  Upload File
+                </button>
+                <button
+                  onClick={() => setForm((f) => ({ ...f, uploadMode: 'url', file: null }))}
+                  className={`rounded px-3 py-1 text-sm font-medium transition-colors ${form.uploadMode === 'url' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  Paste URL
+                </button>
+              </div>
+            )}
+
+            {/* File upload */}
+            {form.uploadMode === 'file' && form.type === 'image' && !editingRow ? (
+              <div className="space-y-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null
+                    setForm((f) => ({ ...f, file, caption: f.caption || (file?.name.replace(/\.[^.]+$/, '') ?? '') }))
+                  }}
+                />
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${form.file ? 'border-primary/50 bg-primary/5' : 'hover:border-muted-foreground/50'}`}
+                >
+                  {form.file ? (
+                    <div>
+                      <p className="text-sm font-medium">{form.file.name}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{(form.file.size / 1024 / 1024).toFixed(1)} MB</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-sm text-muted-foreground">Click to select a photo</p>
+                      <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WebP, HEIC supported</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              /* URL entry */
+              <div className="space-y-1">
+                <Label>{form.type === 'youtube' ? 'YouTube URL' : 'Image URL'}</Label>
+                <Input
+                  value={form.url}
+                  onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
+                  placeholder={form.type === 'youtube' ? 'https://www.youtube.com/watch?v=…' : 'https://example.com/photo.jpg'}
+                />
+              </div>
+            )}
+
             <div className="space-y-1">
               <Label>Caption (optional)</Label>
               <Input
@@ -264,19 +336,11 @@ export default function AdminMediaPage() {
                 placeholder="Short description"
               />
             </div>
-            <div className="space-y-1">
-              <Label>Sort Order</Label>
-              <Input
-                type="number"
-                value={form.sort_order}
-                onChange={(e) => setForm((f) => ({ ...f, sort_order: e.target.value }))}
-              />
-            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleSave} disabled={saving}>
-              {saving ? 'Saving…' : 'Save'}
+              {saving ? (form.uploadMode === 'file' ? 'Uploading…' : 'Saving…') : 'Save'}
             </Button>
           </DialogFooter>
         </DialogContent>

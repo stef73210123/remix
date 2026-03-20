@@ -31,7 +31,7 @@ function getBucketName(): string {
  * URL expires in 15 minutes.
  * Never expose r2_key or raw R2 URLs to the client.
  */
-export async function generateSignedDownloadUrl(r2Key: string): Promise<string> {
+export async function generateSignedDownloadUrl(r2Key: string, expiresIn = 900): Promise<string> {
   const client = getR2Client()
   const bucket = getBucketName()
 
@@ -40,7 +40,7 @@ export async function generateSignedDownloadUrl(r2Key: string): Promise<string> 
     Key: r2Key,
   })
 
-  return getSignedUrl(client, command, { expiresIn: 900 }) // 15 minutes
+  return getSignedUrl(client, command, { expiresIn })
 }
 
 export async function uploadToR2(key: string, body: Buffer, contentType: string): Promise<void> {

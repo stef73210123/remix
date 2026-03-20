@@ -1,17 +1,19 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { marked } from 'marked'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import RaiseProgressBar from '@/components/deal-room/RaiseProgressBar'
 import DocRenderer from '@/components/shared/DocRenderer'
+import MediaGallery from '@/components/shared/MediaGallery'
 import { getAssetContent } from '@/lib/gdocs/assets'
 import { getAssetConfig, getConfig } from '@/lib/sheets/config'
 import { getAssetMedia } from '@/lib/sheets/media'
 import { formatCurrency } from '@/lib/utils/format'
 import { ASSET_NAMES } from '@/types'
-import type { AssetSlug, AssetMedia } from '@/types'
+import type { AssetSlug } from '@/types'
 
 export const revalidate = 60
 
@@ -26,81 +28,6 @@ export async function generateStaticParams() {
   return VALID_SLUGS.map((slug) => ({ slug }))
 }
 
-function youtubeId(url: string): string | null {
-  const m = url.match(
-    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/
-  )
-  return m ? m[1] : null
-}
-
-function MediaGallery({ media }: { media: AssetMedia[] }) {
-  const images = media.filter((m) => m.type === 'image')
-  const videos = media.filter((m) => m.type === 'youtube')
-
-  if (media.length === 0) return null
-
-  return (
-    <section className="border-b">
-      <div className="container mx-auto max-w-6xl px-4 py-10">
-        {images.length > 0 && (
-          <div
-            className={`grid gap-3 mb-6 ${
-              images.length === 1
-                ? 'grid-cols-1 max-w-2xl'
-                : images.length === 2
-                ? 'grid-cols-2'
-                : 'grid-cols-2 md:grid-cols-3'
-            }`}
-          >
-            {images.map((img, i) => (
-              <div
-                key={img.id}
-                className={`overflow-hidden rounded-lg bg-muted ${
-                  images.length >= 3 && i === 0 ? 'col-span-2 md:col-span-1' : ''
-                }`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={img.url}
-                  alt={img.caption || ''}
-                  className="w-full h-64 object-cover"
-                />
-                {img.caption && (
-                  <p className="px-2 py-1 text-xs text-muted-foreground">{img.caption}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {videos.length > 0 && (
-          <div className={`grid gap-4 ${videos.length > 1 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 max-w-2xl'}`}>
-            {videos.map((vid) => {
-              const id = youtubeId(vid.url)
-              if (!id) return null
-              return (
-                <div key={vid.id}>
-                  <div className="relative aspect-video rounded-lg overflow-hidden bg-black">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${id}`}
-                      title={vid.caption || 'Property video'}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="absolute inset-0 w-full h-full"
-                    />
-                  </div>
-                  {vid.caption && (
-                    <p className="mt-1 text-xs text-muted-foreground">{vid.caption}</p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
-    </section>
-  )
-}
 
 export default async function AssetPage({
   params,
@@ -125,7 +52,14 @@ export default async function AssetPage({
   const configMap = configMapResult.status === 'fulfilled' ? configMapResult.value : {}
   const media = mediaResult.status === 'fulfilled' ? mediaResult.value : []
   const assetName = ASSET_NAMES[slug as AssetSlug] || slug
+  const tagline = configMap[`${slug}_tagline`] || ''
   const description = configMap[`${slug}_description`] || ''
+  const highlights = (configMap[`${slug}_highlights`] || '')
+    .split('\n')
+    .map((s) => s.trim())
+    .filter(Boolean)
+  // Convert markdown description to HTML
+  const descriptionHtml = description ? marked.parse(description) as string : ''
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -142,8 +76,11 @@ export default async function AssetPage({
                 Assets
               </div>
               <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{assetName}</h1>
+              {tagline && (
+                <p className="text-lg text-muted-foreground mt-2 max-w-xl">{tagline}</p>
+              )}
               {cfg && (
-                <div className="flex flex-wrap items-center gap-2 mt-2">
+                <div className="flex flex-wrap items-center gap-2 mt-3">
                   <Badge variant="outline">{cfg.asset_type}</Badge>
                   <Badge variant="outline">{cfg.location}</Badge>
                   <Badge>{cfg.status}</Badge>
@@ -195,10 +132,30 @@ export default async function AssetPage({
       )}
 
       {/* Property description */}
-      {description && (
+      {descriptionHtml && (
         <section className="border-b">
           <div className="container mx-auto max-w-4xl px-4 py-10">
-            <p className="text-lg leading-relaxed text-foreground whitespace-pre-line">{description}</p>
+            <div
+              className="prose prose-lg max-w-none prose-headings:font-semibold prose-headings:tracking-tight"
+              dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Highlights */}
+      {highlights.length > 0 && (
+        <section className="border-b">
+          <div className="container mx-auto max-w-4xl px-4 py-10">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">Highlights</h2>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {highlights.map((item, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm">
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}
