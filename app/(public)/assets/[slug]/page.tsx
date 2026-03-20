@@ -11,6 +11,8 @@ import MediaGallery from '@/components/shared/MediaGallery'
 import { getAssetContent } from '@/lib/gdocs/assets'
 import { getAssetConfig, getConfig } from '@/lib/sheets/config'
 import { getAssetMedia } from '@/lib/sheets/media'
+import { getTimeline } from '@/lib/sheets/timeline'
+import { TimelineGantt } from '@/components/shared/TimelineGantt'
 import { formatCurrency } from '@/lib/utils/format'
 import { ASSET_NAMES } from '@/types'
 import type { AssetSlug } from '@/types'
@@ -40,17 +42,19 @@ export default async function AssetPage({
     notFound()
   }
 
-  const [contentResult, configResult, configMapResult, mediaResult] = await Promise.allSettled([
+  const [contentResult, configResult, configMapResult, mediaResult, timelineResult] = await Promise.allSettled([
     getAssetContent(slug, 'public'),
     getAssetConfig(slug),
     getConfig(),
     getAssetMedia(slug),
+    getTimeline(slug),
   ])
 
   const content = contentResult.status === 'fulfilled' ? contentResult.value : null
   const cfg = configResult.status === 'fulfilled' ? configResult.value : null
   const configMap = configMapResult.status === 'fulfilled' ? configMapResult.value : {}
   const media = mediaResult.status === 'fulfilled' ? mediaResult.value : []
+  const timeline = timelineResult.status === 'fulfilled' ? timelineResult.value : []
   const assetName = ASSET_NAMES[slug as AssetSlug] || slug
   const tagline = configMap[`${slug}_tagline`] || ''
   const description = configMap[`${slug}_description`] || ''
@@ -204,6 +208,16 @@ export default async function AssetPage({
           </div>
         </section>
       ) : null}
+
+      {/* Timeline */}
+      {timeline.length > 0 && (
+        <section className="border-t">
+          <div className="container mx-auto max-w-6xl px-4 py-10">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-4">Project Timeline</h2>
+            <TimelineGantt milestones={timeline} />
+          </div>
+        </section>
+      )}
 
       {/* Map */}
       {MAP_COORDS[slug as AssetSlug] && (

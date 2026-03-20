@@ -23,7 +23,7 @@ import { toast } from 'sonner'
 import type { User, UserRole } from '@/types'
 
 const ROLES: UserRole[] = ['admin', 'gp', 'lp', 'dealroom']
-const ASSET_OPTIONS = ['livingstonfarm', 'wrenofthewoods']
+const ASSET_OPTIONS = ['circularplatform', 'livingstonfarm', 'wrenofthewoods']
 
 const ROLE_COLORS: Record<UserRole, string> = {
   admin: 'destructive',
