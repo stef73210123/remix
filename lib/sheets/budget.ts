@@ -13,6 +13,7 @@ function rowToBudgetLine(row: string[]): BudgetLine {
     projected_final: parseFloat(row[3] || '0'),
     notes: row[4] || '',
     sort_order: parseInt(row[5] || '0', 10),
+    group: row[6] || '',
   }
 }
 
@@ -24,6 +25,7 @@ function budgetLineToRow(b: BudgetLine): string[] {
     String(b.projected_final),
     b.notes || '',
     String(b.sort_order),
+    b.group || '',
   ]
 }
 

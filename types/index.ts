@@ -106,6 +106,7 @@ export interface BudgetLine {
   projected_final: number
   notes?: string
   sort_order: number
+  group?: string
 }
 
 // ─── Portfolio ───────────────────────────────────────────────────────────────
@@ -167,5 +168,5 @@ export const ASSET_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods', 'ci
 export const ASSET_NAMES: Record<AssetSlug, string> = {
   livingstonfarm: 'Livingston Farm',
   wrenofthewoods: 'Wren of the Woods',
-  circularplatform: 'Circular Platform',
+  circularplatform: 'Circular',
 }

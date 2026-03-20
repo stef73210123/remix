@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import DocRenderer from '@/components/shared/DocRenderer'
+import { AnnouncementCard } from '@/components/shared/AnnouncementCard'
 import DistributionChartClient from './DistributionChartClient'
 import { getInvestorPositionForAsset } from '@/lib/sheets/investors'
 import { getDistributionsForUser } from '@/lib/sheets/distributions'
@@ -216,46 +216,51 @@ export default async function PortalAssetPage({
             </div>
           )}
 
-          {/* In-app announcements */}
+          {/* In-app announcements + Google Doc updates — unified card format */}
           {announcements.length > 0 && (
             <div className="mb-8 space-y-4">
-              {announcements.map((ann) => (
-                <div key={ann.id} className="rounded-lg border-l-4 border-primary bg-muted/30 px-5 py-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="text-sm font-semibold">{ann.title}</h3>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(ann.posted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground whitespace-pre-line">{ann.body}</p>
-                </div>
-              ))}
+              {announcements.map((ann) => {
+                const mediaUrls = ann.media_urls
+                  ? ann.media_urls.split(/[\n,]/).map((u) => u.trim()).filter(Boolean)
+                  : []
+                return (
+                  <AnnouncementCard
+                    key={ann.id}
+                    title={ann.title}
+                    date={new Date(ann.posted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    body={ann.body}
+                    mediaUrls={mediaUrls}
+                  />
+                )
+              })}
             </div>
           )}
 
-          {latestUpdate ? (
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold mb-3">{latestUpdate.heading}</h2>
-              <DocRenderer html={latestUpdate.html} />
+          {updates.length > 0 ? (
+            <div className="space-y-4">
+              <AnnouncementCard
+                title={latestUpdate!.heading}
+                bodyHtml={latestUpdate!.html}
+              />
+              {olderUpdates.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide">Previous Updates</h3>
+                  <Accordion type="multiple" className="space-y-2">
+                    {olderUpdates.map((update, idx) => (
+                      <AccordionItem key={idx} value={`update-${idx}`} className="border rounded-md px-4">
+                        <AccordionTrigger className="text-sm font-medium">{update.heading}</AccordionTrigger>
+                        <AccordionContent>
+                          <AnnouncementCard title={update.heading} bodyHtml={update.html} />
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
+              )}
             </div>
-          ) : (
+          ) : announcements.length === 0 ? (
             <p className="text-muted-foreground mb-6">Project updates will appear here as progress is made.</p>
-          )}
-          {olderUpdates.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide">Previous Updates</h3>
-              <Accordion type="multiple" className="space-y-2">
-                {olderUpdates.map((update, idx) => (
-                  <AccordionItem key={idx} value={`update-${idx}`} className="border rounded-md px-4">
-                    <AccordionTrigger className="text-sm font-medium">{update.heading}</AccordionTrigger>
-                    <AccordionContent>
-                      <DocRenderer html={update.html} />
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-          )}
+          ) : null}
         </TabsContent>
 
         {/* ── Tab 3: Timeline ── */}

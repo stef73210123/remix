@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   const adminEmail = request.headers.get('x-user-email') || 'admin'
   if (role !== 'admin') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { asset, title, body, notify } = await request.json()
+  const { asset, title, body, notify, media_urls } = await request.json()
   if (!asset || !title || !body) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
     body,
     posted_by: adminEmail,
     posted_at: new Date().toISOString(),
+    media_urls: media_urls || '',
   })
 
   // Send email notifications if requested

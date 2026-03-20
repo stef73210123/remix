@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
       projected_final: parseFloat(rest.projected_final || '0'),
       notes: rest.notes || '',
       sort_order: parseInt(rest.sort_order || '0', 10),
+      group: rest.group || '',
     }
     await appendBudgetLine(asset, line)
     await logActivity(auth.email, 'budget.create', `${asset}/${line.category}`, { asset })
@@ -93,6 +94,7 @@ export async function PATCH(req: NextRequest) {
       projected_final: parseFloat(rest.projected_final || '0'),
       notes: rest.notes || '',
       sort_order: parseInt(rest.sort_order || '0', 10),
+      group: rest.group || '',
     }
     await updateBudgetLine(asset, rowIndex, line)
     await logActivity(auth.email, 'budget.update', `${asset}/${line.category}`, { asset, rowIndex })

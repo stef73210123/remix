@@ -14,7 +14,7 @@ export const revalidate = 300
 const ASSETS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-  { slug: 'circularplatform', name: 'Circular Platform' },
+  { slug: 'circularplatform', name: 'Circular' },
 ]
 
 export default async function HomePage() {

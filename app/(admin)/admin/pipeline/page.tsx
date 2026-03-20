@@ -28,7 +28,7 @@ const ASSETS = ['livingstonfarm', 'wrenofthewoods', 'circularplatform', 'all']
 const ASSET_LABELS: Record<string, string> = {
   livingstonfarm: 'Livingston Farm',
   wrenofthewoods: 'Wren of the Woods',
-  circularplatform: 'Circular Platform',
+  circularplatform: 'Circular',
 }
 
 const STAGES: PipelineStage[] = [
@@ -444,7 +444,7 @@ export default function AdminPipelinePage() {
   // pipeline totals
   const totalTarget = filtered.reduce((s, l) => s + l.target_amount, 0)
   const totalActual = filtered.reduce((s, l) => s + l.actual_amount, 0)
-  const weightedProbable = filtered.reduce((s, l) => s + l.target_amount * (l.probability / 100), 0)
+  const weightedProbable = filtered.reduce((s, l) => s + l.actual_amount * (l.probability / 100), 0)
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -501,7 +501,7 @@ export default function AdminPipelinePage() {
             <SelectItem value="all">All assets</SelectItem>
             <SelectItem value="livingstonfarm">Livingston Farm</SelectItem>
             <SelectItem value="wrenofthewoods">Wren of the Woods</SelectItem>
-            <SelectItem value="circularplatform">Circular Platform</SelectItem>
+            <SelectItem value="circularplatform">Circular</SelectItem>
           </SelectContent>
         </Select>
 
@@ -670,7 +670,7 @@ export default function AdminPipelinePage() {
                   <SelectContent>
                     <SelectItem value="livingstonfarm">Livingston Farm</SelectItem>
                     <SelectItem value="wrenofthewoods">Wren of the Woods</SelectItem>
-                    <SelectItem value="circularplatform">Circular Platform</SelectItem>
+                    <SelectItem value="circularplatform">Circular</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

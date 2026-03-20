@@ -9,6 +9,7 @@ export interface Announcement {
   body: string
   posted_by: string
   posted_at: string
+  media_urls?: string
 }
 
 function rowToAnnouncement(row: string[]): Announcement {
@@ -19,6 +20,7 @@ function rowToAnnouncement(row: string[]): Announcement {
     body: row[3] || '',
     posted_by: row[4] || '',
     posted_at: row[5] || '',
+    media_urls: row[6] || '',
   }
 }
 
@@ -34,6 +36,6 @@ export async function appendAnnouncement(
   ann: Omit<Announcement, 'id'>
 ): Promise<Announcement> {
   const id = `ann_${Date.now()}`
-  await appendSheetRow(TAB, [id, ann.asset, ann.title, ann.body, ann.posted_by, ann.posted_at])
+  await appendSheetRow(TAB, [id, ann.asset, ann.title, ann.body, ann.posted_by, ann.posted_at, ann.media_urls || ''])
   return { id, ...ann }
 }

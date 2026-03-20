@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 
 const ASSETS = [
+  { slug: 'circularplatform', name: 'Circular' },
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-  { slug: 'circularplatform', name: 'Circular Platform' },
 ]
 
 const DOC_TYPES = [
