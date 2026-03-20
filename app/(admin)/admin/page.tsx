@@ -75,6 +75,9 @@ export default async function AdminDashboardPage() {
         <Link href="/admin/investors">
           <Button variant="outline">Investor Positions</Button>
         </Link>
+        <Link href="/admin/pipeline">
+          <Button variant="outline">Pipeline</Button>
+        </Link>
         <Link href="/admin/distributions">
           <Button variant="outline">Distributions</Button>
         </Link>
