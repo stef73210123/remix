@@ -1,4 +1,4 @@
-import { readSheetRange } from './client'
+import { readSheetRange, appendSheetRow, updateSheetRow, findRowIndex } from './client'
 import type { ConfigMap, AssetConfig } from '@/types'
 
 /**
@@ -19,6 +19,15 @@ export async function getConfig(): Promise<ConfigMap> {
 /**
  * Returns structured config for a specific asset slug.
  */
+export async function upsertConfigKey(key: string, value: string): Promise<void> {
+  const rowIndex = await findRowIndex('Config', key)
+  if (rowIndex === -1) {
+    await appendSheetRow('Config', [key, value])
+  } else {
+    await updateSheetRow('Config', rowIndex, [key, value])
+  }
+}
+
 export async function getAssetConfig(slug: string): Promise<AssetConfig> {
   const config = await getConfig()
   return {

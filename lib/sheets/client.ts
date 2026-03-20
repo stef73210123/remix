@@ -78,6 +78,35 @@ export async function updateSheetRow(
 }
 
 /**
+ * Deletes a row by its 1-based row index (including header row).
+ * Uses the Sheets batchUpdate API with deleteDimension.
+ */
+export async function deleteSheetRow(tab: string, rowIndex: number): Promise<void> {
+  const sheets = getSheetsClient()
+  const spreadsheetId = getSheetId()
+
+  const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId })
+  const sheet = spreadsheet.data.sheets?.find((s) => s.properties?.title === tab)
+  if (!sheet?.properties?.sheetId === undefined) throw new Error(`Sheet tab '${tab}' not found`)
+
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [{
+        deleteDimension: {
+          range: {
+            sheetId: sheet!.properties!.sheetId!,
+            dimension: 'ROWS',
+            startIndex: rowIndex - 1,
+            endIndex: rowIndex,
+          },
+        },
+      }],
+    },
+  })
+}
+
+/**
  * Finds the row index (1-based, including header) where column A matches value.
  * Returns -1 if not found.
  */

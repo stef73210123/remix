@@ -72,6 +72,23 @@ export async function sendWelcomeInvestorEmail(
   })
 }
 
+export async function sendInvestorUpdateEmail(
+  to: string,
+  name: string,
+  assetName: string,
+  title: string,
+  body: string,
+  asset: string
+): Promise<void> {
+  const { InvestorUpdateEmail } = await import('./templates/investor-update')
+  const portalUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/portal/${asset}`
+  await sendEmail({
+    to,
+    subject: `${assetName}: ${title}`,
+    react: InvestorUpdateEmail({ name, assetName, title, body, portalUrl }),
+  })
+}
+
 export async function sendDistributionNoticeEmail(
   to: string,
   name: string,

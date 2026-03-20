@@ -1,4 +1,4 @@
-import { readSheetRange } from './client'
+import { readSheetRange, appendSheetRow, updateSheetRow, findRowIndex, deleteSheetRow } from './client'
 import type { InvestorPosition } from '@/types'
 
 const TAB = 'Investors'
@@ -43,4 +43,27 @@ export async function getInvestorPositionForAsset(
 export async function listAllInvestorPositions(): Promise<InvestorPosition[]> {
   const rows = await readSheetRange(TAB)
   return rows.filter((r) => r[0]).map(rowToPosition)
+}
+
+function positionToRow(p: InvestorPosition): string[] {
+  return [
+    p.investor_id, p.email, p.name, p.asset,
+    String(p.equity_invested), String(p.ownership_pct), String(p.capital_account_balance),
+    String(p.nav_estimate), String(p.irr_estimate), String(p.equity_multiple),
+    String(p.distributions_total), p.last_updated || new Date().toISOString().split('T')[0],
+  ]
+}
+
+export async function upsertInvestorPosition(pos: InvestorPosition): Promise<void> {
+  const rowIndex = await findRowIndex(TAB, pos.investor_id)
+  if (rowIndex === -1) {
+    await appendSheetRow(TAB, positionToRow(pos))
+  } else {
+    await updateSheetRow(TAB, rowIndex, positionToRow(pos))
+  }
+}
+
+export async function deleteInvestorPosition(investor_id: string): Promise<void> {
+  const rowIndex = await findRowIndex(TAB, investor_id)
+  if (rowIndex !== -1) await deleteSheetRow(TAB, rowIndex)
 }

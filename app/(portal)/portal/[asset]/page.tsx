@@ -15,6 +15,7 @@ import { getTimeline } from '@/lib/sheets/timeline'
 import { getBudget } from '@/lib/sheets/budget'
 import { getAssetUpdates } from '@/lib/gdocs/updates'
 import { getAssetConfig } from '@/lib/sheets/config'
+import { getAnnouncementsForAsset } from '@/lib/sheets/announcements'
 import {
   formatCurrency,
   formatPercent,
@@ -65,7 +66,7 @@ export default async function PortalAssetPage({
   const assetName = ASSET_NAMES[asset as AssetSlug] || asset
 
   // Fetch all data in parallel
-  const [positionRes, distributionsRes, docsRes, timelineRes, budgetRes, updatesRes, configRes] =
+  const [positionRes, distributionsRes, docsRes, timelineRes, budgetRes, updatesRes, configRes, announcementsRes] =
     await Promise.allSettled([
       getInvestorPositionForAsset(email, asset),
       getDistributionsForUser(email, asset),
@@ -74,6 +75,7 @@ export default async function PortalAssetPage({
       getBudget(asset),
       getAssetUpdates(asset),
       getAssetConfig(asset),
+      getAnnouncementsForAsset(asset),
     ])
 
   const position = positionRes.status === 'fulfilled' ? positionRes.value : null
@@ -83,6 +85,7 @@ export default async function PortalAssetPage({
   const budget = budgetRes.status === 'fulfilled' ? budgetRes.value : []
   const updates = updatesRes.status === 'fulfilled' ? updatesRes.value : []
   const config = configRes.status === 'fulfilled' ? configRes.value : null
+  const announcements = announcementsRes.status === 'fulfilled' ? announcementsRes.value : []
 
   const latestUpdate = updates[0] || null
   const olderUpdates = updates.slice(1)
@@ -212,6 +215,24 @@ export default async function PortalAssetPage({
               <Badge>{config.status}</Badge>
             </div>
           )}
+
+          {/* In-app announcements */}
+          {announcements.length > 0 && (
+            <div className="mb-8 space-y-4">
+              {announcements.map((ann) => (
+                <div key={ann.id} className="rounded-lg border-l-4 border-primary bg-muted/30 px-5 py-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-sm font-semibold">{ann.title}</h3>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(ann.posted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">{ann.body}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
           {latestUpdate ? (
             <div className="mb-6">
               <h2 className="text-lg font-semibold mb-3">{latestUpdate.heading}</h2>

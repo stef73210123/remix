@@ -68,9 +68,30 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Quick links */}
-      <div className="flex gap-3 mb-8">
+      <div className="flex flex-wrap gap-3 mb-8">
         <Link href="/admin/users">
           <Button variant="outline">Manage Users</Button>
+        </Link>
+        <Link href="/admin/investors">
+          <Button variant="outline">Investor Positions</Button>
+        </Link>
+        <Link href="/admin/distributions">
+          <Button variant="outline">Distributions</Button>
+        </Link>
+        <Link href="/admin/config">
+          <Button variant="outline">Asset Config</Button>
+        </Link>
+        <Link href="/admin/timeline">
+          <Button variant="outline">Timeline</Button>
+        </Link>
+        <Link href="/admin/budget">
+          <Button variant="outline">Budget</Button>
+        </Link>
+        <Link href="/admin/announcements">
+          <Button variant="outline">Announcements</Button>
+        </Link>
+        <Link href="/admin/documents">
+          <Button variant="outline">Documents</Button>
         </Link>
         <Link href="/admin/content">
           <Button variant="outline">Preview Content</Button>

@@ -39,20 +39,24 @@ export default async function HomePage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="border-b bg-muted/30">
-        <div className="container mx-auto max-w-6xl px-4 py-20 text-center">
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
+      <section className="border-b" style={{ backgroundColor: '#6B7A58' }}>
+        <div className="container mx-auto max-w-6xl px-4 py-24 text-center">
+          <h1 className="text-5xl font-light tracking-widest uppercase text-white sm:text-6xl md:text-7xl" style={{ fontFamily: 'var(--font-josefin)' }}>
             Private Real Estate<br />Investment
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="mt-6 text-base text-white/75 max-w-2xl mx-auto tracking-wide">
             Curated opportunities in mixed-use resort, residential, and hospitality assets.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link href="/assets/livingstonfarm">
-              <Button size="lg">Explore Assets</Button>
+              <button className="bg-black text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-black/80 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
+                Explore Assets
+              </button>
             </Link>
             <Link href="/request-access">
-              <Button size="lg" variant="outline">Request Deal Room Access</Button>
+              <button className="border border-white text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
+                Request Deal Room Access
+              </button>
             </Link>
           </div>
         </div>
@@ -62,7 +66,7 @@ export default async function HomePage() {
       {aboutHtml && (
         <section className="border-b">
           <div className="container mx-auto max-w-4xl px-4 py-16">
-            <h2 className="text-2xl font-semibold tracking-tight mb-6">About Circular</h2>
+            <h2 className="text-2xl font-light tracking-widest uppercase mb-6" style={{ fontFamily: 'var(--font-josefin)' }}>About Circular</h2>
             <DocRenderer html={aboutHtml} />
           </div>
         </section>
@@ -71,7 +75,7 @@ export default async function HomePage() {
       {/* Portfolio */}
       <section className="border-b bg-muted/20">
         <div className="container mx-auto max-w-6xl px-4 py-16">
-          <h2 className="text-2xl font-semibold tracking-tight mb-2">Current Portfolio</h2>
+          <h2 className="text-2xl font-light tracking-widest uppercase mb-2" style={{ fontFamily: 'var(--font-josefin)' }}>Current Portfolio</h2>
           <p className="text-muted-foreground mb-8">Active capital raises open to accredited investors.</p>
           <div className="grid gap-6 sm:grid-cols-2">
             {ASSETS.map(({ slug, name }) => {
@@ -128,7 +132,7 @@ export default async function HomePage() {
       {philosophyHtml && (
         <section className="border-b">
           <div className="container mx-auto max-w-4xl px-4 py-16">
-            <h2 className="text-2xl font-semibold tracking-tight mb-6">Investment Philosophy</h2>
+            <h2 className="text-2xl font-light tracking-widest uppercase mb-6" style={{ fontFamily: 'var(--font-josefin)' }}>Investment Philosophy</h2>
             <DocRenderer html={philosophyHtml} />
           </div>
         </section>
@@ -138,7 +142,7 @@ export default async function HomePage() {
       {teamSection && (
         <section className="border-b bg-muted/20">
           <div className="container mx-auto max-w-4xl px-4 py-16">
-            <h2 className="text-2xl font-semibold tracking-tight mb-8">Team</h2>
+            <h2 className="text-2xl font-light tracking-widest uppercase mb-8" style={{ fontFamily: 'var(--font-josefin)' }}>Team</h2>
             <DocRenderer html={teamSection.html} />
           </div>
         </section>
@@ -147,7 +151,7 @@ export default async function HomePage() {
       {/* CTA */}
       <section>
         <div className="container mx-auto max-w-4xl px-4 py-16 text-center">
-          <h2 className="text-2xl font-semibold tracking-tight mb-4">Ready to learn more?</h2>
+          <h2 className="text-2xl font-light tracking-widest uppercase mb-4" style={{ fontFamily: 'var(--font-josefin)' }}>Ready to learn more?</h2>
           <p className="text-muted-foreground mb-6">
             Request access to our deal room for detailed financial information and investment materials.
           </p>

@@ -1,4 +1,4 @@
-import { readSheetRange } from './client'
+import { readSheetRange, appendSheetRow } from './client'
 import type { InvestorDocument, DocType, DocVisibility, UserRole } from '@/types'
 
 const TAB = 'Documents'
@@ -51,6 +51,28 @@ export async function getDocumentById(id: string): Promise<InvestorDocument | nu
 /**
  * Returns shared deal room documents (email="all") for a given asset.
  */
+export async function getAllDocuments(): Promise<InvestorDocument[]> {
+  const rows = await readSheetRange(TAB)
+  return rows.map(rowToDocument)
+}
+
+export async function appendDocumentRow(
+  doc: Omit<InvestorDocument, 'id'>
+): Promise<InvestorDocument> {
+  const id = `doc_${Date.now()}`
+  await appendSheetRow(TAB, [
+    id,
+    doc.email,
+    doc.asset,
+    doc.doc_name,
+    doc.doc_type,
+    doc.r2_key,
+    doc.date,
+    doc.visible_to,
+  ])
+  return { id, ...doc }
+}
+
 export async function getSharedDealDocuments(asset: string): Promise<InvestorDocument[]> {
   const rows = await readSheetRange(TAB)
   return rows

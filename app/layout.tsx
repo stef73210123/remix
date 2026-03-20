@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
+import { Josefin_Sans } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 
-const geist = Geist({
-  variable: '--font-geist-sans',
+const josefin = Josefin_Sans({
+  variable: '--font-josefin',
   subsets: ['latin'],
+  weight: ['300', '400', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} font-sans antialiased`}>
+      <body className={`${josefin.variable} font-sans antialiased`}>
         {children}
         <Toaster />
       </body>
