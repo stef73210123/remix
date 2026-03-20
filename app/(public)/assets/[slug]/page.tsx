@@ -17,9 +17,9 @@ import type { AssetSlug } from '@/types'
 
 export const revalidate = 60
 
-const VALID_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods']
+const VALID_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods', 'circularplatform']
 
-const MAP_COORDS: Record<AssetSlug, { lat: number; lng: number; zoom: number }> = {
+const MAP_COORDS: Partial<Record<AssetSlug, { lat: number; lng: number; zoom: number }>> = {
   livingstonfarm: { lat: 41.901914, lng: -74.837076, zoom: 14 },
   wrenofthewoods: { lat: 41.1267614, lng: -73.7133056, zoom: 16 },
 }
@@ -60,6 +60,12 @@ export default async function AssetPage({
     .filter(Boolean)
   // Convert markdown description to HTML
   const descriptionHtml = description ? marked.parse(description) as string : ''
+
+  // Holdings: comma-separated slugs stored as config key (e.g. circularplatform_holdings)
+  const holdingSlugs = (configMap[`${slug}_holdings`] || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s): s is AssetSlug => s in ASSET_NAMES)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -160,6 +166,23 @@ export default async function AssetPage({
         </section>
       )}
 
+      {/* Holdings */}
+      {holdingSlugs.length > 0 && (
+        <section className="border-b">
+          <div className="container mx-auto max-w-4xl px-4 py-10">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-5">Portfolio Holdings</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {holdingSlugs.map((h) => (
+                <Link key={h} href={`/assets/${h}`} className="group rounded-xl border p-5 hover:border-primary/50 hover:bg-muted/30 transition-colors">
+                  <div className="font-semibold group-hover:text-primary transition-colors">{ASSET_NAMES[h]}</div>
+                  <div className="text-sm text-muted-foreground mt-1">{configMap[`${h}_tagline`] || 'View asset details →'}</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Photo gallery + videos */}
       <MediaGallery media={media} />
 
@@ -195,7 +218,7 @@ export default async function AssetPage({
                 style={{ border: 0 }}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                src={`https://maps.google.com/maps?q=${MAP_COORDS[slug as AssetSlug].lat},${MAP_COORDS[slug as AssetSlug].lng}&z=${MAP_COORDS[slug as AssetSlug].zoom}&output=embed`}
+                src={`https://maps.google.com/maps?q=${MAP_COORDS[slug as AssetSlug]!.lat},${MAP_COORDS[slug as AssetSlug]!.lng}&z=${MAP_COORDS[slug as AssetSlug]!.zoom}&output=embed`}
               />
             </div>
           </div>

@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 const ASSETS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
+  { slug: 'circularplatform', name: 'Circular Platform' },
 ]
 
 interface ContentState {

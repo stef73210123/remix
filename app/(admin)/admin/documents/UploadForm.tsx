@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 const ASSETS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
+  { slug: 'circularplatform', name: 'Circular Platform' },
 ]
 
 const DOC_TYPES = [

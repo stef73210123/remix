@@ -14,20 +14,23 @@ export const revalidate = 300
 const ASSETS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
+  { slug: 'circularplatform', name: 'Circular Platform' },
 ]
 
 export default async function HomePage() {
   // Fetch in parallel, fail gracefully
-  const [platformContent, lfConfig, wotConfig] = await Promise.allSettled([
+  const [platformContent, lfConfig, wotConfig, cpConfig] = await Promise.allSettled([
     getPlatformContent(),
     getAssetConfig('livingstonfarm'),
     getAssetConfig('wrenofthewoods'),
+    getAssetConfig('circularplatform'),
   ])
 
   const platform = platformContent.status === 'fulfilled' ? platformContent.value : null
   const configs = {
     livingstonfarm: lfConfig.status === 'fulfilled' ? lfConfig.value : null,
     wrenofthewoods: wotConfig.status === 'fulfilled' ? wotConfig.value : null,
+    circularplatform: cpConfig.status === 'fulfilled' ? cpConfig.value : null,
   }
 
   const aboutHtml = platform ? getSectionHtml(platform, 'About') : ''
@@ -77,7 +80,7 @@ export default async function HomePage() {
         <div className="container mx-auto max-w-6xl px-4 py-16">
           <h2 className="text-2xl font-light tracking-widest uppercase mb-2" style={{ fontFamily: 'var(--font-josefin)' }}>Current Portfolio</h2>
           <p className="text-muted-foreground mb-8">Active capital raises open to accredited investors.</p>
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {ASSETS.map(({ slug, name }) => {
               const cfg = configs[slug as keyof typeof configs]
               return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
@@ -23,7 +23,13 @@ import { toast } from 'sonner'
 import { formatCurrency } from '@/lib/utils/format'
 import type { PipelineLead, PipelineStage } from '@/lib/sheets/pipeline'
 
-const ASSETS = ['livingstonfarm', 'wrenofthewoods', 'all']
+const ASSETS = ['livingstonfarm', 'wrenofthewoods', 'circularplatform', 'all']
+
+const ASSET_LABELS: Record<string, string> = {
+  livingstonfarm: 'Livingston Farm',
+  wrenofthewoods: 'Wren of the Woods',
+  circularplatform: 'Circular Platform',
+}
 
 const STAGES: PipelineStage[] = [
   'prospect',
@@ -81,45 +87,45 @@ const emptyForm = (): FormState => ({
   notes: '',
 })
 
+interface InlineEdit {
+  id: string
+  field: string
+  value: string
+}
+
 // ── Kanban card ───────────────────────────────────────────────────────────────
 
 function KanbanCard({
   lead,
   onEdit,
-  onStageChange,
+  onDragStart,
 }: {
   lead: PipelineLead
   onEdit: (l: PipelineLead) => void
-  onStageChange: (id: string, stage: PipelineStage) => void
+  onDragStart: (id: string) => void
 }) {
   return (
     <div
-      className="bg-white rounded-lg border shadow-sm p-3 cursor-pointer hover:shadow-md transition-shadow"
+      draggable
+      onDragStart={(e) => { e.dataTransfer.effectAllowed = 'move'; onDragStart(lead.id) }}
+      className="bg-white rounded-lg border shadow-sm p-3 cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
       onClick={() => onEdit(lead)}
     >
       <div className="font-medium text-sm">{lead.name}</div>
       {lead.email && <div className="text-xs text-muted-foreground truncate">{lead.email}</div>}
       <div className="mt-2 flex items-center justify-between gap-1">
-        <span className="text-sm font-semibold">{formatCurrency(lead.target_amount, true)}</span>
+        <span className="text-sm font-semibold">{formatCurrency(lead.actual_amount || lead.target_amount, true)}</span>
         <span className="text-xs text-muted-foreground">{lead.probability}%</span>
       </div>
       {lead.asset && (
-        <div className="mt-1 text-xs text-muted-foreground">{lead.asset}</div>
+        <div className="mt-1 text-xs text-muted-foreground">{ASSET_LABELS[lead.asset] ?? lead.asset}</div>
       )}
       {lead.close_date && (
         <div className="mt-1 text-xs text-muted-foreground">Close: {lead.close_date}</div>
       )}
-      <div className="mt-2 flex gap-1 flex-wrap">
-        {STAGES.filter((s) => s !== lead.stage).map((s) => (
-          <button
-            key={s}
-            className="text-[10px] px-1.5 py-0.5 rounded border border-input hover:bg-muted transition-colors"
-            onClick={(e) => { e.stopPropagation(); onStageChange(lead.id, s) }}
-          >
-            → {STAGE_LABELS[s]}
-          </button>
-        ))}
-      </div>
+      {lead.notes && (
+        <div className="mt-1 text-xs text-muted-foreground italic truncate">{lead.notes}</div>
+      )}
     </div>
   )
 }
@@ -130,31 +136,92 @@ function KanbanColumn({
   stage,
   leads,
   onEdit,
-  onStageChange,
+  onDragStart,
+  onDrop,
 }: {
   stage: PipelineStage
   leads: PipelineLead[]
   onEdit: (l: PipelineLead) => void
-  onStageChange: (id: string, stage: PipelineStage) => void
+  onDragStart: (id: string) => void
+  onDrop: (stage: PipelineStage) => void
 }) {
-  const total = leads.reduce((s, l) => s + l.target_amount, 0)
+  const [isDragOver, setIsDragOver] = useState(false)
+  const total = leads.reduce((s, l) => s + (l.actual_amount || l.target_amount), 0)
   return (
     <div className="flex flex-col min-w-[200px] max-w-[240px] flex-shrink-0">
       <div className={`rounded-t-lg px-3 py-2 flex items-center justify-between ${STAGE_COLORS[stage]}`}>
         <span className="text-xs font-semibold uppercase tracking-wide">{STAGE_LABELS[stage]}</span>
         <span className="text-xs font-medium">{leads.length}</span>
       </div>
-      <div className="bg-muted/30 rounded-b-lg p-2 flex flex-col gap-2 min-h-[120px]">
+      <div
+        className={`rounded-b-lg p-2 flex flex-col gap-2 min-h-[120px] transition-colors ${isDragOver ? 'bg-primary/10 ring-2 ring-primary/30' : 'bg-muted/30'}`}
+        onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; setIsDragOver(true) }}
+        onDragLeave={() => setIsDragOver(false)}
+        onDrop={() => { setIsDragOver(false); onDrop(stage) }}
+      >
         {leads.map((lead) => (
-          <KanbanCard key={lead.id} lead={lead} onEdit={onEdit} onStageChange={onStageChange} />
+          <KanbanCard key={lead.id} lead={lead} onEdit={onEdit} onDragStart={onDragStart} />
         ))}
         {total > 0 && (
           <div className="text-xs text-muted-foreground text-right pt-1 border-t border-muted mt-auto">
-            {formatCurrency(total, true)} targeted
+            {formatCurrency(total, true)}
           </div>
         )}
       </div>
     </div>
+  )
+}
+
+// ── Inline editable cell ──────────────────────────────────────────────────────
+
+function InlineCell({
+  lead,
+  field,
+  displayValue,
+  inlineEdit,
+  onStartEdit,
+  onSave,
+  inputType = 'text',
+  className = '',
+}: {
+  lead: PipelineLead
+  field: string
+  displayValue: React.ReactNode
+  inlineEdit: InlineEdit | null
+  onStartEdit: (edit: InlineEdit) => void
+  onSave: (id: string, field: string, value: string) => void
+  inputType?: string
+  className?: string
+}) {
+  const isEditing = inlineEdit?.id === lead.id && inlineEdit?.field === field
+  if (isEditing) {
+    return (
+      <Input
+        autoFocus
+        type={inputType}
+        value={inlineEdit.value}
+        onChange={(e) => onStartEdit({ ...inlineEdit, value: e.target.value })}
+        onBlur={() => onSave(lead.id, field, inlineEdit.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') onSave(lead.id, field, inlineEdit.value)
+          if (e.key === 'Escape') onStartEdit({ id: '', field: '', value: '' })
+        }}
+        className={`h-7 py-0 text-sm ${className}`}
+      />
+    )
+  }
+  const rawValue = lead[field as keyof PipelineLead]
+  return (
+    <span className="group flex items-center gap-1">
+      {displayValue}
+      <button
+        onClick={() => onStartEdit({ id: lead.id, field, value: String(rawValue ?? '') })}
+        className="opacity-0 group-hover:opacity-60 hover:!opacity-100 text-xs transition-opacity"
+        title={`Edit ${field}`}
+      >
+        ✏
+      </button>
+    </span>
   )
 }
 
@@ -174,6 +241,8 @@ export default function AdminPipelinePage() {
   const [form, setForm] = useState<FormState>(emptyForm())
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<PipelineLead | null>(null)
+  const [inlineEdit, setInlineEdit] = useState<InlineEdit | null>(null)
+  const dragLeadId = useRef<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -252,15 +321,84 @@ export default function AdminPipelinePage() {
     }
   }
 
-  const handleStageChange = async (id: string, stage: PipelineStage) => {
+  // Inline save — single field update
+  const saveInline = async (id: string, field: string, value: string) => {
+    setInlineEdit(null)
+    const lead = leads.find((l) => l.id === id)
+    if (!lead) return
+    const numFields = ['target_amount', 'actual_amount', 'probability']
+    const parsed = numFields.includes(field) ? Number(value) : value
     try {
       const res = await fetch('/api/admin/pipeline', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, stage }),
+        body: JSON.stringify({ id, [field]: parsed }),
+      })
+      if (!res.ok) { toast.error('Save failed'); return }
+      setLeads((prev) =>
+        prev.map((l) => l.id === id ? { ...l, [field]: parsed } : l)
+      )
+    } catch {
+      toast.error('Network error')
+    }
+  }
+
+  // Stage change — with auto-close logic + investor position creation
+  const handleStageChange = async (id: string, stage: PipelineStage) => {
+    const lead = leads.find((l) => l.id === id)
+    if (!lead) return
+
+    const updates: Record<string, unknown> = { id, stage }
+
+    // Auto-close: set probability to 100 and actual = target
+    if (stage === 'closed') {
+      updates.probability = 100
+      updates.actual_amount = lead.target_amount
+    }
+
+    try {
+      const res = await fetch('/api/admin/pipeline', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
       })
       if (!res.ok) { toast.error('Failed to update stage'); return }
-      setLeads((prev) => prev.map((l) => l.id === id ? { ...l, stage } : l))
+
+      setLeads((prev) =>
+        prev.map((l) =>
+          l.id === id
+            ? { ...l, stage, ...(stage === 'closed' ? { probability: 100, actual_amount: l.target_amount } : {}) }
+            : l
+        )
+      )
+
+      // Auto-create investor position when closed
+      if (stage === 'closed' && lead.email) {
+        const investorRes = await fetch('/api/admin/investors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: lead.email,
+            name: lead.name,
+            asset: lead.asset,
+            equity_invested: lead.target_amount,
+            ownership_pct: 0,
+            capital_account_balance: lead.target_amount,
+            nav_estimate: lead.target_amount,
+            irr_estimate: 0,
+            equity_multiple: 1,
+            distributions_total: 0,
+          }),
+        })
+        if (investorRes.ok) {
+          toast.success(`Moved to Closed — investor position created for ${lead.name}`)
+        } else {
+          toast.success('Moved to Closed')
+          toast.warning('Could not auto-create investor position — add manually in Investors')
+        }
+      } else {
+        toast.success(`Moved to ${STAGE_LABELS[stage]}`)
+      }
     } catch {
       toast.error('Network error')
     }
@@ -356,19 +494,20 @@ export default function AdminPipelinePage() {
         />
 
         <Select value={assetFilter} onValueChange={setAssetFilter}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-44">
             <SelectValue placeholder="All assets" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All assets</SelectItem>
             <SelectItem value="livingstonfarm">Livingston Farm</SelectItem>
             <SelectItem value="wrenofthewoods">Wren of the Woods</SelectItem>
+            <SelectItem value="circularplatform">Circular Platform</SelectItem>
           </SelectContent>
         </Select>
 
         {view === 'table' && (
           <Select value={stageFilter} onValueChange={setStageFilter}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-36">
               <SelectValue placeholder="All stages" />
             </SelectTrigger>
             <SelectContent>
@@ -394,7 +533,16 @@ export default function AdminPipelinePage() {
               stage={stage}
               leads={filtered.filter((l) => l.stage === stage)}
               onEdit={openEdit}
-              onStageChange={handleStageChange}
+              onDragStart={(id) => { dragLeadId.current = id }}
+              onDrop={(targetStage) => {
+                if (dragLeadId.current) {
+                  const lead = leads.find(l => l.id === dragLeadId.current)
+                  if (lead && lead.stage !== targetStage) {
+                    handleStageChange(dragLeadId.current, targetStage)
+                  }
+                  dragLeadId.current = null
+                }
+              }}
             />
           ))}
         </div>
@@ -430,20 +578,51 @@ export default function AdminPipelinePage() {
             <tbody>
               {sorted.map((lead) => (
                 <tr key={lead.id} className="border-b last:border-0 hover:bg-muted/20">
-                  <td className="px-4 py-2 font-medium">{lead.name}</td>
-                  <td className="px-4 py-2 text-muted-foreground">{lead.email || '—'}</td>
-                  <td className="px-4 py-2">
-                    <Badge variant="outline">{lead.asset}</Badge>
+                  <td className="px-4 py-2 font-medium">
+                    <InlineCell lead={lead} field="name" displayValue={lead.name} inlineEdit={inlineEdit} onStartEdit={setInlineEdit} onSave={saveInline} />
+                  </td>
+                  <td className="px-4 py-2 text-muted-foreground">
+                    <InlineCell lead={lead} field="email" displayValue={lead.email || '—'} inlineEdit={inlineEdit} onStartEdit={setInlineEdit} onSave={saveInline} inputType="email" />
                   </td>
                   <td className="px-4 py-2">
-                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STAGE_COLORS[lead.stage]}`}>
-                      {STAGE_LABELS[lead.stage]}
-                    </span>
+                    <Badge variant="outline">{ASSET_LABELS[lead.asset] ?? lead.asset}</Badge>
                   </td>
-                  <td className="px-4 py-2 text-right">{formatCurrency(lead.target_amount, true)}</td>
-                  <td className="px-4 py-2 text-right">{formatCurrency(lead.actual_amount, true)}</td>
-                  <td className="px-4 py-2 text-right">{lead.probability}%</td>
-                  <td className="px-4 py-2 text-muted-foreground whitespace-nowrap">{lead.close_date || '—'}</td>
+                  <td className="px-4 py-2">
+                    {inlineEdit?.id === lead.id && inlineEdit?.field === 'stage' ? (
+                      <select
+                        autoFocus
+                        value={inlineEdit.value}
+                        onChange={(e) => setInlineEdit({ ...inlineEdit, value: e.target.value })}
+                        onBlur={() => saveInline(lead.id, 'stage', inlineEdit.value)}
+                        className="text-xs border rounded px-1 py-0.5"
+                      >
+                        {STAGES.map((s) => <option key={s} value={s}>{STAGE_LABELS[s]}</option>)}
+                      </select>
+                    ) : (
+                      <span className="group flex items-center gap-1">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STAGE_COLORS[lead.stage]}`}>
+                          {STAGE_LABELS[lead.stage]}
+                        </span>
+                        <button
+                          onClick={() => setInlineEdit({ id: lead.id, field: 'stage', value: lead.stage })}
+                          className="opacity-0 group-hover:opacity-60 hover:!opacity-100 text-xs"
+                          title="Edit stage"
+                        >✏</button>
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 text-right">
+                    <InlineCell lead={lead} field="target_amount" displayValue={formatCurrency(lead.target_amount, true)} inlineEdit={inlineEdit} onStartEdit={setInlineEdit} onSave={saveInline} inputType="number" className="w-24 text-right" />
+                  </td>
+                  <td className="px-4 py-2 text-right">
+                    <InlineCell lead={lead} field="actual_amount" displayValue={formatCurrency(lead.actual_amount, true)} inlineEdit={inlineEdit} onStartEdit={setInlineEdit} onSave={saveInline} inputType="number" className="w-24 text-right" />
+                  </td>
+                  <td className="px-4 py-2 text-right">
+                    <InlineCell lead={lead} field="probability" displayValue={`${lead.probability}%`} inlineEdit={inlineEdit} onStartEdit={setInlineEdit} onSave={saveInline} inputType="number" className="w-16 text-right" />
+                  </td>
+                  <td className="px-4 py-2 text-muted-foreground whitespace-nowrap">
+                    <InlineCell lead={lead} field="close_date" displayValue={lead.close_date || '—'} inlineEdit={inlineEdit} onStartEdit={setInlineEdit} onSave={saveInline} inputType="date" className="w-36" />
+                  </td>
                   <td className="px-4 py-2 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <Button variant="ghost" size="sm" onClick={() => openEdit(lead)}>Edit</Button>
@@ -491,6 +670,7 @@ export default function AdminPipelinePage() {
                   <SelectContent>
                     <SelectItem value="livingstonfarm">Livingston Farm</SelectItem>
                     <SelectItem value="wrenofthewoods">Wren of the Woods</SelectItem>
+                    <SelectItem value="circularplatform">Circular Platform</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

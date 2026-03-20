@@ -27,6 +27,7 @@ import type { TimelineMilestoneWithRow } from '@/lib/sheets/timeline'
 const ASSETS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
+  { slug: 'circularplatform', name: 'Circular Platform' },
 ]
 
 const STATUSES: MilestoneStatus[] = ['upcoming', 'in-progress', 'complete', 'delayed']

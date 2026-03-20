@@ -160,11 +160,12 @@ export interface AssetMediaWithRow extends AssetMedia {
 
 // ─── Assets ──────────────────────────────────────────────────────────────────
 
-export type AssetSlug = 'livingstonfarm' | 'wrenofthewoods'
+export type AssetSlug = 'livingstonfarm' | 'wrenofthewoods' | 'circularplatform'
 
-export const ASSET_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods']
+export const ASSET_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods', 'circularplatform']
 
 export const ASSET_NAMES: Record<AssetSlug, string> = {
   livingstonfarm: 'Livingston Farm',
   wrenofthewoods: 'Wren of the Woods',
+  circularplatform: 'Circular Platform',
 }

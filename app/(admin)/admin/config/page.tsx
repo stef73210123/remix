@@ -19,6 +19,7 @@ import type { ConfigMap } from '@/types'
 const ASSETS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
+  { slug: 'circularplatform', name: 'Circular Platform' },
 ]
 
 const ASSET_FIELDS = [
