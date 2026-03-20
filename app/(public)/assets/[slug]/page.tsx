@@ -17,6 +17,11 @@ export const revalidate = 60
 
 const VALID_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods']
 
+const MAP_COORDS: Record<AssetSlug, { lat: number; lng: number; zoom: number }> = {
+  livingstonfarm: { lat: 41.901914, lng: -74.837076, zoom: 14 },
+  wrenofthewoods: { lat: 41.1267614, lng: -73.7133056, zoom: 16 },
+}
+
 export async function generateStaticParams() {
   return VALID_SLUGS.map((slug) => ({ slug }))
 }
@@ -219,6 +224,26 @@ export default async function AssetPage({
           </div>
         </section>
       ) : null}
+
+      {/* Map */}
+      {MAP_COORDS[slug as AssetSlug] && (
+        <section className="border-t">
+          <div className="container mx-auto max-w-6xl px-4 py-10">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground mb-4">Location</h2>
+            <div className="rounded-xl overflow-hidden border aspect-video max-h-[420px]">
+              <iframe
+                title={`${assetName} location`}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={`https://maps.google.com/maps?q=${MAP_COORDS[slug as AssetSlug].lat},${MAP_COORDS[slug as AssetSlug].lng}&z=${MAP_COORDS[slug as AssetSlug].zoom}&output=embed`}
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="border-t bg-muted/20 mt-auto">
