@@ -185,9 +185,11 @@ export default function AdminBudgetPage() {
   const [previousBids, setPreviousBids] = useState<ParsedBid[]>([])
   const [bidLevelingOpen, setBidLevelingOpen] = useState(false)
   const [parsingBids, setParsingBids] = useState(false)
-  const [parsingPrevBids, setParsingPrevBids] = useState(false)
-  const quoteInputRef = useRef<HTMLInputElement>(null)
-  const prevQuoteInputRef = useRef<HTMLInputElement>(null)
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
+  const [currentFiles, setCurrentFiles] = useState<File[]>([])
+  const [prevFiles, setPrevFiles] = useState<File[]>([])
+  const currentFileInputRef = useRef<HTMLInputElement>(null)
+  const prevFileInputRef = useRef<HTMLInputElement>(null)
 
   // Circular holding roll-up state
   const [includeHoldings, setIncludeHoldings] = useState<Set<string>>(new Set(HOLDINGS.map((h) => h.slug)))
@@ -296,82 +298,33 @@ export default function AdminBudgetPage() {
 
   const assetType = asset === 'wrenofthewoods' ? 'restaurant' : asset === 'livingstonfarm' ? 'resort' : 'other'
 
-  const handleQuoteFiles = async (files: FileList) => {
-    if (!files.length) return
-    setParsingBids(true)
-    try {
-      const documents: Array<{ fileName: string; content: string; mimeType: string }> = []
-      for (const file of Array.from(files)) {
-        const isText = file.type.startsWith('text/') || file.name.endsWith('.csv') || file.name.endsWith('.txt')
-        if (isText) {
-          const text = await file.text()
-          documents.push({ fileName: file.name, content: text, mimeType: file.type || 'text/plain' })
-        } else {
-          // Binary files (PDF, docx, etc.) — send as base64 (chunked to avoid stack overflow)
-          const buf = await file.arrayBuffer()
-          const bytes = new Uint8Array(buf)
-          const chunks: string[] = []
-          for (let i = 0; i < bytes.length; i += 8192) {
-            chunks.push(String.fromCharCode(...bytes.subarray(i, i + 8192)))
-          }
-          const b64 = btoa(chunks.join(''))
-          documents.push({ fileName: file.name, content: b64, mimeType: file.type || 'application/octet-stream' })
-        }
-      }
-      const res = await fetch('/api/admin/budget/parse-bid', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ documents }),
-      })
-      const data = await res.json()
-      if (!res.ok) { toast.error(data.error || 'Parsing failed'); return }
-      setParsedBids(data.bids)
-      setBidLevelingOpen(true)
-    } catch {
-      toast.error('Failed to parse documents')
-    } finally {
-      setParsingBids(false)
-      if (quoteInputRef.current) quoteInputRef.current.value = ''
-    }
-  }
-
-  // Parse previous bid revision for variance comparison
-  const parseBidFiles = async (files: FileList): Promise<ParsedBid[]> => {
-    const documents: Array<{ fileName: string; content: string; mimeType: string }> = []
-    for (const file of Array.from(files)) {
-      const isText = file.type.startsWith('text/') || file.name.endsWith('.csv') || file.name.endsWith('.txt')
-      if (isText) {
-        documents.push({ fileName: file.name, content: await file.text(), mimeType: file.type || 'text/plain' })
-      } else {
-        const buf = await file.arrayBuffer()
-        const bytes = new Uint8Array(buf)
-        const chunks: string[] = []
-        for (let i = 0; i < bytes.length; i += 8192) chunks.push(String.fromCharCode(...bytes.subarray(i, i + 8192)))
-        documents.push({ fileName: file.name, content: btoa(chunks.join('')), mimeType: file.type || 'application/octet-stream' })
-      }
-    }
-    const res = await fetch('/api/admin/budget/parse-bid', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ documents }),
-    })
+  const parseFilesViaFormData = async (files: File[]): Promise<ParsedBid[]> => {
+    const fd = new FormData()
+    for (const f of files) fd.append('files', f)
+    const res = await fetch('/api/admin/budget/parse-bid', { method: 'POST', body: fd })
     const data = await res.json()
     if (!res.ok) throw new Error(data.error || 'Parsing failed')
     return data.bids as ParsedBid[]
   }
 
-  const handlePreviousQuoteFiles = async (files: FileList) => {
-    if (!files.length) return
-    setParsingPrevBids(true)
+  const handleUploadSubmit = async () => {
+    if (!currentFiles.length) { toast.error('Select at least one current bid file'); return }
+    setParsingBids(true)
+    setUploadDialogOpen(false)
     try {
-      const bids = await parseBidFiles(files)
-      setPreviousBids(bids)
-      toast.success(`Previous bid loaded: ${bids.map((b) => b.vendor).join(', ')}`)
+      const [current, previous] = await Promise.all([
+        parseFilesViaFormData(currentFiles),
+        prevFiles.length ? parseFilesViaFormData(prevFiles) : Promise.resolve([] as ParsedBid[]),
+      ])
+      setParsedBids(current)
+      setPreviousBids(previous)
+      setBidLevelingOpen(true)
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Failed to parse previous bid')
+      toast.error(e instanceof Error ? e.message : 'Failed to parse documents')
     } finally {
-      setParsingPrevBids(false)
-      if (prevQuoteInputRef.current) prevQuoteInputRef.current.value = ''
+      setParsingBids(false)
+      setCurrentFiles([])
+      setPrevFiles([])
     }
   }
 
@@ -538,46 +491,11 @@ export default function AdminBudgetPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => quoteInputRef.current?.click()}
+            onClick={() => setUploadDialogOpen(true)}
             disabled={parsingBids}
           >
-            {parsingBids ? 'Parsing…' : '📄 Upload Quote'}
+            {parsingBids ? 'Parsing…' : '📄 Upload Bids'}
           </Button>
-          <input
-            ref={quoteInputRef}
-            type="file"
-            accept=".txt,.csv,.pdf,.xlsx,.xls,.doc,.docx"
-            multiple
-            className="hidden"
-            onChange={(e) => e.target.files && handleQuoteFiles(e.target.files)}
-          />
-          <div className="relative">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => prevQuoteInputRef.current?.click()}
-              disabled={parsingPrevBids}
-              className={previousBids.length > 0 ? 'border-purple-400 text-purple-700' : ''}
-              title="Load a previous revision of the same bid to see variance"
-            >
-              {parsingPrevBids ? 'Parsing…' : previousBids.length > 0 ? `↩ Prev: ${previousBids.map(b => b.vendor).join(', ')}` : '↩ Load Previous Bid'}
-            </Button>
-            {previousBids.length > 0 && (
-              <button
-                onClick={() => setPreviousBids([])}
-                className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-muted-foreground/30 text-[10px] flex items-center justify-center hover:bg-muted-foreground/50"
-                title="Clear previous bid"
-              >✕</button>
-            )}
-          </div>
-          <input
-            ref={prevQuoteInputRef}
-            type="file"
-            accept=".txt,.csv,.pdf,.xlsx,.xls,.doc,.docx"
-            multiple
-            className="hidden"
-            onChange={(e) => e.target.files && handlePreviousQuoteFiles(e.target.files)}
-          />
           <Button onClick={openCreate}>Add Line</Button>
         </div>
       </div>
@@ -753,6 +671,96 @@ export default function AdminBudgetPage() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setNoteDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleSaveNote} disabled={savingNote}>{savingNote ? 'Saving…' : 'Add Note'}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Upload Bids dialog */}
+      <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Upload Bids</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-5 py-2">
+            {/* Current bids */}
+            <div className="space-y-2">
+              <Label className="font-medium">Current Bid(s) <span className="text-destructive">*</span></Label>
+              <p className="text-xs text-muted-foreground">PDF, CSV, TXT, or Word — one or more vendor quotes to compare</p>
+              <div
+                className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                onClick={() => currentFileInputRef.current?.click()}
+              >
+                {currentFiles.length > 0 ? (
+                  <div className="space-y-1">
+                    {currentFiles.map((f) => (
+                      <div key={f.name} className="text-sm font-medium flex items-center justify-center gap-1">
+                        <span>📄</span> {f.name}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="text-xs text-muted-foreground hover:text-foreground mt-1"
+                      onClick={(e) => { e.stopPropagation(); setCurrentFiles([]) }}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Click to select files</p>
+                )}
+              </div>
+              <input
+                ref={currentFileInputRef}
+                type="file"
+                accept=".txt,.csv,.pdf,.xlsx,.xls,.doc,.docx"
+                multiple
+                className="hidden"
+                onChange={(e) => e.target.files && setCurrentFiles(Array.from(e.target.files))}
+              />
+            </div>
+
+            {/* Previous revision */}
+            <div className="space-y-2">
+              <Label className="font-medium">Previous Revision <span className="text-muted-foreground font-normal">(optional — for variance analysis)</span></Label>
+              <p className="text-xs text-muted-foreground">Upload an earlier version of the same bid to see what changed</p>
+              <div
+                className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                onClick={() => prevFileInputRef.current?.click()}
+              >
+                {prevFiles.length > 0 ? (
+                  <div className="space-y-1">
+                    {prevFiles.map((f) => (
+                      <div key={f.name} className="text-sm font-medium flex items-center justify-center gap-1">
+                        <span>📄</span> {f.name}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="text-xs text-muted-foreground hover:text-foreground mt-1"
+                      onClick={(e) => { e.stopPropagation(); setPrevFiles([]) }}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Click to select previous version</p>
+                )}
+              </div>
+              <input
+                ref={prevFileInputRef}
+                type="file"
+                accept=".txt,.csv,.pdf,.xlsx,.xls,.doc,.docx"
+                multiple
+                className="hidden"
+                onChange={(e) => e.target.files && setPrevFiles(Array.from(e.target.files))}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setUploadDialogOpen(false); setCurrentFiles([]); setPrevFiles([]) }}>Cancel</Button>
+            <Button onClick={handleUploadSubmit} disabled={!currentFiles.length}>
+              Parse &amp; Compare
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

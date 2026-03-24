@@ -73,97 +73,138 @@ Important:
 - Round amounts to nearest dollar
 - Group very minor line items under their category if they are sub-items`
 
+async function parseOneFile(
+  client: Anthropic,
+  fileName: string,
+  buffer: ArrayBuffer,
+  mimeType: string,
+): Promise<ParsedBid> {
+  const isPdf = mimeType === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf')
+  const isText = !isPdf && (mimeType.startsWith('text/') || mimeType === 'application/json' || fileName.endsWith('.csv') || fileName.endsWith('.txt'))
+
+  type ContentBlock =
+    | { type: 'text'; text: string }
+    | { type: 'document'; source: { type: 'base64'; media_type: 'application/pdf'; data: string } }
+
+  const contentBlocks: ContentBlock[] = []
+
+  if (isPdf) {
+    const bytes = new Uint8Array(buffer)
+    const chunks: string[] = []
+    for (let i = 0; i < bytes.length; i += 8192) {
+      chunks.push(String.fromCharCode(...bytes.subarray(i, i + 8192)))
+    }
+    const b64 = btoa(chunks.join(''))
+    contentBlocks.push({
+      type: 'document',
+      source: { type: 'base64', media_type: 'application/pdf', data: b64 },
+    })
+    contentBlocks.push({
+      type: 'text',
+      text: `Parse this vendor quote/bid document (file: ${fileName}) and return structured JSON as instructed.`,
+    })
+  } else if (isText) {
+    const text = new TextDecoder().decode(buffer).slice(0, 50000)
+    contentBlocks.push({
+      type: 'text',
+      text: `Parse this vendor quote/bid document and return structured JSON as instructed.\n\nFile: ${fileName}\n\n---\n${text}\n---`,
+    })
+  } else {
+    const text = new TextDecoder('utf-8', { fatal: false }).decode(buffer).slice(0, 50000)
+    contentBlocks.push({
+      type: 'text',
+      text: `Parse this vendor quote/bid document and return structured JSON as instructed.\n\nFile: ${fileName}\n\n---\n${text}\n---`,
+    })
+  }
+
+  const response = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 4096,
+    system: SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: contentBlocks }],
+  })
+
+  const text = response.content[0].type === 'text' ? response.content[0].text : ''
+  const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/) || text.match(/(\{[\s\S]*\})/)
+  const jsonStr = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text.trim()
+
+  try {
+    const data = JSON.parse(jsonStr)
+    return {
+      vendor: data.vendor || fileName,
+      fileName,
+      total: Number(data.total) || 0,
+      items: (data.items || []).map((item: Record<string, unknown>) => ({
+        category: String(item.category || 'Other'),
+        description: String(item.description || ''),
+        amount: Number(item.amount) || 0,
+        unit: item.unit ? String(item.unit) : null,
+        quantity: item.quantity != null ? Number(item.quantity) : null,
+      })),
+    }
+  } catch {
+    return { vendor: fileName, fileName, total: 0, items: [], raw_summary: text }
+  }
+}
+
 export async function POST(req: NextRequest) {
   const auth = await requireAdmin()
   if (auth instanceof NextResponse) return auth
 
   try {
-    const { documents } = await req.json() as {
-      documents: Array<{ fileName: string; content: string; mimeType: string }>
-    }
-
-    if (!documents || documents.length === 0) {
-      return NextResponse.json({ error: 'No documents provided' }, { status: 400 })
-    }
-
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
     const results: ParsedBid[] = []
 
-    for (const doc of documents) {
-      const isPdf = doc.mimeType === 'application/pdf' || doc.fileName.toLowerCase().endsWith('.pdf')
-      const isText = !isPdf && (doc.mimeType?.startsWith('text/') || doc.mimeType === 'application/json')
+    const contentType = req.headers.get('content-type') || ''
 
-      // Build message content
-      type ContentBlock =
-        | { type: 'text'; text: string }
-        | { type: 'document'; source: { type: 'base64'; media_type: 'application/pdf'; data: string } }
+    if (contentType.includes('multipart/form-data')) {
+      // FormData upload — no base64 overhead in request body
+      const formData = await req.formData()
+      const files = formData.getAll('files') as File[]
 
-      const contentBlocks: ContentBlock[] = []
-
-      if (isPdf) {
-        // Use Claude's native PDF document block
-        contentBlocks.push({
-          type: 'document',
-          source: { type: 'base64', media_type: 'application/pdf', data: doc.content },
-        })
-        contentBlocks.push({
-          type: 'text',
-          text: `Parse this vendor quote/bid document (file: ${doc.fileName}) and return structured JSON as instructed.`,
-        })
-      } else {
-        // Plain text / CSV / other text-readable formats
-        const textContent = isText ? doc.content : Buffer.from(doc.content, 'base64').toString('utf-8').slice(0, 50000)
-        contentBlocks.push({
-          type: 'text',
-          text: `Parse this vendor quote/bid document and return structured JSON as instructed.\n\nFile name: ${doc.fileName}\n\nDocument content:\n---\n${textContent.slice(0, 50000)}\n---`,
-        })
+      if (!files.length) {
+        return NextResponse.json({ error: 'No files provided' }, { status: 400 })
       }
 
-      const response = await client.messages.create({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 4096,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: contentBlocks }],
-      })
+      for (const file of files) {
+        const buffer = await file.arrayBuffer()
+        const parsed = await parseOneFile(client, file.name, buffer, file.type || 'application/octet-stream')
+        results.push(parsed)
+      }
+    } else {
+      // Legacy JSON fallback
+      const body = await req.json() as {
+        documents: Array<{ fileName: string; content: string; mimeType: string }>
+      }
+      const documents = body.documents || []
 
-      const text = response.content[0].type === 'text' ? response.content[0].text : ''
-
-      // Extract JSON from response (handle markdown code blocks)
-      const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/) || text.match(/(\{[\s\S]*\})/)
-      const jsonStr = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text.trim()
-
-      let parsed: ParsedBid
-      try {
-        const data = JSON.parse(jsonStr)
-        parsed = {
-          vendor: data.vendor || doc.fileName,
-          fileName: doc.fileName,
-          total: Number(data.total) || 0,
-          items: (data.items || []).map((item: Record<string, unknown>) => ({
-            category: String(item.category || 'Other'),
-            description: String(item.description || ''),
-            amount: Number(item.amount) || 0,
-            unit: item.unit ? String(item.unit) : null,
-            quantity: item.quantity != null ? Number(item.quantity) : null,
-          })),
-        }
-      } catch {
-        // Fallback: return raw text as a single summary item
-        parsed = {
-          vendor: doc.fileName,
-          fileName: doc.fileName,
-          total: 0,
-          items: [],
-          raw_summary: text,
-        }
+      if (!documents.length) {
+        return NextResponse.json({ error: 'No documents provided' }, { status: 400 })
       }
 
-      results.push(parsed)
+      for (const doc of documents) {
+        const isPdf = doc.mimeType === 'application/pdf' || doc.fileName.toLowerCase().endsWith('.pdf')
+        const isText = !isPdf && (doc.mimeType?.startsWith('text/') || doc.mimeType === 'application/json')
+
+        let buffer: ArrayBuffer
+        if (isText) {
+          buffer = new TextEncoder().encode(doc.content).buffer as ArrayBuffer
+        } else {
+          // Decode base64 to buffer
+          const binary = atob(doc.content)
+          const arr = new Uint8Array(binary.length)
+          for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i)
+          buffer = arr.buffer as ArrayBuffer
+        }
+
+        const parsed = await parseOneFile(client, doc.fileName, buffer, doc.mimeType || 'application/octet-stream')
+        results.push(parsed)
+      }
     }
 
     return NextResponse.json({ bids: results })
   } catch (e) {
     console.error('parse-bid error', e)
-    return NextResponse.json({ error: 'Failed to parse documents' }, { status: 500 })
+    return NextResponse.json({ error: String(e) }, { status: 500 })
   }
 }

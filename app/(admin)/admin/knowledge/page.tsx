@@ -155,6 +155,28 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
+// Minimal markdown → HTML for lightbox body
+function renderMarkdownLightbox(md: string): string {
+  return md
+    .replace(/^### (.+)$/gm, '<h3 class="text-xl font-semibold mt-8 mb-3">$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-bold mt-10 mb-4">$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-bold mt-12 mb-5">$1</h1>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="w-full rounded-xl my-6 object-cover max-h-96" />')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-primary underline underline-offset-2">$1</a>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .split('\n\n')
+    .map((block) => {
+      if (block.startsWith('<h') || block.startsWith('<img')) return block
+      if (block.startsWith('- ')) {
+        const items = block.split('\n').filter((l) => l.startsWith('- '))
+        return '<ul class="list-disc pl-6 space-y-1 my-4">' + items.map((i) => `<li>${i.slice(2)}</li>`).join('') + '</ul>'
+      }
+      return `<p class="mb-4 leading-relaxed">${block.replace(/\n/g, '<br/>')}</p>`
+    })
+    .join('\n')
+}
+
 export default function AdminKnowledgePage() {
   const [articles, setArticles] = useState<KnowledgeArticle[]>([])
   const [loading, setLoading] = useState(true)
@@ -166,6 +188,7 @@ export default function AdminKnowledgePage() {
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<KnowledgeArticle | null>(null)
   const [preview, setPreview] = useState(false)
+  const [viewingArticle, setViewingArticle] = useState<KnowledgeArticle | null>(null)
 
   // URL-first flow (new article only)
   const [newArticleMode, setNewArticleMode] = useState<'url' | 'editor'>('url')
@@ -409,15 +432,13 @@ export default function AdminKnowledgePage() {
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <a
-                          href={`/learn/${a.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-medium text-sm hover:text-primary hover:underline transition-colors"
-                          onClick={(e) => e.stopPropagation()}
+                        <button
+                          type="button"
+                          className="font-medium text-sm hover:text-primary hover:underline transition-colors text-left"
+                          onClick={(e) => { e.stopPropagation(); setViewingArticle(a) }}
                         >
                           {a.title}
-                        </a>
+                        </button>
                         {!a.published && (
                           <span className="text-xs bg-zinc-100 text-zinc-500 rounded px-1.5 py-0.5">Draft</span>
                         )}
@@ -696,6 +717,47 @@ export default function AdminKnowledgePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Article lightbox */}
+      {viewingArticle && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm overflow-y-auto py-8 px-4"
+          onClick={(e) => { if (e.target === e.currentTarget) setViewingArticle(null) }}
+        >
+          <div className="relative bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden">
+            {viewingArticle.image_url && (
+              <div className="w-full h-64 bg-muted overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={viewingArticle.image_url} alt="" className="w-full h-full object-cover" />
+              </div>
+            )}
+            <button
+              onClick={() => setViewingArticle(null)}
+              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-colors z-10"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+            <div className="px-8 py-8">
+              <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
+                {allCategories.find((c) => c.value === viewingArticle.category)?.label || viewingArticle.category}
+              </div>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-4">{viewingArticle.title}</h1>
+              {viewingArticle.tags && (
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {viewingArticle.tags.split(',').map((t) => t.trim()).filter(Boolean).map((t) => (
+                    <span key={t} className="text-xs bg-gray-100 rounded-full px-3 py-1 text-gray-500">{t}</span>
+                  ))}
+                </div>
+              )}
+              <div
+                className="prose prose-zinc max-w-none text-gray-700 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: renderMarkdownLightbox(viewingArticle.body) }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete confirm */}
       <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
