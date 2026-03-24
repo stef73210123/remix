@@ -8,6 +8,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Button } from '@/components/ui/button'
 import { AnnouncementCard } from '@/components/shared/AnnouncementCard'
 import DistributionChartClient from './DistributionChartClient'
+import BudgetChartClient from './BudgetChartClient'
+import { TimelineGantt } from '@/components/shared/TimelineGantt'
 import { getInvestorPositionForAsset } from '@/lib/sheets/investors'
 import { getDistributionsForUser } from '@/lib/sheets/distributions'
 import { getDocumentsForUser } from '@/lib/sheets/documents'
@@ -110,7 +112,7 @@ export default async function PortalAssetPage({
   })
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-12">
+    <div className="container mx-auto max-w-6xl px-4 py-8 sm:py-12">
       {/* Header */}
       <div className="mb-2 text-sm text-muted-foreground">
         <Link href="/portal" className="hover:underline">Portfolio</Link>
@@ -125,13 +127,15 @@ export default async function PortalAssetPage({
       </div>
 
       <Tabs defaultValue="position">
-        <TabsList className="mb-6">
-          <TabsTrigger value="position">My Position</TabsTrigger>
-          <TabsTrigger value="status">Project Status</TabsTrigger>
-          <TabsTrigger value="timeline">Timeline</TabsTrigger>
-          <TabsTrigger value="budget">Budget</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto mb-6">
+          <TabsList className="min-w-max">
+            <TabsTrigger value="position">My Position</TabsTrigger>
+            <TabsTrigger value="status">Project Status</TabsTrigger>
+            <TabsTrigger value="timeline">Timeline</TabsTrigger>
+            <TabsTrigger value="budget">Budget</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* ── Tab 1: My Position ── */}
         <TabsContent value="position">
@@ -267,6 +271,9 @@ export default async function PortalAssetPage({
         <TabsContent value="timeline">
           {timeline.length > 0 ? (
             <div className="space-y-6">
+              {/* Gantt chart */}
+              <TimelineGantt milestones={timeline} announcements={announcements} />
+
               {upcomingMilestones.length > 0 && (
                 <div className="rounded-lg border bg-muted/30 p-4">
                   <h3 className="text-sm font-semibold mb-3">Upcoming Milestones</h3>
@@ -316,6 +323,12 @@ export default async function PortalAssetPage({
         <TabsContent value="budget">
           {budget.length > 0 ? (
             <div className="space-y-4">
+              {/* Budget chart */}
+              <div className="rounded-xl border p-4">
+                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Cost Breakdown by Group</h2>
+                <BudgetChartClient lines={budget} />
+              </div>
+
               <div className="rounded-md border overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>

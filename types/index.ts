@@ -91,7 +91,9 @@ export type MilestoneStatus = 'upcoming' | 'in-progress' | 'complete' | 'delayed
 export interface TimelineMilestone {
   milestone: string
   planned_date: string
+  planned_end_date?: string
   actual_date?: string
+  actual_end_date?: string
   status: MilestoneStatus
   notes?: string
   sort_order: number
@@ -107,6 +109,7 @@ export interface BudgetLine {
   notes?: string
   sort_order: number
   group?: string
+  csi_code?: string
 }
 
 // ─── Portfolio ───────────────────────────────────────────────────────────────

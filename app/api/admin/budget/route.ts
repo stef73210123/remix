@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
       notes: rest.notes || '',
       sort_order: parseInt(rest.sort_order || '0', 10),
       group: rest.group || '',
+      csi_code: rest.csi_code || '',
     }
     await appendBudgetLine(asset, line)
     await logActivity(auth.email, 'budget.create', `${asset}/${line.category}`, { asset })
@@ -95,6 +96,7 @@ export async function PATCH(req: NextRequest) {
       notes: rest.notes || '',
       sort_order: parseInt(rest.sort_order || '0', 10),
       group: rest.group || '',
+      csi_code: rest.csi_code || '',
     }
     await updateBudgetLine(asset, rowIndex, line)
     await logActivity(auth.email, 'budget.update', `${asset}/${line.category}`, { asset, rowIndex })

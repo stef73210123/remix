@@ -39,3 +39,43 @@ export function buildMagicLinkUrl(token: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   return `${baseUrl}/auth/verify?token=${encodeURIComponent(token)}`
 }
+
+/**
+ * Creates an invite token valid for 7 days (purpose: 'invite').
+ */
+export async function createInviteToken(email: string): Promise<string> {
+  const secret = getMagicLinkSecret()
+  return new SignJWT({ email, purpose: 'invite' })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d')
+    .sign(secret)
+}
+
+/**
+ * Creates a password reset token valid for 15 minutes (purpose: 'reset').
+ */
+export async function createResetToken(email: string): Promise<string> {
+  const secret = getMagicLinkSecret()
+  return new SignJWT({ email, purpose: 'reset' })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('15m')
+    .sign(secret)
+}
+
+/**
+ * Verifies an invite or reset token. Returns { email, purpose } if valid, null if invalid/expired.
+ */
+export async function verifyToken(token: string): Promise<{ email: string; purpose: string } | null> {
+  try {
+    const secret = getMagicLinkSecret()
+    const { payload } = await jwtVerify(token, secret)
+    const email = payload.email as string
+    const purpose = payload.purpose as string
+    if (!email || !purpose) return null
+    return { email, purpose }
+  } catch {
+    return null
+  }
+}

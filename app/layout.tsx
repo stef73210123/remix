@@ -10,7 +10,7 @@ const josefin = Josefin_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Circular',
+  title: 'Circular | Invest in a Regenerative Future',
   description: 'Private real estate investment platform',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://circular.enterprises'),
 }

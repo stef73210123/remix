@@ -22,6 +22,8 @@ import {
 import { toast } from 'sonner'
 import type { User, UserRole } from '@/types'
 
+type UserWithStatus = User & { has_password: boolean }
+
 const ROLES: UserRole[] = ['admin', 'gp', 'lp', 'dealroom']
 const ASSET_OPTIONS = ['circularplatform', 'livingstonfarm', 'wrenofthewoods']
 
@@ -51,7 +53,7 @@ const emptyForm = (): UserFormState => ({
 })
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<User[]>([])
+  const [users, setUsers] = useState<UserWithStatus[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -59,6 +61,7 @@ export default function AdminUsersPage() {
   const [form, setForm] = useState<UserFormState>(emptyForm())
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<User | null>(null)
+  const [resendingInvite, setResendingInvite] = useState<string | null>(null)
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
@@ -124,7 +127,7 @@ export default function AdminUsersPage() {
         toast.error(data.error || 'Save failed')
         return
       }
-      toast.success(editingUser ? 'User updated' : 'User created')
+      toast.success(editingUser ? 'User updated' : 'User created — invite email sent')
       setDialogOpen(false)
       loadUsers()
     } catch {
@@ -151,6 +154,27 @@ export default function AdminUsersPage() {
       loadUsers()
     } catch {
       toast.error('Network error')
+    }
+  }
+
+  const handleResendInvite = async (user: User) => {
+    setResendingInvite(user.email)
+    try {
+      const res = await fetch('/api/admin/users/resend-invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        toast.error(data.error || 'Failed to resend invite')
+        return
+      }
+      toast.success(`Invite sent to ${user.email}`)
+    } catch {
+      toast.error('Network error')
+    } finally {
+      setResendingInvite(null)
     }
   }
 
@@ -182,7 +206,7 @@ export default function AdminUsersPage() {
       ) : filtered.length === 0 ? (
         <p className="text-sm text-muted-foreground">No users found.</p>
       ) : (
-        <div className="rounded-md border">
+        <div className="rounded-md border overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/50">
@@ -191,6 +215,7 @@ export default function AdminUsersPage() {
                 <th className="px-4 py-2 text-left font-medium">Role</th>
                 <th className="px-4 py-2 text-left font-medium">Assets</th>
                 <th className="px-4 py-2 text-left font-medium">Status</th>
+                <th className="px-4 py-2 text-left font-medium">Password</th>
                 <th className="px-4 py-2 text-left font-medium">Joined</th>
                 <th className="px-4 py-2 text-right font-medium">Actions</th>
               </tr>
@@ -213,9 +238,27 @@ export default function AdminUsersPage() {
                       {user.active ? 'Active' : 'Inactive'}
                     </Badge>
                   </td>
+                  <td className="px-4 py-2">
+                    {user.has_password ? (
+                      <Badge variant="outline" className="text-xs text-green-700 border-green-300">Set</Badge>
+                    ) : (
+                      <Badge variant="secondary" className="text-xs">Invite pending</Badge>
+                    )}
+                  </td>
                   <td className="px-4 py-2 text-muted-foreground">{user.created_at}</td>
                   <td className="px-4 py-2 text-right">
                     <div className="flex items-center justify-end gap-2">
+                      {!user.has_password && user.active && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-700"
+                          onClick={() => handleResendInvite(user)}
+                          disabled={resendingInvite === user.email}
+                        >
+                          {resendingInvite === user.email ? 'Sending…' : 'Resend Invite'}
+                        </Button>
+                      )}
                       <Button variant="ghost" size="sm" onClick={() => openEdit(user)}>
                         Edit
                       </Button>

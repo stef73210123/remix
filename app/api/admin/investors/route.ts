@@ -70,9 +70,6 @@ export async function POST(req: NextRequest) {
   if (auth instanceof NextResponse) return auth
   try {
     const body = await req.json()
-    if (!body.email || !body.name || !body.asset) {
-      return NextResponse.json({ error: 'email, name, and asset are required' }, { status: 400 })
-    }
     const pos = bodyToPosition({
       ...body,
       investor_id: body.investor_id || `inv_${Date.now()}`,

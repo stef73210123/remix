@@ -7,12 +7,17 @@ function extractYoutubeId(url: string): string | null {
   return m ? m[1] : null
 }
 
+function isVideoUrl(url: string) {
+  return /\.(mp4|webm|mov|ogg)(\?|$)/i.test(url)
+}
+
 function MediaCarousel({ urls }: { urls: string[] }) {
   const [idx, setIdx] = useState(0)
   if (urls.length === 0) return null
 
   const url = urls[idx]
   const ytId = extractYoutubeId(url)
+  const isVid = !ytId && isVideoUrl(url)
 
   return (
     <div className="mt-3">
@@ -25,6 +30,9 @@ function MediaCarousel({ urls }: { urls: string[] }) {
             allowFullScreen
             className="w-full h-full"
           />
+        ) : isVid ? (
+          // eslint-disable-next-line jsx-a11y/media-has-caption
+          <video src={url} controls className="w-full h-full object-contain bg-black" />
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img

@@ -1,6 +1,9 @@
 'use client'
 
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import { BidLevelingDialog } from '@/components/admin/BidLevelingDialog'
+import { CsiCombobox, CATEGORY_TO_CSI } from '@/components/admin/CsiCombobox'
+import type { ParsedBid } from '@/app/api/admin/budget/parse-bid/route'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -14,6 +17,8 @@ import {
 import { toast } from 'sonner'
 import { formatCurrency } from '@/lib/utils/format'
 import type { BudgetLineWithRow } from '@/lib/sheets/budget'
+import { Textarea } from '@/components/ui/textarea'
+import { MediaUploader } from '@/components/shared/MediaUploader'
 import {
   BarChart,
   Bar,
@@ -31,6 +36,13 @@ const ASSETS = [
   { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
 ]
 
+const HOLDINGS = [
+  { slug: 'livingstonfarm', name: 'Livingston Farm' },
+  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
+]
+
+type BudgetLineDisplay = BudgetLineWithRow & { _source?: string }
+
 type SortField = 'sort_order' | 'budgeted' | 'actual_to_date' | 'projected_final'
 
 interface FormState {
@@ -41,6 +53,7 @@ interface FormState {
   projected_final: string
   notes: string
   sort_order: string
+  csi_code: string
 }
 
 const emptyForm = (): FormState => ({
@@ -51,6 +64,7 @@ const emptyForm = (): FormState => ({
   projected_final: '0',
   notes: '',
   sort_order: '0',
+  csi_code: '',
 })
 
 // ─── Group combobox with localStorage persistence ─────────────────────────────
@@ -150,7 +164,7 @@ function GroupSelect({
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function AdminBudgetPage() {
-  const [asset, setAsset] = useState('livingstonfarm')
+  const [asset, setAsset] = useState('circularplatform')
   const [lines, setLines] = useState<BudgetLineWithRow[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -159,7 +173,25 @@ export default function AdminBudgetPage() {
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<BudgetLineWithRow | null>(null)
   const [sortField, setSortField] = useState<SortField>('sort_order')
-  const [showChart, setShowChart] = useState(true)
+  const [editingAsset, setEditingAsset] = useState(asset)
+  const [noteDialogOpen, setNoteDialogOpen] = useState(false)
+  const [noteTarget, setNoteTarget] = useState<{ ref_id: string; ref_label: string } | null>(null)
+  const [noteForm, setNoteForm] = useState({ title: '', body: '' })
+  const [noteMedia, setNoteMedia] = useState<string[]>([])
+  const [savingNote, setSavingNote] = useState(false)
+
+  // Bid leveling state
+  const [parsedBids, setParsedBids] = useState<ParsedBid[]>([])
+  const [previousBids, setPreviousBids] = useState<ParsedBid[]>([])
+  const [bidLevelingOpen, setBidLevelingOpen] = useState(false)
+  const [parsingBids, setParsingBids] = useState(false)
+  const [parsingPrevBids, setParsingPrevBids] = useState(false)
+  const quoteInputRef = useRef<HTMLInputElement>(null)
+  const prevQuoteInputRef = useRef<HTMLInputElement>(null)
+
+  // Circular holding roll-up state
+  const [includeHoldings, setIncludeHoldings] = useState<Set<string>>(new Set(HOLDINGS.map((h) => h.slug)))
+  const [holdingLines, setHoldingLines] = useState<Record<string, BudgetLineWithRow[]>>({})
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -174,25 +206,69 @@ export default function AdminBudgetPage() {
     }
   }, [asset])
 
+  const loadHoldingLines = useCallback(async (slug: string) => {
+    try {
+      const res = await fetch(`/api/admin/budget?asset=${slug}`)
+      if (!res.ok) throw new Error()
+      const data: BudgetLineWithRow[] = await res.json()
+      setHoldingLines((prev) => ({ ...prev, [slug]: data }))
+    } catch {
+      toast.error(`Failed to load ${slug} budget lines`)
+    }
+  }, [])
+
   useEffect(() => { load() }, [load])
 
-  // All groups derived from lines
+  // Pre-load all holdings on mount so default Circular view has data
+  useEffect(() => {
+    HOLDINGS.forEach((h) => loadHoldingLines(h.slug))
+  }, [loadHoldingLines])
+
+  // Reset holdings when switching away from / back to circularplatform
+  useEffect(() => {
+    if (asset !== 'circularplatform') {
+      setIncludeHoldings(new Set())
+      setHoldingLines({})
+    } else {
+      const defaultHoldings = new Set(HOLDINGS.map((h) => h.slug))
+      setIncludeHoldings(defaultHoldings)
+      HOLDINGS.forEach((h) => loadHoldingLines(h.slug))
+    }
+  }, [asset, loadHoldingLines])
+
+
+  // All groups derived from own lines
   const allGroups = useMemo(() => {
     const g = new Set(lines.map((l) => l.group).filter(Boolean) as string[])
     return Array.from(g).sort()
   }, [lines])
 
-  // Sort lines within groups
-  const sortedLines = useMemo(() => {
-    if (sortField === 'sort_order') return [...lines]
-    return [...lines].sort((a, b) => (b[sortField] as number) - (a[sortField] as number))
-  }, [lines, sortField])
+  // Merge own lines + included holding lines (tagged with _source)
+  const allDisplayLines = useMemo((): BudgetLineDisplay[] => {
+    const own: BudgetLineDisplay[] = lines.map((l) => ({ ...l }))
+    const holding: BudgetLineDisplay[] = []
+    for (const { slug, name } of HOLDINGS) {
+      if (includeHoldings.has(slug) && holdingLines[slug]) {
+        for (const l of holdingLines[slug]) {
+          holding.push({ ...l, _source: name })
+        }
+      }
+    }
+    return [...own, ...holding]
+  }, [lines, includeHoldings, holdingLines])
 
-  // Group the lines
+  // Sort lines
+  const sortedLines = useMemo(() => {
+    if (sortField === 'sort_order') return [...allDisplayLines]
+    return [...allDisplayLines].sort((a, b) => (b[sortField] as number) - (a[sortField] as number))
+  }, [allDisplayLines, sortField])
+
+  // Group the lines — prefix holding group names with source asset name
   const grouped = useMemo(() => {
-    const groups = new Map<string, BudgetLineWithRow[]>()
+    const groups = new Map<string, BudgetLineDisplay[]>()
     for (const line of sortedLines) {
-      const g = line.group || '(Ungrouped)'
+      const rawGroup = line.group || '(Ungrouped)'
+      const g = line._source ? `${line._source} · ${rawGroup}` : rawGroup
       if (!groups.has(g)) groups.set(g, [])
       groups.get(g)!.push(line)
     }
@@ -211,11 +287,125 @@ export default function AdminBudgetPage() {
 
   const openCreate = () => {
     setEditingRow(null)
+    setEditingAsset(asset)
     setForm(emptyForm())
     setDialogOpen(true)
   }
 
-  const openEdit = (line: BudgetLineWithRow) => {
+  // ── Bid parsing ─────────────────────────────────────────────────────────────
+
+  const assetType = asset === 'wrenofthewoods' ? 'restaurant' : asset === 'livingstonfarm' ? 'resort' : 'other'
+
+  const handleQuoteFiles = async (files: FileList) => {
+    if (!files.length) return
+    setParsingBids(true)
+    try {
+      const documents: Array<{ fileName: string; content: string; mimeType: string }> = []
+      for (const file of Array.from(files)) {
+        const isText = file.type.startsWith('text/') || file.name.endsWith('.csv') || file.name.endsWith('.txt')
+        if (isText) {
+          const text = await file.text()
+          documents.push({ fileName: file.name, content: text, mimeType: file.type || 'text/plain' })
+        } else {
+          // Binary files (PDF, docx, etc.) — send as base64 (chunked to avoid stack overflow)
+          const buf = await file.arrayBuffer()
+          const bytes = new Uint8Array(buf)
+          const chunks: string[] = []
+          for (let i = 0; i < bytes.length; i += 8192) {
+            chunks.push(String.fromCharCode(...bytes.subarray(i, i + 8192)))
+          }
+          const b64 = btoa(chunks.join(''))
+          documents.push({ fileName: file.name, content: b64, mimeType: file.type || 'application/octet-stream' })
+        }
+      }
+      const res = await fetch('/api/admin/budget/parse-bid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documents }),
+      })
+      const data = await res.json()
+      if (!res.ok) { toast.error(data.error || 'Parsing failed'); return }
+      setParsedBids(data.bids)
+      setBidLevelingOpen(true)
+    } catch {
+      toast.error('Failed to parse documents')
+    } finally {
+      setParsingBids(false)
+      if (quoteInputRef.current) quoteInputRef.current.value = ''
+    }
+  }
+
+  // Parse previous bid revision for variance comparison
+  const parseBidFiles = async (files: FileList): Promise<ParsedBid[]> => {
+    const documents: Array<{ fileName: string; content: string; mimeType: string }> = []
+    for (const file of Array.from(files)) {
+      const isText = file.type.startsWith('text/') || file.name.endsWith('.csv') || file.name.endsWith('.txt')
+      if (isText) {
+        documents.push({ fileName: file.name, content: await file.text(), mimeType: file.type || 'text/plain' })
+      } else {
+        const buf = await file.arrayBuffer()
+        const bytes = new Uint8Array(buf)
+        const chunks: string[] = []
+        for (let i = 0; i < bytes.length; i += 8192) chunks.push(String.fromCharCode(...bytes.subarray(i, i + 8192)))
+        documents.push({ fileName: file.name, content: btoa(chunks.join('')), mimeType: file.type || 'application/octet-stream' })
+      }
+    }
+    const res = await fetch('/api/admin/budget/parse-bid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ documents }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Parsing failed')
+    return data.bids as ParsedBid[]
+  }
+
+  const handlePreviousQuoteFiles = async (files: FileList) => {
+    if (!files.length) return
+    setParsingPrevBids(true)
+    try {
+      const bids = await parseBidFiles(files)
+      setPreviousBids(bids)
+      toast.success(`Previous bid loaded: ${bids.map((b) => b.vendor).join(', ')}`)
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to parse previous bid')
+    } finally {
+      setParsingPrevBids(false)
+      if (prevQuoteInputRef.current) prevQuoteInputRef.current.value = ''
+    }
+  }
+
+  const handleBidConfirm = async (lines: Array<{ category: string; description: string; budgeted: number }>) => {
+    let added = 0
+    for (const line of lines) {
+      try {
+        const res = await fetch('/api/admin/budget', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            asset,
+            category: line.description || line.category,
+            group: line.category,
+            budgeted: line.budgeted,
+            actual_to_date: 0,
+            projected_final: line.budgeted,
+            notes: `Imported from vendor quote`,
+            sort_order: 0,
+            csi_code: CATEGORY_TO_CSI[line.category] || '',
+          }),
+        })
+        if (res.ok) added++
+      } catch { /* continue */ }
+    }
+    toast.success(`Added ${added} line${added !== 1 ? 's' : ''} to budget`)
+    load()
+  }
+
+  const openEdit = (line: BudgetLineDisplay) => {
+    const sourceSlug = (line as BudgetLineDisplay)._source
+      ? HOLDINGS.find((h) => h.name === (line as BudgetLineDisplay)._source)?.slug || asset
+      : asset
+    setEditingAsset(sourceSlug)
     setEditingRow(line._rowIndex)
     setForm({
       category: line.category,
@@ -225,6 +415,7 @@ export default function AdminBudgetPage() {
       projected_final: String(line.projected_final),
       notes: line.notes || '',
       sort_order: String(line.sort_order),
+      csi_code: line.csi_code || '',
     })
     setDialogOpen(true)
   }
@@ -238,7 +429,7 @@ export default function AdminBudgetPage() {
     try {
       const method = editingRow ? 'PATCH' : 'POST'
       const body = {
-        asset,
+        asset: editingAsset,
         ...form,
         ...(editingRow ? { rowIndex: editingRow } : {}),
       }
@@ -259,12 +450,49 @@ export default function AdminBudgetPage() {
     }
   }
 
-  const handleDelete = async (line: BudgetLineWithRow) => {
+  const openNoteDialog = (line: BudgetLineWithRow) => {
+    setNoteTarget({ ref_id: String(line._rowIndex), ref_label: line.category })
+    setNoteForm({ title: '', body: '' })
+    setNoteMedia([])
+    setNoteDialogOpen(true)
+  }
+
+  const handleSaveNote = async () => {
+    if (!noteForm.title || !noteTarget) { toast.error('Title is required'); return }
+    setSavingNote(true)
+    try {
+      const res = await fetch('/api/admin/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'budget',
+          asset,
+          ref_id: noteTarget.ref_id,
+          ref_label: noteTarget.ref_label,
+          title: noteForm.title,
+          body: noteForm.body,
+          media_urls: noteMedia,
+        }),
+      })
+      if (!res.ok) { toast.error('Failed to save note'); return }
+      toast.success('Note added')
+      setNoteDialogOpen(false)
+    } catch {
+      toast.error('Network error')
+    } finally {
+      setSavingNote(false)
+    }
+  }
+
+  const handleDelete = async (line: BudgetLineDisplay) => {
+    const deleteAsset = line._source
+      ? HOLDINGS.find((h) => h.name === line._source)?.slug || asset
+      : asset
     try {
       const res = await fetch('/api/admin/budget', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ asset, rowIndex: line._rowIndex }),
+        body: JSON.stringify({ asset: deleteAsset, rowIndex: line._rowIndex }),
       })
       const data = await res.json()
       if (!res.ok) { toast.error(data.error || 'Delete failed'); return }
@@ -276,9 +504,9 @@ export default function AdminBudgetPage() {
     }
   }
 
-  const totalBudgeted = lines.reduce((s, l) => s + l.budgeted, 0)
-  const totalActual = lines.reduce((s, l) => s + l.actual_to_date, 0)
-  const totalProjected = lines.reduce((s, l) => s + l.projected_final, 0)
+  const totalBudgeted = allDisplayLines.reduce((s, l) => s + l.budgeted, 0)
+  const totalActual = allDisplayLines.reduce((s, l) => s + l.actual_to_date, 0)
+  const totalProjected = allDisplayLines.reduce((s, l) => s + l.projected_final, 0)
 
   const formatYAxis = (v: number) =>
     v >= 1_000_000 ? `$${(v / 1_000_000).toFixed(1)}M`
@@ -293,7 +521,7 @@ export default function AdminBudgetPage() {
       </div>
 
       {/* Asset tabs */}
-      <div className="flex items-center justify-between gap-4 mb-6">
+      <div className="flex items-center justify-between gap-4 mb-4">
         <div className="flex gap-2">
           {ASSETS.map(({ slug, name }) => (
             <Button
@@ -306,22 +534,63 @@ export default function AdminBudgetPage() {
             </Button>
           ))}
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => setShowChart((v) => !v)}>
-            {showChart ? 'Hide Chart' : 'Show Chart'}
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => quoteInputRef.current?.click()}
+            disabled={parsingBids}
+          >
+            {parsingBids ? 'Parsing…' : '📄 Upload Quote'}
           </Button>
+          <input
+            ref={quoteInputRef}
+            type="file"
+            accept=".txt,.csv,.pdf,.xlsx,.xls,.doc,.docx"
+            multiple
+            className="hidden"
+            onChange={(e) => e.target.files && handleQuoteFiles(e.target.files)}
+          />
+          <div className="relative">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => prevQuoteInputRef.current?.click()}
+              disabled={parsingPrevBids}
+              className={previousBids.length > 0 ? 'border-purple-400 text-purple-700' : ''}
+              title="Load a previous revision of the same bid to see variance"
+            >
+              {parsingPrevBids ? 'Parsing…' : previousBids.length > 0 ? `↩ Prev: ${previousBids.map(b => b.vendor).join(', ')}` : '↩ Load Previous Bid'}
+            </Button>
+            {previousBids.length > 0 && (
+              <button
+                onClick={() => setPreviousBids([])}
+                className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-muted-foreground/30 text-[10px] flex items-center justify-center hover:bg-muted-foreground/50"
+                title="Clear previous bid"
+              >✕</button>
+            )}
+          </div>
+          <input
+            ref={prevQuoteInputRef}
+            type="file"
+            accept=".txt,.csv,.pdf,.xlsx,.xls,.doc,.docx"
+            multiple
+            className="hidden"
+            onChange={(e) => e.target.files && handlePreviousQuoteFiles(e.target.files)}
+          />
           <Button onClick={openCreate}>Add Line</Button>
         </div>
       </div>
 
+
       {loading ? (
         <p className="text-sm text-muted-foreground">Loading…</p>
-      ) : lines.length === 0 ? (
+      ) : allDisplayLines.length === 0 ? (
         <p className="text-sm text-muted-foreground">No budget lines yet.</p>
       ) : (
         <>
           {/* Chart */}
-          {showChart && chartData.length > 0 && (
+          {chartData.length > 0 && (
             <div className="mb-8 rounded-xl border p-4">
               <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">Cost Breakdown by Group</h2>
               <ResponsiveContainer width="100%" height={240}>
@@ -364,7 +633,7 @@ export default function AdminBudgetPage() {
           </div>
 
           {/* Grouped table */}
-          <div className="rounded-md border overflow-hidden">
+          <div className="rounded-md border overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/50">
@@ -381,7 +650,6 @@ export default function AdminBudgetPage() {
                   const subBudgeted = grpLines.reduce((s, l) => s + l.budgeted, 0)
                   const subActual = grpLines.reduce((s, l) => s + l.actual_to_date, 0)
                   const subProjected = grpLines.reduce((s, l) => s + l.projected_final, 0)
-
                   return (
                     <GroupSection
                       key={groupName}
@@ -392,6 +660,7 @@ export default function AdminBudgetPage() {
                       subProjected={subProjected}
                       onEdit={openEdit}
                       onDelete={setDeleteTarget}
+                      onNote={openNoteDialog}
                     />
                   )
                 })}
@@ -441,6 +710,13 @@ export default function AdminBudgetPage() {
               <Input type="number" value={form.projected_final} onChange={(e) => setForm((f) => ({ ...f, projected_final: e.target.value }))} />
             </div>
             <div className="space-y-1">
+              <Label>CSI MasterFormat Code <span className="text-muted-foreground font-normal">(optional)</span></Label>
+              <CsiCombobox
+                value={form.csi_code}
+                onChange={(code) => setForm((f) => ({ ...f, csi_code: code }))}
+              />
+            </div>
+            <div className="space-y-1">
               <Label>Notes</Label>
               <Input value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} placeholder="Optional" />
             </div>
@@ -450,6 +726,33 @@ export default function AdminBudgetPage() {
             <Button onClick={handleSave} disabled={saving}>
               {saving ? 'Saving…' : 'Save'}
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Note dialog */}
+      <Dialog open={noteDialogOpen} onOpenChange={setNoteDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Note{noteTarget ? ` — ${noteTarget.ref_label}` : ''}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="space-y-1">
+              <Label>Title</Label>
+              <Input value={noteForm.title} onChange={(e) => setNoteForm((f) => ({ ...f, title: e.target.value }))} placeholder="Brief note title" />
+            </div>
+            <div className="space-y-1">
+              <Label>Body (optional)</Label>
+              <Textarea value={noteForm.body} onChange={(e) => setNoteForm((f) => ({ ...f, body: e.target.value }))} placeholder="Details…" rows={3} />
+            </div>
+            <div className="space-y-1">
+              <Label>Media (optional)</Label>
+              <MediaUploader value={noteMedia} onChange={setNoteMedia} acceptAll />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setNoteDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveNote} disabled={savingNote}>{savingNote ? 'Saving…' : 'Add Note'}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -467,6 +770,16 @@ export default function AdminBudgetPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Bid Leveling Dialog */}
+      <BidLevelingDialog
+        open={bidLevelingOpen}
+        onClose={() => setBidLevelingOpen(false)}
+        bids={parsedBids}
+        previousBids={previousBids}
+        assetType={assetType as 'restaurant' | 'resort' | 'other'}
+        onConfirm={handleBidConfirm}
+      />
     </div>
   )
 }
@@ -481,14 +794,16 @@ function GroupSection({
   subProjected,
   onEdit,
   onDelete,
+  onNote,
 }: {
   groupName: string
-  lines: BudgetLineWithRow[]
+  lines: BudgetLineDisplay[]
   subBudgeted: number
   subActual: number
   subProjected: number
-  onEdit: (l: BudgetLineWithRow) => void
-  onDelete: (l: BudgetLineWithRow) => void
+  onEdit: (l: BudgetLineDisplay) => void
+  onDelete: (l: BudgetLineDisplay) => void
+  onNote: (l: BudgetLineWithRow) => void
 }) {
   const [open, setOpen] = useState(true)
 
@@ -512,14 +827,20 @@ function GroupSection({
 
       {/* Line items */}
       {open && lines.map((line) => (
-        <tr key={line._rowIndex} className="border-b last:border-0 hover:bg-muted/20">
-          <td className="px-4 py-2 pl-8">{line.category}</td>
+        <tr key={`${line._source || 'own'}-${line._rowIndex}`} className="border-b last:border-0 hover:bg-muted/20">
+          <td className="px-4 py-2 pl-8">
+            {line.category}
+            {line._source && (
+              <span className="ml-2 text-xs text-muted-foreground/60">({line._source})</span>
+            )}
+          </td>
           <td className="px-4 py-2 text-right">{formatCurrency(line.budgeted)}</td>
           <td className="px-4 py-2 text-right">{formatCurrency(line.actual_to_date)}</td>
           <td className="px-4 py-2 text-right">{formatCurrency(line.projected_final)}</td>
           <td className="px-4 py-2 text-muted-foreground max-w-xs truncate">{line.notes || '—'}</td>
           <td className="px-4 py-2 text-right">
             <div className="flex items-center justify-end gap-2">
+              <Button variant="ghost" size="sm" onClick={() => onNote(line)} title="Add note">Note</Button>
               <Button variant="ghost" size="sm" onClick={() => onEdit(line)}>Edit</Button>
               <Button
                 variant="ghost"

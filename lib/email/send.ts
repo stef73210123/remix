@@ -104,3 +104,29 @@ export async function sendDistributionNoticeEmail(
     react: DistributionNoticeEmail({ name, asset, amount, date, portalUrl }),
   })
 }
+
+export async function sendInviteEmail(
+  to: string,
+  name: string,
+  inviteUrl: string
+): Promise<void> {
+  const { InviteEmail } = await import('./templates/invite')
+  await sendEmail({
+    to,
+    subject: "You're invited to Circular",
+    react: InviteEmail({ name, inviteUrl }),
+  })
+}
+
+export async function sendPasswordResetEmail(
+  to: string,
+  name: string,
+  resetUrl: string
+): Promise<void> {
+  const { PasswordResetEmail } = await import('./templates/password-reset')
+  await sendEmail({
+    to,
+    subject: 'Reset your Circular password',
+    react: PasswordResetEmail({ name, resetUrl }),
+  })
+}

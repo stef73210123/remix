@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
@@ -24,6 +24,10 @@ import { formatDate } from '@/lib/utils/format'
 import { TimelineGantt } from '@/components/shared/TimelineGantt'
 import type { MilestoneStatus } from '@/types'
 import type { TimelineMilestoneWithRow } from '@/lib/sheets/timeline'
+import type { Announcement } from '@/lib/sheets/announcements'
+import type { Note } from '@/lib/sheets/notes'
+import { Textarea } from '@/components/ui/textarea'
+import { MediaUploader } from '@/components/shared/MediaUploader'
 
 const ASSETS = [
   { slug: 'circularplatform', name: 'Circular' },
@@ -45,7 +49,9 @@ type SortMode = 'order' | 'date_asc' | 'date_desc'
 interface FormState {
   milestone: string
   planned_date: string
+  planned_end_date: string
   actual_date: string
+  actual_end_date: string
   status: MilestoneStatus
   notes: string
   sort_order: string
@@ -54,24 +60,45 @@ interface FormState {
 const emptyForm = (): FormState => ({
   milestone: '',
   planned_date: new Date().toISOString().split('T')[0],
+  planned_end_date: '',
   actual_date: '',
+  actual_end_date: '',
   status: 'upcoming',
   notes: '',
   sort_order: '0',
 })
 
+const HOLDINGS = [
+  { slug: 'livingstonfarm', name: 'Livingston Farm' },
+  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
+]
+
+type MilestoneDisplay = TimelineMilestoneWithRow & { _source?: string }
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function AdminTimelinePage() {
-  const [asset, setAsset] = useState('livingstonfarm')
+  const [asset, setAsset] = useState('circularplatform')
   const [milestones, setMilestones] = useState<TimelineMilestoneWithRow[]>([])
   const [loading, setLoading] = useState(true)
+  const [includeHoldings, setIncludeHoldings] = useState<Set<string>>(new Set(HOLDINGS.map((h) => h.slug)))
+  const [holdingMilestones, setHoldingMilestones] = useState<Record<string, TimelineMilestoneWithRow[]>>({})
+  const [announcements, setAnnouncements] = useState<Announcement[]>([])
+  const [notes, setNotes] = useState<Note[]>([])
+  const [holdingAnnouncements, setHoldingAnnouncements] = useState<Record<string, Announcement[]>>({})
+  const [holdingNotes, setHoldingNotes] = useState<Record<string, Note[]>>({})
+  const [noteDialogOpen, setNoteDialogOpen] = useState(false)
+  const [noteTarget, setNoteTarget] = useState<{ ref_id: string; ref_label: string } | null>(null)
+  const [noteForm, setNoteForm] = useState({ title: '', body: '' })
+  const [noteMedia, setNoteMedia] = useState<string[]>([])
+  const [savingNote, setSavingNote] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingRow, setEditingRow] = useState<number | null>(null)
   const [form, setForm] = useState<FormState>(emptyForm())
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<TimelineMilestoneWithRow | null>(null)
   const [savingOrder, setSavingOrder] = useState(false)
+  const [editingAsset, setEditingAsset] = useState(asset)
   const [sortMode, setSortMode] = useState<SortMode>('order')
 
   // Drag state
@@ -81,9 +108,21 @@ export default function AdminTimelinePage() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/admin/timeline?asset=${asset}`)
-      if (!res.ok) throw new Error()
-      setMilestones(await res.json())
+      const [timelineRes, annRes, notesRes] = await Promise.allSettled([
+        fetch(`/api/admin/timeline?asset=${asset}`),
+        fetch(`/api/admin/announcements?asset=${asset}`),
+        fetch(`/api/admin/notes?asset=${asset}&type=timeline`),
+      ])
+      if (timelineRes.status === 'fulfilled' && timelineRes.value.ok) {
+        setMilestones(await timelineRes.value.json())
+      }
+      if (annRes.status === 'fulfilled' && annRes.value.ok) {
+        const annData = await annRes.value.json()
+        setAnnouncements(Array.isArray(annData) ? annData : (annData.announcements ?? []))
+      }
+      if (notesRes.status === 'fulfilled' && notesRes.value.ok) {
+        setNotes(await notesRes.value.json())
+      }
     } catch {
       toast.error('Failed to load timeline')
     } finally {
@@ -93,12 +132,74 @@ export default function AdminTimelinePage() {
 
   useEffect(() => { load() }, [load])
 
-  // Sorted milestones for display
-  const displayMilestones = [...milestones].sort((a, b) => {
-    if (sortMode === 'date_asc') return new Date(a.planned_date).getTime() - new Date(b.planned_date).getTime()
-    if (sortMode === 'date_desc') return new Date(b.planned_date).getTime() - new Date(a.planned_date).getTime()
-    return a.sort_order - b.sort_order
-  })
+  const loadHolding = useCallback(async (slug: string) => {
+    try {
+      const [timelineRes, annRes, notesRes] = await Promise.allSettled([
+        fetch(`/api/admin/timeline?asset=${slug}`),
+        fetch(`/api/admin/announcements?asset=${slug}`),
+        fetch(`/api/admin/notes?asset=${slug}&type=timeline`),
+      ])
+      if (timelineRes.status === 'fulfilled' && timelineRes.value.ok) {
+        const data: TimelineMilestoneWithRow[] = await timelineRes.value.json()
+        setHoldingMilestones((prev) => ({ ...prev, [slug]: data }))
+      }
+      if (annRes.status === 'fulfilled' && annRes.value.ok) {
+        const annData = await annRes.value.json()
+        const anns: Announcement[] = Array.isArray(annData) ? annData : (annData.announcements ?? [])
+        setHoldingAnnouncements((prev) => ({ ...prev, [slug]: anns }))
+      }
+      if (notesRes.status === 'fulfilled' && notesRes.value.ok) {
+        const notesData: Note[] = await notesRes.value.json()
+        setHoldingNotes((prev) => ({ ...prev, [slug]: notesData }))
+      }
+    } catch {
+      toast.error(`Failed to load ${slug} milestones`)
+    }
+  }, [])
+
+  // Manage holdings when asset changes
+  useEffect(() => {
+    if (asset !== 'circularplatform') {
+      setIncludeHoldings(new Set())
+      setHoldingMilestones({})
+      setHoldingAnnouncements({})
+      setHoldingNotes({})
+    } else {
+      setIncludeHoldings(new Set(HOLDINGS.map((h) => h.slug)))
+      HOLDINGS.forEach((h) => loadHolding(h.slug))
+    }
+  }, [asset, loadHolding])
+
+
+  // All milestones for display: own (editable) + included holdings (read-only)
+  const allDisplayMilestones = useMemo((): MilestoneDisplay[] => {
+    const own: MilestoneDisplay[] = milestones.map((m) => ({ ...m }))
+    const rollup: MilestoneDisplay[] = []
+    for (const slug of includeHoldings) {
+      const name = HOLDINGS.find((h) => h.slug === slug)?.name || slug
+      for (const m of holdingMilestones[slug] || []) {
+        rollup.push({ ...m, _source: name })
+      }
+    }
+    const all = [...own, ...rollup]
+    if (sortMode === 'date_asc') return all.sort((a, b) => new Date(a.planned_date).getTime() - new Date(b.planned_date).getTime())
+    if (sortMode === 'date_desc') return all.sort((a, b) => new Date(b.planned_date).getTime() - new Date(a.planned_date).getTime())
+    return all.sort((a, b) => a.sort_order - b.sort_order)
+  }, [milestones, holdingMilestones, includeHoldings, sortMode])
+
+  // Aggregate announcements + notes including included holdings
+  const allAnnouncements = useMemo(() => {
+    const holding = Array.from(includeHoldings).flatMap((slug) => holdingAnnouncements[slug] || [])
+    return [...announcements, ...holding]
+  }, [announcements, holdingAnnouncements, includeHoldings])
+
+  const allNotes = useMemo(() => {
+    const holding = Array.from(includeHoldings).flatMap((slug) => holdingNotes[slug] || [])
+    return [...notes, ...holding]
+  }, [notes, holdingNotes, includeHoldings])
+
+  // Only own milestones (used for drag-drop ordering, excludes read-only holdings)
+  const displayMilestones = allDisplayMilestones
 
   // ── Drag-and-drop ──────────────────────────────────────────────────────────
 
@@ -145,7 +246,9 @@ export default function AdminTimelinePage() {
               rowIndex: m._rowIndex,
               milestone: m.milestone,
               planned_date: m.planned_date,
+              planned_end_date: m.planned_end_date || '',
               actual_date: m.actual_date || '',
+              actual_end_date: m.actual_end_date || '',
               status: m.status,
               notes: m.notes || '',
               sort_order: String(m.sort_order),
@@ -165,16 +268,23 @@ export default function AdminTimelinePage() {
 
   const openCreate = () => {
     setEditingRow(null)
+    setEditingAsset(asset)
     setForm({ ...emptyForm(), sort_order: String(milestones.length) })
     setDialogOpen(true)
   }
 
-  const openEdit = (m: TimelineMilestoneWithRow) => {
+  const openEdit = (m: MilestoneDisplay) => {
+    const sourceSlug = m._source
+      ? HOLDINGS.find((h) => h.name === m._source)?.slug || asset
+      : asset
+    setEditingAsset(sourceSlug)
     setEditingRow(m._rowIndex)
     setForm({
       milestone: m.milestone,
       planned_date: m.planned_date,
+      planned_end_date: m.planned_end_date || '',
       actual_date: m.actual_date || '',
+      actual_end_date: m.actual_end_date || '',
       status: m.status,
       notes: m.notes || '',
       sort_order: String(m.sort_order),
@@ -191,7 +301,7 @@ export default function AdminTimelinePage() {
     try {
       const method = editingRow ? 'PATCH' : 'POST'
       const body = {
-        asset,
+        asset: editingAsset,
         ...form,
         ...(editingRow ? { rowIndex: editingRow } : {}),
       }
@@ -212,12 +322,50 @@ export default function AdminTimelinePage() {
     }
   }
 
-  const handleDelete = async (m: TimelineMilestoneWithRow) => {
+  const openNoteDialog = (m: TimelineMilestoneWithRow) => {
+    setNoteTarget({ ref_id: String(m._rowIndex), ref_label: m.milestone })
+    setNoteForm({ title: '', body: '' })
+    setNoteMedia([])
+    setNoteDialogOpen(true)
+  }
+
+  const handleSaveNote = async () => {
+    if (!noteForm.title || !noteTarget) { toast.error('Title is required'); return }
+    setSavingNote(true)
+    try {
+      const res = await fetch('/api/admin/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'timeline',
+          asset,
+          ref_id: noteTarget.ref_id,
+          ref_label: noteTarget.ref_label,
+          title: noteForm.title,
+          body: noteForm.body,
+          media_urls: noteMedia,
+        }),
+      })
+      if (!res.ok) { toast.error('Failed to save note'); return }
+      toast.success('Note added')
+      setNoteDialogOpen(false)
+      load()
+    } catch {
+      toast.error('Network error')
+    } finally {
+      setSavingNote(false)
+    }
+  }
+
+  const handleDelete = async (m: MilestoneDisplay) => {
+    const deleteAsset = m._source
+      ? HOLDINGS.find((h) => h.name === m._source)?.slug || asset
+      : asset
     try {
       const res = await fetch('/api/admin/timeline', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ asset, rowIndex: m._rowIndex }),
+        body: JSON.stringify({ asset: deleteAsset, rowIndex: m._rowIndex }),
       })
       const data = await res.json()
       if (!res.ok) { toast.error(data.error || 'Delete failed'); return }
@@ -240,7 +388,7 @@ export default function AdminTimelinePage() {
       </div>
 
       {/* Asset + controls */}
-      <div className="flex items-center justify-between gap-4 mb-6">
+      <div className="flex items-center justify-between gap-4 mb-4">
         <div className="flex gap-2">
           {ASSETS.map(({ slug, name }) => (
             <Button
@@ -259,16 +407,17 @@ export default function AdminTimelinePage() {
         </div>
       </div>
 
+
       {loading ? (
         <p className="text-sm text-muted-foreground">Loading…</p>
-      ) : milestones.length === 0 ? (
+      ) : allDisplayMilestones.length === 0 ? (
         <p className="text-sm text-muted-foreground">No milestones yet.</p>
       ) : (
         <>
           {/* Gantt chart */}
           <div className="mb-8">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">Timeline View</h2>
-            <TimelineGantt milestones={displayMilestones} />
+            <TimelineGantt milestones={displayMilestones} announcements={allAnnouncements} notes={allNotes} />
           </div>
 
           {/* Sort control */}
@@ -292,7 +441,7 @@ export default function AdminTimelinePage() {
           </div>
 
           {/* Table */}
-          <div className="rounded-md border">
+          <div className="rounded-md border overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/50">
@@ -306,47 +455,68 @@ export default function AdminTimelinePage() {
                 </tr>
               </thead>
               <tbody>
-                {displayMilestones.map((m, idx) => (
-                  <tr
-                    key={m._rowIndex}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, idx)}
-                    onDragOver={(e) => handleDragOver(e, idx)}
-                    onDrop={(e) => handleDrop(e, idx)}
-                    onDragEnd={handleDragEnd}
-                    className={`border-b last:border-0 transition-colors ${
-                      dragOverIdx === idx ? 'bg-primary/10' : 'hover:bg-muted/20'
-                    }`}
-                  >
-                    <td className="px-2 py-2 cursor-grab active:cursor-grabbing text-muted-foreground">
-                      <GripIcon />
-                    </td>
-                    <td className="px-4 py-2 font-medium">{m.milestone}</td>
-                    <td className="px-4 py-2 text-muted-foreground whitespace-nowrap">{formatDate(m.planned_date)}</td>
-                    <td className="px-4 py-2 text-muted-foreground whitespace-nowrap">
-                      {m.actual_date ? formatDate(m.actual_date) : '—'}
-                    </td>
-                    <td className="px-4 py-2">
-                      <Badge variant={STATUS_COLORS[m.status] as 'default' | 'secondary' | 'outline' | 'destructive'}>
-                        {m.status}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-2 text-muted-foreground max-w-xs truncate">{m.notes || '—'}</td>
-                    <td className="px-4 py-2 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => openEdit(m)}>Edit</Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                          onClick={() => setDeleteTarget(m)}
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {(displayMilestones as MilestoneDisplay[]).map((m, idx) => {
+                  const isOwn = !m._source
+                  return (
+                    <tr
+                      key={`${m._source || ''}-${m._rowIndex}`}
+                      draggable={isOwn}
+                      onDragStart={isOwn ? (e) => handleDragStart(e, idx) : undefined}
+                      onDragOver={isOwn ? (e) => handleDragOver(e, idx) : undefined}
+                      onDrop={isOwn ? (e) => handleDrop(e, idx) : undefined}
+                      onDragEnd={isOwn ? handleDragEnd : undefined}
+                      className={`border-b last:border-0 transition-colors ${
+                        isOwn && dragOverIdx === idx ? 'bg-primary/10' : 'hover:bg-muted/20'
+                      }`}
+                    >
+                      <td className="px-2 py-2 text-muted-foreground">
+                        {isOwn && <GripIcon />}
+                      </td>
+                      <td className="px-4 py-2 font-medium">
+                        {m.milestone}
+                        {m._source && (
+                          <span className="ml-2 text-xs font-normal text-muted-foreground border rounded px-1.5 py-0.5">{m._source}</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground whitespace-nowrap text-xs">
+                        {formatDate(m.planned_date)}
+                        {m.planned_end_date && (
+                          <span className="block text-muted-foreground/60">→ {formatDate(m.planned_end_date)}</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground whitespace-nowrap text-xs">
+                        {m.actual_date ? (
+                          <>
+                            {formatDate(m.actual_date)}
+                            {m.actual_end_date && (
+                              <span className="block text-muted-foreground/60">→ {formatDate(m.actual_end_date)}</span>
+                            )}
+                          </>
+                        ) : '—'}
+                      </td>
+                      <td className="px-4 py-2">
+                        <Badge variant={STATUS_COLORS[m.status] as 'default' | 'secondary' | 'outline' | 'destructive'}>
+                          {m.status}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground max-w-xs truncate">{m.notes || '—'}</td>
+                      <td className="px-4 py-2 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button variant="ghost" size="sm" onClick={() => openNoteDialog(m)} title="Add note">Note</Button>
+                          <Button variant="ghost" size="sm" onClick={() => openEdit(m)}>Edit</Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive"
+                            onClick={() => setDeleteTarget(m)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -364,13 +534,25 @@ export default function AdminTimelinePage() {
               <Label>Milestone Name</Label>
               <Input value={form.milestone} onChange={(e) => setForm((f) => ({ ...f, milestone: e.target.value }))} placeholder="e.g. Construction Start" />
             </div>
-            <div className="space-y-1">
-              <Label>Planned Date</Label>
-              <Input type="date" value={form.planned_date} onChange={(e) => setForm((f) => ({ ...f, planned_date: e.target.value }))} />
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Planned Start</Label>
+                <Input type="date" value={form.planned_date} onChange={(e) => setForm((f) => ({ ...f, planned_date: e.target.value }))} />
+              </div>
+              <div className="space-y-1">
+                <Label>Planned End (optional)</Label>
+                <Input type="date" value={form.planned_end_date} onChange={(e) => setForm((f) => ({ ...f, planned_end_date: e.target.value }))} />
+              </div>
             </div>
-            <div className="space-y-1">
-              <Label>Actual Date (optional)</Label>
-              <Input type="date" value={form.actual_date} onChange={(e) => setForm((f) => ({ ...f, actual_date: e.target.value }))} />
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Actual Start (optional)</Label>
+                <Input type="date" value={form.actual_date} onChange={(e) => setForm((f) => ({ ...f, actual_date: e.target.value }))} />
+              </div>
+              <div className="space-y-1">
+                <Label>Actual End (optional)</Label>
+                <Input type="date" value={form.actual_end_date} onChange={(e) => setForm((f) => ({ ...f, actual_end_date: e.target.value }))} />
+              </div>
             </div>
             <div className="space-y-1">
               <Label>Status</Label>
@@ -391,6 +573,33 @@ export default function AdminTimelinePage() {
             <Button onClick={handleSave} disabled={saving}>
               {saving ? 'Saving…' : 'Save'}
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Note dialog */}
+      <Dialog open={noteDialogOpen} onOpenChange={setNoteDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Note{noteTarget ? ` — ${noteTarget.ref_label}` : ''}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="space-y-1">
+              <Label>Title</Label>
+              <Input value={noteForm.title} onChange={(e) => setNoteForm((f) => ({ ...f, title: e.target.value }))} placeholder="Brief note title" />
+            </div>
+            <div className="space-y-1">
+              <Label>Body (optional)</Label>
+              <Textarea value={noteForm.body} onChange={(e) => setNoteForm((f) => ({ ...f, body: e.target.value }))} placeholder="Details…" rows={3} />
+            </div>
+            <div className="space-y-1">
+              <Label>Media (optional)</Label>
+              <MediaUploader value={noteMedia} onChange={setNoteMedia} acceptAll />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setNoteDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveNote} disabled={savingNote}>{savingNote ? 'Saving…' : 'Add Note'}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

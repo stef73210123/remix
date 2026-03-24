@@ -14,6 +14,7 @@ function rowToBudgetLine(row: string[]): BudgetLine {
     notes: row[4] || '',
     sort_order: parseInt(row[5] || '0', 10),
     group: row[6] || '',
+    csi_code: row[7] || '',
   }
 }
 
@@ -26,6 +27,7 @@ function budgetLineToRow(b: BudgetLine): string[] {
     b.notes || '',
     String(b.sort_order),
     b.group || '',
+    b.csi_code || '',
   ]
 }
 

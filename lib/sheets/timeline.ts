@@ -13,11 +13,22 @@ function rowToMilestone(row: string[]): TimelineMilestone {
     status: (row[3] || 'upcoming') as MilestoneStatus,
     notes: row[4] || '',
     sort_order: parseInt(row[5] || '0', 10),
+    planned_end_date: row[6] || undefined,
+    actual_end_date: row[7] || undefined,
   }
 }
 
 function milestoneToRow(m: TimelineMilestone): string[] {
-  return [m.milestone, m.planned_date, m.actual_date || '', m.status, m.notes || '', String(m.sort_order)]
+  return [
+    m.milestone,
+    m.planned_date,
+    m.actual_date || '',
+    m.status,
+    m.notes || '',
+    String(m.sort_order),
+    m.planned_end_date || '',
+    m.actual_end_date || '',
+  ]
 }
 
 export async function getTimeline(asset: string): Promise<TimelineMilestone[]> {

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import { listUsers, getUser, upsertUser, deleteUser } from '@/lib/sheets/users'
+import { listUsersWithStatus, getUser, upsertUser, deleteUser } from '@/lib/sheets/users'
 import { appendSheetRow } from '@/lib/sheets/client'
+import { createInviteToken } from '@/lib/auth/magic-link'
+import { sendInviteEmail } from '@/lib/email/send'
 import type { User, UserRole } from '@/types'
 
 async function requireAdmin(): Promise<{ email: string } | NextResponse> {
@@ -46,7 +48,7 @@ export async function GET() {
   if (auth instanceof NextResponse) return auth
 
   try {
-    const users = await listUsers()
+    const users = await listUsersWithStatus()
     return NextResponse.json(users)
   } catch (error) {
     console.error('[admin/users GET] Error:', error)
@@ -88,6 +90,16 @@ export async function POST(req: NextRequest) {
 
     await upsertUser(newUser)
     await logActivity(auth.email, 'user.create', email, { name, role })
+
+    // Send invite email so user can set their password
+    try {
+      const inviteToken = await createInviteToken(newUser.email)
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://circular.enterprises'
+      const inviteUrl = `${siteUrl}/auth/set-password?token=${encodeURIComponent(inviteToken)}`
+      await sendInviteEmail(newUser.email, newUser.name, inviteUrl)
+    } catch (emailError) {
+      console.error('[admin/users POST] Failed to send invite email:', emailError)
+    }
 
     return NextResponse.json({ message: 'User created', user: newUser }, { status: 201 })
   } catch (error) {

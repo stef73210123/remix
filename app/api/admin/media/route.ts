@@ -58,16 +58,44 @@ export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get('content-type') || ''
 
-    // File upload via multipart form data
+    // File upload or Google Drive download via multipart form data
     if (contentType.includes('multipart/form-data')) {
       const formData = await req.formData()
-      const file = formData.get('file') as File | null
       const asset = formData.get('asset') as string
       const caption = (formData.get('caption') as string) || ''
       const sortOrder = parseInt((formData.get('sort_order') as string) || '0', 10)
 
-      if (!file || !asset) {
-        return NextResponse.json({ error: 'file and asset are required' }, { status: 400 })
+      if (!asset) {
+        return NextResponse.json({ error: 'asset is required' }, { status: 400 })
+      }
+
+      // ── Google Drive image ──────────────────────────────────────────────────
+      const driveFileId = formData.get('driveFileId') as string | null
+      const driveAccessToken = formData.get('driveAccessToken') as string | null
+      const driveFileName = (formData.get('driveFileName') as string) || 'image.jpg'
+
+      if (driveFileId && driveAccessToken) {
+        const driveRes = await fetch(
+          `https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,
+          { headers: { Authorization: `Bearer ${driveAccessToken}` } }
+        )
+        if (!driveRes.ok) {
+          return NextResponse.json({ error: 'Failed to download image from Google Drive' }, { status: 502 })
+        }
+        const mimeType = driveRes.headers.get('content-type') || 'image/jpeg'
+        const buffer = Buffer.from(await driveRes.arrayBuffer())
+        const sanitizedName = driveFileName.replace(/[^a-zA-Z0-9._-]/g, '_')
+        const r2Key = `media/${asset}/${Date.now()}-${sanitizedName}`
+        await uploadToR2(r2Key, buffer, mimeType)
+        const media = await appendMedia({ asset, type: 'image', url: `r2:${r2Key}`, caption, sort_order: sortOrder })
+        await logActivity(auth.email, 'media.upload_drive', media.id, { asset, driveFileId })
+        return NextResponse.json({ message: 'Photo imported from Google Drive', media }, { status: 201 })
+      }
+
+      // ── Local file upload ───────────────────────────────────────────────────
+      const file = formData.get('file') as File | null
+      if (!file) {
+        return NextResponse.json({ error: 'file or driveFileId is required' }, { status: 400 })
       }
 
       const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')

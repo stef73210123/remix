@@ -15,6 +15,13 @@ function rowToUser(row: string[]): User {
   }
 }
 
+function rowToUserWithHash(row: string[]): User & { password_hash?: string } {
+  return {
+    ...rowToUser(row),
+    password_hash: row[7] || undefined,
+  }
+}
+
 function userToRow(user: User): string[] {
   return [
     user.email,
@@ -39,6 +46,14 @@ export async function listUsers(): Promise<User[]> {
   return rows.filter((r) => r[0]).map(rowToUser)
 }
 
+export async function listUsersWithStatus(): Promise<(User & { has_password: boolean })[]> {
+  const rows = await readSheetRange(TAB)
+  return rows.filter((r) => r[0]).map((row) => ({
+    ...rowToUser(row),
+    has_password: !!(row[7] && row[7].trim()),
+  }))
+}
+
 export async function upsertUser(user: User): Promise<void> {
   const rowIndex = await findRowIndex(TAB, user.email)
   if (rowIndex === -1) {
@@ -61,4 +76,37 @@ export async function deleteUser(email: string): Promise<void> {
   if (!user) return
   user.active = false
   await upsertUser(user)
+}
+
+/**
+ * Returns a user including the password_hash column (col 7).
+ */
+export async function getUserWithPasswordHash(email: string): Promise<(User & { password_hash?: string }) | null> {
+  const rows = await readSheetRange(TAB)
+  const row = rows.find((r) => r[0]?.toLowerCase() === email.toLowerCase())
+  if (!row) return null
+  return rowToUserWithHash(row)
+}
+
+/**
+ * Updates only the password_hash column (col 7) for a given user row.
+ */
+export async function updateUserPasswordHash(email: string, hash: string): Promise<void> {
+  const rowIndex = await findRowIndex(TAB, email)
+  if (rowIndex === -1) throw new Error(`User not found: ${email}`)
+  const rows = await readSheetRange(TAB)
+  const row = rows.find((r) => r[0]?.toLowerCase() === email.toLowerCase())
+  if (!row) throw new Error(`User row not found: ${email}`)
+  // Build the full row including the new hash at index 7
+  const fullRow = [
+    row[0] || '',
+    row[1] || '',
+    row[2] || '',
+    row[3] || '',
+    row[4] || '',
+    row[5] || '',
+    row[6] || '',
+    hash,
+  ]
+  await updateSheetRow(TAB, rowIndex, fullRow)
 }

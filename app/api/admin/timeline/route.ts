@@ -66,7 +66,9 @@ export async function POST(req: NextRequest) {
     const milestone: TimelineMilestone = {
       milestone: rest.milestone,
       planned_date: rest.planned_date,
+      planned_end_date: rest.planned_end_date || undefined,
       actual_date: rest.actual_date || undefined,
+      actual_end_date: rest.actual_end_date || undefined,
       status: (rest.status || 'upcoming') as MilestoneStatus,
       notes: rest.notes || '',
       sort_order: parseInt(rest.sort_order || '0', 10),
@@ -92,7 +94,9 @@ export async function PATCH(req: NextRequest) {
     const milestone: TimelineMilestone = {
       milestone: rest.milestone,
       planned_date: rest.planned_date,
+      planned_end_date: rest.planned_end_date || undefined,
       actual_date: rest.actual_date || undefined,
+      actual_end_date: rest.actual_end_date || undefined,
       status: (rest.status || 'upcoming') as MilestoneStatus,
       notes: rest.notes || '',
       sort_order: parseInt(rest.sort_order || '0', 10),

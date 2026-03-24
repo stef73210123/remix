@@ -10,69 +10,94 @@ import { Suspense } from 'react'
 
 function LoginForm() {
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const searchParams = useSearchParams()
-  const error = searchParams.get('error')
+  const urlError = searchParams.get('error')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+    setError(null)
     try {
-      await fetch('/api/auth/request-link', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
       })
-      setSubmitted(true)
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Unable to sign in. Please try again.')
+        return
+      }
+      // Cookie is set by the API; follow the redirect
+      window.location.href = data.redirectTo
+    } catch {
+      setError('Unable to sign in. Please try again.')
     } finally {
       setLoading(false)
     }
   }
+
+  const displayError = error || (urlError === 'expired'
+    ? 'This link has expired or is invalid.'
+    : urlError
+      ? 'Unable to sign in. Please try again.'
+      : null)
 
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Sign in</CardTitle>
         <CardDescription>
-          Enter your email to receive a secure login link.
+          Enter your email and password to access your account.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {error && (
+        {displayError && (
           <div className="mb-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
-            {error === 'expired'
-              ? 'This link has expired or is invalid.'
-              : 'Unable to sign in. Please try again.'}
-            {' '}
-            <a href="/login" className="underline">Request a new link</a>.
+            {displayError}
           </div>
         )}
-
-        {submitted ? (
-          <p className="text-sm text-muted-foreground">
-            If that email is in our system, you&apos;ll receive a link shortly. Check your inbox.
-          </p>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                autoFocus
-              />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email address</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              autoFocus
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+            />
+            <div className="text-right">
+              <a
+                href="/forgot-password"
+                className="text-xs text-muted-foreground underline-offset-4 hover:underline"
+              >
+                Forgot password?
+              </a>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Sending…' : 'Send me a link'}
-            </Button>
-          </form>
-        )}
+          </div>
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? 'Signing in…' : 'Sign in'}
+          </Button>
+        </form>
       </CardContent>
     </Card>
   )

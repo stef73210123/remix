@@ -41,18 +41,39 @@ export default async function HomePage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
-      {/* Hero */}
-      <section className="border-b" style={{ backgroundColor: '#6B7A58' }}>
-        <div className="container mx-auto max-w-6xl px-4 py-24 text-center">
+      {/* Hero — video background */}
+      <section className="relative border-b overflow-hidden" style={{ minHeight: '80vh' }}>
+        {/* YouTube video background */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
+          <iframe
+            src="https://www.youtube.com/embed/1_Fbu9hpAV4?autoplay=1&mute=1&loop=1&playlist=1_Fbu9hpAV4&controls=0&showinfo=0&rel=0&iv_load_policy=3&playsinline=1"
+            allow="autoplay; encrypted-media"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: '100vw',
+              height: '56.25vw',
+              minHeight: '100%',
+              minWidth: '177.78vh',
+              transform: 'translate(-50%, -50%)',
+              border: 0,
+            }}
+          />
+        </div>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/55" />
+        {/* Content */}
+        <div className="relative z-10 container mx-auto max-w-6xl px-4 py-32 text-center flex flex-col items-center justify-center" style={{ minHeight: '80vh' }}>
           <h1 className="text-5xl font-light tracking-widest uppercase text-white sm:text-6xl md:text-7xl" style={{ fontFamily: 'var(--font-josefin)' }}>
-            Private Real Estate<br />Investment
+            Invest in a<br />Regenerative Future
           </h1>
-          <p className="mt-6 text-base text-white/75 max-w-2xl mx-auto tracking-wide">
-            Curated opportunities in mixed-use resort, residential, and hospitality assets.
+          <p className="mt-6 text-base text-white/80 max-w-2xl mx-auto tracking-wide">
+            Scalable, carbon-positive agritourism hospitality platform with institutional-grade returns.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link href="/assets/livingstonfarm">
-              <button className="bg-black text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-black/80 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
+              <button className="border border-white text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
                 Explore Assets
               </button>
             </Link>
