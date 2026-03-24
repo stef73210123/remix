@@ -1,17 +1,10 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {
   Dialog,
   DialogContent,
@@ -26,17 +19,18 @@ import type { TeamMember, TeamMemberType } from '@/lib/sheets/team'
 const ASSETS = [
   { value: 'livingstonfarm', label: 'Livingston Farm' },
   { value: 'wrenofthewoods', label: 'Wren of the Woods' },
-  { value: 'all', label: 'All Assets' },
+  { value: 'circularplatform', label: 'Circular' },
 ]
 
-const TABS: { key: string; label: string }[] = [
+const TABS = [
   { key: 'livingstonfarm', label: 'Livingston Farm' },
   { key: 'wrenofthewoods', label: 'Wren of the Woods' },
+  { key: 'circularplatform', label: 'Circular' },
 ]
 
-function emptyForm(type: TeamMemberType = 'principal'): Omit<TeamMember, 'id' | 'created_at'> {
+function emptyForm(type: TeamMemberType = 'principal', asset = 'livingstonfarm'): Omit<TeamMember, 'id' | 'created_at'> {
   return {
-    asset: 'livingstonfarm',
+    asset,
     type,
     name: '',
     title: '',
@@ -52,51 +46,61 @@ function emptyForm(type: TeamMemberType = 'principal'): Omit<TeamMember, 'id' | 
   }
 }
 
+// ── Drag-reorderable member card ──────────────────────────────────────────────
 function MemberCard({
   member,
   onEdit,
   onDelete,
+  onDragStart,
+  onDragOver,
+  onDrop,
 }: {
   member: TeamMember
   onEdit: () => void
   onDelete: () => void
+  onDragStart: (id: string) => void
+  onDragOver: (e: React.DragEvent) => void
+  onDrop: (targetId: string) => void
 }) {
   const isPrincipal = member.type === 'principal'
   const thumb = isPrincipal ? member.headshot_url : member.logo_url
+  const [dragOver, setDragOver] = useState(false)
 
   return (
-    <div className="flex items-start gap-3 rounded-lg border bg-card p-4">
-      {thumb && (
+    <div
+      draggable
+      onDragStart={() => onDragStart(member.id)}
+      onDragOver={(e) => { e.preventDefault(); setDragOver(true); onDragOver(e) }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={() => { setDragOver(false); onDrop(member.id) }}
+      className={`flex items-start gap-3 rounded-lg border bg-card p-4 cursor-grab active:cursor-grabbing transition-colors ${dragOver ? 'border-primary/60 bg-primary/5' : ''}`}
+    >
+      {/* Drag handle */}
+      <div className="flex flex-col justify-center self-stretch pr-1 text-muted-foreground/30 hover:text-muted-foreground/60 shrink-0 cursor-grab select-none">
+        ⣿
+      </div>
+
+      {thumb ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={thumb}
-          alt={member.name}
-          className="w-14 h-14 rounded-full object-cover shrink-0 border"
-        />
-      )}
-      {!thumb && (
+        <img src={thumb} alt={member.name} className="w-14 h-14 rounded-full object-cover shrink-0 border" />
+      ) : (
         <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center text-xl shrink-0">
           {isPrincipal ? '👤' : '🏢'}
         </div>
       )}
+
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
           <div>
             <p className="font-medium">{member.name}</p>
-            {member.title && (
-              <p className="text-sm text-muted-foreground">{member.title}</p>
-            )}
+            {member.title && <p className="text-sm text-muted-foreground">{member.title}</p>}
           </div>
           <div className="flex gap-1 shrink-0">
             <Button size="sm" variant="outline" onClick={onEdit}>Edit</Button>
-            <Button size="sm" variant="outline" className="text-destructive" onClick={onDelete}>
-              Delete
-            </Button>
+            <Button size="sm" variant="outline" className="text-destructive" onClick={onDelete}>Delete</Button>
           </div>
         </div>
-        {member.bio && (
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{member.bio}</p>
-        )}
+        {member.bio && <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{member.bio}</p>}
         <div className="flex flex-wrap gap-3 mt-1 text-xs text-muted-foreground">
           {member.email && <span>{member.email}</span>}
           {member.linkedin_url && <span>LinkedIn</span>}
@@ -109,6 +113,7 @@ function MemberCard({
   )
 }
 
+// ── Main page ─────────────────────────────────────────────────────────────────
 export default function AdminTeamPage() {
   const [activeTab, setActiveTab] = useState('livingstonfarm')
   const [memberType, setMemberType] = useState<TeamMemberType>('principal')
@@ -119,6 +124,13 @@ export default function AdminTeamPage() {
   const [form, setForm] = useState<Omit<TeamMember, 'id' | 'created_at'>>(emptyForm())
   const [saving, setSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<TeamMember | null>(null)
+
+  // URL enrichment
+  const [enrichUrl, setEnrichUrl] = useState('')
+  const [enriching, setEnriching] = useState(false)
+
+  // Drag state
+  const dragId = useRef<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -135,34 +147,55 @@ export default function AdminTeamPage() {
 
   useEffect(() => { load() }, [load])
 
-  const displayed = members.filter(
-    (m) => (m.asset === activeTab || m.asset === 'all') && m.type === memberType
-  )
+  const displayed = members
+    .filter((m) => (m.asset === activeTab || m.asset === 'all') && m.type === memberType)
+    .sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name))
 
   const openCreate = () => {
     setEditing(null)
-    setForm({ ...emptyForm(memberType), asset: activeTab })
+    setEnrichUrl('')
+    setForm({ ...emptyForm(memberType, activeTab) })
     setDialogOpen(true)
   }
 
   const openEdit = (m: TeamMember) => {
     setEditing(m)
+    setEnrichUrl(m.website || '')
     setForm({
-      asset: m.asset,
-      type: m.type,
-      name: m.name,
-      title: m.title,
-      bio: m.bio,
-      email: m.email,
-      linkedin_url: m.linkedin_url,
-      website: m.website,
-      headshot_url: m.headshot_url,
-      logo_url: m.logo_url,
-      images: m.images,
-      sort_order: m.sort_order,
-      active: m.active,
+      asset: m.asset, type: m.type, name: m.name, title: m.title,
+      bio: m.bio, email: m.email, linkedin_url: m.linkedin_url,
+      website: m.website, headshot_url: m.headshot_url, logo_url: m.logo_url,
+      images: m.images, sort_order: m.sort_order, active: m.active,
     })
     setDialogOpen(true)
+  }
+
+  // URL auto-populate
+  const handleEnrich = async () => {
+    if (!enrichUrl.startsWith('http')) { toast.error('Enter a valid URL'); return }
+    setEnriching(true)
+    try {
+      const res = await fetch('/api/admin/team/enrich', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: enrichUrl }),
+      })
+      const data = await res.json()
+      if (!res.ok) { toast.error(data.error || 'Enrichment failed'); return }
+      setForm((f) => ({
+        ...f,
+        name: data.name || f.name,
+        bio: data.description || f.bio,
+        website: data.website || enrichUrl || f.website,
+        logo_url: data.logo_url || f.logo_url,
+        images: data.images?.length ? data.images : f.images,
+      }))
+      toast.success('Fields populated from website')
+    } catch {
+      toast.error('Failed to fetch website info')
+    } finally {
+      setEnriching(false)
+    }
   }
 
   const handleSave = async () => {
@@ -177,7 +210,8 @@ export default function AdminTeamPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-      if (!res.ok) throw new Error('Save failed')
+      const data = await res.json()
+      if (!res.ok) { toast.error(data.error || 'Save failed'); return }
       toast.success(editing ? 'Updated' : 'Added')
       setDialogOpen(false)
       load()
@@ -200,13 +234,46 @@ export default function AdminTeamPage() {
     }
   }
 
+  // Drag reorder
+  const handleDrop = async (targetId: string) => {
+    if (!dragId.current || dragId.current === targetId) return
+    const srcIdx = displayed.findIndex((m) => m.id === dragId.current)
+    const dstIdx = displayed.findIndex((m) => m.id === targetId)
+    if (srcIdx === -1 || dstIdx === -1) return
+
+    // Rebuild sort_order for the displayed slice
+    const reordered = [...displayed]
+    const [moved] = reordered.splice(srcIdx, 1)
+    reordered.splice(dstIdx, 0, moved)
+
+    // Patch all affected members with new sort_order
+    const updates = reordered.map((m, i) => ({ ...m, sort_order: i }))
+    // Optimistic update
+    setMembers((prev) => {
+      const map = new Map(updates.map((u) => [u.id, u]))
+      return prev.map((m) => map.get(m.id) ?? m)
+    })
+
+    await Promise.all(
+      updates.map((m) =>
+        fetch('/api/admin/team', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(m),
+        })
+      )
+    )
+    dragId.current = null
+  }
+
   const isPrincipal = form.type === 'principal'
+  const typeLabel = memberType === 'principal' ? 'Principal' : 'Partner Firm'
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Team</h1>
-        <Button onClick={openCreate}>+ Add {memberType === 'principal' ? 'Principal' : 'Partner Firm'}</Button>
+        <Button onClick={openCreate}>+ Add {typeLabel}</Button>
       </div>
 
       {/* Asset tabs */}
@@ -243,21 +310,20 @@ export default function AdminTeamPage() {
       {loading ? (
         <p className="text-muted-foreground text-sm">Loading…</p>
       ) : displayed.length === 0 ? (
-        <p className="text-muted-foreground text-sm">
-          No {memberType === 'principal' ? 'principals' : 'partner firms'} yet.
-        </p>
+        <p className="text-muted-foreground text-sm">No {typeLabel.toLowerCase()}s yet.</p>
       ) : (
         <div className="space-y-3">
-          {displayed
-            .sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name))
-            .map((m) => (
-              <MemberCard
-                key={m.id}
-                member={m}
-                onEdit={() => openEdit(m)}
-                onDelete={() => setDeleteTarget(m)}
-              />
-            ))}
+          {displayed.map((m) => (
+            <MemberCard
+              key={m.id}
+              member={m}
+              onEdit={() => openEdit(m)}
+              onDelete={() => setDeleteTarget(m)}
+              onDragStart={(id) => { dragId.current = id }}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+            />
+          ))}
         </div>
       )}
 
@@ -271,59 +337,64 @@ export default function AdminTeamPage() {
           </DialogHeader>
 
           <div className="space-y-4 py-2">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label>Asset</Label>
-                <Select
-                  value={form.asset}
-                  onValueChange={(v) => setForm((f) => ({ ...f, asset: v }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ASSETS.map((a) => (
-                      <SelectItem key={a.value} value={a.value}>{a.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1">
-                <Label>Type</Label>
-                <Select
-                  value={form.type}
-                  onValueChange={(v) => setForm((f) => ({ ...f, type: v as TeamMemberType }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="principal">Principal</SelectItem>
-                    <SelectItem value="firm">Partner Firm</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            {/* Asset selector */}
+            <div className="space-y-1">
+              <Label>Asset</Label>
+              <select
+                className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm"
+                value={form.asset}
+                onChange={(e) => setForm((f) => ({ ...f, asset: e.target.value }))}
+              >
+                {ASSETS.map((a) => (
+                  <option key={a.value} value={a.value}>{a.label}</option>
+                ))}
+              </select>
             </div>
+
+            {/* URL enrich — firms only */}
+            {!isPrincipal && (
+              <div className="space-y-1">
+                <Label>Website URL <span className="text-muted-foreground font-normal">(auto-populate from URL)</span></Label>
+                <div className="flex gap-2">
+                  <Input
+                    type="url"
+                    value={enrichUrl}
+                    onChange={(e) => setEnrichUrl(e.target.value)}
+                    placeholder="https://snohetta.com"
+                    className="flex-1"
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleEnrich() } }}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleEnrich}
+                    disabled={enriching || !enrichUrl}
+                  >
+                    {enriching ? 'Fetching…' : 'Auto-fill'}
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">Enter the firm's homepage and click Auto-fill to populate name, description, logo and images.</p>
+              </div>
+            )}
 
             <div className="space-y-1">
               <Label>{isPrincipal ? 'Full Name' : 'Firm Name'} *</Label>
               <Input
                 value={form.name}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                placeholder={isPrincipal ? 'Jane Smith' : 'Acme Architecture'}
+                placeholder={isPrincipal ? 'Jane Smith' : 'Snøhetta'}
               />
             </div>
 
-            {isPrincipal && (
-              <div className="space-y-1">
-                <Label>Title / Role</Label>
-                <Input
-                  value={form.title}
-                  onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-                  placeholder="Managing Principal"
-                />
-              </div>
-            )}
+            {/* Role / Title — both principals and firms */}
+            <div className="space-y-1">
+              <Label>{isPrincipal ? 'Title / Role' : 'Role / Discipline'}</Label>
+              <Input
+                value={form.title}
+                onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                placeholder={isPrincipal ? 'Managing Principal' : 'Landscape Architecture'}
+              />
+            </div>
 
             <div className="space-y-1">
               <Label>{isPrincipal ? 'Bio' : 'Description'}</Label>
@@ -373,7 +444,7 @@ export default function AdminTeamPage() {
                     type="url"
                     value={form.website}
                     onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))}
-                    placeholder="https://acmearch.com"
+                    placeholder="https://snohetta.com"
                   />
                 </div>
                 <div className="space-y-1">
@@ -386,7 +457,7 @@ export default function AdminTeamPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label>Image Carousel</Label>
+                  <Label>Image Carousel <span className="text-muted-foreground font-normal">(signature projects)</span></Label>
                   <MediaUploader
                     value={form.images}
                     onChange={(urls) => setForm((f) => ({ ...f, images: urls }))}
@@ -396,16 +467,6 @@ export default function AdminTeamPage() {
                 </div>
               </>
             )}
-
-            <div className="space-y-1">
-              <Label>Sort Order</Label>
-              <Input
-                type="number"
-                value={form.sort_order}
-                onChange={(e) => setForm((f) => ({ ...f, sort_order: parseInt(e.target.value, 10) || 0 }))}
-                className="w-24"
-              />
-            </div>
 
             <div className="flex items-center gap-2">
               <input
@@ -422,27 +483,22 @@ export default function AdminTeamPage() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleSave} disabled={saving}>
-              {saving ? 'Saving…' : editing ? 'Save Changes' : 'Add'}
+              {saving ? 'Saving…' : editing ? 'Save Changes' : `Add ${isPrincipal ? 'Principal' : 'Partner Firm'}`}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete confirm dialog */}
+      {/* Delete confirm */}
       <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete "{deleteTarget?.name}"?</DialogTitle>
+            <DialogTitle>Delete &quot;{deleteTarget?.name}&quot;?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">This will permanently remove the record.</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>Cancel</Button>
-            <Button
-              variant="destructive"
-              onClick={() => deleteTarget && handleDelete(deleteTarget)}
-            >
-              Delete
-            </Button>
+            <Button variant="destructive" onClick={() => deleteTarget && handleDelete(deleteTarget)}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

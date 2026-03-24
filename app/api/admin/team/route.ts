@@ -18,29 +18,44 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   if (!isAdmin(req)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  const body = await req.json() as Omit<TeamMember, 'id' | 'created_at'>
-  const member: TeamMember = {
-    ...body,
-    id: `team_${Date.now()}`,
-    created_at: new Date().toISOString().split('T')[0],
+  try {
+    const body = await req.json() as Omit<TeamMember, 'id' | 'created_at'>
+    const member: TeamMember = {
+      ...body,
+      id: `team_${Date.now()}`,
+      created_at: new Date().toISOString().split('T')[0],
+    }
+    await upsertTeamMember(member)
+    return NextResponse.json(member)
+  } catch (e) {
+    console.error('[team POST]', e)
+    return NextResponse.json({ error: String(e) }, { status: 500 })
   }
-  await upsertTeamMember(member)
-  return NextResponse.json(member)
 }
 
 export async function PATCH(req: NextRequest) {
   if (!isAdmin(req)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  const body = await req.json() as TeamMember
-  if (!body.id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
-  await upsertTeamMember(body)
-  return NextResponse.json(body)
+  try {
+    const body = await req.json() as TeamMember
+    if (!body.id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+    await upsertTeamMember(body)
+    return NextResponse.json(body)
+  } catch (e) {
+    console.error('[team PATCH]', e)
+    return NextResponse.json({ error: String(e) }, { status: 500 })
+  }
 }
 
 export async function DELETE(req: NextRequest) {
   if (!isAdmin(req)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  const { searchParams } = new URL(req.url)
-  const id = searchParams.get('id')
-  if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
-  await deleteTeamMember(id)
-  return NextResponse.json({ ok: true })
+  try {
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get('id')
+    if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+    await deleteTeamMember(id)
+    return NextResponse.json({ ok: true })
+  } catch (e) {
+    console.error('[team DELETE]', e)
+    return NextResponse.json({ error: String(e) }, { status: 500 })
+  }
 }
