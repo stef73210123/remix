@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getArticleBySlug, KNOWLEDGE_CATEGORIES } from '@/lib/sheets/knowledge'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

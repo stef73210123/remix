@@ -9,7 +9,7 @@ import { getPlatformContent } from '@/lib/gdocs/platform'
 import { getSectionHtml } from '@/lib/gdocs/parser'
 import { getAssetConfig } from '@/lib/sheets/config'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 const ASSETS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },

@@ -19,7 +19,7 @@ import { formatCurrency } from '@/lib/utils/format'
 import { ASSET_NAMES } from '@/types'
 import type { AssetSlug } from '@/types'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 const VALID_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods', 'circularplatform']
 

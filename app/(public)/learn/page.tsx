@@ -2,7 +2,7 @@ import { listArticles } from '@/lib/sheets/knowledge'
 import { KNOWLEDGE_CATEGORIES } from '@/lib/sheets/knowledge'
 import LearnArticleList from './LearnArticleList'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function LearnPage() {
   const articles = await listArticles(true)
