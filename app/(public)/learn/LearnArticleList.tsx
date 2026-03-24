@@ -25,8 +25,6 @@ export default function LearnArticleList({ grouped }: { grouped: GroupedCategory
                 <a
                   key={a.id}
                   href={`/learn/${a.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="w-full text-left flex items-start gap-4 px-5 py-4 hover:bg-muted/30 transition-colors group"
                 >
                   {/* Preview image */}
