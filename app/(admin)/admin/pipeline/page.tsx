@@ -1278,7 +1278,6 @@ export default function AdminPipelinePage() {
                 </tr>
                 )
               })}
-              ))}
             </tbody>
           </table>
         </div>
