@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { formatCurrency } from '@/lib/utils/format'
-import type { PipelineLead, PipelineStage, InvestorCategory, InvestorType, PointOfContact } from '@/lib/sheets/pipeline'
+import type { PipelineLead, PipelineStage, InvestorCategory, PointOfContact } from '@/lib/sheets/pipeline'
 import type { Note } from '@/lib/sheets/notes'
 import { Textarea } from '@/components/ui/textarea'
 import { MediaUploader } from '@/components/shared/MediaUploader'
@@ -72,15 +72,6 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
   unqualified: 'Unqualified',
 }
 
-const INVESTOR_TYPE_LABELS: Record<InvestorType | 'all', string> = {
-  all: 'All types',
-  individual: 'Individual',
-  'family-office': 'Family Office',
-  institutional: 'Institutional',
-  other: 'Other',
-  '': 'Unspecified',
-}
-
 const POC_LABELS: Record<PointOfContact | 'all', string> = {
   all: 'All POCs',
   stefan: 'Stefan',
@@ -101,6 +92,50 @@ const STAGE_COLORS: Record<PipelineStage, string> = {
   unqualified: 'bg-red-50 text-red-400',
 }
 
+// ── Column system ─────────────────────────────────────────────────────────────
+
+interface ColDef {
+  key: string
+  label: string
+  visible: boolean
+}
+
+const DEFAULT_COLUMNS: ColDef[] = [
+  { key: 'name', label: 'Name', visible: true },
+  { key: 'firm', label: 'Firm', visible: true },
+  { key: 'category', label: 'Type', visible: true },
+  { key: 'point_of_contact', label: 'POC', visible: true },
+  { key: 'email', label: 'Email', visible: true },
+  { key: 'stage', label: 'Stage', visible: true },
+  { key: 'priority_tier', label: 'Priority', visible: true },
+  { key: 'target_amount', label: 'Target', visible: true },
+  { key: 'close_date', label: 'Est. Close', visible: true },
+]
+
+const COLUMNS_KEY = 'pipeline_cols_v2'
+
+function persistColumns(cols: ColDef[]) {
+  try { localStorage.setItem(COLUMNS_KEY, JSON.stringify(cols)) } catch {}
+}
+
+function initColumns(): ColDef[] {
+  if (typeof window === 'undefined') return DEFAULT_COLUMNS
+  try {
+    const s = localStorage.getItem(COLUMNS_KEY)
+    if (!s) return DEFAULT_COLUMNS
+    const saved: { key: string; visible: boolean }[] = JSON.parse(s)
+    const ordered: ColDef[] = []
+    for (const { key, visible } of saved) {
+      const def = DEFAULT_COLUMNS.find(c => c.key === key)
+      if (def) ordered.push({ ...def, visible })
+    }
+    for (const def of DEFAULT_COLUMNS) {
+      if (!ordered.find(c => c.key === def.key)) ordered.push(def)
+    }
+    return ordered
+  } catch { return DEFAULT_COLUMNS }
+}
+
 type SortKey = keyof PipelineLead
 type SortDir = 'asc' | 'desc'
 
@@ -116,7 +151,6 @@ interface FormState {
   probability: string
   notes: string
   category: InvestorCategory
-  investor_type: InvestorType
   point_of_contact: PointOfContact
   firm: string
   title: string
@@ -140,7 +174,6 @@ const emptyForm = (): FormState => ({
   probability: '0',
   notes: '',
   category: '',
-  investor_type: '',
   point_of_contact: '',
   firm: '',
   title: '',
@@ -345,8 +378,8 @@ function LeadDetailModal({
       <Dialog open onOpenChange={onClose}>
         <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col p-0">
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b shrink-0">
-            <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-3 px-6 py-4 border-b shrink-0 pr-14">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
               <div className="min-w-0">
                 <h2 className="text-lg font-semibold truncate">{local.name}</h2>
                 {local.firm && <p className="text-sm text-muted-foreground truncate">{local.firm}{local.title ? ` · ${local.title}` : ''}</p>}
@@ -360,7 +393,7 @@ function LeadDetailModal({
             </div>
             <button
               onClick={() => setConfirmDelete(true)}
-              className="shrink-0 ml-4 text-muted-foreground/50 hover:text-destructive transition-colors text-lg"
+              className="shrink-0 text-muted-foreground/50 hover:text-destructive transition-colors text-lg"
               title="Remove lead"
             >
               🗑
@@ -393,15 +426,7 @@ function LeadDetailModal({
                   <EF label="Probability (%)" field="probability" value={local.probability} type="number" />
                   <EF label="Est. Close Date" field="close_date" value={local.close_date} type="date" />
                   <EF
-                    label="Investor Type" field="investor_type" value={local.investor_type}
-                    asSelect options={[
-                      { value: '', label: '—' }, { value: 'individual', label: 'Individual' },
-                      { value: 'family-office', label: 'Family Office' }, { value: 'institutional', label: 'Institutional' },
-                      { value: 'other', label: 'Other' },
-                    ]}
-                  />
-                  <EF
-                    label="Category" field="category" value={local.category}
+                    label="Type" field="category" value={local.category}
                     asSelect options={[
                       { value: '', label: '—' }, { value: 'institutional', label: 'Institutional' },
                       { value: 'co-gp', label: 'Co-GP' }, { value: 'family-office', label: 'Family Office' },
@@ -735,33 +760,32 @@ function BuildingIcon({ className }: { className?: string }) {
 
 function LeadIcon({ lead }: { lead: PipelineLead }) {
   if (lead.is_company) return <BuildingIcon className="w-3.5 h-3.5 text-blue-400" />
-  if (lead.investor_type === 'family-office') return <PeopleIcon className="w-4 h-3.5 text-violet-400" />
-  if (lead.investor_type === 'institutional') return <BuildingIcon className="w-3.5 h-3.5 text-blue-400" />
+  if (lead.category === 'family-office') return <PeopleIcon className="w-4 h-3.5 text-violet-400" />
+  if (lead.category === 'institutional' || lead.category === 'co-gp') return <BuildingIcon className="w-3.5 h-3.5 text-blue-400" />
   return <PersonIcon className="w-3 h-3 text-muted-foreground/50" />
 }
 
 function buildMailto(lead: PipelineLead): string {
   if (!lead.email) return ''
   const firstName = lead.name.split(' ')[0]
-  const firm = lead.firm ? ` at ${lead.firm}` : ''
+  const rationale = lead.investment_rationale
+  const rationaleText = rationale
+    ? `\n\nGiven your background${lead.firm ? ` at ${lead.firm}` : ''} and focus on ${rationale}, I thought Circular would be a natural fit.`
+    : ''
   const subject = encodeURIComponent('Introduction to Circular – Regenerative Agritourism Investment Platform')
   const body = encodeURIComponent(
 `Hi ${firstName},
 
-I hope this message finds you well. I wanted to reach out and introduce you to Circular, a regenerative agritourism investment platform offering institutional-grade returns through carbon-positive hospitality assets.
+I wanted to reach out and introduce you to Circular, a regenerative agritourism investment platform offering institutional-grade returns through carbon-positive hospitality assets.${rationaleText}
 
-We're currently raising for Livingston Farm, our flagship project — a 500-acre regenerative agritourism destination in the Hudson Valley designed for scalable, repeatable deployment.
+We're currently raising for Livingston Farm, our flagship project — a 121-acre regenerative agritourism destination in the Catskills designed for scalable, repeatable deployment.
 
-I'd love to share more. Please find our materials below:
+I'd love to share more — please find our materials below:
 
-📄 Offering Overview: https://circular.enterprises/offering
-🎬 Teaser Video: https://circular.enterprises/video
+Offering Overview: circular.enterprises/offering
+Teaser Video: circular.enterprises/video
 
-Would you be open to a brief call to explore fit?
-
-Best,
-Stefan Martinovic
-Circular | investors.circular.enterprises`
+Would you be open to a brief call to explore fit?`
   )
   return `mailto:${lead.email}?subject=${subject}&body=${body}`
 }
@@ -777,7 +801,6 @@ export default function AdminPipelinePage() {
   const [assetFilter, setAssetFilter] = useState('all')
   const [stageFilter, setStageFilter] = useState('all')
   const [categoryFilter, setCategoryFilter] = useState('all')
-  const [investorTypeFilter, setInvestorTypeFilter] = useState('all')
   const [pocFilter, setPocFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('name')
@@ -789,6 +812,11 @@ export default function AdminPipelinePage() {
   const [deleteTarget, setDeleteTarget] = useState<PipelineLead | null>(null)
   const [collapsedCompanies, setCollapsedCompanies] = useState<Set<string>>(new Set())
   const dragLeadId = useRef<string | null>(null)
+  const [columns, setColumns] = useState<ColDef[]>(DEFAULT_COLUMNS)
+  const [colMenuOpen, setColMenuOpen] = useState(false)
+  const dragColRef = useRef<string | null>(null)
+
+  useEffect(() => { setColumns(initColumns()) }, [])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -796,7 +824,11 @@ export default function AdminPipelinePage() {
       const tiersParam = [...selectedTiers].join(',') || 'active'
       const res = await fetch(`/api/admin/pipeline?tiers=${tiersParam}`)
       if (!res.ok) throw new Error()
-      setLeads(await res.json())
+      const data: PipelineLead[] = await res.json()
+      setLeads(data)
+      // Default-collapse all companies that have children
+      const parentIds = new Set(data.filter(l => l.parent_id).map(l => l.parent_id as string))
+      setCollapsedCompanies(parentIds)
     } catch {
       toast.error('Failed to load pipeline')
     } finally {
@@ -875,11 +907,11 @@ export default function AdminPipelinePage() {
       if (!res.ok) { toast.error('Failed to update stage'); return }
 
       setLeads((prev) =>
-        prev.map((l) =>
-          l.id === id
-            ? { ...l, stage, ...(stage === 'closed' ? { probability: 100, actual_amount: l.target_amount } : {}) }
-            : l
-        )
+        prev.map((l) => {
+          if (l.id === id) return { ...l, stage, ...(stage === 'closed' ? { probability: 100, actual_amount: l.target_amount } : {}) }
+          if (l.parent_id === id) return { ...l, stage }
+          return l
+        })
       )
 
       // Auto-create investor position when closed
@@ -920,7 +952,6 @@ export default function AdminPipelinePage() {
     .filter((l) => assetFilter === 'all' || l.asset === assetFilter)
     .filter((l) => stageFilter === 'all' || l.stage === stageFilter)
     .filter((l) => categoryFilter === 'all' || (categoryFilter === 'uncategorized' ? !l.category : l.category === categoryFilter))
-    .filter((l) => investorTypeFilter === 'all' || (investorTypeFilter === 'unspecified' ? !l.investor_type : l.investor_type === investorTypeFilter))
     .filter((l) => pocFilter === 'all' || (pocFilter === 'unassigned' ? !l.point_of_contact : l.point_of_contact === pocFilter))
     .filter((l) => {
       if (!search) return true
@@ -1065,64 +1096,6 @@ export default function AdminPipelinePage() {
           </SelectContent>
         </Select>
 
-        {view === 'table' && (
-          <Select value={stageFilter} onValueChange={setStageFilter}>
-            <SelectTrigger className="w-36">
-              <SelectValue placeholder="All stages" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All stages</SelectItem>
-              {STAGES.map((s) => (
-                <SelectItem key={s} value={s}>{STAGE_LABELS[s]}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-
-        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-          <SelectTrigger className="w-44">
-            <SelectValue placeholder="All categories" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All categories</SelectItem>
-            <SelectItem value="institutional">Institutional</SelectItem>
-            <SelectItem value="co-gp">Co-GP</SelectItem>
-            <SelectItem value="family-office">Family Office</SelectItem>
-            <SelectItem value="individual">Individual</SelectItem>
-            <SelectItem value="new-contact">New Contact</SelectItem>
-            <SelectItem value="uncategorized">Uncategorized</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={investorTypeFilter} onValueChange={setInvestorTypeFilter}>
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="All types" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All types</SelectItem>
-            <SelectItem value="individual">Individual</SelectItem>
-            <SelectItem value="family-office">Family Office</SelectItem>
-            <SelectItem value="institutional">Institutional</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
-            <SelectItem value="unspecified">Unspecified</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={pocFilter} onValueChange={setPocFilter}>
-          <SelectTrigger className="w-36">
-            <SelectValue placeholder="All POCs" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All POCs</SelectItem>
-            <SelectItem value="stefan">Stefan</SelectItem>
-            <SelectItem value="joe">Joe</SelectItem>
-            <SelectItem value="roxanne">Roxanne</SelectItem>
-            <SelectItem value="unassigned">Unassigned</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <span className="text-xs text-muted-foreground">{filtered.length.toLocaleString()} leads</span>
-
         {/* Priority / tier filter */}
         <Select
           value={[...selectedTiers][0] || 'active'}
@@ -1139,6 +1112,34 @@ export default function AdminPipelinePage() {
             <SelectItem value="none">Untiered Backlog</SelectItem>
           </SelectContent>
         </Select>
+
+        <div className="relative">
+          <Button variant="outline" size="sm" onClick={() => setColMenuOpen(o => !o)}>
+            Columns ▾
+          </Button>
+          {colMenuOpen && (
+            <div className="absolute right-0 top-full mt-1 z-50 bg-popover border rounded-md shadow-md p-2 min-w-[160px]">
+              {columns.map(col => (
+                <label key={col.key} className="flex items-center gap-2 px-2 py-1 text-sm cursor-pointer hover:bg-muted/50 rounded">
+                  <input
+                    type="checkbox"
+                    checked={col.visible}
+                    onChange={e => {
+                      setColumns(prev => {
+                        const next = prev.map(c => c.key === col.key ? { ...c, visible: e.target.checked } : c)
+                        persistColumns(next)
+                        return next
+                      })
+                    }}
+                  />
+                  {col.label}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <span className="text-xs text-muted-foreground">{filtered.length.toLocaleString()} leads</span>
 
         <Button onClick={openCreate} className="ml-auto">Add Lead</Button>
       </div>
@@ -1175,25 +1176,84 @@ export default function AdminPipelinePage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/50">
-                {([
-                  ['name', 'Name'],
-                  ['firm', 'Firm'],
-                  ['investor_type', 'Type'],
-                  ['point_of_contact', 'POC'],
-                  ['email', 'Email'],
-                  ['stage', 'Stage'],
-                  ['priority_tier', 'Priority'],
-                  ['target_amount', 'Target'],
-                  ['close_date', 'Est. Close'],
-                ] as [SortKey, string][]).map(([key, label]) => (
-                  <th
-                    key={key}
-                    className="px-4 py-2 text-left font-medium cursor-pointer hover:text-foreground select-none whitespace-nowrap"
-                    onClick={() => handleSort(key)}
-                  >
-                    {label}<SortIcon k={key} />
-                  </th>
-                ))}
+                {columns.filter(c => c.visible).map((col) => {
+                  const isName = col.key === 'name'
+                  const filterEl = col.key === 'stage' ? (
+                    <select
+                      className="ml-1 text-[10px] border rounded px-0.5 py-0 bg-background cursor-pointer"
+                      value={stageFilter}
+                      onChange={e => setStageFilter(e.target.value)}
+                      onClick={e => e.stopPropagation()}
+                      title="Filter by stage"
+                    >
+                      <option value="all">All</option>
+                      {STAGES.map(s => <option key={s} value={s}>{STAGE_LABELS[s]}</option>)}
+                    </select>
+                  ) : col.key === 'category' ? (
+                    <select
+                      className="ml-1 text-[10px] border rounded px-0.5 py-0 bg-background cursor-pointer"
+                      value={categoryFilter}
+                      onChange={e => setCategoryFilter(e.target.value)}
+                      onClick={e => e.stopPropagation()}
+                      title="Filter by type"
+                    >
+                      <option value="all">All</option>
+                      <option value="institutional">Institutional</option>
+                      <option value="co-gp">Co-GP</option>
+                      <option value="family-office">Family Office</option>
+                      <option value="individual">Individual</option>
+                      <option value="new-contact">New Contact</option>
+                      <option value="uncategorized">Uncategorized</option>
+                    </select>
+                  ) : col.key === 'point_of_contact' ? (
+                    <select
+                      className="ml-1 text-[10px] border rounded px-0.5 py-0 bg-background cursor-pointer"
+                      value={pocFilter}
+                      onChange={e => setPocFilter(e.target.value)}
+                      onClick={e => e.stopPropagation()}
+                      title="Filter by POC"
+                    >
+                      <option value="all">All</option>
+                      <option value="stefan">Stefan</option>
+                      <option value="joe">Joe</option>
+                      <option value="roxanne">Roxanne</option>
+                      <option value="unassigned">Unassigned</option>
+                    </select>
+                  ) : null
+                  return (
+                    <th
+                      key={col.key}
+                      className={`px-4 py-2 text-left font-medium select-none whitespace-nowrap ${isName ? 'sticky left-0 z-10 bg-muted/50' : ''}`}
+                      draggable
+                      onDragStart={() => { dragColRef.current = col.key }}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={() => {
+                        if (!dragColRef.current || dragColRef.current === col.key) return
+                        setColumns(prev => {
+                          const next = [...prev]
+                          const fromIdx = next.findIndex(c => c.key === dragColRef.current)
+                          const toIdx = next.findIndex(c => c.key === col.key)
+                          const [moved] = next.splice(fromIdx, 1)
+                          next.splice(toIdx, 0, moved)
+                          persistColumns(next)
+                          return next
+                        })
+                        dragColRef.current = null
+                      }}
+                      style={{ cursor: 'grab' }}
+                    >
+                      <div className="flex items-center">
+                        <span
+                          className="cursor-pointer hover:text-foreground"
+                          onClick={() => handleSort(col.key as SortKey)}
+                        >
+                          {col.label}<SortIcon k={col.key as SortKey} />
+                        </span>
+                        {filterEl}
+                      </div>
+                    </th>
+                  )
+                })}
                 <th className="px-4 py-2 text-right font-medium">Actions</th>
               </tr>
             </thead>
@@ -1210,51 +1270,61 @@ export default function AdminPipelinePage() {
                   className={`border-b last:border-0 hover:bg-muted/20 cursor-pointer ${depth ? 'bg-muted/5' : ''}`}
                   onClick={() => setDetailLead(lead)}
                 >
-                  <td className="px-4 py-2 font-medium whitespace-nowrap">
-                    <div className="flex items-center gap-1.5" style={{ paddingLeft: depth ? '1.5rem' : undefined }}>
-                      {hasChildren && (
-                        <button
-                          className="text-muted-foreground/50 hover:text-foreground transition-colors w-4 text-center leading-none"
-                          onClick={(e) => { e.stopPropagation(); toggleCollapse(lead.id) }}
-                          title={isCollapsed ? `Expand ${childCount} contacts` : 'Collapse'}
-                        >
-                          {isCollapsed ? '▶' : '▼'}
-                        </button>
-                      )}
-                      {!hasChildren && !depth && <span className="w-4" />}
-                      <LeadIcon lead={lead} />
-                      <span>{lead.name}</span>
-                      {hasChildren && isCollapsed && (
-                        <span className="text-xs text-muted-foreground/40 font-normal">({childCount})</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-2 text-muted-foreground max-w-[160px] truncate text-sm">
-                    {lead.firm || '—'}
-                  </td>
-                  <td className="px-4 py-2 text-xs text-muted-foreground whitespace-nowrap">
-                    {lead.investor_type ? INVESTOR_TYPE_LABELS[lead.investor_type] || lead.investor_type : '—'}
-                  </td>
-                  <td className="px-4 py-2 text-xs text-muted-foreground whitespace-nowrap capitalize">
-                    {lead.point_of_contact || '—'}
-                  </td>
-                  <td className="px-4 py-2 text-muted-foreground text-xs truncate max-w-[160px]">
-                    {lead.email || '—'}
-                  </td>
-                  <td className="px-4 py-2">
-                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STAGE_COLORS[lead.stage]}`}>
-                      {STAGE_LABELS[lead.stage]}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-xs text-muted-foreground whitespace-nowrap">
-                    {lead.priority_tier || '—'}
-                  </td>
-                  <td className="px-4 py-2 text-right text-sm">
-                    {lead.target_amount > 0 ? formatCurrency(lead.target_amount, true) : '—'}
-                  </td>
-                  <td className="px-4 py-2 text-muted-foreground whitespace-nowrap text-sm">
-                    {lead.close_date || '—'}
-                  </td>
+                  {columns.filter(c => c.visible).map(col => {
+                    const isName = col.key === 'name'
+                    if (isName) return (
+                      <td key="name" className="px-4 py-2 font-medium whitespace-nowrap sticky left-0 z-10 bg-inherit">
+                        <div className="flex items-center gap-1.5" style={{ paddingLeft: depth ? '1.5rem' : undefined }}>
+                          {hasChildren && (
+                            <button
+                              className="text-muted-foreground/50 hover:text-foreground transition-colors w-4 text-center leading-none"
+                              onClick={(e) => { e.stopPropagation(); toggleCollapse(lead.id) }}
+                              title={isCollapsed ? `Expand ${childCount} contacts` : 'Collapse'}
+                            >
+                              {isCollapsed ? '▶' : '▼'}
+                            </button>
+                          )}
+                          {!hasChildren && !depth && <span className="w-4" />}
+                          <LeadIcon lead={lead} />
+                          <span>{lead.name}</span>
+                          {hasChildren && isCollapsed && (
+                            <span className="text-xs text-muted-foreground/40 font-normal">({childCount})</span>
+                          )}
+                        </div>
+                      </td>
+                    )
+                    if (col.key === 'firm') return (
+                      <td key="firm" className="px-4 py-2 text-muted-foreground max-w-[160px] truncate text-sm">{lead.firm || '—'}</td>
+                    )
+                    if (col.key === 'category') return (
+                      <td key="category" className="px-4 py-2 text-xs text-muted-foreground whitespace-nowrap">
+                        {lead.category ? CATEGORY_LABELS[lead.category] || lead.category : '—'}
+                      </td>
+                    )
+                    if (col.key === 'point_of_contact') return (
+                      <td key="point_of_contact" className="px-4 py-2 text-xs text-muted-foreground whitespace-nowrap capitalize">{lead.point_of_contact || '—'}</td>
+                    )
+                    if (col.key === 'email') return (
+                      <td key="email" className="px-4 py-2 text-muted-foreground text-xs truncate max-w-[160px]">{lead.email || '—'}</td>
+                    )
+                    if (col.key === 'stage') return (
+                      <td key="stage" className="px-4 py-2">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STAGE_COLORS[lead.stage]}`}>
+                          {STAGE_LABELS[lead.stage]}
+                        </span>
+                      </td>
+                    )
+                    if (col.key === 'priority_tier') return (
+                      <td key="priority_tier" className="px-4 py-2 text-xs text-muted-foreground whitespace-nowrap">{lead.priority_tier || '—'}</td>
+                    )
+                    if (col.key === 'target_amount') return (
+                      <td key="target_amount" className="px-4 py-2 text-right text-sm">{lead.target_amount > 0 ? formatCurrency(lead.target_amount, true) : '—'}</td>
+                    )
+                    if (col.key === 'close_date') return (
+                      <td key="close_date" className="px-4 py-2 text-muted-foreground whitespace-nowrap text-sm">{lead.close_date || '—'}</td>
+                    )
+                    return null
+                  })}
                   <td className="px-4 py-2 text-right" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center justify-end gap-1">
                       {mailto && (
@@ -1318,19 +1388,6 @@ export default function AdminPipelinePage() {
                 <Input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
               </div>
               <div className="space-y-1">
-                <Label>Investor Type</Label>
-                <Select value={form.investor_type || 'none'} onValueChange={(v) => setForm((f) => ({ ...f, investor_type: v === 'none' ? '' : v as InvestorType }))}>
-                  <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">—</SelectItem>
-                    <SelectItem value="individual">Individual</SelectItem>
-                    <SelectItem value="family-office">Family Office</SelectItem>
-                    <SelectItem value="institutional">Institutional</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1">
                 <Label>Point of Contact</Label>
                 <Select value={form.point_of_contact || 'none'} onValueChange={(v) => setForm((f) => ({ ...f, point_of_contact: v === 'none' ? '' : v as PointOfContact }))}>
                   <SelectTrigger><SelectValue placeholder="POC" /></SelectTrigger>
@@ -1343,9 +1400,9 @@ export default function AdminPipelinePage() {
                 </Select>
               </div>
               <div className="space-y-1">
-                <Label>Category</Label>
+                <Label>Type</Label>
                 <Select value={form.category || 'none'} onValueChange={(v) => setForm((f) => ({ ...f, category: v === 'none' ? '' : v as InvestorCategory }))}>
-                  <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">—</SelectItem>
                     <SelectItem value="institutional">Institutional</SelectItem>
