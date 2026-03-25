@@ -806,7 +806,7 @@ export default function AdminPipelinePage() {
       )
     })
 
-  const sorted = [...filtered].sort((a, b) => {
+  const baseSorted = [...filtered].sort((a, b) => {
     const av = a[sortKey]
     const bv = b[sortKey]
     if (av === undefined || bv === undefined) return 0
@@ -817,6 +817,26 @@ export default function AdminPipelinePage() {
       ? String(av).localeCompare(String(bv))
       : String(bv).localeCompare(String(av))
   })
+
+  // Nest contacts under their parent company rows
+  const sorted: (PipelineLead & { _depth?: number })[] = []
+  const childrenByParent = new Map<string, PipelineLead[]>()
+  for (const l of baseSorted) {
+    if (l.parent_id) {
+      const arr = childrenByParent.get(l.parent_id) || []
+      arr.push(l)
+      childrenByParent.set(l.parent_id, arr)
+    }
+  }
+  for (const l of baseSorted) {
+    if (!l.parent_id) {
+      sorted.push(l)
+      const children = childrenByParent.get(l.id) || []
+      for (const child of children) {
+        sorted.push({ ...child, _depth: 1 })
+      }
+    }
+  }
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
@@ -958,27 +978,22 @@ export default function AdminPipelinePage() {
 
         <span className="text-xs text-muted-foreground">{filtered.length.toLocaleString()} leads</span>
 
-        {/* Tier checkboxes */}
-        <div className="flex items-center gap-3 border rounded-md px-3 py-1.5 text-xs text-muted-foreground">
-          <span className="font-medium text-foreground">Show:</span>
-          {([
-            { key: 'active', label: 'Active Pipeline' },
-            { key: 'high',   label: 'High Priority' },
-            { key: 'medium', label: 'Medium Priority' },
-            { key: 'low',    label: 'Low Priority' },
-            { key: 'none',   label: 'Untiered' },
-          ] as const).map(({ key, label }) => (
-            <label key={key} className="flex items-center gap-1 cursor-pointer hover:text-foreground transition-colors">
-              <input
-                type="checkbox"
-                checked={selectedTiers.has(key)}
-                onChange={() => toggleTier(key)}
-                className="accent-primary"
-              />
-              {label}
-            </label>
-          ))}
-        </div>
+        {/* Priority / tier filter */}
+        <Select
+          value={[...selectedTiers][0] || 'active'}
+          onValueChange={(v) => setSelectedTiers(new Set([v]))}
+        >
+          <SelectTrigger className="w-44">
+            <SelectValue placeholder="Active Pipeline" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="active">Active Pipeline</SelectItem>
+            <SelectItem value="high">High Priority Backlog</SelectItem>
+            <SelectItem value="medium">Medium Priority Backlog</SelectItem>
+            <SelectItem value="low">Low Priority Backlog</SelectItem>
+            <SelectItem value="none">Untiered Backlog</SelectItem>
+          </SelectContent>
+        </Select>
 
         <Button onClick={openCreate} className="ml-auto">Add Lead</Button>
       </div>
@@ -1041,13 +1056,13 @@ export default function AdminPipelinePage() {
               {sorted.map((lead) => (
                 <tr
                   key={lead.id}
-                  className="border-b last:border-0 hover:bg-muted/20 cursor-pointer"
+                  className={`border-b last:border-0 hover:bg-muted/20 cursor-pointer ${(lead as PipelineLead & { _depth?: number })._depth ? 'bg-muted/5' : ''}`}
                   onClick={() => setDetailLead(lead)}
                 >
                   <td className="px-4 py-2 font-medium whitespace-nowrap">
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1" style={{ paddingLeft: (lead as PipelineLead & { _depth?: number })._depth ? '1.5rem' : undefined }}>
                       {lead.is_company && <span className="text-xs text-muted-foreground/60" title="Company record">🏢</span>}
-                      {lead.parent_id && <span className="text-xs text-muted-foreground/60" title="Individual contact">↳</span>}
+                      {(lead as PipelineLead & { _depth?: number })._depth ? <span className="text-xs text-muted-foreground/40">↳</span> : null}
                       {lead.name}
                     </div>
                   </td>
