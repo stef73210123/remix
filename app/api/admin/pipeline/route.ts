@@ -121,6 +121,19 @@ export async function PATCH(req: NextRequest) {
     await updatePipelineLead(id, updates)
     await logActivity(auth.email, 'pipeline.update', id, updates)
 
+    // Cascade stage change to child contacts (parent_id === id)
+    if (updates.stage) {
+      try {
+        const allLeads = await listPipelineLeads()
+        const children = allLeads.filter((l) => l.parent_id === id)
+        for (const child of children) {
+          await updatePipelineLead(child.id, { stage: updates.stage })
+        }
+      } catch (e) {
+        console.error('[admin/pipeline PATCH] Failed to cascade stage:', e)
+      }
+    }
+
     // Auto-create investor position when stage is closed
     if (updates.stage === 'closed') {
       try {
