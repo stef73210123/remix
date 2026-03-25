@@ -17,6 +17,13 @@ function rowToPosition(row: string[]): InvestorPosition {
     equity_multiple: parseFloat(row[9] || '0'),
     distributions_total: parseFloat(row[10] || '0'),
     last_updated: row[11] || '',
+    investor_role: (row[12] || '') as InvestorPosition['investor_role'],
+    vehicle: (row[13] || '') as InvestorPosition['vehicle'],
+    issuance_date: row[14] || '',
+    maturity_date: row[15] || '',
+    interest_rate: parseFloat(row[16] || '0'),
+    position_status: (row[17] || 'active') as InvestorPosition['position_status'],
+    repaid_date: row[18] || '',
   }
 }
 
@@ -51,6 +58,13 @@ function positionToRow(p: InvestorPosition): string[] {
     String(p.equity_invested), String(p.ownership_pct), String(p.capital_account_balance),
     String(p.nav_estimate), String(p.irr_estimate), String(p.equity_multiple),
     String(p.distributions_total), p.last_updated || new Date().toISOString().split('T')[0],
+    p.investor_role || '',
+    p.vehicle || '',
+    p.issuance_date || '',
+    p.maturity_date || '',
+    String(p.interest_rate ?? ''),
+    p.position_status || 'active',
+    p.repaid_date || '',
   ]
 }
 

@@ -51,6 +51,14 @@ export interface InvestorPosition {
   equity_multiple: number
   distributions_total: number
   last_updated: string
+  // Investment structure
+  investor_role?: 'GP' | 'LP' | ''
+  vehicle?: 'preferred_equity' | 'convertible_note' | ''
+  issuance_date?: string
+  maturity_date?: string
+  interest_rate?: number
+  position_status?: 'active' | 'repaid' | ''
+  repaid_date?: string
 }
 
 // ─── Distributions ───────────────────────────────────────────────────────────

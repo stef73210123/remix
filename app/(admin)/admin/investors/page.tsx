@@ -31,6 +31,25 @@ const ASSETS = [
 
 const DIST_TYPES: DistributionType[] = ['profit', 'preferred_return', 'return_of_capital']
 
+// ─── Helpers ───────────────────────────────────────────────────────────────────
+
+function calcCurrentPosition(pos: InvestorPosition): number {
+  if (pos.vehicle !== 'convertible_note') return pos.equity_invested
+  const start = pos.issuance_date ? new Date(pos.issuance_date) : null
+  if (!start) return pos.equity_invested
+  const end = pos.position_status === 'repaid' && pos.repaid_date
+    ? new Date(pos.repaid_date)
+    : new Date()
+  const holdYears = Math.max(0, (end.getTime() - start.getTime()) / (365.25 * 24 * 3600 * 1000))
+  const rate = (pos.interest_rate ?? 0) / 100
+  return pos.equity_invested * (1 + rate * holdYears)
+}
+
+function isMatured(maturity_date?: string): boolean {
+  if (!maturity_date) return false
+  return new Date(maturity_date) < new Date()
+}
+
 // ─── Position form ─────────────────────────────────────────────────────────────
 
 interface PosForm {
@@ -38,6 +57,8 @@ interface PosForm {
   equity_invested: string; ownership_pct: string; capital_account_balance: string
   nav_estimate: string; irr_estimate: string; equity_multiple: string
   distributions_total: string; last_updated: string
+  investor_role: string; vehicle: string; issuance_date: string
+  maturity_date: string; interest_rate: string; position_status: string; repaid_date: string
 }
 
 const emptyPosForm = (): PosForm => ({
@@ -45,6 +66,8 @@ const emptyPosForm = (): PosForm => ({
   equity_invested: '0', ownership_pct: '0', capital_account_balance: '0',
   nav_estimate: '0', irr_estimate: '0', equity_multiple: '1',
   distributions_total: '0', last_updated: new Date().toISOString().split('T')[0],
+  investor_role: 'LP', vehicle: 'preferred_equity', issuance_date: '',
+  maturity_date: '', interest_rate: '0', position_status: 'active', repaid_date: '',
 })
 
 // ─── Distribution form ─────────────────────────────────────────────────────────
@@ -118,6 +141,13 @@ export default function AdminInvestorsPage() {
       capital_account_balance: String(pos.capital_account_balance), nav_estimate: String(pos.nav_estimate),
       irr_estimate: String(pos.irr_estimate), equity_multiple: String(pos.equity_multiple),
       distributions_total: String(pos.distributions_total), last_updated: pos.last_updated,
+      investor_role: pos.investor_role || 'LP',
+      vehicle: pos.vehicle || 'preferred_equity',
+      issuance_date: pos.issuance_date || '',
+      maturity_date: pos.maturity_date || '',
+      interest_rate: String(pos.interest_rate ?? ''),
+      position_status: pos.position_status || 'active',
+      repaid_date: pos.repaid_date || '',
     })
     setPosDialogOpen(true)
   }
@@ -235,23 +265,54 @@ export default function AdminInvestorsPage() {
               <thead>
                 <tr className="border-b bg-muted/50">
                   <th className="px-4 py-2 text-left font-medium">Name</th>
-                  <th className="px-4 py-2 text-left font-medium">Email</th>
                   <th className="px-4 py-2 text-left font-medium">Asset</th>
+                  <th className="px-4 py-2 text-left font-medium">Role</th>
+                  <th className="px-4 py-2 text-left font-medium">Vehicle</th>
                   <th className="px-4 py-2 text-right font-medium">Invested</th>
-                  <th className="px-4 py-2 text-right font-medium">NAV Est.</th>
-                  <th className="px-4 py-2 text-right font-medium">IRR %</th>
+                  <th className="px-4 py-2 text-right font-medium">Current Position</th>
+                  <th className="px-4 py-2 text-left font-medium">Maturity</th>
+                  <th className="px-4 py-2 text-left font-medium">Status</th>
                   <th className="px-4 py-2 text-right font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPositions.map((pos) => (
+                {filteredPositions.map((pos) => {
+                  const currentPos = calcCurrentPosition(pos)
+                  const matured = isMatured(pos.maturity_date)
+                  const isConvertible = pos.vehicle === 'convertible_note'
+                  return (
                   <tr key={pos.investor_id} className="border-b last:border-0">
-                    <td className="px-4 py-2 font-medium">{pos.name}</td>
-                    <td className="px-4 py-2 text-muted-foreground">{pos.email}</td>
+                    <td className="px-4 py-2">
+                      <div className="font-medium">{pos.name}</div>
+                      <div className="text-xs text-muted-foreground">{pos.email}</div>
+                    </td>
                     <td className="px-4 py-2"><Badge variant="outline">{pos.asset}</Badge></td>
+                    <td className="px-4 py-2 text-xs text-muted-foreground">{pos.investor_role || '—'}</td>
+                    <td className="px-4 py-2 text-xs text-muted-foreground">
+                      {pos.vehicle === 'convertible_note' ? 'Conv. Note' : pos.vehicle === 'preferred_equity' ? 'Pref. Equity' : '—'}
+                      {isConvertible && pos.interest_rate ? <span className="ml-1 text-muted-foreground/60">{pos.interest_rate}%</span> : null}
+                    </td>
                     <td className="px-4 py-2 text-right">{formatCurrency(pos.equity_invested)}</td>
-                    <td className="px-4 py-2 text-right">{formatCurrency(pos.nav_estimate)}</td>
-                    <td className="px-4 py-2 text-right">{pos.irr_estimate}%</td>
+                    <td className="px-4 py-2 text-right font-medium">
+                      {isConvertible ? formatCurrency(currentPos) : formatCurrency(pos.equity_invested)}
+                      {isConvertible && pos.interest_rate ? (
+                        <div className="text-xs text-muted-foreground font-normal">
+                          +{formatCurrency(currentPos - pos.equity_invested)} interest
+                        </div>
+                      ) : null}
+                    </td>
+                    <td className="px-4 py-2 text-xs">
+                      {pos.maturity_date ? (
+                        <span className={matured ? 'text-red-600 font-semibold' : 'text-muted-foreground'}>
+                          {pos.maturity_date}{matured ? ' ⚠ Matured' : ''}
+                        </span>
+                      ) : '—'}
+                    </td>
+                    <td className="px-4 py-2">
+                      <Badge variant={pos.position_status === 'repaid' ? 'secondary' : 'outline'}>
+                        {pos.position_status === 'repaid' ? `Repaid${pos.repaid_date ? ' ' + pos.repaid_date : ''}` : 'Active'}
+                      </Badge>
+                    </td>
                     <td className="px-4 py-2 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button variant="ghost" size="sm" onClick={() => openEditPos(pos)}>Edit</Button>
@@ -259,7 +320,8 @@ export default function AdminInvestorsPage() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -335,7 +397,50 @@ export default function AdminInvestorsPage() {
                 <SelectContent>{ASSETS.map((a) => <SelectItem key={a.slug} value={a.slug}>{a.name}</SelectItem>)}</SelectContent>
               </Select>
             </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label>Role</Label>
+                <Select value={posForm.investor_role} onValueChange={(v) => setPosForm((f) => ({ ...f, investor_role: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="LP">LP</SelectItem>
+                    <SelectItem value="GP">GP</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <Label>Vehicle</Label>
+                <Select value={posForm.vehicle} onValueChange={(v) => setPosForm((f) => ({ ...f, vehicle: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="preferred_equity">Preferred Equity</SelectItem>
+                    <SelectItem value="convertible_note">Convertible Note</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
             {posField('equity_invested', 'Equity Invested ($)', 'number')}
+            {posForm.vehicle === 'convertible_note' && (
+              <div className="space-y-3 rounded-md border p-3 bg-muted/20">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Convertible Note Details</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {posField('issuance_date', 'Date of Issuance', 'date')}
+                  {posField('maturity_date', 'Maturity Date', 'date')}
+                  {posField('interest_rate', 'Interest Rate (%)', 'number')}
+                  <div className="space-y-1">
+                    <Label>Status</Label>
+                    <Select value={posForm.position_status} onValueChange={(v) => setPosForm((f) => ({ ...f, position_status: v }))}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="repaid">Repaid</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                {posForm.position_status === 'repaid' && posField('repaid_date', 'Date of Repayment', 'date')}
+              </div>
+            )}
             {posField('ownership_pct', 'Ownership %', 'number')}
             {posField('capital_account_balance', 'Capital Account Balance ($)', 'number')}
             {posField('nav_estimate', 'NAV Estimate ($)', 'number')}

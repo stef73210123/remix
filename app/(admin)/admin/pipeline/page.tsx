@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
@@ -162,11 +162,13 @@ interface InlineEdit {
 
 function LeadDetailModal({
   lead,
+  allLeads,
   onClose,
   onUpdate,
   onDelete,
 }: {
   lead: PipelineLead
+  allLeads: PipelineLead[]
   onClose: () => void
   onUpdate: (l: PipelineLead) => void
   onDelete: (l: PipelineLead) => void
@@ -181,6 +183,9 @@ function LeadDetailModal({
   const [noteMedia, setNoteMedia] = useState<string[]>([])
   const [savingNote, setSavingNote] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [mergeSearch, setMergeSearch] = useState('')
+  const [mergeTarget, setMergeTarget] = useState<PipelineLead | null>(null)
+  const [merging, setMerging] = useState(false)
 
   useEffect(() => {
     setNotesLoading(true)
@@ -241,6 +246,35 @@ function LeadDetailModal({
     } catch { toast.error('Network error') }
     finally { setSavingNote(false) }
   }
+
+  const handleMerge = async () => {
+    if (!mergeTarget) return
+    setMerging(true)
+    try {
+      // Copy non-empty fields from local to target if target lacks them
+      const patches: Record<string, unknown> = {}
+      const fields: (keyof PipelineLead)[] = ['email', 'phone', 'firm', 'title', 'linkedin_url', 'website', 'notes', 'investment_rationale', 'target_amount', 'actual_amount']
+      for (const f of fields) {
+        const lv = local[f]; const tv = mergeTarget[f]
+        if ((lv !== undefined && lv !== '' && lv !== 0) && (tv === undefined || tv === '' || tv === 0)) patches[f] = lv
+      }
+      if (local.notes && mergeTarget.notes && local.notes !== mergeTarget.notes) {
+        patches.notes = mergeTarget.notes + '\n\n' + local.notes
+      }
+      if (Object.keys(patches).length > 0) {
+        await fetch('/api/admin/pipeline', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: mergeTarget.id, ...patches }) })
+      }
+      // Delete this lead
+      await fetch(`/api/admin/pipeline?id=${local.id}`, { method: 'DELETE' })
+      toast.success(`Merged into ${mergeTarget.name}`)
+      onDelete(local)
+    } catch { toast.error('Merge failed') }
+    finally { setMerging(false) }
+  }
+
+  const mergeOptions = mergeSearch.length > 1
+    ? allLeads.filter(l => l.id !== local.id && (l.name.toLowerCase().includes(mergeSearch.toLowerCase()) || (l.firm || '').toLowerCase().includes(mergeSearch.toLowerCase()))).slice(0, 8)
+    : []
 
   // Editable field — click the value to edit, blur/Enter to save
   function EF({
@@ -451,6 +485,41 @@ function LeadDetailModal({
                   )}
                 </div>
 
+                {/* Merge control */}
+                <div className="border rounded-lg p-4 space-y-3 bg-muted/20 sm:w-80 shrink-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Merge Into</p>
+                  <div className="relative">
+                    <Input
+                      placeholder="Search by name or firm…"
+                      value={mergeTarget ? mergeTarget.name : mergeSearch}
+                      onChange={(e) => { setMergeSearch(e.target.value); setMergeTarget(null) }}
+                      className="text-sm"
+                    />
+                    {mergeOptions.length > 0 && !mergeTarget && (
+                      <div className="absolute z-50 mt-1 w-full bg-popover border rounded-md shadow-md overflow-hidden">
+                        {mergeOptions.map(l => (
+                          <button
+                            key={l.id}
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-muted/50 transition-colors"
+                            onClick={() => { setMergeTarget(l); setMergeSearch('') }}
+                          >
+                            <span className="font-medium">{l.name}</span>
+                            {l.firm && <span className="text-muted-foreground text-xs ml-1">· {l.firm}</span>}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {mergeTarget && (
+                    <div className="text-xs text-muted-foreground">
+                      Merge <span className="font-medium text-foreground">{local.name}</span> → <span className="font-medium text-foreground">{mergeTarget.name}</span> (fields copied, this record deleted)
+                    </div>
+                  )}
+                  <Button size="sm" variant="destructive" onClick={handleMerge} disabled={!mergeTarget || merging}>
+                    {merging ? 'Merging…' : 'Merge & Delete'}
+                  </Button>
+                </div>
+
                 {/* Add note */}
                 <div className="border rounded-lg p-4 space-y-3 bg-muted/20 sm:w-80 shrink-0">
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Add Note</p>
@@ -627,6 +696,76 @@ function InlineCell({
   )
 }
 
+// ── Icons ─────────────────────────────────────────────────────────────────────
+
+function PersonIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <circle cx="8" cy="4.5" r="2.5" />
+      <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6H2z" />
+    </svg>
+  )
+}
+
+function PeopleIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 16" fill="currentColor" aria-hidden="true">
+      <circle cx="6" cy="4.5" r="2.5" />
+      <path d="M1 14c0-2.8 2.2-5 5-5s5 2.2 5 5H1z" />
+      <circle cx="14" cy="4.5" r="2.5" />
+      <path d="M10 14c0-2.8 2.2-5 5-5h4v5h-9z" />
+    </svg>
+  )
+}
+
+function BuildingIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <rect x="1" y="3" width="14" height="11" rx="1" />
+      <rect x="4" y="6" width="2" height="2" fill="white" opacity="0.6" />
+      <rect x="7" y="6" width="2" height="2" fill="white" opacity="0.6" />
+      <rect x="10" y="6" width="2" height="2" fill="white" opacity="0.6" />
+      <rect x="4" y="10" width="2" height="2" fill="white" opacity="0.6" />
+      <rect x="7" y="10" width="2" height="2" fill="white" opacity="0.6" />
+      <rect x="10" y="10" width="2" height="2" fill="white" opacity="0.6" />
+      <path d="M5 14V9h6v5" fill="white" opacity="0.3" />
+    </svg>
+  )
+}
+
+function LeadIcon({ lead }: { lead: PipelineLead }) {
+  if (lead.is_company) return <BuildingIcon className="w-3.5 h-3.5 text-blue-400" />
+  if (lead.investor_type === 'family-office') return <PeopleIcon className="w-4 h-3.5 text-violet-400" />
+  if (lead.investor_type === 'institutional') return <BuildingIcon className="w-3.5 h-3.5 text-blue-400" />
+  return <PersonIcon className="w-3 h-3 text-muted-foreground/50" />
+}
+
+function buildMailto(lead: PipelineLead): string {
+  if (!lead.email) return ''
+  const firstName = lead.name.split(' ')[0]
+  const firm = lead.firm ? ` at ${lead.firm}` : ''
+  const subject = encodeURIComponent('Introduction to Circular – Regenerative Agritourism Investment Platform')
+  const body = encodeURIComponent(
+`Hi ${firstName},
+
+I hope this message finds you well. I wanted to reach out and introduce you to Circular, a regenerative agritourism investment platform offering institutional-grade returns through carbon-positive hospitality assets.
+
+We're currently raising for Livingston Farm, our flagship project — a 500-acre regenerative agritourism destination in the Hudson Valley designed for scalable, repeatable deployment.
+
+I'd love to share more. Please find our materials below:
+
+📄 Offering Overview: https://circular.enterprises/offering
+🎬 Teaser Video: https://circular.enterprises/video
+
+Would you be open to a brief call to explore fit?
+
+Best,
+Stefan Martinovic
+Circular | investors.circular.enterprises`
+  )
+  return `mailto:${lead.email}?subject=${subject}&body=${body}`
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function AdminPipelinePage() {
@@ -648,6 +787,7 @@ export default function AdminPipelinePage() {
   const [saving, setSaving] = useState(false)
   const [detailLead, setDetailLead] = useState<PipelineLead | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<PipelineLead | null>(null)
+  const [collapsedCompanies, setCollapsedCompanies] = useState<Set<string>>(new Set())
   const dragLeadId = useRef<string | null>(null)
 
   const load = useCallback(async () => {
@@ -665,19 +805,6 @@ export default function AdminPipelinePage() {
   }, [selectedTiers])
 
   useEffect(() => { load() }, [load])
-
-  const toggleTier = (tier: string) => {
-    setSelectedTiers((prev) => {
-      const next = new Set(prev)
-      if (next.has(tier)) {
-        if (next.size === 1) return prev // always keep at least one selected
-        next.delete(tier)
-      } else {
-        next.add(tier)
-      }
-      return next
-    })
-  }
 
   const openCreate = () => {
     setForm(emptyForm())
@@ -818,24 +945,42 @@ export default function AdminPipelinePage() {
       : String(bv).localeCompare(String(av))
   })
 
-  // Nest contacts under their parent company rows
-  const sorted: (PipelineLead & { _depth?: number })[] = []
-  const childrenByParent = new Map<string, PipelineLead[]>()
-  for (const l of baseSorted) {
-    if (l.parent_id) {
-      const arr = childrenByParent.get(l.parent_id) || []
-      arr.push(l)
-      childrenByParent.set(l.parent_id, arr)
-    }
-  }
-  for (const l of baseSorted) {
-    if (!l.parent_id) {
-      sorted.push(l)
-      const children = childrenByParent.get(l.id) || []
-      for (const child of children) {
-        sorted.push({ ...child, _depth: 1 })
+  // Build children map
+  const childrenByParent = useMemo(() => {
+    const map = new Map<string, PipelineLead[]>()
+    for (const l of leads) {
+      if (l.parent_id) {
+        const arr = map.get(l.parent_id) || []
+        arr.push(l)
+        map.set(l.parent_id, arr)
       }
     }
+    return map
+  }, [leads])
+
+  // Nest contacts under their parent company rows, respecting collapse state
+  const sorted: (PipelineLead & { _depth?: number; _childCount?: number })[] = []
+  for (const l of baseSorted) {
+    if (!l.parent_id) {
+      const children = childrenByParent.get(l.id) || []
+      sorted.push({ ...l, _childCount: children.length })
+      if (!collapsedCompanies.has(l.id)) {
+        // Show children that also pass the current filters
+        const filteredChildren = children.filter(c => baseSorted.some(b => b.id === c.id))
+        for (const child of filteredChildren) {
+          sorted.push({ ...child, _depth: 1 })
+        }
+      }
+    }
+  }
+
+  const toggleCollapse = (id: string) => {
+    setCollapsedCompanies(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
   }
 
   const handleSort = (key: SortKey) => {
@@ -1053,17 +1198,35 @@ export default function AdminPipelinePage() {
               </tr>
             </thead>
             <tbody>
-              {sorted.map((lead) => (
+              {sorted.map((lead) => {
+                const depth = (lead as PipelineLead & { _depth?: number })._depth || 0
+                const childCount = (lead as PipelineLead & { _childCount?: number })._childCount || 0
+                const hasChildren = childCount > 0
+                const isCollapsed = collapsedCompanies.has(lead.id)
+                const mailto = buildMailto(lead)
+                return (
                 <tr
                   key={lead.id}
-                  className={`border-b last:border-0 hover:bg-muted/20 cursor-pointer ${(lead as PipelineLead & { _depth?: number })._depth ? 'bg-muted/5' : ''}`}
+                  className={`border-b last:border-0 hover:bg-muted/20 cursor-pointer ${depth ? 'bg-muted/5' : ''}`}
                   onClick={() => setDetailLead(lead)}
                 >
                   <td className="px-4 py-2 font-medium whitespace-nowrap">
-                    <div className="flex items-center gap-1" style={{ paddingLeft: (lead as PipelineLead & { _depth?: number })._depth ? '1.5rem' : undefined }}>
-                      {lead.is_company && <span className="text-xs text-muted-foreground/60" title="Company record">🏢</span>}
-                      {(lead as PipelineLead & { _depth?: number })._depth ? <span className="text-xs text-muted-foreground/40">↳</span> : null}
-                      {lead.name}
+                    <div className="flex items-center gap-1.5" style={{ paddingLeft: depth ? '1.5rem' : undefined }}>
+                      {hasChildren && (
+                        <button
+                          className="text-muted-foreground/50 hover:text-foreground transition-colors w-4 text-center leading-none"
+                          onClick={(e) => { e.stopPropagation(); toggleCollapse(lead.id) }}
+                          title={isCollapsed ? `Expand ${childCount} contacts` : 'Collapse'}
+                        >
+                          {isCollapsed ? '▶' : '▼'}
+                        </button>
+                      )}
+                      {!hasChildren && !depth && <span className="w-4" />}
+                      <LeadIcon lead={lead} />
+                      <span>{lead.name}</span>
+                      {hasChildren && isCollapsed && (
+                        <span className="text-xs text-muted-foreground/40 font-normal">({childCount})</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-2 text-muted-foreground max-w-[160px] truncate text-sm">
@@ -1093,15 +1256,28 @@ export default function AdminPipelinePage() {
                     {lead.close_date || '—'}
                   </td>
                   <td className="px-4 py-2 text-right" onClick={(e) => e.stopPropagation()}>
-                    <button
-                      className="text-muted-foreground/40 hover:text-destructive transition-colors text-base px-1"
-                      title="Remove lead"
-                      onClick={() => setDeleteTarget(lead)}
-                    >
-                      🗑
-                    </button>
+                    <div className="flex items-center justify-end gap-1">
+                      {mailto && (
+                        <a
+                          href={mailto}
+                          className="text-muted-foreground/40 hover:text-primary transition-colors text-sm px-1"
+                          title="Send intro email"
+                        >
+                          ✉
+                        </a>
+                      )}
+                      <button
+                        className="text-muted-foreground/40 hover:text-destructive transition-colors text-base px-1"
+                        title="Remove lead"
+                        onClick={() => setDeleteTarget(lead)}
+                      >
+                        🗑
+                      </button>
+                    </div>
                   </td>
                 </tr>
+                )
+              })}
               ))}
             </tbody>
           </table>
@@ -1112,6 +1288,7 @@ export default function AdminPipelinePage() {
       {detailLead && (
         <LeadDetailModal
           lead={detailLead}
+          allLeads={leads}
           onClose={() => setDetailLead(null)}
           onUpdate={(updated) => {
             setLeads((prev) => prev.map((l) => l.id === updated.id ? updated : l))
