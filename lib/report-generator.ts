@@ -1,6 +1,7 @@
 // PDF Report generator for property summaries
 // Uses jsPDF for PDF creation
 
+import React from "react";
 import { Property, PROPERTY_TYPE_TO_LAND_USE } from "@/types/cesium";
 import { getDemographicsForProperty } from "@/lib/data/demographics";
 
@@ -172,4 +173,50 @@ export async function generatePropertyPDF(property: Property): Promise<void> {
 
   // Download
   doc.save(`property-report-${property.id}.pdf`);
+}
+
+export async function captureMapSnapshot(
+  viewerRef: React.MutableRefObject<any>
+): Promise<string | null> {
+  try {
+    const viewer = viewerRef.current;
+    const canvas = viewer.scene.canvas as HTMLCanvasElement;
+    viewer.scene.render();
+    return canvas.toDataURL("image/png");
+  } catch {
+    return null;
+  }
+}
+
+export async function copySnapshotToClipboard(
+  viewerRef: React.MutableRefObject<any>
+): Promise<boolean> {
+  try {
+    const dataUrl = await captureMapSnapshot(viewerRef);
+    if (!dataUrl) return false;
+
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    await navigator.clipboard.write([
+      new ClipboardItem({ "image/png": blob }),
+    ]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function downloadSnapshot(
+  viewerRef: React.MutableRefObject<any>,
+  filename?: string
+): Promise<void> {
+  const dataUrl = await captureMapSnapshot(viewerRef);
+  if (!dataUrl) return;
+
+  const link = document.createElement("a");
+  link.href = dataUrl;
+  link.download = filename ?? `map-snapshot-${Date.now()}.png`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }

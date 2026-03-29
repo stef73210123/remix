@@ -1,13 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { BrokerageListing } from "@/types/cesium";
 import { STATE_REGIONS } from "@/lib/scrapers/brokerage-config";
+import { Redis } from "@upstash/redis";
 
 export const dynamic = "force-dynamic";
 
-/**
- * In-memory listing store. In production this would be backed by a database.
- * Listings are populated by the /api/listings/scrape endpoint.
- */
+/* ------------------------------------------------------------------ */
+/*  Redis client (optional – falls back to in-memory when env is unset) */
+/* ------------------------------------------------------------------ */
+
+const REDIS_KEY = "listings:all";
+const REDIS_TTL_SECONDS = 60 * 60 * 24; // 24 hours
+
+function regionKey(region: string) {
+  return `listings:region:${region}`;
+}
+
+let redis: Redis | null = null;
+if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  redis = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/*  In-memory fallback store                                          */
+/* ------------------------------------------------------------------ */
+
 let listingsStore: BrokerageListing[] = [];
 
 export function setListingsStore(listings: BrokerageListing[]) {
@@ -15,6 +35,61 @@ export function setListingsStore(listings: BrokerageListing[]) {
 }
 
 export function getListingsStore(): BrokerageListing[] {
+  return listingsStore;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Redis helpers                                                     */
+/* ------------------------------------------------------------------ */
+
+async function getListingsFromRedis(): Promise<BrokerageListing[] | null> {
+  if (!redis) return null;
+  try {
+    const data = await redis.get<BrokerageListing[]>(REDIS_KEY);
+    return data ?? null;
+  } catch (err) {
+    console.error("[listings] Redis GET failed, falling back to memory:", err);
+    return null;
+  }
+}
+
+async function storeListingsToRedis(listings: BrokerageListing[]) {
+  if (!redis) return;
+  try {
+    // Store the full listing set with TTL
+    await redis.set(REDIS_KEY, listings, { ex: REDIS_TTL_SECONDS });
+
+    // Also index by region for faster regional queries
+    const byRegion = new Map<string, BrokerageListing[]>();
+    for (const l of listings) {
+      if (l.region) {
+        const existing = byRegion.get(l.region) ?? [];
+        existing.push(l);
+        byRegion.set(l.region, existing);
+      }
+    }
+
+    const pipeline = redis.pipeline();
+    for (const [region, regionListings] of byRegion) {
+      pipeline.set(regionKey(region), regionListings, { ex: REDIS_TTL_SECONDS });
+    }
+    await pipeline.exec();
+  } catch (err) {
+    console.error("[listings] Redis SET failed:", err);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Resolve listings: Redis first, then in-memory                     */
+/* ------------------------------------------------------------------ */
+
+async function resolveListings(): Promise<BrokerageListing[]> {
+  const fromRedis = await getListingsFromRedis();
+  if (fromRedis && fromRedis.length > 0) {
+    // Keep in-memory copy in sync so getListingsStore() stays useful
+    listingsStore = fromRedis;
+    return fromRedis;
+  }
   return listingsStore;
 }
 
@@ -35,7 +110,7 @@ export function getListingsStore(): BrokerageListing[] {
  */
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
-  let filtered = [...listingsStore];
+  let filtered = [...(await resolveListings())];
 
   // Filter by region
   const region = params.get("region");
@@ -114,14 +189,21 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const newListings: BrokerageListing[] = body.listings || [];
 
+    // Resolve current listings (from Redis or memory)
+    const current = await resolveListings();
+
     // Merge with existing, deduplicating by id
-    const existingIds = new Set(listingsStore.map((l) => l.id));
+    const existingIds = new Set(current.map((l) => l.id));
     const toAdd = newListings.filter((l) => !existingIds.has(l.id));
-    listingsStore = [...listingsStore, ...toAdd];
+    const merged = [...current, ...toAdd];
+
+    // Update both in-memory and Redis
+    listingsStore = merged;
+    await storeListingsToRedis(merged);
 
     return NextResponse.json({
       added: toAdd.length,
-      total: listingsStore.length,
+      total: merged.length,
     });
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });

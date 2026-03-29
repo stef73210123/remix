@@ -10,12 +10,23 @@ export default function PropertyTab({ property }: { property: Property }) {
   const color = PROPERTY_TYPE_COLORS[property.propertyType];
   const [starred, setStarred] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [walkData, setWalkData] = useState<any>(null);
   const googleKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
 
   useEffect(() => {
     setStarred(isFavorite(property.id));
     addRecent(property.id);
   }, [property.id]);
+
+  useEffect(() => {
+    let cancelled = false;
+    import("@/lib/walkscore").then(({ getWalkabilityData }) => {
+      getWalkabilityData(property.lat, property.lng).then(data => {
+        if (!cancelled) setWalkData(data);
+      });
+    });
+    return () => { cancelled = true; };
+  }, [property.lat, property.lng]);
 
   function handleStar() {
     const nowFav = toggleFavorite(property.id);
@@ -146,6 +157,73 @@ export default function PropertyTab({ property }: { property: Property }) {
             <DetailRow label="Stories:" value={String(property.stories)} />
           )}
         </div>
+
+        {/* Walkability & Transit */}
+        <div className="bg-[#1e2d3d] px-3 py-1.5">
+          <span className="text-[#0088aa] text-xs font-bold">WALKABILITY &amp; TRANSIT</span>
+        </div>
+        {walkData ? (
+          <div className="bg-white px-3 py-3">
+            {/* Score circles */}
+            <div className="flex justify-around mb-3">
+              {([
+                { label: "Walk Score", score: walkData.walkScore, desc: walkData.walkDescription },
+                { label: "Transit Score", score: walkData.transitScore, desc: walkData.transitDescription },
+                { label: "Bike Score", score: walkData.bikeScore, desc: walkData.bikeDescription },
+              ] as const).map((item) => (
+                <div key={item.label} className="flex flex-col items-center">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                    style={{
+                      backgroundColor:
+                        item.score >= 70 ? "#22c55e" : item.score >= 50 ? "#eab308" : "#ef4444",
+                    }}
+                  >
+                    {item.score}
+                  </div>
+                  <span className="text-[10px] font-semibold text-gray-700 mt-1">{item.label}</span>
+                  <span className="text-[9px] text-gray-500">{item.desc}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Nearby Transit */}
+            {walkData.nearbyTransit.length > 0 && (
+              <div className="mb-3">
+                <div className="text-[10px] font-bold text-gray-600 mb-1">Nearby Transit</div>
+                {walkData.nearbyTransit.slice(0, 5).map((stop: any, i: number) => (
+                  <div key={i} className="flex items-center justify-between py-0.5 text-[10px]">
+                    <span className="text-gray-800 truncate flex-1">{stop.name}</span>
+                    <span className="text-gray-500 mx-2">{stop.type.replace("_", " ")}</span>
+                    <span className="text-gray-400 whitespace-nowrap">{stop.distance}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Nearby Amenities */}
+            <div>
+              <div className="text-[10px] font-bold text-gray-600 mb-1">Nearby Amenities</div>
+              <div className="flex justify-between text-[10px]">
+                {([
+                  { label: "Restaurants", count: walkData.nearbyAmenities.restaurants },
+                  { label: "Groceries", count: walkData.nearbyAmenities.groceries },
+                  { label: "Parks", count: walkData.nearbyAmenities.parks },
+                  { label: "Schools", count: walkData.nearbyAmenities.schools },
+                ] as const).map((a) => (
+                  <div key={a.label} className="text-center">
+                    <div className="font-bold text-gray-800">{a.count}</div>
+                    <div className="text-gray-500">{a.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white px-3 py-4 text-center text-[10px] text-gray-400">
+            Loading walkability data...
+          </div>
+        )}
       </div>
     </div>
   );

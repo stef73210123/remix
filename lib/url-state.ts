@@ -10,6 +10,7 @@ export interface URLViewState {
   layers?: string[];
   panel?: string;
   region?: string;
+  address?: string;
 }
 
 export function parseURLState(): URLViewState {
@@ -41,6 +42,9 @@ export function parseURLState(): URLViewState {
   const region = params.get("region");
   if (region) state.region = region;
 
+  const address = params.get("address");
+  if (address) state.address = address;
+
   return state;
 }
 
@@ -56,6 +60,7 @@ export function buildURLState(state: URLViewState): string {
   if (state.layers && state.layers.length > 0) params.set("layers", state.layers.join(","));
   if (state.panel) params.set("panel", state.panel);
   if (state.region) params.set("region", state.region);
+  if (state.address) params.set("address", state.address);
 
   const str = params.toString();
   return str ? `?${str}` : "";

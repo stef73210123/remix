@@ -33,6 +33,26 @@ const MeasureTools = dynamic(
   { ssr: false }
 );
 
+const DrawTools = dynamic(
+  () => import("@/components/toolbar/DrawTools"),
+  { ssr: false }
+);
+
+const HistoricalImagery = dynamic(
+  () => import("@/components/toolbar/HistoricalImagery"),
+  { ssr: false }
+);
+
+const CoordinateDisplay = dynamic(
+  () => import("@/components/toolbar/CoordinateDisplay"),
+  { ssr: false }
+);
+
+const KeyboardShortcuts = dynamic(
+  () => import("@/components/toolbar/KeyboardShortcuts"),
+  { ssr: false }
+);
+
 function URLStateSync() {
   const {
     selectedProperty,
@@ -64,6 +84,7 @@ function URLStateLoader() {
     setRightPanel,
     setActiveRegion,
     flyToProperty,
+    viewerRef,
   } = useCesium();
 
   useEffect(() => {
@@ -87,6 +108,45 @@ function URLStateLoader() {
         setSelectedProperty(prop);
         setLeftPanelOpen(true);
         setTimeout(() => flyToProperty(prop), 2000);
+      }
+    }
+
+    if (state.address) {
+      geocodeAndFly(state.address);
+    }
+
+    async function geocodeAndFly(address: string) {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address)}`
+        );
+        const data = await res.json();
+        if (!data || data.length === 0) return;
+        const { lat, lon } = data[0];
+        const latitude = parseFloat(lat);
+        const longitude = parseFloat(lon);
+
+        const tryFly = () => {
+          const viewer = viewerRef.current;
+          if (!viewer) {
+            setTimeout(tryFly, 500);
+            return;
+          }
+          import("cesium").then((Cesium) => {
+            viewer.camera.flyTo({
+              destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, 800),
+              orientation: {
+                heading: Cesium.Math.toRadians(0),
+                pitch: Cesium.Math.toRadians(-45),
+                roll: 0,
+              },
+              duration: 2,
+            });
+          });
+        };
+        setTimeout(tryFly, 2000);
+      } catch {
+        // Geocoding failed silently
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -196,6 +256,15 @@ export default function MapPage() {
         {/* Measurement tools */}
         <MeasureTools />
 
+        {/* Drawing tools */}
+        <DrawTools />
+
+        {/* Historical imagery */}
+        <HistoricalImagery />
+
+        {/* Keyboard shortcuts */}
+        <KeyboardShortcuts />
+
         {/* URL state sync */}
         <URLStateSync />
         <URLStateLoader />
@@ -214,6 +283,9 @@ export default function MapPage() {
 
         {/* Bottom Toolbar */}
         <MapToolbar />
+
+        {/* Coordinate display */}
+        <CoordinateDisplay />
 
         {/* Cesium attribution */}
         <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1.5">

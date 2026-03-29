@@ -1,7 +1,7 @@
 "use client";
 
 import { useCesium } from "@/components/cesium/CesiumContext";
-import { Map, Building2, Grid3x3, Ruler, Pentagon, GitCompare, MapPin, Footprints } from "lucide-react";
+import { Map, Building2, Grid3x3, Ruler, Pentagon, GitCompare, MapPin, Footprints, Camera, Maximize } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MapToolbar() {
@@ -23,6 +23,7 @@ export default function MapToolbar() {
     comparisonProperties,
     rightPanel,
     setRightPanel,
+    viewerRef,
   } = useCesium();
 
   return (
@@ -94,6 +95,28 @@ export default function MapToolbar() {
           />
         </>
       )}
+      <div className="w-px h-6 bg-white/20 mx-1" />
+      <ToolbarButton
+        icon={<Camera className="w-4 h-4" />}
+        label="SNAPSHOT"
+        active={false}
+        onClick={async () => {
+          const { downloadSnapshot } = await import("@/lib/report-generator");
+          await downloadSnapshot(viewerRef);
+        }}
+      />
+      <ToolbarButton
+        icon={<Maximize className="w-4 h-4" />}
+        label="FULLSCREEN"
+        active={!!document.fullscreenElement}
+        onClick={() => {
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else {
+            document.documentElement.requestFullscreen();
+          }
+        }}
+      />
     </div>
   );
 }

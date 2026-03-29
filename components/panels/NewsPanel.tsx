@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronUp, ChevronDown, Newspaper, ExternalLink, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,7 @@ interface NewsItem {
   category: "market" | "development" | "policy" | "finance";
 }
 
-const MOCK_NEWS: NewsItem[] = [
+const FALLBACK_NEWS: NewsItem[] = [
   {
     id: "1",
     title: "DC Office Market Sees Highest Vacancy Rate in a Decade",
@@ -44,33 +44,6 @@ const MOCK_NEWS: NewsItem[] = [
   },
   {
     id: "4",
-    title: "Connecticut Multifamily Cap Rates Compress to 5.2%",
-    source: "Real Capital Analytics",
-    summary: "Strong demand for suburban multifamily assets in Fairfield County pushes cap rates to post-pandemic lows.",
-    url: "#",
-    timestamp: "8h ago",
-    category: "finance",
-  },
-  {
-    id: "5",
-    title: "MassGIS Releases Updated Statewide Parcel Data for 2026",
-    source: "Mass.gov",
-    summary: "The Commonwealth of Massachusetts has published its annual Level 3 parcel dataset covering all 351 municipalities.",
-    url: "#",
-    timestamp: "12h ago",
-    category: "policy",
-  },
-  {
-    id: "6",
-    title: "Hudson Valley Industrial Market Attracts NYC Investors",
-    source: "Real Estate Weekly",
-    summary: "Warehouse and distribution properties in Dutchess and Orange counties see 35% YoY transaction volume increase.",
-    url: "#",
-    timestamp: "1d ago",
-    category: "market",
-  },
-  {
-    id: "7",
     title: "Federal Interest Rate Decision Impacts CRE Lending",
     source: "CBRE Research",
     summary: "Latest Fed decision to hold rates steady provides cautious optimism for commercial real estate refinancing activity.",
@@ -78,16 +51,22 @@ const MOCK_NEWS: NewsItem[] = [
     timestamp: "1d ago",
     category: "finance",
   },
-  {
-    id: "8",
-    title: "New York State Expands Wetland Buffer Requirements",
-    source: "NY DEC",
-    summary: "Updated regulations increase required setbacks from freshwater wetlands, impacting development in rural counties.",
-    url: "#",
-    timestamp: "2d ago",
-    category: "policy",
-  },
 ];
+
+function getRelativeTime(pubDate: string): string {
+  const now = Date.now();
+  const then = new Date(pubDate).getTime();
+  const diffMs = now - then;
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 1) return "just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays}d ago`;
+}
+
+const VALID_CATEGORIES = new Set<NewsItem["category"]>(["market", "development", "policy", "finance"]);
 
 const CATEGORY_COLORS: Record<NewsItem["category"], string> = {
   market: "#2980b9",
@@ -99,9 +78,43 @@ const CATEGORY_COLORS: Record<NewsItem["category"], string> = {
 export default function NewsPanel() {
   const [expanded, setExpanded] = useState(false);
   const [filter, setFilter] = useState<NewsItem["category"] | "all">("all");
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchNews() {
+      try {
+        const res = await fetch("/api/news?limit=20");
+        if (!res.ok) throw new Error("Failed to fetch news");
+        const data = await res.json();
+        if (cancelled) return;
+        const items: NewsItem[] = data.items.map(
+          (item: { id: string; title: string; link: string; description: string; pubDate: string; source: string; category: string }) => ({
+            id: item.id,
+            title: item.title,
+            source: item.source,
+            summary: item.description,
+            url: item.link,
+            timestamp: getRelativeTime(item.pubDate),
+            category: VALID_CATEGORIES.has(item.category as NewsItem["category"])
+              ? (item.category as NewsItem["category"])
+              : "market",
+          })
+        );
+        setNews(items);
+      } catch {
+        if (!cancelled) setNews(FALLBACK_NEWS);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    fetchNews();
+    return () => { cancelled = true; };
+  }, []);
 
   const filtered =
-    filter === "all" ? MOCK_NEWS : MOCK_NEWS.filter((n) => n.category === filter);
+    filter === "all" ? news : news.filter((n) => n.category === filter);
 
   return (
     <div
@@ -121,7 +134,7 @@ export default function NewsPanel() {
             REAL ESTATE NEWS
           </span>
           <span className="text-[10px] text-white/50">
-            {MOCK_NEWS.length} articles
+            {loading ? "..." : `${news.length} articles`}
           </span>
         </div>
         <div className="flex items-center gap-3">
@@ -171,7 +184,11 @@ export default function NewsPanel() {
       {expanded && (
         <div className="bg-[#111b27]/95 backdrop-blur-sm h-[calc(100%-36px)] overflow-x-auto overflow-y-hidden">
           <div className="flex gap-3 p-3 h-full">
-            {filtered.map((item) => (
+            {loading ? (
+              <div className="flex items-center justify-center w-full text-white/50 text-xs">Loading...</div>
+            ) : filtered.length === 0 ? (
+              <div className="flex items-center justify-center w-full text-white/50 text-xs">No news available</div>
+            ) : filtered.map((item) => (
               <article
                 key={item.id}
                 className="flex-shrink-0 w-[280px] bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col hover:bg-white/10 transition-colors cursor-pointer group"

@@ -20,6 +20,8 @@ import {
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
+import { MapPin } from 'lucide-react'
+import Link from 'next/link'
 import { formatCurrency } from '@/lib/utils/format'
 import type { Deal, DealStage } from '@/lib/sheets/deals'
 
@@ -468,6 +470,14 @@ export default function AdminDealsPage() {
                   </td>
                   <td className="px-4 py-2 text-right">
                     <div className="flex items-center justify-end gap-2">
+                      {deal.address && (
+                        <Button variant="ghost" size="sm" asChild>
+                          <Link href={`/map?address=${encodeURIComponent(deal.address)}`}>
+                            <MapPin className="h-3.5 w-3.5 mr-1" />
+                            Map
+                          </Link>
+                        </Button>
+                      )}
                       <Button variant="ghost" size="sm" onClick={() => openEdit(deal)}>Edit</Button>
                       <Button
                         variant="ghost"
