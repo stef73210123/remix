@@ -8,14 +8,9 @@ import DocRenderer from '@/components/shared/DocRenderer'
 import { getPlatformContent } from '@/lib/gdocs/platform'
 import { getSectionHtml } from '@/lib/gdocs/parser'
 import { getAssetConfig } from '@/lib/sheets/config'
+import { ASSETS } from '@/lib/data/assets'
 
 export const dynamic = 'force-dynamic'
-
-const ASSETS = [
-  { slug: 'livingstonfarm', name: 'Livingston Farm' },
-  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-  { slug: 'circularplatform', name: 'Circular' },
-]
 
 export default async function HomePage() {
   // Fetch in parallel, fail gracefully

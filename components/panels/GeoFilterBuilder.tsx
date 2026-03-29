@@ -1,8 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, Play, RotateCcw, MapPin } from "lucide-react";
+import { Plus, Trash2, Play, RotateCcw, MapPin, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+/** Haversine distance in miles between two lat/lng points. */
+function haversineDistance(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+): number {
+  const R = 3958.8; // Earth radius in miles
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
 type GeoShape = "radius" | "polygon" | "rectangle" | "isochrone";
 type LogicalOp = "AND" | "OR" | "NOT";
@@ -74,6 +93,9 @@ export default function GeoFilterBuilder({
   });
 
   const [resultCount, setResultCount] = useState<number | null>(null);
+  const [querying, setQuerying] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [results, setResults] = useState<any[]>([]);
 
   function addCondition() {
     setGeoFilter((prev) => ({
@@ -98,9 +120,130 @@ export default function GeoFilterBuilder({
     }));
   }
 
-  function runQuery() {
-    // Mock query execution
-    setResultCount(Math.floor(Math.random() * 50) + 5);
+  async function runQuery() {
+    setQuerying(true);
+    setResultCount(null);
+    setResults([]);
+
+    try {
+      // If isochrone, fetch the polygon boundary first
+      let isochronePolygon: { lat: number; lng: number }[] | null = null;
+      if (geoFilter.shape === "isochrone" && geoFilter.center) {
+        const isoRes = await fetch(
+          `/api/isochrone?lat=${geoFilter.center.lat}&lng=${geoFilter.center.lng}&mode=${geoFilter.isochroneMode || "drive"}&minutes=${geoFilter.isochroneMinutes || 15}`
+        );
+        if (isoRes.ok) {
+          const isoData = await isoRes.json();
+          isochronePolygon = isoData.polygon ?? null;
+        }
+      }
+
+      // Fetch listings (up to 500)
+      const listingsRes = await fetch("/api/listings?mapOnly=true&limit=500");
+      if (!listingsRes.ok) throw new Error("Failed to fetch listings");
+      const listingsData = await listingsRes.json();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let listings: any[] = Array.isArray(listingsData)
+        ? listingsData
+        : listingsData.listings ?? listingsData.data ?? [];
+
+      // Spatial filter: radius or isochrone
+      if (geoFilter.shape === "radius" && geoFilter.center && geoFilter.radiusMiles) {
+        const { lat, lng } = geoFilter.center;
+        const maxDist = geoFilter.radiusMiles;
+        listings = listings.filter((l: { lat?: number; lng?: number; latitude?: number; longitude?: number }) => {
+          const pLat = l.lat ?? l.latitude;
+          const pLng = l.lng ?? l.longitude;
+          if (pLat == null || pLng == null) return false;
+          return haversineDistance(lat, lng, pLat, pLng) <= maxDist;
+        });
+      } else if (geoFilter.shape === "isochrone" && isochronePolygon && isochronePolygon.length > 0) {
+        // Simple point-in-polygon (ray casting) for isochrone boundary
+        listings = listings.filter((l: { lat?: number; lng?: number; latitude?: number; longitude?: number }) => {
+          const pLat = l.lat ?? l.latitude;
+          const pLng = l.lng ?? l.longitude;
+          if (pLat == null || pLng == null) return false;
+          let inside = false;
+          for (let i = 0, j = isochronePolygon!.length - 1; i < isochronePolygon!.length; j = i++) {
+            const yi = isochronePolygon![i].lat, xi = isochronePolygon![i].lng;
+            const yj = isochronePolygon![j].lat, xj = isochronePolygon![j].lng;
+            if ((yi > pLat) !== (yj > pLat) && pLng < ((xj - xi) * (pLat - yi)) / (yj - yi) + xi) {
+              inside = !inside;
+            }
+          }
+          return inside;
+        });
+      }
+      // polygon/rectangle shapes rely on map-drawn boundaries (not yet wired)
+
+      // Apply filter conditions client-side
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      function getNestedValue(obj: any, path: string): any {
+        return path.split(".").reduce((o, k) => (o != null ? o[k] : undefined), obj);
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      function matchesCondition(listing: any, cond: FilterCondition): boolean {
+        if (!cond.value) return true; // skip empty conditions
+        const fieldVal = getNestedValue(listing, cond.field);
+        const strVal = String(fieldVal ?? "").toLowerCase();
+        const cmpVal = cond.value.toLowerCase();
+        const numField = parseFloat(strVal);
+        const numCmp = parseFloat(cmpVal);
+
+        switch (cond.operator) {
+          case "=":
+            return strVal === cmpVal;
+          case "!=":
+            return strVal !== cmpVal;
+          case ">":
+            return !isNaN(numField) && !isNaN(numCmp) && numField > numCmp;
+          case "<":
+            return !isNaN(numField) && !isNaN(numCmp) && numField < numCmp;
+          case ">=":
+            return !isNaN(numField) && !isNaN(numCmp) && numField >= numCmp;
+          case "<=":
+            return !isNaN(numField) && !isNaN(numCmp) && numField <= numCmp;
+          case "contains":
+            return strVal.includes(cmpVal);
+          case "in":
+            return cmpVal.split(",").map((s) => s.trim()).includes(strVal);
+          default:
+            return true;
+        }
+      }
+
+      const conditions = geoFilter.conditions.filter((c) => c.value);
+      if (conditions.length > 0) {
+        listings = listings.filter((listing) => {
+          let result = matchesCondition(listing, conditions[0]);
+          for (let i = 1; i < conditions.length; i++) {
+            const cond = conditions[i];
+            const match = matchesCondition(listing, cond);
+            switch (cond.logicalOp) {
+              case "AND":
+                result = result && match;
+                break;
+              case "OR":
+                result = result || match;
+                break;
+              case "NOT":
+                result = result && !match;
+                break;
+            }
+          }
+          return result;
+        });
+      }
+
+      setResults(listings);
+      setResultCount(listings.length);
+    } catch (err) {
+      console.error("Geo query failed:", err);
+      setResultCount(0);
+    } finally {
+      setQuerying(false);
+    }
   }
 
   function resetQuery() {
@@ -111,6 +254,8 @@ export default function GeoFilterBuilder({
       conditions: [newCondition("AND")],
     });
     setResultCount(null);
+    setResults([]);
+    setQuerying(false);
   }
 
   return (
@@ -374,9 +519,14 @@ export default function GeoFilterBuilder({
       <div className="px-3 py-2 bg-white border-t flex gap-2">
         <button
           onClick={runQuery}
-          className="flex-1 flex items-center justify-center gap-1 bg-[#0088aa] text-white text-xs font-bold py-2 rounded hover:bg-[#006b88]"
+          disabled={querying}
+          className="flex-1 flex items-center justify-center gap-1 bg-[#0088aa] text-white text-xs font-bold py-2 rounded hover:bg-[#006b88] disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <Play className="w-3 h-3" /> Run Query
+          {querying ? (
+            <><Loader2 className="w-3 h-3 animate-spin" /> Running...</>
+          ) : (
+            <><Play className="w-3 h-3" /> Run Query</>
+          )}
         </button>
         <button
           onClick={resetQuery}

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Property, DemographicData } from "@/types/cesium";
-import { getDemographicsForProperty, DC_DEMOGRAPHICS } from "@/lib/data/demographics";
+import { Property } from "@/types/cesium";
 import * as d3 from "d3";
 import {
   Chart as ChartJS,
@@ -17,7 +16,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import { Bar, Doughnut, Line } from "react-chartjs-2";
+import { Bar, Doughnut } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +36,42 @@ const RADIUS_COLORS = ["#1a5276", "#5dade2", "#e67e22", "#27ae60"];
 const BOUNDARY_TYPES = ["radius", "census-tract", "zip-code", "isochrone"] as const;
 const ISOCHRONE_MODES = ["drive", "walk", "transit"] as const;
 
+interface CensusApiResponse {
+  fips: { state: string; county: string; tract: string };
+  location: { lat: number; lng: number; stateName: string; countyName: string };
+  demographics: {
+    totalPopulation: number;
+    medianAge: number;
+    totalHouseholds: number;
+    medianHouseholdIncome: number;
+    housingUnits: number;
+  };
+}
+
+// DC baseline reference data for comparison column
+const DC_BASELINE = {
+  totalPopulation: 689545,
+  medianAge: 34.0,
+  maleFemaleRatio: [47, 53] as [number, number],
+  totalHouseholds: 308200,
+  avgHouseholdSize: 2.11,
+};
+
+/**
+ * Given a median household income, approximate a percentage distribution
+ * across income brackets: <$25K, $25-50K, $50-75K, $75-100K, $100-150K, $150K+
+ */
+function estimateIncomeDistribution(median: number): number[] {
+  // Use a log-normal-inspired heuristic centered on the median
+  const brackets = [12500, 37500, 62500, 87500, 125000, 175000];
+  const raw = brackets.map((mid) => {
+    const logDiff = Math.log(mid / median);
+    return Math.exp(-0.5 * logDiff * logDiff);
+  });
+  const total = raw.reduce((a, b) => a + b, 0);
+  return raw.map((v) => Math.round((v / total) * 100));
+}
+
 export default function DemographicsReport({
   property,
 }: {
@@ -46,94 +81,61 @@ export default function DemographicsReport({
   const [boundaryType, setBoundaryType] = useState<(typeof BOUNDARY_TYPES)[number]>("radius");
   const [isochroneMode, setIsochroneMode] = useState<(typeof ISOCHRONE_MODES)[number]>("drive");
   const [isochroneMinutes, setIsochroneMinutes] = useState(15);
+  const [censusData, setCensusData] = useState<CensusApiResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const d3ContainerRef = useRef<SVGSVGElement>(null);
 
-  const allDemographics = getDemographicsForProperty(property.id);
-  const demographics = allDemographics.find((d) => d.radius === selectedRadius)!;
-  const city = DC_DEMOGRAPHICS;
+  // Fetch census data from API
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
 
-  // D3 Population Pyramid
+    fetch(`/api/census?lat=${property.lat}&lng=${property.lng}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Census API returned ${res.status}`);
+        return res.json();
+      })
+      .then((data: CensusApiResponse) => {
+        if (!cancelled) {
+          setCensusData(data);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message);
+          setLoading(false);
+        }
+      });
+
+    return () => { cancelled = true; };
+  }, [property.lat, property.lng]);
+
+  const city = DC_BASELINE;
+
+  // D3 Population Pyramid - Census API only returns a snapshot, no age breakdown
   useEffect(() => {
     if (!d3ContainerRef.current) return;
-
     const svg = d3.select(d3ContainerRef.current);
     svg.selectAll("*").remove();
 
+    if (!censusData) return;
+
     const width = 230;
-    const height = 180;
-    const margin = { top: 10, right: 30, bottom: 20, left: 70 };
-    const innerWidth = width - margin.left - margin.right;
-    const innerHeight = height - margin.top - margin.bottom;
+    const height = 40;
+    svg.attr("width", width).attr("height", height);
 
-    const g = svg
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    const data = demographics.populationByAge;
-    const maxValue = d3.max(data, (d) => d.count) || 1;
-
-    const y = d3
-      .scaleBand()
-      .domain(data.map((d) => d.ageGroup))
-      .range([0, innerHeight])
-      .padding(0.15);
-
-    const x = d3.scaleLinear().domain([0, maxValue]).range([0, innerWidth]);
-
-    // Bars
-    g.selectAll("rect")
-      .data(data)
-      .enter()
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", (d) => y(d.ageGroup)!)
-      .attr("width", (d) => x(d.count))
-      .attr("height", y.bandwidth())
-      .attr("fill", "#5dade2")
-      .attr("rx", 2)
-      .attr("opacity", 0.8);
-
-    // Value labels
-    g.selectAll(".value")
-      .data(data)
-      .enter()
+    svg
       .append("text")
-      .attr("x", (d) => x(d.count) + 3)
-      .attr("y", (d) => y(d.ageGroup)! + y.bandwidth() / 2)
-      .attr("dy", "0.35em")
-      .attr("font-size", "8px")
-      .attr("fill", "#666")
-      .text((d) => d.count.toLocaleString());
-
-    // Y-axis
-    g.append("g")
-      .call(d3.axisLeft(y).tickSize(0))
-      .selectAll("text")
-      .attr("font-size", "7px")
-      .attr("fill", "#888");
-
-    g.select(".domain").remove();
-  }, [demographics]);
-
-  // Chart.js - Population Growth Line Chart
-  const populationChartData = {
-    labels: demographics.populationByYear.map((d) => String(d.year)),
-    datasets: RADIUS_OPTIONS.map((radius, i) => {
-      const radiusData = allDemographics.find((d) => d.radius === radius)!;
-      return {
-        label: radius,
-        data: radiusData.populationByYear.map((d) => d.population),
-        borderColor: RADIUS_COLORS[i],
-        backgroundColor: RADIUS_COLORS[i] + "20",
-        fill: radius === selectedRadius,
-        tension: 0.3,
-        pointRadius: 3,
-        borderWidth: radius === selectedRadius ? 2.5 : 1,
-      };
-    }),
-  };
+      .attr("x", width / 2)
+      .attr("y", 20)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "9px")
+      .attr("fill", "#888")
+      .text("Age breakdown not available from Census API");
+  }, [censusData]);
 
   // Chart.js - Property Type Distribution Doughnut
   const doughnutData = {
@@ -147,24 +149,62 @@ export default function DemographicsReport({
     ],
   };
 
-  // Chart.js - Income Distribution Bar Chart
+  // Chart.js - Income Distribution Bar Chart (estimated from median)
+  const areaIncomeDist = censusData
+    ? estimateIncomeDistribution(censusData.demographics.medianHouseholdIncome)
+    : [0, 0, 0, 0, 0, 0];
+  const cityIncomeDist = estimateIncomeDistribution(82604); // DC median household income baseline
+
   const incomeData = {
     labels: ["<$25K", "$25-50K", "$50-75K", "$75-100K", "$100-150K", "$150K+"],
     datasets: [
       {
-        label: selectedRadius,
-        data: [8, 14, 18, 22, 24, 14].map((v) => v + (parseInt(property.id) % 5)),
+        label: "Census Tract",
+        data: areaIncomeDist,
         backgroundColor: "#5dade2",
         borderRadius: 3,
       },
       {
-        label: "City Average",
-        data: [12, 16, 19, 20, 19, 14],
+        label: "DC Average",
+        data: cityIncomeDist,
         backgroundColor: "#bdc3c7",
         borderRadius: 3,
       },
     ],
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
+        <div className="px-3 py-2 bg-[#1a2332]">
+          <h2 className="text-sm font-bold text-white truncate">{property.address}</h2>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-6 h-6 border-2 border-[#0088aa] border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs text-gray-500">Loading census data...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !censusData) {
+    return (
+      <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
+        <div className="px-3 py-2 bg-[#1a2332]">
+          <h2 className="text-sm font-bold text-white truncate">{property.address}</h2>
+        </div>
+        <div className="flex-1 flex items-center justify-center px-4">
+          <div className="text-xs text-red-600 text-center">
+            Failed to load census data{error ? `: ${error}` : ""}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const demo = censusData.demographics;
 
   return (
     <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
@@ -250,12 +290,12 @@ export default function DemographicsReport({
         )}
         {boundaryType === "census-tract" && (
           <div className="text-[10px] text-gray-500">
-            Census Tract: 0062.02 (based on {property.lat.toFixed(4)}, {property.lng.toFixed(4)})
+            Census Tract: {censusData?.fips.tract || "N/A"} (based on {property.lat.toFixed(4)}, {property.lng.toFixed(4)})
           </div>
         )}
         {boundaryType === "zip-code" && (
           <div className="text-[10px] text-gray-500">
-            ZIP Code: 200{(parseInt(property.id) % 9) + 1}
+            ZIP Code: {censusData?.fips.tract || "N/A"}
           </div>
         )}
       </div>
@@ -277,58 +317,47 @@ export default function DemographicsReport({
           <tbody className="divide-y divide-gray-100">
             <tr>
               <td className="px-3 py-1 text-gray-700">Total Population</td>
-              <td className="px-3 py-1 text-right font-bold">{demographics.totalPopulation.toLocaleString()}</td>
+              <td className="px-3 py-1 text-right font-bold">{demo.totalPopulation.toLocaleString()}</td>
               <td className="px-3 py-1 text-right text-gray-500">{city.totalPopulation.toLocaleString()}</td>
             </tr>
             <tr>
               <td className="px-3 py-1 text-gray-700">Median Age</td>
-              <td className="px-3 py-1 text-right font-bold">{demographics.medianAge.toFixed(1)}</td>
+              <td className="px-3 py-1 text-right font-bold">{demo.medianAge.toFixed(1)}</td>
               <td className="px-3 py-1 text-right text-gray-500">{city.medianAge.toFixed(1)}</td>
             </tr>
             <tr>
               <td className="px-3 py-1 text-gray-700">Male/Female %</td>
-              <td className="px-3 py-1 text-right font-bold">{demographics.maleFemaleRatio[0]}% / {demographics.maleFemaleRatio[1]}%</td>
+              <td className="px-3 py-1 text-right font-bold">N/A</td>
               <td className="px-3 py-1 text-right text-gray-500">{city.maleFemaleRatio[0]}% / {city.maleFemaleRatio[1]}%</td>
             </tr>
             <tr>
               <td className="px-3 py-1 text-gray-700">Households</td>
-              <td className="px-3 py-1 text-right font-bold">{demographics.totalHouseholds.toLocaleString()}</td>
+              <td className="px-3 py-1 text-right font-bold">{demo.totalHouseholds.toLocaleString()}</td>
               <td className="px-3 py-1 text-right text-gray-500">{city.totalHouseholds.toLocaleString()}</td>
             </tr>
             <tr>
-              <td className="px-3 py-1 text-gray-700">Avg HH Size</td>
-              <td className="px-3 py-1 text-right font-bold">{demographics.avgHouseholdSize.toFixed(2)}</td>
-              <td className="px-3 py-1 text-right text-gray-500">{city.avgHouseholdSize.toFixed(2)}</td>
+              <td className="px-3 py-1 text-gray-700">Housing Units</td>
+              <td className="px-3 py-1 text-right font-bold">{demo.housingUnits.toLocaleString()}</td>
+              <td className="px-3 py-1 text-right text-gray-500">—</td>
+            </tr>
+            <tr>
+              <td className="px-3 py-1 text-gray-700">Median HH Income</td>
+              <td className="px-3 py-1 text-right font-bold">${demo.medianHouseholdIncome.toLocaleString()}</td>
+              <td className="px-3 py-1 text-right text-gray-500">$82,604</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      {/* Population Growth - Chart.js Line */}
+      {/* Population Growth - Historical data not available from Census API */}
       <div className="bg-white mt-2 px-3 py-2">
         <h3 className="text-[10px] font-bold text-gray-700 mb-2">
           POPULATION GROWTH TREND
         </h3>
-        <div className="h-[140px]">
-          <Line
-            data={populationChartData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: { display: true, labels: { font: { size: 8 }, boxWidth: 12 } },
-              },
-              scales: {
-                x: { ticks: { font: { size: 9 } } },
-                y: {
-                  ticks: {
-                    font: { size: 9 },
-                    callback: (v) => `${(Number(v) / 1000).toFixed(0)}k`,
-                  },
-                },
-              },
-            }}
-          />
+        <div className="h-[40px] flex items-center justify-center">
+          <span className="text-[10px] text-gray-400 italic">
+            Historical data not available from Census API
+          </span>
         </div>
       </div>
 

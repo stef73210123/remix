@@ -6,12 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { Announcement } from '@/lib/sheets/announcements'
 import { MediaUploader } from '@/components/shared/MediaUploader'
-
-const ASSETS = [
-  { slug: 'circularplatform', name: 'Circular' },
-  { slug: 'livingstonfarm', name: 'Livingston Farm' },
-  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-]
+import { ASSETS } from '@/lib/data/assets'
 
 function formatDateTime(iso: string) {
   if (!iso) return '—'

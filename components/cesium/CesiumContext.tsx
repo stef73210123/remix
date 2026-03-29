@@ -5,6 +5,7 @@ import { Property, FilterState } from "@/types/cesium";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type BuildingSource = "osm" | "microsoft" | "none";
+export type BasemapMode = "satellite" | "osm" | "dark" | "light" | "terrain" | "hybrid";
 
 interface CesiumContextValue {
   viewerRef: React.MutableRefObject<any>;
@@ -24,8 +25,8 @@ interface CesiumContextValue {
   setOsmPlaceCategories: React.Dispatch<React.SetStateAction<Set<string>>>;
   showParcels: boolean;
   setShowParcels: (show: boolean) => void;
-  basemapMode: "satellite" | "street";
-  setBasemapMode: (mode: "satellite" | "street") => void;
+  basemapMode: BasemapMode;
+  setBasemapMode: (mode: BasemapMode) => void;
   flyToProperty: (property: Property) => void;
   leftPanelOpen: boolean;
   setLeftPanelOpen: (open: boolean) => void;
@@ -67,7 +68,7 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
     new Set(["amenity", "shop", "tourism"])
   );
   const [showParcels, setShowParcels] = useState(true);
-  const [basemapMode, setBasemapMode] = useState<"satellite" | "street">(
+  const [basemapMode, setBasemapMode] = useState<BasemapMode>(
     "satellite"
   );
   const [leftPanelOpen, setLeftPanelOpen] = useState(false);

@@ -22,12 +22,7 @@ import {
 import { toast } from 'sonner'
 import { formatCurrency, formatDate } from '@/lib/utils/format'
 import type { InvestorPosition, Distribution, DistributionType } from '@/types'
-
-const ASSETS = [
-  { slug: 'circularplatform', name: 'Circular' },
-  { slug: 'livingstonfarm', name: 'Livingston Farm' },
-  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-]
+import { ASSETS } from '@/lib/data/assets'
 
 const DIST_TYPES: DistributionType[] = ['profit', 'preferred_return', 'return_of_capital']
 

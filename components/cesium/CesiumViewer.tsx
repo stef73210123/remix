@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCesium } from "./CesiumContext";
 import { MOCK_PROPERTIES } from "@/lib/data/properties";
-import { PROPERTY_TYPE_COLORS, FilterState, Property } from "@/types/cesium";
+import { PROPERTY_TYPE_COLORS, FilterState, Property, BrokerageListing } from "@/types/cesium";
 import { getBuildingStyleConditions } from "./BuildingStyles";
 import { DEFAULT_VIEW, OVERPASS_API, OSM_PLACE_CATEGORIES } from "@/lib/cesium-config";
 import { resolveLayer } from "@/lib/layer-resolver";
@@ -52,7 +52,32 @@ function matchesFilter(property: Property, filter: FilterState): boolean {
   return true;
 }
 
+/** Convert a BrokerageListing (from API) into the Property shape used for map pins */
+function listingToProperty(l: BrokerageListing): Property | null {
+  if (l.lat == null || l.lng == null) return null;
+  return {
+    id: `api-${l.id}`,
+    address: l.address,
+    lat: l.lat,
+    lng: l.lng,
+    propertyType: (l.propertyType as Property["propertyType"]) || "Retail",
+    squareFeet: l.squareFeet ?? 0,
+    neighborhood: l.city || "",
+    zoningDistrict: "",
+    squareSuffixLot: "",
+    neighborhoodCluster: [],
+    landArea: { sqft: l.lotSize ?? 0, acres: (l.lotSize ?? 0) / 43560 },
+    jurisdiction: l.state || "",
+    bookPageNo: "",
+    propertyUse: l.listingType,
+    owner: { name: l.brokerageName || "", address: "" },
+    yearBuilt: l.yearBuilt,
+    buildingSize: l.squareFeet,
+  };
+}
+
 export default function CesiumViewerComponent() {
+  const [apiListings, setApiListings] = useState<Property[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
   // Track active imagery layers for add/remove
@@ -79,10 +104,84 @@ export default function CesiumViewerComponent() {
   } = useCesium();
 
   // Track OSM footprint/places entities for cleanup
+  // Ref holding combined (deduplicated) properties for click handlers
+  const allPropertiesRef = useRef<Property[]>(MOCK_PROPERTIES);
   const osmFootprintIdsRef = useRef<string[]>([]);
   const osmPlaceIdsRef = useRef<string[]>([]);
   const osmPlacesLoadedBboxRef = useRef<string>("");
   const osmFootprintsLoadedBboxRef = useRef<string>("");
+
+  // Fetch API listings on mount to augment MOCK_PROPERTIES
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/listings?mapOnly=true&limit=200")
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .then((data: BrokerageListing[]) => {
+        if (cancelled) return;
+        const mapped = data
+          .map(listingToProperty)
+          .filter((p): p is Property => p !== null);
+        setApiListings(mapped);
+      })
+      .catch((err) => console.warn("Failed to fetch API listings for map:", err));
+    return () => { cancelled = true; };
+  }, []);
+
+  // When apiListings arrive, add pin entities and update combined ref
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer || apiListings.length === 0) return;
+
+    // Deduplicate: skip API listings whose coords match an existing MOCK property
+    const existingCoords = new Set(
+      MOCK_PROPERTIES.map((p) => `${p.lat.toFixed(5)},${p.lng.toFixed(5)}`)
+    );
+    const existingAddresses = new Set(
+      MOCK_PROPERTIES.map((p) => p.address.toLowerCase().trim())
+    );
+
+    const deduplicated = apiListings.filter((p) => {
+      const coordKey = `${p.lat.toFixed(5)},${p.lng.toFixed(5)}`;
+      const addrKey = p.address.toLowerCase().trim();
+      return !existingCoords.has(coordKey) && !existingAddresses.has(addrKey);
+    });
+
+    // Update combined ref
+    allPropertiesRef.current = [...MOCK_PROPERTIES, ...deduplicated];
+
+    // Add entities for new API listings
+    (async () => {
+      const Cesium = await import("cesium");
+      for (const property of deduplicated) {
+        if (viewer.entities.getById(`property-${property.id}`)) continue;
+        const color =
+          PROPERTY_TYPE_COLORS[property.propertyType] || "#2980b9";
+        const cesiumColor = Cesium.Color.fromCssColorString(color);
+
+        viewer.entities.add({
+          id: `property-${property.id}`,
+          position: Cesium.Cartesian3.fromDegrees(
+            property.lng,
+            property.lat,
+            0
+          ),
+          point: {
+            pixelSize: 10,
+            color: cesiumColor,
+            outlineColor: Cesium.Color.WHITE,
+            outlineWidth: 2,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+            disableDepthTestDistance: Number.POSITIVE_INFINITY,
+          },
+          properties: {
+            propertyId: property.id,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any,
+        });
+      }
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiListings, viewerRef]);
 
   useEffect(() => {
     if (initialized.current || !containerRef.current) return;
@@ -193,7 +292,7 @@ export default function CesiumViewerComponent() {
             const entityId = picked.id.id as string;
             if (entityId?.startsWith("property-")) {
               const propId = entityId.replace("property-", "");
-              const property = MOCK_PROPERTIES.find((p) => p.id === propId);
+              const property = allPropertiesRef.current.find((p) => p.id === propId);
               if (property) {
                 setSelectedProperty(property);
                 setLeftPanelOpen(true);
@@ -214,7 +313,7 @@ export default function CesiumViewerComponent() {
             const entityId = picked.id.id as string;
             if (entityId?.startsWith("property-")) {
               const propId = entityId.replace("property-", "");
-              const property = MOCK_PROPERTIES.find((p) => p.id === propId);
+              const property = allPropertiesRef.current.find((p) => p.id === propId);
               if (property) {
                 addToComparison(property);
               }
@@ -274,26 +373,52 @@ export default function CesiumViewerComponent() {
         layers.remove(layers.get(0));
       }
 
-      if (basemapMode === "satellite") {
-        try {
-          const provider = await Cesium.IonImageryProvider.fromAssetId(2);
-          layers.addImageryProvider(provider, 0);
-        } catch {
-          layers.addImageryProvider(
-            new Cesium.OpenStreetMapImageryProvider({
+      let provider;
+      switch (basemapMode) {
+        case "satellite":
+          try {
+            provider = await Cesium.IonImageryProvider.fromAssetId(2);
+          } catch {
+            provider = new Cesium.OpenStreetMapImageryProvider({
               url: "https://tile.openstreetmap.org/",
-            }),
-            0
-          );
-        }
-      } else {
-        layers.addImageryProvider(
-          new Cesium.OpenStreetMapImageryProvider({
+            });
+          }
+          break;
+        case "osm":
+          provider = new Cesium.OpenStreetMapImageryProvider({
             url: "https://tile.openstreetmap.org/",
-          }),
-          0
-        );
+          });
+          break;
+        case "dark":
+          provider = new Cesium.UrlTemplateImageryProvider({
+            url: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+            credit: "CartoDB Dark Matter",
+          });
+          break;
+        case "light":
+          provider = new Cesium.UrlTemplateImageryProvider({
+            url: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+            credit: "CartoDB Positron",
+          });
+          break;
+        case "terrain":
+          provider = new Cesium.UrlTemplateImageryProvider({
+            url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+            credit: "Esri World Topo",
+          });
+          break;
+        case "hybrid":
+          provider = new Cesium.UrlTemplateImageryProvider({
+            url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            credit: "Esri World Imagery",
+          });
+          break;
+        default:
+          provider = new Cesium.OpenStreetMapImageryProvider({
+            url: "https://tile.openstreetmap.org/",
+          });
       }
+      layers.addImageryProvider(provider, 0);
     }
 
     switchBasemap();
@@ -361,7 +486,7 @@ export default function CesiumViewerComponent() {
           return;
         }
         const propId = entity.id.replace("property-", "");
-        const property = MOCK_PROPERTIES.find((p) => p.id === propId);
+        const property = allPropertiesRef.current.find((p) => p.id === propId);
         if (property) {
           entity.show = showParcels && matchesFilter(property, filterState);
         }

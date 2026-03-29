@@ -9,6 +9,38 @@ export async function generatePropertyPDF(property: Property): Promise<void> {
   // Dynamic import to keep bundle size small
   const { default: jsPDF } = await import("jspdf");
 
+  // Fetch real Census and Comps data from APIs
+  const baseUrl = typeof window !== 'undefined' ? '' : 'http://localhost:3000';
+  let censusData: {
+    totalPopulation?: number;
+    medianAge?: number;
+    totalHouseholds?: number;
+    medianHouseholdIncome?: number;
+    housingUnits?: number;
+  } | null = null;
+  let compsData: {
+    avgPricePerSF?: number;
+    medianPrice?: number;
+  } | null = null;
+
+  try {
+    const censusRes = await fetch(`${baseUrl}/api/census?lat=${property.lat}&lng=${property.lng}`);
+    if (censusRes.ok) {
+      censusData = await censusRes.json();
+    }
+  } catch {
+    // Fall back to mock data
+  }
+
+  try {
+    const compsRes = await fetch(`${baseUrl}/api/listings/comps?lat=${property.lat}&lng=${property.lng}&propertyType=${property.propertyType}`);
+    if (compsRes.ok) {
+      compsData = await compsRes.json();
+    }
+  } catch {
+    // Fall back to seeded values
+  }
+
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const margin = 15;
@@ -98,27 +130,40 @@ export async function generatePropertyPDF(property: Property): Promise<void> {
   doc.text("DEMOGRAPHICS (1/2 mile radius)", margin, y);
   y += 8;
 
-  const demographics = getDemographicsForProperty(property.id);
-  const halfMile = demographics.find((d) => d.radius === "1/2 mile");
-  if (halfMile) {
-    doc.setFontSize(9);
-    const demoDetails: [string, string][] = [
-      ["Total Population", halfMile.totalPopulation.toLocaleString()],
-      ["Median Age", String(halfMile.medianAge)],
-      ["Male/Female", `${halfMile.maleFemaleRatio[0]}% / ${halfMile.maleFemaleRatio[1]}%`],
-      ["Total Households", halfMile.totalHouseholds.toLocaleString()],
-      ["Avg Household Size", String(halfMile.avgHouseholdSize)],
-    ];
+  doc.setFontSize(9);
+  let demoDetails: [string, string][];
 
-    for (const [label, value] of demoDetails) {
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(120, 120, 120);
-      doc.text(label + ":", margin, y);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(40, 40, 40);
-      doc.text(value, margin + 40, y);
-      y += 5;
-    }
+  if (censusData && censusData.totalPopulation != null) {
+    demoDetails = [
+      ["Total Population", censusData.totalPopulation.toLocaleString()],
+      ["Median Age", censusData.medianAge != null ? String(censusData.medianAge) : "N/A"],
+      ["Total Households", censusData.totalHouseholds != null ? censusData.totalHouseholds.toLocaleString() : "N/A"],
+      ["Median Household Income", censusData.medianHouseholdIncome != null ? `$${censusData.medianHouseholdIncome.toLocaleString()}` : "N/A"],
+      ["Housing Units", censusData.housingUnits != null ? censusData.housingUnits.toLocaleString() : "N/A"],
+    ];
+  } else {
+    // Fallback to mock demographics data
+    const demographics = getDemographicsForProperty(property.id);
+    const halfMile = demographics.find((d) => d.radius === "1/2 mile");
+    demoDetails = halfMile
+      ? [
+          ["Total Population", halfMile.totalPopulation.toLocaleString()],
+          ["Median Age", String(halfMile.medianAge)],
+          ["Male/Female", `${halfMile.maleFemaleRatio[0]}% / ${halfMile.maleFemaleRatio[1]}%`],
+          ["Total Households", halfMile.totalHouseholds.toLocaleString()],
+          ["Avg Household Size", String(halfMile.avgHouseholdSize)],
+        ]
+      : [];
+  }
+
+  for (const [label, value] of demoDetails) {
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(120, 120, 120);
+    doc.text(label + ":", margin, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(40, 40, 40);
+    doc.text(value, margin + 40, y);
+    y += 5;
   }
 
   y += 5;
@@ -134,21 +179,38 @@ export async function generatePropertyPDF(property: Property): Promise<void> {
   doc.text("FINANCING ESTIMATES", margin, y);
   y += 8;
 
-  const seed = parseInt(property.id, 10) || 1;
-  const estimatedValue = 250000 + seed * 150000;
-  const capRate = 4.5 + (seed % 4) * 0.5;
+  let estimatedValue: number;
+  let capRate: number;
+
+  if (compsData && compsData.avgPricePerSF != null) {
+    estimatedValue = compsData.avgPricePerSF * property.squareFeet;
+    capRate = 5.5; // market-standard default when using real comps
+  } else {
+    // Fallback to seeded values
+    const seed = parseInt(property.id, 10) || 1;
+    estimatedValue = 250000 + seed * 150000;
+    capRate = 4.5 + (seed % 4) * 0.5;
+  }
+
   const noi = estimatedValue * (capRate / 100);
   const loanAmount = estimatedValue * 0.65;
   const annualDebt = loanAmount * 0.0625 * (1.0625 ** 30) / (1.0625 ** 30 - 1);
 
   doc.setFontSize(9);
   const finDetails: [string, string][] = [
-    ["Estimated Value", `$${estimatedValue.toLocaleString()}`],
+    ["Estimated Value", `$${Math.round(estimatedValue).toLocaleString()}`],
     ["Cap Rate", `${capRate.toFixed(1)}%`],
     ["NOI", `$${Math.round(noi).toLocaleString()}`],
     ["Loan Amount (65% LTV)", `$${Math.round(loanAmount).toLocaleString()}`],
     ["Annual Debt Service", `$${Math.round(annualDebt).toLocaleString()}`],
   ];
+
+  if (compsData?.avgPricePerSF != null) {
+    finDetails.splice(1, 0, ["Avg Price/SF (Comps)", `$${compsData.avgPricePerSF.toFixed(2)}`]);
+  }
+  if (compsData?.medianPrice != null) {
+    finDetails.splice(compsData.avgPricePerSF != null ? 2 : 1, 0, ["Median Comp Price", `$${compsData.medianPrice.toLocaleString()}`]);
+  }
 
   for (const [label, value] of finDetails) {
     doc.setFont("helvetica", "bold");

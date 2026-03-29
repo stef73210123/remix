@@ -26,12 +26,7 @@ import type { Announcement } from '@/lib/sheets/announcements'
 import { useGoogleDrivePicker } from '@/components/shared/useGoogleDrivePicker'
 import type { DriveFile } from '@/components/shared/useGoogleDrivePicker'
 import PropertyMap from '@/components/shared/PropertyMap'
-
-const ASSETS = [
-  { slug: 'circularplatform', name: 'Circular' },
-  { slug: 'livingstonfarm', name: 'Livingston Farm' },
-  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-]
+import { ASSETS } from '@/lib/data/assets'
 
 const CONFIG_FIELDS = [
   { key: 'raise_target', label: 'Raise Target ($)', type: 'number' },

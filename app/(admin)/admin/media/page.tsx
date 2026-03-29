@@ -20,12 +20,7 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import type { AssetMediaType, AssetMediaWithRow } from '@/types'
-
-const ASSETS = [
-  { slug: 'circularplatform', name: 'Circular' },
-  { slug: 'livingstonfarm', name: 'Livingston Farm' },
-  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-]
+import { ASSETS } from '@/lib/data/assets'
 
 interface FormState {
   id: string

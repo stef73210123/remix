@@ -28,12 +28,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
-
-const ASSETS = [
-  { slug: 'circularplatform', name: 'Circular' },
-  { slug: 'livingstonfarm', name: 'Livingston Farm' },
-  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-]
+import { ASSETS } from '@/lib/data/assets'
 
 const HOLDINGS = [
   { slug: 'livingstonfarm', name: 'Livingston Farm' },
@@ -387,7 +382,7 @@ function BidMappingScreen({
 
 // ─── Add / Import modal ───────────────────────────────────────────────────────
 
-type ImportMode = 'choose' | 'manual' | 'budget' | 'bid'
+type ImportMode = 'choose' | 'manual' | 'budget' | 'budget_preview' | 'bid'
 type BudgetImportMode = 'replace' | 'add'
 
 // ─── Main page ────────────────────────────────────────────────────────────────
@@ -418,6 +413,13 @@ export default function AdminBudgetPage() {
   const [budgetImportMode, setBudgetImportMode] = useState<BudgetImportMode | null>(null)
   const [importingBudget, setImportingBudget] = useState(false)
   const budgetFileInputRef = useRef<HTMLInputElement>(null)
+
+  // CSV preview state for budget file import
+  const [csvPreview, setCsvPreview] = useState<Record<string, string>[] | null>(null)
+  const [csvHeaders, setCsvHeaders] = useState<string[]>([])
+  const [csvColumnMap, setCsvColumnMap] = useState<{ category: string; group: string; budgeted: string; actual_to_date: string; projected_final: string; notes: string }>({
+    category: '', group: '', budgeted: '', actual_to_date: '', projected_final: '', notes: '',
+  })
 
   // Bid parsing state
   const [bidFiles, setBidFiles] = useState<File[]>([])
@@ -536,6 +538,100 @@ export default function AdminBudgetPage() {
     setBudgetImportMode(null)
     setBidFiles([])
     setImportModalOpen(true)
+  }
+
+  // ── Budget file import ───────────────────────────────────────────────────────
+
+  const handleBudgetFileParse = async () => {
+    if (!budgetFiles.length) return
+    const file = budgetFiles[0]
+    const text = await file.text()
+    const Papa = (await import('papaparse')).default
+    const result = Papa.parse<Record<string, string>>(text, {
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: (h: string) => h.trim(),
+    })
+    if (result.errors.length > 0 && result.data.length === 0) {
+      toast.error('Failed to parse CSV: ' + result.errors[0].message)
+      return
+    }
+    const headers = result.meta.fields || []
+    setCsvHeaders(headers)
+    setCsvPreview(result.data)
+    // Auto-map columns by matching common names
+    const lowerHeaders = headers.map((h) => h.toLowerCase())
+    const autoMap = { category: '', group: '', budgeted: '', actual_to_date: '', projected_final: '', notes: '' }
+    const findHeader = (candidates: string[]) =>
+      headers[lowerHeaders.findIndex((h) => candidates.some((c) => h.includes(c)))] || ''
+    autoMap.category = findHeader(['category', 'item', 'name', 'description', 'line item', 'line_item'])
+    autoMap.group = findHeader(['group', 'division', 'section', 'phase'])
+    autoMap.budgeted = findHeader(['budget', 'amount', 'cost', 'estimate', 'total'])
+    autoMap.actual_to_date = findHeader(['actual', 'spent', 'paid'])
+    autoMap.projected_final = findHeader(['projected', 'forecast', 'final'])
+    autoMap.notes = findHeader(['note', 'comment', 'memo', 'remark'])
+    setCsvColumnMap(autoMap)
+    setImportMode('budget_preview' as ImportMode)
+  }
+
+  const handleBudgetFileImport = async () => {
+    if (!csvPreview || !csvColumnMap.category) {
+      toast.error('Please map at least the Category column')
+      return
+    }
+    setImportingBudget(true)
+    try {
+      // If replace mode, delete existing lines first (in reverse row order to avoid index shifts)
+      if (budgetImportMode === 'replace' && lines.length > 0) {
+        const sortedByRow = [...lines].sort((a, b) => b._rowIndex - a._rowIndex)
+        for (const line of sortedByRow) {
+          await fetch('/api/admin/budget', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ asset, rowIndex: line._rowIndex }),
+          })
+        }
+      }
+      let added = 0
+      for (const row of csvPreview) {
+        const category = row[csvColumnMap.category]?.trim()
+        if (!category) continue
+        const parseCurrency = (val: string | undefined) => {
+          if (!val) return 0
+          return parseFloat(val.replace(/[^0-9.\-]/g, '')) || 0
+        }
+        const budgeted = parseCurrency(row[csvColumnMap.budgeted])
+        const actual = parseCurrency(row[csvColumnMap.actual_to_date])
+        const projected = csvColumnMap.projected_final ? parseCurrency(row[csvColumnMap.projected_final]) : budgeted
+        const res = await fetch('/api/admin/budget', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            asset,
+            category,
+            group: row[csvColumnMap.group]?.trim() || '',
+            budgeted,
+            actual_to_date: actual,
+            projected_final: projected,
+            notes: row[csvColumnMap.notes]?.trim() || '',
+            sort_order: added,
+            csi_code: '',
+          }),
+        })
+        if (res.ok) added++
+      }
+      toast.success(`Imported ${added} budget line${added !== 1 ? 's' : ''}`)
+      setImportModalOpen(false)
+      setCsvPreview(null)
+      setCsvHeaders([])
+      setBudgetFiles([])
+      setBudgetImportMode(null)
+      load()
+    } catch (e) {
+      toast.error('Import failed: ' + (e instanceof Error ? e.message : 'Unknown error'))
+    } finally {
+      setImportingBudget(false)
+    }
   }
 
   // ── Bid parsing ──────────────────────────────────────────────────────────────
@@ -980,9 +1076,88 @@ export default function AdminBudgetPage() {
                 <Button variant="outline" onClick={() => setImportMode('choose')}>Back</Button>
                 <Button
                   disabled={budgetFiles.length === 0 || !budgetImportMode || importingBudget}
-                  onClick={() => toast.info('Budget file import coming soon')}
+                  onClick={handleBudgetFileParse}
                 >
                   {importingBudget ? 'Importing…' : 'Import'}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+
+          {/* ── Budget CSV preview & column mapping ─────────────────────── */}
+          {importMode === 'budget_preview' && csvPreview && (
+            <div className="space-y-4 py-2">
+              <div className="space-y-3">
+                <Label className="font-medium">Map CSV columns to budget fields</Label>
+                <p className="text-xs text-muted-foreground">
+                  Found {csvPreview.length} row{csvPreview.length !== 1 ? 's' : ''} in the file. Map at least the Category column.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {([
+                    ['category', 'Category / Line Item *'],
+                    ['group', 'Group / Division'],
+                    ['budgeted', 'Budgeted Amount'],
+                    ['actual_to_date', 'Actual to Date'],
+                    ['projected_final', 'Projected Final'],
+                    ['notes', 'Notes'],
+                  ] as const).map(([field, label]) => (
+                    <div key={field} className="space-y-1">
+                      <Label className="text-xs">{label}</Label>
+                      <select
+                        className="w-full h-8 text-xs rounded border border-input bg-background px-2"
+                        value={csvColumnMap[field]}
+                        onChange={(e) => setCsvColumnMap((prev) => ({ ...prev, [field]: e.target.value }))}
+                      >
+                        <option value="">— skip —</option>
+                        {csvHeaders.map((h) => (
+                          <option key={h} value={h}>{h}</option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Preview table */}
+              <div className="space-y-2">
+                <Label className="font-medium text-xs">Preview (first 5 rows)</Label>
+                <div className="overflow-auto max-h-48 rounded border text-xs">
+                  <table className="w-full">
+                    <thead className="bg-muted/50 sticky top-0">
+                      <tr>
+                        {csvColumnMap.category && <th className="px-2 py-1 text-left font-medium">Category</th>}
+                        {csvColumnMap.group && <th className="px-2 py-1 text-left font-medium">Group</th>}
+                        {csvColumnMap.budgeted && <th className="px-2 py-1 text-right font-medium">Budgeted</th>}
+                        {csvColumnMap.actual_to_date && <th className="px-2 py-1 text-right font-medium">Actual</th>}
+                        {csvColumnMap.projected_final && <th className="px-2 py-1 text-right font-medium">Projected</th>}
+                        {csvColumnMap.notes && <th className="px-2 py-1 text-left font-medium">Notes</th>}
+                        {!csvColumnMap.category && <th className="px-2 py-1 text-left font-medium text-muted-foreground">Select a Category column</th>}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {csvPreview.slice(0, 5).map((row, i) => (
+                        <tr key={i} className="border-t">
+                          {csvColumnMap.category && <td className="px-2 py-1">{row[csvColumnMap.category]}</td>}
+                          {csvColumnMap.group && <td className="px-2 py-1">{row[csvColumnMap.group]}</td>}
+                          {csvColumnMap.budgeted && <td className="px-2 py-1 text-right font-mono">{row[csvColumnMap.budgeted]}</td>}
+                          {csvColumnMap.actual_to_date && <td className="px-2 py-1 text-right font-mono">{row[csvColumnMap.actual_to_date]}</td>}
+                          {csvColumnMap.projected_final && <td className="px-2 py-1 text-right font-mono">{row[csvColumnMap.projected_final]}</td>}
+                          {csvColumnMap.notes && <td className="px-2 py-1 truncate max-w-[120px]">{row[csvColumnMap.notes]}</td>}
+                          {!csvColumnMap.category && <td className="px-2 py-1 text-muted-foreground">—</td>}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => { setCsvPreview(null); setImportMode('budget') }}>Back</Button>
+                <Button
+                  disabled={!csvColumnMap.category || importingBudget}
+                  onClick={handleBudgetFileImport}
+                >
+                  {importingBudget ? 'Importing…' : `Import ${csvPreview.length} line${csvPreview.length !== 1 ? 's' : ''}`}
                 </Button>
               </DialogFooter>
             </div>

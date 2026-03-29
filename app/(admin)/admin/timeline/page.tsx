@@ -28,12 +28,7 @@ import type { Announcement } from '@/lib/sheets/announcements'
 import type { Note } from '@/lib/sheets/notes'
 import { Textarea } from '@/components/ui/textarea'
 import { MediaUploader } from '@/components/shared/MediaUploader'
-
-const ASSETS = [
-  { slug: 'circularplatform', name: 'Circular' },
-  { slug: 'livingstonfarm', name: 'Livingston Farm' },
-  { slug: 'wrenofthewoods', name: 'Wren of the Woods' },
-]
+import { ASSETS } from '@/lib/data/assets'
 
 const STATUSES: MilestoneStatus[] = ['upcoming', 'in-progress', 'complete', 'delayed']
 

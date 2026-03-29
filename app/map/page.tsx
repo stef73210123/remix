@@ -8,7 +8,7 @@ import RightPanel from "@/components/panels/RightPanel";
 import MapToolbar from "@/components/toolbar/MapToolbar";
 import SearchBar from "@/components/search/SearchBar";
 import NewsPanel from "@/components/panels/NewsPanel";
-import { Home, ChevronDown } from "lucide-react";
+import { Home, ChevronDown, LocateFixed } from "lucide-react";
 import { REGIONS, getRegion } from "@/lib/data/regions";
 import { parseURLState, updateURL } from "@/lib/url-state";
 import { MOCK_PROPERTIES } from "@/lib/data/properties";
@@ -50,6 +50,16 @@ const CoordinateDisplay = dynamic(
 
 const KeyboardShortcuts = dynamic(
   () => import("@/components/toolbar/KeyboardShortcuts"),
+  { ssr: false }
+);
+
+const CompassControl = dynamic(
+  () => import("@/components/toolbar/CompassControl"),
+  { ssr: false }
+);
+
+const BasemapSelector = dynamic(
+  () => import("@/components/toolbar/BasemapSelector"),
   { ssr: false }
 );
 
@@ -240,6 +250,69 @@ function HomeButton() {
   );
 }
 
+function MyLocationButton() {
+  const { viewerRef } = useCesium();
+
+  async function goToMyLocation() {
+    if (!navigator.geolocation) {
+      console.warn("Geolocation is not supported by this browser.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const viewer = viewerRef.current;
+        if (!viewer) return;
+
+        const { latitude, longitude } = position.coords;
+        const Cesium = await import("cesium");
+
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(longitude, latitude, 500),
+          orientation: {
+            heading: Cesium.Math.toRadians(0),
+            pitch: Cesium.Math.toRadians(-45),
+            roll: 0,
+          },
+          duration: 1.5,
+        });
+
+        // Add a pulsing blue point entity
+        const entityId = "__my_location__";
+        const existing = viewer.entities.getById(entityId);
+        if (existing) {
+          viewer.entities.remove(existing);
+        }
+
+        viewer.entities.add({
+          id: entityId,
+          position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
+          point: {
+            pixelSize: 12,
+            color: Cesium.Color.DODGERBLUE,
+            outlineColor: Cesium.Color.WHITE,
+            outlineWidth: 2,
+            scaleByDistance: new Cesium.NearFarScalar(1.0e2, 1.5, 1.0e5, 0.5),
+          },
+        });
+      },
+      (error) => {
+        console.warn("Geolocation error:", error.message);
+      }
+    );
+  }
+
+  return (
+    <button
+      onClick={goToMyLocation}
+      className="p-2 bg-[#1a2332]/90 rounded-lg shadow-lg border border-white/10 text-white hover:bg-[#1a2332] transition-colors"
+      title="My Location"
+    >
+      <LocateFixed className="w-4 h-4" />
+    </button>
+  );
+}
+
 export default function MapPage() {
   return (
     <CesiumProvider>
@@ -247,7 +320,13 @@ export default function MapPage() {
         {/* Top-left controls */}
         <div className="absolute top-3 left-3 z-40 flex items-center gap-2">
           <HomeButton />
+          <MyLocationButton />
           <RegionSelector />
+        </div>
+
+        {/* Compass control - top right */}
+        <div className="absolute top-3 right-[280px] z-30">
+          <CompassControl />
         </div>
 
         {/* Cesium 3D Viewer */}
@@ -283,6 +362,9 @@ export default function MapPage() {
 
         {/* Bottom Toolbar */}
         <MapToolbar />
+
+        {/* Basemap Selector */}
+        <BasemapSelector />
 
         {/* Coordinate display */}
         <CoordinateDisplay />

@@ -33,7 +33,7 @@ export default function MapToolbar() {
         label="BASE MAP"
         active={basemapMode === "satellite"}
         onClick={() =>
-          setBasemapMode(basemapMode === "satellite" ? "street" : "satellite")
+          setBasemapMode(basemapMode === "satellite" ? "osm" : "satellite")
         }
       />
       <div className="w-px h-6 bg-white/20 mx-1" />

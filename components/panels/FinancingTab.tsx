@@ -1,13 +1,71 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Property } from "@/types/cesium";
 import { DollarSign, TrendingUp, BarChart3, Calculator } from "lucide-react";
 
+interface CompEntry {
+  id: string;
+  address: string;
+  price: number;
+  squareFeet: number;
+  pricePerSF: number;
+  propertyType: string;
+  distance: number;
+  capRate: number;
+}
+
+interface CompsResponse {
+  comps: CompEntry[];
+  summary: {
+    avgPricePerSF: number;
+    medianPrice: number;
+    priceRange: { min: number; max: number };
+  };
+  meta: { lat: number; lng: number; radiusMiles: number; totalFound: number };
+}
+
 export default function FinancingTab({ property }: { property: Property }) {
-  const pricePerSqft = Math.round(250 + (parseInt(property.id) % 10) * 50);
-  const estimatedValue = property.squareFeet * pricePerSqft;
-  const capRate = (4.5 + (parseInt(property.id) % 5) * 0.5).toFixed(1);
-  const noi = Math.round(estimatedValue * (parseFloat(capRate) / 100));
+  const [compsData, setCompsData] = useState<CompsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetch(
+      `/api/listings/comps?lat=${property.lat}&lng=${property.lng}&propertyType=${encodeURIComponent(property.propertyType)}`
+    )
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled) {
+          setCompsData(data ?? null);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setCompsData(null);
+          setLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [property.lat, property.lng, property.propertyType]);
+
+  // Seed-based fallbacks (used when API returns no data)
+  const fallbackPricePerSqft = Math.round(250 + (parseInt(property.id) % 10) * 50);
+  const fallbackEstimatedValue = property.squareFeet * fallbackPricePerSqft;
+  const fallbackCapRate = (4.5 + (parseInt(property.id) % 5) * 0.5).toFixed(1);
+  // Derive metrics from real comps data when available
+  const hasComps = compsData && compsData.comps.length > 0;
+  const pricePerSqft = hasComps ? Math.round(compsData.summary.avgPricePerSF) : fallbackPricePerSqft;
+  const estimatedValue = hasComps ? property.squareFeet * compsData.summary.avgPricePerSF : fallbackEstimatedValue;
+  const avgCapRate = hasComps
+    ? compsData.comps.reduce((sum, c) => sum + c.capRate, 0) / compsData.comps.length
+    : parseFloat(fallbackCapRate);
+  const capRate = avgCapRate.toFixed(1);
+  const noi = Math.round(estimatedValue * (avgCapRate / 100));
 
   return (
     <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
@@ -29,25 +87,28 @@ export default function FinancingTab({ property }: { property: Property }) {
         <div className="grid grid-cols-2 gap-2">
           <MetricCard
             icon={<DollarSign className="w-4 h-4" />}
-            label="Est. Value"
+            label={hasComps ? "Est. Value" : "Est. Value*"}
             value={`$${(estimatedValue / 1000000).toFixed(1)}M`}
           />
           <MetricCard
             icon={<TrendingUp className="w-4 h-4" />}
-            label="Cap Rate"
+            label={hasComps ? "Cap Rate" : "Cap Rate*"}
             value={`${capRate}%`}
           />
           <MetricCard
             icon={<BarChart3 className="w-4 h-4" />}
-            label="NOI"
+            label={hasComps ? "NOI" : "NOI*"}
             value={`$${(noi / 1000).toFixed(0)}K`}
           />
           <MetricCard
             icon={<Calculator className="w-4 h-4" />}
-            label="Price/SF"
+            label={hasComps ? "Price/SF" : "Price/SF*"}
             value={`$${pricePerSqft}`}
           />
         </div>
+        {!hasComps && !loading && (
+          <p className="text-[9px] text-gray-400 italic px-1">* Estimated — no comparable sales found</p>
+        )}
 
         {/* Comparable Sales */}
         <div className="bg-white rounded-lg p-3">
@@ -55,31 +116,36 @@ export default function FinancingTab({ property }: { property: Property }) {
             Recent Comparable Sales
           </h4>
           <div className="space-y-2 text-[10px]">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="flex justify-between items-center py-1 border-b border-gray-100 last:border-0"
-              >
-                <div>
-                  <div className="font-medium text-gray-800">
-                    {100 + i * 20} {property.neighborhood} St
+            {loading ? (
+              <div className="text-center text-gray-400 py-2">Loading comps...</div>
+            ) : hasComps ? (
+              compsData.comps.map((comp) => (
+                <div
+                  key={comp.id}
+                  className="flex justify-between items-center py-1 border-b border-gray-100 last:border-0"
+                >
+                  <div>
+                    <div className="font-medium text-gray-800">
+                      {comp.address}
+                    </div>
+                    <div className="text-gray-500">
+                      {comp.squareFeet.toLocaleString()}{" "}
+                      SF &middot; {comp.distance.toFixed(1)} mi
+                    </div>
                   </div>
-                  <div className="text-gray-500">
-                    {(property.squareFeet * (0.7 + i * 0.15)).toLocaleString(undefined, { maximumFractionDigits: 0 })}{" "}
-                    SF
+                  <div className="text-right">
+                    <div className="font-bold text-gray-800">
+                      ${(comp.price / 1000000).toFixed(1)}M
+                    </div>
+                    <div className="text-gray-500">
+                      ${Math.round(comp.pricePerSF)}/SF
+                    </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-bold text-gray-800">
-                    ${((estimatedValue * (0.8 + i * 0.1)) / 1000000).toFixed(1)}
-                    M
-                  </div>
-                  <div className="text-gray-500">
-                    ${Math.round(pricePerSqft * (0.9 + i * 0.05))}/SF
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="text-center text-gray-400 py-2">No comparable sales found</div>
+            )}
           </div>
         </div>
 

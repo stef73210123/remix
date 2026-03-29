@@ -40,6 +40,36 @@ export default function SearchBar() {
   } = useCesium();
   const region = getRegion(activeRegion);
 
+  // Fetch API listings on mount
+  const [apiListings, setApiListings] = useState<any[]>([]);
+  useEffect(() => {
+    fetch("/api/listings?mapOnly=true&limit=100")
+      .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+      .then((data) => setApiListings(Array.isArray(data) ? data : data.listings ?? []))
+      .catch((err) => console.warn("Failed to fetch API listings:", err));
+  }, []);
+
+  // Combined properties: API listings + MOCK fallback, deduplicated by address
+  const allProperties = (() => {
+    const seen = new Set<string>();
+    const combined: any[] = [];
+    for (const p of apiListings) {
+      const key = p.address?.toLowerCase();
+      if (key && !seen.has(key)) {
+        seen.add(key);
+        combined.push(p);
+      }
+    }
+    for (const p of MOCK_PROPERTIES) {
+      const key = p.address?.toLowerCase();
+      if (key && !seen.has(key)) {
+        seen.add(key);
+        combined.push(p);
+      }
+    }
+    return combined;
+  })();
+
   // Typeahead geocoding using Nominatim
   const geocode = useCallback(async (searchQuery: string) => {
     if (searchQuery.length < 3) {
@@ -86,12 +116,12 @@ export default function SearchBar() {
     };
   }, [query, geocode]);
 
-  // Match local properties too
+  // Match local properties too (API listings + MOCK fallback)
   const localResults = query.trim()
-    ? MOCK_PROPERTIES.filter(
+    ? allProperties.filter(
         (p) =>
-          p.address.toLowerCase().includes(query.toLowerCase()) ||
-          p.neighborhood.toLowerCase().includes(query.toLowerCase())
+          p.address?.toLowerCase().includes(query.toLowerCase()) ||
+          (p.neighborhood && p.neighborhood.toLowerCase().includes(query.toLowerCase()))
       ).slice(0, 4)
     : [];
 
@@ -107,7 +137,8 @@ export default function SearchBar() {
   }, []);
 
   function selectProperty(propertyId: string) {
-    const property = MOCK_PROPERTIES.find((p) => p.id === propertyId);
+    const property = apiListings.find((p) => p.id === propertyId)
+      || MOCK_PROPERTIES.find((p) => p.id === propertyId);
     if (property) {
       setSelectedProperty(property);
       setLeftPanelOpen(true);
@@ -177,10 +208,11 @@ export default function SearchBar() {
             {!query.trim() && (() => {
               const favIds = getFavorites();
               const recentIds = getRecents();
-              const favProps = favIds.map((id) => MOCK_PROPERTIES.find((p) => p.id === id)).filter(Boolean);
+              const findById = (id: string) => apiListings.find((p) => p.id === id) || MOCK_PROPERTIES.find((p) => p.id === id);
+              const favProps = favIds.map(findById).filter(Boolean);
               const recentProps = recentIds
                 .filter((id) => !favIds.includes(id))
-                .map((id) => MOCK_PROPERTIES.find((p) => p.id === id))
+                .map(findById)
                 .filter(Boolean)
                 .slice(0, 4);
               if (favProps.length === 0 && recentProps.length === 0) return null;
