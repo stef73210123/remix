@@ -25,9 +25,13 @@ import {
   Map as MapIcon,
   BookOpen,
   Scale,
+  Building2,
+  MapPin,
+  Footprints,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCesium } from "@/components/cesium/CesiumContext";
+import { useCesium, type BuildingSource } from "@/components/cesium/CesiumContext";
+import { OSM_PLACE_CATEGORIES } from "@/lib/cesium-config";
 
 const ALL_PROPERTY_TYPES = Object.entries(PROPERTY_TYPE_COLORS) as [
   PropertyType,
@@ -42,7 +46,20 @@ const STATES = [
 ];
 
 export default function LayersPanel({ onClose }: { onClose: () => void }) {
-  const { activeLayers, setActiveLayers } = useCesium();
+  const {
+    activeLayers,
+    setActiveLayers,
+    showBuildings,
+    setShowBuildings,
+    buildingSource,
+    setBuildingSource,
+    showOsmFootprints,
+    setShowOsmFootprints,
+    showOsmPlaces,
+    setShowOsmPlaces,
+    osmPlaceCategories,
+    setOsmPlaceCategories,
+  } = useCesium();
   const [expandedStates, setExpandedStates] = useState<Set<string>>(
     new Set(["NY"])
   );
@@ -138,6 +155,108 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
               </div>
             );
           })}
+        </div>
+
+        {/* ─── 3D BUILDINGS & OSM DATA ─── */}
+        <div className="px-3 py-2 border-b">
+          <div className="text-[10px] font-bold text-gray-600 mb-2 uppercase flex items-center gap-1">
+            <Building2 className="w-3 h-3" /> 3D Buildings
+          </div>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="flex items-center gap-1.5 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showBuildings}
+                onChange={() => setShowBuildings(!showBuildings)}
+                className="rounded border-gray-300 text-[#0088aa] w-3 h-3"
+              />
+              <span className="text-[10px] text-gray-700">Show 3D Buildings</span>
+            </label>
+          </div>
+          {showBuildings && (
+            <div className="flex gap-1 ml-4 mb-2">
+              {(["osm", "microsoft"] as BuildingSource[]).map((src) => (
+                <button
+                  key={src}
+                  onClick={() => setBuildingSource(src)}
+                  className={cn(
+                    "text-[9px] font-medium px-2 py-0.5 rounded border transition-colors",
+                    buildingSource === src
+                      ? "bg-[#0088aa] text-white border-[#0088aa]"
+                      : "bg-white text-gray-600 border-gray-300 hover:border-[#0088aa]"
+                  )}
+                >
+                  {src === "osm" ? "OSM Buildings" : "Microsoft / Google 3D"}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="text-[10px] font-bold text-gray-600 mb-2 mt-3 uppercase flex items-center gap-1">
+            <Footprints className="w-3 h-3" /> OSM Building Footprints
+          </div>
+          <label className="flex items-center gap-1.5 cursor-pointer mb-1">
+            <input
+              type="checkbox"
+              checked={showOsmFootprints}
+              onChange={() => setShowOsmFootprints(!showOsmFootprints)}
+              className="rounded border-gray-300 text-[#0088aa] w-3 h-3"
+            />
+            <span className="text-[10px] text-gray-700">
+              2D Footprints (zoom in to load)
+            </span>
+          </label>
+          <p className="text-[8px] text-gray-400 ml-4 mb-2">
+            Shows color-coded building outlines from OpenStreetMap via Overpass API
+          </p>
+
+          <div className="text-[10px] font-bold text-gray-600 mb-2 mt-3 uppercase flex items-center gap-1">
+            <MapPin className="w-3 h-3" /> OSM Places (POIs)
+          </div>
+          <label className="flex items-center gap-1.5 cursor-pointer mb-2">
+            <input
+              type="checkbox"
+              checked={showOsmPlaces}
+              onChange={() => setShowOsmPlaces(!showOsmPlaces)}
+              className="rounded border-gray-300 text-[#0088aa] w-3 h-3"
+            />
+            <span className="text-[10px] text-gray-700">
+              Show Places (zoom in to load)
+            </span>
+          </label>
+          {showOsmPlaces && (
+            <div className="ml-4 space-y-1">
+              {OSM_PLACE_CATEGORIES.map((cat) => (
+                <label
+                  key={cat.key}
+                  className="flex items-center gap-1.5 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={osmPlaceCategories.has(cat.key)}
+                    onChange={() =>
+                      setOsmPlaceCategories((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(cat.key)) next.delete(cat.key);
+                        else next.add(cat.key);
+                        return next;
+                      })
+                    }
+                    className="rounded border-gray-300 w-3 h-3"
+                    style={{ accentColor: cat.color }}
+                  />
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: cat.color }}
+                  />
+                  <span className="text-[10px] text-gray-700">{cat.label}</span>
+                  <span className="text-[8px] text-gray-400 ml-auto">
+                    {cat.values.length}
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Active layers summary */}

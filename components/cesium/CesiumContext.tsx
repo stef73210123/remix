@@ -4,13 +4,24 @@ import { createContext, useContext, useRef, useCallback, useState } from "react"
 import { Property, FilterState } from "@/types/cesium";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+export type BuildingSource = "osm" | "microsoft" | "none";
+
 interface CesiumContextValue {
   viewerRef: React.MutableRefObject<any>;
   buildingsTilesetRef: React.MutableRefObject<any>;
+  msBuildingsTilesetRef: React.MutableRefObject<any>;
   selectedProperty: Property | null;
   setSelectedProperty: (property: Property | null) => void;
   showBuildings: boolean;
   setShowBuildings: (show: boolean) => void;
+  buildingSource: BuildingSource;
+  setBuildingSource: (source: BuildingSource) => void;
+  showOsmFootprints: boolean;
+  setShowOsmFootprints: (show: boolean) => void;
+  showOsmPlaces: boolean;
+  setShowOsmPlaces: (show: boolean) => void;
+  osmPlaceCategories: Set<string>;
+  setOsmPlaceCategories: React.Dispatch<React.SetStateAction<Set<string>>>;
   showParcels: boolean;
   setShowParcels: (show: boolean) => void;
   basemapMode: "satellite" | "street";
@@ -44,10 +55,17 @@ const CesiumContext = createContext<CesiumContextValue | null>(null);
 export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const viewerRef = useRef<any>(null);
   const buildingsTilesetRef = useRef<any>(null);
+  const msBuildingsTilesetRef = useRef<any>(null);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
   );
   const [showBuildings, setShowBuildings] = useState(true);
+  const [buildingSource, setBuildingSource] = useState<BuildingSource>("osm");
+  const [showOsmFootprints, setShowOsmFootprints] = useState(false);
+  const [showOsmPlaces, setShowOsmPlaces] = useState(false);
+  const [osmPlaceCategories, setOsmPlaceCategories] = useState<Set<string>>(
+    new Set(["amenity", "shop", "tourism"])
+  );
   const [showParcels, setShowParcels] = useState(true);
   const [basemapMode, setBasemapMode] = useState<"satellite" | "street">(
     "satellite"
@@ -99,10 +117,19 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
       value={{
         viewerRef,
         buildingsTilesetRef,
+        msBuildingsTilesetRef,
         selectedProperty,
         setSelectedProperty,
         showBuildings,
         setShowBuildings,
+        buildingSource,
+        setBuildingSource,
+        showOsmFootprints,
+        setShowOsmFootprints,
+        showOsmPlaces,
+        setShowOsmPlaces,
+        osmPlaceCategories,
+        setOsmPlaceCategories,
         showParcels,
         setShowParcels,
         basemapMode,

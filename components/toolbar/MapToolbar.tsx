@@ -1,13 +1,19 @@
 "use client";
 
 import { useCesium } from "@/components/cesium/CesiumContext";
-import { Map, Building2, Grid3x3, Ruler, Pentagon, GitCompare, X } from "lucide-react";
+import { Map, Building2, Grid3x3, Ruler, Pentagon, GitCompare, MapPin, Footprints } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MapToolbar() {
   const {
     showBuildings,
     setShowBuildings,
+    buildingSource,
+    setBuildingSource,
+    showOsmFootprints,
+    setShowOsmFootprints,
+    showOsmPlaces,
+    setShowOsmPlaces,
     showParcels,
     setShowParcels,
     basemapMode,
@@ -32,9 +38,30 @@ export default function MapToolbar() {
       <div className="w-px h-6 bg-white/20 mx-1" />
       <ToolbarButton
         icon={<Building2 className="w-4 h-4" />}
-        label="BUILDINGS"
+        label={`3D ${buildingSource === "osm" ? "OSM" : "MS"}`}
         active={showBuildings}
-        onClick={() => setShowBuildings(!showBuildings)}
+        onClick={() => {
+          if (!showBuildings) {
+            setShowBuildings(true);
+          } else if (buildingSource === "osm") {
+            setBuildingSource("microsoft");
+          } else {
+            setShowBuildings(false);
+            setBuildingSource("osm");
+          }
+        }}
+      />
+      <ToolbarButton
+        icon={<Footprints className="w-4 h-4" />}
+        label="FOOTPRINTS"
+        active={showOsmFootprints}
+        onClick={() => setShowOsmFootprints(!showOsmFootprints)}
+      />
+      <ToolbarButton
+        icon={<MapPin className="w-4 h-4" />}
+        label="PLACES"
+        active={showOsmPlaces}
+        onClick={() => setShowOsmPlaces(!showOsmPlaces)}
       />
       <div className="w-px h-6 bg-white/20 mx-1" />
       <ToolbarButton
