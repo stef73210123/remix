@@ -1,8 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyJWT } from '@/lib/auth/jwt'
 
+/**
+ * Atlas platform proxy
+ *
+ * Deployed to atlas.remix.properties — serves only the Cesium 3D map
+ * and supporting API routes. Blocks deal-room, portal, admin, and
+ * public pages. Also handles auth gating for protected routes.
+ */
+
+const ALLOWED_PREFIXES = [
+  '/map',
+  '/api/',
+  '/cesium',
+  '/auth',
+  '/login',
+  '/forgot-password',
+]
+
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
+
+  // Allow static assets and Next.js internals
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff2?|ttf|css|js|map|json)$/)
+  ) {
+    return NextResponse.next()
+  }
+
+  // Root → redirect to /map
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/map', req.url))
+  }
+
+  // Block routes that aren't part of the atlas platform
+  if (!ALLOWED_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+    return new NextResponse('Not Found', { status: 404 })
+  }
+
+  // Auth gating for protected routes
   const token = req.cookies.get('circular_session')?.value
   const user = token ? await verifyJWT(token) : null
 
@@ -37,5 +74,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/portal/:path*', '/deal-room/:path*', '/admin/:path*', '/api/:path*'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }
