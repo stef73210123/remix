@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remix Properties — Real Estate Investment & Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CA615F;
+    --red-light: #D4767A;
+    --red-dark: #A34D4B;
+    --black: #0A0A0A;
+    --off-black: #141414;
+    --dark-gray: #1C1C1C;
+    --mid-gray: #2A2A2A;
+    --text-gray: #9A9A9A;
+    --light-gray: #E0E0E0;
+    --white: #FAFAFA;
+    --pure-white: #FFFFFF;
+    --exec-color: #CA615F;
+    --advisor-color: #1565C0;
+    --consultant-color: #F9A825;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 1.5rem 4rem; display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    padding: 1rem 4rem; border-bottom: 1px solid rgba(202,97,95,0.15);
+  }
+  .nav-logo { text-decoration: none; display: flex; align-items: center; }
+  .nav-logo img { height: 47px; width: auto; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--text-gray); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.3s ease; position: relative;
+  }
+  .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--red); transition: width 0.3s ease; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-contact {
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--white); text-decoration: none; padding: 0.6rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; transition: all 0.3s ease;
+  }
+  .nav-contact:hover { border-color: var(--red); background: var(--red); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 0 4rem; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -50%; right: -20%; width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(202,97,95,0.08) 0%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(202,97,95,0.3), transparent);
+  }
+  .hero-tag {
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-tag::before { content: ''; width: 40px; height: 1.5px; background: var(--red); }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif; font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 400; line-height: 1.05; max-width: 950px; margin-bottom: 2rem;
+  }
+  .hero h1 em { font-style: normal; text-decoration: underline; text-decoration-color: var(--red); text-underline-offset: 6px; text-decoration-thickness: 2px; }
+  .hero-contours { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .hero-cycle-wrapper {
+    display: block; position: relative;
+    color: var(--red-light); min-width: 5ch; font-style: italic;
+  }
+  .hero-cycle-word {
+    display: inline-block; opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease; position: absolute; left: 0; white-space: nowrap;
+  }
+  .hero-cycle-word.active { opacity: 1; transform: translateY(0); position: relative; }
+  .hero-sub { font-size: 1.15rem; line-height: 1.7; color: var(--text-gray); max-width: 560px; margin-bottom: 3rem; font-weight: 300; }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 1rem; color: var(--white); text-decoration: none;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; transition: gap 0.3s ease;
+  }
+  .hero-cta:hover { gap: 1.5rem; }
+  .hero-cta .arrow { width: 50px; height: 1px; background: var(--red); position: relative; transition: width 0.3s ease; }
+  .hero-cta:hover .arrow { width: 70px; }
+  .hero-cta .arrow::after {
+    content: ''; position: absolute; right: 0; top: -4px; width: 8px; height: 8px;
+    border-right: 1.5px solid var(--red); border-top: 1.5px solid var(--red); transform: rotate(45deg);
+  }
+  .hero-metrics { position: absolute; bottom: 5rem; right: 4rem; display: flex; gap: 4rem; }
+  .metric { text-align: right; }
+  .metric-value { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--white); }
+  .metric-label { font-size: 0.75rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem; }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 8rem 4rem; position: relative; }
+  .section-tag {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .section-tag::before { content: ''; width: 30px; height: 1.5px; background: var(--red); }
+  .section-title {
+    font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 400; line-height: 1.15; max-width: 700px; margin-bottom: 1.5rem;
+  }
+  .section-desc { font-size: 1.05rem; line-height: 1.75; color: var(--text-gray); max-width: 600px; font-weight: 300; margin-bottom: 4rem; }
+
+  /* ─── ABOUT ─── */
+  #about { background: var(--off-black); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+  .about-left .section-desc { margin-bottom: 2rem; }
+  .about-right { display: flex; flex-direction: column; gap: 2.5rem; }
+  .about-stat { padding: 2rem 0; border-bottom: 1px solid var(--mid-gray); }
+  .about-stat:first-child { border-top: 1px solid var(--mid-gray); }
+  .about-stat-value { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: var(--white); margin-bottom: 0.5rem; }
+  .about-stat-label { font-size: 0.9rem; color: var(--text-gray); font-weight: 300; line-height: 1.5; }
+
+  /* ─── SERVICES ─── */
+  #services { background: var(--black); }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--mid-gray); border: 1px solid var(--mid-gray); }
+  .service-card {
+    background: var(--black); padding: 3rem; display: flex; flex-direction: column;
+    min-height: 340px; transition: background 0.4s ease; cursor: default;
+  }
+  .service-card:hover { background: var(--off-black); }
+  .service-icon { margin-bottom: 2rem; }
+  .service-icon svg { width: 32px; height: 32px; stroke: var(--red); stroke-width: 1.5; fill: none; }
+  .service-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 1.2rem; line-height: 1.25; }
+  .service-desc { font-size: 0.9rem; line-height: 1.7; color: var(--text-gray); font-weight: 300; flex-grow: 1; }
+  .service-list { margin-top: 1.5rem; list-style: none; }
+  .service-list li { font-size: 0.8rem; color: var(--text-gray); padding: 0.4rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 400; }
+  .service-list li::before { content: '—'; color: var(--red); margin-right: 0.7rem; }
+
+  /* ─── EXPERIENCE ─── */
+  #experience { background: var(--off-black); }
+  .experience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .exp-card { background: var(--dark-gray); border-radius: 4px; overflow: hidden; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; }
+  .exp-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .exp-image { height: 200px; position: relative; overflow: hidden; }
+  .exp-image-bg {
+    width: 100%; height: 100%; background-size: cover; background-position: center;
+  }
+  .grad-placeholder .exp-image { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); }
+  .exp-type {
+    position: absolute; top: 1rem; left: 1rem; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase; background: var(--red);
+    color: var(--white); padding: 0.35rem 0.8rem; border-radius: 2px;
+  }
+  .exp-info { padding: 1.8rem; }
+  .exp-name { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .exp-location { font-size: 0.8rem; color: var(--red-light); font-weight: 500; margin-bottom: 1rem; }
+  .exp-desc { font-size: 0.85rem; line-height: 1.65; color: var(--text-gray); font-weight: 300; }
+  .exp-stats { display: flex; gap: 1.5rem; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid rgba(255,255,255,0.06); }
+  .exp-stats span { font-size: 0.75rem; color: var(--text-gray); }
+  .exp-stats strong { color: var(--white); font-weight: 600; }
+
+  /* ─── EXPERTISE BANNER ─── */
+  .expertise-banner { background: var(--red-dark); padding: 6rem 4rem; position: relative; overflow: hidden; }
+  .expertise-banner::before {
+    content: ''; position: absolute; top: -50%; right: -10%; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); border-radius: 50%;
+  }
+  .expertise-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3rem; position: relative; z-index: 1; }
+  .expertise-item { text-align: center; }
+  .expertise-icon {
+    width: 48px; height: 48px; margin: 0 auto 1.2rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .expertise-icon svg { width: 36px; height: 36px; stroke: var(--white); stroke-width: 1.5; fill: none; }
+  .expertise-name { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .expertise-detail { font-size: 0.8rem; color: rgba(255,255,255,0.65); line-height: 1.5; font-weight: 300; }
+
+  /* ─── PRINCIPAL ─── */
+  #principal { background: var(--black); }
+  .principal-top { display: grid; grid-template-columns: 340px 1fr; gap: 5rem; align-items: start; margin-bottom: 5rem; }
+  .principal-content .section-desc { margin-bottom: 2.5rem; }
+
+  .headshot {
+    width: 100%; aspect-ratio: 3/4; background: linear-gradient(145deg, var(--dark-gray) 0%, var(--mid-gray) 100%);
+    border-radius: 4px; position: relative; overflow: hidden;
+  }
+  .headshot img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  }
+  .headshot::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 25%;
+    background: linear-gradient(to top, var(--black), transparent);
+  }
+
+  .principal-bottom { margin-top: 0; }
+  .logo-row { margin-bottom: 2rem; }
+  .logo-row:last-of-type { margin-bottom: 0; }
+  .logo-row-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.6rem; }
+  .logo-row-label .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .logo-row.exec .logo-row-label { color: var(--exec-color); }
+  .logo-row.consultant .logo-row-label { color: var(--consultant-color); }
+  .logo-row.advisor .logo-row-label { color: var(--advisor-color); }
+  .logo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--mid-gray); border: 1px solid var(--mid-gray); }
+  .logo-cell {
+    background: var(--black); padding: 1.2rem 0.8rem; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; min-height: 72px;
+    transition: background 0.3s ease; position: relative;
+  }
+  .logo-cell:hover { background: var(--off-black); }
+  .logo-cell-name { font-size: 0.8rem; font-weight: 600; line-height: 1.2; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-dot.exec { background: var(--exec-color); }
+  .legend-dot.advisor { background: var(--advisor-color); }
+  .legend-dot.consultant { background: var(--consultant-color); }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--off-black); text-align: center; padding: 10rem 4rem; }
+  #contact .section-tag { justify-content: center; }
+  #contact .section-tag::before { display: none; }
+  #contact .section-title { margin-left: auto; margin-right: auto; max-width: 600px; }
+  #contact .section-desc { margin-left: auto; margin-right: auto; text-align: center; }
+
+  .contact-form { max-width: 500px; margin: 0 auto; text-align: left; }
+  .form-row { margin-bottom: 1.5rem; }
+  .form-row-double { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .form-label { display: block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-gray); margin-bottom: 0.5rem; }
+  .form-input, .form-textarea {
+    width: 100%; background: var(--dark-gray); border: 1px solid var(--mid-gray); border-radius: 3px;
+    color: var(--white); font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.9rem 1rem;
+    transition: border-color 0.3s ease; outline: none;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--red); }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(154,154,154,0.5); }
+  .form-textarea { min-height: 140px; resize: vertical; }
+  .form-submit {
+    width: 100%; padding: 1rem; background: var(--red); color: var(--white); border: none;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; border-radius: 3px; cursor: pointer; transition: background 0.3s ease;
+  }
+  .form-submit:hover { background: var(--red-light); }
+
+  .contact-meta { margin-top: 3rem; display: flex; justify-content: center; gap: 3rem; }
+  .contact-meta a {
+    font-size: 0.8rem; color: var(--text-gray); text-decoration: none; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 500; transition: color 0.3s ease;
+  }
+  .contact-meta a:hover { color: var(--white); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--mid-gray); background: var(--black);
+  }
+  footer p { font-size: 0.75rem; color: var(--text-gray); font-weight: 300; }
+  .footer-logo { text-decoration: none; display: flex; align-items: center; }
+  .footer-logo img { height: 47px; width: auto; opacity: 0.6; transition: opacity 0.3s ease; }
+  .footer-logo:hover img { opacity: 1; }
+
+  /* ─── MOBILE MENU ─── */
+  .mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 0.5rem; }
+  .mobile-toggle span { width: 24px; height: 1.5px; background: var(--white); transition: all 0.3s ease; display: block; }
+  .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+  .mobile-toggle.active span:nth-child(2) { opacity: 0; }
+  .mobile-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+  .mobile-menu {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10,10,10,0.97); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .mobile-menu.open { display: flex; opacity: 1; }
+  .mobile-menu a {
+    font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--white);
+    text-decoration: none; transition: color 0.3s ease;
+  }
+  .mobile-menu a:hover { color: var(--red); }
+
+  .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── GEOMETRIC BACKGROUNDS ─── */
+  .geo { position: absolute; pointer-events: none; z-index: 0; }
+  .geo-ring { border: 1.5px solid rgba(202,97,95,0.15); border-radius: 50%; }
+  .geo-diamond { border: 1.5px solid rgba(255,255,255,0.06); transform: rotate(45deg); }
+  .geo-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(202,97,95,0.15), transparent); }
+  .geo-dots { background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 24px 24px; }
+  .geo-grid-lines {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .geo-cross::before, .geo-cross::after { content: ''; position: absolute; background: rgba(202,97,95,0.15); }
+  .geo-cross::before { width: 24px; height: 1.5px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+  .geo-cross::after { width: 1.5px; height: 24px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+  @keyframes float { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(2deg); } }
+  @keyframes float-reverse { 0%,100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(10px) rotate(47deg); } }
+  @keyframes pulse-ring { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+
+  .geo-float { animation: float 12s ease-in-out infinite; }
+  .geo-float-reverse { animation: float-reverse 15s ease-in-out infinite; }
+  .geo-pulse { animation: pulse-ring 8s ease-in-out infinite; }
+
+  /* ─── TABLET ─── */
+  @media (max-width: 1024px) {
+    nav { padding: 1.2rem 2rem; }
+    nav.scrolled { padding: 0.8rem 2rem; }
+    section { padding: 5rem 2rem; }
+    .hero { padding: 0 2rem; }
+    .hero-metrics { right: 2rem; gap: 2.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .experience-grid { grid-template-columns: repeat(2, 1fr); }
+    .expertise-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .principal-top { grid-template-columns: 280px 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .logo-grid { grid-template-columns: repeat(5, 1fr); }
+    footer { padding: 2rem; }
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.25rem; }
+    nav.scrolled { padding: 0.75rem 1.25rem; }
+    .nav-logo img { height: 36px; }
+    .nav-links, .nav-contact { display: none; }
+    .mobile-toggle { display: flex; }
+    section { padding: 4rem 1.25rem; }
+    .hero { padding: 0 1.25rem; min-height: 100svh; }
+    .hero h1 { font-size: 2.2rem; line-height: 1.15; margin-bottom: 1.5rem; }
+    .hero-sub { font-size: 1rem; margin-bottom: 2rem; }
+    .hero-cta { font-size: 0.8rem; }
+    .hero-metrics {
+      position: relative; bottom: auto; right: auto;
+      margin-top: 3rem; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .metric { text-align: left; }
+    .metric-value { font-size: 2rem; }
+    .metric-label { font-size: 0.65rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-stat-value { font-size: 2.2rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-card { min-height: auto; padding: 2rem 1.5rem; }
+    .experience-grid { grid-template-columns: 1fr; }
+    .exp-image { height: 180px; }
+    .expertise-banner { padding: 3rem 1.25rem; }
+    .expertise-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .expertise-name { font-size: 0.85rem; }
+    .expertise-detail { font-size: 0.75rem; }
+    .principal-top { grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem; }
+    .headshot { max-width: 280px; margin: 0 auto; }
+    .principal-content .section-desc { font-size: 0.95rem; }
+    .logo-grid { grid-template-columns: repeat(3, 1fr); }
+    .logo-cell { padding: 1rem 0.6rem; min-height: 60px; }
+    .logo-cell-name { font-size: 0.7rem; }
+    .logo-row-label { font-size: 0.65rem; }
+    #contact { padding: 5rem 1.25rem; }
+    .contact-form { max-width: 100%; }
+    .form-row-double { grid-template-columns: 1fr; }
+    footer {
+      flex-direction: column; gap: 1rem; text-align: center;
+      padding: 1.5rem 1.25rem;
+    }
+    .footer-logo img { height: 36px; }
+    .section-title { font-size: 1.8rem; }
+    .section-desc { font-size: 0.95rem; margin-bottom: 2.5rem; }
+    .section-tag { font-size: 0.65rem; }
+  }
+
+  /* ─── SMALL MOBILE ─── */
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 1.8rem; }
+    .hero-metrics { gap: 1rem; }
+    .metric-value { font-size: 1.7rem; }
+    .about-stat-value { font-size: 1.8rem; }
+    .section-title { font-size: 1.5rem; }
+    .expertise-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .logo-grid { grid-template-columns: repeat(2, 1fr); }
+    .headshot { max-width: 220px; }
+    .exp-image { height: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo"><img src="https://i.ibb.co/0yXK0RnF/Remix-Properties-Word-Mark-White-Red.png" alt="Remix Properties"></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#principal">Principal</a></li>
+  </ul>
+  <a href="#contact" class="nav-contact">Get in Touch</a>
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mobile-menu-link">About</a>
+  <a href="#services" class="mobile-menu-link">Services</a>
+  <a href="#experience" class="mobile-menu-link">Experience</a>
+  <a href="#principal" class="mobile-menu-link">Principal</a>
+  <a href="#contact" class="mobile-menu-link">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas class="hero-contours" id="contourCanvas"></canvas>
+  <h1>Where <em>innovation</em> meets real estate
+    <span class="hero-cycle-wrapper" id="cycler">
+      <span class="hero-cycle-word active">strategy</span>
+      <span class="hero-cycle-word">acquisitions</span>
+      <span class="hero-cycle-word">investment</span>
+      <span class="hero-cycle-word">development</span>
+      <span class="hero-cycle-word">asset management</span>
+      <span class="hero-cycle-word">technology</span>
+    </span>
+  </h1>
+  <p class="hero-sub">Remix is a strategic advisory practice at the intersection of commercial real estate, data intelligence, and emerging technology — helping investors and developers see further and move faster.</p>
+  <a href="#services" class="hero-cta">Explore our work <span class="arrow"></span></a>
+  <div class="hero-metrics">
+    <div class="metric"><div class="metric-value">$2B+</div><div class="metric-label">Portfolio Oversight</div></div>
+    <div class="metric"><div class="metric-value">15+</div><div class="metric-label">Years in CRE</div></div>
+    <div class="metric"><div class="metric-value">122</div><div class="metric-label">Acres Acquired</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="fade-in">
+  <div class="geo geo-grid-lines" style="top:0;right:0;width:50%;height:100%;opacity:0.5;"></div>
+  <div class="geo geo-ring geo-float" style="width:300px;height:300px;bottom:-100px;left:-100px;border-color:rgba(255,255,255,0.02);"></div>
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="section-tag">About Remix</div>
+      <h2 class="section-title">Built for complexity. Driven by data.</h2>
+      <p class="section-desc">Remix Properties LLC is a New York–based strategic advisory practice founded by Stefan Martinovic. We partner with investors, developers, and operators to source, underwrite, and execute commercial real estate opportunities across the United States — powered by institutional-grade analytics and deep market knowledge.</p>
+      <p class="section-desc">Our edge is integration: combining traditional deal execution with location intelligence, AI-driven analysis, and technology strategy to unlock value that conventional approaches miss.</p>
+    </div>
+    <div class="about-right">
+      <div class="about-stat">
+        <div class="about-stat-value">$2B+</div>
+        <div class="about-stat-label">CRE portfolio value managed and advised across multifamily, retail, office, and mixed-use.</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-value">$1M</div>
+        <div class="about-stat-label">In New York State grants secured using AI-powered RFP and grant writing tools.</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-value">50,000 SF</div>
+        <div class="about-stat-label">Of commercial, retail, residential, and hospitality use planned on 122 development acres in New York.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="fade-in">
+  <div class="geo geo-diamond geo-float" style="width:180px;height:180px;top:8%;right:5%;border-color:rgba(202,97,95,0.05);"></div>
+  <div class="geo geo-cross" style="width:20px;height:20px;top:15%;right:20%;"></div>
+  <div class="geo geo-ring" style="width:500px;height:500px;bottom:-200px;left:-200px;border-color:rgba(255,255,255,0.015);"></div>
+  <div class="section-tag">What We Do</div>
+  <h2 class="section-title">Full-spectrum real estate advisory</h2>
+  <p class="section-desc">From sourcing to strategy, we bring clarity to every phase of the investment lifecycle.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 32 32"><circle cx="16" cy="14" r="5"/><path d="M16 2a12 12 0 0112 12c0 8-12 16-12 16S4 22 4 14A12 12 0 0116 2z"/></svg></div>
+      <h3 class="service-title">Acquisition Support</h3>
+      <p class="service-desc">End-to-end acquisition advisory from deal sourcing through closing, with rigorous financial analysis and market intelligence at every step.</p>
+      <ul class="service-list">
+        <li>Deal sourcing & pipeline management</li>
+        <li>Financial modeling & underwriting</li>
+        <li>Due diligence coordination</li>
+        <li>Negotiation & closing support</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 32 32"><path d="M6 2h14l6 6v22H6V2z"/><path d="M20 2v6h6"/><path d="M10 14h12M10 18h12M10 22h8"/><circle cx="22" cy="24" r="5" fill="none"/><path d="M20 24l1.5 1.5 3-3"/></svg></div>
+      <h3 class="service-title">Development Consulting</h3>
+      <p class="service-desc">Strategic guidance from feasibility through stabilization, informed by deep experience in entitlements, regulatory navigation, and project delivery.</p>
+      <ul class="service-list">
+        <li>Feasibility studies & pro formas</li>
+        <li>Zoning & entitlement strategy</li>
+        <li>Permitting & regulatory guidance</li>
+        <li>Budget & timeline management</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 32 32"><path d="M16 2L2 12l14 10 14-10L16 2z"/><path d="M2 20l14 10 14-10"/></svg></div>
+      <h3 class="service-title">Location Intelligence & AI</h3>
+      <p class="service-desc">Data-driven site selection, market analytics, and AI implementation to surface opportunities and optimize portfolio performance.</p>
+      <ul class="service-list">
+        <li>Location analytics & geospatial data</li>
+        <li>AI/ML implementation for CRE</li>
+        <li>Market research & comparables</li>
+        <li>Portfolio optimization strategy</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 32 32"><path d="M13.5 5.5l1-2h3l1 2 2.2-.5 1.5-1.5 2.1 2.1-1.5 1.5.5 2.2 2 1v3l-2 1 .5 2.2 1.5 1.5-2.1 2.1-1.5-1.5-2.2.5-1 2h-3l-1-2-2.2.5-1.5 1.5-2.1-2.1 1.5-1.5-.5-2.2-2-1v-3l2-1-.5-2.2L6.4 7.6l2.1-2.1 1.5 1.5z"/><circle cx="15" cy="12" r="3.5"/><path d="M20 21.5l.7-1.4h2.1l.7 1.4 1.5-.4 1-1 1.5 1.5-1 1 .4 1.5 1.4.7v2.1l-1.4.7.4 1.5 1 1-1.5 1.5-1-1-1.5.4-.7 1.4h-2.1l-.7-1.4-1.5.4-1 1-1.5-1.5 1-1-.4-1.5-1.4-.7v-2.1l1.4-.7-.4-1.5-1-1 1.5-1.5 1 1z"/><circle cx="22" cy="25.5" r="2"/></svg></div>
+      <h3 class="service-title">Asset Management</h3>
+      <p class="service-desc">Hands-on portfolio oversight to maximize NOI, identify value-add opportunities, and execute repositioning strategies across asset classes.</p>
+      <ul class="service-list">
+        <li>Portfolio performance analysis</li>
+        <li>Value-add identification</li>
+        <li>Leasing strategy</li>
+        <li>Operational optimization</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 32 32"><rect x="3" y="4" width="26" height="18" rx="2"/><path d="M10 26h12"/><path d="M16 22v4"/><circle cx="16" cy="13" r="4"/><path d="M8 9h2M22 9h2"/></svg></div>
+      <h3 class="service-title">Technology Strategy</h3>
+      <p class="service-desc">PropTech advisory, venture diligence, and technology roadmapping for real estate organizations looking to modernize operations and gain competitive edge.</p>
+      <ul class="service-list">
+        <li>PropTech evaluation & implementation</li>
+        <li>Venture investment advisory</li>
+        <li>Product strategy for RE tech</li>
+        <li>Digital transformation planning</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 32 32"><path d="M16 4l4 8h8l-6 6 2 10-8-5-8 5 2-10-6-6h8z"/></svg></div>
+      <h3 class="service-title">Custom Advisory</h3>
+      <p class="service-desc">Tailored engagements for unique situations — whether it's a complex site assembly, a public-private partnership, or a first-of-its-kind project that doesn't fit a standard playbook.</p>
+      <ul class="service-list">
+        <li>Bespoke consulting engagements</li>
+        <li>Public-private partnership advisory</li>
+        <li>Grant writing & incentive sourcing</li>
+        <li>Special situation analysis</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="fade-in">
+  <div class="geo geo-dots" style="top:0;left:0;width:40%;height:100%;opacity:0.3;"></div>
+  <div class="geo geo-ring geo-float-reverse" style="width:250px;height:250px;top:10%;right:-80px;border-color:rgba(202,97,95,0.04);"></div>
+  <div class="geo geo-cross" style="width:20px;height:20px;bottom:20%;right:15%;"></div>
+  <div class="section-tag">Select Experience</div>
+  <h2 class="section-title">Across markets and asset classes</h2>
+  <p class="section-desc">Representative transactions and advisory engagements spanning multifamily, mixed-use, hospitality, and commercial development.</p>
+  <div class="experience-grid">
+    <div class="exp-card">
+      <div class="exp-image"><div class="exp-image-bg" style="background-image:url('https://images.squarespace-cdn.com/content/v1/635ac0aab5d4b729bde1cfd6/693021da-dd48-481e-9e18-378020dcdb87/1250_9th_St_NW-5.jpg')"></div><span class="exp-type">Mixed-Use</span></div>
+      <div class="exp-info">
+        <h3 class="exp-name">The Colonel</h3>
+        <div class="exp-location">Washington, DC</div>
+        <p class="exp-desc">Five-story urban infill development in the Shaw neighborhood. Adaptive reuse of a 1920s-era structure preserving the original facade, with 70 luxury residential units and street-level retail activating the 9th Street corridor.</p>
+        <div class="exp-stats"><span><strong>70</strong> Units</span><span><strong>8,200 SF</strong> Retail</span></div>
+      </div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-image"><div class="exp-image-bg" style="background-image:url('https://rebusinessonline.com/wp-content/uploads/2025/07/Park-Wilshire-LA-CA.jpg')"></div><span class="exp-type">Residential</span></div>
+      <div class="exp-info">
+        <h3 class="exp-name">Park Wilshire</h3>
+        <div class="exp-location">Los Angeles, CA</div>
+        <p class="exp-desc">Designated historical-cultural monument originally designed in 1924 by Clarence H. Russell and Norman W. Alpaugh. Comprehensive renovation of a 170-unit landmark on Wilshire Boulevard, crowned by its iconic neon sign between Koreatown and DTLA.</p>
+        <div class="exp-stats"><span><strong>170</strong> Units</span><span><strong>1924</strong> Landmark</span></div>
+      </div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-image"><div class="exp-image-bg" style="background-image:url('https://d16x0t42sml8k4.cloudfront.net/eyJidWNrZXQiOiJtY2NhZmZlcnktd2Vic2l0ZS1hc3NldHMiLCJrZXkiOiJDb3JrLWFmdGVyXzIwMjQtMDgtMTQtMTcwMTI2X2lodnYuanBnIiwiZWRpdHMiOnsianBlZyI6eyJxdWFsaXR5Ijo4MiwicHJvZ3Jlc3NpdmUiOnRydWUsInRyZWxsaXNRdWFudGlzYXRpb24iOnRydWUsIm92ZXJzaG9vdERlcmluZ2luZyI6dHJ1ZSwib3B0aW1pemVTY2FucyI6dHJ1ZX0sInJlc2l6ZSI6eyJ3aWR0aCI6NTc2LCJoZWlnaHQiOjU3NiwiZml0IjoiY292ZXIifX19')"></div><span class="exp-type">Residential</span></div>
+      <div class="exp-info">
+        <h3 class="exp-name">Cork Factory</h3>
+        <div class="exp-location">Pittsburgh, PA</div>
+        <p class="exp-desc">$78M adaptive reuse of the legendary 1901 Armstrong Cork Factory on the Allegheny riverfront. 297 luxury loft apartments with exposed brick, factory-style windows, and 45,000 SF of retail in Pittsburgh's Strip District.</p>
+        <div class="exp-stats"><span><strong>297</strong> Units</span><span><strong>$78M</strong> Investment</span></div>
+      </div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-image"><div class="exp-image-bg" style="background-image:url('https://static.wixstatic.com/media/4f8c0c_afbc5970e894445a8d6daa4206277566~mv2.png/v1/fill/w_560,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/4f8c0c_afbc5970e894445a8d6daa4206277566~mv2.png')"></div><span class="exp-type">Hospitality</span></div>
+      <div class="exp-info">
+        <h3 class="exp-name">Wren of the Woods</h3>
+        <div class="exp-location">Armonk, NY</div>
+        <p class="exp-desc">Ground-up farm-to-table restaurant and gathering space led by award-winning Executive Chef Roxanne Spruance. 3,600 SF with 144 seats, sourcing from regenerative organic farms across the Hudson Valley and Catskills.</p>
+        <div class="exp-stats"><span><strong>3,600 SF</strong></span><span><strong>144</strong> Seats</span></div>
+      </div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-image"><div class="exp-image-bg" style="background-image:url('https://www.gilbaneco.com/wp-content/uploads/2022/12/Grove-At-Parkside_Exterior-1024x683.jpg')"></div><span class="exp-type">Mixed-Use</span></div>
+      <div class="exp-info">
+        <h3 class="exp-name">Parkside</h3>
+        <div class="exp-location">Washington, DC</div>
+        <p class="exp-desc">Part of the $750M, 3.1 million SF Parkside master-planned development. Transit-oriented affordable housing community steps from the Minnesota Avenue Metro, delivering modern residences across multiple phases in Ward 7.</p>
+        <div class="exp-stats"><span><strong>186</strong> Units</span><span><strong>$750M</strong> Master Plan</span></div>
+      </div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-image"><div class="exp-image-bg" style="background-image:url('https://static.wixstatic.com/media/4f8c0c_ef82613a75e140a4a1ababc7dcd9a052~mv2.jpg/v1/fill/w_1552,h_853,al_c,q_85,enc_avif,quality_auto/4f8c0c_ef82613a75e140a4a1ababc7dcd9a052~mv2.jpg')"></div><span class="exp-type">Agritourism</span></div>
+      <div class="exp-info">
+        <h3 class="exp-name">Livingston Farm</h3>
+        <div class="exp-location">Livingston Manor, NY</div>
+        <p class="exp-desc">117-acre regenerative organic farm and agritourism resort community in the Catskills. A model for sustainable agricultural development featuring lodging, trail networks, and farm-to-table programming supplying Wren of the Woods.</p>
+        <div class="exp-stats"><span><strong>117</strong> Acres</span><span><strong>Regenerative</strong> Farm</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE BANNER -->
+<div class="expertise-banner fade-in">
+  <div class="expertise-grid">
+    <div class="expertise-item">
+      <div class="expertise-icon"><svg viewBox="0 0 32 32"><rect x="2" y="8" width="12" height="22" rx="1"/><rect x="18" y="2" width="12" height="28" rx="1"/><path d="M5 14h6M5 18h6M5 22h6M21 8h6M21 12h6M21 16h6M21 20h6"/></svg></div>
+      <div class="expertise-name">Multifamily</div>
+      <div class="expertise-detail">1,500+ units across national portfolios</div>
+    </div>
+    <div class="expertise-item">
+      <div class="expertise-icon"><svg viewBox="0 0 32 32"><path d="M2 30V10l8-8h12l8 8v20"/><path d="M2 18h28"/><path d="M12 18v12M20 18v12"/><path d="M12 2v8M20 2v8"/></svg></div>
+      <div class="expertise-name">Mixed-Use</div>
+      <div class="expertise-detail">Retail, residential & hospitality integration</div>
+    </div>
+    <div class="expertise-item">
+      <div class="expertise-icon"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="18" rx="2"/><path d="M10 26h12M16 22v4"/><path d="M10 10l4 4 8-6"/></svg></div>
+      <div class="expertise-name">PropTech</div>
+      <div class="expertise-detail">AI, location analytics & venture investing</div>
+    </div>
+    <div class="expertise-item">
+      <div class="expertise-icon"><svg viewBox="0 0 32 32"><path d="M4 28l12-24 12 24H4z"/><path d="M10 28l6-12 6 12"/><path d="M16 16v4"/></svg></div>
+      <div class="expertise-name">Development</div>
+      <div class="expertise-detail">Entitlements, zoning & ground-up execution</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINCIPAL -->
+<section id="principal" class="fade-in">
+  <div class="geo geo-grid-lines" style="top:0;left:0;width:100%;height:100%;opacity:0.4;"></div>
+  <div class="geo geo-diamond geo-float" style="width:140px;height:140px;top:12%;right:10%;border-color:rgba(202,97,95,0.04);"></div>
+  <div class="geo geo-ring" style="width:350px;height:350px;bottom:-120px;right:-120px;border-color:rgba(255,255,255,0.02);"></div>
+  <div class="principal-top">
+    <div class="headshot">
+      <img src="https://i.ibb.co/gF3vBZsF/SM-Headshot-4-removebg-preview.png" alt="Stefan Martinovic">
+    </div>
+    <div class="principal-content">
+      <div class="section-tag">Principal</div>
+      <h2 class="section-title">Stefan Martinovic</h2>
+      <p class="section-desc">A career built at the intersection of real estate and technology. Stefan has led acquisitions and asset management across a 1,500+ unit national portfolio, and served as VP at Placer.ai, a $1.5B location analytics platform. He launched NYC's MLS as the first Director of Innovation at REBNY, co-founded a VC-backed geospatial data startup, and has deployed ML models to optimize luxury high-rise developments. His work spans institutional portfolio strategy, PropTech venture investing, AI-driven underwriting, and public-sector grant capture. He teaches CRE Entrepreneurship at NYU Schack and is a member of ULI's Technology and Innovation Council. Stefan holds an MBA in Finance from The College of William & Mary and a BBA in Finance from Seton Hall University.</p>
+    </div>
+  </div>
+  <div class="principal-bottom">
+    <div class="logo-row exec">
+      <div class="logo-row-label"><div class="legend-dot exec"></div>Executive</div>
+      <div class="logo-grid">
+        <div class="logo-cell"><div class="logo-cell-name">Guardian Capital</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">Placer.ai</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">Midwood</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">REBNY</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">Create Inc.</div></div>
+      </div>
+    </div>
+    <div class="logo-row consultant">
+      <div class="logo-row-label"><div class="legend-dot consultant"></div>Consultant</div>
+      <div class="logo-grid">
+        <div class="logo-cell"><div class="logo-cell-name">City Interests</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">Hickey & Assoc.</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">ULI</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">Tenney 110</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">AmFam Group</div></div>
+      </div>
+    </div>
+    <div class="logo-row advisor">
+      <div class="logo-row-label"><div class="legend-dot advisor"></div>Advisor</div>
+      <div class="logo-grid">
+        <div class="logo-cell"><div class="logo-cell-name">NYU Schack</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">IMN Events</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">GatherGov</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">Cadastral</div></div>
+        <div class="logo-cell"><div class="logo-cell-name">Gumption</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="fade-in">
+  <div class="geo geo-ring geo-pulse" style="width:500px;height:500px;top:-200px;left:-200px;border-color:rgba(202,97,95,0.04);"></div>
+  <div class="geo geo-cross" style="width:20px;height:20px;top:20%;right:25%;"></div>
+  <div class="geo geo-diamond geo-float-reverse" style="width:100px;height:100px;bottom:15%;right:10%;border-color:rgba(255,255,255,0.03);"></div>
+  <div class="section-tag">Get in Touch</div>
+  <h2 class="section-title">Let's talk about your next opportunity</h2>
+  <p class="section-desc">Whether you're sourcing a deal, planning a development, or looking to leverage technology across your portfolio — we'd like to hear from you.</p>
+  <form class="contact-form" action="https://formspree.io/f/placeholder" method="POST">
+    <div class="form-row-double">
+      <div><label class="form-label" for="name">Name</label><input class="form-input" type="text" id="name" name="name" placeholder="Your name" required></div>
+      <div><label class="form-label" for="company">Company</label><input class="form-input" type="text" id="company" name="company" placeholder="Your company"></div>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="email">Email</label>
+      <input class="form-input" type="email" id="email" name="email" placeholder="you@company.com" required>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="message">Message</label>
+      <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your project or opportunity..." required></textarea>
+    </div>
+    <button type="submit" class="form-submit">Send Message</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo"><img src="https://i.ibb.co/0yXK0RnF/Remix-Properties-Word-Mark-White-Red.png" alt="Remix Properties"></a>
+  <p>&copy; 2026 Remix Properties LLC. All rights reserved.</p>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 80); });
+
+  // Word cycler
+  const words = document.querySelectorAll('.hero-cycle-word');
+  let current = 0;
+  setInterval(() => {
+    words[current].classList.remove('active');
+    current = (current + 1) % words.length;
+    words[current].classList.add('active');
+  }, 2200);
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Mobile menu
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  mobileToggle.addEventListener('click', () => {
+    mobileToggle.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+
+  // Smooth scroll (includes mobile menu links)
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (mobileMenu.classList.contains('open')) {
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Contour lines — topographic / terrain map style
+  (function() {
+    const canvas = document.getElementById('contourCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h, time = 0, animId;
+
+    function resize() {
+      const hero = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      w = hero.offsetWidth;
+      h = hero.offsetHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function noise(x, y, t) {
+      return Math.sin(x * 0.008 + t * 0.15) * Math.cos(y * 0.006 - t * 0.1)
+           + Math.sin((x + y) * 0.005 + t * 0.08) * 0.7
+           + Math.cos(x * 0.012 - y * 0.01 + t * 0.12) * 0.5
+           + Math.sin(x * 0.003 + t * 0.05) * Math.sin(y * 0.004 - t * 0.07) * 0.8;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      const step = 6;
+      const cols = Math.ceil(w / step) + 1;
+      const rows = Math.ceil(h / step) + 1;
+
+      const field = new Float32Array(cols * rows);
+      for (let j = 0; j < rows; j++) {
+        for (let i = 0; i < cols; i++) {
+          field[j * cols + i] = noise(i * step, j * step, time);
+        }
+      }
+
+      const levels = [-1.2, -0.9, -0.6, -0.3, 0, 0.3, 0.6, 0.9, 1.2];
+      levels.forEach((level, li) => {
+        const isRed = li === 3 || li === 4 || li === 5 || li === 6;
+        const alpha = isRed ? 0.28 : 0.09 + (li % 2) * 0.04;
+        ctx.strokeStyle = isRed
+          ? 'rgba(202, 97, 95, ' + alpha + ')'
+          : 'rgba(255, 255, 255, ' + alpha + ')';
+        ctx.lineWidth = isRed ? 1.5 : 0.8;
+        ctx.beginPath();
+
+        for (let j = 0; j < rows - 1; j++) {
+          for (let i = 0; i < cols - 1; i++) {
+            const x = i * step;
+            const y = j * step;
+            const tl = field[j * cols + i];
+            const tr = field[j * cols + i + 1];
+            const br = field[(j + 1) * cols + i + 1];
+            const bl = field[(j + 1) * cols + i];
+
+            const c = ((tl >= level ? 8 : 0) | (tr >= level ? 4 : 0) | (br >= level ? 2 : 0) | (bl >= level ? 1 : 0));
+            if (c === 0 || c === 15) continue;
+
+            const lerp = (a, b) => (level - a) / (b - a);
+            const top = x + lerp(tl, tr) * step;
+            const right = y + lerp(tr, br) * step;
+            const bottom = x + lerp(bl, br) * step;
+            const left = y + lerp(tl, bl) * step;
+
+            const segments = [];
+            switch(c) {
+              case 1: case 14: segments.push(x, left, bottom, y + step); break;
+              case 2: case 13: segments.push(bottom, y + step, x + step, right); break;
+              case 3: case 12: segments.push(x, left, x + step, right); break;
+              case 4: case 11: segments.push(top, y, x + step, right); break;
+              case 5: segments.push(x, left, top, y); segments.push(bottom, y + step, x + step, right); break;
+              case 6: case 9: segments.push(top, y, bottom, y + step); break;
+              case 7: case 8: segments.push(x, left, top, y); break;
+              case 10: segments.push(x, left, bottom, y + step); segments.push(top, y, x + step, right); break;
+            }
+            for (let s = 0; s < segments.length; s += 4) {
+              ctx.moveTo(segments[s], segments[s+1]);
+              ctx.lineTo(segments[s+2], segments[s+3]);
+            }
+          }
+        }
+        ctx.stroke();
+      });
+
+      time += 0.008;
+      animId = requestAnimationFrame(draw);
+    }
+
+    resize();
+    draw();
+    window.addEventListener('resize', () => { resize(); });
+
+    const heroObs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { if (!animId) draw(); }
+      else { cancelAnimationFrame(animId); animId = null; }
+    }, { threshold: 0 });
+    heroObs.observe(canvas.parentElement);
+  })();
+</script>
+
+</body>
+</html>
