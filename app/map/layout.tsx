@@ -1,5 +1,7 @@
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
-  title: "Circular | Property Map",
+  title: "Atlas | Remix Properties",
   description: "CesiumJS 3D real estate map viewer",
 };
 
