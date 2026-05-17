@@ -235,6 +235,112 @@
   .legend-dot.advisor { background: var(--advisor-color); }
   .legend-dot.consultant { background: var(--consultant-color); }
 
+  /* ─── BOOK ─── */
+  #book { background: var(--black); }
+  .book-grid { display: grid; grid-template-columns: 380px 1fr; gap: 5rem; align-items: start; margin-bottom: 6rem; }
+  .book-cover-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+  }
+  .book-cover-wrap::before {
+    content: ''; position: absolute; inset: -30px; pointer-events: none;
+    background: radial-gradient(circle at 50% 40%, rgba(202,97,95,0.18) 0%, transparent 65%);
+    filter: blur(20px); z-index: 0;
+  }
+  .book-cover-wrap img {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%; object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 30px 60px -10px rgba(0,0,0,0.7), 0 18px 36px -18px rgba(202,97,95,0.4);
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .book-cover-wrap:hover img { transform: translateY(-4px); }
+  .book-content .section-tag { margin-bottom: 1.2rem; }
+  .book-title {
+    font-family: 'DM Serif Display', serif; font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    font-weight: 400; line-height: 1.05; margin-bottom: 0.4rem;
+  }
+  .book-subtitle {
+    font-family: 'DM Serif Display', serif; font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    color: var(--red-light); margin-bottom: 1.2rem; line-height: 1.3;
+  }
+  .book-tagline {
+    font-size: 1rem; line-height: 1.6; color: var(--text-gray); font-style: italic;
+    font-weight: 300; margin-bottom: 1.5rem; max-width: 520px;
+  }
+  .book-byline {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--white); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem;
+  }
+  .book-byline::before { content: ''; width: 24px; height: 1.5px; background: var(--red); }
+  .book-pitch {
+    font-size: 1rem; line-height: 1.75; color: var(--text-gray); font-weight: 300;
+    max-width: 560px; margin-bottom: 2.5rem;
+  }
+  .book-cta {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    padding: 0.95rem 1.8rem; background: var(--red); color: var(--white);
+    text-decoration: none; font-family: 'Inter', sans-serif; font-size: 0.85rem;
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    border-radius: 3px; border: 1px solid var(--red);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+  .book-cta:hover { background: var(--red-light); border-color: var(--red-light); transform: translateY(-2px); }
+  .book-cta:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+  .book-cta .arrow-icon { transition: transform 0.3s ease; display: inline-block; }
+  .book-cta:hover .arrow-icon { transform: translateX(4px); }
+
+  /* Testimonials carousel */
+  .testimonials-wrap { position: relative; }
+  .testimonials-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 2rem; gap: 2rem; flex-wrap: wrap;
+  }
+  .testimonials-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); display: flex; align-items: center; gap: 1rem;
+  }
+  .testimonials-label::before { content: ''; width: 30px; height: 1.5px; background: var(--red); }
+  .testimonials-nav { display: flex; gap: 0.6rem; }
+  .testimonials-nav button {
+    width: 40px; height: 40px; border-radius: 50%; background: transparent;
+    border: 1px solid var(--mid-gray); color: var(--text-gray); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+  }
+  .testimonials-nav button:hover { border-color: var(--red); color: var(--white); background: rgba(202,97,95,0.1); }
+  .testimonials-nav button:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .testimonials-nav svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+  .testimonials-track {
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(360px, 1fr);
+    gap: 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-behavior: smooth; padding-bottom: 0.5rem;
+    scrollbar-width: thin; scrollbar-color: var(--mid-gray) transparent;
+  }
+  .testimonials-track::-webkit-scrollbar { height: 6px; }
+  .testimonials-track::-webkit-scrollbar-track { background: transparent; }
+  .testimonials-track::-webkit-scrollbar-thumb { background: var(--mid-gray); border-radius: 3px; }
+  .testimonial-card {
+    scroll-snap-align: start;
+    background: var(--dark-gray); border-radius: 4px; padding: 2.2rem 2rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 240px; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .testimonial-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  .testimonial-card blockquote {
+    font-size: 0.98rem; line-height: 1.7; color: var(--light-gray);
+    font-weight: 300; font-style: italic; margin-bottom: 1.5rem; position: relative;
+  }
+  .testimonial-card blockquote::before {
+    content: '“'; font-family: 'DM Serif Display', serif; font-size: 3rem;
+    color: var(--red); line-height: 0.5; position: absolute; left: -0.6rem; top: 0.4rem;
+    opacity: 0.6;
+  }
+  .testimonial-attr { font-size: 0.78rem; line-height: 1.5; color: var(--text-gray); border-top: 1px solid var(--mid-gray); padding-top: 1rem; }
+  .testimonial-attr strong { display: block; color: var(--white); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.2rem; }
+
   /* ─── CONTACT ─── */
   #contact { background: var(--off-black); text-align: center; padding: 10rem 4rem; }
   #contact .section-tag { justify-content: center; }
@@ -338,6 +444,8 @@
     .expertise-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
     .principal-top { grid-template-columns: 280px 1fr; gap: 3rem; margin-bottom: 3rem; }
     .logo-grid { grid-template-columns: repeat(5, 1fr); }
+    .book-grid { grid-template-columns: 280px 1fr; gap: 3rem; margin-bottom: 4rem; }
+    .testimonials-track { grid-auto-columns: minmax(320px, 1fr); }
     footer { padding: 2rem; }
   }
 
@@ -373,6 +481,14 @@
     .principal-top { grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem; }
     .headshot { max-width: 280px; margin: 0 auto; }
     .principal-content .section-desc { font-size: 0.95rem; }
+    .book-grid { grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 4rem; }
+    .book-cover-wrap { max-width: 260px; margin: 0 auto; }
+    .book-title { font-size: 2rem; }
+    .book-subtitle { font-size: 1.05rem; }
+    .book-pitch { font-size: 0.95rem; }
+    .testimonials-header { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+    .testimonials-track { grid-auto-columns: 85%; gap: 1rem; }
+    .testimonial-card { min-height: 200px; padding: 1.8rem 1.5rem; }
     .logo-grid { grid-template-columns: repeat(3, 1fr); }
     .logo-cell { padding: 1rem 0.6rem; min-height: 60px; }
     .logo-cell-name { font-size: 0.7rem; }
@@ -414,6 +530,7 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#principal">Principal</a></li>
+    <li><a href="#book">Book</a></li>
   </ul>
   <a href="#contact" class="nav-contact">Get in Touch</a>
   <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
@@ -427,6 +544,7 @@
   <a href="#services" class="mobile-menu-link">Services</a>
   <a href="#experience" class="mobile-menu-link">Experience</a>
   <a href="#principal" class="mobile-menu-link">Principal</a>
+  <a href="#book" class="mobile-menu-link">Book</a>
   <a href="#contact" class="mobile-menu-link">Contact</a>
 </div>
 
@@ -699,6 +817,64 @@
   </div>
 </section>
 
+<!-- BOOK -->
+<section id="book" class="fade-in">
+  <div class="geo geo-dots" style="top:0;right:0;width:35%;height:100%;opacity:0.25;"></div>
+  <div class="geo geo-ring geo-float" style="width:280px;height:280px;top:8%;left:-100px;border-color:rgba(202,97,95,0.05);"></div>
+  <div class="geo geo-cross" style="width:20px;height:20px;top:30%;right:18%;"></div>
+  <div class="geo geo-diamond geo-float-reverse" style="width:120px;height:120px;bottom:18%;right:6%;border-color:rgba(255,255,255,0.03);"></div>
+  <div class="section-tag">Latest Book</div>
+  <h2 class="section-title">A field guide to real estate's next decade</h2>
+  <p class="section-desc">Out now — Stefan's first book maps the forces remaking the built world: spatial intelligence, climate adaptation, capital evolution, and the new operating stack of tomorrow's firms.</p>
+
+  <div class="book-grid">
+    <div class="book-cover-wrap">
+      <img src="assets/ground-truth-cover.jpg" alt="Ground Truth book cover by Stefan Martinovic" loading="lazy" width="600" height="900">
+    </div>
+    <div class="book-content">
+      <div class="section-tag">New Release</div>
+      <h3 class="book-title">Ground Truth</h3>
+      <p class="book-subtitle">The Rewiring of Real Estate</p>
+      <p class="book-tagline">How technology, capital, and climate are rewiring our built world.</p>
+      <p class="book-byline">by Stefan Martinovic, Founder of Livingston Farm</p>
+      <p class="book-pitch">Real estate isn't immune to disruption — it's overdue for an upgrade. <em>Ground Truth</em> maps the forces transforming real estate today, from satellite imagery and the rise of spatial intelligence to climate adaptation, capital evolution, and the new operating stack of tomorrow's firms. It's not a prediction of the future. It's a framework for operating in it.</p>
+      <!-- TODO: Stefan will provide actual Amazon URL -->
+      <a class="book-cta" href="https://amazon.com/dp/PLACEHOLDER-ASIN-SWAP-ME" target="_blank" rel="noopener noreferrer" aria-label="Get Ground Truth on Amazon (opens in new tab)">
+        Get it on Amazon
+        <span class="arrow-icon" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="testimonials-wrap">
+    <div class="testimonials-header">
+      <div class="testimonials-label">Early Praise</div>
+      <div class="testimonials-nav" role="group" aria-label="Testimonials navigation">
+        <button type="button" id="testPrev" aria-label="Previous testimonial">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button type="button" id="testNext" aria-label="Next testimonial">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+    <div class="testimonials-track" id="testimonialsTrack" aria-label="Testimonials" tabindex="0">
+      <article class="testimonial-card">
+        <blockquote>A clear-eyed look at how the real estate industry is being remade in real time. Stefan brings rigor to a topic most people only handle in hype.</blockquote>
+        <div class="testimonial-attr"><strong>[Name TBD]</strong>[Role TBD]</div>
+      </article>
+      <article class="testimonial-card">
+        <blockquote>Required reading for anyone deploying capital in property today. The 'Ground Truth' framework is the missing operating manual.</blockquote>
+        <div class="testimonial-attr"><strong>[Name TBD]</strong>[Role TBD]</div>
+      </article>
+      <article class="testimonial-card">
+        <blockquote>Finally, a real estate book that doesn't read like 2015. Stefan connects the dots between technology, climate, and capital in a way that actually maps to how the industry works.</blockquote>
+        <div class="testimonial-attr"><strong>[Name TBD]</strong>[Role TBD]</div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact" class="fade-in">
   <div class="geo geo-ring geo-pulse" style="width:500px;height:500px;top:-200px;left:-200px;border-color:rgba(202,97,95,0.04);"></div>
@@ -772,6 +948,23 @@
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+
+  // Testimonials carousel — scroll-snap with prev/next buttons
+  (function() {
+    const track = document.getElementById('testimonialsTrack');
+    const prev = document.getElementById('testPrev');
+    const next = document.getElementById('testNext');
+    if (!track || !prev || !next) return;
+    function step() {
+      const firstCard = track.querySelector('.testimonial-card');
+      if (!firstCard) return track.clientWidth;
+      const styles = window.getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap || '0');
+      return firstCard.getBoundingClientRect().width + gap;
+    }
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  })();
 
   // Contour lines — topographic / terrain map style
   (function() {
