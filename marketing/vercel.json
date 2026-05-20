@@ -9,6 +9,10 @@
     {
       "source": "/book",
       "destination": "/index.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog.html"
     }
   ],
   "headers": [
