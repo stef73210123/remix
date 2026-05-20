@@ -360,6 +360,9 @@
   .form-input:focus, .form-textarea:focus { border-color: var(--red); }
   .form-input::placeholder, .form-textarea::placeholder { color: rgba(154,154,154,0.5); }
   .form-textarea { min-height: 140px; resize: vertical; }
+  select.form-input { cursor: pointer; }
+  select.form-input:required:invalid { color: rgba(154,154,154,0.55); }
+  select.form-input option { color: var(--white); background: var(--dark-gray); }
   .form-submit {
     width: 100%; padding: 1rem; background: var(--red); color: var(--white); border: none;
     font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
@@ -892,6 +895,16 @@
       <input class="form-input" type="email" id="email" name="email" placeholder="you@company.com" required>
     </div>
     <div class="form-row">
+      <label class="form-label" for="reason">Reason for Inquiry</label>
+      <select class="form-input" id="reason" name="reason" required>
+        <option value="" disabled selected>Select a reason&hellip;</option>
+        <option value="General inquiry">General inquiry</option>
+        <option value="Consulting">Consulting</option>
+        <option value="Speaking engagement">Speaking engagement</option>
+        <option value="Investment inquiry">Investment inquiry</option>
+      </select>
+    </div>
+    <div class="form-row">
       <label class="form-label" for="message">Message</label>
       <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your project or opportunity..." required></textarea>
     </div>
@@ -1065,6 +1078,20 @@
       else { cancelAnimationFrame(animId); animId = null; }
     }, { threshold: 0 });
     heroObs.observe(canvas.parentElement);
+  })();
+  // Direct /book link -- scroll to the Ground Truth book section on /book
+  (function() {
+    var path = window.location.pathname;
+    if (path !== '/book' && path !== '/book/') return;
+    function goToBook() {
+      var book = document.getElementById('book');
+      if (book) book.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (document.readyState === 'complete') {
+      setTimeout(goToBook, 120);
+    } else {
+      window.addEventListener('load', function() { setTimeout(goToBook, 120); });
+    }
   })();
 </script>
 

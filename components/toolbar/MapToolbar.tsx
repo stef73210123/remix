@@ -108,7 +108,7 @@ export default function MapToolbar() {
       <ToolbarButton
         icon={<Maximize className="w-4 h-4" />}
         label="FULLSCREEN"
-        active={!!document.fullscreenElement}
+        active={typeof document !== "undefined" && !!document.fullscreenElement}
         onClick={() => {
           if (document.fullscreenElement) {
             document.exitFullscreen();
