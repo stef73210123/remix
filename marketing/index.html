@@ -991,20 +991,34 @@
     });
   });
 
-  // Logo click: when already on home (/), smooth-scroll to top instead of reloading.
+  // Logo click: when already on home, smooth-scroll to top instead of reloading.
   // From any other page (e.g. /blog), let the browser navigate to / normally.
-  document.querySelectorAll('.nav-logo, .footer-logo').forEach(logo => {
+  function isHomePath() {
+    var p = (location.pathname || '/').replace(/\/+$/, ''); // strip trailing slashes
+    return p === '' || p === '/' || p === '/index' || p === '/index.html';
+  }
+  document.querySelectorAll('.nav-logo, .footer-logo').forEach(function(logo) {
     logo.addEventListener('click', function(e) {
-      const onHome = location.pathname === '/' || location.pathname.endsWith('/index.html');
-      if (!onHome) return; // navigate normally
+      if (!isHomePath()) return; // navigate normally
       e.preventDefault();
+      e.stopPropagation();
       if (mobileMenu && mobileMenu.classList.contains('open')) {
         mobileToggle.classList.remove('active');
         mobileMenu.classList.remove('open');
         document.body.style.overflow = '';
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Clear any anchor hash from URL first so the browser doesn't fight us
       if (location.hash) history.replaceState(null, '', location.pathname);
+      // Try smooth scroll; fall back to instant if browser ignores it
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (err) {
+        window.scrollTo(0, 0);
+      }
+      // Belt-and-suspenders: also scroll the documentElement/body in case
+      // the scroll container isn't window
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     });
   });
 
