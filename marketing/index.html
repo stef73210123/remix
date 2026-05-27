@@ -146,12 +146,12 @@
 
   /* ─── SERVICES ─── */
   #services { background: var(--black); }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--mid-gray); border: 1px solid var(--mid-gray); }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
   .service-card {
-    background: var(--black); padding: 3rem; display: flex; flex-direction: column;
+    background: transparent; padding: 3rem; display: flex; flex-direction: column;
     min-height: 340px; transition: background 0.4s ease; cursor: default;
   }
-  .service-card:hover { background: var(--off-black); }
+  .service-card:hover { background: rgba(255,255,255,0.03); }
   .service-icon { margin-bottom: 2rem; }
   .service-icon svg { width: 32px; height: 32px; stroke: var(--red); stroke-width: 1.5; fill: none; }
   .service-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 1.2rem; line-height: 1.25; }
