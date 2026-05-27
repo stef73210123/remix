@@ -237,11 +237,11 @@
 
   /* ─── BOOK ─── */
   #book { background: var(--black); }
-  .book-grid { display: grid; grid-template-columns: 380px 1fr; gap: 5rem; align-items: start; margin-bottom: 6rem; }
+  .book-grid { display: grid; grid-template-columns: 253px 1fr; gap: 5rem; align-items: start; margin-bottom: 6rem; }
   .book-cover-wrap {
     position: relative;
     width: 100%;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: 3 / 4;
   }
   .book-cover-wrap::before {
     content: ''; position: absolute; inset: -30px; pointer-events: none;
@@ -447,7 +447,7 @@
     .expertise-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
     .principal-top { grid-template-columns: 280px 1fr; gap: 3rem; margin-bottom: 3rem; }
     .logo-grid { grid-template-columns: repeat(5, 1fr); }
-    .book-grid { grid-template-columns: 280px 1fr; gap: 3rem; margin-bottom: 4rem; }
+    .book-grid { grid-template-columns: 187px 1fr; gap: 3rem; margin-bottom: 4rem; }
     .testimonials-track { grid-auto-columns: minmax(320px, 1fr); }
     footer { padding: 2rem; }
   }
@@ -485,7 +485,7 @@
     .headshot { max-width: 280px; margin: 0 auto; }
     .principal-content .section-desc { font-size: 0.95rem; }
     .book-grid { grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 4rem; }
-    .book-cover-wrap { max-width: 260px; margin: 0 auto; }
+    .book-cover-wrap { max-width: 173px; margin: 0 auto; }
     .book-title { font-size: 2rem; }
     .book-subtitle { font-size: 1.05rem; }
     .book-pitch { font-size: 0.95rem; }
@@ -986,7 +986,7 @@
     });
   });
 
-  // Testimonials carousel — scroll-snap with prev/next buttons
+  // Testimonials carousel — scroll-snap with prev/next + auto-advance
   (function() {
     const track = document.getElementById('testimonialsTrack');
     const prev = document.getElementById('testPrev');
@@ -999,8 +999,35 @@
       const gap = parseFloat(styles.columnGap || styles.gap || '0');
       return firstCard.getBoundingClientRect().width + gap;
     }
+    function advance() {
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      if (atEnd) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: step(), behavior: 'smooth' });
+      }
+    }
     prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
     next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+
+    // Auto-advance every 7s, pause on hover/focus and when user manually navigates.
+    // Respect prefers-reduced-motion for accessibility.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+    let timer = setInterval(advance, 7000);
+    function pause() { if (timer) { clearInterval(timer); timer = null; } }
+    function resume() { if (!timer) timer = setInterval(advance, 7000); }
+    [track, prev, next].forEach(el => {
+      el.addEventListener('mouseenter', pause);
+      el.addEventListener('mouseleave', resume);
+      el.addEventListener('focusin', pause);
+      el.addEventListener('focusout', resume);
+    });
+    // Pause briefly when user clicks nav buttons (so they can read)
+    [prev, next].forEach(btn => btn.addEventListener('click', () => {
+      pause();
+      setTimeout(resume, 12000);
+    }));
   })();
 
   // Contour lines — topographic / terrain map style
