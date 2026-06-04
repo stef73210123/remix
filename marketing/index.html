@@ -374,6 +374,10 @@
     text-transform: uppercase; border-radius: 3px; cursor: pointer; transition: background 0.3s ease;
   }
   .form-submit:hover { background: var(--red-light); }
+  .form-submit:disabled { opacity: 0.6; cursor: default; }
+  .form-status { margin-top: 1rem; font-size: 0.85rem; min-height: 1.2em; transition: color 0.3s ease; }
+  .form-status.success { color: #6bbf6b; }
+  .form-status.error { color: var(--red-light); }
 
   .contact-meta { margin-top: 3rem; display: flex; justify-content: center; gap: 3rem; }
   .contact-meta a {
@@ -915,7 +919,13 @@
   <div class="section-tag">Get in Touch</div>
   <h2 class="section-title">Let's talk about your next opportunity</h2>
   <p class="section-desc">Whether you're sourcing a deal, planning a development, or looking to leverage technology across your portfolio — we'd like to hear from you.</p>
-  <form class="contact-form" action="https://formspree.io/f/placeholder" method="POST">
+  <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+    <!-- Web3Forms: get a free access key at https://web3forms.com (emailed instantly). Replace the value below. -->
+    <input type="hidden" name="access_key" value="b06fe5f5-9bae-4fcd-9599-ef08b776e05d">
+    <input type="hidden" name="subject" value="New contact form submission — Remix Properties">
+    <input type="hidden" name="from_name" value="Remix Properties Website">
+    <!-- Honeypot: bots fill this, humans can't see it -->
+    <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none;" aria-hidden="true">
     <div class="form-row-double">
       <div><label class="form-label" for="name">Name</label><input class="form-input" type="text" id="name" name="name" placeholder="Your name" required></div>
       <div><label class="form-label" for="company">Company</label><input class="form-input" type="text" id="company" name="company" placeholder="Your company"></div>
@@ -939,6 +949,7 @@
       <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your project or opportunity..." required></textarea>
     </div>
     <button type="submit" class="form-submit">Send Message</button>
+    <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
   </form>
 </section>
 
@@ -1180,6 +1191,42 @@
     } else {
       window.addEventListener('load', function() { setTimeout(goToBook, 120); });
     }
+  })();
+
+  // Contact form — submit to Web3Forms via AJAX, show inline status
+  (function () {
+    var form = document.getElementById('contact-form');
+    if (!form) return;
+    var status = document.getElementById('form-status');
+    var submitBtn = form.querySelector('.form-submit');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      status.className = 'form-status';
+      status.textContent = 'Sending…';
+      submitBtn.disabled = true;
+      var data = new FormData(form);
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: data
+      })
+        .then(function (res) { return res.json().then(function (json) { return { ok: res.ok, json: json }; }); })
+        .then(function (result) {
+          if (result.ok && result.json.success) {
+            status.className = 'form-status success';
+            status.textContent = 'Thanks — your message has been sent. We’ll be in touch shortly.';
+            form.reset();
+          } else {
+            status.className = 'form-status error';
+            status.textContent = (result.json && result.json.message) || 'Something went wrong. Please email us directly.';
+          }
+        })
+        .catch(function () {
+          status.className = 'form-status error';
+          status.textContent = 'Network error. Please try again or email us directly.';
+        })
+        .finally(function () { submitBtn.disabled = false; });
+    });
   })();
 </script>
 
