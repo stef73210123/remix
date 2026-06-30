@@ -2,52 +2,23 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyJWT } from '@/lib/auth/jwt'
 
 /**
- * Platform middleware (renamed from proxy.ts so Next.js actually runs it).
+ * Auth middleware (renamed from proxy.ts so Next.js actually runs it).
  *
- * Host-aware:
- *  - atlas.remix.properties → locked down to the Cesium map + supporting
- *    routes (everything else 404s), preserving the standalone Atlas surface.
- *  - all other hosts (e.g. remix.properties) → full portal app, with
- *    /portal, /deal-room, and /admin gated behind the circular_session JWT.
+ * Gates /portal, /deal-room, and /admin behind the circular_session JWT and
+ * injects the authenticated user's identity into request headers for server
+ * components. Applies on every host that serves the app (so /admin works
+ * wherever the app is deployed, including atlas and the base domain).
  *
- * In both cases the authenticated user's identity is injected into request
- * headers for server components.
+ * NOTE: the old proxy.ts also contained an atlas-only lockdown (404 everything
+ * except /map). That is intentionally NOT enabled here, because atlas is
+ * currently the only domain serving this app — locking it down would make
+ * /admin unreachable. Re-introduce a host check only once the base domain
+ * (remix.properties) is pointed at this project.
  */
-
-const ATLAS_ALLOWED_PREFIXES = [
-  '/map',
-  '/api/',
-  '/cesium',
-  '/auth',
-  '/login',
-  '/forgot-password',
-]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // Allow static assets and Next.js internals
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff2?|ttf|css|js|map|json)$/)
-  ) {
-    return NextResponse.next()
-  }
-
-  const host = req.headers.get('host') || ''
-  const isAtlas = host.startsWith('atlas.')
-
-  // Atlas subdomain: restrict to the map platform only
-  if (isAtlas) {
-    if (pathname === '/') {
-      return NextResponse.redirect(new URL('/map', req.url))
-    }
-    if (!ATLAS_ALLOWED_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
-      return new NextResponse('Not Found', { status: 404 })
-    }
-  }
-
-  // Auth gating for protected routes (all hosts)
   const token = req.cookies.get('circular_session')?.value
   const user = token ? await verifyJWT(token) : null
 
@@ -85,5 +56,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/portal/:path*', '/deal-room/:path*', '/admin/:path*', '/api/:path*'],
 }
