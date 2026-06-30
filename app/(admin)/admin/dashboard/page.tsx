@@ -35,7 +35,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ExternalLink, AlertTriangle } from 'lucide-react'
+import Link from 'next/link'
+import { ExternalLink, AlertTriangle, Map as MapIcon } from 'lucide-react'
 
 type Tier = 'A' | 'B' | 'C'
 
@@ -248,14 +249,24 @@ export default function OpportunitiesDashboardPage() {
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Opportunities Dashboard
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Government RFP &amp; consulting opportunities from the NYS Contract
-          Reporter, matched to the firm&apos;s development and PropTech profiles.
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Opportunities Dashboard
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Government RFP &amp; consulting opportunities from the NYS Contract
+            Reporter, matched to the firm&apos;s development and PropTech
+            profiles.
+          </p>
+        </div>
+        <Link
+          href="/admin/atlas"
+          className="inline-flex shrink-0 items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          <MapIcon className="size-4" />
+          Open Atlas
+        </Link>
       </div>
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">

@@ -2,14 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyJWT } from '@/lib/auth/jwt'
 
 /**
- * Atlas platform proxy
+ * Platform middleware (renamed from proxy.ts so Next.js actually runs it).
  *
- * Deployed to atlas.remix.properties — serves only the Cesium 3D map
- * and supporting API routes. Blocks deal-room, portal, admin, and
- * public pages. Also handles auth gating for protected routes.
+ * Host-aware:
+ *  - atlas.remix.properties → locked down to the Cesium map + supporting
+ *    routes (everything else 404s), preserving the standalone Atlas surface.
+ *  - all other hosts (e.g. remix.properties) → full portal app, with
+ *    /portal, /deal-room, and /admin gated behind the circular_session JWT.
+ *
+ * In both cases the authenticated user's identity is injected into request
+ * headers for server components.
  */
 
-const ALLOWED_PREFIXES = [
+const ATLAS_ALLOWED_PREFIXES = [
   '/map',
   '/api/',
   '/cesium',
@@ -18,7 +23,7 @@ const ALLOWED_PREFIXES = [
   '/forgot-password',
 ]
 
-export async function proxy(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   // Allow static assets and Next.js internals
@@ -29,17 +34,20 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // Root → redirect to /map
-  if (pathname === '/') {
-    return NextResponse.redirect(new URL('/map', req.url))
+  const host = req.headers.get('host') || ''
+  const isAtlas = host.startsWith('atlas.')
+
+  // Atlas subdomain: restrict to the map platform only
+  if (isAtlas) {
+    if (pathname === '/') {
+      return NextResponse.redirect(new URL('/map', req.url))
+    }
+    if (!ATLAS_ALLOWED_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+      return new NextResponse('Not Found', { status: 404 })
+    }
   }
 
-  // Block routes that aren't part of the atlas platform
-  if (!ALLOWED_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
-    return new NextResponse('Not Found', { status: 404 })
-  }
-
-  // Auth gating for protected routes
+  // Auth gating for protected routes (all hosts)
   const token = req.cookies.get('circular_session')?.value
   const user = token ? await verifyJWT(token) : null
 
@@ -56,7 +64,10 @@ export async function proxy(req: NextRequest) {
   }
 
   if (pathname.startsWith('/admin')) {
-    if (!user || user.role !== 'admin') {
+    if (!user) {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+    if (user.role !== 'admin') {
       return NextResponse.redirect(new URL('/portal', req.url))
     }
   }
@@ -67,7 +78,7 @@ export async function proxy(req: NextRequest) {
     headers.set('x-user-email', user.email)
     headers.set('x-user-role', user.role)
     headers.set('x-user-name', user.name)
-    headers.set('x-user-assets', user.asset_access.join(','))
+    headers.set('x-user-assets', (user.asset_access || []).join(','))
   }
 
   return NextResponse.next({ request: { headers } })
