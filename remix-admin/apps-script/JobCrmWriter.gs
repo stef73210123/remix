@@ -85,7 +85,33 @@ function doPost(e) {
   }
 }
 
-// Optional: quick manual check that the deployment works.
-function doGet() {
-  return _json({ ok: true, service: 'JobCrmWriter' });
+/**
+ * Read endpoint. With ?secret=<SECRET> it returns all CRM rows as JSON so the
+ * admin can read the sheet live WITHOUT the sheet being shared publicly (the
+ * script runs as the owner). Without the secret it's just a health check.
+ */
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  if (p.secret !== SECRET) {
+    return _json({ ok: true, service: 'JobCrmWriter' });
+  }
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var sheet = ss.getSheets()[0];
+  var data = sheet.getDataRange().getValues();
+  var rows = [];
+  for (var i = 1; i < data.length; i++) {
+    var firm = String(data[i][1] || '').trim();
+    if (!firm) continue;
+    rows.push({
+      category: String(data[i][0] || '').trim(),
+      firm: firm,
+      tier: String(data[i][2] || '').trim(),
+      status: String(data[i][3] || '').trim(),
+      email: String(data[i][4] || '').trim(),
+      city: String(data[i][5] || '').trim(),
+      contact: String(data[i][6] || '').trim(),
+      web: String(data[i][7] || '').trim()
+    });
+  }
+  return _json({ rows: rows });
 }
