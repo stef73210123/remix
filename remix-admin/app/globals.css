@@ -204,3 +204,16 @@ th {
   color: #86efac;
   font-size: 13px;
 }
+
+@media (max-width: 860px) {
+  .hidden-narrow {
+    display: none;
+  }
+}
+
+code {
+  background: var(--panel-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+}
