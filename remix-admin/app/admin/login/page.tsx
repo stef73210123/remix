@@ -39,10 +39,8 @@ export default function LoginPage() {
           src="https://remix-admin-omega.vercel.app/remix-wordmark.png"
           alt="Remix Properties"
           className="wordmark"
+          style={{ margin: '0 auto 28px' }}
         />
-        <p className="muted" style={{ margin: '6px 0 24px', fontSize: 13 }}>
-          Properties — Admin
-        </p>
 
         <label className="label" htmlFor="email">
           Email
