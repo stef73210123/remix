@@ -17,4 +17,6 @@ const nextConfig: NextConfig = {
   assetPrefix: 'https://remix-admin-omega.vercel.app',
 }
 
+// build: rebuild trigger after disabling "include files outside root directory"
+
 export default nextConfig
