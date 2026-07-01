@@ -1,31 +1,16 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import RaiseProgressBar from '@/components/deal-room/RaiseProgressBar'
 import DocRenderer from '@/components/shared/DocRenderer'
+import PlatformDetail from '@/components/shared/PlatformDetail'
 import { getPlatformContent } from '@/lib/gdocs/platform'
 import { getSectionHtml } from '@/lib/gdocs/parser'
-import { getAssetConfig } from '@/lib/sheets/config'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  // Fetch in parallel, fail gracefully
-  const [platformContent, lfConfig, wotConfig, cpConfig] = await Promise.allSettled([
-    getPlatformContent(),
-    getAssetConfig('livingstonfarm'),
-    getAssetConfig('wrenofthewoods'),
-    getAssetConfig('circularplatform'),
-  ])
-
-  const platform = platformContent.status === 'fulfilled' ? platformContent.value : null
-  const configs = {
-    livingstonfarm: lfConfig.status === 'fulfilled' ? lfConfig.value : null,
-    wrenofthewoods: wotConfig.status === 'fulfilled' ? wotConfig.value : null,
-    circularplatform: cpConfig.status === 'fulfilled' ? cpConfig.value : null,
-  }
+  const platform = await getPlatformContent().catch(() => null)
 
   const aboutHtml = platform ? getSectionHtml(platform, 'About') : ''
   const philosophyHtml = platform ? getSectionHtml(platform, 'Investment Philosophy') : ''
@@ -66,11 +51,6 @@ export default async function HomePage() {
             Scalable, carbon-positive agritourism hospitality platform with institutional-grade returns.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/assets/circularplatform">
-              <button className="border border-white text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
-                Explore the Platform
-              </button>
-            </Link>
             <Link href="/request-access">
               <button className="border border-white text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
                 Request Deal Room Access
@@ -79,6 +59,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Platform — consolidated from /assets/circularplatform, below the hero */}
+      <PlatformDetail />
 
       {/* About */}
       {aboutHtml && (
@@ -89,64 +72,6 @@ export default async function HomePage() {
           </div>
         </section>
       )}
-
-      {/* Current Offering — single consolidated listing */}
-      <section className="border-b bg-muted/20">
-        <div className="container mx-auto max-w-4xl px-4 py-16">
-          <h2 className="text-2xl font-light tracking-widest uppercase mb-2" style={{ fontFamily: 'var(--font-josefin)' }}>Current Offering</h2>
-          <p className="text-muted-foreground mb-8">Active capital raise open to accredited investors.</p>
-          {(() => {
-            const cfg = configs.circularplatform
-            return (
-              <Card className="flex flex-col">
-                <CardHeader>
-                  <CardTitle className="text-2xl">Circular</CardTitle>
-                  {cfg && (
-                    <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mt-1">
-                      <span>{cfg.asset_type}</span>
-                      <span>·</span>
-                      <span>{cfg.location}</span>
-                    </div>
-                  )}
-                </CardHeader>
-                <CardContent className="flex flex-col gap-6 flex-1">
-                  {cfg && (
-                    <>
-                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 text-sm">
-                        <div>
-                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Target IRR</div>
-                          <div className="text-xl font-semibold">{cfg.target_irr}</div>
-                        </div>
-                        <div>
-                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Multiple</div>
-                          <div className="text-xl font-semibold">{cfg.target_multiple}</div>
-                        </div>
-                        <div>
-                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Hold</div>
-                          <div className="text-xl font-semibold">{cfg.hold_period}</div>
-                        </div>
-                        <div>
-                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Status</div>
-                          <div className="text-xl font-semibold">{cfg.status}</div>
-                        </div>
-                      </div>
-                      <RaiseProgressBar
-                        raiseToDate={cfg.raise_to_date}
-                        raiseTarget={cfg.raise_target}
-                      />
-                    </>
-                  )}
-                  <div className="mt-auto pt-2">
-                    <Link href="/assets/circularplatform">
-                      <Button variant="outline" className="w-full sm:w-auto">View Platform</Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })()}
-        </div>
-      </section>
 
       {/* Investment Philosophy */}
       {philosophyHtml && (

@@ -46,12 +46,6 @@ export default function Navbar({ userRole }: NavbarProps) {
         <nav className="hidden md:flex items-center gap-6">
           {!userRole && (
             <>
-              <Link href="/assets/circularplatform" className={linkClass(pathname.includes('circularplatform'))} style={{ fontFamily: 'var(--font-josefin)' }}>
-                Platform
-              </Link>
-              <Link href="/learn" className={linkClass(pathname.startsWith('/learn'))} style={{ fontFamily: 'var(--font-josefin)' }}>
-                Learn
-              </Link>
               <Link href="/login">
                 <button className="border border-white/60 text-white text-xs tracking-widest uppercase px-5 py-2 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
                   Login
@@ -104,12 +98,6 @@ export default function Navbar({ userRole }: NavbarProps) {
           <div className="container mx-auto max-w-7xl px-6 py-4 flex flex-col gap-4">
             {!userRole && (
               <>
-                <Link href="/assets/circularplatform" className={linkClass(pathname.includes('circularplatform'))} style={{ fontFamily: 'var(--font-josefin)' }} onClick={() => setMobileOpen(false)}>
-                  Platform
-                </Link>
-                <Link href="/learn" className={linkClass(pathname.startsWith('/learn'))} style={{ fontFamily: 'var(--font-josefin)' }} onClick={() => setMobileOpen(false)}>
-                  Learn
-                </Link>
                 <div className="flex flex-col gap-3 pt-2">
                   <Link href="/login" onClick={() => setMobileOpen(false)}>
                     <button className="w-full border border-white/60 text-white text-xs tracking-widest uppercase px-5 py-2.5 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
