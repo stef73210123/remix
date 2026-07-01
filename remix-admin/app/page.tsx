@@ -6,6 +6,6 @@ import DashboardClient from './DashboardClient'
 export default async function DashboardPage() {
   const store = await cookies()
   const session = await verifySession(store.get(SESSION_COOKIE)?.value)
-  if (!session) redirect('/admin/login')
+  if (!session) redirect('/login')
   return <DashboardClient userName={session.name} />
 }
