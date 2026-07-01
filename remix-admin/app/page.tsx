@@ -6,6 +6,7 @@ import DashboardClient from './DashboardClient'
 export default async function DashboardPage() {
   const store = await cookies()
   const session = await verifySession(store.get(SESSION_COOKIE)?.value)
-  if (!session) redirect('/login')
+  // On Vercel, redirect() does not prepend basePath, so target the full path.
+  if (!session) redirect('/admin/login')
   return <DashboardClient userName={session.name} />
 }
