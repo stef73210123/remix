@@ -11,7 +11,7 @@ const ATLAS_SRC = 'https://atlas.remix.properties/map'
 export default async function AtlasPage() {
   const store = await cookies()
   const session = await verifySession(store.get(SESSION_COOKIE)?.value)
-  if (!session) redirect('/login')
+  if (!session) redirect('/admin/login')
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
