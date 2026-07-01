@@ -6,7 +6,10 @@ import { verifySession, SESSION_COOKIE } from '@/lib/auth'
  * Atlas — the CesiumJS 3D map, behind the Remix admin login.
  * Embeds the existing map deployment; swap the iframe src if the map moves.
  */
-const ATLAS_SRC = 'https://atlas.remix.properties/map'
+// Pinned internal Vercel URL for the remix-atlas project.
+// Do NOT switch to the atlas.remix.properties custom domain — that domain
+// 301-redirects to /admin/atlas, which would loop this iframe through login.
+const ATLAS_SRC = 'https://remix-atlas.vercel.app/map'
 
 export default async function AtlasPage() {
   const store = await cookies()

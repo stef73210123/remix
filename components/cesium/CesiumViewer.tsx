@@ -80,6 +80,7 @@ export default function CesiumViewerComponent() {
   const [apiListings, setApiListings] = useState<Property[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
   // Track active imagery layers for add/remove
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const activeImageryRef = useRef<Map<string, any>>(new Map());
@@ -214,6 +215,24 @@ export default function CesiumViewerComponent() {
 
       viewerRef.current = viewer;
 
+      // Cesium's Viewer captures container dimensions at construction time.
+      // When mounted inside an iframe, a delayed layout, or a container that
+      // grows after init (panels animating, DevTools open/close, iframe height
+      // finalizing), the canvas stays pinned to the initial (often tiny) size.
+      // (1) resize once now so the canvas matches the finalized layout, and
+      // (2) observe the container so any subsequent size change re-fits.
+      viewer.resize();
+
+      if (containerRef.current && typeof ResizeObserver !== "undefined") {
+        const obs = new ResizeObserver(() => {
+          if (viewerRef.current && !viewerRef.current.isDestroyed()) {
+            viewerRef.current.resize();
+          }
+        });
+        obs.observe(containerRef.current);
+        resizeObserverRef.current = obs;
+      }
+
       // Set initial camera view to Washington DC
       viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(
@@ -328,6 +347,10 @@ export default function CesiumViewerComponent() {
     init();
 
     return () => {
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect();
+        resizeObserverRef.current = null;
+      }
       if (viewerRef.current && !viewerRef.current.isDestroyed()) {
         viewerRef.current.destroy();
         viewerRef.current = null;
