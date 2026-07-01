@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { RequestAccessDialog } from '@/components/access/RequestAccessDialog'
 
 export default function Footer() {
   return (
@@ -10,9 +10,11 @@ export default function Footer() {
             <span className="text-xs text-muted-foreground">circular.enterprises</span>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <Link href="/request-access" className="hover:text-foreground transition-colors">
-              Request Access
-            </Link>
+            <RequestAccessDialog>
+              <button className="hover:text-foreground transition-colors">
+                Request Access
+              </button>
+            </RequestAccessDialog>
             <a href="mailto:info@circular.enterprises" className="hover:text-foreground transition-colors">
               Contact
             </a>
