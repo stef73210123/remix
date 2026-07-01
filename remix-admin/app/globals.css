@@ -1,16 +1,20 @@
 :root {
-  --bg: #0b0d10;
-  --panel: #14181d;
-  --panel-2: #1b2027;
-  --border: #2a313a;
-  --text: #e7ebf0;
-  --muted: #97a1ad;
-  --primary: #0e7c86;
-  --primary-hover: #0b656d;
-  --a: #16a34a;
-  --b: #2563eb;
-  --c: #6b7280;
-  --warn: #f59e0b;
+  /* Remix brand palette (matches remix.properties) */
+  --bg: #0a0a0a;
+  --off-black: #141414;
+  --panel: #161616;
+  --panel-2: #1c1c1c;
+  --border: #2a2a2a;
+  --text: #fafafa;
+  --muted: #9a9a9a;
+  --primary: #ca615f;
+  --primary-light: #d4767a;
+  --primary-hover: #a34d4b;
+  /* tier accents */
+  --a: #ca615f;
+  --b: #c79a3a;
+  --c: #7a8590;
+  --warn: #f9a825;
 }
 
 * {
@@ -35,7 +39,23 @@ a {
   color: inherit;
 }
 
+/* Animated topographic background */
+.topo-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  /* subtle vignette so content stays legible over the contours */
+  background:
+    radial-gradient(120% 90% at 50% 30%, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 0.55) 100%),
+    var(--bg);
+}
+
 .container {
+  position: relative;
+  z-index: 1;
   max-width: 1040px;
   margin: 0 auto;
   padding: 24px 20px;
@@ -69,11 +89,12 @@ a {
 
 .btn.secondary:hover {
   background: var(--panel-2);
+  border-color: var(--primary);
 }
 
 .input {
   width: 100%;
-  background: var(--panel-2);
+  background: rgba(10, 10, 10, 0.6);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
@@ -84,6 +105,7 @@ a {
 .input:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(202, 97, 95, 0.18);
 }
 
 .card {
@@ -141,9 +163,13 @@ th {
 }
 .badge.C {
   background: var(--c);
+  color: #0a0a0a;
 }
 
+/* Auth screens sit centered over the topo background */
 .auth-wrap {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -153,8 +179,20 @@ th {
 
 .auth-card {
   width: 100%;
-  max-width: 380px;
-  padding: 28px;
+  max-width: 400px;
+  padding: 32px;
+  background: rgba(18, 18, 18, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+.wordmark {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 
 .error {

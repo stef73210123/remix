@@ -34,10 +34,13 @@ export default function LoginPage() {
   return (
     <div className="auth-wrap">
       <form className="card auth-card" onSubmit={onSubmit}>
-        <h1 style={{ margin: '0 0 4px', fontSize: 22, letterSpacing: '0.08em' }}>
-          REMIX
-        </h1>
-        <p className="muted" style={{ margin: '0 0 20px', fontSize: 13 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://remix-admin-omega.vercel.app/remix-wordmark.png"
+          alt="Remix Properties"
+          className="wordmark"
+        />
+        <p className="muted" style={{ margin: '6px 0 24px', fontSize: 13 }}>
           Properties — Admin
         </p>
 

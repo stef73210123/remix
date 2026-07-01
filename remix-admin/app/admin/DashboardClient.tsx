@@ -60,11 +60,14 @@ export default function DashboardClient({ userName }: { userName: string }) {
         }}
       >
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '0.06em' }}>
-            REMIX <span className="muted" style={{ fontWeight: 400 }}>Admin</span>
-          </div>
-          <div className="muted" style={{ fontSize: 13 }}>
-            Signed in as {userName}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://remix-admin-omega.vercel.app/remix-wordmark.png"
+            alt="Remix Properties"
+            style={{ height: 34, width: 'auto', display: 'block' }}
+          />
+          <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>
+            Admin · Signed in as {userName}
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
