@@ -1,6 +1,6 @@
 import { SignJWT, jwtVerify } from 'jose'
 import bcrypt from 'bcryptjs'
-import { redis } from './redis'
+import { getRedis } from './redis'
 
 /** Session cookie name — deliberately distinct from Circular's. */
 export const SESSION_COOKIE = 'remix_admin_session'
@@ -51,11 +51,11 @@ function userKey(email: string) {
 }
 
 export async function getUser(email: string): Promise<AdminUser | null> {
-  return (await redis.get<AdminUser>(userKey(email))) ?? null
+  return (await getRedis().get<AdminUser>(userKey(email))) ?? null
 }
 
 export async function saveUser(user: AdminUser): Promise<void> {
-  await redis.set(userKey(user.email), user)
+  await getRedis().set(userKey(user.email), user)
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -77,13 +77,13 @@ function resetKey(token: string) {
 export async function createResetToken(email: string): Promise<string> {
   const token = crypto.randomUUID()
   // 1-hour expiry
-  await redis.set(resetKey(token), email.trim().toLowerCase(), { ex: 60 * 60 })
+  await getRedis().set(resetKey(token), email.trim().toLowerCase(), { ex: 60 * 60 })
   return token
 }
 
 export async function consumeResetToken(token: string): Promise<string | null> {
-  const email = await redis.get<string>(resetKey(token))
+  const email = await getRedis().get<string>(resetKey(token))
   if (!email) return null
-  await redis.del(resetKey(token))
+  await getRedis().del(resetKey(token))
   return email
 }
