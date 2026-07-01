@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { RequestAccessDialog } from '@/components/access/RequestAccessDialog'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -51,11 +52,11 @@ export default function Navbar({ userRole }: NavbarProps) {
                   Login
                 </button>
               </Link>
-              <Link href="/request-access">
+              <RequestAccessDialog>
                 <button className="bg-black text-white text-xs tracking-widest uppercase px-5 py-2 hover:bg-black/80 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
                   Request Access
                 </button>
-              </Link>
+              </RequestAccessDialog>
             </>
           )}
 
@@ -104,11 +105,11 @@ export default function Navbar({ userRole }: NavbarProps) {
                       Login
                     </button>
                   </Link>
-                  <Link href="/request-access" onClick={() => setMobileOpen(false)}>
-                    <button className="w-full bg-black text-white text-xs tracking-widest uppercase px-5 py-2.5 hover:bg-black/80 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
+                  <RequestAccessDialog>
+                    <button onClick={() => setMobileOpen(false)} className="w-full bg-black text-white text-xs tracking-widest uppercase px-5 py-2.5 hover:bg-black/80 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
                       Request Access
                     </button>
-                  </Link>
+                  </RequestAccessDialog>
                 </div>
               </>
             )}

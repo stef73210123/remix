@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { RequestAccessDialog } from '@/components/access/RequestAccessDialog'
 import { marked } from 'marked'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -132,9 +133,9 @@ export default async function AssetPage({
                 </div>
               )}
             </div>
-            <Link href={`/request-access?asset=${slug}`}>
+            <RequestAccessDialog defaultAsset={slug}>
               <Button size="lg" variant={(heroImage || heroVideo) ? 'secondary' : 'default'}>Request Deal Room Access</Button>
-            </Link>
+            </RequestAccessDialog>
           </div>
         </div>
       </section>
@@ -307,9 +308,9 @@ export default async function AssetPage({
           <p className="text-muted-foreground mb-6 text-sm">
             Request access to the deal room for full financial details, the PPM, and investment terms.
           </p>
-          <Link href={`/request-access?asset=${slug}`}>
+          <RequestAccessDialog defaultAsset={slug}>
             <Button size="lg">Request Deal Room Access</Button>
-          </Link>
+          </RequestAccessDialog>
         </div>
       </section>
 

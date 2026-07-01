@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { RequestAccessDialog } from '@/components/access/RequestAccessDialog'
 import { Button } from '@/components/ui/button'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -51,11 +51,11 @@ export default async function HomePage() {
             Scalable, carbon-positive agritourism hospitality platform with institutional-grade returns.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/request-access">
+            <RequestAccessDialog>
               <button className="border border-white text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
                 Request Deal Room Access
               </button>
-            </Link>
+            </RequestAccessDialog>
           </div>
         </div>
       </section>
@@ -100,9 +100,9 @@ export default async function HomePage() {
           <p className="text-muted-foreground mb-6">
             Request access to our deal room for detailed financial information and investment materials.
           </p>
-          <Link href="/request-access">
+          <RequestAccessDialog>
             <Button size="lg">Request Deal Room Access</Button>
-          </Link>
+          </RequestAccessDialog>
         </div>
       </section>
 
