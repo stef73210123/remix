@@ -12,8 +12,19 @@
  * Re-run any time to refresh (e.g. after your daily automation updates the CRM).
  */
 import { Redis } from '@upstash/redis'
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+// Load remix-admin/.env if present, so scheduled/automated runs need no env setup.
+const __dir = path.dirname(fileURLToPath(import.meta.url))
+const envPath = path.join(__dir, '..', '.env')
+if (existsSync(envPath)) {
+  for (const line of readFileSync(envPath, 'utf8').split('\n')) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/)
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
+  }
+}
 
 const CATEGORIES = ['CRE', 'TECH', 'REC', 'AI', 'CONSULT']
 
