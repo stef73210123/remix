@@ -7,6 +7,14 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/admin",
+      "destination": "https://remix-admin-omega.vercel.app/admin"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://remix-admin-omega.vercel.app/admin/:path*"
+    },
+    {
       "source": "/book",
       "destination": "/index.html"
     },
