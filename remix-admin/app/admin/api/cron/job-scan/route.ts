@@ -18,7 +18,7 @@ export const maxDuration = 60
  *
  * Auth: Vercel Cron sends "Authorization: Bearer $CRON_SECRET" automatically
  * when CRON_SECRET is set. A logged-in admin may also trigger it manually
- * (e.g. ?perRun=5) for testing.
+ * (e.g. /admin/api/cron/job-scan?perRun=5) for testing.
  */
 async function authorize(): Promise<boolean> {
   const h = await headers()
