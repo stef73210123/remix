@@ -8,7 +8,6 @@ import DocRenderer from '@/components/shared/DocRenderer'
 import { getPlatformContent } from '@/lib/gdocs/platform'
 import { getSectionHtml } from '@/lib/gdocs/parser'
 import { getAssetConfig } from '@/lib/sheets/config'
-import { ASSETS } from '@/lib/data/assets'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,9 +66,9 @@ export default async function HomePage() {
             Scalable, carbon-positive agritourism hospitality platform with institutional-grade returns.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/assets/livingstonfarm">
+            <Link href="/assets/circularplatform">
               <button className="border border-white text-white text-xs tracking-widest uppercase px-8 py-3 hover:bg-white/10 transition-colors" style={{ fontFamily: 'var(--font-josefin)' }}>
-                Explore Assets
+                Explore the Platform
               </button>
             </Link>
             <Link href="/request-access">
@@ -91,59 +90,61 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Portfolio */}
+      {/* Current Offering — single consolidated listing */}
       <section className="border-b bg-muted/20">
-        <div className="container mx-auto max-w-6xl px-4 py-16">
-          <h2 className="text-2xl font-light tracking-widest uppercase mb-2" style={{ fontFamily: 'var(--font-josefin)' }}>Current Portfolio</h2>
-          <p className="text-muted-foreground mb-8">Active capital raises open to accredited investors.</p>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {ASSETS.map(({ slug, name }) => {
-              const cfg = configs[slug as keyof typeof configs]
-              return (
-                <Card key={slug} className="flex flex-col">
-                  <CardHeader>
-                    <CardTitle className="text-xl">{name}</CardTitle>
-                    {cfg && (
-                      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mt-1">
-                        <span>{cfg.asset_type}</span>
-                        <span>·</span>
-                        <span>{cfg.location}</span>
-                      </div>
-                    )}
-                  </CardHeader>
-                  <CardContent className="flex flex-col gap-4 flex-1">
-                    {cfg && (
-                      <>
-                        <div className="grid grid-cols-3 gap-3 text-sm">
-                          <div>
-                            <div className="text-muted-foreground">Target IRR</div>
-                            <div className="font-semibold">{cfg.target_irr}</div>
-                          </div>
-                          <div>
-                            <div className="text-muted-foreground">Multiple</div>
-                            <div className="font-semibold">{cfg.target_multiple}</div>
-                          </div>
-                          <div>
-                            <div className="text-muted-foreground">Hold</div>
-                            <div className="font-semibold">{cfg.hold_period}</div>
-                          </div>
-                        </div>
-                        <RaiseProgressBar
-                          raiseToDate={cfg.raise_to_date}
-                          raiseTarget={cfg.raise_target}
-                        />
-                      </>
-                    )}
-                    <div className="mt-auto pt-2">
-                      <Link href={`/assets/${slug}`}>
-                        <Button variant="outline" className="w-full">View Asset</Button>
-                      </Link>
+        <div className="container mx-auto max-w-4xl px-4 py-16">
+          <h2 className="text-2xl font-light tracking-widest uppercase mb-2" style={{ fontFamily: 'var(--font-josefin)' }}>Current Offering</h2>
+          <p className="text-muted-foreground mb-8">Active capital raise open to accredited investors.</p>
+          {(() => {
+            const cfg = configs.circularplatform
+            return (
+              <Card className="flex flex-col">
+                <CardHeader>
+                  <CardTitle className="text-2xl">Circular</CardTitle>
+                  {cfg && (
+                    <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mt-1">
+                      <span>{cfg.asset_type}</span>
+                      <span>·</span>
+                      <span>{cfg.location}</span>
                     </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
+                  )}
+                </CardHeader>
+                <CardContent className="flex flex-col gap-6 flex-1">
+                  {cfg && (
+                    <>
+                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 text-sm">
+                        <div>
+                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Target IRR</div>
+                          <div className="text-xl font-semibold">{cfg.target_irr}</div>
+                        </div>
+                        <div>
+                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Multiple</div>
+                          <div className="text-xl font-semibold">{cfg.target_multiple}</div>
+                        </div>
+                        <div>
+                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Hold</div>
+                          <div className="text-xl font-semibold">{cfg.hold_period}</div>
+                        </div>
+                        <div>
+                          <div className="text-muted-foreground text-xs uppercase tracking-wide">Status</div>
+                          <div className="text-xl font-semibold">{cfg.status}</div>
+                        </div>
+                      </div>
+                      <RaiseProgressBar
+                        raiseToDate={cfg.raise_to_date}
+                        raiseTarget={cfg.raise_target}
+                      />
+                    </>
+                  )}
+                  <div className="mt-auto pt-2">
+                    <Link href="/assets/circularplatform">
+                      <Button variant="outline" className="w-full sm:w-auto">View Platform</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })()}
         </div>
       </section>
 
