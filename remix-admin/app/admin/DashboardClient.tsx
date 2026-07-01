@@ -71,8 +71,21 @@ export default function DashboardClient({ userName }: { userName: string }) {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <a className="btn" href="/admin/atlas">
+          <a
+            className="btn"
+            href="https://atlas.remix.properties"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Open Atlas
+          </a>
+          <a
+            className="btn secondary"
+            href="https://investors.circular.enterprises/admin/feed"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Circular Admin
           </a>
           <button className="btn secondary" onClick={logout}>
             Sign out

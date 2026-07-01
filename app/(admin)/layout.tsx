@@ -3,8 +3,6 @@ import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 
 const ADMIN_NAV = [
-  { href: '/admin/dashboard', label: 'Dashboard' },
-  { href: '/admin/atlas', label: 'Atlas' },
   { href: '/admin/feed', label: 'Feed' },
   { href: '/admin/pipeline', label: 'Fundraising' },
   { href: '/admin/investors', label: 'Investors' },
