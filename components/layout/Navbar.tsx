@@ -49,12 +49,6 @@ export default function Navbar({ userRole }: NavbarProps) {
               <Link href="/assets/circularplatform" className={linkClass(pathname.includes('circularplatform'))} style={{ fontFamily: 'var(--font-josefin)' }}>
                 Platform
               </Link>
-              <Link href="/assets/livingstonfarm" className={linkClass(pathname.includes('livingstonfarm'))} style={{ fontFamily: 'var(--font-josefin)' }}>
-                Livingston Farm
-              </Link>
-              <Link href="/assets/wrenofthewoods" className={linkClass(pathname.includes('wrenofthewoods'))} style={{ fontFamily: 'var(--font-josefin)' }}>
-                Wren of the Woods
-              </Link>
               <Link href="/learn" className={linkClass(pathname.startsWith('/learn'))} style={{ fontFamily: 'var(--font-josefin)' }}>
                 Learn
               </Link>
@@ -112,12 +106,6 @@ export default function Navbar({ userRole }: NavbarProps) {
               <>
                 <Link href="/assets/circularplatform" className={linkClass(pathname.includes('circularplatform'))} style={{ fontFamily: 'var(--font-josefin)' }} onClick={() => setMobileOpen(false)}>
                   Platform
-                </Link>
-                <Link href="/assets/livingstonfarm" className={linkClass(pathname.includes('livingstonfarm'))} style={{ fontFamily: 'var(--font-josefin)' }} onClick={() => setMobileOpen(false)}>
-                  Livingston Farm
-                </Link>
-                <Link href="/assets/wrenofthewoods" className={linkClass(pathname.includes('wrenofthewoods'))} style={{ fontFamily: 'var(--font-josefin)' }} onClick={() => setMobileOpen(false)}>
-                  Wren of the Woods
                 </Link>
                 <Link href="/learn" className={linkClass(pathname.startsWith('/learn'))} style={{ fontFamily: 'var(--font-josefin)' }} onClick={() => setMobileOpen(false)}>
                   Learn

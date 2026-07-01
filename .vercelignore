@@ -1,0 +1,4 @@
+# remix-admin/ is a standalone Next.js app (own package.json, next.config, tsconfig).
+# It deploys as its own Vercel project and must not be uploaded into the circular build,
+# where the shared root tsconfig would try to typecheck it and fail on unresolved paths.
+remix-admin/

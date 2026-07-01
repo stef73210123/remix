@@ -21,7 +21,7 @@ import type { AssetSlug } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
-const VALID_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods', 'circularplatform']
+const VALID_SLUGS: AssetSlug[] = ['circularplatform']
 
 const MAP_COORDS: Partial<Record<AssetSlug, { lat: number; lng: number; zoom: number; label: string }>> = {
   livingstonfarm: { lat: 41.901914, lng: -74.837076, zoom: 16, label: 'Livingston Farm' },
@@ -212,10 +212,10 @@ export default async function AssetPage({
             <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-5">Portfolio Holdings</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {holdingSlugs.map((h) => (
-                <Link key={h} href={`/assets/${h}`} className="group rounded-xl border p-5 hover:border-primary/50 hover:bg-muted/30 transition-colors">
-                  <div className="font-semibold group-hover:text-primary transition-colors">{ASSET_NAMES[h]}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{configMap[`${h}_tagline`] || 'View asset details →'}</div>
-                </Link>
+                <div key={h} className="rounded-xl border p-5">
+                  <div className="font-semibold">{ASSET_NAMES[h]}</div>
+                  <div className="text-sm text-muted-foreground mt-1">{configMap[`${h}_tagline`] || ''}</div>
+                </div>
               ))}
             </div>
           </div>
