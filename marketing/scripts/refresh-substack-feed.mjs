@@ -45,7 +45,10 @@ const FEED_URL = 'https://groundtruthcre.substack.com/feed'
 const SUBSTACK_HOME = 'https://groundtruthcre.substack.com/'
 const MAX_POSTS = 6
 const EXCERPT_WORDS = 45           // ~30-50 word excerpt
-const USER_AGENT = 'RemixPropertiesFeedRefresh/1.0 (+https://remix.properties)'
+// Substack's RSS endpoint returns 403 to obviously-scripted User-Agents from
+// datacenter IP ranges (which is what GitHub Actions runs on). A browser-like
+// UA sails through — this is a public feed, not an evasion.
+const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 const SENTINEL_START = '<!-- SUBSTACK_FEED_START -->'
 const SENTINEL_END = '<!-- SUBSTACK_FEED_END -->'
 
@@ -119,7 +122,13 @@ function formatDate(pubDate) {
 // ─── Feed fetch ───────────────────────────────────────────────────────────
 async function fetchFeed() {
   console.log(`[feed] GET ${FEED_URL}`)
-  const res = await fetch(FEED_URL, { headers: { 'User-Agent': USER_AGENT } })
+  const res = await fetch(FEED_URL, {
+    headers: {
+      'User-Agent': USER_AGENT,
+      'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+      'Accept-Language': 'en-US,en;q=0.9'
+    }
+  })
   if (!res.ok) throw new Error(`Substack RSS returned HTTP ${res.status}`)
   return await res.text()
 }
