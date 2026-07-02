@@ -4,6 +4,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import DocRenderer from '@/components/shared/DocRenderer'
 import PlatformDetail from '@/components/shared/PlatformDetail'
+import HoldingsSection from '@/components/shared/HoldingsSection'
 import { getPlatformContent } from '@/lib/gdocs/platform'
 import { getSectionHtml } from '@/lib/gdocs/parser'
 
@@ -62,6 +63,9 @@ export default async function HomePage() {
 
       {/* Platform — consolidated from /assets/circularplatform, below the hero */}
       <PlatformDetail />
+
+      {/* Underlying Holdings — Livingston Farm + Flybrook */}
+      <HoldingsSection />
 
       {/* About */}
       {aboutHtml && (
