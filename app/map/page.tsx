@@ -1,14 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CesiumProvider, useCesium } from "@/components/cesium/CesiumContext";
 import PropertyPanel from "@/components/panels/PropertyPanel";
 import RightPanel from "@/components/panels/RightPanel";
 import MapToolbar from "@/components/toolbar/MapToolbar";
 import SearchBar from "@/components/search/SearchBar";
 import NewsPanel from "@/components/panels/NewsPanel";
-import { Home, ChevronDown, LocateFixed } from "lucide-react";
+import { Home, ChevronDown, LocateFixed, ArrowLeft } from "lucide-react";
 import { REGIONS, getRegion } from "@/lib/data/regions";
 import { parseURLState, updateURL } from "@/lib/url-state";
 import { MOCK_PROPERTIES } from "@/lib/data/properties";
@@ -20,7 +20,7 @@ const CesiumViewer = dynamic(
     loading: () => (
       <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0a]">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-[#0088aa] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <div className="w-8 h-8 border-2 border-[#ca615f] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-sm text-gray-400">Loading 3D viewer...</p>
         </div>
       </div>
@@ -193,18 +193,18 @@ function RegionSelector() {
 
   return (
     <div className="relative group">
-      <button className="flex items-center gap-1 px-3 py-1.5 bg-[#1a2332]/90 rounded-lg shadow-lg border border-white/10 text-white text-xs font-medium hover:bg-[#1a2332] transition-colors">
+      <button className="flex items-center gap-1 px-3 py-1.5 bg-[#161616]/90 rounded-lg shadow-lg border border-white/10 text-white text-xs font-medium hover:bg-[#161616] transition-colors">
         {region.shortName}
         <ChevronDown className="w-3 h-3 text-white/60" />
       </button>
-      <div className="hidden group-hover:block absolute top-full left-0 mt-1 bg-[#1a2332] rounded-lg shadow-xl border border-white/10 min-w-[160px] overflow-hidden z-50">
+      <div className="hidden group-hover:block absolute top-full left-0 mt-1 bg-[#161616] rounded-lg shadow-xl border border-white/10 min-w-[160px] overflow-hidden z-50">
         {REGIONS.map((r) => (
           <button
             key={r.id}
             onClick={() => switchRegion(r.id)}
             className={`w-full text-left px-3 py-2 text-xs transition-colors ${
               r.id === activeRegion
-                ? "bg-[#0088aa] text-white"
+                ? "bg-[#ca615f] text-white"
                 : "text-white/70 hover:bg-white/10 hover:text-white"
             }`}
           >
@@ -213,6 +213,33 @@ function RegionSelector() {
         ))}
       </div>
     </div>
+  );
+}
+
+function BackToDashboard() {
+  const [back, setBack] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("embed") === "1") {
+      // One-time read of the embed target on mount; not a cascading update.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setBack(params.get("back") || "/");
+    }
+  }, []);
+
+  if (!back) return null;
+
+  return (
+    <a
+      href={back}
+      target="_top"
+      className="flex items-center gap-1.5 px-3 py-2 bg-[#161616]/90 rounded-lg shadow-lg border border-white/10 text-white text-xs font-medium hover:bg-[#161616] hover:border-[#ca615f] transition-colors"
+      title="Back to Dashboard"
+    >
+      <ArrowLeft className="w-4 h-4" />
+      <span className="hidden sm:inline">Dashboard</span>
+    </a>
   );
 }
 
@@ -242,7 +269,7 @@ function HomeButton() {
   return (
     <button
       onClick={flyHome}
-      className="p-2 bg-[#1a2332]/90 rounded-lg shadow-lg border border-white/10 text-white hover:bg-[#1a2332] transition-colors"
+      className="p-2 bg-[#161616]/90 rounded-lg shadow-lg border border-white/10 text-white hover:bg-[#161616] transition-colors"
       title="Home"
     >
       <Home className="w-4 h-4" />
@@ -305,7 +332,7 @@ function MyLocationButton() {
   return (
     <button
       onClick={goToMyLocation}
-      className="p-2 bg-[#1a2332]/90 rounded-lg shadow-lg border border-white/10 text-white hover:bg-[#1a2332] transition-colors"
+      className="p-2 bg-[#161616]/90 rounded-lg shadow-lg border border-white/10 text-white hover:bg-[#161616] transition-colors"
       title="My Location"
     >
       <LocateFixed className="w-4 h-4" />
@@ -316,9 +343,10 @@ function MyLocationButton() {
 export default function MapPage() {
   return (
     <CesiumProvider>
-      <div className="relative w-full h-screen overflow-hidden">
+      <div className="relative w-full h-dvh overflow-hidden">
         {/* Top-left controls */}
         <div className="absolute top-3 left-3 z-40 flex items-center gap-2">
+          <BackToDashboard />
           <HomeButton />
           <MyLocationButton />
           <RegionSelector />
@@ -371,8 +399,8 @@ export default function MapPage() {
 
         {/* Cesium attribution */}
         <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1.5">
-          <div className="bg-[#1a2332]/80 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white/70 flex items-center gap-1.5">
-            <span className="font-bold text-[#6cc0e5]">CESIUM</span>
+          <div className="bg-[#161616]/80 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white/70 flex items-center gap-1.5">
+            <span className="font-bold text-[#d4767a]">CESIUM</span>
             <span>&copy; OpenStreetMap</span>
           </div>
         </div>

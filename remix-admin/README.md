@@ -1,4 +1,4 @@
-# Remix Admin (`remix.properties/admin`)
+# Remix Admin (`remixcre.com/admin`)
 
 A standalone Next.js admin app — its own email/password login, completely
 separate from the Circular investment portal. Served under `/admin` (basePath)
@@ -37,8 +37,8 @@ Resend email with a 1-hour token.
 | `UPSTASH_REDIS_REST_URL` | from Upstash |
 | `UPSTASH_REDIS_REST_TOKEN` | from Upstash |
 | `RESEND_API_KEY` | from Resend |
-| `RESEND_FROM` | e.g. `Remix Admin <admin@remix.properties>` |
-| `ADMIN_PUBLIC_URL` | `https://remix.properties` |
+| `RESEND_FROM` | e.g. `Remix Admin <admin@remixcre.com>` |
+| `ADMIN_PUBLIC_URL` | `https://remixcre.com` |
 
 ### 4. Seed the first admin user
 
@@ -47,7 +47,7 @@ From the `remix-admin/` folder locally (uses the same Upstash creds):
 ```bash
 npm install
 UPSTASH_REDIS_REST_URL=... UPSTASH_REDIS_REST_TOKEN=... \
-ADMIN_SEED_EMAIL=you@remix.properties ADMIN_SEED_NAME="Stefan" \
+ADMIN_SEED_EMAIL=you@remixcre.com ADMIN_SEED_NAME="Stefan" \
 ADMIN_SEED_PASSWORD='choose-a-strong-password' \
 npm run seed-admin
 ```
@@ -55,7 +55,7 @@ npm run seed-admin
 You set your own password; it is hashed before storage. Remove the
 `ADMIN_SEED_*` values after running.
 
-### 5. Point `remix.properties/admin` at this app
+### 5. Point `remixcre.com/admin` at this app
 
 In the **marketing** project's `vercel.json`, add a rewrite so the base domain
 proxies `/admin` to this app. Replace `REMIX_ADMIN_DEPLOYMENT` with this app's
@@ -71,12 +71,12 @@ Vercel URL (e.g. `remix-admin.vercel.app`):
 ```
 
 (Keep the existing `/book` and `/blog` rewrites; just add these.) Because the
-browser stays on `remix.properties`, the session cookie attaches to the base
+browser stays on `remixcre.com`, the session cookie attaches to the base
 domain and login works through the proxy.
 
 ### 6. Verify
 
-- `https://remix.properties/admin` → redirects to `/admin/login`
+- `https://remixcre.com/admin` → redirects to `/admin/login`
 - Sign in → dashboard; **Open Atlas** → `/admin/atlas`
 - Forgot password → reset email → set new password
 

@@ -70,13 +70,13 @@ export default function FinancingTab({ property }: { property: Property }) {
   return (
     <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
       {/* Header */}
-      <div className="px-3 py-2 bg-[#1a2332]">
+      <div className="px-3 py-2 bg-[#161616]">
         <h2 className="text-sm font-bold text-white truncate">
           {property.address}
         </h2>
       </div>
 
-      <div className="bg-[#0088aa] px-3 py-1">
+      <div className="bg-[#ca615f] px-3 py-1">
         <span className="text-white text-xs font-bold">
           FINANCIAL OVERVIEW
         </span>
@@ -202,7 +202,7 @@ function MetricCard({
 }) {
   return (
     <div className="bg-white rounded-lg p-2.5 flex flex-col items-center">
-      <div className="text-[#0088aa] mb-1">{icon}</div>
+      <div className="text-[#ca615f] mb-1">{icon}</div>
       <div className="text-[9px] text-gray-500 uppercase">{label}</div>
       <div className="text-sm font-bold text-gray-800">{value}</div>
     </div>

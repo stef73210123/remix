@@ -58,8 +58,8 @@ export default function ComparisonPanel({ onClose }: { onClose: () => void }) {
       <div className="flex-1 overflow-auto">
         <table className="w-full text-[10px]">
           <thead>
-            <tr className="bg-[#1a2332]">
-              <th className="text-left text-white/60 px-2 py-1.5 font-medium sticky left-0 bg-[#1a2332] min-w-[70px]">
+            <tr className="bg-[#161616]">
+              <th className="text-left text-white/60 px-2 py-1.5 font-medium sticky left-0 bg-[#161616] min-w-[70px]">
                 Field
               </th>
               {comparisonProperties.map((prop) => (

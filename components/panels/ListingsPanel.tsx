@@ -132,7 +132,7 @@ export default function ListingsPanel({ onClose }: ListingsPanelProps) {
       {/* Header */}
       <div className="px-3 py-2 bg-[#f0f0f0] border-b flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Building2 className="w-4 h-4 text-[#0088aa]" />
+          <Building2 className="w-4 h-4 text-[#ca615f]" />
           <h3 className="text-sm font-bold text-gray-800">
             BROKERAGE LISTINGS
           </h3>
@@ -242,7 +242,7 @@ export default function ListingsPanel({ onClose }: ListingsPanelProps) {
             <button
               onClick={runScrape}
               disabled={scraping}
-              className="text-[10px] font-medium text-[#0088aa] hover:text-[#006b88] disabled:opacity-50"
+              className="text-[10px] font-medium text-[#ca615f] hover:text-[#a34d4b] disabled:opacity-50"
             >
               Scrape Now
             </button>
@@ -308,13 +308,13 @@ export default function ListingsPanel({ onClose }: ListingsPanelProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="p-1 text-gray-400 hover:text-[#0088aa]"
+                  className="p-1 text-gray-400 hover:text-[#ca615f]"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
               <div className="flex items-center justify-between mt-1">
-                <span className="text-[9px] text-[#0088aa] font-medium">
+                <span className="text-[9px] text-[#ca615f] font-medium">
                   {listing.brokerageName}
                 </span>
                 {listing.broker && (

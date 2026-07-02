@@ -260,9 +260,9 @@ export default function GeoFilterBuilder({
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="px-3 py-2 bg-[#1a2332] flex items-center justify-between">
+      <div className="px-3 py-2 bg-[#161616] flex items-center justify-between">
         <h3 className="text-xs font-bold text-white flex items-center gap-1.5">
-          <MapPin className="w-3.5 h-3.5 text-[#0088aa]" />
+          <MapPin className="w-3.5 h-3.5 text-[#ca615f]" />
           GEO QUERY BUILDER
         </h3>
         <button onClick={onClose} className="text-white/50 hover:text-white text-xs">
@@ -287,7 +287,7 @@ export default function GeoFilterBuilder({
                   className={cn(
                     "text-[9px] font-medium px-2 py-1 rounded capitalize",
                     geoFilter.shape === shape
-                      ? "bg-[#0088aa] text-white"
+                      ? "bg-[#ca615f] text-white"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   )}
                 >
@@ -399,7 +399,7 @@ export default function GeoFilterBuilder({
                         logicalOp: e.target.value as LogicalOp,
                       })
                     }
-                    className="text-[9px] font-bold px-2 py-0.5 rounded border border-[#0088aa] text-[#0088aa] bg-white"
+                    className="text-[9px] font-bold px-2 py-0.5 rounded border border-[#ca615f] text-[#ca615f] bg-white"
                   >
                     <option value="AND">AND</option>
                     <option value="OR">OR</option>
@@ -482,7 +482,7 @@ export default function GeoFilterBuilder({
 
           <button
             onClick={addCondition}
-            className="flex items-center gap-1 text-[10px] text-[#0088aa] font-medium hover:text-[#006b88] mt-1"
+            className="flex items-center gap-1 text-[10px] text-[#ca615f] font-medium hover:text-[#a34d4b] mt-1"
           >
             <Plus className="w-3 h-3" /> Add condition
           </button>
@@ -507,8 +507,8 @@ export default function GeoFilterBuilder({
 
         {/* Results */}
         {resultCount !== null && (
-          <div className="px-3 py-2 bg-[#0088aa]/10 border-t border-[#0088aa]/20">
-            <span className="text-[10px] font-bold text-[#0088aa]">
+          <div className="px-3 py-2 bg-[#ca615f]/10 border-t border-[#ca615f]/20">
+            <span className="text-[10px] font-bold text-[#ca615f]">
               {resultCount} properties found
             </span>
           </div>
@@ -520,7 +520,7 @@ export default function GeoFilterBuilder({
         <button
           onClick={runQuery}
           disabled={querying}
-          className="flex-1 flex items-center justify-center gap-1 bg-[#0088aa] text-white text-xs font-bold py-2 rounded hover:bg-[#006b88] disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex-1 flex items-center justify-center gap-1 bg-[#ca615f] text-white text-xs font-bold py-2 rounded hover:bg-[#a34d4b] disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {querying ? (
             <><Loader2 className="w-3 h-3 animate-spin" /> Running...</>

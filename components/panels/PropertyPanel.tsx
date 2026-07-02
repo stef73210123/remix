@@ -25,7 +25,7 @@ export default function PropertyPanel() {
   return (
     <div className="absolute left-0 top-0 bottom-0 z-30 flex">
       {/* Vertical Tab Strip */}
-      <div className="flex flex-col bg-[#1a2332] border-r border-white/10">
+      <div className="flex flex-col bg-[#161616] border-r border-white/10">
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -34,7 +34,7 @@ export default function PropertyPanel() {
               "px-1 py-4 text-[10px] font-bold tracking-wider transition-colors",
               "[writing-mode:vertical-lr] rotate-180",
               activeTab === tab.id
-                ? "bg-[#0088aa] text-white"
+                ? "bg-[#ca615f] text-white"
                 : "text-white/60 hover:text-white hover:bg-white/10"
             )}
           >

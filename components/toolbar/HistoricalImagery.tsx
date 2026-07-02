@@ -94,7 +94,7 @@ export default function HistoricalImagery() {
 
   return (
     <div className="absolute top-3 right-3 z-30">
-      <div className="bg-[#1a2332]/90 backdrop-blur-sm rounded-lg shadow-lg border border-white/10 px-3 py-2">
+      <div className="bg-[#161616]/90 backdrop-blur-sm rounded-lg shadow-lg border border-white/10 px-3 py-2">
         {/* Header row with toggle */}
         <div className="flex items-center gap-2">
           <button

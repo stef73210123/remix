@@ -165,8 +165,8 @@ export default function FiltersPanel({ onClose }: { onClose: () => void }) {
       {/* Header */}
       <div className="px-4 py-3 bg-white border-b flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal className="w-4 h-4 text-[#2A364A]" />
-          <span className="text-sm font-bold text-[#2A364A] tracking-wide">
+          <SlidersHorizontal className="w-4 h-4 text-[#2a2a2a]" />
+          <span className="text-sm font-bold text-[#2a2a2a] tracking-wide">
             FILTER PROPERTIES
           </span>
         </div>
@@ -201,7 +201,7 @@ export default function FiltersPanel({ onClose }: { onClose: () => void }) {
                   : undefined,
               });
             }}
-            className="bg-[#2A364A] text-white text-xs font-bold px-4 py-1.5 rounded hover:bg-[#1a2332]"
+            className="bg-[#2a2a2a] text-white text-xs font-bold px-4 py-1.5 rounded hover:bg-[#161616]"
           >
             Apply Filters
           </button>
@@ -212,10 +212,10 @@ export default function FiltersPanel({ onClose }: { onClose: () => void }) {
         {/* PARCEL Section */}
         <div className="px-4 py-3 border-b">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-6 h-6 bg-[#2A364A] rounded flex items-center justify-center">
+            <div className="w-6 h-6 bg-[#2a2a2a] rounded flex items-center justify-center">
               <Square className="w-3.5 h-3.5 text-white" />
             </div>
-            <span className="text-sm font-bold text-[#2A364A]">PARCEL</span>
+            <span className="text-sm font-bold text-[#2a2a2a]">PARCEL</span>
           </div>
           <RangeSlider
             label="SIZE"
@@ -360,7 +360,7 @@ export default function FiltersPanel({ onClose }: { onClose: () => void }) {
 
         {/* ZONING DISTRICTS Section */}
         <div className="px-4 py-3 border-b">
-          <h3 className="text-xs font-bold text-[#2A364A] mb-2 tracking-wide">
+          <h3 className="text-xs font-bold text-[#2a2a2a] mb-2 tracking-wide">
             ZONING DISTRICTS
           </h3>
           <p className="text-[10px] text-gray-500 mb-2">Most Common</p>
@@ -437,10 +437,10 @@ export default function FiltersPanel({ onClose }: { onClose: () => void }) {
         {/* BUILDING Section */}
         <div className="px-4 py-3">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-6 h-6 bg-[#2A364A] rounded flex items-center justify-center">
+            <div className="w-6 h-6 bg-[#2a2a2a] rounded flex items-center justify-center">
               <Building2 className="w-3.5 h-3.5 text-white" />
             </div>
-            <span className="text-sm font-bold text-[#2A364A]">BUILDING</span>
+            <span className="text-sm font-bold text-[#2a2a2a]">BUILDING</span>
           </div>
           <RangeSlider
             label="YEAR"

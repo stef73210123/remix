@@ -168,7 +168,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
                 type="checkbox"
                 checked={showBuildings}
                 onChange={() => setShowBuildings(!showBuildings)}
-                className="rounded border-gray-300 text-[#0088aa] w-3 h-3"
+                className="rounded border-gray-300 text-[#ca615f] w-3 h-3"
               />
               <span className="text-[10px] text-gray-700">Show 3D Buildings</span>
             </label>
@@ -182,8 +182,8 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
                   className={cn(
                     "text-[9px] font-medium px-2 py-0.5 rounded border transition-colors",
                     buildingSource === src
-                      ? "bg-[#0088aa] text-white border-[#0088aa]"
-                      : "bg-white text-gray-600 border-gray-300 hover:border-[#0088aa]"
+                      ? "bg-[#ca615f] text-white border-[#ca615f]"
+                      : "bg-white text-gray-600 border-gray-300 hover:border-[#ca615f]"
                   )}
                 >
                   {src === "osm" ? "OSM Buildings" : "Microsoft / Google 3D"}
@@ -200,7 +200,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
               type="checkbox"
               checked={showOsmFootprints}
               onChange={() => setShowOsmFootprints(!showOsmFootprints)}
-              className="rounded border-gray-300 text-[#0088aa] w-3 h-3"
+              className="rounded border-gray-300 text-[#ca615f] w-3 h-3"
             />
             <span className="text-[10px] text-gray-700">
               2D Footprints (zoom in to load)
@@ -218,7 +218,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
               type="checkbox"
               checked={showOsmPlaces}
               onChange={() => setShowOsmPlaces(!showOsmPlaces)}
-              className="rounded border-gray-300 text-[#0088aa] w-3 h-3"
+              className="rounded border-gray-300 text-[#ca615f] w-3 h-3"
             />
             <span className="text-[10px] text-gray-700">
               Show Places (zoom in to load)
@@ -289,14 +289,14 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
         )}
 
         {/* GIS Layer Library */}
-        <div className="px-3 py-1.5 bg-[#1a2332]">
+        <div className="px-3 py-1.5 bg-[#161616]">
           <span className="text-[10px] font-bold text-white uppercase">
             GIS Layer Library
           </span>
         </div>
 
         {/* ─── CENSUS DATA LAYERS ─── */}
-        <div className="px-3 py-1.5 bg-[#1a2332]">
+        <div className="px-3 py-1.5 bg-[#161616]">
           <span className="text-[10px] font-bold text-white uppercase">
             Census Data
           </span>
@@ -347,7 +347,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
         )}
 
         {/* ─── PARCEL DATA LAYERS ─── */}
-        <div className="px-3 py-1.5 bg-[#1a2332]">
+        <div className="px-3 py-1.5 bg-[#161616]">
           <span className="text-[10px] font-bold text-white uppercase">
             Parcel Data
           </span>
@@ -415,7 +415,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
         })}
 
         {/* ─── ZONING LAYERS ─── */}
-        <div className="px-3 py-1.5 bg-[#1a2332]">
+        <div className="px-3 py-1.5 bg-[#161616]">
           <span className="text-[10px] font-bold text-white uppercase">
             Zoning Districts
           </span>
@@ -458,7 +458,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
         })}
 
         {/* ─── ENVIRONMENTAL / GIS LAYERS ─── */}
-        <div className="px-3 py-1.5 bg-[#1a2332]">
+        <div className="px-3 py-1.5 bg-[#161616]">
           <span className="text-[10px] font-bold text-white uppercase">
             Environmental & GIS
           </span>
@@ -556,7 +556,7 @@ function CensusLayerRow({
       <div
         className={cn(
           "w-3 h-3 rounded-sm border-2 flex items-center justify-center",
-          active ? "bg-[#3498db] border-[#3498db]" : "border-gray-300"
+          active ? "bg-[#ca615f] border-[#ca615f]" : "border-gray-300"
         )}
         style={active ? { backgroundColor: catColor, borderColor: catColor } : {}}
       >
@@ -710,7 +710,7 @@ function LayerRow({
       <div
         className={cn(
           "w-3 h-3 rounded-sm border-2 flex items-center justify-center",
-          active ? "border-[#0088aa] bg-[#0088aa]" : "border-gray-300"
+          active ? "border-[#ca615f] bg-[#ca615f]" : "border-gray-300"
         )}
       >
         {active && (
