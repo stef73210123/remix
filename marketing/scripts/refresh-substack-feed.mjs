@@ -41,8 +41,9 @@ const IMG_DIR = existsSync(join(MARKETING_DIR, 'img'))
   ? join(MARKETING_DIR, 'img', 'substack')
   : join(REPO_ROOT, 'img', 'substack')
 
-const FEED_URL = 'https://groundtruthcre.substack.com/feed'
 const SUBSTACK_HOME = 'https://groundtruthcre.substack.com/'
+const FEED_URL = `${SUBSTACK_HOME}feed`
+const ARCHIVE_URL = `${SUBSTACK_HOME}api/v1/archive?limit=6`
 const MAX_POSTS = 6
 const EXCERPT_WORDS = 45           // ~30-50 word excerpt
 // Substack's RSS endpoint returns 403 to obviously-scripted User-Agents from
@@ -120,17 +121,42 @@ function formatDate(pubDate) {
 }
 
 // ─── Feed fetch ───────────────────────────────────────────────────────────
-async function fetchFeed() {
-  console.log(`[feed] GET ${FEED_URL}`)
-  const res = await fetch(FEED_URL, {
+// Two paths: the public RSS feed, and Substack's /api/v1/archive JSON. The RSS
+// endpoint is preferred (richer content) but Substack sometimes returns 403 to
+// requests from datacenter IP ranges (e.g. GitHub Actions runners), so we fall
+// through to the JSON archive endpoint, which is less aggressively firewalled.
+async function tryFetch(url, accept) {
+  console.log(`[feed] GET ${url}`)
+  const res = await fetch(url, {
     headers: {
       'User-Agent': USER_AGENT,
-      'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+      'Accept': accept,
       'Accept-Language': 'en-US,en;q=0.9'
     }
   })
-  if (!res.ok) throw new Error(`Substack RSS returned HTTP ${res.status}`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return await res.text()
+}
+
+async function fetchPosts() {
+  // Preferred: RSS.
+  try {
+    const xml = await tryFetch(FEED_URL, 'application/rss+xml, application/xml, text/xml, */*')
+    const posts = parseFeed(xml)
+    if (posts.length > 0) {
+      console.log(`[feed] RSS parsed ${posts.length} posts`)
+      return posts
+    }
+    console.warn('[feed] RSS returned 0 posts — falling back to archive JSON')
+  } catch (err) {
+    console.warn(`[feed] RSS failed (${err.message}) — falling back to archive JSON`)
+  }
+
+  // Fallback: JSON archive.
+  const body = await tryFetch(ARCHIVE_URL, 'application/json, */*')
+  const posts = parseArchive(body)
+  console.log(`[feed] archive parsed ${posts.length} posts`)
+  return posts
 }
 
 function parseFeed(xml) {
@@ -161,6 +187,26 @@ function parseFeed(xml) {
       isoDate: new Date(rawDate).toISOString().slice(0, 10),
       excerpt,
       remoteImage: image || null
+    }
+  }).filter(p => p.title && p.link)
+
+  return posts.slice(0, MAX_POSTS)
+}
+
+function parseArchive(json) {
+  const rows = JSON.parse(json)
+  const posts = rows.map((row) => {
+    const link = String(row.canonical_url || '')
+    const rawDate = String(row.post_date || '')
+    const rawExcerpt = row.description || row.subtitle || row.search_engine_description || ''
+    return {
+      slug: row.slug ? String(row.slug).toLowerCase() : slugFromUrl(link),
+      title: String(row.title || '').trim(),
+      link,
+      date: formatDate(rawDate),
+      isoDate: (new Date(rawDate).toISOString() || '').slice(0, 10),
+      excerpt: truncateWords(stripHtml(String(rawExcerpt)), EXCERPT_WORDS),
+      remoteImage: row.cover_image || null
     }
   }).filter(p => p.title && p.link)
 
@@ -243,9 +289,17 @@ function replaceSentinelBlock(html, block) {
 
 // ─── Main ─────────────────────────────────────────────────────────────────
 async function main() {
-  const xml = await fetchFeed()
-  const posts = parseFeed(xml)
-  console.log(`[feed] parsed ${posts.length} posts`)
+  let posts
+  try {
+    posts = await fetchPosts()
+  } catch (err) {
+    // Both RSS and archive endpoints failed. Keep the existing content and
+    // exit clean so the scheduled workflow does not spam alerts on transient
+    // Substack outages. Real drift will be caught the next Monday.
+    console.error(`[error] both feed endpoints failed: ${err.message}`)
+    console.error('[error] keeping existing marketing/index.html content')
+    return
+  }
 
   for (const post of posts) {
     post.localImage = await downloadThumbnail(post)
