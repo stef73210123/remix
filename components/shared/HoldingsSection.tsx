@@ -23,7 +23,7 @@ const HOLDINGS: HoldingCard[] = [
     name: 'Flybrook',
     tagline: 'One kitchen, two rooms — downtown Armonk and the farm',
     hero: '/img/holdings/flybrook/flybrook-armonk.jpg',
-    heroAlt: 'Downtown Armonk at dusk — future site of Flybrook Hudson Valley',
+    heroAlt: 'A Flybrook long-table farm dinner at Livingston Farm',
   },
 ]
 
