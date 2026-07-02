@@ -299,6 +299,62 @@
   .book-cta.spotify { background: #1DB954; border-color: #1DB954; color: var(--white); }
   .book-cta.spotify:hover { background: #1ed760; border-color: #1ed760; }
 
+  /* ─── Substack feed ─── */
+  #substack { background: var(--off-black); }
+  .substack-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem;
+  }
+  .substack-card {
+    display: flex; flex-direction: column; background: var(--dark-gray);
+    border: 1px solid var(--mid-gray); border-radius: 4px; overflow: hidden;
+    text-decoration: none; color: var(--white);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .substack-card:hover { transform: translateY(-4px); border-color: var(--red); }
+  .substack-card:hover .arrow-icon { transform: translateX(4px); }
+  .substack-card:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+  .substack-card-thumb {
+    width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+    background: var(--mid-gray); display: block;
+  }
+  .substack-card-thumb-fallback { background: linear-gradient(135deg, var(--mid-gray), var(--dark-gray)); }
+  .substack-card-body { padding: 1.5rem 1.75rem 1.75rem; display: flex; flex-direction: column; flex: 1; }
+  .substack-card-date {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--text-gray); margin-bottom: 0.75rem;
+  }
+  .substack-card-title {
+    font-family: 'DM Serif Display', serif; font-size: 1.35rem; line-height: 1.25;
+    color: var(--white); margin-bottom: 0.9rem; font-weight: 400;
+  }
+  .substack-card-excerpt {
+    font-size: 0.95rem; line-height: 1.6; color: var(--text-gray);
+    font-weight: 300; margin-bottom: 1.25rem; flex: 1;
+  }
+  .substack-card-cta {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--red);
+    display: inline-flex; align-items: center; gap: 0.6rem;
+  }
+  .substack-card-cta .arrow-icon { transition: transform 0.3s ease; display: inline-block; }
+  .substack-footer { text-align: center; }
+  .substack-footer-link {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    color: var(--red); text-decoration: none;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.6rem 0; border-bottom: 1px solid transparent;
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+  .substack-footer-link:hover { color: var(--red-light); border-bottom-color: var(--red-light); }
+  .substack-footer-link .arrow-icon { transition: transform 0.3s ease; display: inline-block; }
+  .substack-footer-link:hover .arrow-icon { transform: translateX(4px); }
+  @media (max-width: 968px) {
+    .substack-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  }
+  @media (max-width: 640px) {
+    .substack-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+
   /* Testimonials carousel */
   .testimonials-wrap { position: relative; }
   .testimonials-header {
@@ -918,6 +974,61 @@
       </article>
     </div>
   </div>
+</section>
+
+<!-- SUBSTACK -->
+<section id="substack" class="fade-in">
+  <div class="geo geo-ring geo-float" style="width:300px;height:300px;top:5%;right:-100px;border-color:rgba(202,97,95,0.06);"></div>
+  <div class="geo geo-cross" style="width:20px;height:20px;top:22%;left:10%;"></div>
+  <div class="section-tag">From the Newsletter</div>
+  <h2 class="section-title">Latest from Ground Truth</h2>
+  <p class="section-desc">Field notes on how technology, capital, and climate are rewiring real estate — updated weekly on Substack.</p>
+
+  <!-- SUBSTACK_FEED_START -->
+    <div class="substack-grid">
+      <a class="substack-card" href="https://groundtruthcre.substack.com/p/two-places-that-survived-what-should" target="_blank" rel="noopener noreferrer" aria-label="Read 'Two Places That Survived What Should Have Killed Them, and What They Mean for the Underwriting' on Substack (opens in new tab)">
+        <img class="substack-card-thumb" src="/img/substack/two-places-that-survived-what-should.jpg" alt="" loading="lazy" width="600" height="315">
+        <div class="substack-card-body">
+          <time class="substack-card-date" datetime="2026-06-18">June 18, 2026</time>
+          <h3 class="substack-card-title">Two Places That Survived What Should Have Killed Them, and What They Mean for the Underwriting</h3>
+          <p class="substack-card-excerpt">Babcock Ranch took a direct Cat 4 hit and kept the lights on. Serenbe turned $4k/acre raw land into $500k 1/4 acre lots. These are not utopias, but operating data points. And the math has caught up.</p>
+          <span class="substack-card-cta">Read <span class="arrow-icon" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+      <a class="substack-card" href="https://groundtruthcre.substack.com/p/ninety-two-percent-of-cre-is-piloting" target="_blank" rel="noopener noreferrer" aria-label="Read 'Ninety-Two Percent of CRE Is Piloting AI. Five Percent Is Achieving Its Goals.' on Substack (opens in new tab)">
+        <img class="substack-card-thumb" src="/img/substack/ninety-two-percent-of-cre-is-piloting.jpg" alt="" loading="lazy" width="600" height="315">
+        <div class="substack-card-body">
+          <time class="substack-card-date" datetime="2026-06-04">June 4, 2026</time>
+          <h3 class="substack-card-title">Ninety-Two Percent of CRE Is Piloting AI. Five Percent Is Achieving Its Goals.</h3>
+          <p class="substack-card-excerpt">The 83% in the middle is where the next decade gets decided. Most of them think AI doesn&#39;t work in real estate. They will be wrong, but they will not be wrong about their implementation.</p>
+          <span class="substack-card-cta">Read <span class="arrow-icon" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+      <a class="substack-card" href="https://groundtruthcre.substack.com/p/the-insurance-market-is-already-underwriting" target="_blank" rel="noopener noreferrer" aria-label="Read 'The Insurance Market Is Already Underwriting Climate. Your Pro Forma Probably Isn&#39;t.' on Substack (opens in new tab)">
+        <img class="substack-card-thumb" src="/img/substack/the-insurance-market-is-already-underwriting.jpg" alt="" loading="lazy" width="600" height="315">
+        <div class="substack-card-body">
+          <time class="substack-card-date" datetime="2026-05-27">May 27, 2026</time>
+          <h3 class="substack-card-title">The Insurance Market Is Already Underwriting Climate. Your Pro Forma Probably Isn&#39;t.</h3>
+          <p class="substack-card-excerpt">The capital markets have already decided what climate means for real estate. The underwriting model is the last thing to catch up.</p>
+          <span class="substack-card-cta">Read <span class="arrow-icon" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+      <a class="substack-card" href="https://groundtruthcre.substack.com/p/why-i-wrote-ground-truth" target="_blank" rel="noopener noreferrer" aria-label="Read 'Why I Wrote Ground Truth' on Substack (opens in new tab)">
+        <img class="substack-card-thumb" src="/img/substack/why-i-wrote-ground-truth.jpg" alt="" loading="lazy" width="600" height="315">
+        <div class="substack-card-body">
+          <time class="substack-card-date" datetime="2026-05-21">May 21, 2026</time>
+          <h3 class="substack-card-title">Why I Wrote Ground Truth</h3>
+          <p class="substack-card-excerpt">Introducing the book — and a Substack about how technology, capital, and climate are reshaping the built environment.</p>
+          <span class="substack-card-cta">Read <span class="arrow-icon" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+    </div>
+    <div class="substack-footer">
+      <a class="substack-footer-link" href="https://groundtruthcre.substack.com/" target="_blank" rel="noopener noreferrer">
+        See all posts on Substack <span class="arrow-icon" aria-hidden="true">→</span>
+      </a>
+    </div>
+    <!-- SUBSTACK_FEED_END -->
 </section>
 
 <!-- CONTACT -->

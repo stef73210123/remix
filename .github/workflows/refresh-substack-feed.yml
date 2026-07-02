@@ -1,0 +1,56 @@
+# Weekly refresh of the Ground Truth Substack feed embedded on the
+# marketing landing page. Runs every Monday at 08:00 America/New_York
+# (13:00 UTC), and can be triggered manually from the GitHub Actions UI.
+#
+# Flow:
+#   1. Check out main
+#   2. Run scripts/refresh-substack-feed.mjs — updates
+#      marketing/index.html between the SUBSTACK_FEED sentinels and
+#      writes any new post thumbnails to marketing/img/substack/
+#   3. Commit and push if anything changed (skip if no diff)
+#
+# `[skip ci]` in the commit message prevents this commit from re-triggering
+# Vercel builds through any other CI pipelines; Vercel itself deploys off
+# main regardless.
+
+name: Refresh Substack feed
+
+on:
+  schedule:
+    # Every Monday at 13:00 UTC (08:00 America/New_York EDT / 09:00 EST)
+    - cron: '0 13 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: refresh-substack-feed
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Refresh Substack feed
+        run: node marketing/scripts/refresh-substack-feed.mjs
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore(marketing): refresh Substack feed [skip ci]'
+          commit_user_name: 'github-actions[bot]'
+          commit_user_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          file_pattern: |
+            marketing/index.html
+            marketing/img/substack/*
