@@ -5,6 +5,30 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "remix.properties"
+        }
+      ],
+      "destination": "https://remixcre.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.remix.properties"
+        }
+      ],
+      "destination": "https://remixcre.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/admin",
