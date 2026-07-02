@@ -44,7 +44,7 @@ export default function CompassControl() {
   return (
     <div
       onClick={resetToNorth}
-      className="bg-[#1a2332]/90 backdrop-blur-sm rounded-full border border-white/10 w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-[#1a2332] transition-colors"
+      className="bg-[#161616]/90 backdrop-blur-sm rounded-full border border-white/10 w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-[#161616] transition-colors"
       title="Reset to North"
     >
       <span

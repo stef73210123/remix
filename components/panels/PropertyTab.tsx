@@ -48,7 +48,7 @@ export default function PropertyTab({ property }: { property: Property }) {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="px-3 py-2 bg-[#1a2332]">
+      <div className="px-3 py-2 bg-[#161616]">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
             <h2 className="text-sm font-bold text-white truncate">
@@ -90,13 +90,13 @@ export default function PropertyTab({ property }: { property: Property }) {
       </div>
 
       {/* Property Section */}
-      <div className="bg-[#0088aa] px-3 py-1">
+      <div className="bg-[#ca615f] px-3 py-1">
         <span className="text-white text-xs font-bold">Property</span>
       </div>
 
       {/* Street View */}
-      <div className="bg-[#2a3444] px-3 py-1">
-        <span className="text-[#0088aa] text-xs font-semibold">
+      <div className="bg-[#1c1c1c] px-3 py-1">
+        <span className="text-[#ca615f] text-xs font-semibold">
           STREET VIEW
         </span>
       </div>
@@ -120,8 +120,8 @@ export default function PropertyTab({ property }: { property: Property }) {
       </div>
 
       {/* Details */}
-      <div className="bg-[#1e2d3d] px-3 py-1.5">
-        <span className="text-[#0088aa] text-xs font-bold">DETAILS</span>
+      <div className="bg-[#1c1c1c] px-3 py-1.5">
+        <span className="text-[#ca615f] text-xs font-bold">DETAILS</span>
       </div>
       <div className="flex-1 overflow-y-auto bg-[#f5f5f5] text-[11px]">
         <div className="divide-y divide-gray-200">
@@ -159,8 +159,8 @@ export default function PropertyTab({ property }: { property: Property }) {
         </div>
 
         {/* Walkability & Transit */}
-        <div className="bg-[#1e2d3d] px-3 py-1.5">
-          <span className="text-[#0088aa] text-xs font-bold">WALKABILITY &amp; TRANSIT</span>
+        <div className="bg-[#1c1c1c] px-3 py-1.5">
+          <span className="text-[#ca615f] text-xs font-bold">WALKABILITY &amp; TRANSIT</span>
         </div>
         {walkData ? (
           <div className="bg-white px-3 py-3">

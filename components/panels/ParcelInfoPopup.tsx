@@ -245,7 +245,7 @@ export default function ParcelInfoPopup({
       style={positionStyle}
       className={cn(
         "z-50 w-[280px] max-h-[320px] overflow-y-auto rounded-lg",
-        "bg-[#1a2332] text-white shadow-xl border border-white/10",
+        "bg-[#161616] text-white shadow-xl border border-white/10",
         "transition-all duration-200 ease-out",
         visible
           ? "opacity-100 translate-y-0"
@@ -253,7 +253,7 @@ export default function ParcelInfoPopup({
       )}
     >
       {/* Header */}
-      <div className="sticky top-0 flex items-center justify-between bg-[#1a2332] px-3 py-2 border-b border-white/10">
+      <div className="sticky top-0 flex items-center justify-between bg-[#161616] px-3 py-2 border-b border-white/10">
         <span className="text-xs font-semibold tracking-wide uppercase text-white/80">
           Parcel Info
         </span>

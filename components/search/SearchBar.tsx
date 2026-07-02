@@ -321,7 +321,7 @@ export default function SearchBar() {
           className={cn(
             "p-2 rounded-lg shadow-lg border transition-colors",
             rightPanel === "filters"
-              ? "bg-[#0088aa] text-white border-[#0088aa]"
+              ? "bg-[#ca615f] text-white border-[#ca615f]"
               : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
           )}
           title="Filters"
@@ -335,7 +335,7 @@ export default function SearchBar() {
           className={cn(
             "p-2 rounded-lg shadow-lg border transition-colors",
             rightPanel === "layers"
-              ? "bg-[#0088aa] text-white border-[#0088aa]"
+              ? "bg-[#ca615f] text-white border-[#ca615f]"
               : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
           )}
           title="Layers"
@@ -349,7 +349,7 @@ export default function SearchBar() {
           className={cn(
             "p-2 rounded-lg shadow-lg border transition-colors",
             rightPanel === "geo-query"
-              ? "bg-[#0088aa] text-white border-[#0088aa]"
+              ? "bg-[#ca615f] text-white border-[#ca615f]"
               : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
           )}
           title="Geo Query Builder"
@@ -363,7 +363,7 @@ export default function SearchBar() {
           className={cn(
             "p-2 rounded-lg shadow-lg border transition-colors",
             rightPanel === "listings"
-              ? "bg-[#0088aa] text-white border-[#0088aa]"
+              ? "bg-[#ca615f] text-white border-[#ca615f]"
               : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
           )}
           title="Brokerage Listings"

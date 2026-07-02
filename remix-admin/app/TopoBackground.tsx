@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 
 /**
  * Animated topographic contour background — matches the moving "topo" hero on
- * remix.properties. Marching-squares contour lines over an evolving noise field,
+ * remixcre.com. Marching-squares contour lines over an evolving noise field,
  * in the Remix brand red (#CA615F) + white. Fixed, full-viewport, behind content.
  */
 export default function TopoBackground() {

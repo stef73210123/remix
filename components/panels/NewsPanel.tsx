@@ -126,10 +126,10 @@ export default function NewsPanel() {
       {/* Header bar */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-4 py-2 bg-[#1a2332]/95 backdrop-blur-sm border-t border-white/10"
+        className="w-full flex items-center justify-between px-4 py-2 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10"
       >
         <div className="flex items-center gap-2">
-          <Newspaper className="w-4 h-4 text-[#0088aa]" />
+          <Newspaper className="w-4 h-4 text-[#ca615f]" />
           <span className="text-xs font-bold text-white">
             REAL ESTATE NEWS
           </span>
@@ -182,7 +182,7 @@ export default function NewsPanel() {
 
       {/* News content - horizontal scrollable cards */}
       {expanded && (
-        <div className="bg-[#111b27]/95 backdrop-blur-sm h-[calc(100%-36px)] overflow-x-auto overflow-y-hidden">
+        <div className="bg-[#0a0a0a]/95 backdrop-blur-sm h-[calc(100%-36px)] overflow-x-auto overflow-y-hidden">
           <div className="flex gap-3 p-3 h-full">
             {loading ? (
               <div className="flex items-center justify-center w-full text-white/50 text-xs">Loading...</div>
@@ -214,10 +214,10 @@ export default function NewsPanel() {
                   {item.summary}
                 </p>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10">
-                  <span className="text-[9px] text-[#0088aa] font-medium">
+                  <span className="text-[9px] text-[#ca615f] font-medium">
                     {item.source}
                   </span>
-                  <ExternalLink className="w-3 h-3 text-white/30 group-hover:text-[#0088aa] transition-colors" />
+                  <ExternalLink className="w-3 h-3 text-white/30 group-hover:text-[#ca615f] transition-colors" />
                 </div>
               </article>
             ))}

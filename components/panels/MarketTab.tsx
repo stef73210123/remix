@@ -39,7 +39,7 @@ export default function MarketTab({ property }: { property: Property }) {
   return (
     <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
       {/* Header */}
-      <div className="px-3 py-2 bg-[#1a2332]">
+      <div className="px-3 py-2 bg-[#161616]">
         <h2 className="text-sm font-bold text-white truncate">
           {property.address}
         </h2>
@@ -58,7 +58,7 @@ export default function MarketTab({ property }: { property: Property }) {
                 e.target.value as (typeof RADIUS_OPTIONS)[number]
               )
             }
-            className="text-xs border border-gray-300 rounded px-2 py-0.5 bg-[#1a2332] text-white"
+            className="text-xs border border-gray-300 rounded px-2 py-0.5 bg-[#161616] text-white"
           >
             {RADIUS_OPTIONS.map((r) => (
               <option key={r} value={r}>
@@ -70,7 +70,7 @@ export default function MarketTab({ property }: { property: Property }) {
       </div>
 
       {/* Demographics Overview */}
-      <div className="bg-[#0088aa] px-3 py-1">
+      <div className="bg-[#ca615f] px-3 py-1">
         <span className="text-white text-xs font-bold">
           DEMOGRAPHICS OVERVIEW
         </span>

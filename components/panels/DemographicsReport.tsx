@@ -176,12 +176,12 @@ export default function DemographicsReport({
   if (loading) {
     return (
       <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
-        <div className="px-3 py-2 bg-[#1a2332]">
+        <div className="px-3 py-2 bg-[#161616]">
           <h2 className="text-sm font-bold text-white truncate">{property.address}</h2>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="flex flex-col items-center gap-2">
-            <div className="w-6 h-6 border-2 border-[#0088aa] border-t-transparent rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[#ca615f] border-t-transparent rounded-full animate-spin" />
             <span className="text-xs text-gray-500">Loading census data...</span>
           </div>
         </div>
@@ -192,7 +192,7 @@ export default function DemographicsReport({
   if (error || !censusData) {
     return (
       <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
-        <div className="px-3 py-2 bg-[#1a2332]">
+        <div className="px-3 py-2 bg-[#161616]">
           <h2 className="text-sm font-bold text-white truncate">{property.address}</h2>
         </div>
         <div className="flex-1 flex items-center justify-center px-4">
@@ -209,7 +209,7 @@ export default function DemographicsReport({
   return (
     <div className="flex flex-col h-full overflow-y-auto bg-[#f5f5f5]">
       {/* Header */}
-      <div className="px-3 py-2 bg-[#1a2332]">
+      <div className="px-3 py-2 bg-[#161616]">
         <h2 className="text-sm font-bold text-white truncate">
           {property.address}
         </h2>
@@ -223,7 +223,7 @@ export default function DemographicsReport({
             onClick={() => setBoundaryType(type)}
             className={`text-[9px] font-medium px-2 py-1 rounded ${
               boundaryType === type
-                ? "bg-[#0088aa] text-white"
+                ? "bg-[#ca615f] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
@@ -248,7 +248,7 @@ export default function DemographicsReport({
               onChange={(e) =>
                 setSelectedRadius(e.target.value as (typeof RADIUS_OPTIONS)[number])
               }
-              className="text-xs border border-gray-300 rounded px-2 py-0.5 bg-[#1a2332] text-white"
+              className="text-xs border border-gray-300 rounded px-2 py-0.5 bg-[#161616] text-white"
             >
               {RADIUS_OPTIONS.map((r) => (
                 <option key={r} value={r}>
@@ -267,7 +267,7 @@ export default function DemographicsReport({
                 onClick={() => setIsochroneMode(mode)}
                 className={`text-[9px] px-2 py-0.5 rounded ${
                   isochroneMode === mode
-                    ? "bg-[#0088aa] text-white"
+                    ? "bg-[#ca615f] text-white"
                     : "bg-gray-100 text-gray-600"
                 }`}
               >
@@ -301,7 +301,7 @@ export default function DemographicsReport({
       </div>
 
       {/* Demographics Overview */}
-      <div className="bg-[#0088aa] px-3 py-1">
+      <div className="bg-[#ca615f] px-3 py-1">
         <span className="text-white text-xs font-bold">DEMOGRAPHICS OVERVIEW</span>
       </div>
 

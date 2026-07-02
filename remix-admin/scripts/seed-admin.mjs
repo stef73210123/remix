@@ -3,7 +3,7 @@
  *
  * Usage (set env vars, then run from the remix-admin/ folder):
  *   UPSTASH_REDIS_REST_URL=... UPSTASH_REDIS_REST_TOKEN=... \
- *   ADMIN_SEED_EMAIL=you@remix.properties ADMIN_SEED_NAME="Stefan" \
+ *   ADMIN_SEED_EMAIL=you@remixcre.com ADMIN_SEED_NAME="Stefan" \
  *   ADMIN_SEED_PASSWORD='your-strong-password' \
  *   npm run seed-admin
  *
