@@ -44,6 +44,11 @@ const IMG_DIR = existsSync(join(MARKETING_DIR, 'img'))
 const SUBSTACK_HOME = 'https://groundtruthcre.substack.com/'
 const FEED_URL = `${SUBSTACK_HOME}feed`
 const ARCHIVE_URL = `${SUBSTACK_HOME}api/v1/archive?limit=6`
+// Existing Vercel serverless proxy on this same site (marketing/api/feed.js).
+// Substack blocks direct fetches from GitHub Actions IP ranges, but Vercel's
+// edge network can reach Substack fine — so we prefer this proxy when running
+// in CI and fall back to Substack directly for local dev.
+const PROXY_URL = 'https://remix.properties/api/feed'
 const MAX_POSTS = 6
 const EXCERPT_WORDS = 45           // ~30-50 word excerpt
 // Substack's RSS endpoint returns 403 to obviously-scripted User-Agents from
@@ -139,7 +144,8 @@ async function tryFetch(url, accept) {
 }
 
 async function fetchPosts() {
-  // Preferred: RSS.
+  // Preferred: Substack RSS (richest content). Works from home ISPs and Vercel
+  // edge but returns 403 to GitHub Actions runner IPs.
   try {
     const xml = await tryFetch(FEED_URL, 'application/rss+xml, application/xml, text/xml, */*')
     const posts = parseFeed(xml)
@@ -152,10 +158,26 @@ async function fetchPosts() {
     console.warn(`[feed] RSS failed (${err.message}) — falling back to archive JSON`)
   }
 
-  // Fallback: JSON archive.
-  const body = await tryFetch(ARCHIVE_URL, 'application/json, */*')
-  const posts = parseArchive(body)
-  console.log(`[feed] archive parsed ${posts.length} posts`)
+  // Fallback 1: Substack /api/v1/archive JSON. Same IP block as RSS from CI,
+  // but the shape is stable so it works fine when the direct RSS is throttled.
+  try {
+    const body = await tryFetch(ARCHIVE_URL, 'application/json, */*')
+    const posts = parseArchive(body)
+    if (posts.length > 0) {
+      console.log(`[feed] archive parsed ${posts.length} posts`)
+      return posts
+    }
+    console.warn('[feed] archive returned 0 posts — falling back to Vercel proxy')
+  } catch (err) {
+    console.warn(`[feed] archive failed (${err.message}) — falling back to Vercel proxy`)
+  }
+
+  // Fallback 2: this site's own /api/feed serverless function (marketing/api/feed.js).
+  // Vercel's edge can reach Substack even when GitHub Actions IPs are blocked,
+  // so this is what actually keeps the cron alive from CI.
+  const body = await tryFetch(PROXY_URL, 'application/json, */*')
+  const posts = parseProxy(body)
+  console.log(`[feed] proxy parsed ${posts.length} posts`)
   return posts
 }
 
@@ -187,6 +209,30 @@ function parseFeed(xml) {
       isoDate: new Date(rawDate).toISOString().slice(0, 10),
       excerpt,
       remoteImage: image || null
+    }
+  }).filter(p => p.title && p.link)
+
+  return posts.slice(0, MAX_POSTS)
+}
+
+function parseProxy(body) {
+  // marketing/api/feed.js emits { posts: [{ title, link, date, excerpt, image }] }
+  const data = JSON.parse(body)
+  const rows = Array.isArray(data?.posts) ? data.posts : []
+  const posts = rows.map((row) => {
+    const link = String(row.link || '')
+    const rawDate = String(row.date || '')
+    // The proxy already stripped HTML and truncated at ~150 chars; re-truncate
+    // to our word budget to keep card excerpts uniform with archive-JSON output.
+    const rawExcerpt = String(row.excerpt || '')
+    return {
+      slug: slugFromUrl(link),
+      title: String(row.title || '').trim(),
+      link,
+      date: formatDate(rawDate),
+      isoDate: (new Date(rawDate).toISOString() || '').slice(0, 10),
+      excerpt: truncateWords(stripHtml(rawExcerpt), EXCERPT_WORDS),
+      remoteImage: row.image || null
     }
   }).filter(p => p.title && p.link)
 
