@@ -237,6 +237,31 @@
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 25%;
     background: linear-gradient(to top, var(--black), transparent);
   }
+  .principal-photo-col { display: flex; flex-direction: column; gap: 1.25rem; }
+  .contact-buttons {
+    display: flex; flex-wrap: wrap; gap: 0.55rem;
+  }
+  .contact-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 0.95rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--light-gray);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.02em;
+    transition: background 0.25s ease, border-color 0.25s ease,
+                color 0.25s ease, transform 0.25s ease;
+  }
+  .contact-btn:hover {
+    background: rgba(202,97,95,0.1);
+    border-color: var(--red);
+    color: var(--white);
+    transform: translateY(-1px);
+  }
+  .contact-btn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .contact-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
   .principal-bottom { margin-top: 0; }
   .logo-row { margin-bottom: 2rem; }
@@ -472,13 +497,6 @@
   .form-status { margin-top: 1rem; font-size: 0.85rem; min-height: 1.2em; transition: color 0.3s ease; }
   .form-status.success { color: #6bbf6b; }
   .form-status.error { color: var(--red-light); }
-
-  .contact-meta { margin-top: 3rem; display: flex; justify-content: center; gap: 3rem; }
-  .contact-meta a {
-    font-size: 0.8rem; color: var(--text-gray); text-decoration: none; letter-spacing: 0.1em;
-    text-transform: uppercase; font-weight: 500; transition: color 0.3s ease;
-  }
-  .contact-meta a:hover { color: var(--white); }
 
   /* ─── FOOTER ─── */
   footer {
@@ -884,8 +902,20 @@
   <div class="geo geo-diamond geo-float" style="width:140px;height:140px;top:12%;right:10%;border-color:rgba(202,97,95,0.04);"></div>
   <div class="geo geo-ring" style="width:350px;height:350px;bottom:-120px;right:-120px;border-color:rgba(255,255,255,0.02);"></div>
   <div class="principal-top">
-    <div class="headshot">
-      <img src="/img/headshot.png" alt="Stefan Martinovic">
+    <div class="principal-photo-col">
+      <div class="headshot">
+        <img src="/img/headshot.png" alt="Stefan Martinovic">
+      </div>
+      <div class="contact-buttons">
+        <a class="contact-btn" href="https://www.linkedin.com/in/stefanmartinovic/" target="_blank" rel="noopener noreferrer" aria-label="Stefan Martinovic on LinkedIn (opens in new tab)">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.451 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.446-2.136 2.941v5.665H9.355V9h3.414v1.561h.046c.477-.9 1.637-1.852 3.37-1.852 3.601 0 4.267 2.37 4.267 5.455v6.288zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.139 0 2.063.925 2.063 2.063 0 1.139-.925 2.065-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+        <a class="contact-btn" href="mailto:sm@remix.properties" aria-label="Email Stefan Martinovic">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          Email me
+        </a>
+      </div>
     </div>
     <div class="principal-content">
       <div class="section-tag">Principal</div>
@@ -1140,9 +1170,6 @@
     <button type="submit" class="form-submit">Send Message</button>
     <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
   </form>
-  <div class="contact-meta">
-    <a href="mailto:sm@remix.properties">sm@remix.properties</a>
-  </div>
 </section>
 
 <!-- FOOTER -->
