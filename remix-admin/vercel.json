@@ -1,5 +1,6 @@
 {
   "crons": [
-    { "path": "/admin/api/cron/job-scan", "schedule": "0 11 * * *" }
+    { "path": "/admin/api/cron/job-scan", "schedule": "0 11 * * *" },
+    { "path": "/admin/api/cron/rfp-ingest", "schedule": "0 10 * * 1" }
   ]
 }
