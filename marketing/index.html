@@ -322,7 +322,7 @@
   .book-cta.spotify:hover { background: #1ed760; border-color: #1ed760; }
 
   /* ─── Substack feed (horizontal scroll) ─── */
-  #substack { background: var(--off-black); overflow-x: hidden; }
+  #substack { background: var(--off-black); }
   .substack-scroll {
     display: flex;
     gap: 1.5rem;
@@ -336,13 +336,10 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* Bleed to the right edge of the section so the row obviously scrolls */
-    margin-right: -4rem;
-    padding-right: 4rem;
   }
   .substack-scroll::-webkit-scrollbar { display: none; }
   .substack-card {
-    flex: 0 0 320px;
+    flex: 0 0 400px;
     scroll-snap-align: start;
     display: flex; flex-direction: column; background: var(--dark-gray);
     border: 1px solid var(--mid-gray); border-radius: 4px; overflow: hidden;
@@ -388,9 +385,8 @@
   .substack-footer-link .arrow-icon { transition: transform 0.3s ease; display: inline-block; }
   .substack-footer-link:hover .arrow-icon { transform: translateX(4px); }
   @media (max-width: 640px) {
-    /* Narrower cards + smaller side-bleed on phones so a card + peek of the next
-       fits on a ~375px viewport. */
-    .substack-scroll { margin-right: -1.5rem; padding-right: 1.5rem; gap: 1rem; }
+    /* Narrower cards on phones so a card + peek of the next fits on ~375px. */
+    .substack-scroll { gap: 1rem; }
     .substack-card { flex: 0 0 260px; }
   }
 
@@ -708,6 +704,10 @@
         <div class="about-stat-value">50,000 SF</div>
         <div class="about-stat-label">Of commercial, retail, residential, and hospitality use planned on 122 development acres in New York.</div>
       </div>
+      <div class="about-stat">
+        <div class="about-stat-value">200,000 SF</div>
+        <div class="about-stat-label">Of planned development across 400 acres.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -898,24 +898,24 @@
       <div class="speaking-block">
         <div class="speaking-label">Speaking Engagements</div>
         <div class="speaking-pills">
-          <span class="speaking-pill">Blueprint</span>
-          <span class="speaking-pill">Inman Connect</span>
-          <span class="speaking-pill">IMN AI in CRE</span>
-          <span class="speaking-pill">The White House</span>
-          <span class="speaking-pill">Georgetown University</span>
-          <span class="speaking-pill">George Washington University</span>
-          <span class="speaking-pill">Harvard University</span>
-          <span class="speaking-pill">ENR FutureTech</span>
-          <span class="speaking-pill">PropTech Genius</span>
-          <span class="speaking-pill">Geospatial World</span>
-          <span class="speaking-pill">The Real Deal</span>
-          <span class="speaking-pill">Bisnow</span>
-          <span class="speaking-pill">ESRI</span>
-          <span class="speaking-pill">PropTech Hackathon</span>
           <span class="speaking-pill">AEC Hackathon</span>
+          <span class="speaking-pill">Bisnow</span>
+          <span class="speaking-pill">Blueprint</span>
           <span class="speaking-pill">Canadian PropTech</span>
-          <span class="speaking-pill">Seton Hall University</span>
           <span class="speaking-pill">College of William & Mary</span>
+          <span class="speaking-pill">ENR FutureTech</span>
+          <span class="speaking-pill">ESRI</span>
+          <span class="speaking-pill">George Washington University</span>
+          <span class="speaking-pill">Georgetown University</span>
+          <span class="speaking-pill">Geospatial World</span>
+          <span class="speaking-pill">Harvard University</span>
+          <span class="speaking-pill">IMN AI in CRE</span>
+          <span class="speaking-pill">Inman Connect</span>
+          <span class="speaking-pill">PropTech Genius</span>
+          <span class="speaking-pill">PropTech Hackathon</span>
+          <span class="speaking-pill">The Real Deal</span>
+          <span class="speaking-pill">Seton Hall University</span>
+          <span class="speaking-pill">The White House</span>
         </div>
       </div>
     </div>
@@ -972,7 +972,7 @@
       <div class="section-tag">New Release</div>
       <h3 class="book-title">Ground Truth</h3>
       <p class="book-subtitle">The Rewiring of Real Estate</p>
-      <p class="book-byline">by Stefan Martinovic, Founder of Livingston Farm</p>
+      <p class="book-byline">by Stefan Martinovic</p>
       <p class="book-pitch">Technology, capital, and climate are remaking the industry from the ground up — from satellite imagery and spatial intelligence to climate adaptation and the new operating stack. A framework for operating in what comes next, not a prediction of it.</p>
       <div class="book-ctas">
         <a class="book-cta" href="https://www.amazon.com/dp/B0H2R6HBY7" target="_blank" rel="noopener noreferrer" aria-label="Get Ground Truth on Amazon (opens in new tab)">
@@ -1044,12 +1044,12 @@
 <section id="substack" class="fade-in">
   <div class="geo geo-ring geo-float" style="width:300px;height:300px;top:5%;right:-100px;border-color:rgba(202,97,95,0.06);"></div>
   <div class="geo geo-cross" style="width:20px;height:20px;top:22%;left:10%;"></div>
-  <div class="section-tag">From the Newsletter</div>
-  <h2 class="section-title">Latest from Ground Truth</h2>
+  <div class="section-tag">Ground Truth</div>
+  <h2 class="section-title">From the Blog</h2>
   <p class="section-desc">Field notes on how technology, capital, and climate are rewiring real estate — updated weekly on Substack.</p>
 
   <!-- SUBSTACK_FEED_START -->
-    <div class="substack-scroll">
+    <div class="substack-scroll" id="substackScroll">
       <a class="substack-card" href="https://groundtruthcre.substack.com/p/two-thirds-dont-play" target="_blank" rel="noopener noreferrer" aria-label="Read 'Two-Thirds Don&#39;t Play' on Substack (opens in new tab)">
         <img class="substack-card-thumb" src="/img/substack/two-thirds-dont-play.jpg" alt="" loading="lazy" width="600" height="315">
         <div class="substack-card-body">
@@ -1271,6 +1271,40 @@
       pause();
       setTimeout(resume, 12000);
     }));
+  })();
+
+  // Substack "From the Blog" rail — same auto-cycle mechanism as Early Praise:
+  // discrete scrollBy on a scroll-snap track every 7s, loop to 0 at end,
+  // pause on hover/focus, respect prefers-reduced-motion.
+  (function() {
+    const track = document.getElementById('substackScroll');
+    if (!track) return;
+    function step() {
+      const firstCard = track.querySelector('.substack-card');
+      if (!firstCard) return track.clientWidth;
+      const styles = window.getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap || '0');
+      return firstCard.getBoundingClientRect().width + gap;
+    }
+    function advance() {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (maxScroll <= 4) return; // Nothing to cycle on very wide viewports.
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      if (atEnd) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: step(), behavior: 'smooth' });
+      }
+    }
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+    let timer = setInterval(advance, 7000);
+    function pause() { if (timer) { clearInterval(timer); timer = null; } }
+    function resume() { if (!timer) timer = setInterval(advance, 7000); }
+    track.addEventListener('mouseenter', pause);
+    track.addEventListener('mouseleave', resume);
+    track.addEventListener('focusin', pause);
+    track.addEventListener('focusout', resume);
   })();
 
   // Contour lines — topographic / terrain map style
