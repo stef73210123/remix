@@ -48,7 +48,7 @@ const ARCHIVE_URL = `${SUBSTACK_HOME}api/v1/archive?limit=6`
 // Substack blocks direct fetches from GitHub Actions IP ranges, but Vercel's
 // edge network can reach Substack fine — so we prefer this proxy when running
 // in CI and fall back to Substack directly for local dev.
-const PROXY_URL = 'https://remix.properties/api/feed'
+const PROXY_URL = 'https://remixcre.com/api/feed'
 const MAX_POSTS = 6
 const EXCERPT_WORDS = 45           // ~30-50 word excerpt
 // Substack's RSS endpoint returns 403 to obviously-scripted User-Agents from

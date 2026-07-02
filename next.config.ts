@@ -5,8 +5,14 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
+        has: [{ type: 'host', value: 'atlas.remixcre.com' }],
+        destination: 'https://remixcre.com/admin/atlas',
+        permanent: true,
+      },
+      {
+        source: '/',
         has: [{ type: 'host', value: 'atlas.remix.properties' }],
-        destination: 'https://remix.properties/admin/atlas',
+        destination: 'https://remixcre.com/admin/atlas',
         permanent: true,
       },
       {

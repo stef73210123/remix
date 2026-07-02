@@ -49,7 +49,7 @@ function truncate(text, max) {
 module.exports = async function handler(req, res) {
   try {
     const response = await fetch(FEED_URL, {
-      headers: { 'User-Agent': 'RemixPropertiesBlog/1.0 (+https://remixproperties.com)' }
+      headers: { 'User-Agent': 'RemixCREBlog/1.0 (+https://remixcre.com)' }
     });
     if (!response.ok) {
       throw new Error('Substack feed returned HTTP ' + response.status);

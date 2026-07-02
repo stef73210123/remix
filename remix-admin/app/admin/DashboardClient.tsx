@@ -151,7 +151,7 @@ export default function DashboardClient({
           </div>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <a className="btn" href="https://atlas.remix.properties" target="_blank" rel="noopener noreferrer">
+          <a className="btn" href="https://atlas.remixcre.com" target="_blank" rel="noopener noreferrer">
             Open Atlas
           </a>
           <a
