@@ -1,7 +1,12 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { OPPORTUNITIES, nyscrUrl } from '@/lib/opportunities'
+import {
+  STATE_CODES,
+  STATE_NAMES,
+  type Opportunity,
+  type StateCode,
+} from '@/lib/opportunities'
 import {
   CRM_CATEGORIES,
   CRM_LABELS,
@@ -11,6 +16,7 @@ import {
 import type { FundraisingContact } from '@/lib/fundraising'
 
 type TabKey = 'rfps' | CrmCategory | 'fundraising'
+type StateFilter = 'ALL' | StateCode
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -23,9 +29,28 @@ function daysUntil(iso: string): number | null {
 }
 
 function TierBadge({ tier }: { tier: string }) {
-  if (!tier) return null
+  if (!tier) return <span className="muted" style={{ fontSize: 11 }}>—</span>
   const cls = tier === 'A' || tier === 'B' || tier === 'C' ? tier : 'C'
   return <span className={`badge ${cls}`}>{tier}</span>
+}
+
+function StateBadge({ state }: { state: StateCode }) {
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        padding: '2px 6px',
+        borderRadius: 4,
+        fontSize: 11,
+        fontWeight: 600,
+        background: 'rgba(0,0,0,0.06)',
+        color: 'var(--muted)',
+        letterSpacing: 0.3,
+      }}
+    >
+      {state}
+    </span>
+  )
 }
 
 export default function DashboardClient({
@@ -39,6 +64,11 @@ export default function DashboardClient({
   const [query, setQuery] = useState('')
   const [visible, setVisible] = useState(100)
 
+  const [rfps, setRfps] = useState<Opportunity[] | null>(null)
+  const [rfpsLoading, setRfpsLoading] = useState(false)
+  const [rfpsError, setRfpsError] = useState('')
+  const [stateFilter, setStateFilter] = useState<StateFilter>('ALL')
+
   const [fund, setFund] = useState<FundraisingContact[] | null>(null)
   const [fundLoading, setFundLoading] = useState(false)
   const [fundError, setFundError] = useState('')
@@ -47,6 +77,18 @@ export default function DashboardClient({
     setQuery('')
     setVisible(100)
   }, [tab])
+
+  useEffect(() => {
+    if (tab === 'rfps' && rfps === null && !rfpsLoading) {
+      setRfpsLoading(true)
+      setRfpsError('')
+      fetch('/admin/api/rfps')
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+        .then((d) => setRfps(d.opportunities || []))
+        .catch(() => setRfpsError('Could not load RFPs.'))
+        .finally(() => setRfpsLoading(false))
+    }
+  }, [tab, rfps, rfpsLoading])
 
   useEffect(() => {
     if (tab === 'fundraising' && fund === null && !fundLoading) {
@@ -67,20 +109,30 @@ export default function DashboardClient({
 
   const q = query.trim().toLowerCase()
 
-  const rfps = useMemo(() => {
-    return OPPORTUNITIES.filter((o) => {
+  const filteredRfps = useMemo(() => {
+    if (!rfps) return []
+    const stateFiltered =
+      stateFilter === 'ALL' ? rfps : rfps.filter((o) => o.state === stateFilter)
+    return stateFiltered.filter((o) => {
       if (!q) return true
       return (
         o.title.toLowerCase().includes(q) ||
         o.agency.toLowerCase().includes(q) ||
-        o.rationale.toLowerCase().includes(q) ||
-        o.cr.includes(q)
+        (o.rationale || '').toLowerCase().includes(q) ||
+        (o.cr || '').includes(q) ||
+        (o.city || '').toLowerCase().includes(q)
       )
-    }).sort((a, b) => {
-      if (a.tier !== b.tier) return a.tier.localeCompare(b.tier)
-      return (a.due || '9999').localeCompare(b.due || '9999')
     })
-  }, [q])
+  }, [rfps, stateFilter, q])
+
+  const rfpCountsByState = useMemo(() => {
+    const c: Record<StateFilter, number> = { ALL: 0, NY: 0, CT: 0, NJ: 0, RI: 0, MA: 0 }
+    if (rfps) {
+      c.ALL = rfps.length
+      for (const o of rfps) c[o.state]++
+    }
+    return c
+  }, [rfps])
 
   const crmRows = useMemo(() => {
     if (tab === 'rfps' || tab === 'fundraising') return []
@@ -114,7 +166,7 @@ export default function DashboardClient({
   }, [fund, q])
 
   const tabs: { key: TabKey; label: string; count: number | null }[] = [
-    { key: 'rfps', label: 'RFPs', count: OPPORTUNITIES.length },
+    { key: 'rfps', label: 'RFPs', count: rfps ? rfps.length : null },
     ...CRM_CATEGORIES.map((c) => ({
       key: c as TabKey,
       label: CRM_LABELS[c],
@@ -198,7 +250,7 @@ export default function DashboardClient({
         />
         <span className="muted" style={{ fontSize: 13 }}>
           {tab === 'rfps'
-            ? `${rfps.length} shown`
+            ? `${filteredRfps.length} shown`
             : tab === 'fundraising'
               ? fund
                 ? `${fundRows.length} of ${fund.length}`
@@ -207,45 +259,93 @@ export default function DashboardClient({
         </span>
       </div>
 
-      {/* RFPs */}
+      {/* RFPs — state filter chip row */}
+      {tab === 'rfps' && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+          {(['ALL', ...STATE_CODES] as StateFilter[]).map((s) => {
+            const active = stateFilter === s
+            const label = s === 'ALL' ? 'All states' : STATE_NAMES[s]
+            const count = rfpCountsByState[s]
+            return (
+              <button
+                key={s}
+                onClick={() => setStateFilter(s)}
+                className={active ? 'btn' : 'btn secondary'}
+                style={{ padding: '5px 12px', fontSize: 13 }}
+              >
+                {label}
+                <span style={{ opacity: 0.7, marginLeft: 4 }}>({count})</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+
+      {/* RFPs table */}
       {tab === 'rfps' && (
         <div className="card" style={{ overflow: 'hidden' }}>
-          <table>
-            <thead>
-              <tr>
-                <th style={{ width: 54 }}>Tier</th>
-                <th>Opportunity</th>
-                <th>Agency</th>
-                <th>Due</th>
-                <th className="hidden-narrow">Why it fits</th>
-                <th style={{ width: 60 }}>Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rfps.map((o) => {
-                const d = daysUntil(o.due)
-                const urgent = d !== null && d >= 0 && d <= 14
-                const past = d !== null && d < 0
-                return (
-                  <tr key={o.cr}>
-                    <td><TierBadge tier={o.tier} /></td>
-                    <td style={{ fontWeight: 600 }}>
-                      {o.title}
-                      <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>
-                        CR# {o.cr} · {o.city}
-                      </div>
+          {rfpsLoading && <div className="muted" style={{ padding: 20 }}>Loading RFPs…</div>}
+          {rfpsError && <div className="error" style={{ padding: 20 }}>{rfpsError}</div>}
+          {rfps && !rfpsLoading && (
+            <table>
+              <thead>
+                <tr>
+                  <th style={{ width: 54 }}>Tier</th>
+                  <th style={{ width: 46 }}>State</th>
+                  <th>Opportunity</th>
+                  <th>Agency</th>
+                  <th>Due</th>
+                  <th className="hidden-narrow">Why it fits</th>
+                  <th style={{ width: 60 }}>Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRfps.map((o) => {
+                  const d = daysUntil(o.due)
+                  const urgent = d !== null && d >= 0 && d <= 14
+                  const past = d !== null && d < 0
+                  const linkLabel =
+                    o.linkStatus === 'search-fallback' ? `${o.sourceName}*` : o.sourceName
+                  return (
+                    <tr key={o.id}>
+                      <td><TierBadge tier={o.tier} /></td>
+                      <td><StateBadge state={o.state} /></td>
+                      <td style={{ fontWeight: 600 }}>
+                        {o.title}
+                        <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>
+                          {o.cr && `#${o.cr}`}
+                          {o.cr && o.city ? ' · ' : ''}
+                          {o.city}
+                        </div>
+                      </td>
+                      <td style={{ fontSize: 13 }}>{o.agency}</td>
+                      <td
+                        style={{
+                          whiteSpace: 'nowrap',
+                          fontSize: 13,
+                          color: past ? 'var(--muted)' : urgent ? 'var(--warn)' : 'inherit',
+                          fontWeight: urgent ? 700 : 400,
+                        }}
+                      >
+                        {o.dueLabel || '—'}
+                      </td>
+                      <td className="muted hidden-narrow" style={{ fontSize: 12, maxWidth: 340 }}>
+                        {o.rationale || (o.curated ? '' : 'Auto-ingested — not yet triaged.')}
+                      </td>
+                      <td>{link(o.sourceUrl, linkLabel)}</td>
+                    </tr>
+                  )
+                })}
+                {filteredRfps.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="muted" style={{ padding: 20 }}>
+                      No RFPs match this filter yet.
                     </td>
-                    <td style={{ fontSize: 13 }}>{o.agency}</td>
-                    <td style={{ whiteSpace: 'nowrap', fontSize: 13, color: past ? 'var(--muted)' : urgent ? 'var(--warn)' : 'inherit', fontWeight: urgent ? 700 : 400 }}>
-                      {o.dueLabel}
-                    </td>
-                    <td className="muted hidden-narrow" style={{ fontSize: 12, maxWidth: 340 }}>{o.rationale}</td>
-                    <td>{link(nyscrUrl(o.cr), 'NYSCR')}</td>
                   </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
 
@@ -337,7 +437,7 @@ export default function DashboardClient({
       )}
 
       <p className="muted" style={{ fontSize: 12, marginTop: 14 }}>
-        RFPs: NYS Contract Reporter. Job-search &amp; consulting: mirrored from your Stefan_CRM. Fundraising: live from the Circular fundraising sheet.
+        RFPs: NY (NYSCR), CT (CTsource), NJ (NJSTART), RI (RIDOP OSP), MA (COMMBUYS) — ingested weekly. * = search-fallback link (curated row not yet matched to a direct portal record). Job-search &amp; consulting: mirrored from your Stefan_CRM. Fundraising: live from the Circular fundraising sheet.
       </p>
     </div>
   )
