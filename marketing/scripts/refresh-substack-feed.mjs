@@ -307,7 +307,7 @@ function renderCard(post) {
 function renderBlock(posts) {
   const cards = posts.map(renderCard).join('\n')
   return `${SENTINEL_START}
-    <div class="substack-grid">
+    <div class="substack-scroll">
 ${cards}
     </div>
     <div class="substack-footer">

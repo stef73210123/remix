@@ -299,12 +299,29 @@
   .book-cta.spotify { background: #1DB954; border-color: #1DB954; color: var(--white); }
   .book-cta.spotify:hover { background: #1ed760; border-color: #1ed760; }
 
-  /* ─── Substack feed ─── */
-  #substack { background: var(--off-black); }
-  .substack-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem;
+  /* ─── Substack feed (horizontal scroll) ─── */
+  #substack { background: var(--off-black); overflow-x: hidden; }
+  .substack-scroll {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scroll-padding-inline: 0;
+    padding-bottom: 1rem;
+    margin-bottom: 2.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* Bleed to the right edge of the section so the row obviously scrolls */
+    margin-right: -4rem;
+    padding-right: 4rem;
   }
+  .substack-scroll::-webkit-scrollbar { display: none; }
   .substack-card {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
     display: flex; flex-direction: column; background: var(--dark-gray);
     border: 1px solid var(--mid-gray); border-radius: 4px; overflow: hidden;
     text-decoration: none; color: var(--white);
@@ -348,11 +365,11 @@
   .substack-footer-link:hover { color: var(--red-light); border-bottom-color: var(--red-light); }
   .substack-footer-link .arrow-icon { transition: transform 0.3s ease; display: inline-block; }
   .substack-footer-link:hover .arrow-icon { transform: translateX(4px); }
-  @media (max-width: 968px) {
-    .substack-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-  }
   @media (max-width: 640px) {
-    .substack-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    /* Narrower cards + smaller side-bleed on phones so a card + peek of the next
+       fits on a ~375px viewport. */
+    .substack-scroll { margin-right: -1.5rem; padding-right: 1.5rem; gap: 1rem; }
+    .substack-card { flex: 0 0 260px; }
   }
 
   /* Testimonials carousel */
@@ -985,7 +1002,7 @@
   <p class="section-desc">Field notes on how technology, capital, and climate are rewiring real estate — updated weekly on Substack.</p>
 
   <!-- SUBSTACK_FEED_START -->
-    <div class="substack-grid">
+    <div class="substack-scroll">
       <a class="substack-card" href="https://groundtruthcre.substack.com/p/two-places-that-survived-what-should" target="_blank" rel="noopener noreferrer" aria-label="Read 'Two Places That Survived What Should Have Killed Them, and What They Mean for the Underwriting' on Substack (opens in new tab)">
         <img class="substack-card-thumb" src="/img/substack/two-places-that-survived-what-should.jpg" alt="" loading="lazy" width="600" height="315">
         <div class="substack-card-body">
