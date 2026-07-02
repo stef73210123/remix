@@ -18,6 +18,7 @@ import { TimelineGantt } from '@/components/shared/TimelineGantt'
 import PropertyMap from '@/components/shared/PropertyMap'
 import { formatCurrency } from '@/lib/utils/format'
 import { ASSET_NAMES } from '@/types'
+import HoldingsSection from '@/components/shared/HoldingsSection'
 import type { AssetSlug } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -206,22 +207,8 @@ export default async function AssetPage({
         </section>
       )}
 
-      {/* Holdings */}
-      {holdingSlugs.length > 0 && (
-        <section className="border-b">
-          <div className="container mx-auto max-w-4xl px-4 py-10">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-5">Portfolio Holdings</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {holdingSlugs.map((h) => (
-                <div key={h} className="rounded-xl border p-5">
-                  <div className="font-semibold">{ASSET_NAMES[h]}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{configMap[`${h}_tagline`] || ''}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Underlying Holdings — rich cards for Livingston Farm + Flybrook */}
+      {holdingSlugs.length > 0 && <HoldingsSection />}
 
       {/* Photo gallery + videos */}
       <MediaGallery media={media} />

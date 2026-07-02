@@ -176,8 +176,12 @@ export type AssetSlug = 'livingstonfarm' | 'wrenofthewoods' | 'circularplatform'
 
 export const ASSET_SLUGS: AssetSlug[] = ['livingstonfarm', 'wrenofthewoods', 'circularplatform']
 
+// Display names only. Slugs (livingstonfarm, wrenofthewoods, circularplatform)
+// remain the canonical identifiers used by LP asset_access, portal routing,
+// and deal-room routes. `wrenofthewoods` is displayed as "Flybrook" — the
+// current brand — but the slug must not be renamed anywhere in the platform.
 export const ASSET_NAMES: Record<AssetSlug, string> = {
   livingstonfarm: 'Livingston Farm',
-  wrenofthewoods: 'Wren of the Woods',
+  wrenofthewoods: 'Flybrook',
   circularplatform: 'Circular',
 }
