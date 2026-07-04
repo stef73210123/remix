@@ -168,16 +168,40 @@ async function fetchAllFeeds(): Promise<NewsItem[]> {
 // Route handler
 // ---------------------------------------------------------------------------
 
+// Metro/state keywords per map region, so the ticker localizes to the jump.
+const REGION_KEYWORDS: Record<string, RegExp> = {
+  dc: /\b(washington,?\s*d\.?c\.?|d\.?c\.?\b|district of columbia|dmv\b|arlington|alexandria|bethesda|montgomery county|northern virginia|capitol hill|georgetown)\b/i,
+  nyc: /\b(new york city|new york,?\s*ny|nyc\b|manhattan|brooklyn|queens|the bronx|bronx|staten island|hudson yards|midtown|downtown new york)\b/i,
+  sullivan: /\b(sullivan county|catskill|monticello|liberty,?\s*ny|hudson valley|upstate new york)\b/i,
+  westchester: /\b(westchester|white plains|yonkers|new rochelle|mount vernon|rye,?\s*ny|hudson valley)\b/i,
+  ct: /\b(connecticut|\bct\b|stamford|hartford|new haven|greenwich|norwalk|bridgeport|fairfield county)\b/i,
+  boston: /\b(boston|massachusetts|\bma\b|cambridge|somerville|suffolk county|greater boston|seaport|back bay)\b/i,
+};
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
     const category = searchParams.get("category");
+    const region = searchParams.get("region");
     const limit = Math.min(
       Math.max(parseInt(searchParams.get("limit") ?? "20", 10) || 20, 1),
       100
     );
 
     let items = await fetchAllFeeds();
+
+    // Localize to the region's metro. If there are enough local hits use them;
+    // otherwise lead with local and backfill with national so the ticker isn't empty.
+    if (region && REGION_KEYWORDS[region]) {
+      const re = REGION_KEYWORDS[region];
+      const local = items.filter((i) => re.test(`${i.title} ${i.description}`));
+      if (local.length >= 3) {
+        items = local;
+      } else {
+        const seen = new Set(local.map((i) => i.link));
+        items = [...local, ...items.filter((i) => !seen.has(i.link))];
+      }
+    }
 
     if (category && ["market", "development", "policy", "finance"].includes(category)) {
       items = items.filter((item) => item.category === category);
