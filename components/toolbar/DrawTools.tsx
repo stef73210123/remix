@@ -25,7 +25,7 @@ import {
 type DrawMode = "none" | "polygon" | "polyline" | "point" | "text";
 
 export default function DrawTools() {
-  const { viewerRef } = useCesium();
+  const { viewerRef, leftPanelOpen } = useCesium();
   const [drawMode, setDrawMode] = useState<DrawMode>("none");
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -273,8 +273,11 @@ export default function DrawTools() {
     setDrawMode((prev) => (prev === mode ? "none" : mode));
   };
 
+  // The left property panel occupies this edge when open — hide to avoid overlap.
+  if (leftPanelOpen) return null;
+
   return (
-    <div className="hidden sm:flex absolute top-4 right-4 z-20 flex-col gap-1 bg-[#161616]/90 backdrop-blur-sm rounded-lg px-2 py-2 shadow-lg border border-white/10">
+    <div className="hidden lg:flex absolute top-16 left-3 z-20 flex-col gap-1 bg-[#161616]/90 backdrop-blur-sm rounded-lg px-2 py-2 shadow-lg border border-white/10">
       <div className="flex items-center justify-between px-1 pb-1 border-b border-white/10 mb-1">
         <span className="text-[10px] font-semibold text-white/50 uppercase tracking-wider flex items-center gap-1.5">
           <Pencil className="w-3 h-3" />

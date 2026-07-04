@@ -171,7 +171,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="absolute top-16 right-3 left-3 sm:left-auto sm:top-3 z-40 flex flex-wrap items-center justify-end gap-2">
+    <div className="absolute top-16 right-3 left-3 sm:left-auto sm:top-3 z-40 flex flex-wrap sm:flex-nowrap items-center justify-end gap-2">
       {/* Search input */}
       <div className="relative flex-1 sm:flex-none min-w-0">
         <div className="flex items-center bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
@@ -313,7 +313,7 @@ export default function SearchBar() {
       </div>
 
       {/* Action buttons */}
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col sm:flex-row gap-1.5">
         <button
           onClick={() =>
             setRightPanel(rightPanel === "filters" ? null : "filters")

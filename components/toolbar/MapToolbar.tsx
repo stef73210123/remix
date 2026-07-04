@@ -27,7 +27,7 @@ export default function MapToolbar() {
   } = useCesium();
 
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-[#161616]/90 backdrop-blur-sm rounded-lg px-2 py-1.5 shadow-lg border border-white/10 max-w-[calc(100vw-1rem)] overflow-x-auto [&>*]:shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-[#161616]/90 backdrop-blur-sm rounded-lg px-2 py-1.5 shadow-lg border border-white/10 max-w-[calc(100vw-1rem)] overflow-x-auto [&>*]:shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <ToolbarButton
         icon={<Map className="w-4 h-4" />}
         label="BASE MAP"
