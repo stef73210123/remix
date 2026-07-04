@@ -171,11 +171,11 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="absolute top-3 right-3 z-40 flex items-center gap-2">
+    <div className="absolute top-16 right-3 left-3 sm:left-auto sm:top-3 z-40 flex flex-wrap items-center justify-end gap-2">
       {/* Search input */}
-      <div className="relative">
+      <div className="relative flex-1 sm:flex-none min-w-0">
         <div className="flex items-center bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-          <Search className="w-4 h-4 text-gray-400 ml-2.5" />
+          <Search className="w-4 h-4 text-gray-400 ml-2.5 shrink-0" />
           <input
             type="text"
             value={query}
@@ -185,7 +185,7 @@ export default function SearchBar() {
             }}
             onFocus={() => setIsOpen(true)}
             placeholder={region.searchPlaceholder}
-            className="w-[260px] px-2 py-2 text-xs text-gray-800 placeholder-gray-400 outline-none"
+            className="w-full sm:w-[260px] px-2 py-2 text-xs text-gray-800 placeholder-gray-400 outline-none"
           />
           {query && (
             <button

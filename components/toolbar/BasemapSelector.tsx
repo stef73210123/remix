@@ -20,7 +20,7 @@ export default function BasemapSelector() {
   return (
     <div className="relative">
       {open && (
-        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#161616]/90 backdrop-blur-sm rounded-lg border border-white/10 p-3 w-[200px]">
+        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#161616]/90 backdrop-blur-sm rounded-lg border border-white/10 p-3 w-[200px] max-w-[90vw]">
           <div className="grid grid-cols-3 gap-2">
             {BASEMAP_OPTIONS.map(({ mode, label, color }) => (
               <button

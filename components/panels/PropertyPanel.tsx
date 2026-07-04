@@ -44,7 +44,7 @@ export default function PropertyPanel() {
       </div>
 
       {/* Panel Content */}
-      <div className="w-[260px] bg-[#f5f5f5] flex flex-col overflow-hidden shadow-xl relative">
+      <div className="w-[260px] max-w-[calc(100vw-3rem)] bg-[#f5f5f5] flex flex-col overflow-hidden shadow-xl relative">
         <button
           onClick={() => setLeftPanelOpen(false)}
           className="absolute top-1 right-1 z-10 p-0.5 bg-black/30 rounded hover:bg-black/50 text-white"

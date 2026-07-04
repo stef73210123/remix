@@ -191,7 +191,7 @@ export default function NewsPanel() {
             ) : filtered.map((item) => (
               <article
                 key={item.id}
-                className="flex-shrink-0 w-[280px] bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col hover:bg-white/10 transition-colors cursor-pointer group"
+                className="flex-shrink-0 w-[280px] max-w-[85vw] bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col hover:bg-white/10 transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-2 mb-1.5">
                   <span

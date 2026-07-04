@@ -352,8 +352,8 @@ export default function MapPage() {
           <RegionSelector />
         </div>
 
-        {/* Compass control - top right */}
-        <div className="absolute top-3 right-[280px] z-30">
+        {/* Compass control - top right (hidden on mobile: hard to use on touch) */}
+        <div className="hidden sm:block absolute top-3 right-[280px] z-30">
           <CompassControl />
         </div>
 
