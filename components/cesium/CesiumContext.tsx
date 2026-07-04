@@ -4,7 +4,7 @@ import { createContext, useContext, useRef, useCallback, useState } from "react"
 import { Property, FilterState } from "@/types/cesium";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type BuildingSource = "osm" | "microsoft" | "none";
+export type BuildingSource = "osm" | "google" | "none";
 export type BasemapMode = "satellite" | "osm" | "dark" | "light" | "terrain" | "hybrid";
 
 interface CesiumContextValue {
@@ -43,12 +43,15 @@ interface CesiumContextValue {
   setComparisonProperties: React.Dispatch<React.SetStateAction<Property[]>>;
   addToComparison: (property: Property) => void;
   removeFromComparison: (propertyId: string) => void;
-  // 11F: Measurement mode
-  measureMode: "none" | "distance" | "area";
-  setMeasureMode: (mode: "none" | "distance" | "area") => void;
+  // 11F: Measurement mode (unified: click points for distance, close for area)
+  measureMode: "none" | "measure";
+  setMeasureMode: (mode: "none" | "measure") => void;
   // 11I: Active region
   activeRegion: string;
   setActiveRegion: (region: string) => void;
+  // News ticker expanded state (lifted so the toolbar can sit above it)
+  newsExpanded: boolean;
+  setNewsExpanded: (expanded: boolean) => void;
 }
 
 const CesiumContext = createContext<CesiumContextValue | null>(null);
@@ -78,8 +81,9 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [activeLayers, setActiveLayers] = useState<Set<string>>(new Set());
   const [filterState, setFilterState] = useState<FilterState | null>(null);
   const [comparisonProperties, setComparisonProperties] = useState<Property[]>([]);
-  const [measureMode, setMeasureMode] = useState<"none" | "distance" | "area">("none");
+  const [measureMode, setMeasureMode] = useState<"none" | "measure">("none");
   const [activeRegion, setActiveRegion] = useState("dc");
+  const [newsExpanded, setNewsExpanded] = useState(false);
 
   const flyToProperty = useCallback(async (property: Property) => {
     const viewer = viewerRef.current;
@@ -152,6 +156,8 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
         setMeasureMode,
         activeRegion,
         setActiveRegion,
+        newsExpanded,
+        setNewsExpanded,
       }}
     >
       {children}

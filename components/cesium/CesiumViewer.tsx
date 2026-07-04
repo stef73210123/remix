@@ -261,16 +261,17 @@ export default function CesiumViewerComponent() {
         console.warn("Could not load OSM Buildings:", e);
       }
 
-      // Add Microsoft 3D Building Footprints (Cesium Ion global buildings)
-      // Uses Google Photorealistic 3D Tiles as the source for detailed 3D buildings
+      // Add Google Photorealistic 3D Tiles (Cesium Ion asset 2275207).
+      // NOTE: this is Google's photorealistic mesh, NOT Microsoft buildings —
+      // the toolbar previously mislabeled it "MS".
       try {
-        const msTileset = await Cesium.Cesium3DTileset.fromIonAssetId(2275207);
-        viewer.scene.primitives.add(msTileset);
-        msBuildingsTilesetRef.current = msTileset;
-        // Initially hidden — user can toggle between OSM and Microsoft
-        msTileset.show = false;
+        const googleTileset = await Cesium.Cesium3DTileset.fromIonAssetId(2275207);
+        viewer.scene.primitives.add(googleTileset);
+        msBuildingsTilesetRef.current = googleTileset;
+        // Initially hidden — user cycles OSM 3D → Google 3D via the toolbar.
+        googleTileset.show = false;
       } catch (e) {
-        console.warn("Could not load Microsoft/Google 3D buildings:", e);
+        console.warn("Could not load Google Photorealistic 3D Tiles:", e);
       }
 
       // Add property markers
@@ -359,7 +360,7 @@ export default function CesiumViewerComponent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Toggle buildings visibility & source (OSM vs Microsoft)
+  // Toggle buildings visibility & source (OSM vs Google Photorealistic 3D)
   useEffect(() => {
     if (buildingsTilesetRef.current) {
       buildingsTilesetRef.current.show =
@@ -367,7 +368,7 @@ export default function CesiumViewerComponent() {
     }
     if (msBuildingsTilesetRef.current) {
       msBuildingsTilesetRef.current.show =
-        showBuildings && buildingSource === "microsoft";
+        showBuildings && buildingSource === "google";
     }
   }, [showBuildings, buildingSource, buildingsTilesetRef, msBuildingsTilesetRef]);
 

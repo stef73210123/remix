@@ -8,8 +8,8 @@ import RightPanel from "@/components/panels/RightPanel";
 import MapToolbar from "@/components/toolbar/MapToolbar";
 import SearchBar from "@/components/search/SearchBar";
 import NewsPanel from "@/components/panels/NewsPanel";
-import { Home, ChevronDown, LocateFixed, ArrowLeft } from "lucide-react";
-import { REGIONS, getRegion } from "@/lib/data/regions";
+import { Home, LocateFixed, ArrowLeft } from "lucide-react";
+import { getRegion } from "@/lib/data/regions";
 import { parseURLState, updateURL } from "@/lib/url-state";
 import { MOCK_PROPERTIES } from "@/lib/data/properties";
 
@@ -165,57 +165,6 @@ function URLStateLoader() {
   return null;
 }
 
-function RegionSelector() {
-  const { activeRegion, setActiveRegion, viewerRef } = useCesium();
-  const region = getRegion(activeRegion);
-
-  async function switchRegion(regionId: string) {
-    setActiveRegion(regionId);
-    const r = getRegion(regionId);
-    const viewer = viewerRef.current;
-    if (!viewer) return;
-
-    const Cesium = await import("cesium");
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(
-        r.defaultCamera.lng,
-        r.defaultCamera.lat,
-        r.defaultCamera.height
-      ),
-      orientation: {
-        heading: Cesium.Math.toRadians(r.defaultCamera.heading),
-        pitch: Cesium.Math.toRadians(r.defaultCamera.pitch),
-        roll: 0,
-      },
-      duration: 2,
-    });
-  }
-
-  return (
-    <div className="relative group">
-      <button className="flex items-center gap-1 px-3 py-1.5 bg-[#161616]/90 rounded-lg shadow-lg border border-white/10 text-white text-xs font-medium hover:bg-[#161616] transition-colors">
-        {region.shortName}
-        <ChevronDown className="w-3 h-3 text-white/60" />
-      </button>
-      <div className="hidden group-hover:block absolute top-full left-0 mt-1 bg-[#161616] rounded-lg shadow-xl border border-white/10 min-w-[160px] overflow-hidden z-50">
-        {REGIONS.map((r) => (
-          <button
-            key={r.id}
-            onClick={() => switchRegion(r.id)}
-            className={`w-full text-left px-3 py-2 text-xs transition-colors ${
-              r.id === activeRegion
-                ? "bg-[#ca615f] text-white"
-                : "text-white/70 hover:bg-white/10 hover:text-white"
-            }`}
-          >
-            {r.name}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function BackToDashboard() {
   const [back, setBack] = useState<string | null>(null);
 
@@ -349,7 +298,6 @@ export default function MapPage() {
           <BackToDashboard />
           <HomeButton />
           <MyLocationButton />
-          <RegionSelector />
         </div>
 
         {/* Compass control (large screens only; below the search cluster) */}
@@ -394,9 +342,6 @@ export default function MapPage() {
 
         {/* Coordinate display */}
         <CoordinateDisplay />
-
-        {/* Cesium attribution */}
-        <AttributionBadge />
       </div>
     </CesiumProvider>
   );
@@ -414,17 +359,3 @@ function CompassSlot() {
   );
 }
 
-/** Map credit — pinned to the very bottom-left, hidden while the left
- *  property panel occupies that edge. */
-function AttributionBadge() {
-  const { leftPanelOpen } = useCesium();
-  if (leftPanelOpen) return null;
-  return (
-    <div className="absolute bottom-1 left-2 z-20 flex items-center gap-1.5">
-      <div className="bg-[#161616]/80 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white/70 flex items-center gap-1.5">
-        <span className="font-bold text-[#d4767a]">CESIUM</span>
-        <span>&copy; OpenStreetMap</span>
-      </div>
-    </div>
-  );
-}

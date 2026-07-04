@@ -133,3 +133,16 @@
     text-transform: uppercase;
   }
 }
+/* Scrolling headline ticker (Atlas news bar). Content is rendered twice, so
+   translating by -50% produces a seamless loop. */
+@keyframes atlas-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-atlas-marquee {
+  animation: atlas-marquee 45s linear infinite;
+  will-change: transform;
+}
+.animate-atlas-marquee:hover {
+  animation-play-state: paused;
+}

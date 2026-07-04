@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Search, X, Layers, Filter, MapPin, Star, Clock, Building2 } from "lucide-react";
+import { Search, X, Layers, Filter, MapPin, Star, Clock, Building2, Navigation } from "lucide-react";
 import { useCesium } from "@/components/cesium/CesiumContext";
 import { MOCK_PROPERTIES } from "@/lib/data/properties";
 import { cn } from "@/lib/utils";
 import { getFavorites, getRecents } from "@/lib/favorites";
-import { getRegion } from "@/lib/data/regions";
+import { getRegion, REGIONS } from "@/lib/data/regions";
 
 interface GeocodingResult {
   place_id: number;
@@ -37,6 +37,7 @@ export default function SearchBar() {
     rightPanel,
     setRightPanel,
     activeRegion,
+    setActiveRegion,
   } = useCesium();
   const region = getRegion(activeRegion);
 
@@ -170,6 +171,30 @@ export default function SearchBar() {
     setQuery("");
   }
 
+  // Preloaded location jump-tos (the map's regions), flown to from the dropdown.
+  async function jumpToRegion(regionId: string) {
+    setActiveRegion(regionId);
+    const r = getRegion(regionId);
+    setIsOpen(false);
+    setQuery("");
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    const Cesium = await import("cesium");
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(
+        r.defaultCamera.lng,
+        r.defaultCamera.lat,
+        r.defaultCamera.height
+      ),
+      orientation: {
+        heading: Cesium.Math.toRadians(r.defaultCamera.heading),
+        pitch: Cesium.Math.toRadians(r.defaultCamera.pitch),
+        roll: 0,
+      },
+      duration: 2,
+    });
+  }
+
   return (
     <div className="absolute top-16 right-3 left-3 sm:left-auto sm:top-3 z-40 flex flex-wrap sm:flex-nowrap items-center justify-end gap-2">
       {/* Search input */}
@@ -204,6 +229,31 @@ export default function SearchBar() {
         {/* Dropdown */}
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-200 max-h-72 overflow-y-auto">
+            {/* Preloaded location jump-tos */}
+            {!query.trim() && (
+              <>
+                <div className="px-3 py-1 bg-gray-50 text-[9px] font-bold text-gray-500 uppercase flex items-center gap-1">
+                  <Navigation className="w-3 h-3" /> Jump to
+                </div>
+                {REGIONS.map((r) => (
+                  <button
+                    key={r.id}
+                    onClick={() => jumpToRegion(r.id)}
+                    className={cn(
+                      "w-full px-3 py-2 text-left hover:bg-blue-50 border-b border-gray-100 flex items-center gap-2",
+                      r.id === activeRegion && "bg-blue-50/60"
+                    )}
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-[#ca615f] shrink-0" />
+                    <span className="text-xs font-medium text-gray-800">{r.name}</span>
+                    {r.id === activeRegion && (
+                      <span className="ml-auto text-[9px] font-bold text-[#ca615f] uppercase">Current</span>
+                    )}
+                  </button>
+                ))}
+              </>
+            )}
+
             {/* Favorites & Recents when no query */}
             {!query.trim() && (() => {
               const favIds = getFavorites();
