@@ -81,7 +81,7 @@ export default function MapToolbar() {
       className={cn(
         "absolute left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-[#161616]/90 backdrop-blur-sm rounded-lg px-2 py-1.5 shadow-lg border border-white/10 max-w-[calc(100vw-1rem)] overflow-x-auto [&>*]:shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transition-[bottom] duration-300",
         // Ride above the news ticker (collapsed) or the expanded news panel.
-        newsExpanded ? "bottom-[312px]" : "bottom-14"
+        newsExpanded ? "bottom-[312px]" : "bottom-[72px]"
       )}
     >
       <ToolbarButton
