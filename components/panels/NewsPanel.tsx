@@ -77,16 +77,19 @@ const CATEGORY_COLORS: Record<NewsItem["category"], string> = {
 };
 
 export default function NewsPanel() {
-  const { leftPanelOpen, rightPanel, newsExpanded: expanded, setNewsExpanded: setExpanded } = useCesium();
+  const { leftPanelOpen, rightPanel, newsExpanded: expanded, setNewsExpanded: setExpanded, activeRegion } = useCesium();
   const [filter, setFilter] = useState<NewsItem["category"] | "all">("all");
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tickerIndex, setTickerIndex] = useState(0);
 
+  // News localized to the metro of the active region (like the listings).
   useEffect(() => {
     let cancelled = false;
+    setLoading(true);
     async function fetchNews() {
       try {
-        const res = await fetch("/api/news?limit=20");
+        const res = await fetch(`/api/news?limit=20&region=${encodeURIComponent(activeRegion)}`);
         if (!res.ok) throw new Error("Failed to fetch news");
         const data = await res.json();
         if (cancelled) return;
@@ -104,18 +107,28 @@ export default function NewsPanel() {
           })
         );
         setNews(items);
+        setTickerIndex(0);
       } catch {
-        if (!cancelled) setNews(FALLBACK_NEWS);
+        if (!cancelled) { setNews(FALLBACK_NEWS); setTickerIndex(0); }
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
     fetchNews();
     return () => { cancelled = true; };
-  }, []);
+  }, [activeRegion]);
 
   const filtered =
     filter === "all" ? news : news.filter((n) => n.category === filter);
+
+  // Rotate the collapsed ticker headline every ~5s (paused while expanded).
+  useEffect(() => {
+    if (expanded || news.length <= 1) return;
+    const t = setInterval(() => {
+      setTickerIndex((i) => (i + 1) % news.length);
+    }, 5000);
+    return () => clearInterval(t);
+  }, [expanded, news.length]);
 
   // A side panel occupies the full-width bottom bar's space when open.
   if (leftPanelOpen || rightPanel) return null;
@@ -124,47 +137,53 @@ export default function NewsPanel() {
     <div
       className={cn(
         "absolute bottom-0 left-0 right-0 z-20 transition-[height] duration-300",
-        expanded ? "h-[300px]" : "h-9"
+        expanded ? "h-[300px]" : "h-12"
       )}
     >
       {!expanded ? (
-        /* Collapsed: scrolling headline ticker */
+        /* Collapsed: TV-style two-row ticker, one headline at a time */
         <button
           onClick={() => setExpanded(true)}
           aria-label="Open real estate news"
-          className="w-full h-9 flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
+          className="w-full h-12 flex items-stretch gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
         >
-          <div className="flex items-center gap-1.5 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0 self-center">
             <Newspaper className="w-4 h-4 text-[#ca615f]" />
-            <span className="hidden sm:inline text-[11px] font-bold text-white tracking-wide">
+            <span className="hidden sm:inline text-[10px] font-bold text-white/80 tracking-widest">
               NEWS
             </span>
           </div>
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 relative overflow-hidden self-stretch">
             {loading ? (
-              <span className="text-[11px] text-white/40">Loading headlines…</span>
-            ) : news.length === 0 ? (
-              <span className="text-[11px] text-white/40">No news available</span>
-            ) : (
-              <div className="flex w-max gap-10 animate-atlas-marquee">
-                {[...news, ...news].map((item, i) => (
-                  <span
-                    key={`${item.id}-${i}`}
-                    className="flex items-center gap-2 text-[11px] text-white/80 whitespace-nowrap"
-                  >
+              <span className="absolute inset-0 flex items-center text-[11px] text-white/40">Loading headlines…</span>
+            ) : filtered.length === 0 ? (
+              <span className="absolute inset-0 flex items-center text-[11px] text-white/40">No local headlines</span>
+            ) : (() => {
+              const item = filtered[tickerIndex % filtered.length];
+              return (
+                <div
+                  key={tickerIndex}
+                  className="absolute inset-0 flex flex-col justify-center animate-atlas-ticker-in"
+                >
+                  <div className="flex items-center gap-2 leading-none mb-1">
                     <span
-                      className="w-1.5 h-1.5 rounded-full shrink-0"
-                      style={{ backgroundColor: CATEGORY_COLORS[item.category] }}
-                    />
+                      className="text-[8px] font-bold uppercase tracking-wide"
+                      style={{ color: CATEGORY_COLORS[item.category] }}
+                    >
+                      {item.category}
+                    </span>
+                    <span className="text-[9px] text-white/40 truncate">
+                      {item.source} &middot; {item.timestamp}
+                    </span>
+                  </div>
+                  <div className="text-[12px] text-white font-medium leading-tight truncate">
                     {item.title}
-                    <span className="text-white/30">·</span>
-                    <span className="text-white/40">{item.source}</span>
-                  </span>
-                ))}
-              </div>
-            )}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 self-center">
             <span className="hidden sm:flex items-center gap-1 text-[9px] text-white/40">
               <span className="font-bold text-[#d4767a]">CESIUM</span>
               <span>&copy; OSM</span>

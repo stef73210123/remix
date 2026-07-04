@@ -196,9 +196,9 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="absolute top-16 right-3 left-3 sm:left-auto sm:top-3 z-40 flex flex-wrap sm:flex-nowrap items-center justify-end gap-2">
+    <div className="absolute top-3 right-3 z-40 flex flex-nowrap items-start sm:items-center justify-end gap-2">
       {/* Search input */}
-      <div className="relative flex-1 sm:flex-none min-w-0">
+      <div className="relative shrink-0">
         <div className="flex items-center bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
           <Search className="w-4 h-4 text-gray-400 ml-2.5 shrink-0" />
           <input
@@ -210,7 +210,7 @@ export default function SearchBar() {
             }}
             onFocus={() => setIsOpen(true)}
             placeholder={region.searchPlaceholder}
-            className="w-full sm:w-[260px] px-2 py-2 text-xs text-gray-800 placeholder-gray-400 outline-none"
+            className="w-32 max-[350px]:w-20 sm:w-[260px] px-2 py-2 text-xs text-gray-800 placeholder-gray-400 outline-none"
           />
           {query && (
             <button
@@ -228,7 +228,7 @@ export default function SearchBar() {
 
         {/* Dropdown */}
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-200 max-h-72 overflow-y-auto">
+          <div className="absolute top-full right-0 mt-1 w-[280px] max-w-[calc(100vw-1.5rem)] bg-white rounded-lg shadow-xl border border-gray-200 max-h-72 overflow-y-auto">
             {/* Preloaded location jump-tos */}
             {!query.trim() && (
               <>
