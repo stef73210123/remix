@@ -13,7 +13,7 @@ export default function RightPanel() {
   if (!rightPanel) return null;
 
   return (
-    <div className="absolute right-0 top-0 bottom-0 z-30 w-[300px] bg-white shadow-xl border-l border-gray-200 overflow-hidden">
+    <div className="absolute right-0 top-0 bottom-0 z-30 w-[300px] max-w-[88vw] bg-white shadow-xl border-l border-gray-200 overflow-hidden">
       {rightPanel === "layers" && (
         <LayersPanel onClose={() => setRightPanel(null)} />
       )}

@@ -352,10 +352,8 @@ export default function MapPage() {
           <RegionSelector />
         </div>
 
-        {/* Compass control - top right */}
-        <div className="absolute top-3 right-[280px] z-30">
-          <CompassControl />
-        </div>
+        {/* Compass control (large screens only; below the search cluster) */}
+        <CompassSlot />
 
         {/* Cesium 3D Viewer */}
         <CesiumViewer />
@@ -398,13 +396,35 @@ export default function MapPage() {
         <CoordinateDisplay />
 
         {/* Cesium attribution */}
-        <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1.5">
-          <div className="bg-[#161616]/80 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white/70 flex items-center gap-1.5">
-            <span className="font-bold text-[#d4767a]">CESIUM</span>
-            <span>&copy; OpenStreetMap</span>
-          </div>
-        </div>
+        <AttributionBadge />
       </div>
     </CesiumProvider>
+  );
+}
+
+/** Compass — only on large screens, tucked under the search cluster on the
+ *  right edge, and hidden while the right panel occupies that edge. */
+function CompassSlot() {
+  const { rightPanel } = useCesium();
+  if (rightPanel) return null;
+  return (
+    <div className="hidden lg:block absolute top-16 right-3 z-30">
+      <CompassControl />
+    </div>
+  );
+}
+
+/** Map credit — pinned to the very bottom-left, hidden while the left
+ *  property panel occupies that edge. */
+function AttributionBadge() {
+  const { leftPanelOpen } = useCesium();
+  if (leftPanelOpen) return null;
+  return (
+    <div className="absolute bottom-1 left-2 z-20 flex items-center gap-1.5">
+      <div className="bg-[#161616]/80 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white/70 flex items-center gap-1.5">
+        <span className="font-bold text-[#d4767a]">CESIUM</span>
+        <span>&copy; OpenStreetMap</span>
+      </div>
+    </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ChevronUp, ChevronDown, Newspaper, ExternalLink, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCesium } from "@/components/cesium/CesiumContext";
 
 interface NewsItem {
   id: string;
@@ -76,6 +77,7 @@ const CATEGORY_COLORS: Record<NewsItem["category"], string> = {
 };
 
 export default function NewsPanel() {
+  const { leftPanelOpen, rightPanel } = useCesium();
   const [expanded, setExpanded] = useState(false);
   const [filter, setFilter] = useState<NewsItem["category"] | "all">("all");
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -116,10 +118,13 @@ export default function NewsPanel() {
   const filtered =
     filter === "all" ? news : news.filter((n) => n.category === filter);
 
+  // A side panel occupies the full-width bottom bar's space when open.
+  if (leftPanelOpen || rightPanel) return null;
+
   return (
     <div
       className={cn(
-        "absolute bottom-12 left-0 right-0 z-20 transition-all duration-300",
+        "absolute bottom-24 left-0 right-0 z-20 transition-all duration-300",
         expanded ? "h-[280px]" : "h-[52px]"
       )}
     >
@@ -191,7 +196,7 @@ export default function NewsPanel() {
             ) : filtered.map((item) => (
               <article
                 key={item.id}
-                className="flex-shrink-0 w-[280px] bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col hover:bg-white/10 transition-colors cursor-pointer group"
+                className="flex-shrink-0 w-[280px] max-w-[85vw] bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col hover:bg-white/10 transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-2 mb-1.5">
                   <span

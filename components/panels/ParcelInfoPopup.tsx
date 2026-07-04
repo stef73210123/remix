@@ -244,7 +244,7 @@ export default function ParcelInfoPopup({
       ref={cardRef}
       style={positionStyle}
       className={cn(
-        "z-50 w-[280px] max-h-[320px] overflow-y-auto rounded-lg",
+        "z-50 w-[280px] max-w-[90vw] max-h-[320px] overflow-y-auto rounded-lg",
         "bg-[#161616] text-white shadow-xl border border-white/10",
         "transition-all duration-200 ease-out",
         visible

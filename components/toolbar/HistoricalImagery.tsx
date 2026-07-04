@@ -93,7 +93,7 @@ export default function HistoricalImagery() {
   const sliderIndex = AVAILABLE_YEARS.indexOf(selectedYear as any);
 
   return (
-    <div className="absolute top-3 right-3 z-30">
+    <div className="hidden xl:block absolute top-3 left-1/2 -translate-x-1/2 z-30">
       <div className="bg-[#161616]/90 backdrop-blur-sm rounded-lg shadow-lg border border-white/10 px-3 py-2">
         {/* Header row with toggle */}
         <div className="flex items-center gap-2">
