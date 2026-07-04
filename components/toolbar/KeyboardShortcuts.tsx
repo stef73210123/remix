@@ -39,14 +39,8 @@ export default function KeyboardShortcuts() {
           setRightPanel(rightPanel === "listings" ? null : "listings");
           break;
         case "M":
-          // Cycle: none -> distance -> area -> none
-          if (measureMode === "none") {
-            setMeasureMode("distance");
-          } else if (measureMode === "distance") {
-            setMeasureMode("area");
-          } else {
-            setMeasureMode("none");
-          }
+          // Toggle the unified measure tool (line + polygon)
+          setMeasureMode(measureMode === "none" ? "measure" : "none");
           break;
         case "H":
           if (document.fullscreenElement) {

@@ -175,7 +175,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
           </div>
           {showBuildings && (
             <div className="flex gap-1 ml-4 mb-2">
-              {(["osm", "microsoft"] as BuildingSource[]).map((src) => (
+              {(["osm", "google"] as BuildingSource[]).map((src) => (
                 <button
                   key={src}
                   onClick={() => setBuildingSource(src)}
@@ -186,7 +186,7 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
                       : "bg-white text-gray-600 border-gray-300 hover:border-[#ca615f]"
                   )}
                 >
-                  {src === "osm" ? "OSM Buildings" : "Microsoft / Google 3D"}
+                  {src === "osm" ? "OSM Buildings" : "Google Photorealistic 3D"}
                 </button>
               ))}
             </div>

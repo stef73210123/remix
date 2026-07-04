@@ -69,7 +69,8 @@ export default function MeasureTools() {
             },
           });
 
-          if (measureMode === "distance" && pointsRef.current.length >= 2) {
+          // Draw the segment + running distance for every new point (line mode).
+          if (pointsRef.current.length >= 2) {
             const pts = pointsRef.current;
             const lineId = `measure-line-${Date.now()}`;
             entityIdsRef.current.push(lineId);
@@ -125,7 +126,8 @@ export default function MeasureTools() {
             });
           }
 
-          if (measureMode === "area" && pointsRef.current.length >= 3) {
+          // Once the path closes into a polygon (3+ points), also show area.
+          if (pointsRef.current.length >= 3) {
             // Remove old polygon if exists
             const oldPoly = entityIdsRef.current.find((id) => id.startsWith("measure-poly-"));
             if (oldPoly) {
