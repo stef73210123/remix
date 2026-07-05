@@ -6,29 +6,28 @@ import { useCesium } from "@/components/cesium/CesiumContext";
 /**
  * Zoom-driven automatic basemap. As the camera settles, the visible ground
  * area decides the basemap:
- *   - > 5 sq mi (city or wider) → user's discretion (auto re-arms here)
+ *   - > 5 sq mi (city or wider) → the user's chosen basemap, Google 3D off
  *   - ~2.5–5 sq mi (neighborhood) → Streets
  *   - ~1–2.5 sq mi → Hybrid satellite
  *   - ≤ 1 sq mi (block) → Google Photorealistic 3D
- * The user can override at city scale via the MAPS picker; the override holds
- * until they zoom back out past the city threshold, which re-arms auto.
+ * Zooming back out reverts through the tiers (so Google 3D never sticks). The
+ * user's manual pick in the MAPS picker sets the wide/city basemap.
  */
 export default function AutoBasemap() {
   const {
     viewerRef,
-    autoBasemap,
-    setAutoBasemap,
+    userBasemap,
     setBasemapMode,
     setShowBuildings,
     setBuildingSource,
     setShowOsmFootprints,
   } = useCesium();
 
-  // Read live values inside the (once-registered) camera listener.
-  const autoRef = useRef(autoBasemap);
+  // Read the live preferred basemap inside the once-registered listener.
+  const userBasemapRef = useRef(userBasemap);
   useEffect(() => {
-    autoRef.current = autoBasemap;
-  }, [autoBasemap]);
+    userBasemapRef.current = userBasemap;
+  }, [userBasemap]);
 
   const lastTierRef = useRef<string>("");
 
@@ -39,17 +38,26 @@ export default function AutoBasemap() {
     (async () => {
       const Cesium = await import("cesium");
 
-      const applyTier = (tier: "streets" | "hybrid" | "google3d") => {
-        if (lastTierRef.current === tier) return;
-        lastTierRef.current = tier;
+      const apply = (tier: "wide" | "streets" | "hybrid" | "google3d") => {
+        // Key includes the preferred basemap so a manual change re-applies.
+        const key = tier === "wide" ? `wide:${userBasemapRef.current}` : tier;
+        if (lastTierRef.current === key) return;
+        lastTierRef.current = key;
         if (tier === "google3d") {
           setShowOsmFootprints(false);
           setBuildingSource("google");
           setShowBuildings(true);
         } else {
+          // Drop Google 3D and show the tier's flat basemap.
           setShowBuildings(false);
           setBuildingSource("osm");
-          setBasemapMode(tier === "hybrid" ? "hybrid" : "osm");
+          setBasemapMode(
+            tier === "hybrid"
+              ? "hybrid"
+              : tier === "streets"
+              ? "osm"
+              : userBasemapRef.current
+          );
         }
       };
 
@@ -58,10 +66,9 @@ export default function AutoBasemap() {
         if (!viewer) return;
         const rect = viewer.camera.computeViewRectangle();
 
-        // Horizon in view (very wide) → city/wide: user's discretion + re-arm.
+        // Horizon in view (very wide) → treat as city/wide.
         if (!rect) {
-          lastTierRef.current = "";
-          if (!autoRef.current) setAutoBasemap(true);
+          apply("wide");
           return;
         }
 
@@ -74,17 +81,10 @@ export default function AutoBasemap() {
         const lngMi = (east - west) * 69.0 * Math.cos((centerLat * Math.PI) / 180);
         const areaSqMi = Math.abs(latMi * lngMi);
 
-        if (areaSqMi > 5) {
-          // City or wider — respect the user's choice and re-arm for zoom-in.
-          lastTierRef.current = "";
-          if (!autoRef.current) setAutoBasemap(true);
-          return;
-        }
-        if (!autoRef.current) return; // manual override in effect
-
-        if (areaSqMi <= 1) applyTier("google3d");
-        else if (areaSqMi <= 2.5) applyTier("hybrid");
-        else applyTier("streets");
+        if (areaSqMi > 5) apply("wide");
+        else if (areaSqMi <= 1) apply("google3d");
+        else if (areaSqMi <= 2.5) apply("hybrid");
+        else apply("streets");
       };
 
       const attach = () => {

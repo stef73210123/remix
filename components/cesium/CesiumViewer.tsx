@@ -372,15 +372,23 @@ export default function CesiumViewerComponent() {
         (movement: { position: any }) => {
           const camera = viewer.camera;
           const ray = camera.getPickRay(movement.position);
-          const target = ray
+          // Prefer the terrain/globe hit; fall back to the ellipsoid so it
+          // works even before terrain tiles have streamed in.
+          let target = ray
             ? viewer.scene.globe.pick(ray, viewer.scene)
             : undefined;
+          if (!target) {
+            target = camera.pickEllipsoid(
+              movement.position,
+              viewer.scene.globe.ellipsoid
+            );
+          }
           if (target) {
-            // Move halfway toward the tapped point, keeping orientation.
+            // Move most of the way toward the tapped point, keeping orientation.
             const newPos = Cesium.Cartesian3.lerp(
               camera.positionWC,
               target,
-              0.5,
+              0.72,
               new Cesium.Cartesian3()
             );
             camera.flyTo({

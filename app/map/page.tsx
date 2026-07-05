@@ -292,7 +292,7 @@ function MyLocationButton() {
 export default function MapPage() {
   return (
     <CesiumProvider>
-      <div className="relative w-full h-dvh overflow-hidden">
+      <div className="relative w-full h-dvh overflow-hidden select-none [-webkit-touch-callout:none]">
         {/* Top-left controls */}
         <div className="absolute top-3 left-3 z-40 flex items-center gap-2">
           <BackToDashboard />
