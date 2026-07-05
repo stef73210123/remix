@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { CesiumProvider, useCesium } from "@/components/cesium/CesiumContext";
-import PropertyPanel from "@/components/panels/PropertyPanel";
+import PropertyDetail from "@/components/panels/PropertyDetail";
 import RightPanel from "@/components/panels/RightPanel";
 import MapTypePicker from "@/components/toolbar/MapTypePicker";
 import SearchBar from "@/components/search/SearchBar";
@@ -317,8 +317,8 @@ export default function MapPage() {
         <URLStateSync />
         <URLStateLoader />
 
-        {/* Left Panel - Property Details */}
-        <PropertyPanel />
+        {/* Property detail — Google-Maps-style card (desktop) / drag sheet (mobile) */}
+        <PropertyDetail />
 
         {/* Right Panel - Layers / Filters / Comparison */}
         <RightPanel />
