@@ -226,7 +226,7 @@ export default function MapTypePicker() {
           )}
         >
           <LayersIcon className="w-4 h-4" />
-          MAP TYPE
+          MAPS
         </button>
 
       {/* Measure — surfaced here for phones/tablets (desktop has it in Draw tools). */}
