@@ -68,12 +68,16 @@ export default function MapTypePicker() {
     measureMode,
     setMeasureMode,
     leftPanelOpen,
+    setAutoBasemap,
   } = useCesium();
   const [open, setOpen] = useState(false);
 
   const google3dActive = showBuildings && buildingSource === "google";
 
   const selectMapType = (key: BasemapMode | "google3d") => {
+    // A manual pick pauses zoom-driven auto-basemap until the user zooms back
+    // out to city scale.
+    setAutoBasemap(false);
     if (key === "google3d") {
       setShowOsmFootprints(false);
       setBuildingSource("google");

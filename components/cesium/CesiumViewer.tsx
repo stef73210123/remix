@@ -305,26 +305,98 @@ export default function CesiumViewerComponent() {
         });
       }
 
-      // Click handler — shift+click adds to comparison
       const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      const canvas = viewer.scene.canvas as HTMLCanvasElement;
+
+      // Pick the property under a screen point and select + fly to it.
+      const selectPropertyAt = (clientX: number, clientY: number) => {
+        const rect = canvas.getBoundingClientRect();
+        const pos = new Cesium.Cartesian2(clientX - rect.left, clientY - rect.top);
+        const picked = viewer.scene.pick(pos);
+        if (Cesium.defined(picked) && picked.id) {
+          const entityId = picked.id.id as string;
+          if (entityId?.startsWith("property-")) {
+            const propId = entityId.replace("property-", "");
+            const property = allPropertiesRef.current.find((p) => p.id === propId);
+            if (property) {
+              setSelectedProperty(property);
+              setLeftPanelOpen(true);
+              flyToProperty(property);
+            }
+          }
+        }
+      };
+
+      // Long press & hold (~450ms, without dragging) selects + flies to a
+      // property. A plain tap/drag just navigates the map — this stops
+      // accidental selection while panning.
+      let pressTimer: ReturnType<typeof setTimeout> | null = null;
+      let startX = 0;
+      let startY = 0;
+      const clearPress = () => {
+        if (pressTimer) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+      };
+      const onPointerDown = (e: PointerEvent) => {
+        if (e.button && e.button !== 0) return; // primary button / touch only
+        startX = e.clientX;
+        startY = e.clientY;
+        clearPress();
+        pressTimer = setTimeout(() => {
+          pressTimer = null;
+          selectPropertyAt(startX, startY);
+        }, 450);
+      };
+      const onPointerMove = (e: PointerEvent) => {
+        if (
+          pressTimer &&
+          (Math.abs(e.clientX - startX) > 10 || Math.abs(e.clientY - startY) > 10)
+        ) {
+          clearPress();
+        }
+      };
+      canvas.addEventListener("pointerdown", onPointerDown);
+      canvas.addEventListener("pointermove", onPointerMove);
+      canvas.addEventListener("pointerup", clearPress);
+      canvas.addEventListener("pointercancel", clearPress);
+      canvas.addEventListener("pointerleave", clearPress);
+
+      // Double tap / double click zooms in toward the tapped point.
+      viewer.screenSpaceEventHandler?.removeInputAction(
+        Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
+      );
       handler.setInputAction(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (movement: { position: any }) => {
-          const picked = viewer.scene.pick(movement.position);
-          if (Cesium.defined(picked) && picked.id) {
-            const entityId = picked.id.id as string;
-            if (entityId?.startsWith("property-")) {
-              const propId = entityId.replace("property-", "");
-              const property = allPropertiesRef.current.find((p) => p.id === propId);
-              if (property) {
-                setSelectedProperty(property);
-                setLeftPanelOpen(true);
-                flyToProperty(property);
-              }
-            }
+          const camera = viewer.camera;
+          const ray = camera.getPickRay(movement.position);
+          const target = ray
+            ? viewer.scene.globe.pick(ray, viewer.scene)
+            : undefined;
+          if (target) {
+            // Move halfway toward the tapped point, keeping orientation.
+            const newPos = Cesium.Cartesian3.lerp(
+              camera.positionWC,
+              target,
+              0.5,
+              new Cesium.Cartesian3()
+            );
+            camera.flyTo({
+              destination: newPos,
+              orientation: {
+                heading: camera.heading,
+                pitch: camera.pitch,
+                roll: camera.roll,
+              },
+              duration: 0.4,
+            });
+          } else {
+            camera.zoomIn(camera.positionCartographic.height * 0.4);
           }
         },
-        Cesium.ScreenSpaceEventType.LEFT_CLICK
+        Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
       );
 
       // Shift+click for comparison
