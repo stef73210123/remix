@@ -92,6 +92,23 @@ a {
   border-color: var(--primary);
 }
 
+/* Horizontal-scroll strip for pill/chip rows on narrow screens.
+   Pills stay on one line and scroll sideways instead of stacking. */
+.pill-strip {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.pill-strip::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.pill-strip > .btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .input {
   width: 100%;
   background: rgba(10, 10, 10, 0.6);
