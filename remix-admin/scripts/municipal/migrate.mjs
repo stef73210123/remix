@@ -4,16 +4,18 @@
  *
  * Usage:
  *   NEON_DATABASE_URL=postgres://... node scripts/municipal/migrate.mjs
+ *   NEON_DATABASE_URL=postgres://... node scripts/municipal/migrate.mjs --reset
  *
- * Runs SQL files in scripts/municipal/migrations/ in lexical order,
- * tracking applied migrations in `_municipal_migration` table.
+ * Uses @neondatabase/serverless's Client (pg-compatible) so multi-statement
+ * DDL bodies run cleanly. Tracks applied migrations in `_municipal_migration`.
  *
- * Idempotent — safe to re-run.
+ * `--reset` drops schema `public` first — useful for M1 iteration on a
+ * fresh Neon DB. Idempotent otherwise.
  */
 import { readdir, readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { neon } from '@neondatabase/serverless'
+import { Client } from '@neondatabase/serverless'
 
 const url = process.env.NEON_DATABASE_URL
 if (!url) {
@@ -21,26 +23,32 @@ if (!url) {
   process.exit(1)
 }
 
-const sql = neon(url)
+const reset = process.argv.includes('--reset')
+
 const dir = join(dirname(fileURLToPath(import.meta.url)), 'migrations')
 
-async function ensureMigrationTable() {
-  await sql`
+async function run() {
+  const client = new Client(url)
+  await client.connect()
+
+  if (reset) {
+    console.log('→ RESET: dropping schema public')
+    await client.query('DROP SCHEMA public CASCADE')
+    await client.query('CREATE SCHEMA public')
+    await client.query('GRANT ALL ON SCHEMA public TO PUBLIC')
+    console.log('✓ schema reset')
+  }
+
+  await client.query(`
     CREATE TABLE IF NOT EXISTS _municipal_migration (
       name text PRIMARY KEY,
       applied_at timestamptz NOT NULL DEFAULT now()
     )
-  `
-}
+  `)
 
-async function appliedSet() {
-  const rows = await sql`SELECT name FROM _municipal_migration`
-  return new Set(rows.map((r) => r.name))
-}
+  const appliedRes = await client.query('SELECT name FROM _municipal_migration')
+  const applied = new Set(appliedRes.rows.map((r) => r.name))
 
-async function run() {
-  await ensureMigrationTable()
-  const applied = await appliedSet()
   const files = (await readdir(dir)).filter((f) => f.endsWith('.sql')).sort()
 
   for (const f of files) {
@@ -50,26 +58,36 @@ async function run() {
     }
     console.log(`→ ${f}`)
     const body = await readFile(join(dir, f), 'utf8')
-    // Neon HTTP driver runs one statement per call for multi-statement bodies;
-    // we split naively on `;\n` and skip empties. Comments retained inside
-    // individual statements are fine.
-    const statements = body
-      .split(/;\s*\n/g)
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0 && !/^--/.test(s))
 
-    for (const s of statements) {
-      try {
-        await sql.query(s)
-      } catch (e) {
-        console.error(`✗ failed statement in ${f}:\n${s.slice(0, 200)}...`)
-        throw e
-      }
+    try {
+      // Client.query handles multi-statement DDL bodies natively.
+      await client.query(body)
+    } catch (e) {
+      console.error(`✗ failed in ${f}: ${e.message}`)
+      await client.end()
+      throw e
     }
-    await sql`INSERT INTO _municipal_migration (name) VALUES (${f})`
+    await client.query('INSERT INTO _municipal_migration (name) VALUES ($1)', [f])
     console.log(`✓ ${f} applied`)
   }
 
+  // Sanity: enumerate created objects
+  const tables = await client.query(`
+    SELECT tablename FROM pg_tables
+    WHERE schemaname = 'public' AND tablename NOT LIKE '_%'
+    ORDER BY tablename
+  `)
+  const extensions = await client.query(`
+    SELECT extname FROM pg_extension
+    WHERE extname IN ('vector', 'postgis', 'pgcrypto', 'pg_trgm')
+    ORDER BY extname
+  `)
+
+  console.log(`\nTables created: ${tables.rows.length}`)
+  console.log(tables.rows.map((r) => `  - ${r.tablename}`).join('\n'))
+  console.log(`\nExtensions: ${extensions.rows.map((r) => r.extname).join(', ')}`)
+
+  await client.end()
   console.log('\nAll migrations applied.')
 }
 
