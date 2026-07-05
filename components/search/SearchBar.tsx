@@ -33,6 +33,7 @@ export default function SearchBar() {
     setSelectedProperty,
     setLeftPanelOpen,
     flyToProperty,
+    flyToAddressOverhead,
     viewerRef,
     rightPanel,
     setRightPanel,
@@ -150,24 +151,9 @@ export default function SearchBar() {
     setQuery("");
   }
 
-  async function flyToGeocode(result: GeocodingResult) {
-    const viewer = viewerRef.current;
-    if (!viewer) return;
-
-    const Cesium = await import("cesium");
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(
-        parseFloat(result.lon),
-        parseFloat(result.lat),
-        1000
-      ),
-      orientation: {
-        heading: Cesium.Math.toRadians(0),
-        pitch: Cesium.Math.toRadians(-45),
-        roll: 0,
-      },
-      duration: 1.5,
-    });
+  function flyToGeocode(result: GeocodingResult) {
+    // Address lookups land on a 2D overhead, north-up view of the location.
+    flyToAddressOverhead(parseFloat(result.lon), parseFloat(result.lat));
     setIsOpen(false);
     setQuery("");
   }
