@@ -3,9 +3,9 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { CesiumProvider, useCesium } from "@/components/cesium/CesiumContext";
-import PropertyPanel from "@/components/panels/PropertyPanel";
+import PropertyDetail from "@/components/panels/PropertyDetail";
 import RightPanel from "@/components/panels/RightPanel";
-import MapStyleToggle from "@/components/toolbar/MapStyleToggle";
+import MapTypePicker from "@/components/toolbar/MapTypePicker";
 import SearchBar from "@/components/search/SearchBar";
 import NewsPanel from "@/components/panels/NewsPanel";
 import { Home, LocateFixed, ArrowLeft } from "lucide-react";
@@ -317,8 +317,8 @@ export default function MapPage() {
         <URLStateSync />
         <URLStateLoader />
 
-        {/* Left Panel - Property Details */}
-        <PropertyPanel />
+        {/* Property detail — Google-Maps-style card (desktop) / drag sheet (mobile) */}
+        <PropertyDetail />
 
         {/* Right Panel - Layers / Filters / Comparison */}
         <RightPanel />
@@ -329,8 +329,8 @@ export default function MapPage() {
         {/* News Panel */}
         <NewsPanel />
 
-        {/* Basemap + 3D style toggle (replaces the old bottom strip) */}
-        <MapStyleToggle />
+        {/* Map type & layers picker (Google-Maps style) + mobile Measure */}
+        <MapTypePicker />
 
         {/* Coordinate display */}
         <CoordinateDisplay />
