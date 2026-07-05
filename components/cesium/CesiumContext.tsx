@@ -53,10 +53,11 @@ interface CesiumContextValue {
   viewMode: "2D" | "3D";
   toggleViewMode: () => void;
   flyToAddressOverhead: (lng: number, lat: number) => void;
-  // Zoom-driven automatic basemap. Disarmed when the user picks a basemap
-  // manually; re-armed automatically once they zoom back out to city scale.
-  autoBasemap: boolean;
-  setAutoBasemap: (on: boolean) => void;
+  // Zoom-driven automatic basemap. The user's manually chosen basemap is
+  // remembered here and used as the wide/city-scale basemap (auto reverts to
+  // it — and drops Google 3D — as you zoom back out).
+  userBasemap: BasemapMode;
+  setUserBasemap: (mode: BasemapMode) => void;
 }
 
 const CesiumContext = createContext<CesiumContextValue | null>(null);
@@ -89,7 +90,7 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [measureMode, setMeasureMode] = useState<"none" | "measure">("none");
   const [activeRegion, setActiveRegion] = useState("dc");
   const [viewMode, setViewMode] = useState<"2D" | "3D">("3D");
-  const [autoBasemap, setAutoBasemap] = useState(true);
+  const [userBasemap, setUserBasemap] = useState<BasemapMode>("satellite");
 
   // Toggle 2D/3D while keeping the current focal point (screen-center ground
   // point) and zoom — Cesium's default morph otherwise jumps the camera out.
@@ -141,9 +142,6 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const flyToAddressOverhead = useCallback(async (lng: number, lat: number) => {
     const viewer = viewerRef.current;
     if (!viewer) return;
-    // Respect the explicit overhead view — pause auto-basemap until the user
-    // zooms back out to city scale (which re-arms it).
-    setAutoBasemap(false);
     const Cesium = await import("cesium");
     const scene = viewer.scene;
     const camera = viewer.camera;
@@ -237,8 +235,8 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
         viewMode,
         toggleViewMode,
         flyToAddressOverhead,
-        autoBasemap,
-        setAutoBasemap,
+        userBasemap,
+        setUserBasemap,
       }}
     >
       {children}

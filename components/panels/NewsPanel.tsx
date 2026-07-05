@@ -219,7 +219,7 @@ export default function NewsPanel() {
           onClick={() => setLightbox(null)}
         >
           <div
-            className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto bg-white text-gray-900 rounded-2xl shadow-2xl"
+            className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto bg-white text-gray-900 rounded-2xl shadow-2xl select-text"
             onClick={(e) => e.stopPropagation()}
           >
             <button
