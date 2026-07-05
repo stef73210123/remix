@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useCesium, BasemapMode } from "@/components/cesium/CesiumContext";
+import ViewModeToggle from "@/components/toolbar/ViewModeToggle";
 import { cn } from "@/lib/utils";
 
 // Top row — map types (basemaps + Google Photorealistic 3D as a "type").
@@ -247,6 +248,9 @@ export default function MapTypePicker() {
         <Ruler className="w-4 h-4" />
         MEASURE
       </button>
+
+      {/* 2D / 3D globe view toggle */}
+      <ViewModeToggle />
     </div>
   );
 }

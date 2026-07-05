@@ -159,19 +159,13 @@ export default function NewsPanel() {
       )}
     >
       {!expanded ? (
-        /* Collapsed: TV-style lower-third — category icon + big headline + source/date */
+        /* Collapsed: TV lower-third — the topic icon is the ONLY icon (category
+           label beneath it) + big headline + source/date */
         <button
           onClick={() => setExpanded(true)}
           aria-label="Open real estate news"
           className="w-full h-20 flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
         >
-          {/* Static news brand mark */}
-          <div className="flex flex-col items-center gap-0.5 shrink-0">
-            <Newspaper className="w-5 h-5 text-[#ca615f]" />
-            <span className="text-[8px] font-bold text-white/60 tracking-widest">
-              NEWS
-            </span>
-          </div>
           <div className="flex-1 relative overflow-hidden self-stretch">
             {loading ? (
               <span className="absolute inset-0 flex items-center text-xs text-white/40">Loading headlines…</span>
@@ -183,15 +177,22 @@ export default function NewsPanel() {
               return (
                 <div
                   key={tickerIndex}
-                  className="absolute inset-0 flex items-center gap-2.5 animate-atlas-ticker-in"
+                  className="absolute inset-0 flex items-center gap-3 animate-atlas-ticker-in"
                 >
-                  {/* Category as an icon (was the "market / policy" text label) */}
-                  <div
-                    className="shrink-0 w-9 h-9 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: CATEGORY_COLORS[item.category] + "22" }}
-                    title={item.category}
-                  >
-                    <CatIcon className="w-4 h-4" style={{ color: CATEGORY_COLORS[item.category] }} />
+                  {/* Topic icon — the only icon on the bar, with its category label under it */}
+                  <div className="shrink-0 flex flex-col items-center gap-1 w-12">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center"
+                      style={{ backgroundColor: CATEGORY_COLORS[item.category] + "22" }}
+                    >
+                      <CatIcon className="w-4 h-4" style={{ color: CATEGORY_COLORS[item.category] }} />
+                    </div>
+                    <span
+                      className="text-[8px] font-bold uppercase tracking-wide leading-none"
+                      style={{ color: CATEGORY_COLORS[item.category] }}
+                    >
+                      {item.category}
+                    </span>
                   </div>
                   <div className="min-w-0 flex flex-col justify-center">
                     <div className="text-[13px] sm:text-sm text-white font-semibold leading-snug line-clamp-2">
