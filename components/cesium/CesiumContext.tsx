@@ -49,9 +49,14 @@ interface CesiumContextValue {
   // 11I: Active region
   activeRegion: string;
   setActiveRegion: (region: string) => void;
-  // News ticker expanded state (lifted so the toolbar can sit above it)
-  newsExpanded: boolean;
-  setNewsExpanded: (expanded: boolean) => void;
+  // 2D / 3D scene mode (lifted so the toggle button + search flow stay in sync)
+  viewMode: "2D" | "3D";
+  toggleViewMode: () => void;
+  flyToAddressOverhead: (lng: number, lat: number) => void;
+  // Zoom-driven automatic basemap. Disarmed when the user picks a basemap
+  // manually; re-armed automatically once they zoom back out to city scale.
+  autoBasemap: boolean;
+  setAutoBasemap: (on: boolean) => void;
 }
 
 const CesiumContext = createContext<CesiumContextValue | null>(null);
@@ -83,7 +88,80 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [comparisonProperties, setComparisonProperties] = useState<Property[]>([]);
   const [measureMode, setMeasureMode] = useState<"none" | "measure">("none");
   const [activeRegion, setActiveRegion] = useState("dc");
-  const [newsExpanded, setNewsExpanded] = useState(false);
+  const [viewMode, setViewMode] = useState<"2D" | "3D">("3D");
+  const [autoBasemap, setAutoBasemap] = useState(true);
+
+  // Toggle 2D/3D while keeping the current focal point (screen-center ground
+  // point) and zoom — Cesium's default morph otherwise jumps the camera out.
+  const toggleViewMode = useCallback(async () => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    const Cesium = await import("cesium");
+    const scene = viewer.scene;
+    const camera = viewer.camera;
+    const canvas = scene.canvas;
+
+    // Focal point under the middle of the screen + distance to it (≈ zoom).
+    const centerPx = new Cesium.Cartesian2(
+      canvas.clientWidth / 2,
+      canvas.clientHeight / 2
+    );
+    const centerCart = camera.pickEllipsoid(centerPx, scene.globe.ellipsoid);
+    let lon: number, lat: number, distance: number;
+    if (centerCart) {
+      const carto = Cesium.Cartographic.fromCartesian(centerCart);
+      lon = carto.longitude;
+      lat = carto.latitude;
+      distance = Cesium.Cartesian3.distance(camera.positionWC, centerCart);
+    } else {
+      const pc = camera.positionCartographic;
+      lon = pc.longitude;
+      lat = pc.latitude;
+      distance = pc.height;
+    }
+    const heading = camera.heading;
+    const goingTo2D = scene.mode !== Cesium.SceneMode.SCENE2D;
+
+    const restore = () => {
+      camera.setView({
+        destination: Cesium.Cartesian3.fromRadians(lon, lat, distance),
+        orientation: { heading, pitch: -Cesium.Math.PI_OVER_TWO, roll: 0 },
+      });
+    };
+    const remove = scene.morphComplete.addEventListener(() => {
+      restore();
+      remove();
+    });
+    if (goingTo2D) scene.morphTo2D(0.5);
+    else scene.morphTo3D(0.5);
+    setViewMode(goingTo2D ? "2D" : "3D");
+  }, []);
+
+  // Address search lands on a 2D overhead, north-up view centered on the result.
+  const flyToAddressOverhead = useCallback(async (lng: number, lat: number) => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    // Respect the explicit overhead view — pause auto-basemap until the user
+    // zooms back out to city scale (which re-arms it).
+    setAutoBasemap(false);
+    const Cesium = await import("cesium");
+    const scene = viewer.scene;
+    const camera = viewer.camera;
+    const height = 1200;
+    const dest = Cesium.Cartesian3.fromDegrees(lng, lat, height);
+    const overhead = { heading: 0, pitch: -Cesium.Math.PI_OVER_TWO, roll: 0 };
+
+    if (scene.mode !== Cesium.SceneMode.SCENE2D) {
+      const remove = scene.morphComplete.addEventListener(() => {
+        camera.setView({ destination: dest, orientation: overhead });
+        remove();
+      });
+      scene.morphTo2D(0.5);
+      setViewMode("2D");
+    } else {
+      camera.flyTo({ destination: dest, orientation: overhead, duration: 1.5 });
+    }
+  }, []);
 
   const flyToProperty = useCallback(async (property: Property) => {
     const viewer = viewerRef.current;
@@ -156,8 +234,11 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
         setMeasureMode,
         activeRegion,
         setActiveRegion,
-        newsExpanded,
-        setNewsExpanded,
+        viewMode,
+        toggleViewMode,
+        flyToAddressOverhead,
+        autoBasemap,
+        setAutoBasemap,
       }}
     >
       {children}

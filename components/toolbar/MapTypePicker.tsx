@@ -67,14 +67,17 @@ export default function MapTypePicker() {
     setRightPanel,
     measureMode,
     setMeasureMode,
-    newsExpanded,
     leftPanelOpen,
+    setAutoBasemap,
   } = useCesium();
   const [open, setOpen] = useState(false);
 
   const google3dActive = showBuildings && buildingSource === "google";
 
   const selectMapType = (key: BasemapMode | "google3d") => {
+    // A manual pick pauses zoom-driven auto-basemap until the user zooms back
+    // out to city scale.
+    setAutoBasemap(false);
     if (key === "google3d") {
       setShowOsmFootprints(false);
       setBuildingSource("google");
@@ -132,8 +135,7 @@ export default function MapTypePicker() {
   return (
     <div
       className={cn(
-        "absolute left-1/2 -translate-x-1/2 z-30 flex items-end gap-2 transition-[bottom] duration-300",
-        newsExpanded ? "bottom-[312px]" : "bottom-[88px]",
+        "absolute left-1/2 -translate-x-1/2 z-30 flex items-end gap-2 bottom-[88px]",
         // The property sheet/card overlaps the bottom-center control until there's
         // room beside it (lg+) — hide while a property is open below lg.
         leftPanelOpen && "max-lg:hidden"

@@ -10,7 +10,7 @@ interface Coordinates {
 }
 
 export default function CoordinateDisplay() {
-  const { viewerRef, rightPanel, newsExpanded } = useCesium();
+  const { viewerRef, rightPanel } = useCesium();
   const [coords, setCoords] = useState<Coordinates | null>(null);
   const lastUpdateRef = useRef(0);
 
@@ -77,7 +77,7 @@ export default function CoordinateDisplay() {
   }, [viewerRef]);
 
   // The right panel or expanded news occupies this corner — hide to avoid overlap.
-  if (!coords || rightPanel || newsExpanded) return null;
+  if (!coords || rightPanel) return null;
 
   const latDir = coords.lat >= 0 ? "N" : "S";
   const lngDir = coords.lng >= 0 ? "E" : "W";

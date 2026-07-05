@@ -58,6 +58,11 @@ const CompassControl = dynamic(
   { ssr: false }
 );
 
+const AutoBasemap = dynamic(
+  () => import("@/components/toolbar/AutoBasemap"),
+  { ssr: false }
+);
+
 function URLStateSync() {
   const {
     selectedProperty,
@@ -300,6 +305,9 @@ export default function MapPage() {
 
         {/* Cesium 3D Viewer */}
         <CesiumViewer />
+
+        {/* Zoom-driven automatic basemap */}
+        <AutoBasemap />
 
         {/* Measurement tools */}
         <MeasureTools />

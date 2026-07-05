@@ -2,17 +2,13 @@
 
 import { useState, useEffect } from "react";
 import {
-  ChevronUp,
-  ChevronDown,
-  Newspaper,
+  X,
   ExternalLink,
-  Clock,
   TrendingUp,
   Building2,
   Landmark,
   DollarSign,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useCesium } from "@/components/cesium/CesiumContext";
 
 interface NewsItem {
@@ -95,11 +91,12 @@ const CATEGORY_ICONS: Record<NewsItem["category"], React.ElementType> = {
 };
 
 export default function NewsPanel() {
-  const { leftPanelOpen, rightPanel, newsExpanded: expanded, setNewsExpanded: setExpanded, activeRegion } = useCesium();
-  const [filter, setFilter] = useState<NewsItem["category"] | "all">("all");
+  const { leftPanelOpen, rightPanel, activeRegion } = useCesium();
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [tickerIndex, setTickerIndex] = useState(0);
+  // The article opened in the lightbox (null = closed).
+  const [lightbox, setLightbox] = useState<NewsItem | null>(null);
 
   // News localized to the metro of the active region (like the listings).
   useEffect(() => {
@@ -136,181 +133,141 @@ export default function NewsPanel() {
     return () => { cancelled = true; };
   }, [activeRegion]);
 
-  const filtered =
-    filter === "all" ? news : news.filter((n) => n.category === filter);
-
-  // Rotate the collapsed ticker headline every ~5s (paused while expanded).
+  // Rotate the ticker headline every ~5s (paused while the lightbox is open).
   useEffect(() => {
-    if (expanded || news.length <= 1) return;
+    if (lightbox || news.length <= 1) return;
     const t = setInterval(() => {
       setTickerIndex((i) => (i + 1) % news.length);
     }, 5000);
     return () => clearInterval(t);
-  }, [expanded, news.length]);
+  }, [lightbox, news.length]);
 
-  // A side panel occupies the full-width bottom bar's space when open.
-  if (leftPanelOpen || rightPanel) return null;
+  // Close the lightbox on Escape.
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
+
+  const current = news.length ? news[tickerIndex % news.length] : null;
 
   return (
-    <div
-      className={cn(
-        "absolute bottom-0 left-0 right-0 z-20 transition-[height] duration-300",
-        expanded ? "h-[300px]" : "h-20"
-      )}
-    >
-      {!expanded ? (
-        /* Collapsed: TV lower-third — the topic icon is the ONLY icon (category
-           label beneath it) + big headline + source/date */
-        <button
-          onClick={() => setExpanded(true)}
-          aria-label="Open real estate news"
-          className="w-full h-20 flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
-        >
-          <div className="flex-1 relative overflow-hidden self-stretch">
-            {loading ? (
-              <span className="absolute inset-0 flex items-center text-xs text-white/40">Loading headlines…</span>
-            ) : filtered.length === 0 ? (
-              <span className="absolute inset-0 flex items-center text-xs text-white/40">No local headlines</span>
-            ) : (() => {
-              const item = filtered[tickerIndex % filtered.length];
-              const CatIcon = CATEGORY_ICONS[item.category];
-              return (
-                <div
-                  key={tickerIndex}
-                  className="absolute inset-0 flex items-center gap-3 animate-atlas-ticker-in"
-                >
-                  {/* Topic icon — the only icon on the bar, with its category label under it */}
-                  <div className="shrink-0 flex flex-col items-center gap-1 w-12">
-                    <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center"
-                      style={{ backgroundColor: CATEGORY_COLORS[item.category] + "22" }}
-                    >
-                      <CatIcon className="w-4 h-4" style={{ color: CATEGORY_COLORS[item.category] }} />
+    <>
+      {/* A side panel occupies the full-width bottom bar's space when open. */}
+      {!leftPanelOpen && !rightPanel && (
+        <div className="absolute bottom-0 left-0 right-0 z-20 h-20">
+          <button
+            onClick={() => current && setLightbox(current)}
+            aria-label="Open this headline"
+            disabled={!current}
+            className="w-full h-20 flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left disabled:cursor-default"
+          >
+            <div className="flex-1 relative overflow-hidden self-stretch">
+              {loading ? (
+                <span className="absolute inset-0 flex items-center text-xs text-white/40">Loading headlines…</span>
+              ) : !current ? (
+                <span className="absolute inset-0 flex items-center text-xs text-white/40">No local headlines</span>
+              ) : (() => {
+                const CatIcon = CATEGORY_ICONS[current.category];
+                return (
+                  <div
+                    key={tickerIndex}
+                    className="absolute inset-0 flex items-center gap-3 animate-atlas-ticker-in"
+                  >
+                    {/* Topic icon — the only icon on the bar, category label ABOVE it */}
+                    <div className="shrink-0 flex flex-col items-center gap-1 w-12">
+                      <span
+                        className="text-[8px] font-bold uppercase tracking-wide leading-none"
+                        style={{ color: CATEGORY_COLORS[current.category] }}
+                      >
+                        {current.category}
+                      </span>
+                      <div
+                        className="w-9 h-9 rounded-lg flex items-center justify-center"
+                        style={{ backgroundColor: CATEGORY_COLORS[current.category] + "22" }}
+                      >
+                        <CatIcon className="w-4 h-4" style={{ color: CATEGORY_COLORS[current.category] }} />
+                      </div>
                     </div>
-                    <span
-                      className="text-[8px] font-bold uppercase tracking-wide leading-none"
-                      style={{ color: CATEGORY_COLORS[item.category] }}
-                    >
-                      {item.category}
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex flex-col justify-center">
-                    <div className="text-[13px] sm:text-sm text-white font-semibold leading-snug line-clamp-2">
-                      {item.title}
-                    </div>
-                    <div className="text-[10px] text-white/45 truncate mt-0.5">
-                      {item.source} &middot; {item.timestamp}
+                    <div className="min-w-0 flex flex-col justify-center">
+                      <div className="text-[13px] sm:text-sm text-white font-semibold leading-snug line-clamp-2">
+                        {current.title}
+                      </div>
+                      <div className="text-[10px] text-white/45 truncate mt-0.5">
+                        {current.source} &middot; {current.timestamp}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })()}
-          </div>
-          <div className="flex flex-col items-end gap-1 shrink-0 self-center">
-            <span className="hidden md:flex items-center gap-1 text-[8px] text-white/30">
+                );
+              })()}
+            </div>
+            <span className="hidden md:flex items-center gap-1 text-[8px] text-white/30 shrink-0 self-center">
               <span className="font-bold text-[#d4767a]">CESIUM</span>
               <span>&copy; OSM</span>
             </span>
-            <ChevronUp className="w-4 h-4 text-white/60" />
-          </div>
-        </button>
-      ) : (
-        /* Expanded: header + horizontal cards */
-        <div className="h-full flex flex-col">
-          <div className="flex items-center justify-between px-4 h-9 shrink-0 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10">
-            <div className="flex items-center gap-2">
-              <Newspaper className="w-4 h-4 text-[#ca615f]" />
-              <span className="text-xs font-bold text-white">REAL ESTATE NEWS</span>
-              <span className="text-[10px] text-white/50">
-                {loading ? "..." : `${news.length} articles`}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-1 mr-2">
-                <FilterChip label="All" active={filter === "all"} onClick={() => setFilter("all")} />
-                <FilterChip label="Market" color={CATEGORY_COLORS.market} active={filter === "market"} onClick={() => setFilter("market")} />
-                <FilterChip label="Development" color={CATEGORY_COLORS.development} active={filter === "development"} onClick={() => setFilter("development")} />
-                <FilterChip label="Policy" color={CATEGORY_COLORS.policy} active={filter === "policy"} onClick={() => setFilter("policy")} />
-                <FilterChip label="Finance" color={CATEGORY_COLORS.finance} active={filter === "finance"} onClick={() => setFilter("finance")} />
-              </div>
-              <button onClick={() => setExpanded(false)} aria-label="Collapse news" className="p-0.5">
-                <ChevronDown className="w-4 h-4 text-white/60" />
-              </button>
-            </div>
-          </div>
+          </button>
+        </div>
+      )}
 
-          <div className="bg-[#0a0a0a]/95 backdrop-blur-sm flex-1 overflow-x-auto overflow-y-hidden">
-            <div className="flex gap-3 p-3 h-full">
-              {loading ? (
-                <div className="flex items-center justify-center w-full text-white/50 text-xs">Loading...</div>
-              ) : filtered.length === 0 ? (
-                <div className="flex items-center justify-center w-full text-white/50 text-xs">No news available</div>
-              ) : filtered.map((item) => (
+      {/* Lightbox — the tapped article over the whole app, X to return. */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          onClick={() => setLightbox(null)}
+        >
+          <div
+            className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto bg-white text-gray-900 rounded-2xl shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setLightbox(null)}
+              aria-label="Close"
+              className="absolute top-3 right-3 p-1.5 rounded-full bg-black/5 hover:bg-black/10 text-gray-600"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span
+                  className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded text-white"
+                  style={{ backgroundColor: CATEGORY_COLORS[lightbox.category] }}
+                >
+                  {lightbox.category}
+                </span>
+                <span className="text-xs text-gray-500">
+                  {lightbox.source} &middot; {lightbox.timestamp}
+                </span>
+              </div>
+
+              <h2 className="text-xl font-bold leading-tight mb-3 pr-6 normal-case tracking-normal">
+                {lightbox.title}
+              </h2>
+
+              {lightbox.summary && (
+                <p className="text-sm text-gray-600 leading-relaxed mb-5">
+                  {lightbox.summary}
+                </p>
+              )}
+
+              {lightbox.url && lightbox.url !== "#" && (
                 <a
-                  key={item.id}
-                  href={item.url}
+                  href={lightbox.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-shrink-0 w-[280px] max-w-[85vw] bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col hover:bg-white/10 transition-colors cursor-pointer group"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#ca615f] hover:text-[#d4767a]"
                 >
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span
-                      className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded text-white"
-                      style={{ backgroundColor: CATEGORY_COLORS[item.category] }}
-                    >
-                      {item.category}
-                    </span>
-                    <div className="flex items-center gap-1 text-white/40">
-                      <Clock className="w-3 h-3" />
-                      <span className="text-[9px]">{item.timestamp}</span>
-                    </div>
-                  </div>
-                  <h4 className="text-xs font-semibold text-white leading-tight mb-1 line-clamp-2">
-                    {item.title}
-                  </h4>
-                  <p className="text-[10px] text-white/60 leading-relaxed flex-1 line-clamp-3">
-                    {item.summary}
-                  </p>
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10">
-                    <span className="text-[9px] text-[#ca615f] font-medium">{item.source}</span>
-                    <ExternalLink className="w-3 h-3 text-white/30 group-hover:text-[#ca615f] transition-colors" />
-                  </div>
+                  Read full article
+                  <ExternalLink className="w-4 h-4" />
                 </a>
-              ))}
+              )}
             </div>
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function FilterChip({
-  label,
-  color,
-  active,
-  onClick,
-}: {
-  label: string;
-  color?: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-      className={cn(
-        "text-[9px] font-medium px-2 py-0.5 rounded-full transition-colors",
-        active
-          ? "bg-white/20 text-white"
-          : "text-white/40 hover:text-white/70"
-      )}
-      style={active && color ? { backgroundColor: color } : undefined}
-    >
-      {label}
-    </button>
+    </>
   );
 }
