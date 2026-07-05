@@ -114,6 +114,12 @@ a {
   border-radius: 12px;
 }
 
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
 .label {
   display: block;
   font-size: 12px;
@@ -164,6 +170,19 @@ th {
 .badge.C {
   background: var(--c);
   color: #0a0a0a;
+}
+
+/* Neutral pill for secondary metadata (e.g. state codes). Reads on the dark
+   panel — uses surface + border tokens instead of a near-invisible black tint. */
+.badge.state {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 /* Auth screens sit centered over the topo background */

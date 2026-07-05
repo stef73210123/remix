@@ -35,22 +35,7 @@ function TierBadge({ tier }: { tier: string }) {
 }
 
 function StateBadge({ state }: { state: StateCode }) {
-  return (
-    <span
-      style={{
-        display: 'inline-block',
-        padding: '2px 6px',
-        borderRadius: 4,
-        fontSize: 11,
-        fontWeight: 600,
-        background: 'rgba(0,0,0,0.06)',
-        color: 'var(--muted)',
-        letterSpacing: 0.3,
-      }}
-    >
-      {state}
-    </span>
-  )
+  return <span className="badge state">{state}</span>
 }
 
 export default function DashboardClient({
@@ -255,7 +240,7 @@ export default function DashboardClient({
         </div>
       </header>
 
-      <h1 style={{ fontSize: 22, margin: '0 0 16px' }}>CRM</h1>
+      <h1 className="page-title">CRM</h1>
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
