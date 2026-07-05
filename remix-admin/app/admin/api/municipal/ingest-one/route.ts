@@ -3,15 +3,14 @@
  * municipality (default: 1 meeting, no transcription).
  *
  * Usage (via curl or browser after logging into /admin/):
- *   GET  /admin/api/municipal/ingest-one?muni=nc
- *   GET  /admin/api/municipal/ingest-one?muni=rockland
- *   GET  /admin/api/municipal/ingest-one?muni=nc&body=town_board&limit=1
+ *   GET /admin/api/municipal/ingest-one?muni=nc
+ *   GET /admin/api/municipal/ingest-one?muni=rockland
+ *   GET /admin/api/municipal/ingest-one?muni=nc&body=town_board&limit=1
  *
- * Auth mirrors /admin/api/cron/rfp-ingest: Vercel Cron header OR admin session.
+ * Auth: session cookie OR Bearer CRON_SECRET OR Bearer MUNICIPAL_INGEST_TOKEN
  */
 import { NextResponse } from 'next/server'
-import { cookies, headers } from 'next/headers'
-import { verifySession, SESSION_COOKIE } from '@/lib/auth'
+import { authorizeMunicipal } from '@/lib/municipal/auth'
 import { ingestMunicipality } from '@/lib/municipal/ingest'
 import { health } from '@/lib/municipal/db'
 
@@ -19,18 +18,8 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
 
-async function authorize(): Promise<boolean> {
-  const h = await headers()
-  const auth = h.get('authorization')
-  const secret = process.env.CRON_SECRET
-  if (secret && auth === `Bearer ${secret}`) return true
-  const store = await cookies()
-  const session = await verifySession(store.get(SESSION_COOKIE)?.value)
-  return !!session
-}
-
 export async function GET(req: Request) {
-  if (!(await authorize())) {
+  if (!(await authorizeMunicipal())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -59,12 +48,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: true, muni, dbHealth, report })
   } catch (e) {
     return NextResponse.json(
-      {
-        ok: false,
-        muni,
-        dbHealth,
-        error: e instanceof Error ? e.message : String(e),
-      },
+      { ok: false, muni, dbHealth, error: e instanceof Error ? e.message : String(e) },
       { status: 500 },
     )
   }
