@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CesiumProvider, useCesium } from "@/components/cesium/CesiumContext";
 import PropertyPanel from "@/components/panels/PropertyPanel";
 import RightPanel from "@/components/panels/RightPanel";
-import MapToolbar from "@/components/toolbar/MapToolbar";
+import MapStyleToggle from "@/components/toolbar/MapStyleToggle";
 import SearchBar from "@/components/search/SearchBar";
 import NewsPanel from "@/components/panels/NewsPanel";
 import { Home, LocateFixed, ArrowLeft } from "lucide-react";
@@ -55,11 +55,6 @@ const KeyboardShortcuts = dynamic(
 
 const CompassControl = dynamic(
   () => import("@/components/toolbar/CompassControl"),
-  { ssr: false }
-);
-
-const BasemapSelector = dynamic(
-  () => import("@/components/toolbar/BasemapSelector"),
   { ssr: false }
 );
 
@@ -334,11 +329,8 @@ export default function MapPage() {
         {/* News Panel */}
         <NewsPanel />
 
-        {/* Bottom Toolbar */}
-        <MapToolbar />
-
-        {/* Basemap Selector */}
-        <BasemapSelector />
+        {/* Basemap + 3D style toggle (replaces the old bottom strip) */}
+        <MapStyleToggle />
 
         {/* Coordinate display */}
         <CoordinateDisplay />

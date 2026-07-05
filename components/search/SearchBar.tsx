@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Search, X, Layers, Filter, MapPin, Star, Clock, Building2, Navigation } from "lucide-react";
+import { Search, X, Layers, Filter, MapPin, Star, Clock, Building2, Navigation, GitCompare } from "lucide-react";
 import { useCesium } from "@/components/cesium/CesiumContext";
 import { MOCK_PROPERTIES } from "@/lib/data/properties";
 import { cn } from "@/lib/utils";
@@ -38,6 +38,7 @@ export default function SearchBar() {
     setRightPanel,
     activeRegion,
     setActiveRegion,
+    comparisonProperties,
   } = useCesium();
   const region = getRegion(activeRegion);
 
@@ -420,6 +421,25 @@ export default function SearchBar() {
         >
           <Building2 className="w-4 h-4" />
         </button>
+        {comparisonProperties.length > 0 && (
+          <button
+            onClick={() =>
+              setRightPanel(rightPanel === "comparison" ? null : "comparison")
+            }
+            className={cn(
+              "relative p-2 rounded-lg shadow-lg border transition-colors",
+              rightPanel === "comparison"
+                ? "bg-[#ca615f] text-white border-[#ca615f]"
+                : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+            )}
+            title={`Compare (${comparisonProperties.length})`}
+          >
+            <GitCompare className="w-4 h-4" />
+            <span className="absolute -top-1 -right-1 min-w-[15px] h-[15px] px-0.5 rounded-full bg-[#ca615f] text-white text-[9px] font-bold leading-[15px] text-center">
+              {comparisonProperties.length}
+            </span>
+          </button>
+        )}
       </div>
     </div>
   );

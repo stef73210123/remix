@@ -11,6 +11,7 @@ import {
   Trash2,
   Download,
   Upload,
+  Ruler,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -25,7 +26,7 @@ import {
 type DrawMode = "none" | "polygon" | "polyline" | "point" | "text";
 
 export default function DrawTools() {
-  const { viewerRef, leftPanelOpen } = useCesium();
+  const { viewerRef, leftPanelOpen, measureMode, setMeasureMode } = useCesium();
   const [drawMode, setDrawMode] = useState<DrawMode>("none");
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -313,6 +314,12 @@ export default function DrawTools() {
         label="Text"
         active={drawMode === "text"}
         onClick={() => toggleMode("text")}
+      />
+      <DrawButton
+        icon={<Ruler className="w-4 h-4" />}
+        label="Measure"
+        active={measureMode === "measure"}
+        onClick={() => setMeasureMode(measureMode === "measure" ? "none" : "measure")}
       />
 
       <div className="w-full h-px bg-white/10 my-1" />

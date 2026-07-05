@@ -137,7 +137,7 @@ export default function NewsPanel() {
     <div
       className={cn(
         "absolute bottom-0 left-0 right-0 z-20 transition-[height] duration-300",
-        expanded ? "h-[300px]" : "h-12"
+        expanded ? "h-[300px]" : "h-16"
       )}
     >
       {!expanded ? (
@@ -145,7 +145,7 @@ export default function NewsPanel() {
         <button
           onClick={() => setExpanded(true)}
           aria-label="Open real estate news"
-          className="w-full h-12 flex items-stretch gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
+          className="w-full h-16 flex items-stretch gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
         >
           <div className="flex items-center gap-1.5 shrink-0 self-center">
             <Newspaper className="w-4 h-4 text-[#ca615f]" />
@@ -176,7 +176,7 @@ export default function NewsPanel() {
                       {item.source} &middot; {item.timestamp}
                     </span>
                   </div>
-                  <div className="text-[12px] text-white font-medium leading-tight truncate">
+                  <div className="text-[12px] text-white font-medium leading-tight line-clamp-2">
                     {item.title}
                   </div>
                 </div>
