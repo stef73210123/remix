@@ -68,8 +68,6 @@ export default function DashboardClient({
   const [rfpsLoading, setRfpsLoading] = useState(false)
   const [rfpsError, setRfpsError] = useState('')
   const [stateFilter, setStateFilter] = useState<StateFilter>('ALL')
-  const [ingestRunning, setIngestRunning] = useState(false)
-  const [ingestSummary, setIngestSummary] = useState('')
 
   const [fund, setFund] = useState<FundraisingContact[] | null>(null)
   const [fundLoading, setFundLoading] = useState(false)
@@ -107,39 +105,6 @@ export default function DashboardClient({
   async function logout() {
     await fetch('/admin/api/auth/logout', { method: 'POST' })
     window.location.href = '/admin/login'
-  }
-
-  async function refreshFromPortals() {
-    setIngestRunning(true)
-    setIngestSummary('Refreshing from state portals — 30 to 90 seconds…')
-    try {
-      const res = await fetch('/admin/api/cron/rfp-ingest', {
-        method: 'POST',
-        credentials: 'include',
-      })
-      if (!res.ok) {
-        setIngestSummary(`Ingest failed (HTTP ${res.status}).`)
-        return
-      }
-      const report = await res.json()
-      const parts: string[] = []
-      let ok = 0
-      for (const s of report.states || []) {
-        if (s.ok) ok++
-        parts.push(`${s.state}=${s.filtered}/${s.fetched}${s.ok ? '' : '!'}`)
-      }
-      setIngestSummary(`${ok}/5 portals OK · ${parts.join(' ')}`)
-      // Refetch the list so the UI shows fresh records.
-      const r2 = await fetch('/admin/api/rfps')
-      if (r2.ok) {
-        const d2 = await r2.json()
-        setRfps(d2.opportunities || [])
-      }
-    } catch {
-      setIngestSummary('Ingest failed — network error.')
-    } finally {
-      setIngestRunning(false)
-    }
   }
 
   const q = query.trim().toLowerCase()
@@ -295,47 +260,31 @@ export default function DashboardClient({
         </span>
       </div>
 
-      {/* RFPs — state filter chip row + refresh */}
+      {/* RFPs — state filter chip row (horizontal-scroll strip on mobile).
+          Records are refreshed automatically by the weekly ingest cron
+          (see vercel.json → /admin/api/cron/rfp-ingest). */}
       {tab === 'rfps' && (
-        <>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12 }}>
-            <div
-              className="pill-strip"
-              style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', flex: 1, minWidth: 0 }}
-            >
-              {(['ALL', ...STATE_CODES] as StateFilter[]).map((s) => {
-                const active = stateFilter === s
-                const label = s === 'ALL' ? 'All states' : STATE_NAMES[s]
-                const count = rfpCountsByState[s]
-                return (
-                  <button
-                    key={s}
-                    onClick={() => setStateFilter(s)}
-                    className={active ? 'btn' : 'btn secondary'}
-                    style={{ padding: '5px 12px', fontSize: 13 }}
-                  >
-                    {label}
-                    <span style={{ opacity: 0.7, marginLeft: 4 }}>({count})</span>
-                  </button>
-                )
-              })}
-            </div>
-            <button
-              onClick={refreshFromPortals}
-              disabled={ingestRunning}
-              className="btn secondary"
-              style={{ padding: '5px 12px', fontSize: 13, flexShrink: 0 }}
-              title="Runs the same ingest the weekly cron runs. Takes 30-90s."
-            >
-              {ingestRunning ? 'Refreshing…' : 'Refresh from portals'}
-            </button>
-          </div>
-          {ingestSummary && (
-            <div className="muted" style={{ fontSize: 12, marginBottom: 12 }}>
-              {ingestSummary}
-            </div>
-          )}
-        </>
+        <div
+          className="pill-strip"
+          style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 12 }}
+        >
+          {(['ALL', ...STATE_CODES] as StateFilter[]).map((s) => {
+            const active = stateFilter === s
+            const label = s === 'ALL' ? 'All states' : STATE_NAMES[s]
+            const count = rfpCountsByState[s]
+            return (
+              <button
+                key={s}
+                onClick={() => setStateFilter(s)}
+                className={active ? 'btn' : 'btn secondary'}
+                style={{ padding: '5px 12px', fontSize: 13 }}
+              >
+                {label}
+                <span style={{ opacity: 0.7, marginLeft: 4 }}>({count})</span>
+              </button>
+            )
+          })}
+        </div>
       )}
 
       {/* RFPs table */}
