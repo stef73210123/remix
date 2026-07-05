@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useCesium, BasemapMode } from "@/components/cesium/CesiumContext";
+import ViewModeToggle from "@/components/toolbar/ViewModeToggle";
 import { cn } from "@/lib/utils";
 
 // Top row — map types (basemaps + Google Photorealistic 3D as a "type").
@@ -132,7 +133,7 @@ export default function MapTypePicker() {
     <div
       className={cn(
         "absolute left-1/2 -translate-x-1/2 z-30 flex items-end gap-2 transition-[bottom] duration-300",
-        newsExpanded ? "bottom-[312px]" : "bottom-[72px]",
+        newsExpanded ? "bottom-[312px]" : "bottom-[88px]",
         // The property sheet/card overlaps the bottom-center control until there's
         // room beside it (lg+) — hide while a property is open below lg.
         leftPanelOpen && "max-lg:hidden"
@@ -247,6 +248,9 @@ export default function MapTypePicker() {
         <Ruler className="w-4 h-4" />
         MEASURE
       </button>
+
+      {/* 2D / 3D globe view toggle */}
+      <ViewModeToggle />
     </div>
   );
 }

@@ -85,7 +85,7 @@ export default function CoordinateDisplay() {
   const lngStr = Math.abs(coords.lng).toFixed(4);
 
   return (
-    <div className="hidden sm:block absolute bottom-[72px] right-2 z-20 bg-[#161616]/80 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white/70 font-mono">
+    <div className="hidden sm:block absolute bottom-[88px] right-2 z-20 bg-[#161616]/80 backdrop-blur-sm rounded px-2 py-1 text-[10px] text-white/70 font-mono">
       {latStr}&deg; {latDir}, {lngStr}&deg; {lngDir} | Alt: {coords.alt}m
     </div>
   );

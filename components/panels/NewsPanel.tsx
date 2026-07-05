@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronUp, ChevronDown, Newspaper, ExternalLink, Clock } from "lucide-react";
+import {
+  ChevronUp,
+  ChevronDown,
+  Newspaper,
+  ExternalLink,
+  Clock,
+  TrendingUp,
+  Building2,
+  Landmark,
+  DollarSign,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCesium } from "@/components/cesium/CesiumContext";
 
@@ -76,6 +86,14 @@ const CATEGORY_COLORS: Record<NewsItem["category"], string> = {
   finance: "#e67e22",
 };
 
+// Category badge → icon (replaces the spelled-out "market/policy" label in the ticker)
+const CATEGORY_ICONS: Record<NewsItem["category"], React.ElementType> = {
+  market: TrendingUp,
+  development: Building2,
+  policy: Landmark,
+  finance: DollarSign,
+};
+
 export default function NewsPanel() {
   const { leftPanelOpen, rightPanel, newsExpanded: expanded, setNewsExpanded: setExpanded, activeRegion } = useCesium();
   const [filter, setFilter] = useState<NewsItem["category"] | "all">("all");
@@ -137,54 +155,59 @@ export default function NewsPanel() {
     <div
       className={cn(
         "absolute bottom-0 left-0 right-0 z-20 transition-[height] duration-300",
-        expanded ? "h-[300px]" : "h-16"
+        expanded ? "h-[300px]" : "h-20"
       )}
     >
       {!expanded ? (
-        /* Collapsed: TV-style two-row ticker, one headline at a time */
+        /* Collapsed: TV lower-third — the topic icon is the ONLY icon (category
+           label beneath it) + big headline + source/date */
         <button
           onClick={() => setExpanded(true)}
           aria-label="Open real estate news"
-          className="w-full h-16 flex items-stretch gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
+          className="w-full h-20 flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left"
         >
-          <div className="flex items-center gap-1.5 shrink-0 self-center">
-            <Newspaper className="w-4 h-4 text-[#ca615f]" />
-            <span className="hidden sm:inline text-[10px] font-bold text-white/80 tracking-widest">
-              NEWS
-            </span>
-          </div>
           <div className="flex-1 relative overflow-hidden self-stretch">
             {loading ? (
-              <span className="absolute inset-0 flex items-center text-[11px] text-white/40">Loading headlines…</span>
+              <span className="absolute inset-0 flex items-center text-xs text-white/40">Loading headlines…</span>
             ) : filtered.length === 0 ? (
-              <span className="absolute inset-0 flex items-center text-[11px] text-white/40">No local headlines</span>
+              <span className="absolute inset-0 flex items-center text-xs text-white/40">No local headlines</span>
             ) : (() => {
               const item = filtered[tickerIndex % filtered.length];
+              const CatIcon = CATEGORY_ICONS[item.category];
               return (
                 <div
                   key={tickerIndex}
-                  className="absolute inset-0 flex flex-col justify-center animate-atlas-ticker-in"
+                  className="absolute inset-0 flex items-center gap-3 animate-atlas-ticker-in"
                 >
-                  <div className="flex items-center gap-2 leading-none mb-1">
+                  {/* Topic icon — the only icon on the bar, with its category label under it */}
+                  <div className="shrink-0 flex flex-col items-center gap-1 w-12">
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center"
+                      style={{ backgroundColor: CATEGORY_COLORS[item.category] + "22" }}
+                    >
+                      <CatIcon className="w-4 h-4" style={{ color: CATEGORY_COLORS[item.category] }} />
+                    </div>
                     <span
-                      className="text-[8px] font-bold uppercase tracking-wide"
+                      className="text-[8px] font-bold uppercase tracking-wide leading-none"
                       style={{ color: CATEGORY_COLORS[item.category] }}
                     >
                       {item.category}
                     </span>
-                    <span className="text-[9px] text-white/40 truncate">
-                      {item.source} &middot; {item.timestamp}
-                    </span>
                   </div>
-                  <div className="text-[12px] text-white font-medium leading-tight line-clamp-2">
-                    {item.title}
+                  <div className="min-w-0 flex flex-col justify-center">
+                    <div className="text-[13px] sm:text-sm text-white font-semibold leading-snug line-clamp-2">
+                      {item.title}
+                    </div>
+                    <div className="text-[10px] text-white/45 truncate mt-0.5">
+                      {item.source} &middot; {item.timestamp}
+                    </div>
                   </div>
                 </div>
               );
             })()}
           </div>
-          <div className="flex items-center gap-2 shrink-0 self-center">
-            <span className="hidden sm:flex items-center gap-1 text-[9px] text-white/40">
+          <div className="flex flex-col items-end gap-1 shrink-0 self-center">
+            <span className="hidden md:flex items-center gap-1 text-[8px] text-white/30">
               <span className="font-bold text-[#d4767a]">CESIUM</span>
               <span>&copy; OSM</span>
             </span>
