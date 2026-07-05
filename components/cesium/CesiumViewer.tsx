@@ -84,6 +84,9 @@ export default function CesiumViewerComponent() {
   // Track active imagery layers for add/remove
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const activeImageryRef = useRef<Map<string, any>>(new Map());
+  // Reference overlays (roads + labels) that ride on top of the hybrid basemap
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const hybridRefLayersRef = useRef<any[]>([]);
   const {
     viewerRef,
     buildingsTilesetRef,
@@ -392,6 +395,11 @@ export default function CesiumViewerComponent() {
     async function switchBasemap() {
       const Cesium = await import("cesium");
       const layers = viewer!.imageryLayers;
+      // Remove the previous basemap's reference overlays (roads/labels)
+      for (const refLayer of hybridRefLayersRef.current) {
+        if (layers.contains(refLayer)) layers.remove(refLayer);
+      }
+      hybridRefLayersRef.current = [];
       // Remove only the base layer (index 0), keep overlay layers
       if (layers.length > 0) {
         layers.remove(layers.get(0));
@@ -443,6 +451,24 @@ export default function CesiumViewerComponent() {
           });
       }
       layers.addImageryProvider(provider, 0);
+
+      // Hybrid = satellite imagery + a road/label reference overlay so streets
+      // and place names read on top of the aerial (Google-hybrid style).
+      if (basemapMode === "hybrid") {
+        const refUrls = [
+          "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}",
+          "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+        ];
+        refUrls.forEach((url, i) => {
+          const refProvider = new Cesium.UrlTemplateImageryProvider({
+            url,
+            credit: "Esri Reference",
+          });
+          // Sit directly above the base layer (index 1, 2) — below data overlays.
+          const refLayer = layers.addImageryProvider(refProvider, 1 + i);
+          hybridRefLayersRef.current.push(refLayer);
+        });
+      }
     }
 
     switchBasemap();

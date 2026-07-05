@@ -42,17 +42,42 @@ export default function CompassControl() {
   }
 
   return (
-    <div
+    <button
       onClick={resetToNorth}
-      className="bg-[#161616]/90 backdrop-blur-sm rounded-full border border-white/10 w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-[#161616] transition-colors"
-      title="Reset to North"
+      title="Reset bearing to north"
+      aria-label="Reset bearing to north"
+      className="group relative bg-[#161616]/90 backdrop-blur-sm rounded-full border border-white/10 w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-[#161616] transition-colors shadow-lg"
     >
-      <span
-        className={`font-bold text-sm ${isNorth ? "text-red-500" : "text-white"}`}
-        style={{ transform: `rotate(-${heading}deg)`, display: "inline-block" }}
+      {/* The rose counter-rotates so North always points to the camera bearing */}
+      <svg
+        viewBox="0 0 40 40"
+        className="w-8 h-8"
+        style={{ transform: `rotate(${-heading}deg)` }}
       >
-        N
-      </span>
-    </div>
+        {/* North needle (red) */}
+        <polygon points="20,5 15.5,20 24.5,20" fill="#ca615f" />
+        {/* South needle (light) */}
+        <polygon points="20,35 15.5,20 24.5,20" fill="#ffffff" opacity="0.55" />
+        {/* Hub */}
+        <circle cx="20" cy="20" r="2.4" fill="#161616" stroke="#ffffff" strokeWidth="1" />
+        {/* N marker */}
+        <text
+          x="20"
+          y="10.5"
+          textAnchor="middle"
+          fontSize="7"
+          fontWeight="700"
+          fill="#ffffff"
+        >
+          N
+        </text>
+      </svg>
+      {/* subtle ring highlight when already facing north */}
+      <span
+        className={`pointer-events-none absolute inset-0 rounded-full transition-opacity ${
+          isNorth ? "ring-2 ring-[#ca615f]/50 opacity-100" : "opacity-0"
+        }`}
+      />
+    </button>
   );
 }

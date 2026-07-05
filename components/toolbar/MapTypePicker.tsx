@@ -132,7 +132,7 @@ export default function MapTypePicker() {
     <div
       className={cn(
         "absolute left-1/2 -translate-x-1/2 z-30 flex items-end gap-2 transition-[bottom] duration-300",
-        newsExpanded ? "bottom-[312px]" : "bottom-[72px]",
+        newsExpanded ? "bottom-[312px]" : "bottom-[88px]",
         // The property sheet/card overlaps the bottom-center control until there's
         // room beside it (lg+) — hide while a property is open below lg.
         leftPanelOpen && "max-lg:hidden"
