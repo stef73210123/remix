@@ -226,6 +226,7 @@ export default function DashboardClient({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap',
           gap: 16,
           marginBottom: 20,
         }}
@@ -237,9 +238,9 @@ export default function DashboardClient({
             Admin · Signed in as {userName}
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
           <a className="btn" href="https://atlas.remixcre.com" target="_blank" rel="noopener noreferrer">
-            Open Atlas
+            Atlas
           </a>
           <a
             className="btn secondary"
@@ -247,7 +248,7 @@ export default function DashboardClient({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Circular Admin
+            Circular
           </a>
           <button className="btn secondary" onClick={logout}>
             Sign out
@@ -258,7 +259,7 @@ export default function DashboardClient({
       <h1 style={{ fontSize: 22, margin: '0 0 16px' }}>CRM</h1>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
+      <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 16 }}>
         {tabs.map((t) => (
           <button
             key={t.key}
@@ -297,28 +298,33 @@ export default function DashboardClient({
       {/* RFPs — state filter chip row + refresh */}
       {tab === 'rfps' && (
         <>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
-            {(['ALL', ...STATE_CODES] as StateFilter[]).map((s) => {
-              const active = stateFilter === s
-              const label = s === 'ALL' ? 'All states' : STATE_NAMES[s]
-              const count = rfpCountsByState[s]
-              return (
-                <button
-                  key={s}
-                  onClick={() => setStateFilter(s)}
-                  className={active ? 'btn' : 'btn secondary'}
-                  style={{ padding: '5px 12px', fontSize: 13 }}
-                >
-                  {label}
-                  <span style={{ opacity: 0.7, marginLeft: 4 }}>({count})</span>
-                </button>
-              )
-            })}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12 }}>
+            <div
+              className="pill-strip"
+              style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', flex: 1, minWidth: 0 }}
+            >
+              {(['ALL', ...STATE_CODES] as StateFilter[]).map((s) => {
+                const active = stateFilter === s
+                const label = s === 'ALL' ? 'All states' : STATE_NAMES[s]
+                const count = rfpCountsByState[s]
+                return (
+                  <button
+                    key={s}
+                    onClick={() => setStateFilter(s)}
+                    className={active ? 'btn' : 'btn secondary'}
+                    style={{ padding: '5px 12px', fontSize: 13 }}
+                  >
+                    {label}
+                    <span style={{ opacity: 0.7, marginLeft: 4 }}>({count})</span>
+                  </button>
+                )
+              })}
+            </div>
             <button
               onClick={refreshFromPortals}
               disabled={ingestRunning}
               className="btn secondary"
-              style={{ padding: '5px 12px', fontSize: 13, marginLeft: 'auto' }}
+              style={{ padding: '5px 12px', fontSize: 13, flexShrink: 0 }}
               title="Runs the same ingest the weekly cron runs. Takes 30-90s."
             >
               {ingestRunning ? 'Refreshing…' : 'Refresh from portals'}
