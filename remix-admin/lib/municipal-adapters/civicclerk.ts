@@ -7,19 +7,13 @@
  * the AgendaCenter category ids returned the wrong board's documents.
  *
  * The portal SPA is backed by an OData API at `{slug}.api.civicclerk.com`.
- * Meetings are discovered from `/v1/Events`; each event carries a category
- * name (the board) and a set of published files (agenda / minutes). The
- * canonical file download is the GetMeetingFileStream endpoint keyed by fileId.
+ * `GET /v1/Events` returns events with (confirmed against the live response):
+ *   - id, eventName, startDateTime, categoryName, isPublished
+ *   - publishedFiles[]: { fileId, type ("Agenda" | "Agenda Packet" | "Minutes"),
+ *       name, url ("stream/{TENANT}/{guid}.pdf") }
  *
- * Field names vary slightly between CivicClerk deployments, so the parsing
- * here is deliberately defensive: it reads a value from the first of several
- * candidate keys rather than assuming one exact shape. Meetings are mapped to a
- * board by matching the event's category name against the municipality's
- * configured body keys, so no per-board numeric id is needed.
- *
- * NOTE: built against CivicClerk's documented API shape; the North Castle host
- * is not reachable from the build sandbox, so verify with a live ingest
- * (/admin/api/municipal/ingest-one?muni=nc) after deploy.
+ * Meetings are mapped to a board by matching `categoryName` against the
+ * municipality's configured body keys, so no per-board numeric id is needed.
  */
 import type {
   AdapterContext,
@@ -44,13 +38,11 @@ function portalBase(slug: string): string {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function pick(obj: any, keys: string[]): any {
-  for (const k of keys) {
-    if (obj && obj[k] != null) return obj[k]
-  }
+  for (const k of keys) if (obj && obj[k] != null) return obj[k]
   return undefined
 }
 
-/** Map a CivicClerk category/committee name to our internal body key. */
+/** Map a CivicClerk category name to our internal body key. */
 function bodyKeyFromCategory(name: string): BodyKey | null {
   const n = (name || '').toLowerCase()
   if (/town board/.test(n)) return 'town_board'
@@ -64,22 +56,34 @@ function bodyKeyFromCategory(name: string): BodyKey | null {
   return null
 }
 
-/** Classify a file as an agenda or minutes from its type/name, else null. */
+/**
+ * Classify a published file. Only the primary Agenda and Minutes are ingested;
+ * "Agenda Packet" and other supplementary files are ignored (M1).
+ */
 function fileKind(file: any): 'agenda' | 'minutes' | null {
-  const hay = `${pick(file, ['type', 'fileType', 'categoryName', 'name', 'fileName']) ?? ''}`.toLowerCase()
-  if (/agenda/.test(hay)) return 'agenda'
-  if (/minute/.test(hay)) return 'minutes'
+  const type = `${file?.type ?? ''}`.toLowerCase().trim()
+  const name = `${file?.name ?? file?.fileName ?? ''}`.toLowerCase()
+  if (type === 'minutes' || (!type && /minute/.test(name))) return 'minutes'
+  if (type === 'agenda' || (!type && /agenda/.test(name) && !/packet/.test(name))) return 'agenda'
   return null
 }
 
+/** Resolve a published file's relative `url` to an absolute PDF download URL. */
+function fileUrl(api: string, file: any): string | null {
+  const raw = pick(file, ['url', 'streamUrl', 'downloadUrl'])
+  if (raw) return /^https?:\/\//.test(raw) ? raw : `${api}/v1/${String(raw).replace(/^\/+/, '')}`
+  const fileId = pick(file, ['fileId', 'id'])
+  return fileId != null ? `${api}/v1/Meetings/GetMeetingFileStream(fileId=${fileId},plainText=false)` : null
+}
+
 async function fetchEvents(api: string, top: number): Promise<any[]> {
-  // Prefer files embedded via $expand; fall back to a plain list if the
-  // deployment rejects the expand (older/newer OData surface).
-  const queries = [
-    `/v1/Events?$expand=publishedFiles&$orderby=startDateTime desc&$top=${top}`,
+  // publishedFiles come inline on /v1/Events (no $expand needed). Try ordered
+  // first, fall back to a plain list if $orderby is rejected.
+  for (const q of [
     `/v1/Events?$orderby=startDateTime desc&$top=${top}`,
-  ]
-  for (const q of queries) {
+    `/v1/Events?$top=${top}`,
+    `/v1/Events`,
+  ]) {
     const res = await politeFetch(`${api}${q}`, { headers: { Accept: 'application/json' } })
     if (!res.ok) continue
     const json = (await res.json()) as any
@@ -95,18 +99,21 @@ async function* discover(
   since?: Date,
 ): AsyncGenerator<DiscoveredMeeting> {
   const api = apiBase(slug)
-  const events = await fetchEvents(api, 100)
+  const events = await fetchEvents(api, 200)
 
   for (const ev of events) {
     const eventId = pick(ev, ['id', 'eventId'])
     if (eventId == null) continue
 
-    const category = `${pick(ev, ['categoryName', 'category', 'eventTypeName', 'committeeName']) ?? ''}`
+    // Only publicly-published meetings.
+    const published = pick(ev, ['isPublished'])
+    if (published != null && `${published}`.toLowerCase() !== 'published') continue
+
+    const category = `${pick(ev, ['categoryName', 'eventCategoryName', 'category']) ?? ''}`
     const bodyKey = bodyKeyFromCategory(category)
-    // Only surface boards this municipality actually tracks.
     if (!bodyKey || !configuredBodies.has(bodyKey)) continue
 
-    const startRaw = pick(ev, ['startDateTime', 'eventDate', 'startDate', 'date'])
+    const startRaw = pick(ev, ['startDateTime', 'eventDate', 'startDate'])
     const scheduledAt = startRaw ? new Date(startRaw) : null
     if (!scheduledAt || isNaN(scheduledAt.getTime())) continue
     if (since && scheduledAt < since) continue
@@ -116,9 +123,8 @@ async function* discover(
     for (const f of files) {
       const kind = fileKind(f)
       if (!kind || externalUrls[kind]) continue
-      const fileId = pick(f, ['fileId', 'id'])
-      if (fileId == null) continue
-      externalUrls[kind] = `${api}/v1/Meetings/GetMeetingFileStream(fileId=${fileId},plainText=false)`
+      const url = fileUrl(api, f)
+      if (url) externalUrls[kind] = url
     }
 
     yield {
@@ -128,7 +134,7 @@ async function* discover(
       sourceRef: `civicclerk:${eventId}`,
       sourceUrl: `${portalBase(slug)}/event/${eventId}/overview`,
       externalUrls,
-      meta: { eventId, category },
+      meta: { eventId, category, agendaId: pick(ev, ['agendaId']) },
     }
   }
 }
