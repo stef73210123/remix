@@ -131,6 +131,19 @@ a {
   border-radius: 12px;
 }
 
+/* Card that wraps a wide table: scroll horizontally instead of clipping
+   columns on narrow/mobile screens. The table keeps its natural width so
+   columns don't cram, but still fills the card on wide screens. */
+.table-card {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-card > table {
+  width: max-content;
+  min-width: 100%;
+}
+
 .page-title {
   font-size: 22px;
   font-weight: 700;

@@ -277,7 +277,7 @@ export default function DashboardClient({
 
       {/* RFPs table */}
       {tab === 'rfps' && (
-        <div className="card" style={{ overflow: 'hidden' }}>
+        <div className="card table-card">
           {rfpsLoading && <div className="muted" style={{ padding: 20 }}>Loading RFPs…</div>}
           {rfpsError && <div className="error" style={{ padding: 20 }}>{rfpsError}</div>}
           {rfps && !rfpsLoading && (
@@ -345,7 +345,7 @@ export default function DashboardClient({
 
       {/* CRM categories */}
       {tab !== 'rfps' && tab !== 'fundraising' && (
-        <div className="card" style={{ overflow: 'hidden' }}>
+        <div className="card table-card">
           <table>
             <thead>
               <tr>
@@ -383,7 +383,7 @@ export default function DashboardClient({
 
       {/* Fundraising */}
       {tab === 'fundraising' && (
-        <div className="card" style={{ overflow: 'hidden' }}>
+        <div className="card table-card">
           {fundLoading && <div className="muted" style={{ padding: 20 }}>Loading fundraising directory…</div>}
           {fundError && <div className="error" style={{ padding: 20 }}>{fundError}</div>}
           {fund && !fundLoading && (
