@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import AdminNav from '@/app/admin/AdminNav'
+import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -148,6 +149,14 @@ export default function BoardClient({ userName }: { userName: string }) {
     [data]
   )
 
+  // Breadcrumb trail: Dashboard › Town › Board (current).
+  const crumbs = useMemo<Crumb[]>(() => {
+    const trail: Crumb[] = [{ label: 'Dashboard', href: '/admin/municipal' }]
+    if (data?.town) trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
+    trail.push({ label: data?.board.displayName || 'Board' })
+    return trail
+  }, [data])
+
   return (
     <div className="container">
       <header
@@ -160,6 +169,12 @@ export default function BoardClient({ userName }: { userName: string }) {
         </div>
         <AdminNav />
       </header>
+
+      {data && !loading && (
+        <div style={{ marginBottom: 20 }}>
+          <Breadcrumbs items={crumbs} />
+        </div>
+      )}
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading board…</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
@@ -180,16 +195,20 @@ export default function BoardClient({ userName }: { userName: string }) {
           {data.members.length > 0 ? (
             <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 6, marginBottom: 26, WebkitOverflowScrolling: 'touch' }}>
               {data.members.map((m) => (
-                <div key={m.id} className="card" style={{ padding: 14, minWidth: 210, flexShrink: 0 }}>
+                <a
+                  key={m.id}
+                  href={`/admin/municipal/member?muni=${data.town.key}&body=${data.board.key}&id=${m.id}`}
+                  className="card"
+                  style={{ padding: 14, minWidth: 210, flexShrink: 0, textDecoration: 'none', display: 'block' }}
+                >
                   <div style={{ fontWeight: 700 }}>{m.full_name}</div>
                   <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{m.title || '—'}</div>
                   <span className="badge state" style={{ display: 'inline-block', marginTop: 10 }}>{m.kind.replace(/_/g, ' ')}</span>
                   {m.email && (
-                    <div style={{ marginTop: 10 }}>
-                      <a href={`mailto:${m.email}`} className="muted" style={{ fontSize: 12, wordBreak: 'break-all' }}>{m.email}</a>
-                    </div>
+                    <div className="muted" style={{ fontSize: 12, marginTop: 10, wordBreak: 'break-all' }}>{m.email}</div>
                   )}
-                </div>
+                  <div style={{ fontSize: 12, marginTop: 10, color: 'var(--primary-light)' }}>View profile →</div>
+                </a>
               ))}
             </div>
           ) : (
@@ -278,6 +297,11 @@ export default function BoardClient({ userName }: { userName: string }) {
             ) : (
               <div className="muted" style={{ padding: 20, fontSize: 13 }}>No meetings ingested for this board yet.</div>
             )}
+          </div>
+
+          {/* Climb-back trail at the end of the board page */}
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginTop: 26 }}>
+            <Breadcrumbs items={crumbs} />
           </div>
 
           {!data.dbOk && data.dbError && (
