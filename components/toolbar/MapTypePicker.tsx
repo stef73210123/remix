@@ -35,13 +35,13 @@ const MAP_TYPES: { key: BasemapMode | "google3d"; label: string; color: string }
 type LayerTile =
   | { id: string; label: string; icon: React.ElementType; kind: "bool"; kindKey: BoolKey }
   | { id: string; label: string; icon: React.ElementType; kind: "layer" };
-type BoolKey = "buildings" | "footprints" | "places" | "parcels";
+type BoolKey = "buildings" | "footprints" | "parcelCentroids" | "listings";
 
 const TOP_LAYERS: LayerTile[] = [
   { id: "buildings", label: "3D Buildings", icon: Building2, kind: "bool", kindKey: "buildings" },
   { id: "footprints", label: "Footprints", icon: Footprints, kind: "bool", kindKey: "footprints" },
-  { id: "places", label: "Places", icon: MapPin, kind: "bool", kindKey: "places" },
-  { id: "parcels", label: "Parcels", icon: Grid3x3, kind: "bool", kindKey: "parcels" },
+  { id: "parcelCentroids", label: "Parcels", icon: Grid3x3, kind: "bool", kindKey: "parcelCentroids" },
+  { id: "listings", label: "Listings", icon: MapPin, kind: "bool", kindKey: "listings" },
   { id: "census-tracts", label: "Census Tracts", icon: MapIcon, kind: "layer" },
   { id: "census-block-groups", label: "Block Groups", icon: LayoutGrid, kind: "layer" },
   { id: "census-zcta", label: "ZIP Codes", icon: Hash, kind: "layer" },
@@ -59,8 +59,8 @@ export default function MapTypePicker() {
     setBuildingSource,
     showOsmFootprints,
     setShowOsmFootprints,
-    showOsmPlaces,
-    setShowOsmPlaces,
+    showParcelCentroids,
+    setShowParcelCentroids,
     showParcels,
     setShowParcels,
     activeLayers,
@@ -130,8 +130,8 @@ export default function MapTypePicker() {
   const boolState: Record<BoolKey, boolean> = {
     buildings: showBuildings,
     footprints: showOsmFootprints,
-    places: showOsmPlaces,
-    parcels: showParcels,
+    parcelCentroids: showParcelCentroids,
+    listings: showParcels,
   };
 
   const isLayerActive = (tile: LayerTile) =>
@@ -147,10 +147,10 @@ export default function MapTypePicker() {
         case "footprints":
           setShowOsmFootprints(!showOsmFootprints);
           break;
-        case "places":
-          setShowOsmPlaces(!showOsmPlaces);
+        case "parcelCentroids":
+          setShowParcelCentroids(!showParcelCentroids);
           break;
-        case "parcels":
+        case "listings":
           setShowParcels(!showParcels);
           break;
       }
