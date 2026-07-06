@@ -49,11 +49,10 @@ interface Summary {
 type TownFilter = 'ALL' | string
 type BoardFilter = 'ALL' | string
 
-function fmtDate(iso: string): string {
-  if (!iso) return '—'
-  const d = new Date(iso)
-  if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+function fmtDate(d: Date | string): string {
+  const dt = typeof d === 'string' ? new Date(d) : d
+  if (!dt || isNaN(dt.getTime())) return '—'
+  return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
 function startOfToday(): number {
@@ -62,11 +61,57 @@ function startOfToday(): number {
   return d.getTime()
 }
 
+// ── Recurring-pattern → next date ─────────────────────────────────────────
+// Parses human patterns like "2nd & 4th Wednesday 7:30pm" or "1st Thursday"
+// into the next actual calendar date on/after `from`. Returns null for vague
+// patterns ("Monthly", "Quarterly to monthly") that don't name a weekday.
+const WEEKDAYS: Record<string, number> = {
+  sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6,
+}
+const ORDINALS: Record<string, number> = {
+  '1st': 1, '2nd': 2, '3rd': 3, '4th': 4, '5th': 5, last: -1,
+}
+
+function nthWeekday(year: number, month: number, weekday: number, n: number): Date | null {
+  if (n === -1) {
+    const last = new Date(year, month + 1, 0)
+    const diff = (last.getDay() - weekday + 7) % 7
+    return new Date(year, month, last.getDate() - diff)
+  }
+  const first = new Date(year, month, 1)
+  const offset = (weekday - first.getDay() + 7) % 7
+  const d = new Date(year, month, 1 + offset + (n - 1) * 7)
+  return d.getMonth() === month ? d : null
+}
+
+function nextMeetingDate(pattern: string | null, from: Date): Date | null {
+  if (!pattern) return null
+  const p = pattern.toLowerCase()
+  const weekdayName = Object.keys(WEEKDAYS).find((w) => p.includes(w))
+  if (!weekdayName) return null
+  const weekday = WEEKDAYS[weekdayName]
+  const ords: number[] = []
+  for (const [k, v] of Object.entries(ORDINALS)) {
+    if (new RegExp(`(^|[^a-z0-9])${k}([^a-z0-9]|$)`).test(p)) ords.push(v)
+  }
+  if (ords.length === 0) return null
+  const uniq = Array.from(new Set(ords))
+  const base = new Date(from.getFullYear(), from.getMonth(), from.getDate())
+  let best: Date | null = null
+  for (let mo = 0; mo <= 3; mo++) {
+    const total = base.getMonth() + mo
+    const y = base.getFullYear() + Math.floor(total / 12)
+    const m = ((total % 12) + 12) % 12
+    for (const n of uniq) {
+      const d = nthWeekday(y, m, weekday, n)
+      if (d && d.getTime() >= base.getTime() && (!best || d < best)) best = d
+    }
+  }
+  return best
+}
+
 const STATUS_COLOR: Record<string, string> = {
-  held: 'var(--a)',
-  scheduled: 'var(--b)',
-  cancelled: 'var(--c)',
-  rescheduled: 'var(--warn)',
+  held: 'var(--a)', scheduled: 'var(--b)', cancelled: 'var(--c)', rescheduled: 'var(--warn)',
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -99,6 +144,18 @@ function DocLinks({ assets }: { assets: Asset[] }) {
   )
 }
 
+function AgendaLink({ assets }: { assets: Asset[] }) {
+  const agenda = assets.find((a) => a.kind === 'agenda')
+  const href = agenda ? agenda.blobUrl || agenda.sourceUrl || '' : ''
+  return href ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="badge state" style={{ textDecoration: 'none' }}>
+      Agenda ↗
+    </a>
+  ) : (
+    <span className="muted">—</span>
+  )
+}
+
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button onClick={onClick} className={active ? 'btn' : 'btn secondary'} style={{ padding: '6px 12px', fontSize: 13 }}>
@@ -128,17 +185,13 @@ export default function MunicipalClient({ userName }: { userName: string }) {
     window.location.href = '/admin/login'
   }
 
-  // Union of board names across towns, in first-seen order — powers the board filter.
   const allBoards = useMemo(() => {
     if (!data) return [] as string[]
     const seen = new Set<string>()
     const out: string[] = []
     for (const m of data.municipalities)
       for (const b of m.bodies)
-        if (!seen.has(b.displayName)) {
-          seen.add(b.displayName)
-          out.push(b.displayName)
-        }
+        if (!seen.has(b.displayName)) { seen.add(b.displayName); out.push(b.displayName) }
     return out
   }, [data])
 
@@ -154,28 +207,39 @@ export default function MunicipalClient({ userName }: { userName: string }) {
     )
   }, [data, town, board])
 
-  const { upcoming, history } = useMemo(() => {
-    const t0 = startOfToday()
-    const up: Meeting[] = []
-    const hist: Meeting[] = []
-    for (const m of meetingsFiltered) {
-      const ts = new Date(m.scheduled_at).getTime()
-      if (!isNaN(ts) && ts >= t0) up.push(m)
-      else hist.push(m)
-    }
-    up.sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime())
-    return { upcoming: up, history: hist }
-  }, [meetingsFiltered])
+  const history = useMemo(
+    () => meetingsFiltered.filter((m) => new Date(m.scheduled_at).getTime() < startOfToday()),
+    [meetingsFiltered]
+  )
 
-  // Recurring schedule fallback for "upcoming" when no future-dated meetings are ingested yet.
-  const schedule = useMemo(() => {
-    const rows: { town: string; board: string; pattern: string }[] = []
-    for (const m of munisShown)
-      for (const b of m.bodies)
-        if (b.meetingPattern && (board === 'ALL' || b.displayName === board))
-          rows.push({ town: m.name, board: b.displayName, pattern: b.meetingPattern })
+  // One "next meeting" row per tracked board: prefer a real ingested upcoming
+  // meeting (with its agenda); otherwise project the next date from the schedule.
+  const upcomingRows = useMemo(() => {
+    const t0 = startOfToday()
+    const today = new Date(t0)
+    const rows: { town: string; board: string; date: Date | null; assets: Asset[]; pattern: string | null; projected: boolean }[] = []
+    const meetings = data?.meetings ?? []
+    for (const m of munisShown) {
+      for (const b of m.bodies) {
+        if (board !== 'ALL' && b.displayName !== board) continue
+        const ingested = meetings
+          .filter((mm) => mm.muni_key === m.key && mm.body_name === b.displayName && new Date(mm.scheduled_at).getTime() >= t0)
+          .sort((a, c) => new Date(a.scheduled_at).getTime() - new Date(c.scheduled_at).getTime())[0]
+        if (ingested) {
+          rows.push({ town: m.name, board: b.displayName, date: new Date(ingested.scheduled_at), assets: ingested.assets, pattern: b.meetingPattern, projected: false })
+        } else {
+          rows.push({ town: m.name, board: b.displayName, date: nextMeetingDate(b.meetingPattern, today), assets: [], pattern: b.meetingPattern, projected: true })
+        }
+      }
+    }
+    rows.sort((a, c) => {
+      if (a.date && c.date) return a.date.getTime() - c.date.getTime()
+      if (a.date) return -1
+      if (c.date) return 1
+      return 0
+    })
     return rows
-  }, [munisShown, board])
+  }, [munisShown, board, data])
 
   const totalBodies = useMemo(
     () => (data ? data.municipalities.reduce((n, m) => n + m.bodies.length, 0) : 0),
@@ -215,88 +279,53 @@ export default function MunicipalClient({ userName }: { userName: string }) {
 
       {data && !loading && (
         <>
-          {/* Town filter strip */}
           <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 8 }}>
             <Chip active={town === 'ALL'} onClick={() => setTown('ALL')}>All towns</Chip>
             {data.municipalities.map((m) => (
               <Chip key={m.key} active={town === m.key} onClick={() => setTown(m.key)}>{m.name}</Chip>
             ))}
           </div>
-          {/* Board filter strip */}
-          <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 20 }}>
+          <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22 }}>
             <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>All boards</Chip>
             {allBoards.map((b) => (
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
             ))}
           </div>
 
-          {/* Town cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14, marginBottom: 26 }}>
-            {munisShown.map((m) => {
-              const c = data.counts[m.key]
-              return (
-                <div key={m.key} className="card" style={{ padding: 16 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'baseline' }}>
-                    <div style={{ fontWeight: 700, fontSize: 15 }}>{m.name}</div>
-                    <span className="badge state">{m.state}</span>
-                  </div>
-                  <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>
-                    {m.county ? `${m.county} County` : ''}{m.domains[0] ? ` · ${m.domains[0]}` : ''}
-                  </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
-                    {m.bodies.map((b) => (
-                      <span key={b.key} className="badge state" title={b.meetingPattern || undefined}>{b.displayName}</span>
-                    ))}
-                  </div>
-                  <div className="muted" style={{ fontSize: 12, marginTop: 12 }}>
-                    {c ? `${c.meetings} meeting${c.meetings === 1 ? '' : 's'} · latest ${fmtDate(c.lastMeetingAt || '')}` : data.dbOk ? 'No meetings ingested yet' : `${m.bodies.length} boards configured`}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-
-          {/* Upcoming */}
+          {/* Upcoming — actual next meeting date per board + agenda when available */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Upcoming meetings</h2>
-          {upcoming.length > 0 ? (
-            <div className="card" style={{ overflow: 'hidden', marginBottom: 26 }}>
+          <div className="card" style={{ overflow: 'hidden', marginBottom: 26 }}>
+            {upcomingRows.length > 0 ? (
               <table>
                 <thead>
-                  <tr><th>Town</th><th>Board</th><th>Date</th><th>Status</th><th>Documents</th></tr>
+                  <tr><th>Town</th><th>Board</th><th>Next meeting</th><th>Agenda</th></tr>
                 </thead>
                 <tbody>
-                  {upcoming.map((mtg) => (
-                    <tr key={mtg.id}>
-                      <td style={{ fontWeight: 600 }}>{mtg.muni_name}</td>
-                      <td style={{ fontSize: 13 }}>{mtg.body_name}</td>
-                      <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
-                      <td><StatusBadge status={mtg.status} /></td>
-                      <td><DocLinks assets={mtg.assets} /></td>
+                  {upcomingRows.map((r, i) => (
+                    <tr key={i}>
+                      <td style={{ fontWeight: 600 }}>{r.town}</td>
+                      <td style={{ fontSize: 13 }}>{r.board}</td>
+                      <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>
+                        {r.date ? (
+                          <span title={r.projected ? 'Projected from meeting schedule' : undefined}>
+                            {fmtDate(r.date)}{r.projected ? ' *' : ''}
+                          </span>
+                        ) : (
+                          <span className="muted">{r.pattern || 'schedule TBD'}</span>
+                        )}
+                      </td>
+                      <td><AgendaLink assets={r.assets} /></td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </div>
-          ) : (
-            <div className="card" style={{ overflow: 'hidden', marginBottom: 26 }}>
-              {schedule.length > 0 ? (
-                <table>
-                  <thead><tr><th>Town</th><th>Board</th><th>Recurring schedule</th></tr></thead>
-                  <tbody>
-                    {schedule.map((s, i) => (
-                      <tr key={i}>
-                        <td style={{ fontWeight: 600 }}>{s.town}</td>
-                        <td style={{ fontSize: 13 }}>{s.board}</td>
-                        <td className="muted" style={{ fontSize: 13 }}>{s.pattern}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="muted" style={{ padding: 20, fontSize: 13 }}>No upcoming meetings for this filter.</div>
-              )}
-            </div>
-          )}
+            ) : (
+              <div className="muted" style={{ padding: 20, fontSize: 13 }}>No boards match this filter.</div>
+            )}
+          </div>
+          <div className="muted" style={{ fontSize: 11, marginTop: -18, marginBottom: 26 }}>
+            * projected from the board&apos;s recurring schedule; agenda links appear once a meeting is published/ingested.
+          </div>
 
           {/* History */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
