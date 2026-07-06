@@ -7,6 +7,7 @@
 import type { AdapterKey } from '../municipal/registry'
 import type { MunicipalAdapter } from './base'
 import civicplus from './civicplus'
+import civicclerk from './civicclerk'
 import granicus from './granicus'
 import wpPdf from './wp-pdf'
 import ecode360 from './ecode360'
@@ -23,6 +24,7 @@ const youtubeStub: MunicipalAdapter = {
 
 export const ADAPTERS: Record<AdapterKey, MunicipalAdapter> = {
   'nc-civicplus': civicplus,
+  'nc-civicclerk': civicclerk,
   'nc-granicus': granicus,
   'nc-youtube': youtubeStub,
   'rockland-wp': wpPdf,

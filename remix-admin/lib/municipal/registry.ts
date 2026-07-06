@@ -12,6 +12,7 @@
 
 export type AdapterKey =
   | 'nc-civicplus'
+  | 'nc-civicclerk'
   | 'nc-granicus'
   | 'nc-youtube'
   | 'rockland-wp'
@@ -51,7 +52,10 @@ export const MUNICIPALITIES: MunicipalityConfig[] = [
     timezone: 'America/New_York',
     domains: ['northcastleny.com', 'northcastleny.gov'],
     sources: {
-      meetings: ['nc-civicplus', 'nc-granicus', 'nc-youtube'],
+      // North Castle publishes meetings on a CivicClerk portal, not the
+      // CivicPlus AgendaCenter — the AgendaCenter category ids below returned
+      // the wrong board's documents (e.g. Parks & Rec agenda under Town Board).
+      meetings: ['nc-civicclerk', 'nc-granicus'],
       code: ['ecode360:29140526'],
       officials: ['nc-civicplus'],
     },
