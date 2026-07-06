@@ -31,7 +31,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCesium, type BuildingSource } from "@/components/cesium/CesiumContext";
-import { OSM_PLACE_CATEGORIES } from "@/lib/cesium-config";
 
 const ALL_PROPERTY_TYPES = Object.entries(PROPERTY_TYPE_COLORS) as [
   PropertyType,
@@ -55,10 +54,8 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
     setBuildingSource,
     showOsmFootprints,
     setShowOsmFootprints,
-    showOsmPlaces,
-    setShowOsmPlaces,
-    osmPlaceCategories,
-    setOsmPlaceCategories,
+    showParcelCentroids,
+    setShowParcelCentroids,
   } = useCesium();
   const [expandedStates, setExpandedStates] = useState<Set<string>>(
     new Set(["NY"])
@@ -211,52 +208,22 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
           </p>
 
           <div className="text-[10px] font-bold text-gray-600 mb-2 mt-3 uppercase flex items-center gap-1">
-            <MapPin className="w-3 h-3" /> OSM Places (POIs)
+            <MapPin className="w-3 h-3" /> Parcel Centroids
           </div>
-          <label className="flex items-center gap-1.5 cursor-pointer mb-2">
+          <label className="flex items-center gap-1.5 cursor-pointer mb-1">
             <input
               type="checkbox"
-              checked={showOsmPlaces}
-              onChange={() => setShowOsmPlaces(!showOsmPlaces)}
+              checked={showParcelCentroids}
+              onChange={() => setShowParcelCentroids(!showParcelCentroids)}
               className="rounded border-gray-300 text-[#ca615f] w-3 h-3"
             />
             <span className="text-[10px] text-gray-700">
-              Show Places (zoom in to load)
+              Show parcel centroids (zoom in to load)
             </span>
           </label>
-          {showOsmPlaces && (
-            <div className="ml-4 space-y-1">
-              {OSM_PLACE_CATEGORIES.map((cat) => (
-                <label
-                  key={cat.key}
-                  className="flex items-center gap-1.5 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={osmPlaceCategories.has(cat.key)}
-                    onChange={() =>
-                      setOsmPlaceCategories((prev) => {
-                        const next = new Set(prev);
-                        if (next.has(cat.key)) next.delete(cat.key);
-                        else next.add(cat.key);
-                        return next;
-                      })
-                    }
-                    className="rounded border-gray-300 w-3 h-3"
-                    style={{ accentColor: cat.color }}
-                  />
-                  <span
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: cat.color }}
-                  />
-                  <span className="text-[10px] text-gray-700">{cat.label}</span>
-                  <span className="text-[8px] text-gray-400 ml-auto">
-                    {cat.values.length}
-                  </span>
-                </label>
-              ))}
-            </div>
-          )}
+          <p className="text-[8px] text-gray-400 ml-4 mb-2">
+            A dot at the center of every parcel in view, from the active region&apos;s public GIS
+          </p>
         </div>
 
         {/* Active layers summary */}

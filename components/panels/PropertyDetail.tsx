@@ -144,8 +144,14 @@ export default function PropertyDetail() {
         </button>
       </div>
 
-      {/* Scroll body */}
-      <div className="flex-1 overflow-y-auto overscroll-contain">
+      {/* Scroll body — scrolling the content up grows the half sheet to full
+          (mobile only; on desktop md:h-auto makes the expand a no-op). */}
+      <div
+        className="flex-1 overflow-y-auto overscroll-contain"
+        onScroll={(e) => {
+          if (!expanded && e.currentTarget.scrollTop > 4) setExpanded(true);
+        }}
+      >
         {/* Nearby carousel */}
         {nearby.length > 0 && (
           <div className="px-4 pt-3">

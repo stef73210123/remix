@@ -25,6 +25,9 @@ interface CesiumContextValue {
   setOsmPlaceCategories: React.Dispatch<React.SetStateAction<Set<string>>>;
   showParcels: boolean;
   setShowParcels: (show: boolean) => void;
+  // Centroid dot for every parcel in view (public county/state GIS).
+  showParcelCentroids: boolean;
+  setShowParcelCentroids: (show: boolean) => void;
   basemapMode: BasemapMode;
   setBasemapMode: (mode: BasemapMode) => void;
   flyToProperty: (property: Property) => void;
@@ -73,6 +76,7 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [buildingSource, setBuildingSource] = useState<BuildingSource>("osm");
   const [showOsmFootprints, setShowOsmFootprints] = useState(false);
   const [showOsmPlaces, setShowOsmPlaces] = useState(false);
+  const [showParcelCentroids, setShowParcelCentroids] = useState(false);
   const [osmPlaceCategories, setOsmPlaceCategories] = useState<Set<string>>(
     new Set(["amenity", "shop", "tourism"])
   );
@@ -219,6 +223,8 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
         setOsmPlaceCategories,
         showParcels,
         setShowParcels,
+        showParcelCentroids,
+        setShowParcelCentroids,
         basemapMode,
         setBasemapMode,
         flyToProperty,

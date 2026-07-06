@@ -99,6 +99,7 @@ export default function CesiumViewerComponent() {
     showOsmPlaces,
     osmPlaceCategories,
     showParcels,
+    showParcelCentroids,
     basemapMode,
     flyToProperty,
     activeLayers,
@@ -113,6 +114,8 @@ export default function CesiumViewerComponent() {
   const osmFootprintIdsRef = useRef<string[]>([]);
   const osmPlaceIdsRef = useRef<string[]>([]);
   const osmPlacesLoadedBboxRef = useRef<string>("");
+  const parcelCentroidIdsRef = useRef<string[]>([]);
+  const parcelCentroidBboxRef = useRef<string>("");
   const osmFootprintsLoadedBboxRef = useRef<string>("");
 
   // Fetch API listings on mount to augment MOCK_PROPERTIES
@@ -870,6 +873,85 @@ export default function CesiumViewerComponent() {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showOsmPlaces, osmPlaceCategories, viewerRef]);
+
+  // Parcel centroids — a dot for every parcel in view, from the active region's
+  // public GIS. Loads once zoomed in to neighborhood scale (like footprints).
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+
+    const clear = () => {
+      for (const id of parcelCentroidIdsRef.current) {
+        const entity = viewer.entities.getById(id);
+        if (entity) viewer.entities.remove(entity);
+      }
+      parcelCentroidIdsRef.current = [];
+    };
+
+    clear();
+    parcelCentroidBboxRef.current = "";
+    if (!showParcelCentroids) return;
+
+    async function loadParcels() {
+      const Cesium = await import("cesium");
+      const rect = viewer!.camera.computeViewRectangle();
+      if (!rect) return;
+      const south = Cesium.Math.toDegrees(rect.south);
+      const west = Cesium.Math.toDegrees(rect.west);
+      const north = Cesium.Math.toDegrees(rect.north);
+      const east = Cesium.Math.toDegrees(rect.east);
+
+      // Only when zoomed in enough that a parcel query is bounded (neighborhood).
+      if (north - south > 0.08 || east - west > 0.08) return;
+
+      const bboxKey = `${activeRegion}:${south.toFixed(4)},${west.toFixed(4)},${north.toFixed(4)},${east.toFixed(4)}`;
+      if (parcelCentroidBboxRef.current === bboxKey) return;
+      parcelCentroidBboxRef.current = bboxKey;
+
+      try {
+        const res = await fetch(
+          `/api/parcels?region=${encodeURIComponent(activeRegion)}&bbox=${west},${south},${east},${north}`
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        const parcels: { lng: number; lat: number; id: string | number }[] =
+          data.parcels || [];
+
+        clear();
+        const dot = Cesium.Color.fromCssColorString("#ca615f");
+        for (const p of parcels) {
+          const id = `parcel-c-${p.id}`;
+          parcelCentroidIdsRef.current.push(id);
+          viewer!.entities.add({
+            id,
+            position: Cesium.Cartesian3.fromDegrees(p.lng, p.lat, 0),
+            point: {
+              pixelSize: 5,
+              color: dot,
+              outlineColor: Cesium.Color.WHITE,
+              outlineWidth: 1,
+              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+              disableDepthTestDistance: Number.POSITIVE_INFINITY,
+              scaleByDistance: new Cesium.NearFarScalar(500, 1.2, 8000, 0.4),
+              translucencyByDistance: new Cesium.NearFarScalar(500, 1.0, 12000, 0.0),
+            },
+          });
+        }
+      } catch (e) {
+        console.warn("Parcel centroids load failed:", e);
+      }
+    }
+
+    loadParcels();
+    const removeListener = viewer.camera.moveEnd.addEventListener(() => {
+      if (showParcelCentroids) loadParcels();
+    });
+
+    return () => {
+      removeListener();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showParcelCentroids, activeRegion, viewerRef]);
 
   return (
     <div
