@@ -48,6 +48,11 @@ interface Summary {
   dbError?: string
 }
 
+interface AgendaItem {
+  title: string
+  action: string | null
+}
+
 type TownFilter = 'ALL' | string
 type BoardFilter = 'ALL' | string
 
@@ -212,7 +217,16 @@ export default function MunicipalClient({
   // summary/preview keyed by meeting id.
   const [openRows, setOpenRows] = useState<Set<string>>(new Set())
   const [details, setDetails] = useState<
-    Record<string, { loading: boolean; summary?: string | null; excerpt?: string | null; error?: boolean }>
+    Record<
+      string,
+      {
+        loading: boolean
+        agendaItems?: AgendaItem[]
+        summary?: string | null
+        excerpt?: string | null
+        error?: boolean
+      }
+    >
   >({})
 
   function toggleRow(id: string) {
@@ -227,7 +241,10 @@ export default function MunicipalClient({
       fetch(`/admin/api/municipal/meeting?id=${encodeURIComponent(id)}`)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
         .then((d) =>
-          setDetails((p) => ({ ...p, [id]: { loading: false, summary: d.summary, excerpt: d.excerpt } }))
+          setDetails((p) => ({
+            ...p,
+            [id]: { loading: false, agendaItems: d.agendaItems || [], summary: d.summary, excerpt: d.excerpt },
+          }))
         )
         .catch(() => setDetails((p) => ({ ...p, [id]: { loading: false, error: true } })))
       return { ...prev, [id]: { loading: true } }
@@ -522,20 +539,30 @@ export default function MunicipalClient({
                               <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
                                 <div style={{ flex: '1 1 420px', minWidth: 0 }}>
                                   <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)', marginBottom: 6 }}>
-                                    Summary
+                                    Agenda
                                   </div>
                                   {d?.loading ? (
-                                    <div className="muted" style={{ fontSize: 13 }}>Loading summary…</div>
+                                    <div className="muted" style={{ fontSize: 13 }}>Loading agenda…</div>
+                                  ) : d?.agendaItems && d.agendaItems.length > 0 ? (
+                                    <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                      {d.agendaItems.map((it, k) => (
+                                        <li key={k} style={{ fontSize: 13, lineHeight: 1.5 }}>
+                                          {it.action && <strong style={{ color: 'var(--primary-light)' }}>{it.action}</strong>}
+                                          {it.action ? ' — ' : ''}
+                                          {it.title}
+                                        </li>
+                                      ))}
+                                    </ul>
                                   ) : d?.summary ? (
                                     <div style={{ fontSize: 13, lineHeight: 1.55 }}>{d.summary}</div>
                                   ) : d?.excerpt ? (
                                     <div style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--muted)' }}>
                                       {d.excerpt}{d.excerpt.length >= 1400 ? '…' : ''}
-                                      <div style={{ fontSize: 11, marginTop: 6 }}>Preview from the meeting&apos;s extracted text — no AI summary yet.</div>
+                                      <div style={{ fontSize: 11, marginTop: 6 }}>Preview from the meeting&apos;s extracted text — agenda not itemized.</div>
                                     </div>
                                   ) : (
                                     <div className="muted" style={{ fontSize: 13 }}>
-                                      {d?.error ? 'Could not load summary.' : 'No summary or minutes text available for this meeting yet.'}
+                                      {d?.error ? 'Could not load the agenda.' : 'No agenda or minutes text available for this meeting yet.'}
                                     </div>
                                   )}
                                 </div>
