@@ -259,6 +259,7 @@ export default function MunicipalClient({ userName }: { userName: string }) {
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
           <a className="btn secondary" href="/admin">← CRM</a>
+          <a className="btn secondary" href="/admin/municipal/budget?town=nc">Budget</a>
           <a className="btn secondary" href="https://atlas.remixcre.com" target="_blank" rel="noopener noreferrer">Atlas</a>
           <button className="btn secondary" onClick={logout}>Sign out</button>
         </div>
