@@ -123,13 +123,17 @@ export async function listAll(): Promise<Opportunity[]> {
 }
 
 /**
- * Seed the 13 curated NY entries into Redis once. Idempotent: re-runs won't
- * duplicate. Called at cron startup to ensure the base rows exist.
+ * Ensure the 13 curated NY entries exist in Redis. Called at cron startup.
+ *
+ * Self-healing: runs the per-row upsert on EVERY ingest rather than gating on
+ * a one-time flag. The per-row existence check keeps it idempotent (never
+ * duplicates, never clobbers a row Stefan has edited), so re-running is cheap
+ * and safe. The previous flag-gated version could permanently skip seeding if
+ * the flag was ever set while the rows were missing (e.g. after a wipe or a
+ * run against a different Redis), which left the curated baseline empty.
  */
 export async function seedCuratedIfNeeded(): Promise<{ seeded: boolean; count: number }> {
   const r = getRedis()
-  const already = await r.get(KEY_SEED)
-  if (already) return { seeded: false, count: 0 }
 
   let count = 0
   for (const row of CURATED_NY_OPPORTUNITIES) {
@@ -140,8 +144,9 @@ export async function seedCuratedIfNeeded(): Promise<{ seeded: boolean; count: n
     await r.sadd(KEY_INDEX_ALL, `${row.state}:${row.sourceId}`)
     count++
   }
+  // Record the last seed sweep for observability; no longer used as a gate.
   await r.set(KEY_SEED, new Date().toISOString())
-  return { seeded: true, count }
+  return { seeded: count > 0, count }
 }
 
 /**
