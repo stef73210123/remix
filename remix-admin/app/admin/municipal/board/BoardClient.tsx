@@ -66,6 +66,46 @@ function DocLinks({ assets }: { assets: Asset[] }) {
   )
 }
 
+function startOfToday(): number {
+  const d = new Date()
+  d.setHours(0, 0, 0, 0)
+  return d.getTime()
+}
+
+// Next actual date from a recurring pattern like "2nd & 4th Wednesday 7:30pm".
+const WEEKDAYS: Record<string, number> = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 }
+const ORDINALS: Record<string, number> = { '1st': 1, '2nd': 2, '3rd': 3, '4th': 4, '5th': 5, last: -1 }
+function nthWeekday(year: number, month: number, weekday: number, n: number): Date | null {
+  if (n === -1) {
+    const last = new Date(year, month + 1, 0)
+    return new Date(year, month, last.getDate() - ((last.getDay() - weekday + 7) % 7))
+  }
+  const first = new Date(year, month, 1)
+  const d = new Date(year, month, 1 + ((weekday - first.getDay() + 7) % 7) + (n - 1) * 7)
+  return d.getMonth() === month ? d : null
+}
+function nextMeetingDate(pattern: string | null, from: Date): Date | null {
+  if (!pattern) return null
+  const p = pattern.toLowerCase()
+  const wd = Object.keys(WEEKDAYS).find((w) => p.includes(w))
+  if (!wd) return null
+  const ords: number[] = []
+  for (const [k, v] of Object.entries(ORDINALS)) if (new RegExp(`(^|[^a-z0-9])${k}([^a-z0-9]|$)`).test(p)) ords.push(v)
+  if (!ords.length) return null
+  const base = new Date(from.getFullYear(), from.getMonth(), from.getDate())
+  let best: Date | null = null
+  for (let mo = 0; mo <= 3; mo++) {
+    const total = base.getMonth() + mo
+    const y = base.getFullYear() + Math.floor(total / 12)
+    const m = ((total % 12) + 12) % 12
+    for (const n of Array.from(new Set(ords))) {
+      const d = nthWeekday(y, m, WEEKDAYS[wd], n)
+      if (d && d.getTime() >= base.getTime() && (!best || d < best)) best = d
+    }
+  }
+  return best
+}
+
 export default function BoardClient({ userName }: { userName: string }) {
   const [muni, setMuni] = useState('')
   const [body, setBody] = useState('')
@@ -93,6 +133,20 @@ export default function BoardClient({ userName }: { userName: string }) {
   }, [])
 
   const openCount = useMemo(() => data?.openFiles.length ?? 0, [data])
+  const { upcoming, history } = useMemo(() => {
+    const t0 = startOfToday()
+    const ms = data?.meetings || []
+    return {
+      upcoming: ms
+        .filter((m) => new Date(m.scheduled_at).getTime() >= t0)
+        .sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()),
+      history: ms.filter((m) => new Date(m.scheduled_at).getTime() < t0),
+    }
+  }, [data])
+  const projectedNext = useMemo(
+    () => (data ? nextMeetingDate(data.board.meetingPattern, new Date(startOfToday())) : null),
+    [data]
+  )
 
   return (
     <div className="container">
@@ -118,36 +172,37 @@ export default function BoardClient({ userName }: { userName: string }) {
             {data.board.meetingPattern ? ` · ${data.board.meetingPattern}` : ''}
           </div>
 
-          {/* Members */}
+          {/* Members — horizontal carousel */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
             Board members
             <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {data.members.length}</span>
           </h2>
-          <div className="card table-card" style={{ marginBottom: 26 }}>
-            {data.members.length > 0 ? (
-              <table>
-                <thead><tr><th>Name</th><th>Title</th><th>Role</th><th>Contact</th></tr></thead>
-                <tbody>
-                  {data.members.map((m) => (
-                    <tr key={m.id}>
-                      <td style={{ fontWeight: 600 }}>{m.full_name}</td>
-                      <td style={{ fontSize: 13 }}>{m.title || '—'}</td>
-                      <td style={{ fontSize: 13 }}>{m.kind}</td>
-                      <td style={{ fontSize: 13 }}>{m.email ? <a href={`mailto:${m.email}`} className="muted">{m.email}</a> : '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
+          {data.members.length > 0 ? (
+            <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 6, marginBottom: 26, WebkitOverflowScrolling: 'touch' }}>
+              {data.members.map((m) => (
+                <div key={m.id} className="card" style={{ padding: 14, minWidth: 210, flexShrink: 0 }}>
+                  <div style={{ fontWeight: 700 }}>{m.full_name}</div>
+                  <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{m.title || '—'}</div>
+                  <span className="badge state" style={{ display: 'inline-block', marginTop: 10 }}>{m.kind.replace(/_/g, ' ')}</span>
+                  {m.email && (
+                    <div style={{ marginTop: 10 }}>
+                      <a href={`mailto:${m.email}`} className="muted" style={{ fontSize: 12, wordBreak: 'break-all' }}>{m.email}</a>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="card" style={{ marginBottom: 26 }}>
               <div className="muted" style={{ padding: 20, fontSize: 13 }}>
-                No board members recorded yet. Members are populated by officials enrichment (M2) — parsing them from meeting minutes and the town site.
+                No members recorded yet — run officials enrichment (/admin/api/municipal/officials-refresh?muni={data.town.key}).
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* Open files */}
+          {/* Cases before this board (map coming with matter extraction) */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-            Open files
+            Cases before this board
             <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {openCount}</span>
           </h2>
           <div className="card table-card" style={{ marginBottom: 26 }}>
@@ -168,31 +223,54 @@ export default function BoardClient({ userName }: { userName: string }) {
               </table>
             ) : (
               <div className="muted" style={{ padding: 20, fontSize: 13 }}>
-                No open files tracked yet. Applications/matters (site plans, variances, special-use permits) are extracted from agendas &amp; minutes in M2.
+                No cases tracked yet. A map of case locations heard before this board is coming with matter extraction (M2).
               </div>
             )}
           </div>
 
-          {/* Meetings */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-            Meetings
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {data.meetings.length}</span>
-          </h2>
-          <div className="card table-card">
-            {data.meetings.length > 0 ? (
+          {/* Upcoming meetings */}
+          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Upcoming meetings</h2>
+          <div className="card table-card" style={{ marginBottom: 26 }}>
+            {upcoming.length > 0 ? (
               <table>
-                <thead><tr><th>Date</th><th>Status</th><th>Documents</th><th style={{ width: 60 }}>Text</th><th style={{ width: 70 }}>Source</th></tr></thead>
+                <thead><tr><th>Date</th><th>Documents</th></tr></thead>
                 <tbody>
-                  {data.meetings.map((mtg) => (
+                  {upcoming.map((mtg) => (
+                    <tr key={mtg.id}>
+                      <td style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
+                      <td><DocLinks assets={mtg.assets} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="muted" style={{ padding: 20, fontSize: 13 }}>
+                {projectedNext
+                  ? `Next meeting (projected from schedule): ${fmtDate(projectedNext.toISOString())}`
+                  : data.board.meetingPattern
+                    ? `Schedule: ${data.board.meetingPattern}`
+                    : 'No upcoming meetings.'}
+              </div>
+            )}
+          </div>
+
+          {/* Meeting history */}
+          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
+            Meeting history
+            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length}</span>
+          </h2>
+          <div className="card table-card" style={{ maxHeight: 360, overflowY: 'auto' }}>
+            {history.length > 0 ? (
+              <table>
+                <thead><tr><th>Date</th><th>Documents</th></tr></thead>
+                <tbody>
+                  {history.map((mtg) => (
                     <tr key={mtg.id}>
                       <td style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
                         {fmtDate(mtg.scheduled_at)}
                         {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2, fontWeight: 400 }}>{mtg.title}</div>}
                       </td>
-                      <td style={{ fontSize: 13 }}>{mtg.status}</td>
                       <td><DocLinks assets={mtg.assets} /></td>
-                      <td style={{ fontSize: 13 }}>{mtg.text_count > 0 ? '✓' : '—'}</td>
-                      <td>{mtg.source_url ? <a href={mtg.source_url} target="_blank" rel="noopener noreferrer" className="muted">Page ↗</a> : <span className="muted">—</span>}</td>
                     </tr>
                   ))}
                 </tbody>
