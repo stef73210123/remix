@@ -189,7 +189,10 @@ export default function DashboardClient({
           </div>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          <a className="btn" href="https://atlas.remixcre.com" target="_blank" rel="noopener noreferrer">
+          <a className="btn" href="/admin/municipal">
+            Municipal
+          </a>
+          <a className="btn secondary" href="https://atlas.remixcre.com" target="_blank" rel="noopener noreferrer">
             Atlas
           </a>
           <a
