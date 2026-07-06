@@ -2,15 +2,11 @@
 
 import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './BudgetPanel'
+import AdminNav from '@/app/admin/AdminNav'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
 export default function BudgetClient({ userName, budget }: { userName: string; budget: TownBudget }) {
-  async function logout() {
-    await fetch('/admin/api/auth/logout', { method: 'POST' })
-    window.location.href = '/admin/login'
-  }
-
   return (
     <div className="container">
       <header
@@ -21,10 +17,7 @@ export default function BudgetClient({ userName, budget }: { userName: string; b
           <img src={WORDMARK} alt="Remix Properties" style={{ height: 34, display: 'block' }} />
           <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>Municipal · Signed in as {userName}</div>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          <a className="btn secondary" href="/admin/municipal">← Municipal</a>
-          <button className="btn secondary" onClick={logout}>Sign out</button>
-        </div>
+        <AdminNav />
       </header>
 
       <h1 className="page-title" style={{ marginBottom: 12 }}>Budget</h1>
