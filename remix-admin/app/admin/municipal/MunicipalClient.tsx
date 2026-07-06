@@ -262,6 +262,13 @@ export default function MunicipalClient({
     })
   }
 
+  // Deep-link: breadcrumbs and board pages return here with ?town=nc so the
+  // right jurisdiction tab is pre-selected.
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get('town')
+    if (t) setTown(t)
+  }, [])
+
   useEffect(() => {
     setLoading(true)
     fetch('/admin/api/municipal/summary')
