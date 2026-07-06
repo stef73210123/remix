@@ -68,12 +68,18 @@ function fileKind(file: any): 'agenda' | 'minutes' | null {
   return null
 }
 
-/** Resolve a published file's relative `url` to an absolute PDF download URL. */
+/**
+ * Absolute PDF download URL for a published file.
+ *
+ * The relative `url` ("stream/{TENANT}/{guid}.pdf") is NOT servable under the
+ * API host (404). CivicClerk streams published files by id via the documented
+ * GetMeetingFileStream function endpoint, so prefer the fileId.
+ */
 function fileUrl(api: string, file: any): string | null {
-  const raw = pick(file, ['url', 'streamUrl', 'downloadUrl'])
-  if (raw) return /^https?:\/\//.test(raw) ? raw : `${api}/v1/${String(raw).replace(/^\/+/, '')}`
   const fileId = pick(file, ['fileId', 'id'])
-  return fileId != null ? `${api}/v1/Meetings/GetMeetingFileStream(fileId=${fileId},plainText=false)` : null
+  if (fileId != null) return `${api}/v1/Meetings/GetMeetingFileStream(fileId=${fileId},plainText=false)`
+  const raw = pick(file, ['url', 'streamUrl', 'downloadUrl'])
+  return raw && /^https?:\/\//.test(raw) ? raw : null
 }
 
 async function fetchEvents(api: string, top: number): Promise<any[]> {
