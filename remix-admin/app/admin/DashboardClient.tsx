@@ -189,9 +189,9 @@ export default function DashboardClient({
           </div>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          <button className="btn" onClick={() => setTab('rfps')}>
-            Municipal Dashboard
-          </button>
+          <a className="btn" href="/admin/municipal">
+            Municipal
+          </a>
           <a className="btn secondary" href="https://atlas.remixcre.com" target="_blank" rel="noopener noreferrer">
             Atlas
           </a>
