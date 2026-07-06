@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -124,11 +124,37 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
+const RECORDING_KINDS = new Set(['video_mp4', 'audio_mp3'])
+
+function recordingHref(assets: Asset[]): string {
+  const a = (assets || []).find((x) => RECORDING_KINDS.has(x.kind))
+  return a ? a.blobUrl || a.sourceUrl || '' : ''
+}
+
+function RecordingLink({ assets }: { assets: Asset[] }) {
+  const href = recordingHref(assets)
+  if (!href) return null
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="badge state"
+      style={{ textDecoration: 'none', whiteSpace: 'nowrap' }}
+      title="Meeting recording"
+    >
+      ▶ Recording ↗
+    </a>
+  )
+}
+
 function DocLinks({ assets }: { assets: Asset[] }) {
-  if (!assets || assets.length === 0) return <span className="muted">—</span>
+  // Recordings are surfaced separately (RecordingLink); this lists documents.
+  const docs = (assets || []).filter((a) => !RECORDING_KINDS.has(a.kind))
+  if (docs.length === 0) return <span className="muted">—</span>
   return (
     <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6 }}>
-      {assets.map((a, i) => {
+      {docs.map((a, i) => {
         const href = a.blobUrl || a.sourceUrl || ''
         const label = a.kind.charAt(0).toUpperCase() + a.kind.slice(1)
         const title = a.pageCount ? `${label} · ${a.pageCount}pp` : label
@@ -170,6 +196,32 @@ export default function MunicipalClient({ userName }: { userName: string }) {
   const [error, setError] = useState('')
   const [town, setTown] = useState<TownFilter>('ALL')
   const [board, setBoard] = useState<BoardFilter>('ALL')
+
+  // Expandable history rows: which meeting ids are open + their lazy-loaded
+  // summary/preview keyed by meeting id.
+  const [openRows, setOpenRows] = useState<Set<string>>(new Set())
+  const [details, setDetails] = useState<
+    Record<string, { loading: boolean; summary?: string | null; excerpt?: string | null; error?: boolean }>
+  >({})
+
+  function toggleRow(id: string) {
+    setOpenRows((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+    setDetails((prev) => {
+      if (prev[id]) return prev // already loaded / loading
+      fetch(`/admin/api/municipal/meeting?id=${encodeURIComponent(id)}`)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+        .then((d) =>
+          setDetails((p) => ({ ...p, [id]: { loading: false, summary: d.summary, excerpt: d.excerpt } }))
+        )
+        .catch(() => setDetails((p) => ({ ...p, [id]: { loading: false, error: true } })))
+      return { ...prev, [id]: { loading: true } }
+    })
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -294,40 +346,72 @@ export default function MunicipalClient({ userName }: { userName: string }) {
             ))}
           </div>
 
-          {/* Upcoming — actual next meeting date per board + agenda when available */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Upcoming meetings</h2>
-          <div className="card table-card" style={{ marginBottom: 26 }}>
-            {upcomingRows.length > 0 ? (
-              <table>
-                <thead>
-                  <tr><th>Town</th><th>Board</th><th>Next meeting</th><th>Agenda</th></tr>
-                </thead>
-                <tbody>
-                  {upcomingRows.map((r, i) => (
-                    <tr key={i}>
-                      <td style={{ fontWeight: 600 }}>{r.town}</td>
-                      <td style={{ fontSize: 13 }}>
-                        <a href={`/admin/municipal/board?muni=${r.muniKey}&body=${r.bodyKey}`} style={{ color: 'var(--primary-light)' }}>{r.board}</a>
-                      </td>
-                      <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>
-                        {r.date ? (
-                          <span title={r.projected ? 'Projected from meeting schedule' : undefined}>
-                            {fmtDate(r.date)}{r.projected ? ' *' : ''}
-                          </span>
-                        ) : (
-                          <span className="muted">{r.pattern || 'schedule TBD'}</span>
-                        )}
-                      </td>
-                      <td><AgendaLink assets={r.assets} /></td>
-                    </tr>
+          {/* Town profile — shown when a single town is selected in the strip:
+              its budget, boards & committees, then its meetings below. */}
+          {town !== 'ALL' && (() => {
+            const m = data.municipalities.find((x) => x.key === town)
+            if (!m) return null
+            return (
+              <div className="card" style={{ padding: 18, marginBottom: 22 }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+                  <div>
+                    <div style={{ fontSize: 18, fontWeight: 700 }}>{m.name}</div>
+                    <div className="muted" style={{ fontSize: 13 }}>
+                      {[m.county ? `${m.county} County` : null, m.state].filter(Boolean).join(' · ')}
+                      {' · '}{m.bodies.length} boards &amp; committees
+                    </div>
+                  </div>
+                  <a className="btn" href={`/admin/municipal/budget?town=${m.key}`}>Budget ↗</a>
+                </div>
+                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)', margin: '16px 0 8px' }}>
+                  Boards &amp; committees
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {m.bodies.map((b) => (
+                    <a key={b.key} href={`/admin/municipal/board?muni=${m.key}&body=${b.key}`} className="btn secondary" style={{ padding: '6px 12px', fontSize: 13 }}>
+                      {b.displayName}
+                    </a>
                   ))}
-                </tbody>
-              </table>
-            ) : (
+                </div>
+              </div>
+            )
+          })()}
+
+          {/* Upcoming — horizontal timeline of the next meeting per board */}
+          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Upcoming meetings</h2>
+          {upcomingRows.length > 0 ? (
+            <div className="card" style={{ padding: '22px 8px 18px', marginBottom: 8, overflowX: 'auto' }}>
+              <div style={{ display: 'flex', minWidth: 'min-content' }}>
+                {upcomingRows.map((r, i) => (
+                  <div key={i} style={{ flex: '0 0 190px', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 8px' }}>
+                    {/* rail + dot */}
+                    <div style={{ position: 'relative', width: '100%', height: 16, marginBottom: 12 }}>
+                      <div style={{ position: 'absolute', top: 7, left: 0, right: 0, height: 2, background: 'var(--border)' }} />
+                      {i === 0 && <div style={{ position: 'absolute', top: 7, left: 0, width: '50%', height: 2, background: 'var(--panel)' }} />}
+                      {i === upcomingRows.length - 1 && <div style={{ position: 'absolute', top: 7, right: 0, width: '50%', height: 2, background: 'var(--panel)' }} />}
+                      <div style={{ position: 'absolute', top: 1, left: '50%', transform: 'translateX(-50%)', width: 13, height: 13, borderRadius: 999, background: r.projected ? 'var(--c)' : 'var(--primary)', border: '2px solid var(--panel)' }} />
+                    </div>
+                    {/* content */}
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap' }} title={r.projected ? 'Projected from meeting schedule' : undefined}>
+                        {r.date ? `${fmtDate(r.date)}${r.projected ? ' *' : ''}` : (r.pattern || 'TBD')}
+                      </div>
+                      <div style={{ fontSize: 13, marginTop: 3 }}>
+                        <a href={`/admin/municipal/board?muni=${r.muniKey}&body=${r.bodyKey}`} style={{ color: 'var(--primary-light)' }}>{r.board}</a>
+                      </div>
+                      <div className="muted" style={{ fontSize: 12 }}>{r.town}</div>
+                      <div style={{ marginTop: 8 }}><AgendaLink assets={r.assets} /></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="card" style={{ marginBottom: 8 }}>
               <div className="muted" style={{ padding: 20, fontSize: 13 }}>No boards match this filter.</div>
-            )}
-          </div>
-          <div className="muted" style={{ fontSize: 11, marginTop: -18, marginBottom: 26 }}>
+            </div>
+          )}
+          <div className="muted" style={{ fontSize: 11, marginBottom: 26 }}>
             * projected from the board&apos;s recurring schedule; agenda links appear once a meeting is published/ingested.
           </div>
 
@@ -340,31 +424,81 @@ export default function MunicipalClient({ userName }: { userName: string }) {
             {history.length > 0 ? (
               <table>
                 <thead>
-                  <tr><th>Town</th><th>Board</th><th>Date</th><th>Status</th><th>Documents</th><th style={{ width: 60 }}>Text</th><th style={{ width: 70 }}>Source</th></tr>
+                  <tr>
+                    <th style={{ width: 26 }}></th>
+                    <th>Town</th><th>Board</th><th>Date</th><th>Status</th>
+                    <th>Recording</th><th>Documents</th>
+                    <th style={{ width: 50 }}>Text</th><th style={{ width: 64 }}>Source</th>
+                  </tr>
                 </thead>
                 <tbody>
-                  {history.map((mtg) => (
-                    <tr key={mtg.id}>
-                      <td style={{ fontWeight: 600 }}>
-                        {mtg.muni_name}
-                        {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{mtg.title}</div>}
-                      </td>
-                      <td style={{ fontSize: 13 }}>
-                        <a href={`/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`} style={{ color: 'var(--primary-light)' }}>{mtg.body_name}</a>
-                      </td>
-                      <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
-                      <td><StatusBadge status={mtg.status} /></td>
-                      <td><DocLinks assets={mtg.assets} /></td>
-                      <td style={{ fontSize: 13 }}>{mtg.text_count > 0 ? '✓' : '—'}</td>
-                      <td>
-                        {mtg.source_url ? (
-                          <a href={mtg.source_url} target="_blank" rel="noopener noreferrer" className="muted">Page ↗</a>
-                        ) : (
-                          <span className="muted">—</span>
+                  {history.map((mtg) => {
+                    const isOpen = openRows.has(mtg.id)
+                    const d = details[mtg.id]
+                    const stop = (e: React.MouseEvent) => e.stopPropagation()
+                    return (
+                      <Fragment key={mtg.id}>
+                        <tr onClick={() => toggleRow(mtg.id)} style={{ cursor: 'pointer' }}>
+                          <td style={{ color: 'var(--muted)', textAlign: 'center' }}>{isOpen ? '▾' : '▸'}</td>
+                          <td style={{ fontWeight: 600 }}>
+                            {mtg.muni_name}
+                            {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{mtg.title}</div>}
+                          </td>
+                          <td style={{ fontSize: 13 }} onClick={stop}>
+                            <a href={`/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`} style={{ color: 'var(--primary-light)' }}>{mtg.body_name}</a>
+                          </td>
+                          <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
+                          <td><StatusBadge status={mtg.status} /></td>
+                          <td onClick={stop}>
+                            {recordingHref(mtg.assets) ? <RecordingLink assets={mtg.assets} /> : <span className="muted">—</span>}
+                          </td>
+                          <td onClick={stop}><DocLinks assets={mtg.assets} /></td>
+                          <td style={{ fontSize: 13 }}>{mtg.text_count > 0 ? '✓' : '—'}</td>
+                          <td onClick={stop}>
+                            {mtg.source_url ? (
+                              <a href={mtg.source_url} target="_blank" rel="noopener noreferrer" className="muted">Page ↗</a>
+                            ) : (
+                              <span className="muted">—</span>
+                            )}
+                          </td>
+                        </tr>
+                        {isOpen && (
+                          <tr>
+                            <td colSpan={9} style={{ background: 'var(--panel-2)', padding: '14px 18px', borderTop: '1px solid var(--border)' }}>
+                              <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                                <div style={{ flex: '1 1 420px', minWidth: 0 }}>
+                                  <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)', marginBottom: 6 }}>
+                                    Summary
+                                  </div>
+                                  {d?.loading ? (
+                                    <div className="muted" style={{ fontSize: 13 }}>Loading summary…</div>
+                                  ) : d?.summary ? (
+                                    <div style={{ fontSize: 13, lineHeight: 1.55 }}>{d.summary}</div>
+                                  ) : d?.excerpt ? (
+                                    <div style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--muted)' }}>
+                                      {d.excerpt}{d.excerpt.length >= 1400 ? '…' : ''}
+                                      <div style={{ fontSize: 11, marginTop: 6 }}>Preview from the meeting&apos;s extracted text — no AI summary yet.</div>
+                                    </div>
+                                  ) : (
+                                    <div className="muted" style={{ fontSize: 13 }}>
+                                      {d?.error ? 'Could not load summary.' : 'No summary or minutes text available for this meeting yet.'}
+                                    </div>
+                                  )}
+                                </div>
+                                {recordingHref(mtg.assets) && (
+                                  <div style={{ flex: '0 0 auto' }}>
+                                    <a href={recordingHref(mtg.assets)} target="_blank" rel="noopener noreferrer" className="btn" style={{ whiteSpace: 'nowrap' }}>
+                                      ▶ Watch recording ↗
+                                    </a>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
                         )}
-                      </td>
-                    </tr>
-                  ))}
+                      </Fragment>
+                    )
+                  })}
                 </tbody>
               </table>
             ) : (
