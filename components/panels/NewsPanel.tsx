@@ -10,6 +10,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import { useCesium } from "@/components/cesium/CesiumContext";
+import { cn } from "@/lib/utils";
 
 interface NewsItem {
   id: string;
@@ -156,9 +157,16 @@ export default function NewsPanel() {
 
   return (
     <>
-      {/* A side panel occupies the full-width bottom bar's space when open. */}
-      {!leftPanelOpen && !rightPanel && (
-        <div className="absolute bottom-0 left-0 right-0 z-20 h-20">
+      {/* The right panel takes the whole bottom bar. A selected property is a
+          full-width bottom sheet on phones (hide), but a left-side card on
+          tablet/desktop — offset the ticker to sit beside it there. */}
+      {!rightPanel && (
+        <div
+          className={cn(
+            "absolute bottom-0 right-0 z-20 h-20",
+            leftPanelOpen ? "left-0 max-md:hidden md:left-[390px]" : "left-0"
+          )}
+        >
           <button
             onClick={() => current && setLightbox(current)}
             aria-label="Open this headline"

@@ -312,7 +312,8 @@ export default function CesiumViewerComponent() {
       const selectPropertyAt = (clientX: number, clientY: number) => {
         const rect = canvas.getBoundingClientRect();
         const pos = new Cesium.Cartesian2(clientX - rect.left, clientY - rect.top);
-        const picked = viewer.scene.pick(pos);
+        // Wide pick tolerance (~44px) so a fingertip reliably hits a small pin.
+        const picked = viewer.scene.pick(pos, 44, 44);
         if (Cesium.defined(picked) && picked.id) {
           const entityId = picked.id.id as string;
           if (entityId?.startsWith("property-")) {
