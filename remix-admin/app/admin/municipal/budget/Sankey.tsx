@@ -40,19 +40,40 @@ interface Ribbon {
 export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: BudgetLink[] }) {
   const [hoverLink, setHoverLink] = useState<string | null>(null)
   const [hoverNode, setHoverNode] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
-  const { laid, ribbons, tip } = useMemo(() => {
+  // Which nodes can be drilled into (have detail children).
+  const expandable = useMemo(() => new Set(nodes.filter((n) => n.parent).map((n) => n.parent!)), [nodes])
+
+  function toggle(id: string) {
+    if (!expandable.has(id)) return
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const { laid, ribbons, maxLayer } = useMemo(() => {
+    // Only show a detail child when its parent is expanded.
+    const nodesV = nodes.filter((n) => !n.parent || expanded.has(n.parent))
+    const visIds = new Set(nodesV.map((n) => n.id))
+    const linksV = links.filter((l) => visIds.has(l.source) && visIds.has(l.target))
+
     const byId = new Map<string, Laid>()
-    for (const n of nodes) {
+    for (const n of nodesV) {
       byId.set(n.id, { node: n, x: 0, y: 0, h: 0, value: 0, sOff: 0, tOff: 0 })
     }
-    // Node value = max(incoming, outgoing).
-    for (const n of nodes) {
-      const inc = links.filter((l) => l.target === n.id).reduce((s, l) => s + l.value, 0)
-      const out = links.filter((l) => l.source === n.id).reduce((s, l) => s + l.value, 0)
+    // Node value = max(incoming, outgoing) over visible links.
+    for (const n of nodesV) {
+      const inc = linksV.filter((l) => l.target === n.id).reduce((s, l) => s + l.value, 0)
+      const out = linksV.filter((l) => l.source === n.id).reduce((s, l) => s + l.value, 0)
       byId.get(n.id)!.value = Math.max(inc, out)
     }
-    const layers = Array.from(new Set(nodes.map((n) => n.layer))).sort((a, b) => a - b)
+    const nodes2 = nodesV
+    const links2 = linksV
+    const layers = Array.from(new Set(nodes2.map((n) => n.layer))).sort((a, b) => a - b)
     const maxLayer = layers[layers.length - 1] || 0
     const plotH = H - PAD.top - PAD.bottom
 
@@ -60,7 +81,7 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
     let scale = Infinity
     const byLayer = new Map<number, Laid[]>()
     for (const L of layers) {
-      const col = nodes.filter((n) => n.layer === L).map((n) => byId.get(n.id)!)
+      const col = nodes2.filter((n) => n.layer === L).map((n) => byId.get(n.id)!)
       col.sort((a, b) => b.value - a.value)
       byLayer.set(L, col)
       const sum = col.reduce((s, c) => s + c.value, 0)
@@ -86,7 +107,7 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
     }
 
     // Build ribbons. Order each node's links by the other end's y to reduce crossings.
-    const ordered = [...links].sort((a, b) => {
+    const ordered = [...links2].sort((a, b) => {
       const ay = byId.get(a.source)!.y + byId.get(a.target)!.y
       const by = byId.get(b.source)!.y + byId.get(b.target)!.y
       return ay - by
@@ -117,8 +138,8 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
       t.tOff += th
     }
 
-    return { laid: [...byId.values()], ribbons, tip: null as null }
-  }, [nodes, links])
+    return { laid: [...byId.values()], ribbons, maxLayer }
+  }, [nodes, links, expanded])
 
   const active = hoverLink || hoverNode
   const hovered =
@@ -128,6 +149,9 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
 
   return (
     <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+      <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
+        Click a spending area marked ⊕ to break it down; click ⊖ to roll it back up.
+      </div>
       <svg
         viewBox={`0 0 ${W} ${H}`}
         style={{ width: '100%', minWidth: 760, display: 'block' }}
@@ -152,11 +176,13 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
 
         {/* Nodes + labels */}
         {laid.map((n) => {
-          const isRevenue = n.node.layer === 0
-          const isHub = n.node.layer === 1
-          const labelX = isRevenue ? n.x - 8 : isHub ? n.x + NODE_W / 2 : n.x + NODE_W + 8
-          const anchor = isRevenue ? 'end' : isHub ? 'middle' : 'start'
-          const labelY = isHub ? n.y - 8 : n.y + n.h / 2
+          const isLeft = n.node.layer === 0
+          // Middle columns (hub + any expanded parent) label above; rightmost labels to the right.
+          const isMiddle = n.node.layer > 0 && n.node.layer < maxLayer
+          const labelX = isLeft ? n.x - 8 : isMiddle ? n.x + NODE_W / 2 : n.x + NODE_W + 8
+          const anchor = isLeft ? 'end' : isMiddle ? 'middle' : 'start'
+          const canDrill = expandable.has(n.node.id)
+          const drillMark = canDrill ? (expanded.has(n.node.id) ? ' ⊖' : ' ⊕') : ''
           return (
             <g key={n.node.id}>
               <rect
@@ -167,33 +193,52 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
                 rx={2}
                 fill={n.node.color ?? NEUTRAL}
                 opacity={active && hoverNode !== n.node.id && !(hoverLink && hoverLink.includes(n.node.id)) ? 0.4 : 1}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: canDrill ? 'pointer' : 'default' }}
                 onMouseEnter={() => setHoverNode(n.node.id)}
                 onMouseLeave={() => setHoverNode(null)}
+                onClick={() => toggle(n.node.id)}
               />
-              <text
-                x={labelX}
-                y={isHub ? labelY : labelY - 2}
-                textAnchor={anchor}
-                dominantBaseline={isHub ? 'auto' : 'middle'}
-                fontSize={13}
-                fontWeight={600}
-                fill="#fafafa"
-                style={{ pointerEvents: 'none' }}
-              >
-                {n.node.label}
-              </text>
-              <text
-                x={labelX}
-                y={isHub ? labelY : labelY + 13}
-                textAnchor={anchor}
-                dominantBaseline={isHub ? 'auto' : 'middle'}
-                fontSize={11}
-                fill="#9a9a9a"
-                style={{ pointerEvents: 'none' }}
-              >
-                {isHub ? '' : fmtUSD(n.value)}
-              </text>
+              {isMiddle ? (
+                <text
+                  x={labelX}
+                  y={n.y - 8}
+                  textAnchor="middle"
+                  fontSize={13}
+                  fontWeight={600}
+                  fill="#fafafa"
+                  style={{ cursor: canDrill ? 'pointer' : 'default' }}
+                  onClick={() => toggle(n.node.id)}
+                >
+                  {n.node.label}{drillMark}
+                </text>
+              ) : (
+                <>
+                  <text
+                    x={labelX}
+                    y={n.y + n.h / 2 - 2}
+                    textAnchor={anchor}
+                    dominantBaseline="middle"
+                    fontSize={13}
+                    fontWeight={600}
+                    fill="#fafafa"
+                    style={{ cursor: canDrill ? 'pointer' : 'default' }}
+                    onClick={() => toggle(n.node.id)}
+                  >
+                    {n.node.label}{drillMark}
+                  </text>
+                  <text
+                    x={labelX}
+                    y={n.y + n.h / 2 + 13}
+                    textAnchor={anchor}
+                    dominantBaseline="middle"
+                    fontSize={11}
+                    fill="#9a9a9a"
+                    style={{ pointerEvents: 'none' }}
+                  >
+                    {fmtUSD(n.value)}
+                  </text>
+                </>
+              )}
             </g>
           )
         })}

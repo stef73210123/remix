@@ -19,6 +19,8 @@ export interface BudgetNode {
   id: string
   label: string
   layer: number
+  /** Parent node id — set on drill-down detail nodes (layer 3+). */
+  parent?: string
   /** Validated categorical hue, or null for neutral (hub / minor areas). */
   color: string | null
 }
@@ -92,6 +94,64 @@ const NORTH_CASTLE_PLACEHOLDER: TownBudget = {
     { source: 'total', target: 'exp_debt', value: 2_500_000 },
     { source: 'total', target: 'exp_other', value: 2_500_000 },
   ],
+}
+
+// Drill-down detail (layer 3): each spending category → its sub-line-items.
+// Children sum to the parent value. Placeholder, like the top level.
+const NC_DETAIL: Record<string, [string, number][]> = {
+  exp_public_safety: [
+    ['Police Protection', 5_500_000],
+    ['Fire / EMS', 1_800_000],
+    ['Building & Code', 900_000],
+    ['Justice Court', 800_000],
+  ],
+  exp_highway: [
+    ['Personnel', 2_600_000],
+    ['Road Maintenance', 1_600_000],
+    ['Snow & Ice', 1_000_000],
+    ['Equipment', 800_000],
+  ],
+  exp_general_gov: [
+    ['Town Board & Supervisor', 900_000],
+    ['Finance & IT', 1_100_000],
+    ['Legal', 800_000],
+    ['Assessor', 700_000],
+    ['Clerk & Records', 700_000],
+    ['Town Buildings', 800_000],
+  ],
+  exp_benefits: [
+    ['Health Insurance', 2_800_000],
+    ['NYS Retirement', 1_500_000],
+    ['Social Security', 700_000],
+  ],
+  exp_parks: [
+    ['Facilities & Grounds', 1_300_000],
+    ['Programs', 1_200_000],
+    ['Pool', 500_000],
+  ],
+  exp_sanitation: [
+    ['Collection', 1_600_000],
+    ['Disposal / Tipping', 900_000],
+  ],
+  exp_debt: [
+    ['Principal', 1_700_000],
+    ['Interest', 800_000],
+  ],
+  exp_other: [
+    ['Contingency', 1_000_000],
+    ['Insurance', 900_000],
+    ['Miscellaneous', 600_000],
+  ],
+}
+
+for (const [parentId, kids] of Object.entries(NC_DETAIL)) {
+  const parent = NORTH_CASTLE_PLACEHOLDER.nodes.find((n) => n.id === parentId)
+  if (!parent) continue
+  kids.forEach(([label, value], i) => {
+    const id = `${parentId}__${i}`
+    NORTH_CASTLE_PLACEHOLDER.nodes.push({ id, label, layer: 3, parent: parentId, color: parent.color })
+    NORTH_CASTLE_PLACEHOLDER.links.push({ source: parentId, target: id, value })
+  })
 }
 
 export const TOWN_BUDGETS: Record<string, TownBudget> = {
