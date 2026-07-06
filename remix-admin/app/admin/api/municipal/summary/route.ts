@@ -21,6 +21,12 @@ import { MUNICIPALITIES } from '@/lib/municipal/registry'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
+interface Asset {
+  kind: string
+  sourceUrl: string | null
+  blobUrl: string | null
+  pageCount: number | null
+}
 interface MeetingRow {
   id: string
   muni_key: string
@@ -33,7 +39,7 @@ interface MeetingRow {
   status: string
   title: string | null
   source_url: string | null
-  asset_count: number
+  assets: Asset[]
   text_count: number
 }
 
@@ -76,13 +82,21 @@ export async function GET() {
              m.status       AS status,
              m.title        AS title,
              m.source_url   AS source_url,
-             (SELECT count(*)::int FROM meeting_asset a WHERE a.meeting_id = m.id) AS asset_count,
-             (SELECT count(*)::int FROM meeting_text  t WHERE t.meeting_id = m.id) AS text_count
+             COALESCE((
+               SELECT json_agg(json_build_object(
+                        'kind', a.kind,
+                        'sourceUrl', a.source_url,
+                        'blobUrl', a.blob_url,
+                        'pageCount', a.page_count
+                      ) ORDER BY a.kind)
+               FROM meeting_asset a WHERE a.meeting_id = m.id
+             ), '[]'::json) AS assets,
+             (SELECT count(*)::int FROM meeting_text t WHERE t.meeting_id = m.id) AS text_count
       FROM meeting m
       JOIN municipality mun ON mun.id = m.municipality_id
       JOIN body b           ON b.id  = m.body_id
       ORDER BY m.scheduled_at DESC
-      LIMIT 200
+      LIMIT 500
     `) as MeetingRow[]
     dbOk = true
 
