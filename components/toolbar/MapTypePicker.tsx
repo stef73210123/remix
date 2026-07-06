@@ -50,6 +50,7 @@ const TOP_LAYERS: LayerTile[] = [
 
 export default function MapTypePicker() {
   const {
+    viewerRef,
     basemapMode,
     setBasemapMode,
     showBuildings,
@@ -74,11 +75,43 @@ export default function MapTypePicker() {
 
   const google3dActive = showBuildings && buildingSource === "google";
 
+  // Tilt to a 45° perspective centered on the point currently in view, keeping
+  // the same zoom and heading. Used when switching from a flat (2D) basemap
+  // back to 3D, so the mesh reads as 3D instead of staying top-down.
+  const tiltTo3D = async () => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    const Cesium = await import("cesium");
+    const { scene } = viewer;
+    const { camera } = scene;
+    const canvas = scene.canvas;
+    const centerPx = new Cesium.Cartesian2(
+      canvas.clientWidth / 2,
+      canvas.clientHeight / 2
+    );
+    const ray = camera.getPickRay(centerPx);
+    // The ground point under screen-center is the "original point" to stay on.
+    const center = ray ? scene.globe.pick(ray, scene) : undefined;
+    if (!center) return;
+    // Preserve the current distance to that point so the zoom level is unchanged.
+    const range = Cesium.Cartesian3.distance(camera.positionWC, center);
+    camera.flyToBoundingSphere(new Cesium.BoundingSphere(center, 0), {
+      offset: new Cesium.HeadingPitchRange(
+        camera.heading,
+        Cesium.Math.toRadians(-45),
+        range
+      ),
+      duration: 1.2,
+    });
+  };
+
   const selectMapType = (key: BasemapMode | "google3d") => {
     if (key === "google3d") {
       setShowOsmFootprints(false);
       setBuildingSource("google");
       setShowBuildings(true);
+      // Only reframe on the actual 2D → 3D transition, not when 3D is re-picked.
+      if (!google3dActive) tiltTo3D();
     } else {
       // Remember this as the wide/city basemap so auto reverts to it on zoom-out.
       setUserBasemap(key);
