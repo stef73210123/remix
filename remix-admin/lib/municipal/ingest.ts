@@ -114,7 +114,7 @@ export async function ingestMunicipality(opts: {
 
 // ── Persistence helpers ────────────────────────────────────────────────
 
-async function ensureMunicipality(cfg: MunicipalityConfig): Promise<{ id: string }> {
+export async function ensureMunicipality(cfg: MunicipalityConfig): Promise<{ id: string }> {
   const rows = (await sql`
     INSERT INTO municipality (key, name, state, county, timezone, meta)
     VALUES (${cfg.key}, ${cfg.name}, ${cfg.state}, ${cfg.county ?? null}, ${cfg.timezone}, ${JSON.stringify(cfg.meta ?? {})}::jsonb)
@@ -129,7 +129,7 @@ async function ensureMunicipality(cfg: MunicipalityConfig): Promise<{ id: string
   return rows[0]!
 }
 
-async function ensureBodies(
+export async function ensureBodies(
   muniId: string,
   cfg: MunicipalityConfig,
 ): Promise<Record<string, string>> {
