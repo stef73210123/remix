@@ -108,24 +108,25 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
       canvas.clientHeight / 2
     );
     const centerCart = camera.pickEllipsoid(centerPx, scene.globe.ellipsoid);
-    let lon: number, lat: number, distance: number;
+    let lon: number, lat: number;
     if (centerCart) {
       const carto = Cesium.Cartographic.fromCartesian(centerCart);
       lon = carto.longitude;
       lat = carto.latitude;
-      distance = Cesium.Cartesian3.distance(camera.positionWC, centerCart);
     } else {
       const pc = camera.positionCartographic;
       lon = pc.longitude;
       lat = pc.latitude;
-      distance = pc.height;
     }
+    // Eye altitude is well-defined in both 2D and 3D (unlike positionWC-based
+    // distance, which is garbage in 2D and sent the camera to earth scale).
+    const height = camera.positionCartographic.height;
     const heading = camera.heading;
     const goingTo2D = scene.mode !== Cesium.SceneMode.SCENE2D;
 
     const restore = () => {
       camera.setView({
-        destination: Cesium.Cartesian3.fromRadians(lon, lat, distance),
+        destination: Cesium.Cartesian3.fromRadians(lon, lat, height),
         orientation: { heading, pitch: -Cesium.Math.PI_OVER_TWO, roll: 0 },
       });
     };
@@ -133,8 +134,11 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
       restore();
       remove();
     });
-    if (goingTo2D) scene.morphTo2D(0.5);
-    else scene.morphTo3D(0.5);
+    // Duration 0 → instant switch. A timed morph animates out to earth scale
+    // and back, which reads as a jarring zoom-out/in.
+    if (goingTo2D) scene.morphTo2D(0);
+    else scene.morphTo3D(0);
+    restore();
     setViewMode(goingTo2D ? "2D" : "3D");
   }, []);
 
@@ -154,7 +158,9 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
         camera.setView({ destination: dest, orientation: overhead });
         remove();
       });
-      scene.morphTo2D(0.5);
+      // Instant morph (no earth-scale flyout), then fly to the address in 2D.
+      scene.morphTo2D(0);
+      camera.setView({ destination: dest, orientation: overhead });
       setViewMode("2D");
     } else {
       camera.flyTo({ destination: dest, orientation: overhead, duration: 1.5 });

@@ -134,10 +134,14 @@ export default function MapTypePicker() {
   return (
     <div
       className={cn(
-        "absolute left-1/2 -translate-x-1/2 z-30 flex items-end gap-2 bottom-[88px]",
-        // The property sheet/card overlaps the bottom-center control until there's
-        // room beside it (lg+) — hide while a property is open below lg.
-        leftPanelOpen && "max-lg:hidden"
+        "absolute z-30 flex items-end gap-2 bottom-[88px]",
+        // Default: centered along the bottom.
+        !leftPanelOpen && "left-1/2 -translate-x-1/2",
+        // Property open: a full-width bottom sheet covers this on phones (hide);
+        // on tablets the side card sits on the left, so right-anchor to clear it;
+        // on desktop there's room to stay centered.
+        leftPanelOpen &&
+          "max-md:hidden md:right-3 lg:left-1/2 lg:right-auto lg:-translate-x-1/2"
       )}
     >
       {open && (
