@@ -1,0 +1,93 @@
+/**
+ * Live demographics from the U.S. Census ACS 5-year API.
+ *
+ * Queries county-subdivision (town/MCD) rows for the town's county and matches
+ * by name, so no exact cousub FIPS is needed. Returns the same TownDemographics
+ * shape as the static fallback. Requires CENSUS_API_KEY in the environment;
+ * returns null (caller falls back) when the key is absent or the fetch fails.
+ *
+ * The key is read from process.env only — never hard-coded or logged.
+ */
+import type { TownDemographics, IncomeBracket } from './demographics'
+
+const ACS_YEAR = '2022'
+
+// muniKey → Census geography (state + county FIPS) and the town name to match.
+const CENSUS_GEO: Record<string, { state: string; county: string; nameStartsWith: string }> = {
+  nc: { state: '36', county: '119', nameStartsWith: 'North Castle' }, // Westchester Co, NY
+  rockland: { state: '36', county: '105', nameStartsWith: 'Rockland' }, // Sullivan Co, NY
+}
+
+// B19001 income brackets 002..017 (<$10k … $200k+).
+const B19001 = Array.from({ length: 16 }, (_, i) => `B19001_${String(i + 2).padStart(3, '0')}E`)
+const VARS = [
+  'NAME',
+  'B01003_001E', // population
+  'B19013_001E', // median household income
+  'B01002_001E', // median age
+  'B11001_001E', // households
+  'B25003_001E', // occupied units
+  'B25003_002E', // owner-occupied
+  ...B19001,
+]
+
+/** ACS null sentinels are large negatives; coerce to a safe number. */
+function num(v: string | undefined): number {
+  const n = Number(v)
+  return isFinite(n) && n > -100000 ? n : 0
+}
+
+export async function fetchCensusDemographics(
+  muniKey: string,
+  townName: string,
+): Promise<TownDemographics | null> {
+  const key = process.env.CENSUS_API_KEY
+  const geo = CENSUS_GEO[muniKey]
+  if (!key || !geo) return null
+
+  const url =
+    `https://api.census.gov/data/${ACS_YEAR}/acs/acs5?get=${VARS.join(',')}` +
+    `&for=county%20subdivision:*&in=state:${geo.state}%20county:${geo.county}&key=${key}`
+
+  const res = await fetch(url, { signal: AbortSignal.timeout(15000) })
+  if (!res.ok) throw new Error(`census HTTP ${res.status}`)
+  const table = (await res.json()) as string[][]
+  if (!Array.isArray(table) || table.length < 2) return null
+
+  const header = table[0]
+  const idx = (name: string) => header.indexOf(name)
+  const nameI = idx('NAME')
+  const row = table.slice(1).find((r) => (r[nameI] || '').startsWith(geo.nameStartsWith))
+  if (!row) return null
+
+  const get = (v: string) => num(row[idx(v)])
+
+  const households = get('B11001_001E')
+  const occupied = get('B25003_001E')
+  const owner = get('B25003_002E')
+  const bTotal = get('B19001_001E') || B19001.reduce((s, v) => s + get(v), 0)
+
+  const sum = (vs: string[]) => vs.reduce((s, v) => s + get(v), 0)
+  const pct = (n: number) => (bTotal > 0 ? Math.round((n / bTotal) * 100) : 0)
+  const b = (i: number) => `B19001_${String(i).padStart(3, '0')}E`
+  const incomeBrackets: IncomeBracket[] = [
+    { label: '<$50K', pct: pct(sum([2, 3, 4, 5, 6, 7, 8, 9, 10].map(b))) },
+    { label: '$50–100K', pct: pct(sum([11, 12, 13].map(b))) },
+    { label: '$100–150K', pct: pct(sum([14, 15].map(b))) },
+    { label: '$150–200K', pct: pct(get(b(16))) },
+    { label: '$200K+', pct: pct(get(b(17))) },
+  ]
+
+  return {
+    townKey: muniKey,
+    townName,
+    approximate: false,
+    source: `U.S. Census ACS 5-year (${ACS_YEAR})`,
+    population: get('B01003_001E'),
+    households,
+    medianIncomeUsd: get('B19013_001E'),
+    medianAgeYears: get('B01002_001E'),
+    ownerOccupiedPct: occupied > 0 ? Math.round((owner / occupied) * 100) : 0,
+    incomeBrackets,
+  }
+}

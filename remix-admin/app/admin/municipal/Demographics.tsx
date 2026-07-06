@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import type { TownDemographics } from '@/lib/municipal/demographics'
 
 function fmtInt(n: number): string {
@@ -19,7 +20,22 @@ function Tile({ label, value, sub }: { label: string; value: string; sub?: strin
   )
 }
 
-export default function Demographics({ demo }: { demo: TownDemographics }) {
+export default function Demographics({ muniKey }: { muniKey: string }) {
+  const [demo, setDemo] = useState<TownDemographics | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    fetch(`/admin/api/municipal/demographics?muni=${encodeURIComponent(muniKey)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+      .then((d) => setDemo(d.demo || null))
+      .catch(() => setDemo(null))
+      .finally(() => setLoading(false))
+  }, [muniKey])
+
+  if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading demographics…</div>
+  if (!demo) return null
+
   const renterPct = Math.max(0, 100 - demo.ownerOccupiedPct)
   const maxBracket = Math.max(...demo.incomeBrackets.map((b) => b.pct), 1)
 

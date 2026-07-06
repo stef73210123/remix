@@ -4,7 +4,6 @@ import { Fragment, useEffect, useMemo, useState } from 'react'
 import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
-import { getDemographics } from '@/lib/municipal/demographics'
 import AdminNav from '@/app/admin/AdminNav'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
@@ -413,10 +412,7 @@ export default function MunicipalClient({
           })()}
 
           {/* Demographics — Dashboard tab only, for the selected town. */}
-          {board === 'ALL' && (() => {
-            const d = getDemographics(town)
-            return d ? <Demographics demo={d} /> : null
-          })()}
+          {board === 'ALL' && town !== 'ALL' && <Demographics muniKey={town} />}
 
           {/* Financial analysis — the selected town's budget. Dashboard tab only. */}
           {board === 'ALL' && (() => {
