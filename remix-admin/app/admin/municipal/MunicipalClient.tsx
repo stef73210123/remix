@@ -51,6 +51,28 @@ interface Summary {
 interface AgendaItem {
   title: string
   action: string | null
+  heading?: boolean
+}
+
+/** Group a flat agenda list into sections: each heading row starts a new
+ *  section that the following items nest under. Items before the first
+ *  heading fall in a leading section with no header. */
+function groupAgenda(items: AgendaItem[]): { heading: string | null; items: AgendaItem[] }[] {
+  const groups: { heading: string | null; items: AgendaItem[] }[] = []
+  let current: { heading: string | null; items: AgendaItem[] } | null = null
+  for (const it of items) {
+    if (it.heading) {
+      current = { heading: it.title, items: [] }
+      groups.push(current)
+    } else {
+      if (!current) {
+        current = { heading: null, items: [] }
+        groups.push(current)
+      }
+      current.items.push(it)
+    }
+  }
+  return groups
 }
 
 type TownFilter = 'ALL' | string
@@ -544,15 +566,43 @@ export default function MunicipalClient({
                                   {d?.loading ? (
                                     <div className="muted" style={{ fontSize: 13 }}>Loading agenda…</div>
                                   ) : d?.agendaItems && d.agendaItems.length > 0 ? (
-                                    <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                                      {d.agendaItems.map((it, k) => (
-                                        <li key={k} style={{ fontSize: 13, lineHeight: 1.5 }}>
-                                          {it.action && <strong style={{ color: 'var(--primary-light)' }}>{it.action}</strong>}
-                                          {it.action ? ' — ' : ''}
-                                          {it.title}
-                                        </li>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                      {groupAgenda(d.agendaItems).map((g, gi) => (
+                                        <div key={gi}>
+                                          {g.heading && (
+                                            <div
+                                              style={{
+                                                fontSize: 13,
+                                                fontWeight: 700,
+                                                textDecoration: 'underline',
+                                                textUnderlineOffset: 3,
+                                                color: 'var(--primary-light)',
+                                                marginBottom: 6,
+                                              }}
+                                            >
+                                              {g.heading}
+                                            </div>
+                                          )}
+                                          <ul
+                                            style={{
+                                              margin: 0,
+                                              paddingLeft: g.heading ? 28 : 18,
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              gap: 6,
+                                            }}
+                                          >
+                                            {g.items.map((it, k) => (
+                                              <li key={k} style={{ fontSize: 13, lineHeight: 1.5 }}>
+                                                {it.action && <strong style={{ color: 'var(--primary-light)' }}>{it.action}</strong>}
+                                                {it.action ? ' — ' : ''}
+                                                {it.title}
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
                                       ))}
-                                    </ul>
+                                    </div>
                                   ) : d?.summary ? (
                                     <div style={{ fontSize: 13, lineHeight: 1.55 }}>{d.summary}</div>
                                   ) : d?.excerpt ? (
