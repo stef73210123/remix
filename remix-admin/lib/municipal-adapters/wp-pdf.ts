@@ -135,6 +135,7 @@ async function* discoverForHub(
     pdfs.add(abs)
   })
 
+  const items: DiscoveredMeeting[] = []
   for (const pdfUrl of pdfs) {
     // Only consider URLs under wp-content/uploads (rules out header/theme links).
     if (!pdfUrl.includes('/wp-content/uploads/')) continue
@@ -142,12 +143,14 @@ async function* discoverForHub(
     const filename = decodeURIComponent(pdfUrl.split('/').pop() ?? '')
     const parsedDate = parseDateFromFilename(filename)
 
-    // If we can't parse a date at all, still yield with placeholder — better
-    // to surface for human triage than drop.
+    // If we can't parse a date from the filename, fall back to the WP upload
+    // folder (YYYY/MM) — a rough but usable date. Apply `since` to that
+    // fallback too, so a bounded backfill doesn't drag in years of undated
+    // PDFs (which would blow the serverless time budget).
     const scheduledAt = parsedDate ?? unknownDate(pdfUrl)
-    if (since && parsedDate && parsedDate < since) continue
+    if (since && scheduledAt < since) continue
 
-    yield {
+    items.push({
       bodyKey: hub.body,
       scheduledAt,
       title: `${hub.label} — ${filename}`,
@@ -158,10 +161,14 @@ async function* discoverForHub(
       },
       meta: {
         filename,
-        dateSource: parsedDate ? 'filename' : 'unknown',
+        dateSource: parsedDate ? 'filename' : 'upload-folder',
       },
-    }
+    })
   }
+
+  // Newest first, so a `limit` cap keeps the most recent meetings.
+  items.sort((a, b) => b.scheduledAt.getTime() - a.scheduledAt.getTime())
+  for (const m of items) yield m
 }
 
 /**
