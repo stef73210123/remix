@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import type { TownBudget } from '@/lib/municipal/budget'
 import Sankey from './Sankey'
 
@@ -14,9 +14,7 @@ function fmtUSD(v: number): string {
  * standalone Budget page and the inline section on the Municipal dashboard.
  */
 export default function BudgetPanel({ budget }: { budget: TownBudget }) {
-  const [showTable, setShowTable] = useState(false)
-
-  const { revenue, spending, total } = useMemo(() => {
+  const { total } = useMemo(() => {
     const out = (id: string) => budget.links.filter((l) => l.source === id).reduce((s, l) => s + l.value, 0)
     const inc = (id: string) => budget.links.filter((l) => l.target === id).reduce((s, l) => s + l.value, 0)
     const revenue = budget.nodes
@@ -46,52 +44,9 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
         </div>
       )}
 
-      <div className="card" style={{ padding: 20, marginBottom: 14 }}>
+      <div className="card" style={{ padding: 20 }}>
         <Sankey nodes={budget.nodes} links={budget.links} />
       </div>
-
-      <button className="btn secondary" onClick={() => setShowTable((v) => !v)} style={{ marginBottom: 14 }}>
-        {showTable ? 'Hide table view' : 'Show table view'}
-      </button>
-
-      {showTable && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-          <div className="card table-card">
-            <table>
-              <thead><tr><th>Revenue source</th><th style={{ textAlign: 'right' }}>Amount</th><th style={{ width: 60, textAlign: 'right' }}>%</th></tr></thead>
-              <tbody>
-                {revenue.map((r) => (
-                  <tr key={r.label}>
-                    <td>
-                      <span style={{ display: 'inline-block', width: 9, height: 9, borderRadius: 2, background: r.color ?? '#7a8590', marginRight: 8 }} />
-                      {r.label}
-                    </td>
-                    <td style={{ textAlign: 'right', fontSize: 13, whiteSpace: 'nowrap' }}>{fmtUSD(r.value)}</td>
-                    <td style={{ textAlign: 'right', fontSize: 13 }}>{total ? Math.round((r.value / total) * 100) : 0}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="card table-card">
-            <table>
-              <thead><tr><th>Spending area</th><th style={{ textAlign: 'right' }}>Amount</th><th style={{ width: 60, textAlign: 'right' }}>%</th></tr></thead>
-              <tbody>
-                {spending.map((r) => (
-                  <tr key={r.label}>
-                    <td>
-                      <span style={{ display: 'inline-block', width: 9, height: 9, borderRadius: 2, background: r.color ?? '#7a8590', marginRight: 8 }} />
-                      {r.label}
-                    </td>
-                    <td style={{ textAlign: 'right', fontSize: 13, whiteSpace: 'nowrap' }}>{fmtUSD(r.value)}</td>
-                    <td style={{ textAlign: 'right', fontSize: 13 }}>{total ? Math.round((r.value / total) * 100) : 0}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </>
   )
 }

@@ -140,19 +140,6 @@ function nextMeetingDate(pattern: string | null, from: Date): Date | null {
   return best
 }
 
-const STATUS_COLOR: Record<string, string> = {
-  held: 'var(--a)', scheduled: 'var(--b)', cancelled: 'var(--c)', rescheduled: 'var(--warn)',
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const color = STATUS_COLOR[status] || 'var(--c)'
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
-      <span style={{ width: 8, height: 8, borderRadius: 999, background: color, display: 'inline-block' }} />
-      {status}
-    </span>
-  )
-}
 
 const RECORDING_KINDS = new Set(['video_mp4', 'audio_mp3'])
 
@@ -230,7 +217,7 @@ export default function MunicipalClient({
   const [data, setData] = useState<Summary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [town, setTown] = useState<TownFilter>('ALL')
+  const [town, setTown] = useState<TownFilter>('nc')
   const [board, setBoard] = useState<BoardFilter>('ALL')
   // When "All towns" is selected, the financial-analysis section shows one
   // town at a time, chosen with this toggle.
@@ -381,7 +368,6 @@ export default function MunicipalClient({
       {data && !loading && (
         <>
           <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 8 }}>
-            <Chip active={town === 'ALL'} onClick={() => setTown('ALL')}>All towns</Chip>
             {data.municipalities.map((m) => (
               <Chip key={m.key} active={town === m.key} onClick={() => setTown(m.key)}>{m.name}</Chip>
             ))}
@@ -504,15 +490,14 @@ export default function MunicipalClient({
             Meeting history
             <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length}</span>
           </h2>
-          <div className="card table-card">
+          <div className="card table-card" style={{ maxHeight: 360, overflowY: 'auto' }}>
             {history.length > 0 ? (
               <table>
                 <thead>
                   <tr>
                     <th style={{ width: 26 }}></th>
-                    <th>Town</th><th>Board</th><th>Date</th><th>Status</th>
-                    <th>Recording</th><th>Documents</th>
-                    <th style={{ width: 50 }}>Text</th><th style={{ width: 64 }}>Source</th>
+                    <th>Town</th><th>Board</th><th>Date</th>
+                    <th>Documents</th><th>Recording</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -532,23 +517,14 @@ export default function MunicipalClient({
                             <a href={`/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`} style={{ color: 'var(--primary-light)' }}>{mtg.body_name}</a>
                           </td>
                           <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
-                          <td><StatusBadge status={mtg.status} /></td>
+                          <td onClick={stop}><DocLinks assets={mtg.assets} /></td>
                           <td onClick={stop}>
                             {recordingHref(mtg.assets) ? <RecordingLink assets={mtg.assets} /> : <span className="muted">—</span>}
-                          </td>
-                          <td onClick={stop}><DocLinks assets={mtg.assets} /></td>
-                          <td style={{ fontSize: 13 }}>{mtg.text_count > 0 ? '✓' : '—'}</td>
-                          <td onClick={stop}>
-                            {mtg.source_url ? (
-                              <a href={mtg.source_url} target="_blank" rel="noopener noreferrer" className="muted">Page ↗</a>
-                            ) : (
-                              <span className="muted">—</span>
-                            )}
                           </td>
                         </tr>
                         {isOpen && (
                           <tr>
-                            <td colSpan={9} style={{ background: 'var(--panel-2)', padding: '14px 18px', borderTop: '1px solid var(--border)' }}>
+                            <td colSpan={6} style={{ background: 'var(--panel-2)', padding: '14px 18px', borderTop: '1px solid var(--border)' }}>
                               <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
                                 <div style={{ flex: '1 1 420px', minWidth: 0 }}>
                                   <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)', marginBottom: 6 }}>
