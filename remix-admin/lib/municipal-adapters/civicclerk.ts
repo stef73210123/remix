@@ -77,10 +77,16 @@ function fileUrl(api: string, file: any): string | null {
 }
 
 async function fetchEvents(api: string, top: number): Promise<any[]> {
-  // publishedFiles come inline on /v1/Events (no $expand needed). Try ordered
-  // first, fall back to a plain list if $orderby is rejected.
+  // Ordering newest-first alone returns only upcoming meetings, which have no
+  // agenda posted yet — so prefer meetings that actually HAVE an agenda,
+  // most-recent first. Fall back progressively if the OData surface rejects a
+  // filter/orderby. publishedFiles come inline on /v1/Events (no $expand).
+  const hasAgenda = encodeURIComponent('hasAgenda eq true')
+  const byDate = encodeURIComponent('startDateTime desc')
   for (const q of [
-    `/v1/Events?$orderby=startDateTime desc&$top=${top}`,
+    `/v1/Events?$filter=${hasAgenda}&$orderby=${byDate}&$top=${top}`,
+    `/v1/Events?$filter=${hasAgenda}&$top=${top}`,
+    `/v1/Events?$orderby=${byDate}&$top=${top}`,
     `/v1/Events?$top=${top}`,
     `/v1/Events`,
   ]) {
@@ -88,7 +94,7 @@ async function fetchEvents(api: string, top: number): Promise<any[]> {
     if (!res.ok) continue
     const json = (await res.json()) as any
     const rows = Array.isArray(json) ? json : json.value
-    if (Array.isArray(rows)) return rows
+    if (Array.isArray(rows) && rows.length > 0) return rows
   }
   throw new Error('civicclerk: could not read /v1/Events')
 }
