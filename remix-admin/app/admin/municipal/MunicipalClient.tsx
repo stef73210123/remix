@@ -217,7 +217,7 @@ export default function MunicipalClient({ userName }: { userName: string }) {
   const upcomingRows = useMemo(() => {
     const t0 = startOfToday()
     const today = new Date(t0)
-    const rows: { town: string; board: string; date: Date | null; assets: Asset[]; pattern: string | null; projected: boolean }[] = []
+    const rows: { town: string; board: string; muniKey: string; bodyKey: string; date: Date | null; assets: Asset[]; pattern: string | null; projected: boolean }[] = []
     const meetings = data?.meetings ?? []
     for (const m of munisShown) {
       for (const b of m.bodies) {
@@ -225,10 +225,11 @@ export default function MunicipalClient({ userName }: { userName: string }) {
         const ingested = meetings
           .filter((mm) => mm.muni_key === m.key && mm.body_name === b.displayName && new Date(mm.scheduled_at).getTime() >= t0)
           .sort((a, c) => new Date(a.scheduled_at).getTime() - new Date(c.scheduled_at).getTime())[0]
+        const common = { town: m.name, board: b.displayName, muniKey: m.key, bodyKey: b.key, pattern: b.meetingPattern }
         if (ingested) {
-          rows.push({ town: m.name, board: b.displayName, date: new Date(ingested.scheduled_at), assets: ingested.assets, pattern: b.meetingPattern, projected: false })
+          rows.push({ ...common, date: new Date(ingested.scheduled_at), assets: ingested.assets, projected: false })
         } else {
-          rows.push({ town: m.name, board: b.displayName, date: nextMeetingDate(b.meetingPattern, today), assets: [], pattern: b.meetingPattern, projected: true })
+          rows.push({ ...common, date: nextMeetingDate(b.meetingPattern, today), assets: [], projected: true })
         }
       }
     }
@@ -304,7 +305,9 @@ export default function MunicipalClient({ userName }: { userName: string }) {
                   {upcomingRows.map((r, i) => (
                     <tr key={i}>
                       <td style={{ fontWeight: 600 }}>{r.town}</td>
-                      <td style={{ fontSize: 13 }}>{r.board}</td>
+                      <td style={{ fontSize: 13 }}>
+                        <a href={`/admin/municipal/board?muni=${r.muniKey}&body=${r.bodyKey}`} style={{ color: 'var(--primary-light)' }}>{r.board}</a>
+                      </td>
                       <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>
                         {r.date ? (
                           <span title={r.projected ? 'Projected from meeting schedule' : undefined}>
@@ -345,7 +348,9 @@ export default function MunicipalClient({ userName }: { userName: string }) {
                         {mtg.muni_name}
                         {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{mtg.title}</div>}
                       </td>
-                      <td style={{ fontSize: 13 }}>{mtg.body_name}</td>
+                      <td style={{ fontSize: 13 }}>
+                        <a href={`/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`} style={{ color: 'var(--primary-light)' }}>{mtg.body_name}</a>
+                      </td>
                       <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
                       <td><StatusBadge status={mtg.status} /></td>
                       <td><DocLinks assets={mtg.assets} /></td>
