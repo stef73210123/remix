@@ -14,6 +14,7 @@ import {
   type CrmData,
 } from '@/lib/crm'
 import type { FundraisingContact } from '@/lib/fundraising'
+import AdminNav from '@/app/admin/AdminNav'
 
 type TabKey = 'rfps' | CrmCategory | 'fundraising'
 type StateFilter = 'ALL' | StateCode
@@ -86,11 +87,6 @@ export default function DashboardClient({
         .finally(() => setFundLoading(false))
     }
   }, [tab, fund, fundLoading])
-
-  async function logout() {
-    await fetch('/admin/api/auth/logout', { method: 'POST' })
-    window.location.href = '/admin/login'
-  }
 
   const q = query.trim().toLowerCase()
 
@@ -188,25 +184,7 @@ export default function DashboardClient({
             Admin · Signed in as {userName}
           </div>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          <a className="btn" href="/admin/municipal">
-            Municipal
-          </a>
-          <a className="btn secondary" href="https://atlas.remixcre.com" target="_blank" rel="noopener noreferrer">
-            Atlas
-          </a>
-          <a
-            className="btn secondary"
-            href="https://investors.circular.enterprises/admin/feed"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Circular
-          </a>
-          <button className="btn secondary" onClick={logout}>
-            Sign out
-          </button>
-        </div>
+        <AdminNav />
       </header>
 
       <h1 className="page-title">CRM</h1>

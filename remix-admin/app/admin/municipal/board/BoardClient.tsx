@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import AdminNav from '@/app/admin/AdminNav'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -91,11 +92,6 @@ export default function BoardClient({ userName }: { userName: string }) {
       .finally(() => setLoading(false))
   }, [])
 
-  async function logout() {
-    await fetch('/admin/api/auth/logout', { method: 'POST' })
-    window.location.href = '/admin/login'
-  }
-
   const openCount = useMemo(() => data?.openFiles.length ?? 0, [data])
 
   return (
@@ -108,10 +104,7 @@ export default function BoardClient({ userName }: { userName: string }) {
           <img src={WORDMARK} alt="Remix Properties" style={{ height: 34, display: 'block' }} />
           <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>Municipal · Signed in as {userName}</div>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          <a className="btn secondary" href="/admin/municipal">← Municipal</a>
-          <button className="btn secondary" onClick={logout}>Sign out</button>
-        </div>
+        <AdminNav />
       </header>
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading board…</div>}
