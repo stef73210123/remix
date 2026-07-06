@@ -47,11 +47,45 @@ const SECTION_HEADINGS: { re: RegExp; label: string }[] = [
   { re: /^appointments?$/i, label: 'Appointments' },
   { re: /^discussion\s+items?$/i, label: 'Discussion Items' },
   { re: /^action\s+items?$/i, label: 'Action Items' },
+  { re: /^personnel$/i, label: 'Personnel' },
+  { re: /^miscellaneous$/i, label: 'Miscellaneous' },
+  { re: /^agreements?$/i, label: 'Agreements' },
+  { re: /^contracts?$/i, label: 'Contracts' },
 ]
 
 // Leading enumeration only (1. / A) / IV. / Item 3) — NOT keyword markers, so a
 // heading like "7. Old Business" is still detected before the item parser runs.
 const ENUM_MARKER = /^\s*(?:\d{1,2}[.)]|[A-Za-z][.)]|[ivxlcdm]{1,5}[.)]|item\s+\d+[:.)]?)\s*/i
+
+// Small words kept lowercase when title-casing an ALL-CAPS heading.
+const TITLE_SMALL = new Set(['of', 'the', 'and', 'for', 'to', 'a', 'an', 'in', 'on', 'at', 'by', 'or', '&'])
+
+function titleCaseHeading(s: string): string {
+  return s
+    .toLowerCase()
+    .split(/\s+/)
+    .map((w, i) => (i > 0 && TITLE_SMALL.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)))
+    .join(' ')
+}
+
+/**
+ * ALL-CAPS heuristic: on municipal agendas a short line typed entirely in
+ * upper case is almost always a section header (PERSONNEL, MISCELLANEOUS,
+ * AGREEMENTS, CONSENSUS UPDATES…). Conservative guards keep caps-styled item
+ * lines out: no digits (addresses / resolution #s / amounts), no leading
+ * action verb, and at most four words.
+ */
+function isAllCapsHeading(cleaned: string): boolean {
+  if (/[a-z]/.test(cleaned)) return false // any lowercase → not an all-caps header
+  if (/\d/.test(cleaned)) return false // digits → likely an item, not a section
+  const letters = cleaned.replace(/[^A-Za-z]/g, '')
+  if (letters.length < 4) return false
+  const words = cleaned.split(/\s+/).filter(Boolean)
+  if (words.length < 1 || words.length > 4) return false
+  const first = words[0].toLowerCase()
+  if (ACTION_VERBS.some((v) => v === first || first.startsWith(v))) return false
+  return true
+}
 
 /** Return the canonical heading label if the line is a bare section header. */
 function matchSectionHeading(line: string): string | null {
@@ -60,9 +94,14 @@ function matchSectionHeading(line: string): string | null {
     .replace(/\.{2,}\s*\d+$/, '') // trailing PDF dot-leaders + page number
     .replace(/[:.\s]+$/, '')
     .trim()
-  if (cleaned.length < 5 || cleaned.length > 40) return null
+  if (cleaned.length < 4 || cleaned.length > 48) return null
   for (const { re, label } of SECTION_HEADINGS) {
     if (re.test(cleaned)) return label
+  }
+  // Fall back to the ALL-CAPS heuristic, but never promote boilerplate
+  // (CALL TO ORDER, ROLL CALL, ADJOURNMENT…) into a heading.
+  if (isAllCapsHeading(cleaned) && !BOILERPLATE.test(cleaned)) {
+    return titleCaseHeading(cleaned)
   }
   return null
 }
