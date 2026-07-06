@@ -183,7 +183,7 @@ export default function NewsPanel() {
                 return (
                   <div
                     key={tickerIndex}
-                    className="absolute inset-0 flex items-center gap-3 animate-atlas-ticker-in"
+                    className="absolute inset-0 flex items-center gap-3 animate-atlas-ticker-in lg:justify-center"
                   >
                     {/* Topic icon — the only icon on the bar, category label ABOVE it */}
                     <div className="shrink-0 flex flex-col items-center gap-1 w-12">
@@ -200,7 +200,7 @@ export default function NewsPanel() {
                         <CatIcon className="w-4 h-4" style={{ color: CATEGORY_COLORS[current.category] }} />
                       </div>
                     </div>
-                    <div className="min-w-0 flex flex-col justify-center">
+                    <div className="min-w-0 flex flex-col justify-center lg:flex-none lg:max-w-[680px]">
                       <div className="text-[13px] sm:text-sm text-white font-semibold leading-snug line-clamp-2">
                         {current.title}
                       </div>

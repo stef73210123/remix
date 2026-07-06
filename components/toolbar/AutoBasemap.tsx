@@ -63,7 +63,13 @@ export default function AutoBasemap() {
         }
       };
 
+      // Stay on the startup default (hybrid, buildings off) until the user
+      // actually navigates — otherwise the initial camera height would auto-
+      // switch to Google 3D on load. Armed a moment after the viewer is ready.
+      let armed = false;
+
       const onSettle = () => {
+        if (!armed) return;
         const viewer = viewerRef.current;
         if (!viewer) return;
         const h = viewer.camera.positionCartographic?.height;
@@ -83,7 +89,10 @@ export default function AutoBasemap() {
           return;
         }
         off = viewer.camera.moveEnd.addEventListener(onSettle);
-        onSettle();
+        // Arm after the initial fly-in settles so startup keeps the default.
+        setTimeout(() => {
+          if (!cancelled) armed = true;
+        }, 1500);
       };
       attach();
     })();

@@ -72,7 +72,8 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
   );
-  const [showBuildings, setShowBuildings] = useState(true);
+  // OSM 3D buildings start off — the app opens on the flat aerial (hybrid).
+  const [showBuildings, setShowBuildings] = useState(false);
   const [buildingSource, setBuildingSource] = useState<BuildingSource>("osm");
   const [showOsmFootprints, setShowOsmFootprints] = useState(false);
   const [showOsmPlaces, setShowOsmPlaces] = useState(false);
@@ -82,7 +83,7 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   );
   const [showParcels, setShowParcels] = useState(true);
   const [basemapMode, setBasemapMode] = useState<BasemapMode>(
-    "satellite"
+    "hybrid"
   );
   const [leftPanelOpen, setLeftPanelOpen] = useState(false);
   const [rightPanel, setRightPanel] = useState<"layers" | "filters" | "geo-query" | "comparison" | "listings" | null>(
@@ -94,7 +95,7 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [measureMode, setMeasureMode] = useState<"none" | "measure">("none");
   const [activeRegion, setActiveRegion] = useState("dc");
   const [viewMode, setViewMode] = useState<"2D" | "3D">("3D");
-  const [userBasemap, setUserBasemap] = useState<BasemapMode>("satellite");
+  const [userBasemap, setUserBasemap] = useState<BasemapMode>("hybrid");
 
   // Toggle 2D/3D while keeping the current focal point (screen-center ground
   // point) and zoom — Cesium's default morph otherwise jumps the camera out.

@@ -47,16 +47,17 @@ export default function HistoricalImagery() {
   }, [viewerRef]);
 
   const applyLayer = useCallback(
-    (year: number) => {
+    async (year: number) => {
       const viewer = viewerRef.current;
       if (!viewer) return;
 
       // Remove any existing historical layer first
       removeLayer();
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const Cesium = (window as any).Cesium;
-      if (!Cesium) return;
+      // Cesium is an ES module here — window.Cesium is never set (that was the
+      // bug that made the time slider a no-op). Import it directly.
+      const Cesium = await import("cesium");
+      if (viewer.isDestroyed?.()) return;
 
       const provider = new Cesium.UrlTemplateImageryProvider({
         url: getWaybackUrl(year),
@@ -64,6 +65,8 @@ export default function HistoricalImagery() {
         credit: new Cesium.Credit("Esri World Imagery Wayback"),
       });
 
+      // Add above the base imagery (and hybrid road/label overlays) so the
+      // historical aerial is what shows for the selected year.
       layerRef.current = viewer.imageryLayers.addImageryProvider(provider);
     },
     [viewerRef, removeLayer]
