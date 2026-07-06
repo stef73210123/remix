@@ -294,7 +294,7 @@ export default function MunicipalClient({ userName }: { userName: string }) {
 
           {/* Upcoming — actual next meeting date per board + agenda when available */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Upcoming meetings</h2>
-          <div className="card" style={{ overflow: 'hidden', marginBottom: 26 }}>
+          <div className="card table-card" style={{ marginBottom: 26 }}>
             {upcomingRows.length > 0 ? (
               <table>
                 <thead>
@@ -332,7 +332,7 @@ export default function MunicipalClient({ userName }: { userName: string }) {
             Meeting history
             <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length}</span>
           </h2>
-          <div className="card" style={{ overflow: 'hidden' }}>
+          <div className="card table-card">
             {history.length > 0 ? (
               <table>
                 <thead>
