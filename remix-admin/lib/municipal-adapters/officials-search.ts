@@ -41,34 +41,34 @@ interface RawOfficial {
   sourceUrl?: unknown
 }
 
-function buildPrompt(cfg: MunicipalityConfig): string {
-  const bodyList = cfg.bodies
-    .map((b) => `  - "${b.key}": ${b.displayName}${b.meetingPattern ? ` (${b.meetingPattern})` : ''}`)
-    .join('\n')
+function buildBodyPrompt(cfg: MunicipalityConfig, body: MunicipalityConfig['bodies'][number]): string {
   const domains = cfg.domains.join(', ')
+  const kindHint = /town board|council/i.test(body.displayName)
+    ? 'elected'
+    : /clerk|inspector|assessor|attorney|department|receiver|superintendent/i.test(body.displayName)
+      ? 'department_head'
+      : 'appointed'
 
-  return `You are compiling the current roster of every board and committee for ${cfg.name}, ${cfg.state}${cfg.county ? ` (${cfg.county} County)` : ''}.
+  return `Compile the CURRENT roster of the ${body.displayName} for ${cfg.name}, ${cfg.state}${cfg.county ? ` (${cfg.county} County)` : ''}.
 
-Use web search against the town's official website (${domains}) and other authoritative government pages. Find the CURRENT members of each of these bodies:
+Use web search against the town's official website (${domains}) and other authoritative government pages. Read the ${body.displayName}'s own page/roster, AND the town's staff / officials directory and contact pages to find each member's official municipal EMAIL.
 
-${bodyList}
-
-For each person, return one JSON object:
+Return ONLY a JSON array; one object per current member of this body:
 {
   "fullName": "First Last",
-  "title": "their role on that body, e.g. 'Chair', 'Supervisor', 'Member', 'Vice Chair', 'Alternate' — or '' if unknown",
-  "bodyKeys": ["one or more of the body keys above that this person currently serves on"],
-  "kind": "one of: elected | appointed | department_head | staff",
-  "email": "official municipal email if listed, else ''",
+  "title": "role on this body: 'Chair' | 'Vice Chair' | 'Member' | 'Alternate' | 'Supervisor' | '' if unknown",
+  "bodyKeys": ["${body.key}"],
+  "kind": "elected | appointed | department_head | staff",
+  "email": "official municipal email if you can find one, else ''",
   "sourceUrl": "the page you found this on"
 }
 
-Guidance:
-  - The Town Board / Council (supervisor + council members) are "elected". Planning Board, Zoning Board, Architectural Review, Conservation, and other citizen committees are "appointed". Town department heads (e.g. Town Clerk, Building Inspector) are "department_head"; other paid staff are "staff".
-  - If one person sits on multiple listed bodies, return a single object with all of their body keys.
-  - Only use the body keys listed above. If someone holds a role that maps to none of them, omit them.
-  - Do NOT fabricate. Only include members you can verify via search. Better to return fewer, correct members than to guess.
-  - Return ONLY a JSON array (no prose, no code fences). If you find nothing, return [].`
+Rules:
+  - Only the ${body.displayName}. Set bodyKeys to exactly ["${body.key}"].
+  - Typical kind for this body is "${kindHint}" — adjust per person only if clearly different.
+  - Work hard to find each member's municipal email from the directory/contact pages, but NEVER invent one — use "" if not found.
+  - Do NOT fabricate members. Fewer correct entries beat guesses.
+  - No prose, no code fences. Return [] if nothing is found.`
 }
 
 function extractJsonArray(text: string): unknown[] {
@@ -89,17 +89,14 @@ function safeStr(v: unknown): string {
   return typeof v === 'string' ? v.trim() : ''
 }
 
-export async function discoverOfficialsViaSearch(
+/** One web-search call for a single board; returns its members (or an error). */
+async function searchOneBody(
   cfg: MunicipalityConfig,
-): Promise<OfficialsSearchResult> {
-  const key = process.env.ANTHROPIC_API_KEY
-  if (!key) {
-    return { ok: false, officials: [], fetched: 0, error: 'ANTHROPIC_API_KEY not set' }
-  }
-
-  const validKeys = new Set(cfg.bodies.map((b) => b.key))
-  const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL
-
+  body: MunicipalityConfig['bodies'][number],
+  key: string,
+  model: string,
+): Promise<{ officials: DiscoveredOfficial[]; fetched: number; error?: string }> {
+  const validKey = body.key
   let raw = ''
   try {
     const res = await fetch(API_URL, {
@@ -111,19 +108,14 @@ export async function discoverOfficialsViaSearch(
       },
       body: JSON.stringify({
         model,
-        max_tokens: 4000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 10 }],
-        messages: [{ role: 'user', content: buildPrompt(cfg) }],
+        max_tokens: 3000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 6 }],
+        messages: [{ role: 'user', content: buildBodyPrompt(cfg, body) }],
       }),
     })
     if (!res.ok) {
       const err = await res.text()
-      return {
-        ok: false,
-        officials: [],
-        fetched: 0,
-        error: `Anthropic HTTP ${res.status}: ${err.slice(0, 300)}`,
-      }
+      return { officials: [], fetched: 0, error: `HTTP ${res.status}: ${err.slice(0, 200)}` }
     }
     const data = (await res.json()) as { content?: AnthropicContentBlock[] }
     raw = (data.content || [])
@@ -131,7 +123,7 @@ export async function discoverOfficialsViaSearch(
       .map((b) => b.text as string)
       .join('\n')
   } catch (e) {
-    return { ok: false, officials: [], fetched: 0, error: e instanceof Error ? e.message : String(e) }
+    return { officials: [], fetched: 0, error: e instanceof Error ? e.message : String(e) }
   }
 
   const arr = extractJsonArray(raw) as RawOfficial[]
@@ -141,14 +133,8 @@ export async function discoverOfficialsViaSearch(
   for (const item of arr) {
     if (!item || typeof item !== 'object') continue
     fetched++
-
     const fullName = safeStr(item.fullName)
     if (!fullName || fullName.length < 3 || fullName.length > 120) continue
-
-    const bodyKeys = Array.isArray(item.bodyKeys)
-      ? (item.bodyKeys.map(safeStr).filter((k) => validKeys.has(k)) as DiscoveredOfficial['bodyKeys'])
-      : []
-    if (!bodyKeys || bodyKeys.length === 0) continue
 
     const kindRaw = safeStr(item.kind).toLowerCase()
     const kind: OfficialKind = (OFFICIAL_KINDS as readonly string[]).includes(kindRaw)
@@ -158,12 +144,47 @@ export async function discoverOfficialsViaSearch(
     officials.push({
       fullName,
       title: safeStr(item.title) || undefined,
-      bodyKeys,
+      // Trust the body we searched for, regardless of what the model echoed back.
+      bodyKeys: [validKey] as DiscoveredOfficial['bodyKeys'],
       kind,
       email: safeStr(item.email) || undefined,
       sourceUrl: safeStr(item.sourceUrl) || (cfg.domains[0] ? `https://${cfg.domains[0]}` : ''),
     })
   }
 
-  return { ok: true, officials, fetched }
+  return { officials, fetched }
+}
+
+/**
+ * Discover officials one board at a time — a focused search per body gives far
+ * better coverage of the appointed committees (Planning, ZBA, ARB, …) and their
+ * emails than a single all-bodies prompt dominated by the elected Town Board.
+ */
+export async function discoverOfficialsViaSearch(
+  cfg: MunicipalityConfig,
+): Promise<OfficialsSearchResult> {
+  const key = process.env.ANTHROPIC_API_KEY
+  if (!key) {
+    return { ok: false, officials: [], fetched: 0, error: 'ANTHROPIC_API_KEY not set' }
+  }
+  const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL
+
+  const officials: DiscoveredOfficial[] = []
+  let fetched = 0
+  const errors: string[] = []
+
+  for (const body of cfg.bodies) {
+    const r = await searchOneBody(cfg, body, key, model)
+    officials.push(...r.officials)
+    fetched += r.fetched
+    if (r.error) errors.push(`${body.key}: ${r.error}`)
+  }
+
+  return {
+    // OK unless every board's search errored.
+    ok: errors.length < cfg.bodies.length,
+    officials,
+    fetched,
+    error: errors.length ? errors.join('; ') : undefined,
+  }
 }
