@@ -373,15 +373,15 @@ export default function MunicipalClient({
             ))}
           </div>
           <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22 }}>
-            <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>All boards</Chip>
+            <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
             {allBoards.map((b) => (
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
             ))}
           </div>
 
-          {/* Town profile — shown when a single town is selected in the strip:
-              its budget, boards & committees, then its meetings below. */}
-          {town !== 'ALL' && (() => {
+          {/* Town profile — shown on the Dashboard tab (board === 'ALL'):
+              its boards & committees, then financial analysis + meetings below. */}
+          {board === 'ALL' && (() => {
             const m = data.municipalities.find((x) => x.key === town)
             if (!m) return null
             return (
@@ -410,9 +410,8 @@ export default function MunicipalClient({
             )
           })()}
 
-          {/* Financial analysis — the selected town's budget, or a town toggle
-              when viewing all towns. */}
-          {(() => {
+          {/* Financial analysis — the selected town's budget. Dashboard tab only. */}
+          {board === 'ALL' && (() => {
             const activeKey =
               town !== 'ALL' ? town : (budgetTown && budgets[budgetTown] ? budgetTown : budgetTownList[0]?.key || '')
             const activeBudget = activeKey ? budgets[activeKey] : undefined
