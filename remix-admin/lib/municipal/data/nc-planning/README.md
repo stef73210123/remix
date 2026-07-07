@@ -22,8 +22,18 @@ and member profiles.
 3. `aggregate.py` canonicalizes themes to a controlled vocabulary, merges the same
    application across meetings, and computes the roll-ups.
 
-Roster used for attribution: Chair (presiding, unnamed in ASR), Larry Ruizi,
-Michael Pollock, Steve Sorrell, Christopher; staff Adam Kaufman (Town Planner),
-John Kellard (Town Engineer), Vincent DeAnno (Conservation liaison).
+Roster (from the town's official Board Members list): **Christopher Carthy**
+(Chairman — presides, so the un-named presiding voice in the ASR is his),
+**Steven Sauro**, **Michael Pollack**, **Thomas Crispi**, **Lawrence Ruisi**
+(members); Joseline Huerta (Secretary). Staff/consultants heard in meetings:
+Adam Kaufman (Town Planner), John Kellard (Town Engineer), Vincent DeAnno
+(Conservation liaison).
+
+ASR name manglings normalized in `aggregate.py` (MEMBER_ALIAS): Ruizi→Ruisi,
+Pollock→Pollack, "Sorrell/Sorro"→Sauro, and the presiding "Chair" + the member
+addressed as "Christopher" both resolve to Christopher Carthy. Thomas Crispi was
+not confidently identified by name in the transcripts, so few/no statements are
+attributed to him — a re-analysis with the confirmed roster would improve his
+coverage.
 
 Sentiment scale is −1 (opposed / heavy concern) to +1 (supportive / favorable).
