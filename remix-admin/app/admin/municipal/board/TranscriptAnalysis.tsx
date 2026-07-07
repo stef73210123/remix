@@ -102,11 +102,18 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
         Board members — overall disposition
       </h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: data.members.some((m2) => m2.totalPositions === 0) ? 10 : 28 }}>
         {data.members.filter((mem) => mem.totalPositions > 0).map((mem) => (
           <MemberCard key={mem.member} mem={mem} muni={muni} body={body} />
         ))}
       </div>
+      {data.members.filter((mem) => mem.totalPositions === 0).length > 0 && (
+        <div className="muted" style={{ fontSize: 12, marginBottom: 28 }}>
+          No statements confidently attributed yet:{' '}
+          {data.members.filter((mem) => mem.totalPositions === 0).map((mem) => mem.member).join(', ')}
+          {' '}— named too rarely in the transcripts to attribute reliably.
+        </div>
+      )}
 
       {/* ---- Themes ---- */}
       <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>

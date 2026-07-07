@@ -19,7 +19,38 @@ ANALYSIS_DIR = sys.argv[1] if len(sys.argv) > 1 else \
 OUT = sys.argv[2] if len(sys.argv) > 2 else \
     "/home/user/remix/remix-admin/lib/municipal/data/nc-planning/analysis.json"
 
-MEMBERS = ["Chair", "Larry Ruizi", "Michael Pollock", "Steve Sorrell", "Christopher"]
+# Canonical board roster (from the town's official Board Members list). The
+# per-meeting analyses used provisional labels before the roster was confirmed;
+# ALIAS maps those to the real names. Notably the presiding "Chair" and the
+# member addressed as "Christopher" are the SAME person — Christopher Carthy.
+MEMBERS = ["Christopher Carthy", "Steven Sauro", "Michael Pollack", "Thomas Crispi", "Lawrence Ruisi"]
+MEMBER_ALIAS = {
+    "chair": "Christopher Carthy",
+    "christopher": "Christopher Carthy",
+    "christopher carthy": "Christopher Carthy",
+    "chris": "Christopher Carthy",
+    "larry ruizi": "Lawrence Ruisi",
+    "lawrence ruisi": "Lawrence Ruisi",
+    "larry": "Lawrence Ruisi",
+    "michael pollock": "Michael Pollack",
+    "michael pollack": "Michael Pollack",
+    "mike": "Michael Pollack",
+    "steve sorrell": "Steven Sauro",
+    "steven sauro": "Steven Sauro",
+    "steve": "Steven Sauro",
+    "thomas crispi": "Thomas Crispi",
+    "tom crispi": "Thomas Crispi",
+    "tom": "Thomas Crispi",
+}
+
+def canon_member(name):
+    n = re.sub(r"\s+", " ", str(name or "").strip()).lower()
+    if n in MEMBER_ALIAS:
+        return MEMBER_ALIAS[n]
+    for k, v in MEMBER_ALIAS.items():
+        if k in n:
+            return v
+    return None
 
 # Canonical theme vocabulary. Each raw theme string (from a per-meeting agent) is
 # scanned for keywords in THIS ORDER; first match wins. Keeps the theme list tight
@@ -190,13 +221,9 @@ def roll_members(meetings):
             cid = slugify(case_key(c))
             cname = c.get("name", cid)
             for p in c.get("memberPositions", []):
-                who = p.get("member", "").strip()
-                if who not in prof:
-                    # tolerate minor variants
-                    match = next((mm for mm in MEMBERS if mm.lower() in who.lower() or who.lower() in mm.lower()), None)
-                    if not match:
-                        continue
-                    who = match
+                who = canon_member(p.get("member", ""))
+                if not who:
+                    continue
                 score = clamp(p.get("score", 0))
                 conf = str(p.get("confidence", "low")).lower()
                 prof[who]["positions"].append(score)
@@ -252,9 +279,46 @@ def canonicalize_meeting_themes(meetings):
                 cur["salience"] = max(cur["salience"], clamp(t.get("salience", 0)))
         m["themes"] = sorted(merged.values(), key=lambda x: -x["salience"])
 
+def canonicalize_meeting_members(meetings):
+    """Rewrite each case's memberPositions to canonical member names, merging any
+    duplicates that collapse to the same person (e.g. 'Chair' + 'Christopher' both
+    → Christopher Carthy) into one averaged position."""
+    for m in meetings:
+        for c in m.get("cases", []):
+            merged = {}
+            for p in c.get("memberPositions", []):
+                who = canon_member(p.get("member", ""))
+                if not who:
+                    continue
+                if who not in merged:
+                    merged[who] = {
+                        "member": who, "stance": p.get("stance", ""),
+                        "score": clamp(p.get("score", 0)),
+                        "themes": list(p.get("themes", [])),
+                        "evidence": p.get("evidence", ""),
+                        "confidence": str(p.get("confidence", "low")).lower(),
+                        "_n": 1,
+                    }
+                else:
+                    e = merged[who]
+                    n = e["_n"]
+                    e["score"] = round((e["score"] * n + clamp(p.get("score", 0))) / (n + 1), 3)
+                    e["_n"] = n + 1
+                    # keep the higher-confidence, longer evidence
+                    if p.get("evidence") and len(p.get("evidence", "")) > len(e["evidence"]):
+                        e["evidence"] = p["evidence"]
+                        e["stance"] = p.get("stance", e["stance"])
+                    for t in p.get("themes", []):
+                        if t not in e["themes"]:
+                            e["themes"].append(t)
+            for e in merged.values():
+                e.pop("_n", None)
+            c["memberPositions"] = list(merged.values())
+
 def main():
     meetings, errors = load()
     canonicalize_meeting_themes(meetings)
+    canonicalize_meeting_members(meetings)
     themes = roll_themes(meetings)
     cases = roll_cases(meetings)
     members = roll_members(meetings)

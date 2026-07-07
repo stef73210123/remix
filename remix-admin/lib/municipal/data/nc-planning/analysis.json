@@ -7,13 +7,13 @@
     "meetings": 20,
     "cases": 122,
     "themes": 17,
-    "memberPositions": 167,
+    "memberPositions": 157,
     "roster": [
-      "Chair",
-      "Larry Ruizi",
-      "Michael Pollock",
-      "Steve Sorrell",
-      "Christopher"
+      "Christopher Carthy",
+      "Steven Sauro",
+      "Michael Pollack",
+      "Thomas Crispi",
+      "Lawrence Ruisi"
     ],
     "source": "Meeting video transcripts (ASR, un-diarized); member attribution is name-based with per-position confidence.",
     "errors": []
@@ -5286,84 +5286,84 @@
   ],
   "members": [
     {
-      "member": "Chair",
-      "totalPositions": 68,
-      "avgSentiment": 0.268,
+      "member": "Christopher Carthy",
+      "totalPositions": 78,
+      "avgSentiment": 0.244,
       "confidenceMix": {
-        "high": 39,
-        "medium": 28,
-        "low": 1
+        "high": 36,
+        "medium": 37,
+        "low": 5
       },
       "byTheme": [
         {
           "theme": "Other",
-          "count": 20,
-          "avgSentiment": 0.245
+          "count": 29,
+          "avgSentiment": 0.187
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 17,
-          "avgSentiment": 0.203
+          "count": 21,
+          "avgSentiment": 0.17
         },
         {
           "theme": "Zoning & land use",
-          "count": 13,
-          "avgSentiment": 0.308
+          "count": 17,
+          "avgSentiment": 0.265
+        },
+        {
+          "theme": "Wetlands & buffers",
+          "count": 14,
+          "avgSentiment": 0.47
         },
         {
           "theme": "Tree removal & screening",
           "count": 12,
-          "avgSentiment": 0.242
+          "avgSentiment": 0.25
         },
         {
-          "theme": "Wetlands & buffers",
-          "count": 12,
-          "avgSentiment": 0.533
+          "theme": "Neighbor concerns & safety",
+          "count": 10,
+          "avgSentiment": 0.027
+        },
+        {
+          "theme": "Steep slopes & rock removal",
+          "count": 10,
+          "avgSentiment": 0.01
         },
         {
           "theme": "Historic & scenic character",
           "count": 9,
-          "avgSentiment": 0.361
+          "avgSentiment": 0.322
         },
         {
-          "theme": "Steep slopes & rock removal",
+          "theme": "Stormwater & drainage",
           "count": 9,
-          "avgSentiment": 0.05
+          "avgSentiment": 0.311
         },
         {
-          "theme": "Neighbor concerns & safety",
+          "theme": "Process & procedure",
           "count": 8,
-          "avgSentiment": 0.062
+          "avgSentiment": 0.237
         },
         {
           "theme": "Time extensions & conditions",
           "count": 8,
-          "avgSentiment": 0.2
-        },
-        {
-          "theme": "Process & procedure",
-          "count": 7,
-          "avgSentiment": 0.243
-        },
-        {
-          "theme": "Stormwater & drainage",
-          "count": 7,
-          "avgSentiment": 0.329
+          "avgSentiment": 0.188
         },
         {
           "theme": "Septic & water supply",
           "count": 5,
-          "avgSentiment": 0.3
+          "avgSentiment": 0.305
         },
         {
           "theme": "Bonding & maintenance",
-          "count": 2,
-          "avgSentiment": -0.125
+          "count": 3,
+          "avgSentiment": -0.192
         },
         {
           "theme": "Retaining walls",
-          "count": 2,
-          "avgSentiment": -0.15
+          "count": 3,
+          "avgSentiment": -0.133
         },
         {
           "theme": "Signage",
@@ -5375,7 +5375,17 @@
         {
           "caseId": "250-east-middle-patent-road",
           "count": 3,
-          "avgSentiment": 0.7
+          "avgSentiment": 0.608
+        },
+        {
+          "caseId": "154-lafayette-avenue",
+          "count": 3,
+          "avgSentiment": 0.05
+        },
+        {
+          "caseId": "76-virginia-road",
+          "count": 3,
+          "avgSentiment": 0.05
         },
         {
           "caseId": "7-hollow-ridge-road",
@@ -5388,19 +5398,14 @@
           "avgSentiment": 0.25
         },
         {
-          "caseId": "154-lafayette-avenue",
+          "caseId": "18-long-pond-road",
           "count": 2,
-          "avgSentiment": 0.0
+          "avgSentiment": 0.425
         },
         {
           "caseId": "100-buck-out-road",
           "count": 2,
           "avgSentiment": 0.35
-        },
-        {
-          "caseId": "76-virginia-road",
-          "count": 2,
-          "avgSentiment": 0.2
         },
         {
           "caseId": "58-middle-patent-road",
@@ -5420,7 +5425,7 @@
         {
           "caseId": "700-bedford-road",
           "count": 1,
-          "avgSentiment": -0.3
+          "avgSentiment": -0.275
         },
         {
           "caseId": "76-fireman-s-road",
@@ -5436,6 +5441,11 @@
           "caseId": "84-business-park-drive",
           "count": 1,
           "avgSentiment": 0.45
+        },
+        {
+          "caseId": "76-byron-ridge-road",
+          "count": 1,
+          "avgSentiment": 0.2
         },
         {
           "caseId": "1613-old-orchard-street",
@@ -5458,6 +5468,11 @@
           "avgSentiment": 0.2
         },
         {
+          "caseId": "130-old-mount-kisco-road",
+          "count": 1,
+          "avgSentiment": 0.1
+        },
+        {
           "caseId": "4-vincent-lane",
           "count": 1,
           "avgSentiment": 0.6
@@ -5474,11 +5489,6 @@
         },
         {
           "caseId": "2-israel-townsend-hill-road",
-          "count": 1,
-          "avgSentiment": 0.5
-        },
-        {
-          "caseId": "18-long-pond-road",
           "count": 1,
           "avgSentiment": 0.5
         },
@@ -5525,7 +5535,7 @@
         {
           "caseId": "825-north-broadway-armonk-ny",
           "count": 1,
-          "avgSentiment": 0.3
+          "avgSentiment": 0.2
         },
         {
           "caseId": "258-east-middle-patent-road",
@@ -5538,6 +5548,11 @@
           "avgSentiment": 0.1
         },
         {
+          "caseId": "60-cox-avenue",
+          "count": 1,
+          "avgSentiment": 0.0
+        },
+        {
           "caseId": "100-banksville-road",
           "count": 1,
           "avgSentiment": 0.1
@@ -5545,12 +5560,17 @@
         {
           "caseId": "76-virginia-road-north-white-plains-ind",
           "count": 1,
-          "avgSentiment": -0.05
+          "avgSentiment": -0.125
+        },
+        {
+          "caseId": "4-vincent-lane-r",
+          "count": 1,
+          "avgSentiment": 0.5
         },
         {
           "caseId": "62-nethermont-avenue",
           "count": 1,
-          "avgSentiment": -0.2
+          "avgSentiment": -0.225
         },
         {
           "caseId": "7-hallowell-road-r28-zoning-district",
@@ -5565,7 +5585,12 @@
         {
           "caseId": "level-3-ev-charging-local-law",
           "count": 1,
-          "avgSentiment": 0.0
+          "avgSentiment": 0.25
+        },
+        {
+          "caseId": "124-125-business-park-drive",
+          "count": 1,
+          "avgSentiment": 0.1
         },
         {
           "caseId": "route-120-access-staging-at-old-post-road",
@@ -5618,6 +5643,16 @@
           "avgSentiment": 0.6
         },
         {
+          "caseId": "six-ledge-place-north-castle",
+          "count": 1,
+          "avgSentiment": -0.1
+        },
+        {
+          "caseId": "65-bedford",
+          "count": 1,
+          "avgSentiment": 0.0
+        },
+        {
           "caseId": "3-north-castle-drive-north-castle",
           "count": 1,
           "avgSentiment": -0.2
@@ -5625,12 +5660,12 @@
         {
           "caseId": "667-north-broadway-r5-zoning-district",
           "count": 1,
-          "avgSentiment": 0.4
+          "avgSentiment": 0.25
         },
         {
           "caseId": "22-whippoorwill-road-east-r10-zoning-district",
           "count": 1,
-          "avgSentiment": -0.3
+          "avgSentiment": -0.2
         },
         {
           "caseId": "909-north-broadway-sir-john-s-plaza",
@@ -5730,14 +5765,15 @@
           "date": "2025-07-28",
           "case": "250 East Middle Patent Road",
           "caseId": "250-east-middle-patent-road",
-          "stance": "supportive",
-          "score": 0.8,
+          "stance": "mixed",
+          "score": 0.525,
           "themes": [
             "Historic & scenic character",
             "Other",
-            "Wetlands & buffers"
+            "Wetlands & buffers",
+            "Zoning & land use"
           ],
-          "evidence": "'I think you're heading in the right direction... a much better plan'; advised formalizing with landscape and wetland mitigation plans.",
+          "evidence": "Raised precedent concern about a pool in the front-yard setback ('those two things give me pause'), but endorsed the side-yard relocation as a very nice transition that removes the front-yard variance worry.",
           "confidence": "high"
         },
         {
@@ -5745,7 +5781,7 @@
           "case": "700 Bedford Road",
           "caseId": "700-bedford-road",
           "stance": "skeptical",
-          "score": -0.3,
+          "score": -0.275,
           "themes": [
             "Parking, traffic & access",
             "Septic & water supply"
@@ -5801,6 +5837,18 @@
             "Parking, traffic & access"
           ],
           "evidence": "Agreed the four-per-thousand parking formula is antiquated and moved the parking variance to the ZBA.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2025-09-08",
+          "case": "76 Byron Ridge Road",
+          "caseId": "76-byron-ridge-road",
+          "stance": "concerned",
+          "score": 0.2,
+          "themes": [
+            "Other"
+          ],
+          "evidence": "Raised whether to approve now or wait, noting 'a lot of open items' on the resolution; accepted the explanation that most items had already been addressed in the July 14 submission and was ultimately fine with approval.",
           "confidence": "medium"
         },
         {
@@ -5867,6 +5915,18 @@
           ],
           "evidence": "Pressed the applicant: 'How can we address the neighbors' concerns?... It seemed like those are reasonable concerns'; endorsed staggered mixed-species evergreens and requested a revised landscape plan.",
           "confidence": "high"
+        },
+        {
+          "date": "2025-09-25",
+          "case": "130 Old Mount Kisco Road amended final plat",
+          "caseId": "130-old-mount-kisco-road",
+          "stance": "neutral",
+          "score": 0.1,
+          "themes": [
+            "Zoning & land use"
+          ],
+          "evidence": "Asked a clarifying zoning question about which lines moved and whether side yards came into play, characterizing the change as 'really de minimis.'",
+          "confidence": "low"
         },
         {
           "date": "2025-09-25",
@@ -6066,27 +6126,42 @@
           "case": "825 North Broadway (gas station renovation)",
           "caseId": "825-north-broadway-armonk-ny",
           "stance": "supportive",
-          "score": 0.3,
+          "score": 0.2,
           "themes": [
+            "Parking, traffic & access",
             "Process & procedure",
             "Stormwater & drainage",
             "Time extensions & conditions"
           ],
           "evidence": "Comfortable with the site; directed applicant to 'tighten up the resolution, address the issues, finish the plans' so the next resolution has far fewer conditions, noting the work must be done before the building department anyway.",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
           "date": "2025-11-10",
           "case": "154 Lafayette Avenue (office/lot merger + truck parking)",
           "caseId": "154-lafayette-avenue",
-          "stance": "neutral",
-          "score": 0.0,
+          "stance": "mixed",
+          "score": 0.05,
           "themes": [
+            "Other",
             "Parking, traffic & access",
             "Process & procedure"
           ],
-          "evidence": "'Quite frankly I'm muddying the waters'; saw it both ways but concluded the board should give clear direction and move the presented parallel plan to a public hearing since it's quicker for the applicant.",
-          "confidence": "high"
+          "evidence": "Personally comfortable with perpendicular parking and noted the police recommendation is advisory, but ultimately agreed not to waste the applicant's time at the ZBA and to move the parallel plan forward.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2025-11-10",
+          "case": "76 Virginia Road (rock-cut / retaining-wall development)",
+          "caseId": "76-virginia-road",
+          "stance": "concerned",
+          "score": -0.2,
+          "themes": [
+            "Neighbor concerns & safety",
+            "Steep slopes & rock removal"
+          ],
+          "evidence": "'How many of these situations has something gotten missed?... it's a concern that I certainly have, and probably some of the residents' - pressed the engineer on failure risk and whether tests had ever failed to prove out.",
+          "confidence": "medium"
         },
         {
           "date": "2025-11-10",
@@ -6116,6 +6191,19 @@
         },
         {
           "date": "2025-11-24",
+          "case": "18 Long Pond Road",
+          "caseId": "18-long-pond-road",
+          "stance": "leaning-supportive",
+          "score": 0.35,
+          "themes": [
+            "Stormwater & drainage",
+            "Wetlands & buffers"
+          ],
+          "evidence": "Worked through the topography and whether water at 18 Long Pond could migrate to the wetland behind, and confirmed the drainage/drawdown detention approach; treated the application analytically and did not object.",
+          "confidence": "low"
+        },
+        {
+          "date": "2025-11-24",
           "case": "Matthews Accessory Barn (258 East Middle Patten Road)",
           "caseId": "258-east-middle-patten-road",
           "stance": "concerned",
@@ -6125,6 +6213,18 @@
             "Time extensions & conditions"
           ],
           "evidence": "Resisted softening the DOH/BOH 'prior to building permit' condition, warning of precedent since 'the whole premise of your construction model is dependent upon that BOH approval,' and 'the reason I'm concerned about changing that is I feel I'm changing for you' \u2014 supportive of the project but protective of standard conditions.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2025-11-24",
+          "case": "60 Cox Avenue (Breeze Mont camp)",
+          "caseId": "60-cox-avenue",
+          "stance": "neutral",
+          "score": 0.0,
+          "themes": [
+            "Parking, traffic & access"
+          ],
+          "evidence": "Pushed for the newly added spaces to be specifically marked in a distinct color on the map because the overlay made it hard to tell new spaces from previously approved ones.",
           "confidence": "medium"
         },
         {
@@ -6144,13 +6244,26 @@
           "case": "76 Virginia Road (National Lawn Sprinkler / Luciano)",
           "caseId": "76-virginia-road-north-white-plains-ind",
           "stance": "mixed",
-          "score": -0.05,
+          "score": -0.125,
           "themes": [
             "Bonding & maintenance",
             "Historic & scenic character",
+            "Other",
             "Steep slopes & rock removal"
           ],
-          "evidence": "Steered the hearing, secured the applicant's agreement to a no-blasting site-plan condition, and pushed for deed/bonding maintenance protections, but admitted the board had not answered residents' 20-50-year maintenance questions well and adjourned rather than closing to set goals for the next meeting.",
+          "evidence": "Offered zoning/legal framing that catastrophic-failure fears were 'an overstatement' and that the board cannot deprive an owner of legal development rights, yet sharply criticized the 'constant going back and forth and the misinformation being put forth by the applicant' and pressed for a firm no-blasting assurance to be made a condition.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2025-12-08",
+          "case": "4 Vincent Lane (Savage)",
+          "caseId": "4-vincent-lane-r",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Other"
+          ],
+          "evidence": "Objected to burdening a new homeowner 'for a mistake that the town made,' arguing the missing ARB sign-off on pre-existing sheds was a town glitch and pushing for the smoothest path to approve.",
           "confidence": "medium"
         },
         {
@@ -6158,12 +6271,14 @@
           "case": "62 Nethermont Avenue",
           "caseId": "62-nethermont-avenue",
           "stance": "concerned",
-          "score": -0.2,
+          "score": -0.225,
           "themes": [
             "Neighbor concerns & safety",
-            "Steep slopes & rock removal"
+            "Other",
+            "Steep slopes & rock removal",
+            "Zoning & land use"
           ],
-          "evidence": "Repeatedly pushed for 'a higher level of protection' for the neighbors given the hammering's proximity, saying he was not convinced the standard chipping permit was sufficient and that 'I just don't know what I don't know in this case.'",
+          "evidence": "Gave a zoning-style analysis that by preserving the subdividable lot the applicant is 'making a choice' that creates a 'collateral detriment' of hammering six feet from the neighbor, which may warrant a different level of scrutiny than if it were 200 feet away.",
           "confidence": "high"
         },
         {
@@ -6183,14 +6298,14 @@
           "case": "76 Virginia Road (rock-cut retaining/wall system)",
           "caseId": "76-virginia-road",
           "stance": "mixed",
-          "score": -0.2,
+          "score": -0.25,
           "themes": [
             "Bonding & maintenance",
             "Parking, traffic & access",
             "Steep slopes & rock removal"
           ],
           "evidence": "Not comfortable closing the hearing with the public absent; drove resolution of monitoring, maintenance, and staging issues but expressed willingness to keep the application moving.",
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
           "date": "2026-01-26",
@@ -6209,7 +6324,7 @@
           "case": "Level 3 EV Charging Local Law (town board referral)",
           "caseId": "level-3-ev-charging-local-law",
           "stance": "mixed",
-          "score": 0.0,
+          "score": 0.25,
           "themes": [
             "Other",
             "Parking, traffic & access"
@@ -6229,6 +6344,31 @@
           ],
           "evidence": "Sympathetic to the applicant grading out the knoll to level the property ('it seemed reasonable to me'), but insisted the applicant must review and address the engineer's memo before a resolution, saying it wouldn't be appropriate to adopt a resolution the applicant hasn't seen.",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-03-09",
+          "case": "154 Lafayette Avenue",
+          "caseId": "154-lafayette-avenue",
+          "stance": "neutral",
+          "score": 0.1,
+          "themes": [
+            "Other",
+            "Zoning & land use"
+          ],
+          "evidence": "Offered the zoning analysis that moving the property line is acceptable so long as it doesn't increase the non-conformity (e.g., adding an apartment), which would trigger ZBA review; framed it as a building-inspector determination.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-03-09",
+          "case": "124/125 Business Park Drive",
+          "caseId": "124-125-business-park-drive",
+          "stance": "neutral",
+          "score": 0.1,
+          "themes": [
+            "Wetlands & buffers"
+          ],
+          "evidence": "Asked whether the wetland-buffer regulations had changed since the prior resolution; satisfied on confirmation that the buffers remained the same and the same requirements apply.",
+          "confidence": "low"
         },
         {
           "date": "2026-03-09",
@@ -6401,6 +6541,32 @@
         },
         {
           "date": "2026-04-27",
+          "case": "Bezel Residence, Six Ledge Place",
+          "caseId": "six-ledge-place-north-castle",
+          "stance": "concerned",
+          "score": -0.1,
+          "themes": [
+            "Neighbor concerns & safety",
+            "Retaining walls"
+          ],
+          "evidence": "Asked what would be placed on top of the tall walls to keep people from falling over them, probing safety of the wall design.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-04-27",
+          "case": "65 Bedford-Banksville Road",
+          "caseId": "65-bedford",
+          "stance": "neutral",
+          "score": 0.0,
+          "themes": [
+            "Other",
+            "Parking, traffic & access"
+          ],
+          "evidence": "Asked for clarification on the status of the submissions, noting apparent conflict over a curb cut versus a display area in the front.",
+          "confidence": "low"
+        },
+        {
+          "date": "2026-04-27",
           "case": "Clubhouse at Eagle Ridge, 3 North Castle Drive",
           "caseId": "3-north-castle-drive-north-castle",
           "stance": "skeptical",
@@ -6417,25 +6583,31 @@
           "date": "2026-05-11",
           "case": "Virgin Mary & Saint Demiana Coptic Orthodox Church",
           "caseId": "667-north-broadway-r5-zoning-district",
-          "stance": "supportive",
-          "score": 0.4,
+          "stance": "mixed",
+          "score": 0.25,
           "themes": [
-            "Parking, traffic & access"
+            "Other",
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Stormwater & drainage"
           ],
-          "evidence": "Praised the church ('I'm sure you're doing excellent work'), pressed the applicant to address the neighbor's truck-turnaround and stormwater concerns, but steered the item to approval with added conditions.",
+          "evidence": "Proposed the additional condition for a soil-erosion control plan to the town engineer's satisfaction, and questioned why the board would adopt the resolution while still awaiting NYSDOT input before signing the plan.",
           "confidence": "medium"
         },
         {
           "date": "2026-05-11",
           "case": "22 Whippoorwill Road East",
           "caseId": "22-whippoorwill-road-east-r10-zoning-district",
-          "stance": "concerned",
-          "score": -0.3,
+          "stance": "mixed",
+          "score": -0.2,
           "themes": [
+            "Bonding & maintenance",
             "Neighbor concerns & safety",
+            "Other",
+            "Parking, traffic & access",
             "Tree removal & screening"
           ],
-          "evidence": "Said he drives past it daily, it's 'kind of unsightly,' feels for the neighbors, and suggested the applicant get the property in appropriate shape before any approval.",
+          "evidence": "Drove the protective conditions - proposed a bond on the plantings and mandatory irrigation until established so the burden of failed trees does not fall on the neighbor - while walking through the procedural distinction between an extension and a new approval.",
           "confidence": "medium"
         },
         {
@@ -6557,7 +6729,7 @@
       ]
     },
     {
-      "member": "Larry Ruizi",
+      "member": "Lawrence Ruisi",
       "totalPositions": 37,
       "avgSentiment": 0.119,
       "confidenceMix": {
@@ -7280,7 +7452,7 @@
       ]
     },
     {
-      "member": "Steve Sorrell",
+      "member": "Steven Sauro",
       "totalPositions": 26,
       "avgSentiment": 0.246,
       "confidenceMix": {
@@ -7801,423 +7973,7 @@
       ]
     },
     {
-      "member": "Christopher",
-      "totalPositions": 20,
-      "avgSentiment": 0.05,
-      "confidenceMix": {
-        "medium": 16,
-        "low": 4
-      },
-      "byTheme": [
-        {
-          "theme": "Other",
-          "count": 10,
-          "avgSentiment": 0.095
-        },
-        {
-          "theme": "Parking, traffic & access",
-          "count": 7,
-          "avgSentiment": 0.05
-        },
-        {
-          "theme": "Steep slopes & rock removal",
-          "count": 4,
-          "avgSentiment": -0.237
-        },
-        {
-          "theme": "Zoning & land use",
-          "count": 4,
-          "avgSentiment": 0.05
-        },
-        {
-          "theme": "Historic & scenic character",
-          "count": 2,
-          "avgSentiment": 0.025
-        },
-        {
-          "theme": "Neighbor concerns & safety",
-          "count": 2,
-          "avgSentiment": -0.15
-        },
-        {
-          "theme": "Stormwater & drainage",
-          "count": 2,
-          "avgSentiment": 0.225
-        },
-        {
-          "theme": "Wetlands & buffers",
-          "count": 2,
-          "avgSentiment": 0.225
-        },
-        {
-          "theme": "Bonding & maintenance",
-          "count": 1,
-          "avgSentiment": -0.1
-        },
-        {
-          "theme": "Process & procedure",
-          "count": 1,
-          "avgSentiment": 0.1
-        },
-        {
-          "theme": "Retaining walls",
-          "count": 1,
-          "avgSentiment": -0.1
-        }
-      ],
-      "byCase": [
-        {
-          "caseId": "154-lafayette-avenue",
-          "count": 2,
-          "avgSentiment": 0.1
-        },
-        {
-          "caseId": "76-virginia-road",
-          "count": 2,
-          "avgSentiment": -0.25
-        },
-        {
-          "caseId": "250-east-middle-patent-road",
-          "count": 1,
-          "avgSentiment": 0.25
-        },
-        {
-          "caseId": "700-bedford-road",
-          "count": 1,
-          "avgSentiment": -0.25
-        },
-        {
-          "caseId": "76-byron-ridge-road",
-          "count": 1,
-          "avgSentiment": 0.2
-        },
-        {
-          "caseId": "130-old-mount-kisco-road",
-          "count": 1,
-          "avgSentiment": 0.1
-        },
-        {
-          "caseId": "825-north-broadway-armonk-ny",
-          "count": 1,
-          "avgSentiment": 0.1
-        },
-        {
-          "caseId": "18-long-pond-road",
-          "count": 1,
-          "avgSentiment": 0.35
-        },
-        {
-          "caseId": "60-cox-avenue",
-          "count": 1,
-          "avgSentiment": 0.0
-        },
-        {
-          "caseId": "76-virginia-road-north-white-plains-ind",
-          "count": 1,
-          "avgSentiment": -0.2
-        },
-        {
-          "caseId": "4-vincent-lane-r",
-          "count": 1,
-          "avgSentiment": 0.5
-        },
-        {
-          "caseId": "62-nethermont-avenue",
-          "count": 1,
-          "avgSentiment": -0.25
-        },
-        {
-          "caseId": "level-3-ev-charging-local-law",
-          "count": 1,
-          "avgSentiment": 0.5
-        },
-        {
-          "caseId": "124-125-business-park-drive",
-          "count": 1,
-          "avgSentiment": 0.1
-        },
-        {
-          "caseId": "six-ledge-place-north-castle",
-          "count": 1,
-          "avgSentiment": -0.1
-        },
-        {
-          "caseId": "65-bedford",
-          "count": 1,
-          "avgSentiment": 0.0
-        },
-        {
-          "caseId": "667-north-broadway-r5-zoning-district",
-          "count": 1,
-          "avgSentiment": 0.1
-        },
-        {
-          "caseId": "22-whippoorwill-road-east-r10-zoning-district",
-          "count": 1,
-          "avgSentiment": -0.1
-        }
-      ],
-      "evidence": [
-        {
-          "date": "2025-07-28",
-          "case": "250 East Middle Patent Road",
-          "caseId": "250-east-middle-patent-road",
-          "stance": "mixed",
-          "score": 0.25,
-          "themes": [
-            "Historic & scenic character",
-            "Zoning & land use"
-          ],
-          "evidence": "Raised precedent concern about a pool in the front-yard setback ('those two things give me pause'), but endorsed the side-yard relocation as a very nice transition that removes the front-yard variance worry.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-07-28",
-          "case": "700 Bedford Road",
-          "caseId": "700-bedford-road",
-          "stance": "skeptical",
-          "score": -0.25,
-          "themes": [
-            "Parking, traffic & access"
-          ],
-          "evidence": "'Thinking out loud,' questioned why a brand-new house was designed around two pre-existing curb cuts rather than one new curb cut that works with the house.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-09-08",
-          "case": "76 Byron Ridge Road",
-          "caseId": "76-byron-ridge-road",
-          "stance": "concerned",
-          "score": 0.2,
-          "themes": [
-            "Other"
-          ],
-          "evidence": "Raised whether to approve now or wait, noting 'a lot of open items' on the resolution; accepted the explanation that most items had already been addressed in the July 14 submission and was ultimately fine with approval.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-09-25",
-          "case": "130 Old Mount Kisco Road amended final plat",
-          "caseId": "130-old-mount-kisco-road",
-          "stance": "neutral",
-          "score": 0.1,
-          "themes": [
-            "Zoning & land use"
-          ],
-          "evidence": "Asked a clarifying zoning question about which lines moved and whether side yards came into play, characterizing the change as 'really de minimis.'",
-          "confidence": "low"
-        },
-        {
-          "date": "2025-11-10",
-          "case": "825 North Broadway (gas station renovation)",
-          "caseId": "825-north-broadway-armonk-ny",
-          "stance": "neutral",
-          "score": 0.1,
-          "themes": [
-            "Parking, traffic & access"
-          ],
-          "evidence": "Offered a mitigation idea for thought: a 'please pull forward' sign to abate the queuing/blocking problem, framing it as a way to 'ameliorate that burden.'",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-11-10",
-          "case": "154 Lafayette Avenue (office/lot merger + truck parking)",
-          "caseId": "154-lafayette-avenue",
-          "stance": "mixed",
-          "score": 0.1,
-          "themes": [
-            "Other",
-            "Parking, traffic & access"
-          ],
-          "evidence": "Personally comfortable with perpendicular parking and noted the police recommendation is advisory, but ultimately agreed not to waste the applicant's time at the ZBA and to move the parallel plan forward.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-11-10",
-          "case": "76 Virginia Road (rock-cut / retaining-wall development)",
-          "caseId": "76-virginia-road",
-          "stance": "concerned",
-          "score": -0.2,
-          "themes": [
-            "Neighbor concerns & safety",
-            "Steep slopes & rock removal"
-          ],
-          "evidence": "'How many of these situations has something gotten missed?... it's a concern that I certainly have, and probably some of the residents' - pressed the engineer on failure risk and whether tests had ever failed to prove out.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-11-24",
-          "case": "18 Long Pond Road",
-          "caseId": "18-long-pond-road",
-          "stance": "leaning-supportive",
-          "score": 0.35,
-          "themes": [
-            "Stormwater & drainage",
-            "Wetlands & buffers"
-          ],
-          "evidence": "Worked through the topography and whether water at 18 Long Pond could migrate to the wetland behind, and confirmed the drainage/drawdown detention approach; treated the application analytically and did not object.",
-          "confidence": "low"
-        },
-        {
-          "date": "2025-11-24",
-          "case": "60 Cox Avenue (Breeze Mont camp)",
-          "caseId": "60-cox-avenue",
-          "stance": "neutral",
-          "score": 0.0,
-          "themes": [
-            "Parking, traffic & access"
-          ],
-          "evidence": "Pushed for the newly added spaces to be specifically marked in a distinct color on the map because the overlay made it hard to tell new spaces from previously approved ones.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-12-08",
-          "case": "76 Virginia Road (National Lawn Sprinkler / Luciano)",
-          "caseId": "76-virginia-road-north-white-plains-ind",
-          "stance": "mixed",
-          "score": -0.2,
-          "themes": [
-            "Historic & scenic character",
-            "Other",
-            "Steep slopes & rock removal"
-          ],
-          "evidence": "Offered zoning/legal framing that catastrophic-failure fears were 'an overstatement' and that the board cannot deprive an owner of legal development rights, yet sharply criticized the 'constant going back and forth and the misinformation being put forth by the applicant' and pressed for a firm no-blasting assurance to be made a condition.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2025-12-08",
-          "case": "4 Vincent Lane (Savage)",
-          "caseId": "4-vincent-lane-r",
-          "stance": "supportive",
-          "score": 0.5,
-          "themes": [
-            "Other"
-          ],
-          "evidence": "Objected to burdening a new homeowner 'for a mistake that the town made,' arguing the missing ARB sign-off on pre-existing sheds was a town glitch and pushing for the smoothest path to approve.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2026-01-12",
-          "case": "62 Nethermont Avenue",
-          "caseId": "62-nethermont-avenue",
-          "stance": "concerned",
-          "score": -0.25,
-          "themes": [
-            "Other",
-            "Steep slopes & rock removal",
-            "Zoning & land use"
-          ],
-          "evidence": "Gave a zoning-style analysis that by preserving the subdividable lot the applicant is 'making a choice' that creates a 'collateral detriment' of hammering six feet from the neighbor, which may warrant a different level of scrutiny than if it were 200 feet away.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2026-01-26",
-          "case": "76 Virginia Road (rock-cut retaining/wall system)",
-          "caseId": "76-virginia-road",
-          "stance": "concerned",
-          "score": -0.3,
-          "themes": [
-            "Steep slopes & rock removal"
-          ],
-          "evidence": "Insisted the seismic/vibration monitoring plan be laid out in writing and reviewed and critiqued by the town's consulting engineer, not merely made a condition of approval.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2026-01-26",
-          "case": "Level 3 EV Charging Local Law (town board referral)",
-          "caseId": "level-3-ev-charging-local-law",
-          "stance": "supportive",
-          "score": 0.5,
-          "themes": [
-            "Other",
-            "Parking, traffic & access"
-          ],
-          "evidence": "Encouraged reducing barriers to EV charging and counting Level 3 spaces within (not above and beyond) the off-street parking requirement, framing it as good long-term infrastructure.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2026-03-09",
-          "case": "154 Lafayette Avenue",
-          "caseId": "154-lafayette-avenue",
-          "stance": "neutral",
-          "score": 0.1,
-          "themes": [
-            "Other",
-            "Zoning & land use"
-          ],
-          "evidence": "Offered the zoning analysis that moving the property line is acceptable so long as it doesn't increase the non-conformity (e.g., adding an apartment), which would trigger ZBA review; framed it as a building-inspector determination.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2026-03-09",
-          "case": "124/125 Business Park Drive",
-          "caseId": "124-125-business-park-drive",
-          "stance": "neutral",
-          "score": 0.1,
-          "themes": [
-            "Wetlands & buffers"
-          ],
-          "evidence": "Asked whether the wetland-buffer regulations had changed since the prior resolution; satisfied on confirmation that the buffers remained the same and the same requirements apply.",
-          "confidence": "low"
-        },
-        {
-          "date": "2026-04-27",
-          "case": "Bezel Residence, Six Ledge Place",
-          "caseId": "six-ledge-place-north-castle",
-          "stance": "concerned",
-          "score": -0.1,
-          "themes": [
-            "Neighbor concerns & safety",
-            "Retaining walls"
-          ],
-          "evidence": "Asked what would be placed on top of the tall walls to keep people from falling over them, probing safety of the wall design.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2026-04-27",
-          "case": "65 Bedford-Banksville Road",
-          "caseId": "65-bedford",
-          "stance": "neutral",
-          "score": 0.0,
-          "themes": [
-            "Other",
-            "Parking, traffic & access"
-          ],
-          "evidence": "Asked for clarification on the status of the submissions, noting apparent conflict over a curb cut versus a display area in the front.",
-          "confidence": "low"
-        },
-        {
-          "date": "2026-05-11",
-          "case": "Virgin Mary & Saint Demiana Coptic Orthodox Church",
-          "caseId": "667-north-broadway-r5-zoning-district",
-          "stance": "mixed",
-          "score": 0.1,
-          "themes": [
-            "Other",
-            "Process & procedure",
-            "Stormwater & drainage"
-          ],
-          "evidence": "Proposed the additional condition for a soil-erosion control plan to the town engineer's satisfaction, and questioned why the board would adopt the resolution while still awaiting NYSDOT input before signing the plan.",
-          "confidence": "medium"
-        },
-        {
-          "date": "2026-05-11",
-          "case": "22 Whippoorwill Road East",
-          "caseId": "22-whippoorwill-road-east-r10-zoning-district",
-          "stance": "mixed",
-          "score": -0.1,
-          "themes": [
-            "Bonding & maintenance",
-            "Other",
-            "Parking, traffic & access"
-          ],
-          "evidence": "Drove the protective conditions - proposed a bond on the plantings and mandatory irrigation until established so the burden of failed trees does not fall on the neighbor - while walking through the procedural distinction between an extension and a new approval.",
-          "confidence": "medium"
-        }
-      ]
-    },
-    {
-      "member": "Michael Pollock",
+      "member": "Michael Pollack",
       "totalPositions": 16,
       "avgSentiment": 0.112,
       "confidenceMix": {
@@ -8575,6 +8331,15 @@
           "confidence": "low"
         }
       ]
+    },
+    {
+      "member": "Thomas Crispi",
+      "totalPositions": 0,
+      "avgSentiment": 0.0,
+      "confidenceMix": {},
+      "byTheme": [],
+      "byCase": [],
+      "evidence": []
     }
   ],
   "meetings": [
@@ -8604,7 +8369,7 @@
           "publicComment": "Heavily contested. Attorney George (Keane & Beane, for Barry Edelman at 88 Round Hill Road) and Edelman himself opposed on safety, precedent, setbacks, DEC and use grounds; Antonio (100 Round Hill Road) worried about intensification/quasi-commercial use since the owner builds golf courses; a neighbor voiced seeing crowds and trucks. Heather Hart (87 Round Hill Road) spoke in support, calling the owner neighborly and saying she has never seen an errant ball in five years. George Rehmer of the Conservation Board noted four tees is more intensive than the two the CB reviewed and suggested reversing the tee/green orientation.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": 0.2,
               "themes": [
@@ -8617,7 +8382,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "skeptical",
               "score": -0.3,
               "themes": [
@@ -8629,7 +8394,7 @@
               "confidence": "high"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -8678,7 +8443,7 @@
           "publicComment": "No members of the public spoke.",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -8688,7 +8453,7 @@
               "confidence": "high"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -8720,7 +8485,7 @@
           "publicComment": "None; applicants noted they have already spoken with immediate neighbors who are supportive.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -8751,7 +8516,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": 0.2,
               "themes": [
@@ -8856,7 +8621,7 @@
           "publicComment": "The long-time property owner came to the mic to explain the 56-vs-70 address history; cordial.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -8866,7 +8631,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -8899,19 +8664,20 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
-              "stance": "supportive",
-              "score": 0.8,
+              "member": "Christopher Carthy",
+              "stance": "mixed",
+              "score": 0.525,
               "themes": [
                 "scenic road",
                 "wetlands",
-                "pool"
+                "pool",
+                "front yard setback"
               ],
-              "evidence": "'I think you're heading in the right direction... a much better plan'; advised formalizing with landscape and wetland mitigation plans.",
+              "evidence": "Raised precedent concern about a pool in the front-yard setback ('those two things give me pause'), but endorsed the side-yard relocation as a very nice transition that removes the front-yard variance worry.",
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.5,
               "themes": [
@@ -8921,17 +8687,6 @@
               ],
               "evidence": "Probed where the moved pool sits relative to the steep-slope drop-off and noted the existing stone wall already provides natural screening from the road.",
               "confidence": "high"
-            },
-            {
-              "member": "Christopher",
-              "stance": "mixed",
-              "score": 0.25,
-              "themes": [
-                "scenic road",
-                "front yard setback"
-              ],
-              "evidence": "Raised precedent concern about a pool in the front-yard setback ('those two things give me pause'), but endorsed the side-yard relocation as a very nice transition that removes the front-yard variance worry.",
-              "confidence": "medium"
             }
           ]
         },
@@ -8955,9 +8710,9 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "skeptical",
-              "score": -0.3,
+              "score": -0.275,
               "themes": [
                 "curb cuts",
                 "septic"
@@ -8966,7 +8721,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "concerned",
               "score": -0.15,
               "themes": [
@@ -8977,17 +8732,7 @@
               "confidence": "high"
             },
             {
-              "member": "Christopher",
-              "stance": "skeptical",
-              "score": -0.25,
-              "themes": [
-                "curb cuts"
-              ],
-              "evidence": "'Thinking out loud,' questioned why a brand-new house was designed around two pre-existing curb cuts rather than one new curb cut that works with the house.",
-              "confidence": "medium"
-            },
-            {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -9019,7 +8764,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -9051,7 +8796,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -9163,7 +8908,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -9209,7 +8954,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -9257,7 +9002,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -9307,7 +9052,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -9339,7 +9084,7 @@
           "publicComment": "Board recalled neighbor comments during the subdivision hearings, particularly regarding this lot; noted trees are being preserved appropriately.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.35,
               "themes": [
@@ -9369,7 +9114,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.45,
               "themes": [
@@ -9482,7 +9227,7 @@
           "publicComment": "Vincent DeAnno of the Fire Bridge Lake HOA / Conservation Board spoke in favor, praising the wetland protection and stressing the five-year mitigation monitoring given algae/lily-pad changes on the lake; Jane Black (Conservation Board) confirmed the board voted to approve. Tone strongly supportive.",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": 0.2,
               "themes": [
@@ -9530,7 +9275,7 @@
           "publicComment": "No members of the public spoke.",
           "memberPositions": [
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -9541,7 +9286,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -9576,7 +9321,7 @@
           "publicComment": "Chris Morezello, a professional engineer speaking for neighbor Frank Iola (1615 Old Orchard Street), raised three concerns (climate-change stormwater standards, oversized building footprint, and driveway blind-hill safety); tone was measured but opposed. Conservation Board chair Jane Black reiterated concern that the house exceeded the roughly 2,000 sq ft the board had recommended and questioned the buffer impact.",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -9587,7 +9332,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -9619,7 +9364,7 @@
           "publicComment": "No members of the public spoke; discussion was procedural.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.3,
               "themes": [
@@ -9769,7 +9514,7 @@
           "publicComment": "No members of the public spoke.",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.8,
               "themes": [
@@ -9780,7 +9525,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.9,
               "themes": [
@@ -9811,7 +9556,7 @@
           "publicComment": "Darren and Susan Lampert (24 Orchard Drive), the directly abutting neighbors, spoke with concern about loss of tree coverage, headlight glare, the home's height, and drainage; tone was worried but constructive, and the board treated their concerns as reasonable.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": 0.2,
               "themes": [
@@ -9858,7 +9603,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -9907,7 +9652,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -9919,7 +9664,7 @@
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -9930,7 +9675,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": 0.0,
               "themes": [
@@ -9963,7 +9708,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -10068,7 +9813,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": 0.3,
               "themes": [
@@ -10079,7 +9824,7 @@
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -10090,7 +9835,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -10123,7 +9868,7 @@
           "publicComment": "Neighbors opposed/concerned but conciliatory. Kalindi Bhat (98 Round Hill Road) questioned whether it was a commercial enterprise and the volume of players. Barry Edelman (88 Round Hill Road), via attorneys George Allison and Jonathan Keenan-Bean, raised safety and asked for netting/fence/deflector walls and a building-inspector determination, stressing they were 'not trying to be bad neighbors.'",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "opposed",
               "score": -0.7,
               "themes": [
@@ -10135,7 +9880,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -10147,7 +9892,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "concerned",
               "score": 0.0,
               "themes": [
@@ -10179,7 +9924,7 @@
           "publicComment": "Brian Kaminer (8 Seymour Place, 20-year resident) reported a definitive increase in street flooding since the newer homes were built and asked the board to avoid worsening it, favoring diverting water out the back but acknowledging tree-removal tradeoffs.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": 0.0,
               "themes": [
@@ -10228,7 +9973,7 @@
           "publicComment": "Darren Lampert (neighbor, on Worthed Drive) said the originally proposed four-foot trees would not block light and requested larger screening trees; board and applicant agreed to 8-10 feet.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -10240,7 +9985,7 @@
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -10291,7 +10036,7 @@
           "publicComment": "No general public spoke; input came from Conservation Board liaison Jane Black, who conveyed the split board's reasoning (mitigation benefits vs. culvert/former-streambed and small-yard objections).",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -10303,7 +10048,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -10428,7 +10173,7 @@
           "publicComment": "No neighbors or members of the public appeared or spoke.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -10440,7 +10185,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -10472,7 +10217,7 @@
           "publicComment": "The neighbor's attorney (Judson C., Keane & Beane) urged netting be installed at both tees plus additional plantings or a compliant six-foot fence behind the green, and asked to review a revised plan before any vote; tone was cooperative but insistent on protective measures.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.6,
               "themes": [
@@ -10484,7 +10229,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "mixed",
               "score": 0.0,
               "themes": [
@@ -10496,7 +10241,7 @@
               "confidence": "high"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "mixed",
               "score": -0.1,
               "themes": [
@@ -10508,7 +10253,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.3,
               "themes": [
@@ -10540,7 +10285,7 @@
           "publicComment": "This was a public hearing; the Chair asked the applicant to re-explain the plan's benefits for the public's understanding, but no residents are recorded speaking.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -10568,7 +10313,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -10599,7 +10344,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -10630,7 +10375,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -10661,7 +10406,7 @@
           "publicComment": "Neighbor Stephen McLaughlin (24 Whippoorwill Road East) spoke, worried about timing/optimal planting season and quality of the required screening ('we don't just get rough shot work'); tone was frustrated but constructive.",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -10672,7 +10417,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": -0.1,
               "themes": [
@@ -10736,7 +10481,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -10854,7 +10599,7 @@
           "publicComment": "No members of the public attended or spoke on this application.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -10865,17 +10610,20 @@
               "confidence": "high"
             },
             {
-              "member": "Christopher",
-              "stance": "neutral",
-              "score": 0.1,
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.2,
               "themes": [
-                "traffic"
+                "traffic",
+                "process",
+                "stormwater",
+                "ARB conditions"
               ],
-              "evidence": "Offered a mitigation idea for thought: a 'please pull forward' sign to abate the queuing/blocking problem, framing it as a way to 'ameliorate that burden.'",
+              "evidence": "Comfortable with the site; directed applicant to 'tighten up the resolution, address the issues, finish the plans' so the next resolution has far fewer conditions, noting the work must be done before the building department anyway.",
               "confidence": "medium"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -10884,18 +10632,6 @@
               ],
               "evidence": "Pragmatic on the open items: 'I actually don't think that these are precision... what benefit to the town would be to hold them up for another month or two' - saw the conditions as tidy-up, not blockers.",
               "confidence": "medium"
-            },
-            {
-              "member": "Chair",
-              "stance": "supportive",
-              "score": 0.3,
-              "themes": [
-                "process",
-                "stormwater",
-                "ARB conditions"
-              ],
-              "evidence": "Comfortable with the site; directed applicant to 'tighten up the resolution, address the issues, finish the plans' so the next resolution has far fewer conditions, noting the work must be done before the building department anyway.",
-              "confidence": "high"
             }
           ]
         },
@@ -10917,7 +10653,7 @@
           "publicComment": "No public opposition; no residents spoke.",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -10928,7 +10664,7 @@
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -10956,7 +10692,7 @@
           "publicComment": "The applicant/owner spoke at length, at times feeling unfairly singled out ('every time I come they just put it hard... I don't know if it's because I'm Hispanic'); the board chair responded that the concern wasn't appropriate and explained the grandfathering distinction.",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -10967,7 +10703,7 @@
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -10978,26 +10714,16 @@
               "confidence": "high"
             },
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "mixed",
-              "score": 0.1,
+              "score": 0.05,
               "themes": [
                 "parking",
-                "police recommendation"
+                "police recommendation",
+                "process"
               ],
               "evidence": "Personally comfortable with perpendicular parking and noted the police recommendation is advisory, but ultimately agreed not to waste the applicant's time at the ZBA and to move the parallel plan forward.",
               "confidence": "medium"
-            },
-            {
-              "member": "Chair",
-              "stance": "neutral",
-              "score": 0.0,
-              "themes": [
-                "parking",
-                "process"
-              ],
-              "evidence": "'Quite frankly I'm muddying the waters'; saw it both ways but concluded the board should give clear direction and move the presented parallel plan to a public hearing since it's quicker for the applicant.",
-              "confidence": "high"
             }
           ]
         },
@@ -11019,7 +10745,7 @@
           "publicComment": "No public spoke tonight, but the record notes Miller Park-area residents had previously appeared, prompting the peer-review geotech study; a public hearing was set so neighbors can be heard.",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -11030,7 +10756,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -11041,7 +10767,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.2,
               "themes": [
@@ -11073,7 +10799,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -11106,7 +10832,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -11279,7 +11005,7 @@
           "publicComment": "No public spoke; Chair confirmed no one was present for the hearing.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.35,
               "themes": [
@@ -11343,7 +11069,7 @@
           "publicComment": "A neighbor, Ms. Blumenthal of 50 Banksville Road, submitted an email and spoke with the Chair by phone; she asked reasonable questions (notably where pool water goes on drawdown) but remained opposed to the application even after the mitigation and detention design were explained.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -11354,7 +11080,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "leaning-supportive",
               "score": 0.35,
               "themes": [
@@ -11387,7 +11113,7 @@
           "publicComment": "No members of the public were present for this application.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": 0.1,
               "themes": [
@@ -11398,7 +11124,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -11428,7 +11154,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -11440,7 +11166,7 @@
               "confidence": "high"
             },
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -11487,7 +11213,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -11516,7 +11242,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": 0.1,
               "themes": [
@@ -11633,19 +11359,20 @@
           "publicComment": "Heavy, largely opposed public turnout: residents (George Keller, Kate Hall, Bonnie Fite, Fred Fite, Nora/Norcans, Cynthia Abbott-Coffman) and the Open Space Committee chair raised safety, catastrophic-failure, water/sewer, noise/dust, and especially the loss of the untouched Revolutionary War battlefield; one impassioned historic-preservation plea urged denial. Tone ranged from concerned to strongly opposed, though several acknowledged the owner's property rights.",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "mixed",
-              "score": -0.2,
+              "score": -0.125,
               "themes": [
                 "historic preservation",
                 "slope stability",
-                "blasting vs chipping"
+                "blasting vs chipping",
+                "long-term maintenance"
               ],
               "evidence": "Offered zoning/legal framing that catastrophic-failure fears were 'an overstatement' and that the board cannot deprive an owner of legal development rights, yet sharply criticized the 'constant going back and forth and the misinformation being put forth by the applicant' and pressed for a firm no-blasting assurance to be made a condition.",
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.25,
               "themes": [
@@ -11657,7 +11384,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -11668,25 +11395,13 @@
               "confidence": "medium"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
                 "slope stability"
               ],
               "evidence": "Highlighted resident/Conservation member Vincent DeAnno's 'amazing' underground experience and asked the applicant's engineer whether the design would change based on DeAnno's critique (answer: no), and urged review of the stability calculations.",
-              "confidence": "medium"
-            },
-            {
-              "member": "Chair",
-              "stance": "mixed",
-              "score": -0.05,
-              "themes": [
-                "blasting vs chipping",
-                "long-term maintenance",
-                "historic preservation"
-              ],
-              "evidence": "Steered the hearing, secured the applicant's agreement to a no-blasting site-plan condition, and pushed for deed/bonding maintenance protections, but admitted the board had not answered residents' 20-50-year maintenance questions well and adjourned rather than closing to set goals for the next meeting.",
               "confidence": "medium"
             }
           ]
@@ -11744,7 +11459,7 @@
           "publicComment": "No public spoke.",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -11754,7 +11469,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -11838,7 +11553,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -11849,7 +11564,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -12022,31 +11737,21 @@
           "publicComment": "Emotional and mixed. The Panella/Pinella neighbors feared rock excavation would damage their old rock-founded home; neighbor Nora questioned the house size, tree removal, and its fit with the small-scale neighborhood; the seller (Jim New) and realtor Gail Norris strongly supported the family and argued a single home is far better than the two duplexes he once planned. Tone was earnest but at times tense between the applicant and the board.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
-              "score": -0.2,
+              "score": -0.225,
               "themes": [
                 "rock hammering",
                 "seismic monitoring",
-                "neighbor privacy"
-              ],
-              "evidence": "Repeatedly pushed for 'a higher level of protection' for the neighbors given the hammering's proximity, saying he was not convinced the standard chipping permit was sufficient and that 'I just don't know what I don't know in this case.'",
-              "confidence": "high"
-            },
-            {
-              "member": "Christopher",
-              "stance": "concerned",
-              "score": -0.25,
-              "themes": [
-                "rock hammering",
+                "neighbor privacy",
                 "subdivision",
                 "proximity"
               ],
               "evidence": "Gave a zoning-style analysis that by preserving the subdividable lot the applicant is 'making a choice' that creates a 'collateral detriment' of hammering six feet from the neighbor, which may warrant a different level of scrutiny than if it were 200 feet away.",
-              "confidence": "medium"
+              "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.35,
               "themes": [
@@ -12057,7 +11762,7 @@
               "confidence": "high"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "mixed",
               "score": 0.0,
               "themes": [
@@ -12296,7 +12001,7 @@
           "publicComment": "No residents spoke in person; a neighbor at 6 Hallowell Place submitted a letter objecting to tree removal and lack of screening, to be addressed at a future hearing.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -12328,7 +12033,7 @@
           "publicComment": "No members of the public were present for this application.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.5,
               "themes": [
@@ -12378,7 +12083,7 @@
           "publicComment": "Two residents spoke critically: North Castle Historical Society's Edward (past president) objected to an inaccurate letter cited in the Neg Dec; Vincent Giordano argued the north/south anchors (15 ft and 10 ft) are too short, raised ice/crash-barrier safety concerns, questioned an alternate design, and suggested the excavation functions as a quarry to sell rock. Tone was skeptical to opposed.",
           "memberPositions": [
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "concerned",
               "score": -0.4,
               "themes": [
@@ -12389,17 +12094,19 @@
               "confidence": "high"
             },
             {
-              "member": "Christopher",
-              "stance": "concerned",
-              "score": -0.3,
+              "member": "Christopher Carthy",
+              "stance": "mixed",
+              "score": -0.25,
               "themes": [
-                "seismic monitoring"
+                "seismic monitoring",
+                "bonding",
+                "truck traffic"
               ],
-              "evidence": "Insisted the seismic/vibration monitoring plan be laid out in writing and reviewed and critiqued by the town's consulting engineer, not merely made a condition of approval.",
+              "evidence": "Not comfortable closing the hearing with the public absent; drove resolution of monitoring, maintenance, and staging issues but expressed willingness to keep the application moving.",
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.3,
               "themes": [
@@ -12408,18 +12115,6 @@
               ],
               "evidence": "Worried about queuing/staging trucks and protecting Virginia Road from cars driving around trucks; pushed for a staging plan written into the resolution.",
               "confidence": "medium"
-            },
-            {
-              "member": "Chair",
-              "stance": "mixed",
-              "score": -0.2,
-              "themes": [
-                "seismic monitoring",
-                "bonding",
-                "truck traffic"
-              ],
-              "evidence": "Not comfortable closing the hearing with the public absent; drove resolution of monitoring, maintenance, and staging issues but expressed willingness to keep the application moving.",
-              "confidence": "high"
             }
           ]
         },
@@ -12456,7 +12151,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -12485,19 +12180,19 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Christopher",
-              "stance": "supportive",
-              "score": 0.5,
+              "member": "Christopher Carthy",
+              "stance": "mixed",
+              "score": 0.25,
               "themes": [
                 "EV charging",
                 "parking",
                 "future infrastructure"
               ],
-              "evidence": "Encouraged reducing barriers to EV charging and counting Level 3 spaces within (not above and beyond) the off-street parking requirement, framing it as good long-term infrastructure.",
+              "evidence": "Initially leaned toward recommending inclusion in the parking count but concluded he did not know enough, and was comfortable sending the law back to the town board as written with no comment.",
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -12508,7 +12203,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -12517,17 +12212,6 @@
               ],
               "evidence": "Asked practical questions about siting/proximity of chargers and where the power would come from; treated the details as largely beyond the board's scope.",
               "confidence": "low"
-            },
-            {
-              "member": "Chair",
-              "stance": "mixed",
-              "score": 0.0,
-              "themes": [
-                "EV charging",
-                "parking"
-              ],
-              "evidence": "Initially leaned toward recommending inclusion in the parking count but concluded he did not know enough, and was comfortable sending the law back to the town board as written with no comment.",
-              "confidence": "medium"
             }
           ]
         }
@@ -12629,7 +12313,7 @@
           "publicComment": "No members of the public spoke; the applicant/owner was audibly frustrated at further delay (\"I've had this for about four months... I'm just anxious to go to work\") after four months and prior cancellations.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -12641,7 +12325,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -12689,7 +12373,7 @@
           "publicComment": "No members of the public appeared for the hearing.",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -12700,7 +12384,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": 0.2,
               "themes": [
@@ -12729,7 +12413,7 @@
           "publicComment": "No members of the public appeared.",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -12762,7 +12446,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12810,7 +12494,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.2,
               "themes": [
@@ -12857,7 +12541,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -12868,7 +12552,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -12878,7 +12562,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -12889,7 +12573,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "mixed",
               "score": 0.1,
               "themes": [
@@ -12921,7 +12605,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -12932,7 +12616,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -13188,7 +12872,7 @@
           "publicComment": "No members of the public appeared.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.8,
               "themes": [
@@ -13221,7 +12905,7 @@
           "publicComment": "A neighbor (Steve Lopez) asked about screening-tree placement within the conservation setback; board confirmed screening is permitted there. A prior neighbor letter about screening was addressed by a landscaping condition.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.3,
               "themes": [
@@ -13233,7 +12917,7 @@
               "confidence": "high"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -13269,7 +12953,7 @@
           "publicComment": "No members of the public spoke; a resident (Nora) reportedly watched on television and had previously expressed interest.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "mixed",
               "score": 0.15,
               "themes": [
@@ -13281,7 +12965,7 @@
               "confidence": "high"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13292,7 +12976,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13323,7 +13007,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13355,7 +13039,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -13384,7 +13068,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -13497,7 +13181,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.8,
               "themes": [
@@ -13531,7 +13215,7 @@
           "publicComment": "The property owner (Mr. Samad) spoke from the audience, frustrated that after roughly five months and six appearances he still cannot proceed; he argued correcting the mitigation-review error now is unfair and costly.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.4,
               "themes": [
@@ -13542,7 +13226,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": -0.1,
               "themes": [
@@ -13572,7 +13256,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -13731,7 +13415,7 @@
           "publicComment": "No members of the public appeared or spoke.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13765,7 +13449,7 @@
           "publicComment": "No public comment; only the applicant's representatives spoke.",
           "memberPositions": [
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -13797,7 +13481,7 @@
           "publicComment": "No public comment noted; discussion among board, staff, and the applicant team.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "mixed",
               "score": -0.1,
               "themes": [
@@ -13808,7 +13492,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Christopher",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -13843,7 +13527,7 @@
           "publicComment": "No public comment; only the applicant team spoke.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "skeptical",
               "score": -0.2,
               "themes": [
@@ -13856,7 +13540,7 @@
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -13977,18 +13661,21 @@
           "publicComment": "Jonathan Wattick (resides 10 Hewlett Ave, Rye; works at abutting 661 North Broadway) gave a detailed, strongly negative critique alleging application errors/omissions, structural risk to the church wall/buttresses, heavy truck traffic, no earthwork or stormwater/erosion plan, tree loss, and no DOT notification. Tone: adversarial and skeptical of the application's completeness.",
           "memberPositions": [
             {
-              "member": "Chair",
-              "stance": "supportive",
-              "score": 0.4,
+              "member": "Christopher Carthy",
+              "stance": "mixed",
+              "score": 0.25,
               "themes": [
                 "handicap access",
-                "traffic"
+                "traffic",
+                "soil erosion",
+                "DOT right-of-way",
+                "procedure"
               ],
-              "evidence": "Praised the church ('I'm sure you're doing excellent work'), pressed the applicant to address the neighbor's truck-turnaround and stormwater concerns, but steered the item to approval with added conditions.",
+              "evidence": "Proposed the additional condition for a soil-erosion control plan to the town engineer's satisfaction, and questioned why the board would adopt the resolution while still awaiting NYSDOT input before signing the plan.",
               "confidence": "medium"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -13996,18 +13683,6 @@
                 "soil erosion"
               ],
               "evidence": "Raised the potential storm-event runoff onto the roadway and pushed for silt fences / erosion controls during construction that were missing from the plan.",
-              "confidence": "medium"
-            },
-            {
-              "member": "Christopher",
-              "stance": "mixed",
-              "score": 0.1,
-              "themes": [
-                "soil erosion",
-                "DOT right-of-way",
-                "procedure"
-              ],
-              "evidence": "Proposed the additional condition for a soil-erosion control plan to the town engineer's satisfaction, and questioned why the board would adopt the resolution while still awaiting NYSDOT input before signing the plan.",
               "confidence": "medium"
             }
           ]
@@ -14032,7 +13707,7 @@
           "publicComment": "Steven McLaughlin (24 Whippoorwill Road East, direct neighbor) called the repeated resolution expirations 'nothing short of absurd,' described paying out of pocket for an easement agreement, and voiced strong concern that a profit-driven bank owner would cut corners and that plantings would fail without watering given his shallow well. Frustrated but engaged; the board was clearly sympathetic to him.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.3,
               "themes": [
@@ -14043,21 +13718,12 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
-              "stance": "concerned",
-              "score": -0.3,
+              "member": "Christopher Carthy",
+              "stance": "mixed",
+              "score": -0.2,
               "themes": [
                 "landscaping",
-                "neighbor privacy"
-              ],
-              "evidence": "Said he drives past it daily, it's 'kind of unsightly,' feels for the neighbors, and suggested the applicant get the property in appropriate shape before any approval.",
-              "confidence": "medium"
-            },
-            {
-              "member": "Christopher",
-              "stance": "mixed",
-              "score": -0.1,
-              "themes": [
+                "neighbor privacy",
                 "maintenance bond",
                 "easement",
                 "irrigation"
@@ -14066,7 +13732,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "leaning-supportive",
               "score": 0.1,
               "themes": [
@@ -14114,7 +13780,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -14186,7 +13852,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -14349,7 +14015,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "concerned",
               "score": -0.5,
               "themes": [
@@ -14362,7 +14028,7 @@
               "confidence": "high"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "mixed",
               "score": -0.1,
               "themes": [
@@ -14393,7 +14059,7 @@
           "publicComment": "No members of the public spoke.",
           "memberPositions": [
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -14427,7 +14093,7 @@
           "publicComment": "No neighbors spoke. George Trapow of the Conservation Board praised the project as 'a wonderful,' model project\u2014an example of good wetland remediation and native planting that the town should showcase.",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "leaning-supportive",
               "score": 0.3,
               "themes": [
@@ -14440,7 +14106,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Michael Pollock",
+              "member": "Michael Pollack",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -14535,7 +14201,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14564,7 +14230,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -14576,7 +14242,7 @@
               "confidence": "high"
             },
             {
-              "member": "Steve Sorrell",
+              "member": "Steven Sauro",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -14587,7 +14253,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -14617,7 +14283,7 @@
           "publicComment": "An outside professional argued the chair may reorder items like a courtroom and that publishing the agenda in one spot is sufficient; tone was collegial but debating.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -14629,7 +14295,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -14657,7 +14323,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -14706,7 +14372,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "neutral",
               "score": -0.1,
               "themes": [
@@ -14819,7 +14485,7 @@
           "publicComment": "One resident, Zach Haas of Whippoorwill Road, spoke - not against the project but to raise an urgent safety concern about the Whippoorwill/King Street hairpin turn worsened by regional construction traffic; his tone was earnest and concerned. The board was sympathetic but explained there was no real nexus between the wetland project and that state-road intersection.",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.8,
               "themes": [
@@ -14830,7 +14496,7 @@
               "confidence": "high"
             },
             {
-              "member": "Larry Ruizi",
+              "member": "Lawrence Ruisi",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -14860,7 +14526,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Chair",
+              "member": "Christopher Carthy",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
