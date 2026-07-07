@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import AdminNav from '@/app/admin/AdminNav'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
+import TranscriptAnalysis from './TranscriptAnalysis'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -113,6 +114,7 @@ export default function BoardClient({ userName }: { userName: string }) {
   const [data, setData] = useState<BoardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [transcriptDates, setTranscriptDates] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
@@ -120,6 +122,12 @@ export default function BoardClient({ userName }: { userName: string }) {
     const b = p.get('body') || ''
     setMuni(m)
     setBody(b)
+    if (m && b) {
+      fetch(`/admin/api/municipal/transcript?muni=${encodeURIComponent(m)}&body=${encodeURIComponent(b)}`)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+        .then((d) => setTranscriptDates(new Set<string>(d.dates || [])))
+        .catch(() => setTranscriptDates(new Set()))
+    }
     if (!m || !b) {
       setError('Missing town or board.')
       setLoading(false)
@@ -219,6 +227,9 @@ export default function BoardClient({ userName }: { userName: string }) {
             </div>
           )}
 
+          {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
+          <TranscriptAnalysis muni={muni} body={body} />
+
           {/* Cases before this board (map coming with matter extraction) */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
             Cases before this board
@@ -283,15 +294,34 @@ export default function BoardClient({ userName }: { userName: string }) {
               <table>
                 <thead><tr><th>Date</th><th>Documents</th></tr></thead>
                 <tbody>
-                  {history.map((mtg) => (
-                    <tr key={mtg.id}>
-                      <td style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
-                        {fmtDate(mtg.scheduled_at)}
-                        {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2, fontWeight: 400 }}>{mtg.title}</div>}
-                      </td>
-                      <td><DocLinks assets={mtg.assets} /></td>
-                    </tr>
-                  ))}
+                  {history.map((mtg) => {
+                    const dateKey = (mtg.scheduled_at || '').slice(0, 10)
+                    const hasTranscript = transcriptDates.has(dateKey)
+                    return (
+                      <tr key={mtg.id}>
+                        <td style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                          {fmtDate(mtg.scheduled_at)}
+                          {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2, fontWeight: 400 }}>{mtg.title}</div>}
+                        </td>
+                        <td>
+                          <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
+                            <DocLinks assets={mtg.assets} />
+                            {hasTranscript && (
+                              <a
+                                href={`/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${dateKey}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="badge state"
+                                style={{ textDecoration: 'none' }}
+                              >
+                                Transcript ↗
+                              </a>
+                            )}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             ) : (
