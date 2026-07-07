@@ -197,7 +197,9 @@ export default function SearchBar() {
             }}
             onFocus={() => setIsOpen(true)}
             placeholder={region.searchPlaceholder}
-            className="w-32 max-[350px]:w-20 sm:w-[260px] px-2 py-2 text-xs text-gray-800 placeholder-gray-400 outline-none"
+            // 16px on mobile so iOS Safari doesn't auto-zoom the page on focus;
+            // shrink back to 12px from sm+ where zoom-on-focus isn't a concern.
+            className="w-32 max-[350px]:w-20 sm:w-[260px] px-2 py-2 text-base sm:text-xs text-gray-800 placeholder-gray-400 outline-none"
           />
           {query && (
             <button
