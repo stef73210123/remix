@@ -29,11 +29,14 @@ Roster (from the town's official Board Members list): **Christopher Carthy**
 Adam Kaufman (Town Planner), John Kellard (Town Engineer), Vincent DeAnno
 (Conservation liaison).
 
-ASR name manglings normalized in `aggregate.py` (MEMBER_ALIAS): Ruizi→Ruisi,
-Pollock→Pollack, "Sorrell/Sorro"→Sauro, and the presiding "Chair" + the member
-addressed as "Christopher" both resolve to Christopher Carthy. Thomas Crispi was
-not confidently identified by name in the transcripts, so few/no statements are
-attributed to him — a re-analysis with the confirmed roster would improve his
-coverage.
+The per-meeting analyses were run with this confirmed roster (the transcripts
+were re-analyzed once the official Board Members list was available), so members
+are attributed by their real names directly. `aggregate.py` still carries a
+`MEMBER_ALIAS` map as a safety net for residual ASR manglings (Ruizi→Ruisi,
+Pollock→Pollack, "Sorrell/Sorro"→Sauro, "Chris"/"Chair"→Christopher Carthy,
+"Tom"→Thomas Crispi). All five members — including Thomas Crispi — now carry
+attributed positions; where a member was absent or not individually named in a
+given meeting, no position was invented (flagged per meeting in
+`attributionNote`).
 
 Sentiment scale is −1 (opposed / heavy concern) to +1 (supportive / favorable).
