@@ -24,6 +24,13 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  // The municipal transcript routes read committed text/JSON from lib/.../data
+  // at runtime; include those files in the serverless function bundles so they
+  // exist on Vercel (Next can't trace fs reads built from dynamic paths).
+  outputFileTracingIncludes: {
+    '/admin/api/municipal/transcript': ['./lib/municipal/data/nc-planning/transcripts/**'],
+    '/admin/api/municipal/transcript-analysis': ['./lib/municipal/data/nc-planning/analysis.json'],
+  },
 }
 
 // build: rebuild trigger after disabling "include files outside root directory"

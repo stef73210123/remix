@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import AdminNav from '@/app/admin/AdminNav'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
+import MemberSentiment from './MemberSentiment'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -50,17 +51,43 @@ export default function MemberClient({ userName }: { userName: string }) {
     const m = p.get('muni') || ''
     const b = p.get('body') || ''
     const id = p.get('id') || ''
+    const byName = p.get('byName') || ''
     setMuni(m)
     setFromBody(b)
-    if (!m || !id) {
+    if (!m || (!id && !byName)) {
       setError('Missing town or member.')
       setLoading(false)
       return
     }
     setLoading(true)
-    fetch(`/admin/api/municipal/member?muni=${encodeURIComponent(m)}&id=${encodeURIComponent(id)}`)
+    if (id) {
+      fetch(`/admin/api/municipal/member?muni=${encodeURIComponent(m)}&id=${encodeURIComponent(id)}`)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+        .then((d: MemberData) => setData(d))
+        .catch(() => setError('Could not load this board member.'))
+        .finally(() => setLoading(false))
+      return
+    }
+    // Reached by name (e.g. an analysis-only member like "Chair"): resolve town +
+    // board from the board API and match a DB official if one exists.
+    fetch(`/admin/api/municipal/board?muni=${encodeURIComponent(m)}&body=${encodeURIComponent(b)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
-      .then((d: MemberData) => setData(d))
+      .then((bd) => {
+        const officials: Member[] = bd.members || []
+        const matched = officials.find(
+          (o) => o.full_name.toLowerCase() === byName.toLowerCase() ||
+                 o.full_name.toLowerCase().includes(byName.toLowerCase())
+        )
+        setData({
+          town: bd.town,
+          member: matched || {
+            id: '', full_name: byName, title: 'Board member', kind: 'appointed',
+            email: null, active: true, updated_at: null,
+          },
+          bodies: bd.board ? [{ key: bd.board.key, displayName: bd.board.displayName }] : [],
+          dbOk: bd.dbOk ?? true,
+        })
+      })
       .catch(() => setError('Could not load this board member.'))
       .finally(() => setLoading(false))
   }, [])
@@ -187,6 +214,11 @@ export default function MemberClient({ userName }: { userName: string }) {
             <div className="card" style={{ marginBottom: 28 }}>
               <div className="muted" style={{ padding: 20, fontSize: 13 }}>No board memberships on record.</div>
             </div>
+          )}
+
+          {/* Transcript-derived sentiment for this member (where a dataset exists) */}
+          {data && fromBody && member.full_name && (
+            <MemberSentiment muni={data.town.key} body={fromBody} memberName={member.full_name} />
           )}
 
           {/* Climb-back trail at the end of the profile */}
