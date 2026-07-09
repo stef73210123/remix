@@ -116,32 +116,44 @@ export interface AnalysisDataset {
   meetings: MeetingAnalysis[]
 }
 
-const DATA_ROOT = path.join(process.cwd(), 'lib', 'municipal', 'data', 'nc-planning')
+// (muni, body) → committed data directory. Add a row when a board gets a dataset.
+const DATA_DIRS: Record<string, string> = {
+  'nc:planning': 'nc-planning',
+  'nc:town_board': 'nc-townboard',
+}
+function dataDir(muniKey: string, bodyKey: string): string | null {
+  const d = DATA_DIRS[`${muniKey}:${bodyKey}`]
+  return d ? path.join(process.cwd(), 'lib', 'municipal', 'data', d) : null
+}
 
 /** Which (muni, body) pairs have a transcript-analysis dataset. */
 export function hasAnalysis(muniKey: string, bodyKey: string): boolean {
-  return muniKey === 'nc' && bodyKey === 'planning'
+  return dataDir(muniKey, bodyKey) !== null
 }
 
-let cache: AnalysisDataset | null | undefined
+const cache = new Map<string, AnalysisDataset | null>()
 export function loadAnalysis(muniKey: string, bodyKey: string): AnalysisDataset | null {
-  if (!hasAnalysis(muniKey, bodyKey)) return null
-  if (cache !== undefined) return cache
+  const dir = dataDir(muniKey, bodyKey)
+  if (!dir) return null
+  const key = `${muniKey}:${bodyKey}`
+  if (cache.has(key)) return cache.get(key) ?? null
+  let val: AnalysisDataset | null = null
   try {
-    const raw = fs.readFileSync(path.join(DATA_ROOT, 'analysis.json'), 'utf8')
-    cache = JSON.parse(raw) as AnalysisDataset
+    val = JSON.parse(fs.readFileSync(path.join(dir, 'analysis.json'), 'utf8')) as AnalysisDataset
   } catch {
-    cache = null
+    val = null
   }
-  return cache
+  cache.set(key, val)
+  return val
 }
 
 /** List transcript dates available for a board. */
 export function listTranscriptDates(muniKey: string, bodyKey: string): string[] {
-  if (!hasAnalysis(muniKey, bodyKey)) return []
+  const dir = dataDir(muniKey, bodyKey)
+  if (!dir) return []
   try {
     return fs
-      .readdirSync(path.join(DATA_ROOT, 'transcripts'))
+      .readdirSync(path.join(dir, 'transcripts'))
       .filter((f) => /^\d{4}-\d{2}-\d{2}\.txt$/.test(f))
       .map((f) => f.slice(0, 10))
       .sort()
@@ -152,10 +164,11 @@ export function listTranscriptDates(muniKey: string, bodyKey: string): string[] 
 
 /** Raw transcript text for one meeting date, or null. Date must be YYYY-MM-DD. */
 export function loadTranscript(muniKey: string, bodyKey: string, date: string): string | null {
-  if (!hasAnalysis(muniKey, bodyKey)) return null
+  const dir = dataDir(muniKey, bodyKey)
+  if (!dir) return null
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null // guard path traversal
   try {
-    return fs.readFileSync(path.join(DATA_ROOT, 'transcripts', `${date}.txt`), 'utf8')
+    return fs.readFileSync(path.join(dir, 'transcripts', `${date}.txt`), 'utf8')
   } catch {
     return null
   }

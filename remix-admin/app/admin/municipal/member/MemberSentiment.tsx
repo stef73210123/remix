@@ -48,7 +48,7 @@ export default function MemberSentiment({
     return map
   }, [data])
 
-  if (loading || !profile || profile.totalPositions === 0) return null
+  if (loading || !data || !profile || profile.totalPositions === 0) return null
 
   const conf = profile.confidenceMix || {}
   const total = (conf.high || 0) + (conf.medium || 0) + (conf.low || 0) || 1
@@ -56,9 +56,9 @@ export default function MemberSentiment({
 
   return (
     <div style={{ marginBottom: 28 }}>
-      <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>Planning Board sentiment</h2>
+      <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>{data.meta.board} sentiment</h2>
       <div className="muted" style={{ fontSize: 11, marginBottom: 16, lineHeight: 1.5, maxWidth: 640 }}>
-        From 12 months of meeting transcripts. Attribution is name-based (this member is credited only when named
+        From {data.meta.meetings} meeting transcripts. Attribution is name-based (this member is credited only when named
         or addressed by name), so read it as directional. {profile.totalPositions} attributed positions ·{' '}
         {Math.round(((conf.high || 0) / total) * 100)}% high-confidence.
       </div>
@@ -108,7 +108,7 @@ export default function MemberSentiment({
         {/* By case */}
         {profile.byCase.length > 0 && (
           <div className="card" style={{ padding: 16 }}>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>Most-engaged applications</div>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>Most-engaged {data.meta.bodyKey === 'town_board' ? 'agenda items' : 'applications'}</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {profile.byCase.slice(0, 8).map((c) => (
                 <div key={c.caseId} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>

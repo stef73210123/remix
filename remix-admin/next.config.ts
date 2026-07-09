@@ -28,8 +28,14 @@ const nextConfig: NextConfig = {
   // at runtime; include those files in the serverless function bundles so they
   // exist on Vercel (Next can't trace fs reads built from dynamic paths).
   outputFileTracingIncludes: {
-    '/admin/api/municipal/transcript': ['./lib/municipal/data/nc-planning/transcripts/**'],
-    '/admin/api/municipal/transcript-analysis': ['./lib/municipal/data/nc-planning/analysis.json'],
+    '/admin/api/municipal/transcript': [
+      './lib/municipal/data/nc-planning/transcripts/**',
+      './lib/municipal/data/nc-townboard/transcripts/**',
+    ],
+    '/admin/api/municipal/transcript-analysis': [
+      './lib/municipal/data/nc-planning/analysis.json',
+      './lib/municipal/data/nc-townboard/analysis.json',
+    ],
   },
 }
 
