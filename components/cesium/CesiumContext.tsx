@@ -69,6 +69,9 @@ interface CesiumContextValue {
   // or on a news pin). null = closed.
   selectedNews: NewsItem | null;
   setSelectedNews: (item: NewsItem | null) => void;
+  // Whether located news stories are pinned on the map (Layers panel toggle).
+  showNewsPins: boolean;
+  setShowNewsPins: (show: boolean) => void;
 }
 
 const CesiumContext = createContext<CesiumContextValue | null>(null);
@@ -106,6 +109,7 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [userBasemap, setUserBasemap] = useState<BasemapMode>("hybrid");
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [showNewsPins, setShowNewsPins] = useState(true);
 
   // Toggle 2D/3D while keeping the current focal point (screen-center ground
   // point) and zoom — Cesium's default morph otherwise jumps the camera out.
@@ -264,6 +268,8 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
         setNewsItems,
         selectedNews,
         setSelectedNews,
+        showNewsPins,
+        setShowNewsPins,
       }}
     >
       {children}
