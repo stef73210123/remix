@@ -1,26 +1,20 @@
 /**
- * Town budget data for the financial-analysis panel.
+ * Town of North Castle budget data for the financial-analysis panel.
  *
- * A budget is modeled per fiscal year as two ranked lists of line items —
- * REVENUE sources and EXPENDITURE areas — each optionally broken into
- * sub-line `children` for drill-down. Holding multiple years lets the panel
- * offer a year toggle and compute each line's year-over-year % change.
+ * REAL figures, parsed from the Town of North Castle 2025 Annual Comprehensive
+ * Financial Report (ACFR/AUD, year ended 12/31/2025). Three views:
+ *   - "All funds · FY2025": all governmental funds combined (actual), every
+ *     revenue source and expenditure function drilling down by fund.
+ *   - "General Fund · FY2025" / "· FY2024": the town's main operating fund,
+ *     with real year-over-year change (FY2025 vs FY2024 actual).
  *
- * The Sankey view is derived from the selected year on the fly (see
- * `yearToSankey`): revenue (layer 0) → total (hub, layer 1) → spending
- * (layer 2) → spending detail (layer 3).
+ * A budget year holds two ranked lists of line items — revenue and expenditure
+ * — each optionally split into `children`. The Sankey view is derived from the
+ * selected year on the fly (see `yearToSankey`). Values are whole dollars.
  *
- * Values are whole dollars.
- *
- * ── DATA STATUS ──────────────────────────────────────────────────────────
- * The North Castle figures below are PLACEHOLDER/ILLUSTRATIVE. A few
- * aggregates are anchored to reporting on the town's adopted FY2025 budget
- * (total ≈ $42.6M, +3.2% over 2024; property-tax levy ≈ $24.27M just under the
- * $24.43M cap; ≈ $4.1M appropriated fund balance), but the by-category splits
- * are NOT the town's actual line items — the adopted-budget PDFs on
- * northcastleny.com and the NYS Comptroller filings are blocked by this
- * environment's egress policy, so they could not be fetched and parsed. Drop
- * the real schedules in here (same shape) and the whole panel updates.
+ * The adopted FY2026 budget the town provided is a scanned PDF with no text
+ * layer, so it is not yet included; a text version (or the summary schedule)
+ * would drop straight in as another BudgetYear.
  */
 
 export interface BudgetChild {
@@ -28,33 +22,38 @@ export interface BudgetChild {
   value: number
 }
 export interface BudgetLine {
-  /** Stable id — used to match a line across years for YoY change. */
+  /** Stable id — matches a line across years for year-over-year change. */
   id: string
   label: string
-  /** Validated categorical hue, or null for neutral (minor / "other"). */
   color: string | null
   value: number
-  /** Sub-line detail for drill-down; children sum to `value`. */
   children?: BudgetChild[]
 }
 export interface BudgetYear {
-  year: string
-  /** 'adopted' | 'preliminary' | 'tentative' | 'placeholder'. */
+  /** Unique key for the year toggle. */
+  key: string
+  /** Toggle label, e.g. "General Fund · FY2025". */
+  label: string
+  fiscalYear: string
+  /** "All governmental funds" | "General Fund" — YoY compares within a scope. */
+  scope: string
   status: string
   revenue: BudgetLine[]
   expense: BudgetLine[]
+  totalRevenue: number
+  totalExpenditure: number
+  note?: string
 }
 export interface TownBudget {
   townKey: string
   townName: string
-  /** True while any year is placeholder rather than the real adopted budget. */
+  /** True only while any figure is a placeholder rather than the real budget. */
   placeholder: boolean
   sourceNote: string
-  /** Fiscal years, newest first. */
   years: BudgetYear[]
 }
 
-// ── Sankey adapter (kept for the flow diagram) ────────────────────────────
+// ── Sankey adapter ────────────────────────────────────────────────────────
 export interface BudgetNode {
   id: string
   label: string
@@ -68,199 +67,635 @@ export interface BudgetLink {
   value: number
 }
 
-/** Build the Sankey node/link graph for one fiscal year. Spending lines keep
- *  their children as layer-3 drill-down; revenue children are surfaced in the
- *  revenue breakdown list instead. */
+/** Build the revenue → total → spending Sankey graph for one fiscal year.
+ *  Expenditure children become layer-3 drill-down; revenue children surface in
+ *  the revenue breakdown list instead. */
 export function yearToSankey(y: BudgetYear): { nodes: BudgetNode[]; links: BudgetLink[] } {
-  const nodes: BudgetNode[] = [{ id: 'total', label: 'Total Budget', layer: 1, color: null }]
+  const nodes: BudgetNode[] = [{ id: 'total', label: 'Total', layer: 1, color: null }]
   const links: BudgetLink[] = []
   for (const r of y.revenue) {
-    nodes.push({ id: r.id, label: r.label, layer: 0, color: r.color })
-    links.push({ source: r.id, target: 'total', value: r.value })
+    nodes.push({ id: `rev_${r.id}`, label: r.label, layer: 0, color: r.color })
+    links.push({ source: `rev_${r.id}`, target: 'total', value: r.value })
   }
   for (const e of y.expense) {
-    nodes.push({ id: e.id, label: e.label, layer: 2, color: e.color })
-    links.push({ source: 'total', target: e.id, value: e.value })
+    nodes.push({ id: `exp_${e.id}`, label: e.label, layer: 2, color: e.color })
+    links.push({ source: 'total', target: `exp_${e.id}`, value: e.value })
     ;(e.children || []).forEach((c, i) => {
-      const cid = `${e.id}__${i}`
-      nodes.push({ id: cid, label: c.label, layer: 3, parent: e.id, color: e.color })
-      links.push({ source: e.id, target: cid, value: c.value })
+      const cid = `exp_${e.id}__${i}`
+      nodes.push({ id: cid, label: c.label, layer: 3, parent: `exp_${e.id}`, color: e.color })
+      links.push({ source: `exp_${e.id}`, target: cid, value: c.value })
     })
   }
   return { nodes, links }
 }
 
-// Validated categorical palette (dataviz — passes light + dark).
-const C = {
-  green: '#3d9c72',
-  blue: '#5a9bd4',
-  coral: '#ca615f',
-  gold: '#b0862f',
-  purple: '#9b7fd4',
-  teal: '#12a6b8',
-  neutral: null,
-}
-
-// Revenue sources share the teal family; each expense area gets its own hue.
-function ncRevenue(v: {
-  propertyTax: number; townLevy: number; highwayLevy: number; districtLevy: number
-  salesTax: number; mortgageTax: number
-  stateAid: number; aim: number; chips: number; stateOther: number
-  deptIncome: number; buildingPermits: number; recFees: number; clerkFees: number; courtFines: number
-  fundBalance: number; other: number; interest: number; rentals: number; miscOther: number
-}): BudgetLine[] {
-  return [
-    { id: 'rev_property_tax', label: 'Real Property Taxes', color: C.teal, value: v.propertyTax, children: [
-      { label: 'Townwide (A) levy', value: v.townLevy },
-      { label: 'Highway (DB) levy', value: v.highwayLevy },
-      { label: 'Special district levies', value: v.districtLevy },
-    ] },
-    { id: 'rev_sales_tax', label: 'Sales Tax', color: C.teal, value: v.salesTax },
-    { id: 'rev_mortgage_tax', label: 'Mortgage Tax', color: C.teal, value: v.mortgageTax },
-    { id: 'rev_state_aid', label: 'State Aid', color: C.teal, value: v.stateAid, children: [
-      { label: 'Per-capita (AIM)', value: v.aim },
-      { label: 'CHIPS (roads)', value: v.chips },
-      { label: 'Other state aid', value: v.stateOther },
-    ] },
-    { id: 'rev_dept_income', label: 'Departmental Income & Fees', color: C.teal, value: v.deptIncome, children: [
-      { label: 'Building permits & fees', value: v.buildingPermits },
-      { label: 'Recreation fees', value: v.recFees },
-      { label: 'Clerk & licensing fees', value: v.clerkFees },
-      { label: 'Court fines & forfeitures', value: v.courtFines },
-    ] },
-    { id: 'rev_fund_balance', label: 'Appropriated Fund Balance', color: C.teal, value: v.fundBalance },
-    { id: 'rev_other', label: 'Other Revenue', color: C.teal, value: v.other, children: [
-      { label: 'Interest earnings', value: v.interest },
-      { label: 'Rentals & leases', value: v.rentals },
-      { label: 'Miscellaneous', value: v.miscOther },
-    ] },
-  ]
-}
-
-function ncExpense(v: {
-  genGov: number; board: number; finance: number; legal: number; assessor: number; clerk: number; buildings: number
-  publicSafety: number; police: number; court: number; codeEnf: number
-  highway: number; hwyPersonnel: number; roadMaint: number; snow: number; equipment: number
-  culture: number; parksFacilities: number; programs: number; pool: number
-  homeComm: number; sanitation: number; water: number; sewer: number; planningZoning: number
-  benefits: number; health: number; retirement: number; fica: number
-  debt: number; principal: number; interest: number
-  other: number
-}): BudgetLine[] {
-  return [
-    { id: 'exp_public_safety', label: 'Public Safety', color: C.coral, value: v.publicSafety, children: [
-      { label: 'Police Department', value: v.police },
-      { label: 'Justice Court', value: v.court },
-      { label: 'Building & Code Enforcement', value: v.codeEnf },
-    ] },
-    { id: 'exp_highway', label: 'Transportation / Highway', color: C.gold, value: v.highway, children: [
-      { label: 'Personnel', value: v.hwyPersonnel },
-      { label: 'Road maintenance', value: v.roadMaint },
-      { label: 'Snow & ice', value: v.snow },
-      { label: 'Equipment', value: v.equipment },
-    ] },
-    { id: 'exp_benefits', label: 'Employee Benefits', color: C.purple, value: v.benefits, children: [
-      { label: 'Health insurance', value: v.health },
-      { label: 'NYS retirement', value: v.retirement },
-      { label: 'Social Security (FICA)', value: v.fica },
-    ] },
-    { id: 'exp_gen_gov', label: 'General Government', color: C.blue, value: v.genGov, children: [
-      { label: 'Town Board & Supervisor', value: v.board },
-      { label: 'Finance & IT', value: v.finance },
-      { label: 'Legal', value: v.legal },
-      { label: 'Assessor', value: v.assessor },
-      { label: 'Clerk & records', value: v.clerk },
-      { label: 'Town buildings', value: v.buildings },
-    ] },
-    { id: 'exp_home_comm', label: 'Home & Community Services', color: C.green, value: v.homeComm, children: [
-      { label: 'Sanitation & refuse', value: v.sanitation },
-      { label: 'Water district', value: v.water },
-      { label: 'Sewer district', value: v.sewer },
-      { label: 'Planning & Zoning', value: v.planningZoning },
-    ] },
-    { id: 'exp_culture', label: 'Culture & Recreation', color: C.teal, value: v.culture, children: [
-      { label: 'Facilities & grounds', value: v.parksFacilities },
-      { label: 'Programs', value: v.programs },
-      { label: 'Pool', value: v.pool },
-    ] },
-    { id: 'exp_debt', label: 'Debt Service', color: C.neutral, value: v.debt, children: [
-      { label: 'Principal', value: v.principal },
-      { label: 'Interest', value: v.interest },
-    ] },
-    { id: 'exp_other', label: 'Interfund & Other', color: C.neutral, value: v.other },
-  ]
-}
-
 const NORTH_CASTLE: TownBudget = {
   townKey: 'nc',
   townName: 'Town of North Castle',
-  placeholder: true,
+  placeholder: false,
   sourceNote:
-    'Illustrative splits — NOT the town’s actual line items. Aggregates anchor to reporting on the adopted FY2025 budget (≈ $42.6M, +3.2% over 2024; levy ≈ $24.27M under the $24.43M cap; ≈ $4.1M appropriated fund balance). The adopted-budget PDFs on northcastleny.com and the NYS Comptroller filings are blocked by this environment’s network policy; provide them and the real figures drop straight in.',
+    'Source: Town of North Castle 2025 Annual Comprehensive Financial Report (year ended 12/31/2025) — Statement of Revenues, Expenditures and Changes in Fund Balance (all governmental funds) and the General Fund comparative schedule. Figures are actuals; the FY2026 adopted budget provided as a scanned PDF is not yet machine-readable and is pending.',
   years: [
     {
-      year: '2026',
-      status: 'placeholder',
-      revenue: ncRevenue({
-        propertyTax: 24_900_000, townLevy: 15_200_000, highwayLevy: 6_100_000, districtLevy: 3_600_000,
-        salesTax: 3_800_000, mortgageTax: 2_000_000,
-        stateAid: 1_250_000, aim: 300_000, chips: 620_000, stateOther: 330_000,
-        deptIncome: 3_450_000, buildingPermits: 1_500_000, recFees: 1_150_000, clerkFees: 350_000, courtFines: 450_000,
-        fundBalance: 4_100_000, other: 4_500_000, interest: 1_700_000, rentals: 900_000, miscOther: 1_900_000,
-      }),
-      expense: ncExpense({
-        genGov: 6_700_000, board: 950_000, finance: 1_250_000, legal: 850_000, assessor: 750_000, clerk: 750_000, buildings: 2_150_000,
-        publicSafety: 10_900_000, police: 8_600_000, court: 850_000, codeEnf: 1_450_000,
-        highway: 7_000_000, hwyPersonnel: 3_100_000, roadMaint: 1_900_000, snow: 1_100_000, equipment: 900_000,
-        culture: 3_700_000, parksFacilities: 1_500_000, programs: 1_500_000, pool: 700_000,
-        homeComm: 5_600_000, sanitation: 2_500_000, water: 1_400_000, sewer: 1_000_000, planningZoning: 700_000,
-        benefits: 6_400_000, health: 3_500_000, retirement: 2_100_000, fica: 800_000,
-        debt: 2_450_000, principal: 1_650_000, interest: 800_000,
-        other: 1_250_000,
-      }),
+      key: "allfunds-2025",
+      label: "All funds \u00b7 FY2025",
+      fiscalYear: "2025",
+      scope: "All governmental funds",
+      status: "actual (ACFR)",
+      revenue: [
+        {
+          id: "x_real_property_taxes",
+          label: "Real property taxes",
+          color: "#12a6b8",
+          value: 24366519,
+          children: [
+            {
+              label: "General Fund",
+              value: 12183504
+            },
+            {
+              label: "Highway Fund",
+              value: 7295300
+            },
+            {
+              label: "Public Library Fund",
+              value: 1739125
+            },
+            {
+              label: "Special Districts",
+              value: 3148590
+            }
+          ]
+        },
+        {
+          id: "x_other_tax_items",
+          label: "Other tax items",
+          color: "#12a6b8",
+          value: 1232753
+        },
+        {
+          id: "x_nonproperty_tax_items",
+          label: "Nonproperty tax items",
+          color: "#12a6b8",
+          value: 3746111
+        },
+        {
+          id: "x_departmental_income",
+          label: "Departmental income",
+          color: "#12a6b8",
+          value: 3626757,
+          children: [
+            {
+              label: "General Fund",
+              value: 2159945
+            },
+            {
+              label: "Public Library Fund",
+              value: 1106
+            },
+            {
+              label: "Special Districts",
+              value: 1465706
+            }
+          ]
+        },
+        {
+          id: "x_intergovernmental_charges",
+          label: "Intergovernmental charges",
+          color: "#12a6b8",
+          value: 40079
+        },
+        {
+          id: "x_use_of_money_and_property",
+          label: "Use of money and property",
+          color: "#12a6b8",
+          value: 2458582,
+          children: [
+            {
+              label: "General Fund",
+              value: 2144242
+            },
+            {
+              label: "Public Library Fund",
+              value: 13820
+            },
+            {
+              label: "Special Districts",
+              value: 300520
+            }
+          ]
+        },
+        {
+          id: "x_licenses_and_permits",
+          label: "Licenses and permits",
+          color: "#12a6b8",
+          value: 1717560
+        },
+        {
+          id: "x_fines_and_forfeitures",
+          label: "Fines and forfeitures",
+          color: "#12a6b8",
+          value: 115075
+        },
+        {
+          id: "x_sale_of_property_and_compensation_for_loss",
+          label: "Sale of property and compensation for loss",
+          color: "#12a6b8",
+          value: 181355,
+          children: [
+            {
+              label: "General Fund",
+              value: 71390
+            },
+            {
+              label: "Highway Fund",
+              value: 99314
+            },
+            {
+              label: "Public Library Fund",
+              value: 651
+            },
+            {
+              label: "Special Districts",
+              value: 10000
+            }
+          ]
+        },
+        {
+          id: "x_state_aid",
+          label: "State aid",
+          color: "#12a6b8",
+          value: 1488065,
+          children: [
+            {
+              label: "General Fund",
+              value: 1029769
+            },
+            {
+              label: "Highway Fund",
+              value: 450721
+            },
+            {
+              label: "Public Library Fund",
+              value: 7575
+            }
+          ]
+        },
+        {
+          id: "x_federal_aid",
+          label: "Federal aid",
+          color: "#12a6b8",
+          value: 374254
+        },
+        {
+          id: "x_miscellaneous",
+          label: "Miscellaneous",
+          color: "#12a6b8",
+          value: 363607,
+          children: [
+            {
+              label: "General Fund",
+              value: 363154
+            },
+            {
+              label: "Highway Fund",
+              value: 20
+            },
+            {
+              label: "Public Library Fund",
+              value: 433
+            }
+          ]
+        }
+      ],
+      expense: [
+        {
+          id: "x_general_governmental_support",
+          label: "General governmental support",
+          color: "#5a9bd4",
+          value: 8689013,
+          children: [
+            {
+              label: "General Fund",
+              value: 5142774
+            },
+            {
+              label: "Special Districts",
+              value: 1349
+            },
+            {
+              label: "Capital Projects",
+              value: 3544890
+            }
+          ]
+        },
+        {
+          id: "x_public_safety",
+          label: "Public safety",
+          color: "#ca615f",
+          value: 13637441,
+          children: [
+            {
+              label: "General Fund",
+              value: 13158246
+            },
+            {
+              label: "Special Districts",
+              value: 479195
+            }
+          ]
+        },
+        {
+          id: "x_health",
+          label: "Health",
+          color: "#9b7fd4",
+          value: 511549,
+          children: [
+            {
+              label: "General Fund",
+              value: 4995
+            },
+            {
+              label: "Special Districts",
+              value: 506554
+            }
+          ]
+        },
+        {
+          id: "x_transportation",
+          label: "Transportation",
+          color: "#b0862f",
+          value: 8093814,
+          children: [
+            {
+              label: "General Fund",
+              value: 424520
+            },
+            {
+              label: "Highway Fund",
+              value: 7421386
+            },
+            {
+              label: "Special Districts",
+              value: 247908
+            }
+          ]
+        },
+        {
+          id: "x_economic_opportunity_and_development",
+          label: "Economic opportunity and development",
+          color: null,
+          value: 206965
+        },
+        {
+          id: "x_culture_and_recreation",
+          label: "Culture and recreation",
+          color: "#3d9c72",
+          value: 6125249,
+          children: [
+            {
+              label: "General Fund",
+              value: 4456899
+            },
+            {
+              label: "Public Library Fund",
+              value: 1652350
+            },
+            {
+              label: "Special Districts",
+              value: 16000
+            }
+          ]
+        },
+        {
+          id: "x_home_and_community_services",
+          label: "Home and community services",
+          color: "#12a6b8",
+          value: 5341525,
+          children: [
+            {
+              label: "General Fund",
+              value: 2537968
+            },
+            {
+              label: "Special Districts",
+              value: 2803557
+            }
+          ]
+        },
+        {
+          id: "x_debt_service_principal",
+          label: "Debt service - Principal",
+          color: null,
+          value: 1804000,
+          children: [
+            {
+              label: "General Fund",
+              value: 91457
+            },
+            {
+              label: "Highway Fund",
+              value: 1050000
+            },
+            {
+              label: "Special Districts",
+              value: 662543
+            }
+          ]
+        },
+        {
+          id: "x_debt_service_interest",
+          label: "Debt service - Interest",
+          color: null,
+          value: 586539,
+          children: [
+            {
+              label: "General Fund",
+              value: 6582
+            },
+            {
+              label: "Highway Fund",
+              value: 270481
+            },
+            {
+              label: "Special Districts",
+              value: 309476
+            }
+          ]
+        }
+      ],
+      totalRevenue: 39710717,
+      totalExpenditure: 44996095,
+      note: "All governmental funds combined, FY2025 actual. Expenditures exceed revenues by $5.3M, funded from reserves (largely capital). Each line drills down by fund. Final adopted appropriations were $46.7M."
     },
     {
-      year: '2025',
-      status: 'adopted (aggregates); splits illustrative',
-      revenue: ncRevenue({
-        propertyTax: 24_270_000, townLevy: 14_900_000, highwayLevy: 5_970_000, districtLevy: 3_400_000,
-        salesTax: 3_600_000, mortgageTax: 1_900_000,
-        stateAid: 1_200_000, aim: 300_000, chips: 600_000, stateOther: 300_000,
-        deptIncome: 3_300_000, buildingPermits: 1_450_000, recFees: 1_100_000, clerkFees: 300_000, courtFines: 450_000,
-        fundBalance: 4_100_000, other: 4_230_000, interest: 1_600_000, rentals: 850_000, miscOther: 1_780_000,
-      }),
-      expense: ncExpense({
-        genGov: 6_500_000, board: 920_000, finance: 1_200_000, legal: 820_000, assessor: 720_000, clerk: 720_000, buildings: 2_120_000,
-        publicSafety: 10_500_000, police: 8_300_000, court: 820_000, codeEnf: 1_380_000,
-        highway: 6_800_000, hwyPersonnel: 3_000_000, roadMaint: 1_850_000, snow: 1_050_000, equipment: 900_000,
-        culture: 3_600_000, parksFacilities: 1_450_000, programs: 1_450_000, pool: 700_000,
-        homeComm: 5_400_000, sanitation: 2_450_000, water: 1_350_000, sewer: 950_000, planningZoning: 650_000,
-        benefits: 6_200_000, health: 3_400_000, retirement: 2_050_000, fica: 750_000,
-        debt: 2_400_000, principal: 1_620_000, interest: 780_000,
-        other: 1_200_000,
-      }),
+      key: "genfund-2025",
+      label: "General Fund \u00b7 FY2025",
+      fiscalYear: "2025",
+      scope: "General Fund",
+      status: "actual (ACFR)",
+      revenue: [
+        {
+          id: "x_real_property_taxes",
+          label: "Real property taxes",
+          color: "#12a6b8",
+          value: 12183504
+        },
+        {
+          id: "x_other_tax_items",
+          label: "Other tax items",
+          color: "#12a6b8",
+          value: 1232753
+        },
+        {
+          id: "x_nonproperty_tax_items",
+          label: "Nonproperty tax items",
+          color: "#12a6b8",
+          value: 3746111
+        },
+        {
+          id: "x_departmental_income",
+          label: "Departmental income",
+          color: "#12a6b8",
+          value: 2159945
+        },
+        {
+          id: "x_use_of_money_and_property",
+          label: "Use of money and property",
+          color: "#12a6b8",
+          value: 2144242
+        },
+        {
+          id: "x_licenses_and_permits",
+          label: "Licenses and permits",
+          color: "#12a6b8",
+          value: 1717560
+        },
+        {
+          id: "x_fines_and_forfeitures",
+          label: "Fines and forfeitures",
+          color: "#12a6b8",
+          value: 115075
+        },
+        {
+          id: "x_sale_of_property_and_compensation_for_loss",
+          label: "Sale of property and compensation for loss",
+          color: "#12a6b8",
+          value: 71390
+        },
+        {
+          id: "x_state_aid",
+          label: "State aid",
+          color: "#12a6b8",
+          value: 1029769
+        },
+        {
+          id: "x_federal_aid",
+          label: "Federal aid",
+          color: "#12a6b8",
+          value: 374254
+        },
+        {
+          id: "x_miscellaneous",
+          label: "Miscellaneous",
+          color: "#12a6b8",
+          value: 363154
+        }
+      ],
+      expense: [
+        {
+          id: "x_general_governmental_support",
+          label: "General governmental support",
+          color: "#5a9bd4",
+          value: 5142774
+        },
+        {
+          id: "x_public_safety",
+          label: "Public safety",
+          color: "#ca615f",
+          value: 13158246
+        },
+        {
+          id: "x_health",
+          label: "Health",
+          color: "#9b7fd4",
+          value: 4995
+        },
+        {
+          id: "x_transportation",
+          label: "Transportation",
+          color: "#b0862f",
+          value: 424520
+        },
+        {
+          id: "x_economic_opportunity_and_development",
+          label: "Economic opportunity and development",
+          color: null,
+          value: 206965
+        },
+        {
+          id: "x_culture_and_recreation",
+          label: "Culture and recreation",
+          color: "#3d9c72",
+          value: 4456899
+        },
+        {
+          id: "x_home_and_community_services",
+          label: "Home and community services",
+          color: "#12a6b8",
+          value: 2537968
+        },
+        {
+          id: "x_debt_service_principal",
+          label: "Debt service \u2013 Principal",
+          color: null,
+          value: 91457
+        },
+        {
+          id: "x_debt_service_interest",
+          label: "Debt service \u2013 Interest",
+          color: null,
+          value: 6582
+        }
+      ],
+      totalRevenue: 25137757,
+      totalExpenditure: 26030406,
+      note: "The town\u2019s main operating fund. Year-over-year change is vs FY2024 actual."
     },
     {
-      year: '2024',
-      status: 'placeholder',
-      revenue: ncRevenue({
-        propertyTax: 24_270_000, townLevy: 14_900_000, highwayLevy: 5_970_000, districtLevy: 3_400_000,
-        salesTax: 3_400_000, mortgageTax: 1_800_000,
-        stateAid: 1_130_000, aim: 300_000, chips: 560_000, stateOther: 270_000,
-        deptIncome: 3_000_000, buildingPermits: 1_300_000, recFees: 1_000_000, clerkFees: 300_000, courtFines: 400_000,
-        fundBalance: 3_600_000, other: 4_100_000, interest: 1_500_000, rentals: 820_000, miscOther: 1_780_000,
-      }),
-      expense: ncExpense({
-        genGov: 6_300_000, board: 900_000, finance: 1_150_000, legal: 800_000, assessor: 700_000, clerk: 700_000, buildings: 2_050_000,
-        publicSafety: 10_100_000, police: 7_980_000, court: 800_000, codeEnf: 1_320_000,
-        highway: 6_600_000, hwyPersonnel: 2_900_000, roadMaint: 1_800_000, snow: 1_000_000, equipment: 900_000,
-        culture: 3_500_000, parksFacilities: 1_400_000, programs: 1_400_000, pool: 700_000,
-        homeComm: 5_200_000, sanitation: 2_400_000, water: 1_300_000, sewer: 900_000, planningZoning: 600_000,
-        benefits: 5_900_000, health: 3_250_000, retirement: 1_950_000, fica: 700_000,
-        debt: 2_400_000, principal: 1_620_000, interest: 780_000,
-        other: 1_100_000,
-      }),
-    },
+      key: "genfund-2024",
+      label: "General Fund \u00b7 FY2024",
+      fiscalYear: "2024",
+      scope: "General Fund",
+      status: "actual (ACFR)",
+      revenue: [
+        {
+          id: "x_real_property_taxes",
+          label: "Real property taxes",
+          color: "#12a6b8",
+          value: 12994439
+        },
+        {
+          id: "x_other_tax_items",
+          label: "Other tax items",
+          color: "#12a6b8",
+          value: 1478663
+        },
+        {
+          id: "x_nonproperty_tax_items",
+          label: "Nonproperty tax items",
+          color: "#12a6b8",
+          value: 3607430
+        },
+        {
+          id: "x_departmental_income",
+          label: "Departmental income",
+          color: "#12a6b8",
+          value: 2163087
+        },
+        {
+          id: "x_use_of_money_and_property",
+          label: "Use of money and property",
+          color: "#12a6b8",
+          value: 2647096
+        },
+        {
+          id: "x_licenses_and_permits",
+          label: "Licenses and permits",
+          color: "#12a6b8",
+          value: 2192021
+        },
+        {
+          id: "x_fines_and_forfeitures",
+          label: "Fines and forfeitures",
+          color: "#12a6b8",
+          value: 144411
+        },
+        {
+          id: "x_sale_of_property_and_compensation_for_loss",
+          label: "Sale of property and compensation for loss",
+          color: "#12a6b8",
+          value: 129278
+        },
+        {
+          id: "x_state_aid",
+          label: "State aid",
+          color: "#12a6b8",
+          value: 1032394
+        },
+        {
+          id: "x_federal_aid",
+          label: "Federal aid",
+          color: "#12a6b8",
+          value: 8197
+        },
+        {
+          id: "x_miscellaneous",
+          label: "Miscellaneous",
+          color: "#12a6b8",
+          value: 32955
+        }
+      ],
+      expense: [
+        {
+          id: "x_general_governmental_support",
+          label: "General governmental support",
+          color: "#5a9bd4",
+          value: 4315335
+        },
+        {
+          id: "x_public_safety",
+          label: "Public safety",
+          color: "#ca615f",
+          value: 12552563
+        },
+        {
+          id: "x_health",
+          label: "Health",
+          color: "#9b7fd4",
+          value: 5003
+        },
+        {
+          id: "x_transportation",
+          label: "Transportation",
+          color: "#b0862f",
+          value: 425928
+        },
+        {
+          id: "x_economic_opportunity_and_development",
+          label: "Economic opportunity and development",
+          color: null,
+          value: 232674
+        },
+        {
+          id: "x_culture_and_recreation",
+          label: "Culture and recreation",
+          color: "#3d9c72",
+          value: 4150781
+        },
+        {
+          id: "x_home_and_community_services",
+          label: "Home and community services",
+          color: "#12a6b8",
+          value: 2356843
+        },
+        {
+          id: "x_debt_service_principal",
+          label: "Debt service \u2013 Principal",
+          color: null,
+          value: 163311
+        },
+        {
+          id: "x_debt_service_interest",
+          label: "Debt service \u2013 Interest",
+          color: null,
+          value: 13160
+        }
+      ],
+      totalRevenue: 26429971,
+      totalExpenditure: 24215598,
+      note: "The town\u2019s main operating fund, FY2024 actual."
+    }
   ],
 }
 
