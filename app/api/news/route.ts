@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchPerigonNews, perigonConfigured, getPerigonDiag } from "@/lib/perigon";
+import { cleanText } from "@/lib/clean-text";
 
 export const dynamic = "force-dynamic";
 
@@ -196,6 +197,13 @@ async function fetchAllFeeds(): Promise<NewsItem[]> {
     items = results.flat();
     if (items.length > 0) feedSource = "rss";
   }
+
+  // Decode HTML entities / fix mojibake so the ticker + lightbox read cleanly.
+  items = items.map((i) => ({
+    ...i,
+    title: cleanText(i.title),
+    description: cleanText(i.description),
+  }));
 
   // Dedupe by link, then sort by pubDate descending (most recent first).
   const seen = new Set<string>();

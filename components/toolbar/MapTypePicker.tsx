@@ -167,7 +167,7 @@ export default function MapTypePicker() {
   return (
     <div
       className={cn(
-        "absolute z-30 flex items-end gap-2 bottom-[88px]",
+        "absolute z-30 flex items-end gap-2 bottom-[calc(88px_+_env(safe-area-inset-bottom))]",
         // Default: centered along the bottom.
         !leftPanelOpen && "left-1/2 -translate-x-1/2",
         // Property open: a full-width bottom sheet covers this on phones (hide);

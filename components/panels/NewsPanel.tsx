@@ -166,7 +166,7 @@ export default function NewsPanel() {
       {!rightPanel && (
         <div
           className={cn(
-            "absolute bottom-0 right-0 z-20 h-20",
+            "absolute bottom-0 right-0 z-20",
             leftPanelOpen ? "left-0 max-md:hidden md:left-[390px]" : "left-0"
           )}
         >
@@ -174,7 +174,13 @@ export default function NewsPanel() {
             onClick={() => current && setLightbox(current)}
             aria-label="Open this headline"
             disabled={!current}
-            className="w-full h-20 flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left disabled:cursor-default"
+            // 80px content area + the iOS safe-area inset (0 elsewhere) so the
+            // bar clears the home indicator on iPad/iPhone instead of hiding.
+            style={{
+              height: "calc(5rem + env(safe-area-inset-bottom))",
+              paddingBottom: "env(safe-area-inset-bottom)",
+            }}
+            className="w-full flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left disabled:cursor-default"
           >
             <div className="flex-1 relative overflow-hidden self-stretch">
               {loading ? (
