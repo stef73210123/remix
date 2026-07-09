@@ -154,20 +154,12 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
           {showAllCases ? 'Show recurring only' : `Show all ${data.cases.length}`}
         </button>
       </div>
-      <div className="card table-card" style={{ marginBottom: 28, maxHeight: showAllCases ? 520 : undefined, overflowY: showAllCases ? 'auto' : undefined }}>
-        <table>
-          <thead>
-            <tr>
-              <th>{isTownBoard ? 'Agenda item' : 'Application'}</th><th>Type</th><th style={{ textAlign: 'center' }}>Seen</th>
-              <th>Last status</th><th style={{ textAlign: 'center' }}>Sentiment</th><th>Trajectory</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visibleCases.map((c) => (
-              <CaseRow key={c.id} c={c} members={data.members} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
-            ))}
-          </tbody>
-        </table>
+      <div className="card" style={{ padding: 0, marginBottom: 28, maxHeight: showAllCases ? 520 : undefined, overflowY: showAllCases ? 'auto' : undefined }}>
+        {visibleCases.length === 0 ? (
+          <div className="muted" style={{ padding: 16, fontSize: 13 }}>Nothing to show.</div>
+        ) : visibleCases.map((c, i) => (
+          <CaseRow key={c.id} c={c} members={data.members} first={i === 0} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
+        ))}
       </div>
 
       {/* ---- Meeting-by-meeting ---- */}
@@ -237,7 +229,7 @@ function ThemeRow({ t, maxMeetings }: { t: ThemeRollup; maxMeetings: number }) {
   )
 }
 
-function CaseRow({ c, members, open, onToggle }: { c: CaseRollup; members: MemberProfile[]; open: boolean; onToggle: () => void }) {
+function CaseRow({ c, members, first, open, onToggle }: { c: CaseRollup; members: MemberProfile[]; first: boolean; open: boolean; onToggle: () => void }) {
   // Where each board member stood on this case: their avg sentiment on it + their quotes.
   const stances = useMemo(() => {
     return members
@@ -252,22 +244,23 @@ function CaseRow({ c, members, open, onToggle }: { c: CaseRollup; members: Membe
   }, [members, c.id])
 
   return (
-    <>
-      <tr onClick={onToggle} style={{ cursor: 'pointer' }}>
-        <td style={{ fontWeight: 600, fontSize: 14, maxWidth: 280 }}>
-          <span className="muted" style={{ marginRight: 6, display: 'inline-block', width: 10 }}>{open ? '▾' : '▸'}</span>
-          {c.name}
-        </td>
-        <td style={{ fontSize: 13 }}>{c.applicationType || '—'}</td>
-        <td style={{ textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>{c.appearances}</td>
-        <td style={{ fontSize: 13 }}>{c.lastStatus || '—'}</td>
-        <td style={{ textAlign: 'center' }}><Chip score={c.avgSentiment} /></td>
-        <td><Spark points={c.trajectory.map((p) => p.sentiment)} /></td>
-      </tr>
+    <div style={{ borderTop: first ? 'none' : '1px solid var(--border)' }}>
+      <div onClick={onToggle} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', padding: '12px 14px', cursor: 'pointer' }}>
+        <span className="muted" style={{ fontSize: 13, lineHeight: '20px', width: 10, flexShrink: 0 }}>{open ? '▾' : '▸'}</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 600, fontSize: 14, lineHeight: 1.35 }}>{c.name}</div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 5, fontSize: 12, color: 'var(--muted)' }}>
+            {c.applicationType && <span>{c.applicationType}</span>}
+            <span>· seen {c.appearances}×</span>
+            {c.lastStatus && <span>· {c.lastStatus}</span>}
+            <Spark points={c.trajectory.map((p) => p.sentiment)} />
+          </div>
+        </div>
+        <span style={{ flexShrink: 0 }}><Chip score={c.avgSentiment} /></span>
+      </div>
       {open && (
-        <tr>
-          <td colSpan={6} style={{ background: 'var(--panel-2)' }}>
-            <div style={{ padding: '6px 8px 12px' }}>
+        <div style={{ background: 'var(--panel-2)', padding: '6px 14px 14px 32px' }}>
+          <div>
               {(c.address || c.applicant) && (
                 <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
                   {c.address}{c.address && c.applicant ? ' · ' : ''}{c.applicant ? `Applicant: ${c.applicant}` : ''}
@@ -319,11 +312,10 @@ function CaseRow({ c, members, open, onToggle }: { c: CaseRollup; members: Membe
                   </div>
                 ))}
               </div>
-            </div>
-          </td>
-        </tr>
+          </div>
+        </div>
       )}
-    </>
+    </div>
   )
 }
 
