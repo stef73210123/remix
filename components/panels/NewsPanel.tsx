@@ -8,6 +8,7 @@ import {
   Building2,
   Landmark,
   DollarSign,
+  MapPin,
 } from "lucide-react";
 import { useCesium } from "@/components/cesium/CesiumContext";
 import { cn } from "@/lib/utils";
@@ -91,6 +92,9 @@ export default function NewsPanel() {
     setNewsItems: setNews,
     selectedNews: lightbox,
     setSelectedNews: setLightbox,
+    showNewsPins,
+    setShowNewsPins,
+    flyToAddressOverhead,
   } = useCesium();
   const [loading, setLoading] = useState(true);
   const [tickerIndex, setTickerIndex] = useState(0);
@@ -165,8 +169,14 @@ export default function NewsPanel() {
           tablet/desktop — offset the ticker to sit beside it there. */}
       {!rightPanel && (
         <div
+          // 80px content area + the iOS safe-area inset (0 elsewhere) so the
+          // bar clears the home indicator on iPad/iPhone instead of hiding.
+          style={{
+            height: "calc(5rem + env(safe-area-inset-bottom))",
+            paddingBottom: "env(safe-area-inset-bottom)",
+          }}
           className={cn(
-            "absolute bottom-0 right-0 z-20",
+            "absolute bottom-0 right-0 z-20 flex items-stretch bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden",
             leftPanelOpen ? "left-0 max-md:hidden md:left-[390px]" : "left-0"
           )}
         >
@@ -174,13 +184,7 @@ export default function NewsPanel() {
             onClick={() => current && setLightbox(current)}
             aria-label="Open this headline"
             disabled={!current}
-            // 80px content area + the iOS safe-area inset (0 elsewhere) so the
-            // bar clears the home indicator on iPad/iPhone instead of hiding.
-            style={{
-              height: "calc(5rem + env(safe-area-inset-bottom))",
-              paddingBottom: "env(safe-area-inset-bottom)",
-            }}
-            className="w-full flex items-center gap-3 px-3 bg-[#161616]/95 backdrop-blur-sm border-t border-white/10 overflow-hidden text-left disabled:cursor-default"
+            className="flex-1 min-w-0 flex items-center gap-3 pl-3 pr-2 overflow-hidden text-left disabled:cursor-default"
           >
             <div className="flex-1 relative overflow-hidden self-stretch">
               {loading ? (
@@ -221,11 +225,29 @@ export default function NewsPanel() {
                 );
               })()}
             </div>
-            <span className="hidden md:flex items-center gap-1 text-[8px] text-white/30 shrink-0 self-center">
+          </button>
+
+          {/* Right controls: news-pin toggle (moved here from the Layers panel)
+              with the map credit beneath it. */}
+          <div className="shrink-0 flex flex-col items-end justify-center gap-1 pr-2 pl-1">
+            <button
+              onClick={() => setShowNewsPins(!showNewsPins)}
+              aria-pressed={showNewsPins}
+              title={showNewsPins ? "Hide news pins on map" : "Show news pins on map"}
+              className={cn(
+                "p-1.5 rounded-md border transition-colors",
+                showNewsPins
+                  ? "bg-[#ca615f]/20 border-[#ca615f]/60 text-[#d4767a]"
+                  : "bg-white/5 border-white/10 text-white/40 hover:text-white/70"
+              )}
+            >
+              <MapPin className="w-4 h-4" />
+            </button>
+            <span className="hidden md:flex items-center gap-1 text-[8px] text-white/30">
               <span className="font-bold text-[#d4767a]">CESIUM</span>
               <span>&copy; OSM</span>
             </span>
-          </button>
+          </div>
         </div>
       )}
 
@@ -271,17 +293,35 @@ export default function NewsPanel() {
                 </p>
               )}
 
-              {lightbox.url && lightbox.url !== "#" && (
-                <a
-                  href={lightbox.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#ca615f] hover:text-[#d4767a]"
-                >
-                  Read full article
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              )}
+              <div className="flex items-center justify-between gap-3 mt-1">
+                {lightbox.url && lightbox.url !== "#" ? (
+                  <a
+                    href={lightbox.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#ca615f] hover:text-[#d4767a]"
+                  >
+                    Read full article
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                ) : (
+                  <span />
+                )}
+
+                {/* Jump to the story's pin (only when it has a precise location). */}
+                {lightbox.lat != null && lightbox.lng != null && (
+                  <button
+                    onClick={() => {
+                      flyToAddressOverhead(lightbox.lng!, lightbox.lat!);
+                      setLightbox(null);
+                    }}
+                    className="inline-flex items-center gap-1.5 shrink-0 text-sm font-semibold text-white bg-[#ca615f] hover:bg-[#d4767a] px-3 py-1.5 rounded-lg shadow-sm"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Jump to
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
