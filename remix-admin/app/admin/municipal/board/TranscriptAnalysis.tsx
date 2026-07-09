@@ -244,7 +244,7 @@ function CaseRow({ c, members, open, onToggle }: { c: CaseRollup; members: Membe
   return (
     <>
       <tr onClick={onToggle} style={{ cursor: 'pointer' }}>
-        <td style={{ fontWeight: 600 }}>
+        <td style={{ fontWeight: 600, fontSize: 14, maxWidth: 280 }}>
           <span className="muted" style={{ marginRight: 6, display: 'inline-block', width: 10 }}>{open ? '▾' : '▸'}</span>
           {c.name}
         </td>
