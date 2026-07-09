@@ -47,6 +47,8 @@ const RSS_FEEDS: { url: string; source: string }[] = [
 let cachedItems: NewsItem[] = [];
 let cacheTimestamp = 0;
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+// Which feed served the cached batch — surfaced in the response for debugging.
+let feedSource: "perigon" | "rss" | "none" = "none";
 
 // ---------------------------------------------------------------------------
 // Category classification
@@ -168,8 +170,10 @@ async function fetchAllFeeds(): Promise<NewsItem[]> {
   // Prefer Perigon (real geo-tagged headlines). Map its raw items into our
   // shape and assign categories with the same keyword classifier used for RSS.
   let items: NewsItem[] = [];
+  feedSource = "none";
   if (perigonConfigured()) {
     const perigon = await fetchPerigonNews(50);
+    if (perigon.length > 0) feedSource = "perigon";
     items = perigon.map((p) => ({
       id: p.id || idFromLink(p.link),
       title: p.title,
@@ -190,6 +194,7 @@ async function fetchAllFeeds(): Promise<NewsItem[]> {
       RSS_FEEDS.map((feed) => fetchFeed(feed.url, feed.source))
     );
     items = results.flat();
+    if (items.length > 0) feedSource = "rss";
   }
 
   // Dedupe by link, then sort by pubDate descending (most recent first).
@@ -259,6 +264,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       count: items.length,
       cached: Date.now() - cacheTimestamp < 1000, // true if just fetched
+      // Debug: which feed is live, whether the Perigon key is set, and how many
+      // of the returned items resolved to map coordinates.
+      source: feedSource,
+      perigonConfigured: perigonConfigured(),
+      geoCount: items.filter((i) => typeof i.lat === "number" && typeof i.lng === "number").length,
       items,
     });
   } catch (err) {
