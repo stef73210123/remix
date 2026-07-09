@@ -36,6 +36,12 @@ export function perigonConfigured(): boolean {
   return Boolean(process.env.PERIGON_API_KEY);
 }
 
+// Last Perigon outcome, surfaced in the /api/news debug fields for diagnosis.
+let lastPerigonDiag: string | null = null;
+export function getPerigonDiag(): string | null {
+  return lastPerigonDiag;
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /** Coerce assorted coordinate shapes into { lat, lng }, or null. */
@@ -315,6 +321,9 @@ export async function fetchPerigonNews(size = 50): Promise<RawNewsItem[]> {
   if (!key) return [];
 
   const url = new URL("https://api.perigon.io/v1/all");
+  // Perigon authenticates via the apiKey query parameter (the documented
+  // primary method); the x-api-key header is sent too for good measure.
+  url.searchParams.set("apiKey", key);
   url.searchParams.set("q", RE_QUERY);
   url.searchParams.set("language", "en");
   url.searchParams.set("country", "us");
@@ -331,10 +340,12 @@ export async function fetchPerigonNews(size = 50): Promise<RawNewsItem[]> {
     });
     if (!res.ok) {
       console.error(`[news] Perigon returned ${res.status}`);
+      lastPerigonDiag = `http_${res.status}`;
       return [];
     }
     const data = await res.json();
     const articles: any[] = Array.isArray(data?.articles) ? data.articles : [];
+    lastPerigonDiag = `ok_${articles.length}`;
     return articles
       .filter((a) => str(a?.title) && str(a?.url))
       .map((a) => {
@@ -354,6 +365,7 @@ export async function fetchPerigonNews(size = 50): Promise<RawNewsItem[]> {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error(`[news] Perigon error: ${message}`);
+    lastPerigonDiag = `error_${message.slice(0, 60)}`;
     return [];
   } finally {
     clearTimeout(timeout);

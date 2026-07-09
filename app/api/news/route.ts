@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchPerigonNews, perigonConfigured } from "@/lib/perigon";
+import { fetchPerigonNews, perigonConfigured, getPerigonDiag } from "@/lib/perigon";
 
 export const dynamic = "force-dynamic";
 
@@ -268,6 +268,7 @@ export async function GET(request: NextRequest) {
       // of the returned items resolved to map coordinates.
       source: feedSource,
       perigonConfigured: perigonConfigured(),
+      perigonDiag: getPerigonDiag(),
       geoCount: items.filter((i) => typeof i.lat === "number" && typeof i.lng === "number").length,
       items,
     });
