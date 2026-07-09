@@ -123,38 +123,46 @@ function Breakdown({ title, lines, prevLines, note }: { title: string; lines: Bu
  */
 export default function BudgetPanel({ budget }: { budget: TownBudget }) {
   const years = budget.years
-  const [idx, setIdx] = useState(0)
-  const sel: BudgetYear | undefined = years[idx]
-  const prev: BudgetYear | undefined = years[idx + 1] // years are newest-first, so +1 is the prior year
+  const [key, setKey] = useState(years[0]?.key || '')
+  const sel: BudgetYear | undefined = years.find((y) => y.key === key) || years[0]
+  // The prior year is the same scope, one fiscal year earlier (so YoY compares
+  // like-for-like); undefined when there's no comparable prior year.
+  const prev: BudgetYear | undefined = sel
+    ? years.find((y) => y.scope === sel.scope && Number(y.fiscalYear) === Number(sel.fiscalYear) - 1)
+    : undefined
 
   const { nodes, links } = useMemo(() => (sel ? yearToSankey(sel) : { nodes: [], links: [] }), [sel])
-  const totalRev = useMemo(() => (sel ? sel.revenue.reduce((s, r) => s + r.value, 0) : 0), [sel])
-  const totalExp = useMemo(() => (sel ? sel.expense.reduce((s, e) => s + e.value, 0) : 0), [sel])
 
   if (!sel) return <div className="muted" style={{ fontSize: 13, padding: 16 }}>No budget data.</div>
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 6 }}>
         <div className="muted" style={{ fontSize: 13 }}>
-          {budget.townName} · FY {sel.year} · total {fmtUSD(totalRev)}
-          {prev && <span> · {sel.status}</span>}
+          {budget.townName} · {sel.scope} · FY {sel.fiscalYear} ({sel.status})
+          <br />
+          revenue <strong style={{ color: 'var(--text)' }}>{fmtUSD(sel.totalRevenue)}</strong>
+          {' · '}spending <strong style={{ color: 'var(--text)' }}>{fmtUSD(sel.totalExpenditure)}</strong>
         </div>
         {years.length > 1 && (
-          <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
-            {years.map((y, i) => (
+          <div className="pill-strip" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+            {years.map((y) => (
               <button
-                key={y.year}
-                onClick={() => setIdx(i)}
+                key={y.key}
+                onClick={() => setKey(y.key)}
                 className="btn secondary"
-                style={{ padding: '5px 12px', fontSize: 13, ...(i === idx ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
+                style={{ padding: '5px 12px', fontSize: 13, whiteSpace: 'nowrap', ...(y.key === sel.key ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
               >
-                FY {y.year}
+                {y.label}
               </button>
             ))}
           </div>
         )}
       </div>
+
+      {sel.note && (
+        <div className="muted" style={{ fontSize: 12, marginBottom: 14, lineHeight: 1.5, maxWidth: 760 }}>{sel.note}</div>
+      )}
 
       {budget.placeholder && (
         <div className="card" style={{ padding: '12px 16px', marginBottom: 18, borderColor: 'var(--warn)', color: 'var(--text)', fontSize: 13, lineHeight: 1.5 }}>
@@ -168,18 +176,20 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
 
       <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
         <Breakdown
-          title={`Revenue · FY ${sel.year}`}
+          title={`Revenue · FY ${sel.fiscalYear}`}
           lines={sel.revenue}
           prevLines={prev?.revenue || []}
-          note={prev ? `▲▼ = change vs FY ${prev.year}. Click a source to see its detail.` : 'Click a source to see its detail.'}
+          note={prev ? `▲▼ = change vs FY ${prev.fiscalYear}. Click a source with a marker to see its detail.` : 'Click a source with a marker to see its detail.'}
         />
         <Breakdown
-          title={`Expenditures · FY ${sel.year}`}
+          title={`Expenditures · FY ${sel.fiscalYear}`}
           lines={sel.expense}
           prevLines={prev?.expense || []}
-          note={prev ? `▲▼ = change vs FY ${prev.year}. Click an area to break it down.` : 'Click an area to break it down.'}
+          note={prev ? `▲▼ = change vs FY ${prev.fiscalYear}. Click an area with a marker to break it down.` : 'Click an area with a marker to break it down.'}
         />
       </div>
+
+      <div className="muted" style={{ fontSize: 11, marginTop: 14, lineHeight: 1.5, maxWidth: 820 }}>{budget.sourceNote}</div>
     </>
   )
 }

@@ -3,8 +3,8 @@
     "Joseph Rende": {
       "member": "Joseph Rende",
       "role": "Supervisor",
-      "email": "jrende@northcastleny.com",
-      "emailSource": "Town of North Castle Staff Directory, Joseph A. Rende entry (https://www.northcastleny.com/directory.aspx?eid=42); email surfaced via the town's official directory listing",
+      "email": "supervisor@northcastleny.gov",
+      "emailSource": "Town of North Castle official Town Board roster, Members table (northcastleny.gov)",
       "bio": "Joseph A. Rende (Joe Rende) is the Democratic Town Supervisor of North Castle, NY (serving Armonk, Banksville and North White Plains), in office since January 2024 after narrowly defeating Republican Councilwoman Barbara DiGiacinto by roughly three votes in a contested, recount-and-litigation election. Professionally he is Director of Business Development at Judicial Title Insurance Agency; earlier he ran and operated his family's home heating oil business, Rende Economy Fuel, alongside his father before selling it to Robison Oil and taking a management role there. Raised in and long a resident of Port Chester, he began his public service in that village's government (planning commission, chairman of the village planning board, elected trustee, deputy mayor) and later served as Westchester County's deputy director of emergency planning and management. He has lived in Armonk for more than ten years with his partner, the Hon. Linda S. Jamieson, a Justice of the Westchester Supreme Court. As Supervisor he has emphasized public safety, fiscal responsibility, and collaborative, cost-saving problem-solving (e.g., organizing local business partners to restore the vandalized North Castle Eagle landmark at no cost to the town), and is running for re-election.",
       "bioConfidence": "high",
       "engagement": {
@@ -35,8 +35,8 @@
     "Barbara DiGiacinto": {
       "member": "Barbara DiGiacinto",
       "role": "Councilwoman",
-      "email": "bdigiacinto@northcastleny.com",
-      "emailSource": "Town of North Castle official Staff Directory, Barbara W. DiGiacinto entry (https://www.northcastleny.com/directory.aspx?EID=52); email surfaced in the directory listing and appears in official town documents. Follows the town's first-initial+lastname@northcastleny.com convention. Town Hall phone 914-273-8019.",
+      "email": "bdigiacinto@northcastleny.gov",
+      "emailSource": "Town of North Castle official Town Board roster, Members table (northcastleny.gov)",
       "bio": "Barbara W. DiGiacinto is a Republican Councilwoman on the North Castle Town Board, first elected in 2013/seated 2014 and completing roughly twelve years of service as of 2025; she is the board's only councilwoman and has served as Deputy Supervisor. She is a retired English teacher, having taught for about 35 years at Westlake High School. Her family has lived in North Castle for over a century, and she is deeply tied to the North White Plains hamlet, where she kept a 2013 campaign pledge by launching regular North White Plains resident gatherings. Before the Town Board she was treasurer of the North Castle Historical Society and was appointed Chair of the North Castle Housing Board by Supervisor Jack Lombardi. She is a breast-cancer survivor and in 2025 ran for Town Supervisor against Democrat Joseph Rende in an exceptionally close, recount-level race.",
       "bioConfidence": "high",
       "engagement": {
@@ -67,8 +67,8 @@
     "Saleem Hussain": {
       "member": "Saleem Hussain",
       "role": "Councilman (Deputy Supervisor 2026)",
-      "email": "",
-      "emailSource": "",
+      "email": "shussain@northcastleny.gov",
+      "emailSource": "Town of North Castle official Town Board roster, Members table (northcastleny.gov)",
       "bio": "Saleem Hussain is a Democratic member of the North Castle (Armonk, NY) Town Board, first appointed and then elected as Councilman, and designated Deputy Supervisor for 2026. Professionally he is a longtime IBM executive based at the company's Armonk headquarters, where he has worked for roughly a decade-plus in strategy and AI-focused research/ecosystem partnership leadership roles; multiple aggregator profiles list his title around head of AI partnerships and business development at IBM Research. His reported education includes an MBA from the MIT Sloan School of Management and executive-education study at Stanford Graduate School of Business. On the board he founded and leads the town's Technology Task Force, driving resident communications, data-security upgrades, and digital engagement, and he routinely recuses himself from matters touching IBM to avoid conflicts of interest. He is engaged in civic and community life, championing the public library, parks and recreation, and the town's 250th anniversary of American Independence celebration.",
       "bioConfidence": "medium",
       "engagement": {
@@ -100,8 +100,8 @@
     "Jose Berra": {
       "member": "Jose Berra",
       "role": "Councilman (Deputy Supervisor 2024-25)",
-      "email": "jberra@northcastleny.com",
-      "emailSource": "Town of North Castle official Staff Directory, José L. Berra profile (https://www.northcastleny.com/directory.aspx?EID=53)",
+      "email": "jberra@northcastleny.gov",
+      "emailSource": "Town of North Castle official Town Board roster, Members table (northcastleny.gov)",
       "bio": "José L. Berra is a longtime Armonk resident (25+ years) serving as a Councilman on the North Castle Town Board, where he was designated Deputy Supervisor for 2024-25. Professionally he is a CPA and tax attorney with a background in investment banking; earlier in his career he worked as a tax lawyer in the Office of Tax Policy at the U.S. Department of the Treasury in Washington, D.C. He was first appointed to the Town Board in January 2014 to fill the seat vacated when Michael Schiliro became Supervisor; after narrowly losing a 2014 special election, he won election in 2015 and has since served multiple full terms, running as an endorsed independent/Democratic-backed candidate. He is a community volunteer with local civic ties including involvement in the Armonk Outdoor Art Show, and on the board has focused on fiscal stewardship, sustainability, and responsible land use.",
       "bioConfidence": "high",
       "engagement": {
@@ -158,11 +158,11 @@
       ],
       "notes": "Professional identity is well corroborated (Cornell; hedge fund PM; founded Probate Advance 2018; CEO Libra Solutions 2023; Armonk resident) and matches the North Castle official via the Armonk nexus, so bioConfidence is high. Name variant 'Milam' appears in some sources; correct spelling is Milim/Matthew Milim. Municipal email could not be verified: the town website (northcastleny.com) blocked automated retrieval (HTTP 403) and no address surfaced in search snippets, so email is left blank per spec rather than guessed (town emails commonly follow a first-initial+lastname pattern at the town domain, but this was NOT confirmed). Assigned role window is 2024-2025 per the brief; note he was first elected Nov 2021 and took office in 2022, so his actual tenure predates that window. Engagement analysis is grounded primarily in the first-party meeting brief (avg sentiment 0.38 across 159 positions; strongest positive themes: grants/capital projects and public safety; notable opposition on the BESS project)."
     },
-    "Sonny Vitaj": {
-      "member": "Sonny Vitaj",
+    "Sonny Vataj": {
+      "member": "Sonny Vataj",
       "role": "Councilman (2026-)",
-      "email": "",
-      "emailSource": "",
+      "email": "svataj@northcastleny.gov",
+      "emailSource": "Town of North Castle official Town Board roster, Members table (northcastleny.gov)",
       "bio": "Sonny Vataj (the name is rendered 'Vitaj/Vitage' in meeting transcripts) is a first-term member of the North Castle Town Board, elected in November 2025 (running on the Democratic and Conservative lines) and sworn in for a term beginning January 2026. By profession he is a real estate broker and owner — principal of EXIT Realty Group, servicing the Bronx, Westchester and Putnam markets for close to two decades. The son of an immigrant, he moved to North Castle from the Bronx with his family in 2004, is married and a father of four, and has been a longtime Armonk volunteer firefighter. As a first-time candidate and small-business owner he campaigned on fiscal stability, strategic phased infrastructure investment without tax increases, and a deliberate, resident-involved approach to the Town Hall building decision. He has since been appointed to the town's Revolutionary War 250 Steering Committee.",
       "bioConfidence": "high",
       "engagement": {

@@ -20,9 +20,11 @@ OUT = sys.argv[2] if len(sys.argv) > 2 else \
     "/home/user/remix/remix-admin/lib/municipal/data/nc-townboard/analysis.json"
 
 # North Castle Town Board roster (Supervisor + 4 Council Members). One seat
-# turnover across 2024-2026: Matt Milim (2024-25) left; Sonny Vitaj joined 2026.
+# turnover across 2024-2026: Matt Milim (2024-25) left; Sonny Vataj joined 2026.
 # Jose Berra served all three years. ALIAS normalizes ASR manglings.
-MEMBERS = ["Joseph Rende", "Barbara DiGiacinto", "Saleem Hussain", "Jose Berra", "Matt Milim", "Sonny Vitaj"]
+# INACTIVE = members no longer serving (kept in the record, flagged in the UI).
+MEMBERS = ["Joseph Rende", "Barbara DiGiacinto", "Saleem Hussain", "Jose Berra", "Matt Milim", "Sonny Vataj"]
+INACTIVE = ["Matt Milim"]
 MEMBER_ALIAS = {
     "joseph rende": "Joseph Rende", "joe rende": "Joseph Rende", "supervisor rende": "Joseph Rende",
     "rende": "Joseph Rende", "supervisor": "Joseph Rende",
@@ -33,7 +35,9 @@ MEMBER_ALIAS = {
     "jose berra": "Jose Berra", "berra": "Jose Berra", "bera": "Jose Berra", "barra": "Jose Berra",
     "barron": "Jose Berra",
     "matt milim": "Matt Milim", "milim": "Matt Milim", "milam": "Matt Milim", "millam": "Matt Milim",
-    "sonny vitaj": "Sonny Vitaj", "sonny": "Sonny Vitaj", "vitaj": "Sonny Vitaj", "vitage": "Sonny Vitaj",
+    # Vataj is the correct surname; the ASR renders it "Vitaj"/"Vitage".
+    "sonny vataj": "Sonny Vataj", "sonny vitaj": "Sonny Vataj", "sonny": "Sonny Vataj",
+    "vataj": "Sonny Vataj", "vitaj": "Sonny Vataj", "vitage": "Sonny Vataj",
 }
 
 def canon_member(name):
@@ -405,6 +409,7 @@ def main():
             "themes": len(themes),
             "memberPositions": total_positions,
             "roster": MEMBERS,
+            "inactiveMembers": INACTIVE,
             "source": "Meeting video transcripts (ASR, un-diarized); member attribution is name-based with per-position confidence.",
             "errors": errors,
         },

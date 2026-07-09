@@ -91,6 +91,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
   if (!data) return null
 
   const m = data.meta
+  const inactiveSet = new Set(m.inactiveMembers || [])
   // Board-appropriate noun for the "cases" (Planning = applications; Town Board = agenda items).
   const isTownBoard = m.bodyKey === 'town_board'
   const itemNounPlural = isTownBoard ? 'agenda items' : 'applications'
@@ -112,7 +113,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       </h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: data.members.some((m2) => m2.totalPositions === 0) ? 10 : 28 }}>
         {data.members.filter((mem) => mem.totalPositions > 0).map((mem) => (
-          <MemberCard key={mem.member} mem={mem} muni={muni} body={body} />
+          <MemberCard key={mem.member} mem={mem} muni={muni} body={body} inactive={inactiveSet.has(mem.member)} />
         ))}
       </div>
       {data.members.filter((mem) => mem.totalPositions === 0).length > 0 && (
@@ -182,7 +183,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
   )
 }
 
-function MemberCard({ mem, muni, body }: { mem: MemberProfile; muni: string; body: string }) {
+function MemberCard({ mem, muni, body, inactive = false }: { mem: MemberProfile; muni: string; body: string; inactive?: boolean }) {
   const conf = mem.confidenceMix || {}
   const total = (conf.high || 0) + (conf.medium || 0) + (conf.low || 0) || 1
   const topThemes = mem.byTheme.slice(0, 3)
@@ -190,10 +191,19 @@ function MemberCard({ mem, muni, body }: { mem: MemberProfile; muni: string; bod
     <a
       href={`/admin/municipal/member?muni=${muni}&body=${body}&byName=${encodeURIComponent(mem.member)}`}
       className="card"
-      style={{ padding: 14, textDecoration: 'none', display: 'block' }}
+      // Inactive (no-longer-serving) members are de-emphasized but stay fully clickable.
+      style={{ padding: 14, textDecoration: 'none', display: 'block', opacity: inactive ? 0.55 : 1 }}
+      title={inactive ? `${mem.member} — former member` : undefined}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
-        <div style={{ fontWeight: 700 }}>{mem.member}</div>
+        <div style={{ fontWeight: 700, display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
+          {mem.member}
+          {inactive && (
+            <span className="badge" style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)' }}>
+              Former
+            </span>
+          )}
+        </div>
         <Chip score={mem.avgSentiment} />
       </div>
       <div style={{ margin: '10px 0 4px' }}><SentBar score={mem.avgSentiment} /></div>
