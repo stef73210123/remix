@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import AdminNav from '@/app/admin/AdminNav'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MemberSentiment from './MemberSentiment'
+import MemberDossier from './MemberDossier'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -172,11 +173,8 @@ export default function MemberClient({ userName }: { userName: string }) {
                   {member.email}
                 </a>
               ) : (
-                <div className="muted" style={{ fontSize: 13 }}>No email on record.</div>
+                <div className="muted" style={{ fontSize: 13 }}>See Background below.</div>
               )}
-              <div className="muted" style={{ fontSize: 12, marginTop: 14 }}>
-                Last updated {fmtDate(member.updated_at)}
-              </div>
             </div>
 
             {/* Role */}
@@ -190,6 +188,11 @@ export default function MemberClient({ userName }: { userName: string }) {
               </div>
             </div>
           </div>
+
+          {/* Researched dossier: background + how-to-engage (where available) */}
+          {data && fromBody && member.full_name && (
+            <MemberDossier muni={data.town.key} body={fromBody} memberName={member.full_name} />
+          )}
 
           {/* Boards this person serves on */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>

@@ -36,6 +36,10 @@ const nextConfig: NextConfig = {
       './lib/municipal/data/nc-planning/analysis.json',
       './lib/municipal/data/nc-townboard/analysis.json',
     ],
+    '/admin/api/municipal/member-dossier': [
+      './lib/municipal/data/nc-planning/dossiers.json',
+      './lib/municipal/data/nc-townboard/dossiers.json',
+    ],
   },
 }
 
