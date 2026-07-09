@@ -173,3 +173,51 @@ export function loadTranscript(muniKey: string, bodyKey: string, date: string): 
     return null
   }
 }
+
+// ---- Member dossiers (researched stakeholder profiles) ----
+export interface MemberDossier {
+  member: string
+  role?: string
+  email?: string
+  emailSource?: string
+  bio?: string
+  bioConfidence?: 'high' | 'medium' | 'low' | string
+  engagement?: {
+    keyIssues?: string[]
+    likes?: string
+    dislikes?: string
+    recommendation?: string
+  }
+  sources?: string[]
+  notes?: string
+}
+
+const dossierCache = new Map<string, Record<string, MemberDossier> | null>()
+function loadDossiers(muniKey: string, bodyKey: string): Record<string, MemberDossier> | null {
+  const dir = dataDir(muniKey, bodyKey)
+  if (!dir) return null
+  const key = `${muniKey}:${bodyKey}`
+  if (dossierCache.has(key)) return dossierCache.get(key) ?? null
+  let val: Record<string, MemberDossier> | null = null
+  try {
+    val = (JSON.parse(fs.readFileSync(path.join(dir, 'dossiers.json'), 'utf8')) as { members: Record<string, MemberDossier> }).members
+  } catch {
+    val = null
+  }
+  dossierCache.set(key, val)
+  return val
+}
+
+/** Researched dossier for one member (name-matched, tolerant of minor variants). */
+export function loadDossier(muniKey: string, bodyKey: string, name: string): MemberDossier | null {
+  const all = loadDossiers(muniKey, bodyKey)
+  if (!all) return null
+  const n = name.trim().toLowerCase()
+  const exact = Object.values(all).find((d) => d.member.toLowerCase() === n)
+  if (exact) return exact
+  return (
+    Object.values(all).find(
+      (d) => d.member.toLowerCase().includes(n) || n.includes(d.member.toLowerCase())
+    ) || null
+  )
+}

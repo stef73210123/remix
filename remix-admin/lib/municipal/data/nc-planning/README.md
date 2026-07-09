@@ -46,3 +46,6 @@ given meeting, no position was invented (flagged per meeting in
 `attributionNote`).
 
 Sentiment scale is −1 (opposed / heavy concern) to +1 (supportive / favorable).
+
+## dossiers.json
+Researched per-member stakeholder profiles (contact email where published, a short researched bio, and a "how to engage" read — key issues, what earns their support, what draws skepticism, and a recommended approach). The engagement read is synthesized from the member's meeting record plus public background; treat it as directional and verify before relying on it. Emails are only included where actually found on the town directory (the town blocks scraping, so several are blank).
