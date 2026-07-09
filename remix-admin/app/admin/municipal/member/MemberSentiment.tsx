@@ -153,8 +153,10 @@ export default function MemberSentiment({
                 onChange={(e) => setEvQuery(e.target.value)}
                 placeholder="Search comments…"
                 style={{
-                  fontSize: 12, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)',
-                  border: '1px solid var(--border)', color: 'var(--text)', minWidth: 160,
+                  // 16px prevents iOS Safari from auto-zooming (and shifting the
+                  // layout) when the field is focused.
+                  fontSize: 16, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)',
+                  border: '1px solid var(--border)', color: 'var(--text)', minWidth: 160, maxWidth: '100%',
                 }}
               />
               <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
