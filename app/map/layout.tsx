@@ -1,8 +1,19 @@
+import type { Viewport } from "next";
+
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: "Atlas | Remix Properties",
   description: "CesiumJS 3D real estate map viewer",
+};
+
+// Render edge-to-edge and expose iOS safe-area insets, so the bottom news
+// ticker and controls can lift clear of the iPad/iPhone home indicator instead
+// of being clipped by it. On devices without insets these values are 0.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function MapLayout({ children }: { children: React.ReactNode }) {
