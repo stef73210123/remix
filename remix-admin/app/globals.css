@@ -25,6 +25,10 @@ html,
 body {
   margin: 0;
   padding: 0;
+  /* Stop iOS/Android from auto-inflating text inside elements wider than the
+     viewport (e.g. horizontally-scrolling tables), which blew up cell text. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
