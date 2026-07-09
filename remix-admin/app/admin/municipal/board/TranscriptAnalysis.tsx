@@ -96,10 +96,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
         {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
       </div>
       <div className="muted" style={{ fontSize: 11, marginBottom: 18, lineHeight: 1.5, maxWidth: 720 }}>
-        Derived from meeting-video transcripts (automatic speech recognition, no speaker labels). Case- and
-        theme-level sentiment is robust; member-level attribution is name-based (a member is credited only when
-        named or addressed by name) and carries a confidence level — read it as directional, not a vote record.
-        Sentiment runs −1 (opposed / heavy concern) to +1 (supportive / favorable).
+        Sentiment −10 (opposed) to +10 (favorable). Member-level attribution is directional.
       </div>
 
       {/* ---- Board member sentiment ---- */}
@@ -157,7 +154,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
           </thead>
           <tbody>
             {visibleCases.map((c) => (
-              <CaseRow key={c.id} c={c} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
+              <CaseRow key={c.id} c={c} members={data.members} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
             ))}
           </tbody>
         </table>
@@ -230,7 +227,20 @@ function ThemeRow({ t, maxMeetings }: { t: ThemeRollup; maxMeetings: number }) {
   )
 }
 
-function CaseRow({ c, open, onToggle }: { c: CaseRollup; open: boolean; onToggle: () => void }) {
+function CaseRow({ c, members, open, onToggle }: { c: CaseRollup; members: MemberProfile[]; open: boolean; onToggle: () => void }) {
+  // Where each board member stood on this case: their avg sentiment on it + their quotes.
+  const stances = useMemo(() => {
+    return members
+      .map((mem) => {
+        const bc = mem.byCase.find((x) => x.caseId === c.id)
+        if (!bc) return null
+        const quotes = mem.evidence.filter((e) => e.caseId === c.id)
+        return { member: mem.member, avgSentiment: bc.avgSentiment, count: bc.count, quotes }
+      })
+      .filter((x): x is NonNullable<typeof x> => x !== null)
+      .sort((a, b) => b.avgSentiment - a.avgSentiment)
+  }, [members, c.id])
+
   return (
     <>
       <tr onClick={onToggle} style={{ cursor: 'pointer' }}>
@@ -247,17 +257,46 @@ function CaseRow({ c, open, onToggle }: { c: CaseRollup; open: boolean; onToggle
       {open && (
         <tr>
           <td colSpan={6} style={{ background: 'var(--panel-2)' }}>
-            <div style={{ padding: '4px 8px 10px' }}>
+            <div style={{ padding: '6px 8px 12px' }}>
               {(c.address || c.applicant) && (
                 <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
                   {c.address}{c.address && c.applicant ? ' · ' : ''}{c.applicant ? `Applicant: ${c.applicant}` : ''}
                 </div>
               )}
               {c.themes.length > 0 && (
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
                   {c.themes.map((t) => <ThemeTag key={t} t={t} />)}
                 </div>
               )}
+
+              {/* Where the board stood — per-member tabulation */}
+              {stances.length > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                  <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                    Where the board stood
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {stances.map((s) => (
+                      <div key={s.member} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13 }}>
+                        <span style={{ width: 130, flexShrink: 0, fontWeight: 600 }}>{s.member}</span>
+                        <span style={{ ...sentimentChipStyle(s.avgSentiment), flexShrink: 0 }}>{fmtSent(s.avgSentiment)}</span>
+                        <span style={{ flex: 1 }}>
+                          {s.quotes.length > 0 ? (
+                            <span className="muted">{s.quotes.map((q) => q.evidence).join(' ')}</span>
+                          ) : (
+                            <span className="muted" style={{ fontStyle: 'italic' }}>{s.count} position{s.count === 1 ? '' : 's'} recorded</span>
+                          )}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Timeline across meetings */}
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                Across meetings
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {c.timeline.map((ap, i) => (
                   <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13 }}>

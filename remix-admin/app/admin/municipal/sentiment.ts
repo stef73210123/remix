@@ -41,9 +41,10 @@ export function dispositionLabel(score: number): string {
   return 'Strongly supportive'
 }
 
+/** Display sentiment on a −10…+10 scale (one decimal): 0.55 → "+5.5". */
 export function fmtSent(score: number): string {
-  const r = Math.round(score * 100) / 100
-  return (r > 0 ? '+' : '') + r.toFixed(2)
+  const r = Math.round(score * 100) / 10
+  return (r > 0 ? '+' : '') + r.toFixed(1)
 }
 
 /** A small pill showing the numeric score on its diverging color. */
