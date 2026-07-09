@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import AdminNav from '@/app/admin/AdminNav'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
+import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import TranscriptAnalysis from './TranscriptAnalysis'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
@@ -42,13 +43,6 @@ interface BoardData {
   openFiles: OpenFile[]
   dbOk: boolean
   dbError?: string
-}
-
-function fmtDate(iso: string | null): string {
-  if (!iso) return '—'
-  const d = new Date(iso)
-  if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
 function DocLinks({ assets }: { assets: Asset[] }) {
@@ -141,21 +135,60 @@ export default function BoardClient({ userName }: { userName: string }) {
       .finally(() => setLoading(false))
   }, [])
 
-  const openCount = useMemo(() => data?.openFiles.length ?? 0, [data])
-  const { upcoming, history } = useMemo(() => {
+  const counts = useMemo(() => {
     const t0 = startOfToday()
     const ms = data?.meetings || []
     return {
-      upcoming: ms
-        .filter((m) => new Date(m.scheduled_at).getTime() >= t0)
-        .sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()),
-      history: ms.filter((m) => new Date(m.scheduled_at).getTime() < t0),
+      past: ms.filter((m) => new Date(m.scheduled_at).getTime() < t0).length,
+      upcoming: ms.filter((m) => new Date(m.scheduled_at).getTime() >= t0).length,
     }
   }, [data])
   const projectedNext = useMemo(
     () => (data ? nextMeetingDate(data.board.meetingPattern, new Date(startOfToday())) : null),
     [data]
   )
+
+  // One horizontal timeline of this board's meetings: past on the left, upcoming
+  // on the right. Each card carries its document + transcript links.
+  const timelineItems = useMemo<TimelineItem[]>(() => {
+    const t0 = startOfToday()
+    const items: TimelineItem[] = (data?.meetings || [])
+      .map((mtg) => {
+        const past = new Date(mtg.scheduled_at).getTime() < t0
+        const dateKey = (mtg.scheduled_at || '').slice(0, 10)
+        const hasTranscript = transcriptDates.has(dateKey)
+        const hasDocs = (mtg.assets || []).length > 0
+        return {
+          key: mtg.id,
+          date: new Date(mtg.scheduled_at),
+          title: mtg.title,
+          past,
+          links:
+            hasDocs || hasTranscript ? (
+              <>
+                {hasDocs && <DocLinks assets={mtg.assets} />}
+                {hasTranscript && (
+                  <a
+                    href={`/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${dateKey}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="badge state"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Transcript ↗
+                  </a>
+                )}
+              </>
+            ) : undefined,
+        }
+      })
+      .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
+    // If no real upcoming meeting is ingested, project the next one from the schedule.
+    if (!items.some((it) => !it.past) && projectedNext) {
+      items.push({ key: 'projected', date: projectedNext, dateSuffix: ' *', dateTitle: 'Projected from meeting schedule', past: false, projected: true })
+    }
+    return items
+  }, [data, transcriptDates, projectedNext, muni, body])
 
   // Breadcrumb trail: Dashboard › Town › Board (current).
   const crumbs = useMemo<Crumb[]>(() => {
@@ -228,103 +261,15 @@ export default function BoardClient({ userName }: { userName: string }) {
           {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
           <TranscriptAnalysis muni={muni} body={body} />
 
-          {/* Cases before this board (map coming with matter extraction) */}
+          {/* Meetings — one horizontal timeline: history on the left, upcoming on
+              the right, matching the municipal dashboard. */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-            Cases before this board
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {openCount}</span>
+            Meetings
+            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming</span>
           </h2>
-          <div className="card table-card" style={{ marginBottom: 26 }}>
-            {data.openFiles.length > 0 ? (
-              <table>
-                <thead><tr><th>Subject</th><th>Applicant</th><th>Type</th><th>Status</th><th>Filed</th></tr></thead>
-                <tbody>
-                  {data.openFiles.map((f) => (
-                    <tr key={f.id}>
-                      <td style={{ fontWeight: 600 }}>{f.subject}</td>
-                      <td style={{ fontSize: 13 }}>{f.applicant_name || '—'}</td>
-                      <td style={{ fontSize: 13 }}>{f.kind.replace(/_/g, ' ')}</td>
-                      <td style={{ fontSize: 13 }}>{f.status.replace(/_/g, ' ')}</td>
-                      <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{fmtDate(f.application_date)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="muted" style={{ padding: 20, fontSize: 13 }}>
-                No cases tracked yet. A map of case locations heard before this board is coming with matter extraction (M2).
-              </div>
-            )}
-          </div>
-
-          {/* Upcoming meetings */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Upcoming meetings</h2>
-          <div className="card table-card" style={{ marginBottom: 26 }}>
-            {upcoming.length > 0 ? (
-              <table>
-                <thead><tr><th>Date</th><th>Documents</th></tr></thead>
-                <tbody>
-                  {upcoming.map((mtg) => (
-                    <tr key={mtg.id}>
-                      <td style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
-                      <td><DocLinks assets={mtg.assets} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="muted" style={{ padding: 20, fontSize: 13 }}>
-                {projectedNext
-                  ? `Next meeting (projected from schedule): ${fmtDate(projectedNext.toISOString())}`
-                  : data.board.meetingPattern
-                    ? `Schedule: ${data.board.meetingPattern}`
-                    : 'No upcoming meetings.'}
-              </div>
-            )}
-          </div>
-
-          {/* Meeting history */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-            Meeting history
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length}</span>
-          </h2>
-          <div className="card table-card" style={{ maxHeight: 360, overflowY: 'auto' }}>
-            {history.length > 0 ? (
-              <table>
-                <thead><tr><th>Date</th><th>Documents</th></tr></thead>
-                <tbody>
-                  {history.map((mtg) => {
-                    const dateKey = (mtg.scheduled_at || '').slice(0, 10)
-                    const hasTranscript = transcriptDates.has(dateKey)
-                    return (
-                      <tr key={mtg.id}>
-                        <td style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
-                          {fmtDate(mtg.scheduled_at)}
-                          {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2, fontWeight: 400 }}>{mtg.title}</div>}
-                        </td>
-                        <td>
-                          <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
-                            <DocLinks assets={mtg.assets} />
-                            {hasTranscript && (
-                              <a
-                                href={`/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${dateKey}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="badge state"
-                                style={{ textDecoration: 'none' }}
-                              >
-                                Transcript ↗
-                              </a>
-                            )}
-                          </span>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            ) : (
-              <div className="muted" style={{ padding: 20, fontSize: 13 }}>No meetings ingested for this board yet.</div>
-            )}
+          <MeetingTimeline items={timelineItems} emptyText="No meetings ingested for this board yet." />
+          <div className="muted" style={{ fontSize: 11, marginBottom: 26 }}>
+            Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
           </div>
 
           {/* Climb-back trail at the end of the board page */}
