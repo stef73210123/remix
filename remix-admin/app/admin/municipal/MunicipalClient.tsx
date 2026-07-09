@@ -1,10 +1,11 @@
 'use client'
 
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
 import TranscriptAnalysis from './board/TranscriptAnalysis'
+import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import AdminNav from '@/app/admin/AdminNav'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
@@ -51,41 +52,8 @@ interface Summary {
   dbError?: string
 }
 
-interface AgendaItem {
-  title: string
-  action: string | null
-  heading?: boolean
-}
-
-/** Group a flat agenda list into sections: each heading row starts a new
- *  section that the following items nest under. Items before the first
- *  heading fall in a leading section with no header. */
-function groupAgenda(items: AgendaItem[]): { heading: string | null; items: AgendaItem[] }[] {
-  const groups: { heading: string | null; items: AgendaItem[] }[] = []
-  let current: { heading: string | null; items: AgendaItem[] } | null = null
-  for (const it of items) {
-    if (it.heading) {
-      current = { heading: it.title, items: [] }
-      groups.push(current)
-    } else {
-      if (!current) {
-        current = { heading: null, items: [] }
-        groups.push(current)
-      }
-      current.items.push(it)
-    }
-  }
-  return groups
-}
-
 type TownFilter = 'ALL' | string
 type BoardFilter = 'ALL' | string
-
-function fmtDate(d: Date | string): string {
-  const dt = typeof d === 'string' ? new Date(d) : d
-  if (!dt || isNaN(dt.getTime())) return '—'
-  return dt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-}
 
 function startOfToday(): number {
   const d = new Date()
@@ -225,44 +193,6 @@ export default function MunicipalClient({
   // town at a time, chosen with this toggle.
   const [budgetTown, setBudgetTown] = useState<string>('')
 
-  // Expandable history rows: which meeting ids are open + their lazy-loaded
-  // summary/preview keyed by meeting id.
-  const [openRows, setOpenRows] = useState<Set<string>>(new Set())
-  const [details, setDetails] = useState<
-    Record<
-      string,
-      {
-        loading: boolean
-        agendaItems?: AgendaItem[]
-        summary?: string | null
-        excerpt?: string | null
-        error?: boolean
-      }
-    >
-  >({})
-
-  function toggleRow(id: string) {
-    setOpenRows((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-    setDetails((prev) => {
-      if (prev[id]) return prev // already loaded / loading
-      fetch(`/admin/api/municipal/meeting?id=${encodeURIComponent(id)}`)
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
-        .then((d) =>
-          setDetails((p) => ({
-            ...p,
-            [id]: { loading: false, agendaItems: d.agendaItems || [], summary: d.summary, excerpt: d.excerpt },
-          }))
-        )
-        .catch(() => setDetails((p) => ({ ...p, [id]: { loading: false, error: true } })))
-      return { ...prev, [id]: { loading: true } }
-    })
-  }
-
   // Deep-link: breadcrumbs and board pages return here with ?town=nc so the
   // right jurisdiction tab is pre-selected.
   useEffect(() => {
@@ -336,6 +266,47 @@ export default function MunicipalClient({
     return rows
   }, [munisShown, board, data])
 
+  // One combined timeline: past meetings (per meeting) on the left, the next
+  // meeting per board on the right, oldest → newest.
+  const timelineItems = useMemo<TimelineItem[]>(() => {
+    const hist: TimelineItem[] = history
+      .map((mtg) => {
+        const hasDocs = (mtg.assets || []).some((a) => !RECORDING_KINDS.has(a.kind))
+        const hasRec = !!recordingHref(mtg.assets)
+        return {
+          key: `h_${mtg.id}`,
+          date: new Date(mtg.scheduled_at),
+          title: mtg.title,
+          board: mtg.body_name,
+          boardHref: `/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`,
+          town: mtg.muni_name,
+          past: true,
+          links:
+            hasDocs || hasRec ? (
+              <>
+                {hasDocs && <DocLinks assets={mtg.assets} />}
+                {hasRec && <RecordingLink assets={mtg.assets} />}
+              </>
+            ) : undefined,
+        }
+      })
+      .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
+    const up: TimelineItem[] = upcomingRows.map((r, i) => ({
+      key: `u_${i}_${r.bodyKey}`,
+      date: r.date,
+      dateSuffix: r.projected ? ' *' : '',
+      dateTitle: r.projected ? 'Projected from meeting schedule' : undefined,
+      fallbackLabel: r.pattern || 'TBD',
+      board: r.board,
+      boardHref: `/admin/municipal/board?muni=${r.muniKey}&body=${r.bodyKey}`,
+      town: r.town,
+      past: false,
+      projected: r.projected,
+      links: <AgendaLink assets={r.assets} />,
+    }))
+    return [...hist, ...up]
+  }, [history, upcomingRows])
+
   const totalBodies = useMemo(
     () => (data ? data.municipalities.reduce((n, m) => n + m.bodies.length, 0) : 0),
     [data]
@@ -403,37 +374,6 @@ export default function MunicipalClient({
             )
           })()}
 
-          {/* Town profile — shown on the Dashboard tab (board === 'ALL'):
-              its boards & committees, then financial analysis + meetings below. */}
-          {board === 'ALL' && (() => {
-            const m = data.municipalities.find((x) => x.key === town)
-            if (!m) return null
-            return (
-              <div className="card" style={{ padding: 18, marginBottom: 22 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-                  <div>
-                    <div style={{ fontSize: 18, fontWeight: 700 }}>{m.name}</div>
-                    <div className="muted" style={{ fontSize: 13 }}>
-                      {[m.county ? `${m.county} County` : null, m.state].filter(Boolean).join(' · ')}
-                      {' · '}{m.bodies.length} boards &amp; committees
-                    </div>
-                  </div>
-                  <a className="btn" href={`/admin/municipal/budget?town=${m.key}`}>Budget ↗</a>
-                </div>
-                <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)', margin: '16px 0 8px' }}>
-                  Boards &amp; committees
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {m.bodies.map((b) => (
-                    <a key={b.key} href={`/admin/municipal/board?muni=${m.key}&body=${b.key}`} className="btn secondary" style={{ padding: '6px 12px', fontSize: 13 }}>
-                      {b.displayName}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )
-          })()}
-
           {/* Demographics — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <Demographics muniKey={town} />}
 
@@ -473,165 +413,24 @@ export default function MunicipalClient({
             )
           })()}
 
-          {/* Upcoming — horizontal timeline of the next meeting per board */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Upcoming meetings</h2>
-          {upcomingRows.length > 0 ? (
-            <div className="card" style={{ padding: '22px 8px 18px', marginBottom: 8, overflowX: 'auto' }}>
-              <div style={{ display: 'flex', minWidth: 'min-content' }}>
-                {upcomingRows.map((r, i) => (
-                  <div key={i} style={{ flex: '0 0 190px', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 8px' }}>
-                    {/* rail + dot */}
-                    <div style={{ position: 'relative', width: '100%', height: 16, marginBottom: 12 }}>
-                      <div style={{ position: 'absolute', top: 7, left: 0, right: 0, height: 2, background: 'var(--border)' }} />
-                      {i === 0 && <div style={{ position: 'absolute', top: 7, left: 0, width: '50%', height: 2, background: 'var(--panel)' }} />}
-                      {i === upcomingRows.length - 1 && <div style={{ position: 'absolute', top: 7, right: 0, width: '50%', height: 2, background: 'var(--panel)' }} />}
-                      <div style={{ position: 'absolute', top: 1, left: '50%', transform: 'translateX(-50%)', width: 13, height: 13, borderRadius: 999, background: r.projected ? 'var(--c)' : 'var(--primary)', border: '2px solid var(--panel)' }} />
-                    </div>
-                    {/* content */}
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap' }} title={r.projected ? 'Projected from meeting schedule' : undefined}>
-                        {r.date ? `${fmtDate(r.date)}${r.projected ? ' *' : ''}` : (r.pattern || 'TBD')}
-                      </div>
-                      <div style={{ fontSize: 13, marginTop: 3 }}>
-                        <a href={`/admin/municipal/board?muni=${r.muniKey}&body=${r.bodyKey}`} style={{ color: 'var(--primary-light)' }}>{r.board}</a>
-                      </div>
-                      <div className="muted" style={{ fontSize: 12 }}>{r.town}</div>
-                      <div style={{ marginTop: 8 }}><AgendaLink assets={r.assets} /></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="card" style={{ marginBottom: 8 }}>
-              <div className="muted" style={{ padding: 20, fontSize: 13 }}>No boards match this filter.</div>
-            </div>
-          )}
-          <div className="muted" style={{ fontSize: 11, marginBottom: 26 }}>
-            * projected from the board&apos;s recurring schedule; agenda links appear once a meeting is published/ingested.
+          {/* Meetings — one horizontal timeline: history on the left, the next
+              meeting per board on the right, with a "Now" divider between. */}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+            <h2 style={{ fontSize: 16, margin: 0 }}>
+              Meetings
+              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · {upcomingRows.length} upcoming</span>
+            </h2>
           </div>
-
-          {/* History */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-            Meeting history
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length}</span>
-          </h2>
-          <div className="card table-card" style={{ maxHeight: 360, overflowY: 'auto' }}>
-            {history.length > 0 ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th style={{ width: 26 }}></th>
-                    <th>Town</th><th>Board</th><th>Date</th>
-                    <th>Documents</th><th>Recording</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {history.map((mtg) => {
-                    const isOpen = openRows.has(mtg.id)
-                    const d = details[mtg.id]
-                    const stop = (e: React.MouseEvent) => e.stopPropagation()
-                    return (
-                      <Fragment key={mtg.id}>
-                        <tr onClick={() => toggleRow(mtg.id)} style={{ cursor: 'pointer' }}>
-                          <td style={{ color: 'var(--muted)', textAlign: 'center' }}>{isOpen ? '▾' : '▸'}</td>
-                          <td style={{ fontWeight: 600 }}>
-                            {mtg.muni_name}
-                            {mtg.title && <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{mtg.title}</div>}
-                          </td>
-                          <td style={{ fontSize: 13 }} onClick={stop}>
-                            <a href={`/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`} style={{ color: 'var(--primary-light)' }}>{mtg.body_name}</a>
-                          </td>
-                          <td style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{fmtDate(mtg.scheduled_at)}</td>
-                          <td onClick={stop}><DocLinks assets={mtg.assets} /></td>
-                          <td onClick={stop}>
-                            {recordingHref(mtg.assets) ? <RecordingLink assets={mtg.assets} /> : <span className="muted">—</span>}
-                          </td>
-                        </tr>
-                        {isOpen && (
-                          <tr>
-                            <td colSpan={6} style={{ background: 'var(--panel-2)', padding: '14px 18px', borderTop: '1px solid var(--border)' }}>
-                              <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                                <div style={{ flex: '1 1 420px', minWidth: 0 }}>
-                                  <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)', marginBottom: 6 }}>
-                                    Agenda
-                                  </div>
-                                  {d?.loading ? (
-                                    <div className="muted" style={{ fontSize: 13 }}>Loading agenda…</div>
-                                  ) : d?.agendaItems && d.agendaItems.length > 0 ? (
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                                      {groupAgenda(d.agendaItems).map((g, gi) => (
-                                        <div key={gi}>
-                                          {g.heading && (
-                                            <div
-                                              style={{
-                                                fontSize: 13,
-                                                fontWeight: 700,
-                                                textDecoration: 'underline',
-                                                textUnderlineOffset: 3,
-                                                color: 'var(--primary-light)',
-                                                marginBottom: 6,
-                                              }}
-                                            >
-                                              {g.heading}
-                                            </div>
-                                          )}
-                                          <ul
-                                            style={{
-                                              margin: 0,
-                                              paddingLeft: g.heading ? 28 : 18,
-                                              display: 'flex',
-                                              flexDirection: 'column',
-                                              gap: 6,
-                                            }}
-                                          >
-                                            {g.items.map((it, k) => (
-                                              <li key={k} style={{ fontSize: 13, lineHeight: 1.5 }}>
-                                                {it.action && <strong style={{ color: 'var(--primary-light)' }}>{it.action}</strong>}
-                                                {it.action ? ' — ' : ''}
-                                                {it.title}
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  ) : d?.summary ? (
-                                    <div style={{ fontSize: 13, lineHeight: 1.55 }}>{d.summary}</div>
-                                  ) : d?.excerpt ? (
-                                    <div style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--muted)' }}>
-                                      {d.excerpt}{d.excerpt.length >= 1400 ? '…' : ''}
-                                      <div style={{ fontSize: 11, marginTop: 6 }}>Preview from the meeting&apos;s extracted text — agenda not itemized.</div>
-                                    </div>
-                                  ) : (
-                                    <div className="muted" style={{ fontSize: 13 }}>
-                                      {d?.error ? 'Could not load the agenda.' : 'No agenda or minutes text available for this meeting yet.'}
-                                    </div>
-                                  )}
-                                </div>
-                                {recordingHref(mtg.assets) && (
-                                  <div style={{ flex: '0 0 auto' }}>
-                                    <a href={recordingHref(mtg.assets)} target="_blank" rel="noopener noreferrer" className="btn" style={{ whiteSpace: 'nowrap' }}>
-                                      ▶ Watch recording ↗
-                                    </a>
-                                  </div>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        )}
-                      </Fragment>
-                    )
-                  })}
-                </tbody>
-              </table>
-            ) : (
-              <div className="muted" style={{ padding: 20, fontSize: 13 }}>
-                {data.dbOk
-                  ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
-                  : 'Pipeline database not connected in this environment. Configured towns and boards are shown above; ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'}
-              </div>
-            )}
+          <MeetingTimeline
+            items={timelineItems}
+            emptyText={
+              data.dbOk
+                ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
+                : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
+            }
+          />
+          <div className="muted" style={{ fontSize: 11, marginBottom: 26 }}>
+            Grey dots are past meetings; coral is the next scheduled meeting per board; slate (*) is projected from the board&apos;s recurring schedule.
           </div>
 
           {!data.dbOk && data.dbError && (
