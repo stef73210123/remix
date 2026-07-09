@@ -84,12 +84,16 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
   if (!data) return null
 
   const m = data.meta
+  // Board-appropriate noun for the "cases" (Planning = applications; Town Board = agenda items).
+  const isTownBoard = m.bodyKey === 'town_board'
+  const itemNounPlural = isTownBoard ? 'agenda items' : 'applications'
+  const itemNounTitle = isTownBoard ? 'agenda items' : 'applications'
 
   return (
     <div style={{ marginBottom: 30 }}>
       <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>Meeting transcript analysis</h2>
       <div className="muted" style={{ fontSize: 13, marginBottom: 6 }}>
-        {m.meetings} meetings · {m.cases} applications · {m.themes} themes · {m.memberPositions} attributed member positions
+        {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
       </div>
       <div className="muted" style={{ fontSize: 11, marginBottom: 18, lineHeight: 1.5, maxWidth: 720 }}>
         Derived from meeting-video transcripts (automatic speech recognition, no speaker labels). Case- and
@@ -137,17 +141,17 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       {/* ---- Cases ---- */}
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
         <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-          {showAllCases ? `All applications (${data.cases.length})` : `Tracked applications (${trackedCases.length})`}
+          {showAllCases ? `All ${itemNounTitle} (${data.cases.length})` : `Recurring ${itemNounTitle} (${trackedCases.length})`}
         </h3>
         <button className="btn secondary" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => setShowAllCases((v) => !v)}>
-          {showAllCases ? 'Show tracked only' : `Show all ${data.cases.length}`}
+          {showAllCases ? 'Show recurring only' : `Show all ${data.cases.length}`}
         </button>
       </div>
       <div className="card table-card" style={{ marginBottom: 28, maxHeight: showAllCases ? 520 : undefined, overflowY: showAllCases ? 'auto' : undefined }}>
         <table>
           <thead>
             <tr>
-              <th>Application</th><th>Type</th><th style={{ textAlign: 'center' }}>Seen</th>
+              <th>{isTownBoard ? 'Agenda item' : 'Application'}</th><th>Type</th><th style={{ textAlign: 'center' }}>Seen</th>
               <th>Last status</th><th style={{ textAlign: 'center' }}>Sentiment</th><th>Trajectory</th>
             </tr>
           </thead>
