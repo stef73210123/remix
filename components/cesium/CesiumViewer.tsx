@@ -84,13 +84,25 @@ const NEWS_CATEGORY_COLORS: Record<NewsCategory, string> = {
   finance: "#e67e22",
 };
 
-// A teardrop map-pin (data URI) in the category color — visually distinct from
-// the small round property/parcel dots so news markers read as news.
-function newsPinDataUri(hex: string): string {
+// Category glyphs — the SAME lucide icons the news ticker uses (TrendingUp /
+// Building2 / Landmark / DollarSign), as raw 24×24 path data.
+const NEWS_PIN_ICON: Record<NewsCategory, string> = {
+  market: `<path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/>`,
+  development: `<path d="M10 12h4"/><path d="M10 8h4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>`,
+  policy: `<path d="M10 18v-7"/><path d="M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M3 22h18"/><path d="M6 18v-7"/>`,
+  finance: `<line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>`,
+};
+
+// A teardrop map-pin (data URI) in the category color with the category's ticker
+// icon set into a white head — visually distinct from the round property dots
+// and consistent with the ticker's iconography.
+function newsPinDataUri(hex: string, category: NewsCategory): string {
+  const icon = NEWS_PIN_ICON[category] ?? NEWS_PIN_ICON.market;
   const svg =
     `<svg xmlns='http://www.w3.org/2000/svg' width='28' height='36' viewBox='0 0 28 36'>` +
     `<path d='M14 0C6.27 0 0 6.27 0 14c0 9.53 12.2 20.65 13.12 21.46a1.33 1.33 0 0 0 1.76 0C15.8 34.65 28 23.53 28 14 28 6.27 21.73 0 14 0z' fill='${hex}' stroke='white' stroke-width='2'/>` +
-    `<circle cx='14' cy='14' r='5' fill='white'/>` +
+    `<circle cx='14' cy='13.5' r='9' fill='white'/>` +
+    `<g transform='translate(7.7 7.2) scale(0.525)' fill='none' stroke='${hex}' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'>${icon}</g>` +
     `</svg>`;
   return `data:image/svg+xml;base64,${btoa(svg)}`;
 }
@@ -251,9 +263,9 @@ export default function CesiumViewerComponent() {
           id,
           position: Cesium.Cartesian3.fromDegrees(item.lng, item.lat, 0),
           billboard: {
-            image: newsPinDataUri(color),
-            width: 22,
-            height: 28,
+            image: newsPinDataUri(color, item.category),
+            width: 26,
+            height: 33,
             verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
             heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
             disableDepthTestDistance: Number.POSITIVE_INFINITY,
