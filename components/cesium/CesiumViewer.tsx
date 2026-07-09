@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useCesium } from "./CesiumContext";
 import { MOCK_PROPERTIES } from "@/lib/data/properties";
-import { PROPERTY_TYPE_COLORS, FilterState, Property, BrokerageListing } from "@/types/cesium";
+import { PROPERTY_TYPE_COLORS, FilterState, Property, BrokerageListing, NewsItem, NewsCategory } from "@/types/cesium";
 import { getBuildingStyleConditions } from "./BuildingStyles";
 import { DEFAULT_VIEW, OVERPASS_API, OSM_PLACE_CATEGORIES } from "@/lib/cesium-config";
 import { resolveLayer } from "@/lib/layer-resolver";
@@ -76,6 +76,25 @@ function listingToProperty(l: BrokerageListing): Property | null {
   };
 }
 
+// Category → pin color for news markers (matches the ticker's category colors).
+const NEWS_CATEGORY_COLORS: Record<NewsCategory, string> = {
+  market: "#2980b9",
+  development: "#27ae60",
+  policy: "#8e44ad",
+  finance: "#e67e22",
+};
+
+// A teardrop map-pin (data URI) in the category color — visually distinct from
+// the small round property/parcel dots so news markers read as news.
+function newsPinDataUri(hex: string): string {
+  const svg =
+    `<svg xmlns='http://www.w3.org/2000/svg' width='28' height='36' viewBox='0 0 28 36'>` +
+    `<path d='M14 0C6.27 0 0 6.27 0 14c0 9.53 12.2 20.65 13.12 21.46a1.33 1.33 0 0 0 1.76 0C15.8 34.65 28 23.53 28 14 28 6.27 21.73 0 14 0z' fill='${hex}' stroke='white' stroke-width='2'/>` +
+    `<circle cx='14' cy='14' r='5' fill='white'/>` +
+    `</svg>`;
+  return `data:image/svg+xml;base64,${btoa(svg)}`;
+}
+
 export default function CesiumViewerComponent() {
   const [apiListings, setApiListings] = useState<Property[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -106,6 +125,8 @@ export default function CesiumViewerComponent() {
     filterState,
     addToComparison,
     activeRegion,
+    newsItems,
+    setSelectedNews,
   } = useCesium();
 
   // Track OSM footprint/places entities for cleanup
@@ -117,6 +138,9 @@ export default function CesiumViewerComponent() {
   const parcelCentroidIdsRef = useRef<string[]>([]);
   const parcelCentroidBboxRef = useRef<string>("");
   const osmFootprintsLoadedBboxRef = useRef<string>("");
+  // News pins + a live ref to the current news list for the click handler.
+  const newsPinIdsRef = useRef<string[]>([]);
+  const newsItemsRef = useRef<NewsItem[]>([]);
 
   // Fetch API listings on mount to augment MOCK_PROPERTIES
   useEffect(() => {
@@ -189,6 +213,61 @@ export default function CesiumViewerComponent() {
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiListings, viewerRef]);
+
+  // Place a pin for every news headline that carries coordinates (Perigon geo).
+  // Keep newsItemsRef current for the click handler registered in init().
+  useEffect(() => {
+    newsItemsRef.current = newsItems;
+    let cancelled = false;
+
+    (async () => {
+      const Cesium = await import("cesium");
+      // The viewer initializes asynchronously — wait briefly for it so news
+      // that arrives before the map is ready still gets pinned.
+      let tries = 0;
+      while (!viewerRef.current && !cancelled && tries++ < 40) {
+        await new Promise((r) => setTimeout(r, 250));
+      }
+      const viewer = viewerRef.current;
+      if (!viewer || cancelled || viewer.isDestroyed?.()) return;
+
+      // Clear the previous batch of news pins.
+      for (const id of newsPinIdsRef.current) {
+        const e = viewer.entities.getById(id);
+        if (e) viewer.entities.remove(e);
+      }
+      newsPinIdsRef.current = [];
+
+      for (const item of newsItems) {
+        if (typeof item.lat !== "number" || typeof item.lng !== "number") continue;
+        const id = `news-${item.id}`;
+        if (viewer.entities.getById(id)) continue;
+        const color = NEWS_CATEGORY_COLORS[item.category] || "#2980b9";
+        viewer.entities.add({
+          id,
+          position: Cesium.Cartesian3.fromDegrees(item.lng, item.lat, 0),
+          billboard: {
+            image: newsPinDataUri(color),
+            width: 22,
+            height: 28,
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+            disableDepthTestDistance: Number.POSITIVE_INFINITY,
+            scaleByDistance: new Cesium.NearFarScalar(500, 1.0, 60000, 0.5),
+          },
+          properties: {
+            newsId: item.id,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any,
+        });
+        newsPinIdsRef.current.push(id);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [newsItems, viewerRef]);
 
   useEffect(() => {
     if (initialized.current || !containerRef.current) return;
@@ -429,6 +508,24 @@ export default function CesiumViewerComponent() {
         },
         Cesium.ScreenSpaceEventType.LEFT_CLICK,
         Cesium.KeyboardEventModifier.SHIFT
+      );
+
+      // Plain click / tap on a news pin opens that headline in the ticker
+      // lightbox. Clicks that miss every pin fall through to normal navigation.
+      handler.setInputAction(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (movement: { position: any }) => {
+          const picked = viewer.scene.pick(movement.position, 44, 44);
+          if (Cesium.defined(picked) && picked.id) {
+            const entityId = picked.id.id as string;
+            if (entityId?.startsWith("news-")) {
+              const newsId = entityId.replace("news-", "");
+              const item = newsItemsRef.current.find((n) => n.id === newsId);
+              if (item) setSelectedNews(item);
+            }
+          }
+        },
+        Cesium.ScreenSpaceEventType.LEFT_CLICK
       );
     }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useRef, useCallback, useState } from "react";
-import { Property, FilterState } from "@/types/cesium";
+import { Property, FilterState, NewsItem } from "@/types/cesium";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type BuildingSource = "osm" | "google" | "none";
@@ -61,6 +61,14 @@ interface CesiumContextValue {
   // it — and drops Google 3D — as you zoom back out).
   userBasemap: BasemapMode;
   setUserBasemap: (mode: BasemapMode) => void;
+  // Localized real-estate headlines (Perigon). Shared so the ticker renders
+  // them and the map can pin the ones that carry coordinates.
+  newsItems: NewsItem[];
+  setNewsItems: (items: NewsItem[]) => void;
+  // The headline opened in the ticker lightbox (set by a click on the ticker
+  // or on a news pin). null = closed.
+  selectedNews: NewsItem | null;
+  setSelectedNews: (item: NewsItem | null) => void;
 }
 
 const CesiumContext = createContext<CesiumContextValue | null>(null);
@@ -96,6 +104,8 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
   const [activeRegion, setActiveRegion] = useState("dc");
   const [viewMode, setViewMode] = useState<"2D" | "3D">("3D");
   const [userBasemap, setUserBasemap] = useState<BasemapMode>("hybrid");
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
   // Toggle 2D/3D while keeping the current focal point (screen-center ground
   // point) and zoom — Cesium's default morph otherwise jumps the camera out.
@@ -250,6 +260,10 @@ export function CesiumProvider({ children }: { children: React.ReactNode }) {
         flyToAddressOverhead,
         userBasemap,
         setUserBasemap,
+        newsItems,
+        setNewsItems,
+        selectedNews,
+        setSelectedNews,
       }}
     >
       {children}
