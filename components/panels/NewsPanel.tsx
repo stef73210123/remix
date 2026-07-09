@@ -11,16 +11,7 @@ import {
 } from "lucide-react";
 import { useCesium } from "@/components/cesium/CesiumContext";
 import { cn } from "@/lib/utils";
-
-interface NewsItem {
-  id: string;
-  title: string;
-  source: string;
-  summary: string;
-  url: string;
-  timestamp: string;
-  category: "market" | "development" | "policy" | "finance";
-}
+import type { NewsItem } from "@/types/cesium";
 
 const FALLBACK_NEWS: NewsItem[] = [
   {
@@ -92,12 +83,17 @@ const CATEGORY_ICONS: Record<NewsItem["category"], React.ElementType> = {
 };
 
 export default function NewsPanel() {
-  const { leftPanelOpen, rightPanel, activeRegion } = useCesium();
-  const [news, setNews] = useState<NewsItem[]>([]);
+  const {
+    leftPanelOpen,
+    rightPanel,
+    activeRegion,
+    newsItems: news,
+    setNewsItems: setNews,
+    selectedNews: lightbox,
+    setSelectedNews: setLightbox,
+  } = useCesium();
   const [loading, setLoading] = useState(true);
   const [tickerIndex, setTickerIndex] = useState(0);
-  // The article opened in the lightbox (null = closed).
-  const [lightbox, setLightbox] = useState<NewsItem | null>(null);
 
   // News localized to the metro of the active region (like the listings).
   useEffect(() => {
@@ -110,7 +106,7 @@ export default function NewsPanel() {
         const data = await res.json();
         if (cancelled) return;
         const items: NewsItem[] = data.items.map(
-          (item: { id: string; title: string; link: string; description: string; pubDate: string; source: string; category: string }) => ({
+          (item: { id: string; title: string; link: string; description: string; pubDate: string; source: string; category: string; lat?: number | null; lng?: number | null; location?: string | null }) => ({
             id: item.id,
             title: item.title,
             source: item.source,
@@ -120,6 +116,9 @@ export default function NewsPanel() {
             category: VALID_CATEGORIES.has(item.category as NewsItem["category"])
               ? (item.category as NewsItem["category"])
               : "market",
+            lat: item.lat ?? null,
+            lng: item.lng ?? null,
+            location: item.location ?? null,
           })
         );
         setNews(items);
@@ -132,6 +131,8 @@ export default function NewsPanel() {
     }
     fetchNews();
     return () => { cancelled = true; };
+    // setNews is a stable context setter; only re-fetch when the region changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeRegion]);
 
   // Rotate the ticker headline every ~5s (paused while the lightbox is open).
@@ -151,6 +152,8 @@ export default function NewsPanel() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+    // setLightbox is a stable context setter.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightbox]);
 
   const current = news.length ? news[tickerIndex % news.length] : null;
@@ -248,6 +251,7 @@ export default function NewsPanel() {
                 </span>
                 <span className="text-xs text-gray-500">
                   {lightbox.source} &middot; {lightbox.timestamp}
+                  {lightbox.location ? ` · ${lightbox.location}` : ""}
                 </span>
               </div>
 

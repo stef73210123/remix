@@ -231,3 +231,24 @@ export interface BrokerageListing {
   scrapedAt: string;
   region: string;
 }
+
+export type NewsCategory = "market" | "development" | "policy" | "finance";
+
+/**
+ * A news headline as consumed by the UI (the ticker, the lightbox, and the map
+ * pins). `lat`/`lng` are present only when the story's location could be
+ * resolved (Perigon geo-tagging → gazetteer); items without coordinates still
+ * show in the ticker but get no pin on the map.
+ */
+export interface NewsItem {
+  id: string;
+  title: string;
+  source: string;
+  summary: string;
+  url: string;
+  timestamp: string;
+  category: NewsCategory;
+  lat?: number | null;
+  lng?: number | null;
+  location?: string | null;
+}

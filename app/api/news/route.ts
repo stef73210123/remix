@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchPerigonNews, perigonConfigured } from "@/lib/perigon";
 
 export const dynamic = "force-dynamic";
 
@@ -7,12 +8,26 @@ export const dynamic = "force-dynamic";
 // ---------------------------------------------------------------------------
 
 interface NewsItem {
+  id: string;
   title: string;
   link: string;
   description: string;
   pubDate: string;
   source: string;
   category: "market" | "development" | "policy" | "finance";
+  // Present only when the story's location could be resolved (Perigon geo).
+  lat: number | null;
+  lng: number | null;
+  location: string | null;
+}
+
+// Stable id from the article link (used to key map pins + dedupe).
+function idFromLink(link: string): string {
+  let h = 0;
+  for (let i = 0; i < link.length; i++) {
+    h = (h * 31 + link.charCodeAt(i)) | 0;
+  }
+  return `n${(h >>> 0).toString(36)}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -120,12 +135,17 @@ async function fetchFeed(url: string, source: string): Promise<NewsItem[]> {
     const rawItems = extractItems(xml);
 
     return rawItems.map((item) => ({
+      id: idFromLink(item.link),
       title: item.title,
       link: item.link,
       description: item.description.slice(0, 500), // cap length
       pubDate: item.pubDate,
       source,
       category: categorize(item.title, item.description),
+      // RSS feeds carry no geo — no pin for these.
+      lat: null,
+      lng: null,
+      location: null,
     }));
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
@@ -145,13 +165,40 @@ async function fetchAllFeeds(): Promise<NewsItem[]> {
     return cachedItems;
   }
 
-  const results = await Promise.all(
-    RSS_FEEDS.map((feed) => fetchFeed(feed.url, feed.source))
-  );
+  // Prefer Perigon (real geo-tagged headlines). Map its raw items into our
+  // shape and assign categories with the same keyword classifier used for RSS.
+  let items: NewsItem[] = [];
+  if (perigonConfigured()) {
+    const perigon = await fetchPerigonNews(50);
+    items = perigon.map((p) => ({
+      id: p.id || idFromLink(p.link),
+      title: p.title,
+      link: p.link,
+      description: p.description,
+      pubDate: p.pubDate,
+      source: p.source,
+      category: categorize(p.title, p.description),
+      lat: p.lat,
+      lng: p.lng,
+      location: p.location,
+    }));
+  }
 
-  const items = results.flat();
+  // Fall back to (or backfill from) the RSS feeds if Perigon is unset or empty.
+  if (items.length === 0) {
+    const results = await Promise.all(
+      RSS_FEEDS.map((feed) => fetchFeed(feed.url, feed.source))
+    );
+    items = results.flat();
+  }
 
-  // Sort by pubDate descending (most recent first)
+  // Dedupe by link, then sort by pubDate descending (most recent first).
+  const seen = new Set<string>();
+  items = items.filter((i) => {
+    if (!i.link || seen.has(i.link)) return false;
+    seen.add(i.link);
+    return true;
+  });
   items.sort((a, b) => {
     const da = a.pubDate ? new Date(a.pubDate).getTime() : 0;
     const db = b.pubDate ? new Date(b.pubDate).getTime() : 0;
