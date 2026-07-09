@@ -127,6 +127,7 @@ export default function CesiumViewerComponent() {
     activeRegion,
     newsItems,
     setSelectedNews,
+    showNewsPins,
   } = useCesium();
 
   // Track OSM footprint/places entities for cleanup
@@ -238,6 +239,9 @@ export default function CesiumViewerComponent() {
       }
       newsPinIdsRef.current = [];
 
+      // Layers-panel toggle: when off, leave the pins cleared.
+      if (!showNewsPins) return;
+
       for (const item of newsItems) {
         if (typeof item.lat !== "number" || typeof item.lng !== "number") continue;
         const id = `news-${item.id}`;
@@ -267,7 +271,7 @@ export default function CesiumViewerComponent() {
     return () => {
       cancelled = true;
     };
-  }, [newsItems, viewerRef]);
+  }, [newsItems, showNewsPins, viewerRef]);
 
   useEffect(() => {
     if (initialized.current || !containerRef.current) return;

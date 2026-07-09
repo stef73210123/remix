@@ -28,6 +28,7 @@ import {
   Building2,
   MapPin,
   Footprints,
+  Newspaper,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCesium, type BuildingSource } from "@/components/cesium/CesiumContext";
@@ -56,6 +57,8 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
     setShowOsmFootprints,
     showParcelCentroids,
     setShowParcelCentroids,
+    showNewsPins,
+    setShowNewsPins,
   } = useCesium();
   const [expandedStates, setExpandedStates] = useState<Set<string>>(
     new Set(["NY"])
@@ -223,6 +226,22 @@ export default function LayersPanel({ onClose }: { onClose: () => void }) {
           </label>
           <p className="text-[8px] text-gray-400 ml-4 mb-2">
             A dot at the center of every parcel in view, from the active region&apos;s public GIS
+          </p>
+
+          <div className="text-[10px] font-bold text-gray-600 mb-2 mt-3 uppercase flex items-center gap-1">
+            <Newspaper className="w-3 h-3" /> News Headlines
+          </div>
+          <label className="flex items-center gap-1.5 cursor-pointer mb-1">
+            <input
+              type="checkbox"
+              checked={showNewsPins}
+              onChange={() => setShowNewsPins(!showNewsPins)}
+              className="rounded border-gray-300 text-[#ca615f] w-3 h-3"
+            />
+            <span className="text-[10px] text-gray-700">Pin news stories on map</span>
+          </label>
+          <p className="text-[8px] text-gray-400 ml-4 mb-2">
+            Drops a pin for each real-estate headline with a known location; tap a pin to read it
           </p>
         </div>
 
