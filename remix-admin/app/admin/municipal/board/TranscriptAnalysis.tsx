@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { AnalysisDataset, CaseRollup, MemberProfile, ThemeRollup, MeetingAnalysis } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
+import MeetingTimelineChart from './MeetingTimelineChart'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
@@ -121,6 +122,9 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
           {' '}— named too rarely in the transcripts to attribute reliably.
         </div>
       )}
+
+      {/* ---- Sentiment timeline (stacked columns per meeting) ---- */}
+      <MeetingTimelineChart data={data} />
 
       {/* ---- Themes ---- */}
       <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
