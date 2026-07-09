@@ -21,6 +21,12 @@ and member profiles.
    theme-level sentiment is robust; member-level is directional, not a vote record.
 3. `aggregate.py` canonicalizes themes to a controlled vocabulary, merges the same
    application across meetings, and computes the roll-ups.
+4. Case names are cross-referenced against the agenda items as read into each
+   meeting record and collapsed to canonical applications via `case_canon.json`
+   (e.g. "92 & 94 Round Hill Road" appeared under 4 name variants; "Whipple" is
+   the ASR mangling of "Whippoorwill"). This took the case list from 127 raw
+   entries to 80 canonical applications. Distinct lots within one subdivision are
+   kept separate.
 
 Roster (from the town's official Board Members list): **Christopher Carthy**
 (Chairman — presides, so the un-named presiding voice in the ASR is his),

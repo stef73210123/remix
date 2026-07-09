@@ -170,19 +170,47 @@ def case_key(c):
 def slugify(k):
     return re.sub(r"\s+", "-", str(k).strip())[:80] or "case"
 
+# Canonical case map (cross-referenced against the agenda items as read into each
+# meeting): collapses the same application appearing under many name variants into
+# one canonical case. Keyed by the pre-canon slug id (slugify(case_key(c))).
+def _load_case_canon():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "case_canon.json")
+    m = {}
+    try:
+        for g in json.load(open(path)):
+            canon = {"id": g["canonicalId"], "name": g["canonicalName"],
+                     "address": g.get("canonicalAddress", ""), "type": g.get("canonicalType", "")}
+            for mid in g.get("memberIds", []):
+                m[mid] = canon
+    except Exception:
+        pass
+    return m
+
+CASE_CANON = _load_case_canon()
+
+def resolve_case(c):
+    """Canonical id/name/address/type for a raw per-meeting case dict."""
+    cur = slugify(case_key(c))
+    canon = CASE_CANON.get(cur)
+    if canon:
+        return canon
+    return {"id": cur, "name": c.get("name", cur), "address": c.get("address", ""),
+            "type": c.get("applicationType", "")}
+
 def roll_cases(meetings):
     agg = defaultdict(lambda: {"id": "", "name": "", "address": "", "type": "", "applicant": "",
                                "themes": set(), "appearances": [], "sentiments": []})
     for m in meetings:
         for c in m.get("cases", []):
-            cid = case_key(c)
+            rc = resolve_case(c)
+            cid = rc["id"]
             if not cid:
                 continue
             a = agg[cid]
-            a["id"] = a["id"] or (c.get("id") or cid)
-            a["name"] = a["name"] or c.get("name", cid)
-            a["address"] = a["address"] or c.get("address", "")
-            a["type"] = a["type"] or c.get("applicationType", "")
+            a["id"] = rc["id"]
+            a["name"] = rc["name"] or a["name"] or c.get("name", cid)
+            a["address"] = rc["address"] or a["address"] or c.get("address", "")
+            a["type"] = rc["type"] or a["type"] or c.get("applicationType", "")
             a["applicant"] = a["applicant"] or c.get("applicant", "")
             for t in c.get("themes", []):
                 ct = canon_theme(t)
@@ -218,8 +246,9 @@ def roll_members(meetings):
                 "evidence": [], "confidence": defaultdict(int)} for m in MEMBERS}
     for m in meetings:
         for c in m.get("cases", []):
-            cid = slugify(case_key(c))
-            cname = c.get("name", cid)
+            rc = resolve_case(c)
+            cid = rc["id"]
+            cname = rc["name"] or c.get("name", cid)
             for p in c.get("memberPositions", []):
                 who = canon_member(p.get("member", ""))
                 if not who:

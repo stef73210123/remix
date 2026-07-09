@@ -1,0 +1,769 @@
+[
+ {
+  "canonicalId": "92-94-round-hill-road",
+  "canonicalName": "92 & 94 Round Hill Road",
+  "canonicalAddress": "92 & 94 Round Hill Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "92-94-round-hill-road-north-castle-ny",
+   "92-94-round-hill-road",
+   "92-and-94-round-hill-road"
+  ]
+ },
+ {
+  "canonicalId": "100-buckout-road",
+  "canonicalName": "100 Buckout Road",
+  "canonicalAddress": "100 Buckout Road, North Castle, NY",
+  "canonicalType": "wetlands permit",
+  "memberIds": [
+   "100-buckout-road",
+   "100-buck-out-road-north-castle-ny",
+   "100-buckout-road-r"
+  ]
+ },
+ {
+  "canonicalId": "7-hollow-ridge-road",
+  "canonicalName": "7 Hollow Ridge Road (Wood Hollow Estates)",
+  "canonicalAddress": "7 Hollow Ridge Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "7-hollow-ridge-road",
+   "7-hollow-ridge-road-2-5"
+  ]
+ },
+ {
+  "canonicalId": "250-east-middle-patent-road",
+  "canonicalName": "250 East Middle Patent Road",
+  "canonicalAddress": "250 East Middle Patent Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "250-east-middle-patent-road",
+   "250-east-middle-patent-road-r"
+  ]
+ },
+ {
+  "canonicalId": "700-bedford-road",
+  "canonicalName": "700 Bedford Road (new house)",
+  "canonicalAddress": "700 Bedford Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "700-bedford-road"
+  ]
+ },
+ {
+  "canonicalId": "summit-golf-club",
+  "canonicalName": "Summit Golf Club",
+  "canonicalAddress": "Summit Golf Club, North Castle, NY",
+  "canonicalType": "subdivision",
+  "memberIds": [
+   "summit-club",
+   "summit-golf-club-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "40-high-street",
+  "canonicalName": "40 High Street",
+  "canonicalAddress": "40 High Street, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "40-high-street",
+   "40-high-street-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "3-north-castle-drive-eagle-ridge",
+  "canonicalName": "Eagle Ridge (3 North Castle Drive / clubhouse)",
+  "canonicalAddress": "3 North Castle Drive, North Castle, NY",
+  "canonicalType": "subdivision",
+  "memberIds": [
+   "3-north-castle-drive",
+   "3-north-council-drive",
+   "eagle-ridge"
+  ]
+ },
+ {
+  "canonicalId": "154-lafayette-avenue",
+  "canonicalName": "154 Lafayette Avenue (Mistis Transport)",
+  "canonicalAddress": "154 Lafayette Avenue, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "154-lafayette-avenue",
+   "154-lafayette-avenue-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "76-virginia-road",
+  "canonicalName": "76 Virginia Road (National Fire Sprinklers)",
+  "canonicalAddress": "76 Virginia Road, North White Plains, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "76-virginia-road",
+   "76-virginia-road-north-castle-ny",
+   "76-virginia-road-north-white-plains-ind"
+  ]
+ },
+ {
+  "canonicalId": "167-mianus-river-road",
+  "canonicalName": "167 Mianus River Road (Mianus River Gorge)",
+  "canonicalAddress": "167 Mianus River Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "167-mayanus-river-road",
+   "167-mianus-river-road-r4a-zoning-district-960",
+   "myanos-river-gorge-nature-center"
+  ]
+ },
+ {
+  "canonicalId": "258-east-middle-patent-road",
+  "canonicalName": "258 East Middle Patent Road (Matthews accessory barn)",
+  "canonicalAddress": "258 East Middle Patent Road, North Castle, NY",
+  "canonicalType": "special use permit",
+  "memberIds": [
+   "58-middle-patent-road",
+   "258-east-middle-patent-road-north-castle-ny",
+   "258-east-middle-patten-road"
+  ]
+ },
+ {
+  "canonicalId": "70-lafayette-avenue",
+  "canonicalName": "70 Lafayette Avenue (Marquis Associates)",
+  "canonicalAddress": "70 Lafayette Avenue, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "70-lafayette-avenue",
+   "70-lafayette-avenue-ind"
+  ]
+ },
+ {
+  "canonicalId": "1613-old-orchard-street",
+  "canonicalName": "1613 Old Orchard Street",
+  "canonicalAddress": "1613 Old Orchard Street, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "1613-old-orchard-street",
+   "1613-old-orchard-street-r1a-zoning-district"
+  ]
+ },
+ {
+  "canonicalId": "2-israel-townsend-hill-lot-1",
+  "canonicalName": "2 Israel Townsend Hill (Lot 1, 32 Orchard Drive subdivision)",
+  "canonicalAddress": "2 Israel Townsend Hill, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "32-orto-drive",
+   "2-israel-towson-hill-r",
+   "2-israel-townsend-hill-road-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "1-israel-townsend-hill-lot-4",
+  "canonicalName": "1 Israel Townsend Hill (Lot 4, 32 Orchard Drive subdivision)",
+  "canonicalAddress": "1 Israel Townsend Hill, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "lot-4-32-wortched-drive-north-castle-ny",
+   "1-israel-townsend-hill-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "3-israel-townsend-hill",
+  "canonicalName": "3 Israel Townsend Hill (32 Orchard Drive subdivision)",
+  "canonicalAddress": "3 Israel Townsend Hill, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "3-israel-townsend-hill-r1a-zoning-district"
+  ]
+ },
+ {
+  "canonicalId": "84-business-park-drive",
+  "canonicalName": "84 Business Park Drive",
+  "canonicalAddress": "84 Business Park Drive, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "84-business-park-drive",
+   "84-business-park-drive-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "4-vincent-lane",
+  "canonicalName": "4 Vincent Lane (wetland restoration)",
+  "canonicalAddress": "4 Vincent Lane, North Castle, NY",
+  "canonicalType": "wetlands permit",
+  "memberIds": [
+   "4-vincent-lane",
+   "4-vincent-lane-r",
+   "vincent-lane"
+  ]
+ },
+ {
+  "canonicalId": "113-king-street",
+  "canonicalName": "113 King Street (RCLA Enclave at Armonk / Toll)",
+  "canonicalAddress": "113 King Street, Armonk, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "113-king-street-armonk-ny",
+   "113-king-street"
+  ]
+ },
+ {
+  "canonicalId": "12-seymour-place-east",
+  "canonicalName": "12 Seymour Place East",
+  "canonicalAddress": "12 Seymour Place East, Armonk, NY",
+  "canonicalType": "special use permit",
+  "memberIds": [
+   "12-seymour-place-east-armonk-ny",
+   "12-seymour-place-east-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "18-long-pond-road",
+  "canonicalName": "18 Long Pond Road",
+  "canonicalAddress": "18 Long Pond Road, North Castle, NY",
+  "canonicalType": "wetlands permit",
+  "memberIds": [
+   "18-long-pond-road-north-castle-ny",
+   "18-long-pond-road"
+  ]
+ },
+ {
+  "canonicalId": "2-4-massaro-court",
+  "canonicalName": "2 & 4 Massaro Court (two-family residences)",
+  "canonicalAddress": "2 & 4 Massaro Court, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "2-4-massaro-court-north-castle-ny",
+   "massaro-court-r",
+   "amsaro-court"
+  ]
+ },
+ {
+  "canonicalId": "6-massaro-court",
+  "canonicalName": "6 Massaro Court (formerly 54 Curtis)",
+  "canonicalAddress": "6 Massaro Court, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "6-massaro-court"
+  ]
+ },
+ {
+  "canonicalId": "4-kensico-court",
+  "canonicalName": "4 Kensico Court (Awesome Landscaping)",
+  "canonicalAddress": "4 Kensico Court, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "4-kensico-court-north-castle-ny",
+   "keskil-court-parking-lot-restriping",
+   "4-ksl-court-armonk-ny"
+  ]
+ },
+ {
+  "canonicalId": "22-whippoorwill-road-east",
+  "canonicalName": "22 Whippoorwill Road East",
+  "canonicalAddress": "22 Whippoorwill Road East, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "22-whipple-road-east-north-castle-ny",
+   "22-whippoorwill-road-east"
+  ]
+ },
+ {
+  "canonicalId": "73-whippoorwill-road",
+  "canonicalName": "73 Whippoorwill Road Subdivision",
+  "canonicalAddress": "73 Whippoorwill Road, North Castle, NY",
+  "canonicalType": "subdivision",
+  "memberIds": [
+   "73-whipple-road-north-castle-ny",
+   "73-whippoorwill-road"
+  ]
+ },
+ {
+  "canonicalId": "825-north-broadway",
+  "canonicalName": "825 North Broadway (BP gas station renovation)",
+  "canonicalAddress": "825 North Broadway, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "825-north-broadway-north-castle-ny",
+   "825-north-broadway"
+  ]
+ },
+ {
+  "canonicalId": "23-whippoorwill-road-east-kent-place",
+  "canonicalName": "Kent Place / Verizon Parking (23 Whippoorwill Road East)",
+  "canonicalAddress": "23 Whippoorwill Road East, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "23-whippoorwill-road-east-r",
+   "ken-place"
+  ]
+ },
+ {
+  "canonicalId": "ibm-ev-charging-stations",
+  "canonicalName": "IBM EV Charging Stations (1 New Orchard Road)",
+  "canonicalAddress": "1 New Orchard Road, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "ibm-corporate-headquarters-campus-north-castle",
+   "1-new-orchard-road-ob-zoning-district"
+  ]
+ },
+ {
+  "canonicalId": "125-business-park-drive",
+  "canonicalName": "125 Business Park Drive (Lot 5, Westchester Business Park)",
+  "canonicalAddress": "125 Business Park Drive, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "125-business-park-drive-lot-5-westchester-business-park-pli-zoning",
+   "124"
+  ]
+ },
+ {
+  "canonicalId": "23-north-lake-road",
+  "canonicalName": "23 North Lake Road",
+  "canonicalAddress": "23 North Lake Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "23-north-lake",
+   "23-north-lake-road"
+  ]
+ },
+ {
+  "canonicalId": "nyc-dep-kensico-wetland-mitigation",
+  "canonicalName": "NYC DEP Kensico-Eastview Wetland Mitigation (Old Post Road)",
+  "canonicalAddress": "Old Post Road / Route 120, North Castle, NY",
+  "canonicalType": "wetlands permit",
+  "memberIds": [
+   "route-120-wetland-site-with-old-post-road-staging-area",
+   "kensico-river-and-old-post-road-tax-lots-113-01"
+  ]
+ },
+ {
+  "canonicalId": "65-bedford-banksville-road",
+  "canonicalName": "65 Bedford-Banksville Road (Buck's Flower Garden)",
+  "canonicalAddress": "65 Bedford-Banksville Road, North Castle, NY",
+  "canonicalType": "special use permit",
+  "memberIds": [
+   "65-banksville-road",
+   "65-bedford"
+  ]
+ },
+ {
+  "canonicalId": "1-east-middle-patent-road",
+  "canonicalName": "1 East Middle Patent Road (accessory garage)",
+  "canonicalAddress": "1 East Middle Patent Road, North Castle, NY",
+  "canonicalType": "special use permit",
+  "memberIds": [
+   "1-east-middle-patent-road",
+   "1-east-middle-patent-road-r4a-zoning-district-along-scenic-roadway"
+  ]
+ },
+ {
+  "canonicalId": "909-north-broadway-cigar-club",
+  "canonicalName": "909 North Broadway Cigar / Membership Club (Sir John's Plaza)",
+  "canonicalAddress": "909 North Broadway, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "909-north-broadway-sir-john-s-plaza",
+   "surjon-s-plaza-shopping-center",
+   "909-911-north-broadway-tax-lot-122-12"
+  ]
+ },
+ {
+  "canonicalId": "124-old-mount-kisco-road",
+  "canonicalName": "124 Old Mount Kisco Road",
+  "canonicalAddress": "124 Old Mount Kisco Road, North Castle, NY",
+  "canonicalType": "subdivision",
+  "memberIds": [
+   "124-old-mount-kisco-road-north-castle-ny",
+   "124-kisco-road"
+  ]
+ },
+ {
+  "canonicalId": "6-sterling-road-south",
+  "canonicalName": "6 Sterling Road South",
+  "canonicalAddress": "6 Sterling Road South, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "6-darling-road-south",
+   "6-sterling-road-south"
+  ]
+ },
+ {
+  "canonicalId": "12-maple-avenue",
+  "canonicalName": "12 Maple Avenue (restaurant)",
+  "canonicalAddress": "12 Maple Avenue, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "12-maple-avenue",
+   "12-april-avenue"
+  ]
+ },
+ {
+  "canonicalId": "263-bedford-banksville-road",
+  "canonicalName": "263 Bedford-Banksville Road (equestrian property)",
+  "canonicalAddress": "263 Bedford-Banksville Road, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "263-bedford-banksville-road"
+  ]
+ },
+ {
+  "canonicalId": "667-north-broadway-coptic-church",
+  "canonicalName": "667 North Broadway (Virgin Mary & St. Monique Coptic Orthodox Church)",
+  "canonicalAddress": "667 North Broadway, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "667-north-broadway"
+  ]
+ },
+ {
+  "canonicalId": "1-virginia-road-uhaul",
+  "canonicalName": "1 Virginia Road (U-Haul)",
+  "canonicalAddress": "1 Virginia Road, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "1-virginia-road"
+  ]
+ },
+ {
+  "canonicalId": "four-ledgewood",
+  "canonicalName": "Four Ledgewood",
+  "canonicalAddress": "Four Ledgewood, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "four-ledgewood"
+  ]
+ },
+ {
+  "canonicalId": "76-firemans-road",
+  "canonicalName": "76 Fireman's Road",
+  "canonicalAddress": "76 Fireman's Road, North Castle, NY",
+  "canonicalType": "wetlands permit",
+  "memberIds": [
+   "76-fireman-s-road"
+  ]
+ },
+ {
+  "canonicalId": "11-new-kings-street-park-place",
+  "canonicalName": "11 New Kings Street (Park Place)",
+  "canonicalAddress": "11 New Kings Street, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "11-new-kings-street"
+  ]
+ },
+ {
+  "canonicalId": "135-bedford-road",
+  "canonicalName": "135 Bedford Road",
+  "canonicalAddress": "135 Bedford Road, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "135-bedford-road"
+  ]
+ },
+ {
+  "canonicalId": "124-old-mianus-road",
+  "canonicalName": "124 Old Mianus Road",
+  "canonicalAddress": "124 Old Mianus Road, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "124-old-mianus-road"
+  ]
+ },
+ {
+  "canonicalId": "76-byron-ridge-road",
+  "canonicalName": "76 Byron Ridge Road",
+  "canonicalAddress": "76 Byron Ridge Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "76-byron-ridge-road-r1a-zoning-district"
+  ]
+ },
+ {
+  "canonicalId": "7-new-king-street",
+  "canonicalName": "7 New King Street",
+  "canonicalAddress": "7 New King Street, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "7-new-king-street"
+  ]
+ },
+ {
+  "canonicalId": "18-bedford-banksville-road",
+  "canonicalName": "18 Bedford-Banksville Road (propane exchange)",
+  "canonicalAddress": "18 Bedford-Banksville Road, North Castle, NY",
+  "canonicalType": "referral",
+  "memberIds": [
+   "18-bedford"
+  ]
+ },
+ {
+  "canonicalId": "6-maple-avenue",
+  "canonicalName": "6 Maple Avenue",
+  "canonicalAddress": "6 Maple Avenue, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "6-maple-avenue"
+  ]
+ },
+ {
+  "canonicalId": "130-old-mount-kisco-road",
+  "canonicalName": "130 Old Mount Kisco Road",
+  "canonicalAddress": "130 Old Mount Kisco Road, North Castle, NY",
+  "canonicalType": "subdivision",
+  "memberIds": [
+   "130-old-mount-kisco-road"
+  ]
+ },
+ {
+  "canonicalId": "round-hill-1-11-driveway",
+  "canonicalName": "1/11 Round Hill (driveway field change)",
+  "canonicalAddress": "Round Hill, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "round-hill-area-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "428-436-main-street",
+  "canonicalName": "428-436 Main Street",
+  "canonicalAddress": "428-436 Main Street, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "428"
+  ]
+ },
+ {
+  "canonicalId": "448-bedford-road",
+  "canonicalName": "448 Bedford Road (church nursery-school)",
+  "canonicalAddress": "448 Bedford Road, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "448-bedford-road-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "126-lafayette-avenue",
+  "canonicalName": "126 Lafayette Avenue (NC Auto Repair)",
+  "canonicalAddress": "126 Lafayette Avenue, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "126-lafayette-avenue-north-castle-ny"
+  ]
+ },
+ {
+  "canonicalId": "10-20-round-hill-way",
+  "canonicalName": "10 & 20 Round Hill Way",
+  "canonicalAddress": "10 & 20 Round Hill Way, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "10-20-round-hill-way"
+  ]
+ },
+ {
+  "canonicalId": "8-cold-drive",
+  "canonicalName": "8 Cold Drive",
+  "canonicalAddress": "8 Cold Drive, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "8-cold-drive"
+  ]
+ },
+ {
+  "canonicalId": "60-cox-avenue-breezemont",
+  "canonicalName": "60 Cox Avenue (Breezemont Day Camp)",
+  "canonicalAddress": "60 Cox Avenue, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "60-cox-avenue"
+  ]
+ },
+ {
+  "canonicalId": "orchard-hill-subdivision-access",
+  "canonicalName": "Orchard Hill Subdivision (existing house access)",
+  "canonicalAddress": "Orchard Hill, North Castle, NY",
+  "canonicalType": "subdivision",
+  "memberIds": [
+   "orchard-hill"
+  ]
+ },
+ {
+  "canonicalId": "angela-single-family-pool",
+  "canonicalName": "Single-family residence & pool (Angela) - cut/fill grading",
+  "canonicalAddress": "North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "single"
+  ]
+ },
+ {
+  "canonicalId": "12-bedford-road",
+  "canonicalName": "12 Bedford Road",
+  "canonicalAddress": "12 Bedford Road, North Castle, NY",
+  "canonicalType": "other",
+  "memberIds": [
+   "12-bedford-road"
+  ]
+ },
+ {
+  "canonicalId": "62-nethermont-avenue",
+  "canonicalName": "62 Nethermont Avenue",
+  "canonicalAddress": "62 Nethermont Avenue, North White Plains, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "62-nethermont-avenue-north-white-plains-r"
+  ]
+ },
+ {
+  "canonicalId": "88-byron-ridge-road",
+  "canonicalName": "88 Byron Ridge Road",
+  "canonicalAddress": "88 Byron Ridge Road, North Castle, NY",
+  "canonicalType": "wetlands permit",
+  "memberIds": [
+   "88-byron-ridge-road-r"
+  ]
+ },
+ {
+  "canonicalId": "850-north-broadway",
+  "canonicalName": "850 North Broadway",
+  "canonicalAddress": "850 North Broadway, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "850-north-broadway"
+  ]
+ },
+ {
+  "canonicalId": "26-hurlingham-drive",
+  "canonicalName": "26 Hurlingham Drive (field change)",
+  "canonicalAddress": "26 Hurlingham Drive, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "26-hurlingham-drive"
+  ]
+ },
+ {
+  "canonicalId": "ev-charging-local-law-referral",
+  "canonicalName": "EV Charging Local Law (Level 3) Referral",
+  "canonicalAddress": "",
+  "canonicalType": "referral",
+  "memberIds": [
+   "ev-charging-local-law-referral"
+  ]
+ },
+ {
+  "canonicalId": "citibank-signage",
+  "canonicalName": "Citibank signage",
+  "canonicalAddress": "",
+  "canonicalType": "referral",
+  "memberIds": [
+   "citibank-signage"
+  ]
+ },
+ {
+  "canonicalId": "short-term-rental-law-referral",
+  "canonicalName": "Short-Term Rental Law (town board referral)",
+  "canonicalAddress": "",
+  "canonicalType": "referral",
+  "memberIds": [
+   "short"
+  ]
+ },
+ {
+  "canonicalId": "extensions-batch-high-summer-banksville",
+  "canonicalName": "Extensions of time (40 High Street; Summer Club; 298 Banksville Road)",
+  "canonicalAddress": "",
+  "canonicalType": "other",
+  "memberIds": [
+   "40-high-street-summer-club-298-banksville-road"
+  ]
+ },
+ {
+  "canonicalId": "extensions-batch-mar-23",
+  "canonicalName": "Extensions of time (batch: 23 Bedford-Banksville; 130 Old Orchard/Middle Patent; 3 North Castle Dr; 215 Business Park Dr; 113 King St)",
+  "canonicalAddress": "",
+  "canonicalType": "other",
+  "memberIds": [
+   "23-bedford-banksville-road-130-old-orchard-middle-patent-road-3-north-castle-dri"
+  ]
+ },
+ {
+  "canonicalId": "3-cedar-hill-road",
+  "canonicalName": "3 Cedar Hill Road",
+  "canonicalAddress": "3 Cedar Hill Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "3-cedar-hill-road-r"
+  ]
+ },
+ {
+  "canonicalId": "church-sidewalk-referral",
+  "canonicalName": "Church sidewalk / special use permit referral",
+  "canonicalAddress": "",
+  "canonicalType": "referral",
+  "memberIds": [
+   "church-sidewalk-special-use-permit-referral"
+  ]
+ },
+ {
+  "canonicalId": "25-north-broadway",
+  "canonicalName": "25 North Broadway",
+  "canonicalAddress": "25 North Broadway, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "25-north-broadway"
+  ]
+ },
+ {
+  "canonicalId": "omaac-extension",
+  "canonicalName": "OMAAC Extension of Time",
+  "canonicalAddress": "",
+  "canonicalType": "other",
+  "memberIds": [
+   "omaac"
+  ]
+ },
+ {
+  "canonicalId": "six-ledge-place-bezel",
+  "canonicalName": "Six Ledge Place (Bezel Residence)",
+  "canonicalAddress": "Six Ledge Place, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "six-ledge-place"
+  ]
+ },
+ {
+  "canonicalId": "26-carolyn-place",
+  "canonicalName": "26 Carolyn Place",
+  "canonicalAddress": "26 Carolyn Place, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "26-carolyn-place"
+  ]
+ },
+ {
+  "canonicalId": "49-roundhouse-road-animal-hospital",
+  "canonicalName": "49 Roundhouse Road (Bedford Greenwich Animal Hospital)",
+  "canonicalAddress": "49 Roundhouse Road, North Castle, NY",
+  "canonicalType": "amended site plan",
+  "memberIds": [
+   "49-roundhouse-road"
+  ]
+ },
+ {
+  "canonicalId": "extensions-of-time-procedure",
+  "canonicalName": "Extensions of Time \u2014 Procedure Discussion",
+  "canonicalAddress": "",
+  "canonicalType": "other",
+  "memberIds": [
+   "extensions-of-time"
+  ]
+ },
+ {
+  "canonicalId": "7-hollow-road",
+  "canonicalName": "7 Hollow Road",
+  "canonicalAddress": "7 Hollow Road, North Castle, NY",
+  "canonicalType": "site plan",
+  "memberIds": [
+   "7-hollow-road-r28-zoning-district"
+  ]
+ }
+]
