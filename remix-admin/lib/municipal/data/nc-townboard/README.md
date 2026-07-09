@@ -19,7 +19,7 @@ Same pipeline as `../nc-planning`, applied to the elected **Town Board** over
 - **Jose Berra** — Councilman, Deputy Supervisor 2024–25 (serves all three years).
 - **Matt Milim** — Councilman 2024–2025 only (left after 2025; in 2026 appears
   as a private citizen).
-- **Sonny Vitaj** — Councilman, joined 2026 (replaced Milim).
+- **Sonny Vataj** — Councilman, joined 2026 (replaced Milim).
 
 Staff heard in meetings (kept out of member attribution): Allison Simon (Clerk),
 Roland (Town Attorney), Robert "Bob" Spolzino (special counsel), Kevin (Town

@@ -104,6 +104,8 @@ export interface AnalysisMeta {
   themes: number
   memberPositions: number
   roster: string[]
+  /** Members on the roster who no longer serve (de-emphasized in the UI). */
+  inactiveMembers?: string[]
   source: string
   errors: string[]
 }

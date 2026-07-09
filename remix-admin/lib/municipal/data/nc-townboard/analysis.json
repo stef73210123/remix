@@ -14,7 +14,10 @@
       "Saleem Hussain",
       "Jose Berra",
       "Matt Milim",
-      "Sonny Vitaj"
+      "Sonny Vataj"
+    ],
+    "inactiveMembers": [
+      "Matt Milim"
     ],
     "source": "Meeting video transcripts (ASR, un-diarized); member attribution is name-based with per-position confidence.",
     "errors": []
@@ -3788,7 +3791,7 @@
           "date": "2026-02-11",
           "status": "public hearing held",
           "sentiment": 0.9,
-          "summary": "The board held a public hearing on extending Water District No. 9 to the Quarry Heights area under Article 12A of Town Law, addressing chronic well-water/PFAS problems among roughly 48 homes. Town Attorney Roland explained that two preliminary resolutions would let the town apply to the State Comptroller and better position the project for grant funding, with a worst-case per-home cost around $46,700 over the life of the bond. Residents spoke strongly in favor (a signed petition and letter were submitted into the record), and the board adopted a 21-day open comment period before both preliminary resolutions passed 5-0 by roll call (Berra, Vitaj, DiGiacinto, Hussain, Rende all aye). Board members voiced unanimous, emphatic support and commitment to pursue grants."
+          "summary": "The board held a public hearing on extending Water District No. 9 to the Quarry Heights area under Article 12A of Town Law, addressing chronic well-water/PFAS problems among roughly 48 homes. Town Attorney Roland explained that two preliminary resolutions would let the town apply to the State Comptroller and better position the project for grant funding, with a worst-case per-home cost around $46,700 over the life of the bond. Residents spoke strongly in favor (a signed petition and letter were submitted into the record), and the board adopted a 21-day open comment period before both preliminary resolutions passed 5-0 by roll call (Berra, Vataj, DiGiacinto, Hussain, Rende all aye). Board members voiced unanimous, emphatic support and commitment to pursue grants."
         },
         {
           "date": "2026-02-11",
@@ -5121,7 +5124,7 @@
           "date": "2026-02-25",
           "status": "tabled",
           "sentiment": -0.1,
-          "summary": "The board considered a request to purchase two new green storage container units for equipment near the IBM Park turf fields, to be paid from fund balance, replacing rotted existing containers. Vitaj strongly objected that metal containers cheapen a multimillion-dollar turf investment (his \"Ferrari with used tires\" analogy) and pushed for a prefab garage-style structure, while DiGiacinto defended the containers as utilitarian, secure, and cost-conscious but asked for full all-in cost comparisons of any alternative. With no motion made, the item was tabled to the next meeting for staff to bring back options."
+          "summary": "The board considered a request to purchase two new green storage container units for equipment near the IBM Park turf fields, to be paid from fund balance, replacing rotted existing containers. Vataj strongly objected that metal containers cheapen a multimillion-dollar turf investment (his \"Ferrari with used tires\" analogy) and pushed for a prefab garage-style structure, while DiGiacinto defended the containers as utilitarian, secure, and cost-conscious but asked for full all-in cost comparisons of any alternative. With no motion made, the item was tabled to the next meeting for staff to bring back options."
         }
       ]
     },
@@ -5694,7 +5697,7 @@
           "date": "2026-01-14",
           "status": "scheduled",
           "sentiment": 0.8,
-          "summary": "The board adopted, by roll-call vote, the order calling a public hearing on the long-awaited extension of Water District No. 9 to serve the Quarry Heights section of North White Plains, where residents have faced dry wells and high PFAS levels; water will be supplied by Westchester Joint Water. Members discussed notifying the roughly 44 additional (plus 11 original = ~55) affected property owners, who will share the bond/debt service; the board directed the Town Clerk to mail notice (regular/certified, not registered) with an affidavit of mailing, per counsel, and to post the order on the project landing page. Counsel outlined next steps (design, Health Department submittals, bidding, grants, and state comptroller approval after the hearing). Roll call recorded ayes from Vitaj, DiGiacinto, Hussain and Supervisor Rende."
+          "summary": "The board adopted, by roll-call vote, the order calling a public hearing on the long-awaited extension of Water District No. 9 to serve the Quarry Heights section of North White Plains, where residents have faced dry wells and high PFAS levels; water will be supplied by Westchester Joint Water. Members discussed notifying the roughly 44 additional (plus 11 original = ~55) affected property owners, who will share the bond/debt service; the board directed the Town Clerk to mail notice (regular/certified, not registered) with an affidavit of mailing, per counsel, and to post the order on the project landing page. Counsel outlined next steps (design, Health Department submittals, bidding, grants, and state comptroller approval after the hearing). Roll call recorded ayes from Vataj, DiGiacinto, Hussain and Supervisor Rende."
         }
       ]
     },
@@ -18820,7 +18823,7 @@
           "date": "2025-11-19",
           "status": "defeated",
           "sentiment": -0.4,
-          "summary": "A late-added item to receive proposed Code of Ethics amendments (drafted with special counsel Bob Spolzino and the Board of Ethics) and schedule a December 10 public hearing triggered a heated dispute. DiGiacinto objected that she received a revised draft only at 4:27 p.m. and accused Berra of overreaching by directing the attorney's edits; Rende said the law 'stinks,' was drafted for the wrong reasons, and that incoming member Sonny Vitaj should weigh in. After agreeing to delete one disputed provision, the motion (Berra/Hussain in favor) failed on a 2-2 roll call (Berra aye, Hussain aye, DiGiacinto no, Rende no; Milim absent), a tie constituting denial."
+          "summary": "A late-added item to receive proposed Code of Ethics amendments (drafted with special counsel Bob Spolzino and the Board of Ethics) and schedule a December 10 public hearing triggered a heated dispute. DiGiacinto objected that she received a revised draft only at 4:27 p.m. and accused Berra of overreaching by directing the attorney's edits; Rende said the law 'stinks,' was drafted for the wrong reasons, and that incoming member Sonny Vataj should weigh in. After agreeing to delete one disputed provision, the motion (Berra/Hussain in favor) failed on a 2-2 roll call (Berra aye, Hussain aye, DiGiacinto no, Rende no; Milim absent), a tie constituting denial."
         }
       ]
     },
@@ -18917,7 +18920,7 @@
           "date": "2025-12-10",
           "status": "adopted",
           "sentiment": 1.0,
-          "summary": "The board presented a certificate of recognition to Councilman Matt Milim, whose four-year term was ending (this being his last meeting), thanking him for his service and specifically for resurrecting the Armonk Lions Club and the Folderol festival. Each colleague spoke warmly about his intelligence, independence, and willingness to embrace debate and dissent. Supervisor Rende and Chief Simonson noted their close working relationships. Ceremonial and universally supportive; incoming councilman Sonny Vitaj was acknowledged as his successor."
+          "summary": "The board presented a certificate of recognition to Councilman Matt Milim, whose four-year term was ending (this being his last meeting), thanking him for his service and specifically for resurrecting the Armonk Lions Club and the Folderol festival. Each colleague spoke warmly about his intelligence, independence, and willingness to embrace debate and dissent. Supervisor Rende and Chief Simonson noted their close working relationships. Ceremonial and universally supportive; incoming councilman Sonny Vataj was acknowledged as his successor."
         }
       ]
     },
@@ -19330,7 +19333,7 @@
           "date": "2026-01-14",
           "status": "adopted",
           "sentiment": 0.9,
-          "summary": "New Councilman Sonny Vitaj was sworn in (a second, ceremonial oath by a visiting justice), and re-elected Supervisor Joseph Rende and Councilwoman Barbara DiGiacinto were recognized (DiGiacinto already re-sworn by the Town Clerk). Each gave brief remarks thanking residents. The board then appointed Saleem Hussain as Deputy Town Supervisor on a unanimous voice vote, with a member remarking it was 'a great choice.'"
+          "summary": "New Councilman Sonny Vataj was sworn in (a second, ceremonial oath by a visiting justice), and re-elected Supervisor Joseph Rende and Councilwoman Barbara DiGiacinto were recognized (DiGiacinto already re-sworn by the Town Clerk). Each gave brief remarks thanking residents. The board then appointed Saleem Hussain as Deputy Town Supervisor on a unanimous voice vote, with a member remarking it was 'a great choice.'"
         }
       ]
     },
@@ -19909,7 +19912,7 @@
           "date": "2026-01-28",
           "status": "adopted",
           "sentiment": 0.2,
-          "summary": "The board considered a memo from KSCJ Consulting and Change Order No. 3 (about $75,000) for additional electrical power and data improvements on the community park artificial turf field project, authorizing the Supervisor to sign. DiGiacinto objected to the letter's 'as requested by the town' wording and pressed for detailed justification, learning much of the cost stemmed from rerouting buried electrical lines and adding access boxes discovered during excavation. Vitaj and Berra questioned pricing reasonableness and asked to be notified of change orders in advance; staff confirmed the same approved unit rates applied. The board approved the change order."
+          "summary": "The board considered a memo from KSCJ Consulting and Change Order No. 3 (about $75,000) for additional electrical power and data improvements on the community park artificial turf field project, authorizing the Supervisor to sign. DiGiacinto objected to the letter's 'as requested by the town' wording and pressed for detailed justification, learning much of the cost stemmed from rerouting buried electrical lines and adding access boxes discovered during excavation. Vataj and Berra questioned pricing reasonableness and asked to be notified of change orders in advance; staff confirmed the same approved unit rates applied. The board approved the change order."
         }
       ]
     },
@@ -20604,7 +20607,7 @@
           "date": "2026-02-25",
           "status": "adopted",
           "sentiment": 0.3,
-          "summary": "The board approved payment application number six from Papito Construction for site work performed on the Water District No. 4 new well project. Approved by voice vote with no substantive discussion (Vitaj moved, DiGiacinto seconded)."
+          "summary": "The board approved payment application number six from Papito Construction for site work performed on the Water District No. 4 new well project. Approved by voice vote with no substantive discussion (Vataj moved, DiGiacinto seconded)."
         }
       ]
     },
@@ -20699,7 +20702,7 @@
           "date": "2026-02-25",
           "status": "adopted",
           "sentiment": 0.3,
-          "summary": "The board considered salary increases for department-head and non-union employees retroactive to January 1, 2026. DiGiacinto voted no and requested a roll call, objecting not to the raises themselves but to the methodology used to determine them, which she said differs from comparable municipalities; discussion was limited because details were set in executive session. The resolution was adopted 4-1 (Berra aye, Vitaj aye, DiGiacinto no, Hussain aye, Rende yes)."
+          "summary": "The board considered salary increases for department-head and non-union employees retroactive to January 1, 2026. DiGiacinto voted no and requested a roll call, objecting not to the raises themselves but to the methodology used to determine them, which she said differs from comparable municipalities; discussion was limited because details were set in executive session. The resolution was adopted 4-1 (Berra aye, Vataj aye, DiGiacinto no, Hussain aye, Rende yes)."
         }
       ]
     },
@@ -21303,7 +21306,7 @@
           "date": "2026-03-25",
           "status": "adopted",
           "sentiment": 0.2,
-          "summary": "The board considered an annual stipend for Highway General Foreman Jamie Norris, effective January 1, prompted by the discovery that compensation for his additional duties had been unilaterally removed by a prior supervisor and never restored. Councilman Berra praised Norris but objected to setting compensation mid-year rather than during budget sessions and abstained ('stood'). On a roll call the measure passed 3-0 (DiGiacinto aye, Hussain aye, Rende yes; Berra abstained; Vitaj absent). A lengthy exchange followed between Rende and Berra on the meaning and propriety of abstention, with counsel explaining an abstention is a non-vote that still effectively counts against passage since a majority of the full board is required."
+          "summary": "The board considered an annual stipend for Highway General Foreman Jamie Norris, effective January 1, prompted by the discovery that compensation for his additional duties had been unilaterally removed by a prior supervisor and never restored. Councilman Berra praised Norris but objected to setting compensation mid-year rather than during budget sessions and abstained ('stood'). On a roll call the measure passed 3-0 (DiGiacinto aye, Hussain aye, Rende yes; Berra abstained; Vataj absent). A lengthy exchange followed between Rende and Berra on the meaning and propriety of abstention, with counsel explaining an abstention is a non-vote that still effectively counts against passage since a majority of the full board is required."
         }
       ]
     },
@@ -21558,7 +21561,7 @@
           "date": "2026-04-08",
           "status": "adopted",
           "sentiment": 0.3,
-          "summary": "The board considered a step increase for employee 003949 from Librarian 1 Step 3 to Librarian 1 Step 5, effective April 1, 2026. After an initial voice vote, Councilman Berra sought a roll-call vote and the board moved to rescind and re-vote so he could abstain. On the roll call it passed 4-0 with Berra abstaining (DiGiacinto aye, Vitaj aye, Hussain aye, Rende aye, Berra abstain). Berra said the employee was excellent but that he opposes mid-year compensation changes absent extraordinary circumstances; Supervisor Rende argued at length that speaking against an item and then abstaining is a misuse of the abstention."
+          "summary": "The board considered a step increase for employee 003949 from Librarian 1 Step 3 to Librarian 1 Step 5, effective April 1, 2026. After an initial voice vote, Councilman Berra sought a roll-call vote and the board moved to rescind and re-vote so he could abstain. On the roll call it passed 4-0 with Berra abstaining (DiGiacinto aye, Vataj aye, Hussain aye, Rende aye, Berra abstain). Berra said the employee was excellent but that he opposes mid-year compensation changes absent extraordinary circumstances; Supervisor Rende argued at length that speaking against an item and then abstaining is a misuse of the abstention."
         }
       ]
     }
@@ -26747,7 +26750,7 @@
             "Legal, litigation & contracts",
             "Open government & procedure"
           ],
-          "evidence": "Voted no, saying he was prepared to reject it regardless of quorum, that the law 'stinks' and was drafted for the wrong reasons with no evidence of the abuses it claims to prevent, and that incoming member Vitaj should help evaluate it.",
+          "evidence": "Voted no, saying he was prepared to reject it regardless of quorum, that the law 'stinks' and was drafted for the wrong reasons with no evidence of the abuses it claims to prevent, and that incoming member Vataj should help evaluate it.",
           "confidence": "high"
         },
         {
@@ -40091,7 +40094,7 @@
       ]
     },
     {
-      "member": "Sonny Vitaj",
+      "member": "Sonny Vataj",
       "totalPositions": 20,
       "avgSentiment": 0.41,
       "confidenceMix": {
@@ -41138,7 +41141,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "The ASR transcript has no speaker labels and the presiding Supervisor voice (Joseph Rende) dominates. Roll-call votes and members addressed by name (Milim/'Matt', DiGiacinto/'Barbara', Hussain/'Saleem', Berra/'Jose') enabled confident attribution on the liaison dispute, library ramp, truss debate and water-district questions. ASR manglings normalized: Barron/Bera/Bearer/Barra/Barrack -> Jose Berra; Milam/Millam -> Matt Milim; Digacinto/Decento/De Jacinto -> Barbara DiGiacinto; Hussein -> Saleem Hussain; Rendez/Rende/'Friendly' -> Joseph Rende. The Airport Campus roll call only recorded three member ayes plus the Supervisor, so votes were not attributed to Milim or Berra on that item. No members were noted absent; Berra recused on the Long Pond Park District agreement. Sonny Vitaj is correctly excluded (2026 only)."
+      "attributionNote": "The ASR transcript has no speaker labels and the presiding Supervisor voice (Joseph Rende) dominates. Roll-call votes and members addressed by name (Milim/'Matt', DiGiacinto/'Barbara', Hussain/'Saleem', Berra/'Jose') enabled confident attribution on the liaison dispute, library ramp, truss debate and water-district questions. ASR manglings normalized: Barron/Bera/Bearer/Barra/Barrack -> Jose Berra; Milam/Millam -> Matt Milim; Digacinto/Decento/De Jacinto -> Barbara DiGiacinto; Hussein -> Saleem Hussain; Rendez/Rende/'Friendly' -> Joseph Rende. The Airport Campus roll call only recorded three member ayes plus the Supervisor, so votes were not attributed to Milim or Berra on that item. No members were noted absent; Berra recused on the Long Pond Park District agreement. Sonny Vataj is correctly excluded (2026 only)."
     },
     {
       "date": "2024-01-25",
@@ -42031,7 +42034,7 @@
     {
       "date": "2024-02-14",
       "meetingSummary": "The Town Board opened with a work session on plans for the town's 2026 celebration of the 250th anniversary of American independence, hearing an enthusiastic Historical Society presentation and a request for a celebration committee and a $40,000 appropriation. It then appointed a new probationary police officer, received liaison and community updates (library smart boards, a new food-scrap composting program, parks/turf-field progress), and took extended public comment on a new credit-card surcharge law and on downtown parking policy. Formal actions included opening/adjourning a public hearing on extending Water District 8 to the former MBIA/Airport Campus, adopting a senior-citizen/disability tax-exemption local law, adopting the Lombardi Park (District 4) water-main final order, scheduling a public hearing on tax-delinquency application restrictions, authorizing 2024 in-rem foreclosures, approving a NYSDOT permit for the Shell station, and debating (without resolution) escalation terms in the Community Park athletic-facilities RFP. A developer's request to reduce affordable-housing units at the former lumberyard was heard but drew no board support to advance.",
-      "durationNote": "Full quorum: Supervisor Rende and Council Members DiGiacinto, Berra, Hussain, and Milim all present (confirmed by roll call). Meeting opened 5:30 PM with an executive session, then a work session that ran long; proceedings continued past 9-10 PM. No absences. (Vitaj not yet on board in 2024; Berra held the seat.)",
+      "durationNote": "Full quorum: Supervisor Rende and Council Members DiGiacinto, Berra, Hussain, and Milim all present (confirmed by roll call). Meeting opened 5:30 PM with an executive session, then a work session that ran long; proceedings continued past 9-10 PM. No absences. (Vataj not yet on board in 2024; Berra held the seat.)",
       "cases": [
         {
           "id": "250th-anniversary-celebration-work-session",
@@ -42928,7 +42931,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Roll call on the Lombardi Park final order confirmed member voices: Councilman 'Millen' (Milim), 'D. Jacinto' (DiGiacinto), 'Bera' (Berra), 'Hussein' (Hussain), and 'Randy'/'Rundy' (Supervisor Rende). The presiding/supervisor voice throughout is Joseph Rende. Councilman Jose Berra was the detail-oriented member reviewing legal/financial documents (also addressed as 'councilman Bera'/'Mr. Burrard'); Saleem Hussain gave the library/250th-awareness and composting-adjacent comments; Matt Milim was the parks/finance-savvy member driving the turf-field, water-cost, and RFP discussions (his identity partly inferred by elimination among the five members and confirmed by the roll call). Barbara DiGiacinto is the board's sole woman. Berra held the seat in 2024 (Vitaj not yet on the board). Non-members kept separate: Town Attorney Roland, Water/Sewer Superintendent Sal, Town Clerk Allison Simon, Town Administrator Kevin Hay, the Police Chief, and applicant counsel Chris Fisher (staffInput); residents Ed Woodyard, Tom Rice, Connie Kehoe, Sue Scheimer, Ed Loberman, Stefan, and developer Mike Ferrari (publicComment). ASR speaker labels are reused across different people, so attribution relied on role and content rather than raw diarization labels."
+      "attributionNote": "Roll call on the Lombardi Park final order confirmed member voices: Councilman 'Millen' (Milim), 'D. Jacinto' (DiGiacinto), 'Bera' (Berra), 'Hussein' (Hussain), and 'Randy'/'Rundy' (Supervisor Rende). The presiding/supervisor voice throughout is Joseph Rende. Councilman Jose Berra was the detail-oriented member reviewing legal/financial documents (also addressed as 'councilman Bera'/'Mr. Burrard'); Saleem Hussain gave the library/250th-awareness and composting-adjacent comments; Matt Milim was the parks/finance-savvy member driving the turf-field, water-cost, and RFP discussions (his identity partly inferred by elimination among the five members and confirmed by the roll call). Barbara DiGiacinto is the board's sole woman. Berra held the seat in 2024 (Vataj not yet on the board). Non-members kept separate: Town Attorney Roland, Water/Sewer Superintendent Sal, Town Clerk Allison Simon, Town Administrator Kevin Hay, the Police Chief, and applicant counsel Chris Fisher (staffInput); residents Ed Woodyard, Tom Rice, Connie Kehoe, Sue Scheimer, Ed Loberman, Stefan, and developer Mike Ferrari (publicComment). ASR speaker labels are reused across different people, so attribution relied on role and content rather than raw diarization labels."
     },
     {
       "date": "2024-02-28",
@@ -44482,7 +44485,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were identifiable with good confidence from roles and the two end-of-meeting roll calls, which named each member. ASR manglings normalized: 'Jose'/'Vera'/'Barra'/'Bearer' = Councilman Jose Berra, who chaired as Deputy Supervisor while Supervisor Joseph Rende ('Endy'/'Rendezvous') participated remotely from Bermuda; 'Digesendo'/'Te Jacindo' = Barbara DiGiacinto; 'Milam' = Matt Milim; 'Hussein'/'Seline'/'Celine' = Saleem Hussain. Care taken to separate presiding voice Berra (Jose) from Supervisor Rende (also 'Joe/Jose' in ASR) by role. Staff (Kaufman, Roland, Simon, Kevin, Jamie Norris, Officer Tom) and applicant Mark Weingarten excluded from member positions. All five members present; no absences. Vitaj not on the board in 2024 and not attributed."
+      "attributionNote": "Speakers were identifiable with good confidence from roles and the two end-of-meeting roll calls, which named each member. ASR manglings normalized: 'Jose'/'Vera'/'Barra'/'Bearer' = Councilman Jose Berra, who chaired as Deputy Supervisor while Supervisor Joseph Rende ('Endy'/'Rendezvous') participated remotely from Bermuda; 'Digesendo'/'Te Jacindo' = Barbara DiGiacinto; 'Milam' = Matt Milim; 'Hussein'/'Seline'/'Celine' = Saleem Hussain. Care taken to separate presiding voice Berra (Jose) from Supervisor Rende (also 'Joe/Jose' in ASR) by role. Staff (Kaufman, Roland, Simon, Kevin, Jamie Norris, Officer Tom) and applicant Mark Weingarten excluded from member positions. All five members present; no absences. Vataj not on the board in 2024 and not attributed."
     },
     {
       "date": "2024-04-24",
@@ -46695,7 +46698,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "Raw ASR with no speaker labels; the Supervisor's presiding voice (Joseph Rende, mangled as 'Rendezvous/Endy/Randy') and roll-call votes anchored attribution. Two roll calls disambiguated members: AFFH 3-2 (Milim aye, DiGiacinto/'Digacinto' aye, Hussain/'Hussein' no, Berra/'Bera/Barra' no, Rende yes) and the 12 Maple CBA 3-1 (Milim aye, Berra aye, DiGiacinto no, Rende yes; Hussain dropped off Zoom at 12:50 a.m.). Saleem Hussain participated remotely and was intermittently cut off. Some Summit public-hearing remarks by residents (e.g., a lawyer citing ROWI general-counsel history) were kept in publicComment rather than risk mis-attributing them to a member. No Sonny Vitaj (2026 only). Non-members Adam Kaufman, Roland, Kevin, Abbas, Sal and the Bonadio auditors were routed to staffInput."
+      "attributionNote": "Raw ASR with no speaker labels; the Supervisor's presiding voice (Joseph Rende, mangled as 'Rendezvous/Endy/Randy') and roll-call votes anchored attribution. Two roll calls disambiguated members: AFFH 3-2 (Milim aye, DiGiacinto/'Digacinto' aye, Hussain/'Hussein' no, Berra/'Bera/Barra' no, Rende yes) and the 12 Maple CBA 3-1 (Milim aye, Berra aye, DiGiacinto no, Rende yes; Hussain dropped off Zoom at 12:50 a.m.). Saleem Hussain participated remotely and was intermittently cut off. Some Summit public-hearing remarks by residents (e.g., a lawyer citing ROWI general-counsel history) were kept in publicComment rather than risk mis-attributing them to a member. No Sonny Vataj (2026 only). Non-members Adam Kaufman, Roland, Kevin, Abbas, Sal and the Bonadio auditors were routed to staffInput."
     },
     {
       "date": "2024-06-26",
@@ -47282,7 +47285,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were identifiable with high confidence despite the label-free ASR. The Supervisor's presiding voice = Joseph Rende (Joe). Roll-call on the road naming confirmed member identities: DiGiacinto aye, Berra (ASR 'Vera') aye, Milim (ASR 'Milam') aye, Hussain (ASR 'Hussein') no, Supervisor Rende aye \u2014 a 4-1 vote. Jose Berra (Councilman, present all of 2024) was disambiguated from Supervisor 'Joe' Rende by role: Berra was the member pushing for a stricter noise standard and questioning the parcel-sale process, addressed as 'Jose.' Non-members correctly routed out of memberPositions: developer 'Jeff'/Mark Weingarten (applicant), Adam Kaufman (planner), Roland (attorney), Kevin (administrator), Allison Simon (clerk), Ed Woodyard (Road Naming Committee, not the councilman), and attorneys Hollis, Veneruso. Sonny Vitaj not attributed (joined 2026). All five members present; DiGiacinto recused from the 23 Bedford Banksville Road public hearing."
+      "attributionNote": "Speakers were identifiable with high confidence despite the label-free ASR. The Supervisor's presiding voice = Joseph Rende (Joe). Roll-call on the road naming confirmed member identities: DiGiacinto aye, Berra (ASR 'Vera') aye, Milim (ASR 'Milam') aye, Hussain (ASR 'Hussein') no, Supervisor Rende aye \u2014 a 4-1 vote. Jose Berra (Councilman, present all of 2024) was disambiguated from Supervisor 'Joe' Rende by role: Berra was the member pushing for a stricter noise standard and questioning the parcel-sale process, addressed as 'Jose.' Non-members correctly routed out of memberPositions: developer 'Jeff'/Mark Weingarten (applicant), Adam Kaufman (planner), Roland (attorney), Kevin (administrator), Allison Simon (clerk), Ed Woodyard (Road Naming Committee, not the councilman), and attorneys Hollis, Veneruso. Sonny Vataj not attributed (joined 2026). All five members present; DiGiacinto recused from the 23 Bedford Banksville Road public hearing."
     },
     {
       "date": "2024-07-10",
@@ -49860,7 +49863,7 @@
     {
       "date": "2024-09-25",
       "meetingSummary": "The North Castle Town Board opened with a work session on a proposed dog park at IBM Community Park, then swore in two new police officers and promoted a detective sergeant. It held a public hearing approving a special-event permit for a nursery fall festival, adopted an order scheduling a sewer-district public hearing, and tabled a set of Eagle Ridge school-bus easement documents that were not ready. The board also discussed a subdivision address-change notification law (scheduling a November public hearing), granted a resident a grace period on an address-change enforcement fine, approved going to bid on the Kent Place parking lot, accepted a $20,000 Lions Club donation, and waived permit fees for an October 7th memorial vigil.",
-      "durationNote": "Councilman Saleem Hussain absent (traveling on business); four of five members present, quorum met. Sonny Vitaj not yet on board (2026).",
+      "durationNote": "Councilman Saleem Hussain absent (traveling on business); four of five members present, quorum met. Sonny Vataj not yet on board (2026).",
       "cases": [
         {
           "id": "dog-park-ibm-community-park",
@@ -50500,7 +50503,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers identified by role in this ASR transcript with no speaker labels. The presiding/Supervisor voice = Joseph Rende (also mangled 'Rende/Rendy/Rendez/Endy'); Councilwoman = Barbara DiGiacinto ('Digacinto'); Councilman Matt Milim ('Milam/Millam'); Councilman Jose Berra ('Vera'), Deputy Supervisor, who led the easement concerns and mail-notice reforms. Saleem Hussain was absent (traveling on business). Sonny Vitaj not yet on the board (2026). Some dog-park 'streamlined process' comments were hard to split between Rende and Berra (medium confidence); staff (Traynor, Barone, Simon, Hay, Kaufman, Chief Simonson) and residents (Weinrock, Sorrell, Cece, Rosen, Woodyard) were kept out of memberPositions."
+      "attributionNote": "Speakers identified by role in this ASR transcript with no speaker labels. The presiding/Supervisor voice = Joseph Rende (also mangled 'Rende/Rendy/Rendez/Endy'); Councilwoman = Barbara DiGiacinto ('Digacinto'); Councilman Matt Milim ('Milam/Millam'); Councilman Jose Berra ('Vera'), Deputy Supervisor, who led the easement concerns and mail-notice reforms. Saleem Hussain was absent (traveling on business). Sonny Vataj not yet on the board (2026). Some dog-park 'streamlined process' comments were hard to split between Rende and Berra (medium confidence); staff (Traynor, Barone, Simon, Hay, Kaufman, Chief Simonson) and residents (Weinrock, Sorrell, Cece, Rosen, Woodyard) were kept out of memberPositions."
     },
     {
       "date": "2024-10-09",
@@ -51025,7 +51028,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "Raw ASR with no speaker labels. The Supervisor (Joseph Rende) and Councilwoman DiGiacinto were the most reliably identifiable (Barbara moved the 5-to-10-year bond change and authored the dog-park non-resident letter). Jose Berra identified as the member reviewing/commenting on the sewer documents ('the escrow agreement that Jose is referring to'; 'Hear that, Jose? I actually agreed with your comments'); attributed only in this 2024 meeting. The analytical dog-park champion who claimed the idea and cited the survey/cost is attributed to Matt Milim (medium confidence) and the 'part of our community/welcome them' comments to Saleem Hussain (medium); several male-voice exchanges could not be split with certainty, so those positions carry low-medium confidence. Names normalized from ASR (Milam/Millam\u2192Milim, Hussein\u2192Hussain, Digicento/Digento\u2192DiGiacinto, Vera/bearer\u2192Berra, Rendy/Rende\u2192Rende). All five members present; Hussain abstained from the Sept 25 minutes and a tabled matter. Sonny Vitaj not on the board in 2024 and not referenced."
+      "attributionNote": "Raw ASR with no speaker labels. The Supervisor (Joseph Rende) and Councilwoman DiGiacinto were the most reliably identifiable (Barbara moved the 5-to-10-year bond change and authored the dog-park non-resident letter). Jose Berra identified as the member reviewing/commenting on the sewer documents ('the escrow agreement that Jose is referring to'; 'Hear that, Jose? I actually agreed with your comments'); attributed only in this 2024 meeting. The analytical dog-park champion who claimed the idea and cited the survey/cost is attributed to Matt Milim (medium confidence) and the 'part of our community/welcome them' comments to Saleem Hussain (medium); several male-voice exchanges could not be split with certainty, so those positions carry low-medium confidence. Names normalized from ASR (Milam/Millam\u2192Milim, Hussein\u2192Hussain, Digicento/Digento\u2192DiGiacinto, Vera/bearer\u2192Berra, Rendy/Rende\u2192Rende). All five members present; Hussain abstained from the Sept 25 minutes and a tabled matter. Sonny Vataj not on the board in 2024 and not referenced."
     },
     {
       "date": "2024-11-13",
@@ -54084,7 +54087,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "Raw ASR with no speaker labels; the presiding/supervisor voice was mapped to Joseph Rende throughout. Council members were inferred from context and forms of address: Barbara DiGiacinto identified via 'Councilwoman' and the sketch/parallel-study remarks; Jose Berra via references to 'Councilman Barra/Barrow' and 'the point that Jose made,' the appraise-before-offer/friendly-condemnation and Byram Lake comments (Berra is valid for 2025); Matt Milim via 'what Matt explained/said' (fairness point, CB-zoning 'nerd' detail, 'once in a lifetime no-brainer'); Saleem Hussain ('Sween'/'Celine' ASR manglings) via the library-liaison update and the visibility/aesthetics concerns. Some overlapping compliments (Breezemont) and the asbestos management-services exchange could not be pinned to a single member with high confidence, so those carry lower confidence. Sonny Vitaj not attributed (2026 only). No absences noted; full five-member board present. Name manglings normalized: 'engineer Fluid' = Enginuity Fluid Inc., 'Bob Roberts Spino' = Bob Spolzino, 'George Ann Richardson' = Georgeanne Richardson."
+      "attributionNote": "Raw ASR with no speaker labels; the presiding/supervisor voice was mapped to Joseph Rende throughout. Council members were inferred from context and forms of address: Barbara DiGiacinto identified via 'Councilwoman' and the sketch/parallel-study remarks; Jose Berra via references to 'Councilman Barra/Barrow' and 'the point that Jose made,' the appraise-before-offer/friendly-condemnation and Byram Lake comments (Berra is valid for 2025); Matt Milim via 'what Matt explained/said' (fairness point, CB-zoning 'nerd' detail, 'once in a lifetime no-brainer'); Saleem Hussain ('Sween'/'Celine' ASR manglings) via the library-liaison update and the visibility/aesthetics concerns. Some overlapping compliments (Breezemont) and the asbestos management-services exchange could not be pinned to a single member with high confidence, so those carry lower confidence. Sonny Vataj not attributed (2026 only). No absences noted; full five-member board present. Name manglings normalized: 'engineer Fluid' = Enginuity Fluid Inc., 'Bob Roberts Spino' = Bob Spolzino, 'George Ann Richardson' = Georgeanne Richardson."
     },
     {
       "date": "2025-02-12",
@@ -54460,7 +54463,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Roll call named Berra ('Vera/Bara'), Milim ('Milam/Milan'), DiGiacinto ('D/Vicento/Digacinto'), Hussain ('Hussein'), and Rende ('Rendy') \u2014 all five present and aye on Water District 9. DiGiacinto recused from 23 Bedford Banksville. On 333 Main Street, member remarks were disambiguated by role and content: the Supervisor explicitly attributed the office-market/replacement-cost analysis to 'Matt' (Milim); DiGiacinto's apprehensive statement and Berra's price-uncertainty/tax-lawyer remarks were self-identifying; Hussain's shorter move-forward/FAQ comment is attributed with medium confidence. Note: a resident named 'Sonny Vitage' spoke during the Banksville hearing \u2014 this is a member of the public, NOT the board member Sonny Vitaj (who did not join the board until 2026), and was not attributed as a member."
+      "attributionNote": "Roll call named Berra ('Vera/Bara'), Milim ('Milam/Milan'), DiGiacinto ('D/Vicento/Digacinto'), Hussain ('Hussein'), and Rende ('Rendy') \u2014 all five present and aye on Water District 9. DiGiacinto recused from 23 Bedford Banksville. On 333 Main Street, member remarks were disambiguated by role and content: the Supervisor explicitly attributed the office-market/replacement-cost analysis to 'Matt' (Milim); DiGiacinto's apprehensive statement and Berra's price-uncertainty/tax-lawyer remarks were self-identifying; Hussain's shorter move-forward/FAQ comment is attributed with medium confidence. Note: a resident named 'Sonny Vitage' spoke during the Banksville hearing \u2014 this is a member of the public, NOT the board member Sonny Vataj (who did not join the board until 2026), and was not attributed as a member."
     },
     {
       "date": "2025-02-26",
@@ -55097,7 +55100,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were generally identifiable by role and content; the presiding/supervisor voice was mapped to Joseph Rende and members distinguished by their liaison roles and the water-district roll call (Berra, DiGiacinto, Hussain, Milim all 'aye,' Rende 'yes'). ASR mangled names throughout: Rende as 'Rendezvous/Endy/Rende,' DiGiacinto as 'Digacinto/Digacento,' Hussain as 'Hussein,' Milim as 'Millam/Millen/Miller,' Berra as 'Bara/Bearer'; Kevin Hay, Matt Traynor, Joe Tramelli and 'Sal' (Salvatore) also garbled. Jose Berra is attributed here (2025 meeting); Sonny Vitaj not on the board yet. Some quality-of-life/police-outsourcing remarks by a police liaison could not be confidently assigned to a specific member and were left unattributed. DiGiacinto recused on 23 Bedford Banksville Road."
+      "attributionNote": "Speakers were generally identifiable by role and content; the presiding/supervisor voice was mapped to Joseph Rende and members distinguished by their liaison roles and the water-district roll call (Berra, DiGiacinto, Hussain, Milim all 'aye,' Rende 'yes'). ASR mangled names throughout: Rende as 'Rendezvous/Endy/Rende,' DiGiacinto as 'Digacinto/Digacento,' Hussain as 'Hussein,' Milim as 'Millam/Millen/Miller,' Berra as 'Bara/Bearer'; Kevin Hay, Matt Traynor, Joe Tramelli and 'Sal' (Salvatore) also garbled. Jose Berra is attributed here (2025 meeting); Sonny Vataj not on the board yet. Some quality-of-life/police-outsourcing remarks by a police liaison could not be confidently assigned to a specific member and were left unattributed. DiGiacinto recused on 23 Bedford Banksville Road."
     },
     {
       "date": "2025-03-12",
@@ -55610,7 +55613,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "The transcript is unlabeled ASR running text. The presiding/Supervisor voice was confidently identified as Joseph Rende, and Barbara DiGiacinto (the board's only woman, named directly and by residents) was identified with high confidence. Matt Milim was identifiable via residents' repeated references to his Facebook post and interview. Jose Berra and Saleem Hussain were inferred from context (Berra polled by name and favoring a November referendum; Hussain describing his 'first government role' and offering to draft the FAQ), so their attributions are lower-confidence. Names were frequently garbled (e.g., 'Rendez,' 'Millen/Milam,' 'Digacinto'). All five board members appear present; Sonny Vitaj is correctly excluded (2026 only)."
+      "attributionNote": "The transcript is unlabeled ASR running text. The presiding/Supervisor voice was confidently identified as Joseph Rende, and Barbara DiGiacinto (the board's only woman, named directly and by residents) was identified with high confidence. Matt Milim was identifiable via residents' repeated references to his Facebook post and interview. Jose Berra and Saleem Hussain were inferred from context (Berra polled by name and favoring a November referendum; Hussain describing his 'first government role' and offering to draft the FAQ), so their attributions are lower-confidence. Names were frequently garbled (e.g., 'Rendez,' 'Millen/Milam,' 'Digacinto'). All five board members appear present; Sonny Vataj is correctly excluded (2026 only)."
     },
     {
       "date": "2025-03-26",
@@ -56268,7 +56271,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were largely identifiable by role and context: Supervisor Rende presided remotely by Zoom ('Joe Rendez joining us by zoom'); Milim (turf champion, Lions Club president recusal) and DiGiacinto (Con Ed resolution, turf bonding concern, recusal on 23 Bedford) were clearly identified; Hussain identified via 'Saleem/Salim/Celine' manglings. Jose Berra is present (Deputy Supervisor) but had little distinctive substantive dialogue; the '11th hour' document-change objection during the 23 Bedford hearing was made by a non-presiding council member whose identity is uncertain (tentatively Berra, low confidence). Barbara DiGiacinto recused on 23 Bedford Banksville Rd; Matt Milim recused on the Lions Club Fol-de-rol. Staff names normalized (DiGiacinto ASR 'digisono'; Comptroller 'Abbasura' = Abbas). Sonny Vitaj not applicable (2026 only)."
+      "attributionNote": "Speakers were largely identifiable by role and context: Supervisor Rende presided remotely by Zoom ('Joe Rendez joining us by zoom'); Milim (turf champion, Lions Club president recusal) and DiGiacinto (Con Ed resolution, turf bonding concern, recusal on 23 Bedford) were clearly identified; Hussain identified via 'Saleem/Salim/Celine' manglings. Jose Berra is present (Deputy Supervisor) but had little distinctive substantive dialogue; the '11th hour' document-change objection during the 23 Bedford hearing was made by a non-presiding council member whose identity is uncertain (tentatively Berra, low confidence). Barbara DiGiacinto recused on 23 Bedford Banksville Rd; Matt Milim recused on the Lions Club Fol-de-rol. Staff names normalized (DiGiacinto ASR 'digisono'; Comptroller 'Abbasura' = Abbas). Sonny Vataj not applicable (2026 only)."
     },
     {
       "date": "2025-04-09",
@@ -57111,7 +57114,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Full board present (Rende, DiGiacinto, Hussain, Milim, Berra); no Vitaj (2026 only). The unlabeled ASR made speaker identification hard on the long sign-law and ethics segments; the presiding/supervisor voice was mapped to Rende and roll-call/named exchanges used to attribute Milim, DiGiacinto, Hussain and Berra. Board of Ethics presenters (e.g., Brett Summers, Sue) are a town committee, treated as public/committee input, not board members. Some names garbled (DiGiacinto as 'Digacino/Dejacinto', Berra as 'Barra/Barros/Bara', Kaufman references). Lower-confidence attributions flagged where the speaker could not be pinned down."
+      "attributionNote": "Full board present (Rende, DiGiacinto, Hussain, Milim, Berra); no Vataj (2026 only). The unlabeled ASR made speaker identification hard on the long sign-law and ethics segments; the presiding/supervisor voice was mapped to Rende and roll-call/named exchanges used to attribute Milim, DiGiacinto, Hussain and Berra. Board of Ethics presenters (e.g., Brett Summers, Sue) are a town committee, treated as public/committee input, not board members. Some names garbled (DiGiacinto as 'Digacino/Dejacinto', Berra as 'Barra/Barros/Bara', Kaufman references). Lower-confidence attributions flagged where the speaker could not be pinned down."
     },
     {
       "date": "2025-04-23",
@@ -59120,7 +59123,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "The presiding supervisor voice was clearly Joseph Rende. The Gateway item's roll call explicitly named all five members (Digacento=DiGiacinto aye, Milam=Milim aye, Hussein=Hussain aye, Vera=Berra no, Rende yes), enabling confident attribution including the 4-1 split. ASR manglings normalized: Digacento/Digacinto to DiGiacinto, Milam/Millam to Milim, Hussein to Hussain, Vera/Behr to Berra. Full board present; no absences noted. Berra attributed as a member (2025 meeting); Vitaj not present per roster. Voice votes on routine items lacked named attribution, so those cases carry few or no member positions."
+      "attributionNote": "The presiding supervisor voice was clearly Joseph Rende. The Gateway item's roll call explicitly named all five members (Digacento=DiGiacinto aye, Milam=Milim aye, Hussein=Hussain aye, Vera=Berra no, Rende yes), enabling confident attribution including the 4-1 split. ASR manglings normalized: Digacento/Digacinto to DiGiacinto, Milam/Millam to Milim, Hussein to Hussain, Vera/Behr to Berra. Full board present; no absences noted. Berra attributed as a member (2025 meeting); Vataj not present per roster. Voice votes on routine items lacked named attribution, so those cases carry few or no member positions."
     },
     {
       "date": "2025-06-11",
@@ -59742,7 +59745,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Full five-member board present; the tabling roll call explicitly named each member, enabling reliable vote attribution (Milim, Berra, DiGiacinto, Hussain aye; Rende no). ASR manglings normalized: 'Rendezvous/Endy'=Joseph Rende (Supervisor), 'Vera/Barra'=Jose Berra, 'Digacinto'=Barbara DiGiacinto, 'Hussein/Salim'=Saleem Hussain, 'Milam'=Matt Milim. Note: 'Sonny' (Vitaj) is mentioned only as an Armonk Fire Department Folderol participant, NOT as a board member (he joins in 2026), so no positions are attributed to him. Some parking-hearing and open-space speaker identities among Hussain/Milim were inferred by context (medium/low confidence). Staff/consultants (McCormick, Connolly, Abbas, Kevin, Sal, Spolzino, Clerk Simon) and residents were kept out of member positions."
+      "attributionNote": "Full five-member board present; the tabling roll call explicitly named each member, enabling reliable vote attribution (Milim, Berra, DiGiacinto, Hussain aye; Rende no). ASR manglings normalized: 'Rendezvous/Endy'=Joseph Rende (Supervisor), 'Vera/Barra'=Jose Berra, 'Digacinto'=Barbara DiGiacinto, 'Hussein/Salim'=Saleem Hussain, 'Milam'=Matt Milim. Note: 'Sonny' (Vataj) is mentioned only as an Armonk Fire Department Folderol participant, NOT as a board member (he joins in 2026), so no positions are attributed to him. Some parking-hearing and open-space speaker identities among Hussain/Milim were inferred by context (medium/low confidence). Staff/consultants (McCormick, Connolly, Abbas, Kevin, Sal, Spolzino, Clerk Simon) and residents were kept out of member positions."
     },
     {
       "date": "2025-06-25",
@@ -60286,7 +60289,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Supervisor Rende presides and speaks most; identified with high confidence. Saleem Hussain's road-quality questioning and Barbara DiGiacinto's remarks are clearly attributable by role and address ('Saleem', 'Barbara'). Matt Milim identified via the AI-art disclosure question; Jose Berra via his 'nothing at all' liaison line (2025 meeting, so Berra is on the board; Vitaj excluded). Non-members Chris Burdick and Shelly Mayer (state legislators) and residents Ed Woodyard/Marion Hamilton were kept out of memberPositions. Roll-call votes were not itemized in this ASR (voice 'all in favor / aye'), so most consent items carry no individual attribution. No absences noted."
+      "attributionNote": "Supervisor Rende presides and speaks most; identified with high confidence. Saleem Hussain's road-quality questioning and Barbara DiGiacinto's remarks are clearly attributable by role and address ('Saleem', 'Barbara'). Matt Milim identified via the AI-art disclosure question; Jose Berra via his 'nothing at all' liaison line (2025 meeting, so Berra is on the board; Vataj excluded). Non-members Chris Burdick and Shelly Mayer (state legislators) and residents Ed Woodyard/Marion Hamilton were kept out of memberPositions. Roll-call votes were not itemized in this ASR (voice 'all in favor / aye'), so most consent items carry no individual attribution. No absences noted."
     },
     {
       "date": "2025-07-23",
@@ -60963,7 +60966,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Two key contested items (Gateway extension and the RFEI) had named roll-call votes, allowing confident attribution of each member's stance, including DiGiacinto's 'no' votes and Berra's abstention on Gateway. ASR mangled surnames (Rende as 'Rendezvous/Endy,' DiGiacinto as 'Digacento/Digacinto,' Hussain as 'Hussein,' Milim as 'Millam/Millen,' Berra as 'Barra/Vera') were normalized to roster names; the presiding/supervisor voice was mapped to Rende and polled members to their surnames. Note: 'Sonny Vitaj' does NOT appear as a board member (he joins in 2026); a 'Bissell Vitage' named in the closing-in-memory list is a resident (brother of the Armonk fire captain), not the councilman, and was not attributed. Guest County Executive Ken Jenkins is an elected official, not town staff. Some voice-vote-only procedural items had no individual attribution."
+      "attributionNote": "Two key contested items (Gateway extension and the RFEI) had named roll-call votes, allowing confident attribution of each member's stance, including DiGiacinto's 'no' votes and Berra's abstention on Gateway. ASR mangled surnames (Rende as 'Rendezvous/Endy,' DiGiacinto as 'Digacento/Digacinto,' Hussain as 'Hussein,' Milim as 'Millam/Millen,' Berra as 'Barra/Vera') were normalized to roster names; the presiding/supervisor voice was mapped to Rende and polled members to their surnames. Note: 'Sonny Vataj' does NOT appear as a board member (he joins in 2026); a 'Bissell Vitage' named in the closing-in-memory list is a resident (brother of the Armonk fire captain), not the councilman, and was not attributed. Guest County Executive Ken Jenkins is an elected official, not town staff. Some voice-vote-only procedural items had no individual attribution."
     },
     {
       "date": "2025-08-13",
@@ -62769,7 +62772,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "The presiding/supervisor voice was attributed to Joseph Rende; Barbara DiGiacinto and Jose Berra were clearly identifiable as the two members in the contested RFEI and ethics exchanges (Berra named in roll-call/recusal and as ethics liaison). Saleem Hussain self-identified via the library presentation. Matt Milim participated remotely and was addressed by name ('Matt, you still with us?'). This is a 2025 meeting so Jose Berra is attributed and Sonny Vitaj does not appear. ASR garbling normalized (DiGiacinto, Milim, Spolzino). Staff (Allison Simon, Roland, Kevin, Sal, Bob Spolzino) and outside attorney Jerry Tortorella kept out of memberPositions. No absences noted beyond Berra briefly stepping out and Milim attending remotely."
+      "attributionNote": "The presiding/supervisor voice was attributed to Joseph Rende; Barbara DiGiacinto and Jose Berra were clearly identifiable as the two members in the contested RFEI and ethics exchanges (Berra named in roll-call/recusal and as ethics liaison). Saleem Hussain self-identified via the library presentation. Matt Milim participated remotely and was addressed by name ('Matt, you still with us?'). This is a 2025 meeting so Jose Berra is attributed and Sonny Vataj does not appear. ASR garbling normalized (DiGiacinto, Milim, Spolzino). Staff (Allison Simon, Roland, Kevin, Sal, Bob Spolzino) and outside attorney Jerry Tortorella kept out of memberPositions. No absences noted beyond Berra briefly stepping out and Milim attending remotely."
     },
     {
       "date": "2025-09-30",
@@ -63463,7 +63466,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "The transcript is unlabeled running ASR text; the presiding/supervisor voice (rendered 'Endy'/'Joe') is Joseph Rende, and the roll-call vote on the Eagle logo gave firm attribution: 'Councilman Millen' = Matt Milim (aye), 'Councilman Hussein' = Saleem Hussain (aye), 'Councilman Barra' = Jose Berra (abstain), 'Councilman Digicinto' = Barbara DiGiacinto (no, via Zoom), 'Supervisor Endy' = Joseph Rende (yes). Berra ('Jose') was disambiguated from Rende by role. DiGiacinto participated remotely (ill) and her Zoom remarks were clearly flagged. Most other votes were unanimous voice votes with no per-member naming. Some substantive stances (e.g., the analytical eagle-branding defense attributed to Hussain, the 'live near a park' hoop comment, and technical GIS questions in the NRI session) could not be pinned to a specific member with certainty and were attributed at medium/low confidence or left unattributed. No members were absent; all five participated (one via Zoom). This is a 2025 meeting, so Jose Berra is on the board and Sonny Vitaj is not."
+      "attributionNote": "The transcript is unlabeled running ASR text; the presiding/supervisor voice (rendered 'Endy'/'Joe') is Joseph Rende, and the roll-call vote on the Eagle logo gave firm attribution: 'Councilman Millen' = Matt Milim (aye), 'Councilman Hussein' = Saleem Hussain (aye), 'Councilman Barra' = Jose Berra (abstain), 'Councilman Digicinto' = Barbara DiGiacinto (no, via Zoom), 'Supervisor Endy' = Joseph Rende (yes). Berra ('Jose') was disambiguated from Rende by role. DiGiacinto participated remotely (ill) and her Zoom remarks were clearly flagged. Most other votes were unanimous voice votes with no per-member naming. Some substantive stances (e.g., the analytical eagle-branding defense attributed to Hussain, the 'live near a park' hoop comment, and technical GIS questions in the NRI session) could not be pinned to a specific member with certainty and were attributed at medium/low confidence or left unattributed. No members were absent; all five participated (one via Zoom). This is a 2025 meeting, so Jose Berra is on the board and Sonny Vataj is not."
     },
     {
       "date": "2025-10-08",
@@ -64129,12 +64132,12 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Roll-call votes explicitly named members (Berra, DiGiacinto, Milim, Hussain, Rende), enabling confident attribution of the two split votes (airport 4-1 Milim no; RFEI extension 4-1 Berra no). ASR mangled surnames (Rendezvous/Rende for Rende, Milam for Milim, Hussein for Hussain, Digesento/Digacinto for DiGiacinto, Barra/Bera for Berra). Supervisor Rende (presiding 'Jose'/'Joe') was disambiguated from Councilman Jose Berra by role. Berra's substantive input was limited outside the RFEI item; his STR-work-session positions were not clearly identifiable and were not attributed. Sonny Vitaj not present (2026 only). All five members present; Hussain attended by Zoom."
+      "attributionNote": "Roll-call votes explicitly named members (Berra, DiGiacinto, Milim, Hussain, Rende), enabling confident attribution of the two split votes (airport 4-1 Milim no; RFEI extension 4-1 Berra no). ASR mangled surnames (Rendezvous/Rende for Rende, Milam for Milim, Hussein for Hussain, Digesento/Digacinto for DiGiacinto, Barra/Bera for Berra). Supervisor Rende (presiding 'Jose'/'Joe') was disambiguated from Councilman Jose Berra by role. Berra's substantive input was limited outside the RFEI item; his STR-work-session positions were not clearly identifiable and were not attributed. Sonny Vataj not present (2026 only). All five members present; Hussain attended by Zoom."
     },
     {
       "date": "2025-10-22",
       "meetingSummary": "The Town Board opened with a lengthy work session on sidewalk and trail improvements for the Armonk and North White Plains hamlets, presented by Town Planner Adam Kaufman, and reached a consensus to have staff and engineers redesign a comprehensive, more cost-effective sidewalk plan covering both hamlets, with a spirited debate over bonding and tax impact. The board then held and closed a public hearing adopting a local law amending Chapter 263 (Special Events) to remove the public-hearing requirement in favor of staff referral. It approved routine business including meeting minutes, a Water District #4 payment application, a NY Swims grant resolution, receipt of the Water District #9 (Quarry Heights) map/plan/report, a tax-map maintenance agreement, a Hergenhan Recreation Center roof replacement (passed with one abstention), and three personnel appointments. Public comment centered on strong resident support for sidewalks and a call to enforce/revise the temporary political-sign law.",
-      "durationNote": "Quorum present; board reopened public session after an executive session. No absences noted. Councilman Jose Berra participated (2025 roster). Note: 'Sonny Vitaj/Vitage' appears here only as a resident/candidate giving public comment, not as a board member.",
+      "durationNote": "Quorum present; board reopened public session after an executive session. No absences noted. Councilman Jose Berra participated (2025 roster). Note: 'Sonny Vataj/Vitage' appears here only as a resident/candidate giving public comment, not as a board member.",
       "cases": [
         {
           "id": "sidewalk-trail-improvements-armonk-north-white-plains",
@@ -64153,7 +64156,7 @@
           ],
           "overallSentiment": "positive",
           "sentimentScore": 0.6,
-          "publicComment": "Strongly supportive. PRAB chair Carl Hendricks urged 'safety over Taj Mahal' and to keep the ball rolling, citing pedestrian accidents on School Street; PRAB member Norma Hill warned that delay only raises costs; resident/candidate Sonny Vitaj recommended making paths plow-width and noted state funding inequities; a resident (Michael Akivan) added context. Overall the public pressed the board to act.",
+          "publicComment": "Strongly supportive. PRAB chair Carl Hendricks urged 'safety over Taj Mahal' and to keep the ball rolling, citing pedestrian accidents on School Street; PRAB member Norma Hill warned that delay only raises costs; resident/candidate Sonny Vataj recommended making paths plow-width and noted state funding inequities; a resident (Michael Akivan) added context. Overall the public pressed the board to act.",
           "memberPositions": [
             {
               "member": "Joseph Rende",
@@ -64226,7 +64229,7 @@
           ],
           "overallSentiment": "positive",
           "sentimentScore": 0.7,
-          "publicComment": "Resident/candidate Sonny Vitaj asked for a plain-language explanation and welcomed retaining the 250-ft neighbor notification; a resident (Michael Akivan) suggested wider notice for high-traffic events like car shows. Tone constructive.",
+          "publicComment": "Resident/candidate Sonny Vataj asked for a plain-language explanation and welcomed retaining the 250-ft neighbor notification; a resident (Michael Akivan) suggested wider notice for high-traffic events like car shows. Tone constructive.",
           "memberPositions": [
             {
               "member": "Joseph Rende",
@@ -64601,7 +64604,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "Raw ASR with no speaker labels. The presiding Supervisor voice (Joseph Rende; mangled as 'Rendez/Rendezvous') was reliably identified. Barbara DiGiacinto (fiscal-caution voice), Matt Milim ('Millam', debt-service math), and Jose Berra ('Vera', clarifying questions) were identified by role/context and the roof roll call. The roof abstention was garbled ('Councilman Vera. Abstained.') and is attributed to Berra with low confidence. Saleem Hussain's sidewalk scope additions (Nethermont path, Main Street pavers) are attributed with low confidence. IMPORTANT: 'Sonny Vitaj/Vitage/Vitash' appears only as a resident/candidate in public comment, NOT as a board member (he joins in 2026), so he is excluded from memberPositions. No board absences were noted."
+      "attributionNote": "Raw ASR with no speaker labels. The presiding Supervisor voice (Joseph Rende; mangled as 'Rendez/Rendezvous') was reliably identified. Barbara DiGiacinto (fiscal-caution voice), Matt Milim ('Millam', debt-service math), and Jose Berra ('Vera', clarifying questions) were identified by role/context and the roof roll call. The roof abstention was garbled ('Councilman Vera. Abstained.') and is attributed to Berra with low confidence. Saleem Hussain's sidewalk scope additions (Nethermont path, Main Street pavers) are attributed with low confidence. IMPORTANT: 'Sonny Vataj/Vitage/Vitash' appears only as a resident/candidate in public comment, NOT as a board member (he joins in 2026), so he is excluded from memberPositions. No board absences were noted."
     },
     {
       "date": "2025-11-05",
@@ -64784,7 +64787,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were largely identifiable by role and direct address. The Supervisor (Rende, presiding voice) and Councilwoman DiGiacinto ('Barbara') were clear; Milim ('Matt', asking the tax-cap questions) and Berra ('Jose', mentioning Argentina call and Tech Task Force) were identifiable. Saleem Hussain was only referenced by Berra (Tech Task Force) and did not clearly speak, so no position is attributed to him. Staff Abbas (Comptroller) and Kevin (Town Administrator) identified by name. This is a 2025 meeting, so Jose Berra is on the board and Sonny Vitaj is not."
+      "attributionNote": "Speakers were largely identifiable by role and direct address. The Supervisor (Rende, presiding voice) and Councilwoman DiGiacinto ('Barbara') were clear; Milim ('Matt', asking the tax-cap questions) and Berra ('Jose', mentioning Argentina call and Tech Task Force) were identifiable. Saleem Hussain was only referenced by Berra (Tech Task Force) and did not clearly speak, so no position is attributed to him. Staff Abbas (Comptroller) and Kevin (Town Administrator) identified by name. This is a 2025 meeting, so Jose Berra is on the board and Sonny Vataj is not."
     },
     {
       "date": "2025-11-12",
@@ -65535,7 +65538,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Full board identifiable via end-of-meeting and mid-meeting roll calls (Milim/Millen, Hussain/Hussein, DiGiacinto/Digesenta, Berra/Bara/Vera, Rende/Rendezvous). This is a 2025 meeting so Jose Berra is attributed and Sonny Vitaj is absent from the roster. The Ethics work session is unlabeled ASR with many overlapping voices, including non-member Board of Ethics presenters (Mr. Summers, Brett, Judge Scheimer) and special counsel Bob Spolzino, kept out of memberPositions; member stances there were inferred by role and self-references (e.g., Rende using 'Joe Rende' as his own example, DiGiacinto as the board's former teacher). The parking-lot change-order #11 objector is attributed to Milim with medium confidence given his fiscal framing, though the roll call recorded him as 'Aye.'"
+      "attributionNote": "Full board identifiable via end-of-meeting and mid-meeting roll calls (Milim/Millen, Hussain/Hussein, DiGiacinto/Digesenta, Berra/Bara/Vera, Rende/Rendezvous). This is a 2025 meeting so Jose Berra is attributed and Sonny Vataj is absent from the roster. The Ethics work session is unlabeled ASR with many overlapping voices, including non-member Board of Ethics presenters (Mr. Summers, Brett, Judge Scheimer) and special counsel Bob Spolzino, kept out of memberPositions; member stances there were inferred by role and self-references (e.g., Rende using 'Joe Rende' as his own example, DiGiacinto as the board's former teacher). The parking-lot change-order #11 objector is attributed to Milim with medium confidence given his fiscal framing, though the roll call recorded him as 'Aye.'"
     },
     {
       "date": "2025-11-19",
@@ -65559,7 +65562,7 @@
           ],
           "overallSentiment": "positive",
           "sentimentScore": 0.7,
-          "publicComment": "Resident Fred Cohen raised specific ramp-striping/merge safety concerns; resident Sonny Vitaj (a firefighter/EMS volunteer) urged wider shoulders for bicyclists and worried about ladder-truck clearance; residents Carolyn Hoffman and Ed Loberman commented, with Loberman vehemently opposing any North White Plains bike lanes. Generally supportive of the replacement.",
+          "publicComment": "Resident Fred Cohen raised specific ramp-striping/merge safety concerns; resident Sonny Vataj (a firefighter/EMS volunteer) urged wider shoulders for bicyclists and worried about ladder-truck clearance; residents Carolyn Hoffman and Ed Loberman commented, with Loberman vehemently opposing any North White Plains bike lanes. Generally supportive of the replacement.",
           "memberPositions": [
             {
               "member": "Joseph Rende",
@@ -65852,7 +65855,7 @@
           "applicationType": "local law",
           "applicant": "Board of Ethics / Councilman Berra (liaison)",
           "status": "defeated",
-          "summary": "A late-added item to receive proposed Code of Ethics amendments (drafted with special counsel Bob Spolzino and the Board of Ethics) and schedule a December 10 public hearing triggered a heated dispute. DiGiacinto objected that she received a revised draft only at 4:27 p.m. and accused Berra of overreaching by directing the attorney's edits; Rende said the law 'stinks,' was drafted for the wrong reasons, and that incoming member Sonny Vitaj should weigh in. After agreeing to delete one disputed provision, the motion (Berra/Hussain in favor) failed on a 2-2 roll call (Berra aye, Hussain aye, DiGiacinto no, Rende no; Milim absent), a tie constituting denial.",
+          "summary": "A late-added item to receive proposed Code of Ethics amendments (drafted with special counsel Bob Spolzino and the Board of Ethics) and schedule a December 10 public hearing triggered a heated dispute. DiGiacinto objected that she received a revised draft only at 4:27 p.m. and accused Berra of overreaching by directing the attorney's edits; Rende said the law 'stinks,' was drafted for the wrong reasons, and that incoming member Sonny Vataj should weigh in. After agreeing to delete one disputed provision, the motion (Berra/Hussain in favor) failed on a 2-2 roll call (Berra aye, Hussain aye, DiGiacinto no, Rende no; Milim absent), a tie constituting denial.",
           "themes": [
             "Legal, litigation & contracts",
             "Open government & procedure",
@@ -65901,7 +65904,7 @@
                 "open government & procedure",
                 "legal & litigation"
               ],
-              "evidence": "Voted no, saying he was prepared to reject it regardless of quorum, that the law 'stinks' and was drafted for the wrong reasons with no evidence of the abuses it claims to prevent, and that incoming member Vitaj should help evaluate it.",
+              "evidence": "Voted no, saying he was prepared to reject it regardless of quorum, that the law 'stinks' and was drafted for the wrong reasons with no evidence of the abuses it claims to prevent, and that incoming member Vataj should help evaluate it.",
               "confidence": "high"
             }
           ]
@@ -66050,7 +66053,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were generally identifiable: roll-call votes named each member (Water District 9 4-0; Ethics 2-2), and the Supervisor, Berra, DiGiacinto, and Hussain spoke distinctly on major items. Matt Milim was absent all evening (out-of-town business, no Zoom), so no positions are attributed to him despite residents quoting his prior statements. Sonny Vitaj appears only as a resident/EMS volunteer (he does not join the board until 2026) and is placed in publicComment, not memberPositions. ASR mangled names (Rende as 'Rendez/Endy/Randy', DiGiacinto as 'Digacinto/Digisonto', Berra as 'Barra/Bearer/Vera', Hussain as 'Hussein') were normalized. One board voice agreeing on the Crossroad item was attributed to DiGiacinto with medium confidence; a bridge-communication question could not be confidently attributed and was omitted."
+      "attributionNote": "Speakers were generally identifiable: roll-call votes named each member (Water District 9 4-0; Ethics 2-2), and the Supervisor, Berra, DiGiacinto, and Hussain spoke distinctly on major items. Matt Milim was absent all evening (out-of-town business, no Zoom), so no positions are attributed to him despite residents quoting his prior statements. Sonny Vataj appears only as a resident/EMS volunteer (he does not join the board until 2026) and is placed in publicComment, not memberPositions. ASR mangled names (Rende as 'Rendez/Endy/Randy', DiGiacinto as 'Digacinto/Digisonto', Berra as 'Barra/Bearer/Vera', Hussain as 'Hussein') were normalized. One board voice agreeing on the Crossroad item was attributed to DiGiacinto with medium confidence; a bridge-communication question could not be confidently attributed and was omitted."
     },
     {
       "date": "2025-12-01",
@@ -66245,12 +66248,12 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "Raw ASR with no speaker labels. Supervisor Joseph Rende (presiding) and the two outside presenters (Michael Ferrari, Keith Rosenthal) and numerous named residents were readily identifiable. Board comments at the end were attributable: Barbara DiGiacinto explicitly named 'Matt' for the detailed financial-analysis remarks, so those are attributed to Matt Milim (confidence lowered to medium because that speaker twice said he 'won't be here' for future decisions, which is unusual given the roster and could indicate a different member); Barbara DiGiacinto's own remarks (conservative-with-money, North White Plains, keep highway on-site) are high confidence; Saleem Hussain identified himself on Zoom. Jose Berra (still on the board through 2025) was not clearly heard on the redevelopment item and is attributed only low-confidence via Supervisor Rende's secondhand reference to him leading condo-taxation legislation at a prior budget meeting. Sonny Vitaj not attributed (2026 only)."
+      "attributionNote": "Raw ASR with no speaker labels. Supervisor Joseph Rende (presiding) and the two outside presenters (Michael Ferrari, Keith Rosenthal) and numerous named residents were readily identifiable. Board comments at the end were attributable: Barbara DiGiacinto explicitly named 'Matt' for the detailed financial-analysis remarks, so those are attributed to Matt Milim (confidence lowered to medium because that speaker twice said he 'won't be here' for future decisions, which is unusual given the roster and could indicate a different member); Barbara DiGiacinto's own remarks (conservative-with-money, North White Plains, keep highway on-site) are high confidence; Saleem Hussain identified himself on Zoom. Jose Berra (still on the board through 2025) was not clearly heard on the redevelopment item and is attributed only low-confidence via Supervisor Rende's secondhand reference to him leading condo-taxation legislation at a prior budget meeting. Sonny Vataj not attributed (2026 only)."
     },
     {
       "date": "2025-12-10",
       "meetingSummary": "The Town Board opened by honoring retiring Police Chief Peter Simonson (35 years) with county, state, and town proclamations, and recognized departing Councilman Matt Milim, whose term was ending. The board then made several appointments (interim Police Chief Reagan Huffnagel, animal warden/parking officer Mary Madsen, two building department staff), held public hearings adopting a Chapter 325 traffic law (Crossroad North one-way), a local law overriding the tax levy limit, and the 2026 town budget (both 4-1 with DiGiacinto opposed). It handled a contentious late-added $5M pool bond resolution and pool structural-engineering authorization, Lombardi Park water-extension change orders (demolition change order split 4-1), receipt of a Ferrari Companies rezoning petition, and a discussion to redraft the EV charging law to permit Level 3 fast charging. The meeting began at 5:30 with an executive session to interview police chief candidates and ran past midnight.",
-      "durationNote": "Full five-member board present (Rende, DiGiacinto, Hussain, Milim, Berra); quorum met, no absences. Meeting opened at 5:30 p.m., recessed to executive session for police-chief interviews, reconvened late and ran past midnight. Incoming councilman Sonny Vitaj attended as a resident/audience member (not yet seated).",
+      "durationNote": "Full five-member board present (Rende, DiGiacinto, Hussain, Milim, Berra); quorum met, no absences. Meeting opened at 5:30 p.m., recessed to executive session for police-chief interviews, reconvened late and ran past midnight. Incoming councilman Sonny Vataj attended as a resident/audience member (not yet seated).",
       "cases": [
         {
           "id": "proclamation-chief-simonson-retirement",
@@ -66327,14 +66330,14 @@
           "applicationType": "proclamation",
           "applicant": "Town Board",
           "status": "adopted",
-          "summary": "The board presented a certificate of recognition to Councilman Matt Milim, whose four-year term was ending (this being his last meeting), thanking him for his service and specifically for resurrecting the Armonk Lions Club and the Folderol festival. Each colleague spoke warmly about his intelligence, independence, and willingness to embrace debate and dissent. Supervisor Rende and Chief Simonson noted their close working relationships. Ceremonial and universally supportive; incoming councilman Sonny Vitaj was acknowledged as his successor.",
+          "summary": "The board presented a certificate of recognition to Councilman Matt Milim, whose four-year term was ending (this being his last meeting), thanking him for his service and specifically for resurrecting the Armonk Lions Club and the Folderol festival. Each colleague spoke warmly about his intelligence, independence, and willingness to embrace debate and dissent. Supervisor Rende and Chief Simonson noted their close working relationships. Ceremonial and universally supportive; incoming councilman Sonny Vataj was acknowledged as his successor.",
           "themes": [
             "Ceremonial & community",
             "Personnel & appointments"
           ],
           "overallSentiment": "positive",
           "sentimentScore": 1.0,
-          "publicComment": "County Legislator Margaret Kunzio and incoming councilman Sonny Vitaj (as a resident) thanked Milim for his service, especially reviving the Folderol.",
+          "publicComment": "County Legislator Margaret Kunzio and incoming councilman Sonny Vataj (as a resident) thanked Milim for his service, especially reviving the Folderol.",
           "memberPositions": [
             {
               "member": "Joseph Rende",
@@ -66555,7 +66558,7 @@
           ],
           "overallSentiment": "mixed",
           "sentimentScore": 0.2,
-          "publicComment": "Resident Michael Akivan (58 Chestnut Ridge Rd) strongly supported the budget ('$165/year is well worth' funding police/school resource officers). Incoming councilman Sonny Vitaj spoke as a resident supporting breaking the cap but questioning the magnitude, asking about the current ~$16.5M fund balance and suggesting a smaller 3% increase.",
+          "publicComment": "Resident Michael Akivan (58 Chestnut Ridge Rd) strongly supported the budget ('$165/year is well worth' funding police/school resource officers). Incoming councilman Sonny Vataj spoke as a resident supporting breaking the cap but questioning the magnitude, asking about the current ~$16.5M fund balance and suggesting a smaller 3% increase.",
           "memberPositions": [
             {
               "member": "Matt Milim",
@@ -66693,7 +66696,7 @@
           ],
           "overallSentiment": "positive",
           "sentimentScore": 0.5,
-          "publicComment": "IBM representatives Seth Wasserman (head of real estate) and counsel Meredith Black advocated for gated-access Level 3 charging; incoming councilman Sonny Vitaj, an EV owner, spoke supporting Level 3 and cautioning about clustering/parking.",
+          "publicComment": "IBM representatives Seth Wasserman (head of real estate) and counsel Meredith Black advocated for gated-access Level 3 charging; incoming councilman Sonny Vataj, an EV owner, spoke supporting Level 3 and cautioning about clustering/parking.",
           "memberPositions": [
             {
               "member": "Joseph Rende",
@@ -67245,12 +67248,12 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Roll-call votes named each member on the contested items (tax cap 4-1, budget 4-1, pool bond 4-1, change order #3 4-1, Ferrari receipt with Berra abstaining), enabling confident attribution. ASR manglings normalized: Barra/Bera/Bear/Vera/Rose = Jose Berra; Millen/Milam/Mills/Miller/Rose(context) = Matt Milim; Hussein = Saleem Hussain; Digacento/Digacinto/Digicinto = Barbara DiGiacinto; Endy/Randy/Rendy/Rendez = Joseph Rende. This is a 2025 meeting so Jose Berra is attributed as the fifth member; Sonny Vitaj was present only as an incoming councilman/resident and his remarks are recorded under publicComment, not memberPositions. Full board present; no absences. Hussain recused himself from the EV/IBM item, so no stance is attributed to him there."
+      "attributionNote": "Roll-call votes named each member on the contested items (tax cap 4-1, budget 4-1, pool bond 4-1, change order #3 4-1, Ferrari receipt with Berra abstaining), enabling confident attribution. ASR manglings normalized: Barra/Bera/Bear/Vera/Rose = Jose Berra; Millen/Milam/Mills/Miller/Rose(context) = Matt Milim; Hussein = Saleem Hussain; Digacento/Digacinto/Digicinto = Barbara DiGiacinto; Endy/Randy/Rendy/Rendez = Joseph Rende. This is a 2025 meeting so Jose Berra is attributed as the fifth member; Sonny Vataj was present only as an incoming councilman/resident and his remarks are recorded under publicComment, not memberPositions. Full board present; no absences. Hussain recused himself from the EV/IBM item, so no stance is attributed to him there."
     },
     {
       "date": "2026-01-14",
-      "meetingSummary": "The Town Board held its annual reorganizational meeting for 2026, opening with the swearing-in of newly elected Councilman Sonny Vitaj and re-elected members (Supervisor Rende and Councilwoman DiGiacinto). Saleem Hussain was named Deputy Supervisor, and the board adopted the full organizational agenda (depositories, officer/secretary appointments, annual policies, master fee schedule, salary schedule, and numerous service, legal, fire/ambulance and intermunicipal agreements). Substantive water-infrastructure business dominated the miscellaneous agenda: payment applications for the School Street water main and Water District 4 well building, and a call for a public hearing on the long-awaited Water District 9 (Quarry Heights) extension. The board also received a short-term rental local law and an EV level-3 charging local law and scheduled public hearings for January 28, handled recreation equipment purchases, several permits, personnel resignations/appointments, liaison updates, and closed with in-memoriam tributes.",
-      "durationNote": "Reorganizational meeting; opened 5:30pm (recessed to executive session for interviews/personnel/real-estate counsel), reconvened publicly, adjourned ~9:00pm. All five 2026 members present: Rende, DiGiacinto, Hussain, Berra, Vitaj. Quorum present. Special counsel Bob Spolzino absent. Multiple recusals/abstentions noted (see cases and attributionNote).",
+      "meetingSummary": "The Town Board held its annual reorganizational meeting for 2026, opening with the swearing-in of newly elected Councilman Sonny Vataj and re-elected members (Supervisor Rende and Councilwoman DiGiacinto). Saleem Hussain was named Deputy Supervisor, and the board adopted the full organizational agenda (depositories, officer/secretary appointments, annual policies, master fee schedule, salary schedule, and numerous service, legal, fire/ambulance and intermunicipal agreements). Substantive water-infrastructure business dominated the miscellaneous agenda: payment applications for the School Street water main and Water District 4 well building, and a call for a public hearing on the long-awaited Water District 9 (Quarry Heights) extension. The board also received a short-term rental local law and an EV level-3 charging local law and scheduled public hearings for January 28, handled recreation equipment purchases, several permits, personnel resignations/appointments, liaison updates, and closed with in-memoriam tributes.",
+      "durationNote": "Reorganizational meeting; opened 5:30pm (recessed to executive session for interviews/personnel/real-estate counsel), reconvened publicly, adjourned ~9:00pm. All five 2026 members present: Rende, DiGiacinto, Hussain, Berra, Vataj. Quorum present. Special counsel Bob Spolzino absent. Multiple recusals/abstentions noted (see cases and attributionNote).",
       "cases": [
         {
           "id": "reorganization-swearing-in-2026",
@@ -67259,7 +67262,7 @@
           "applicationType": "appointment",
           "applicant": "Town Supervisor / Town Clerk",
           "status": "adopted",
-          "summary": "New Councilman Sonny Vitaj was sworn in (a second, ceremonial oath by a visiting justice), and re-elected Supervisor Joseph Rende and Councilwoman Barbara DiGiacinto were recognized (DiGiacinto already re-sworn by the Town Clerk). Each gave brief remarks thanking residents. The board then appointed Saleem Hussain as Deputy Town Supervisor on a unanimous voice vote, with a member remarking it was 'a great choice.'",
+          "summary": "New Councilman Sonny Vataj was sworn in (a second, ceremonial oath by a visiting justice), and re-elected Supervisor Joseph Rende and Councilwoman Barbara DiGiacinto were recognized (DiGiacinto already re-sworn by the Town Clerk). Each gave brief remarks thanking residents. The board then appointed Saleem Hussain as Deputy Town Supervisor on a unanimous voice vote, with a member remarking it was 'a great choice.'",
           "themes": [
             "Ceremonial & community",
             "Open government & procedure",
@@ -67270,7 +67273,7 @@
           "publicComment": "Resident Asad Ghulani congratulated the officials and praised the board's openness, pledging to attend meetings in person this year; warm, appreciative tone.",
           "memberPositions": [
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.9,
               "themes": [
@@ -67400,7 +67403,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -67427,7 +67430,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -67569,7 +67572,7 @@
           "applicationType": "public hearing",
           "applicant": "Town of North Castle",
           "status": "scheduled",
-          "summary": "The board adopted, by roll-call vote, the order calling a public hearing on the long-awaited extension of Water District No. 9 to serve the Quarry Heights section of North White Plains, where residents have faced dry wells and high PFAS levels; water will be supplied by Westchester Joint Water. Members discussed notifying the roughly 44 additional (plus 11 original = ~55) affected property owners, who will share the bond/debt service; the board directed the Town Clerk to mail notice (regular/certified, not registered) with an affidavit of mailing, per counsel, and to post the order on the project landing page. Counsel outlined next steps (design, Health Department submittals, bidding, grants, and state comptroller approval after the hearing). Roll call recorded ayes from Vitaj, DiGiacinto, Hussain and Supervisor Rende.",
+          "summary": "The board adopted, by roll-call vote, the order calling a public hearing on the long-awaited extension of Water District No. 9 to serve the Quarry Heights section of North White Plains, where residents have faced dry wells and high PFAS levels; water will be supplied by Westchester Joint Water. Members discussed notifying the roughly 44 additional (plus 11 original = ~55) affected property owners, who will share the bond/debt service; the board directed the Town Clerk to mail notice (regular/certified, not registered) with an affidavit of mailing, per counsel, and to post the order on the project landing page. Counsel outlined next steps (design, Health Department submittals, bidding, grants, and state comptroller approval after the hearing). Roll call recorded ayes from Vataj, DiGiacinto, Hussain and Supervisor Rende.",
           "themes": [
             "Budget, taxes & finance",
             "Environment & conservation",
@@ -67963,7 +67966,7 @@
         }
       ],
       "attributionCoverage": "medium",
-      "attributionNote": "Raw ASR with no speaker labels; the Supervisor (Joseph Rende) presides and speaks most, so much dialogue is his. All five 2026 members present (Rende, DiGiacinto, Hussain, Berra, Vitaj); Matt Milim is not on the 2026 board and was not attributed. Names were garbled: Rende as 'Rendezvous/Rende,' DiGiacinto as 'Digacento/Digacinto,' Hussain as 'Hussein,' Vitaj as 'Vitage/Vera,' Berra as 'Vera/F/Bera.' Two ambiguous recusals: (1) the EV level-3 charging law recusal by a councilman who works at IBM is left unattributed by name (could be Hussain, Berra, or Vitaj) to avoid invention; (2) the Long Pond Park District recusal ('councilman Vera') is tentatively attributed to Sonny Vitaj per the spec's ASR mapping of 'Vera'->Vitaj, but it could be Jose Berra (low confidence). The December 10, 2025 minutes abstention is confidently Vitaj (the new member not on the prior board). The WD9 roll call named only Vitaj, DiGiacinto, Hussain, and Rende as ayes; Berra was not recorded (possible ASR omission or recusal). Special counsel Bob Spolzino was absent ('good thing Bob's not here')."
+      "attributionNote": "Raw ASR with no speaker labels; the Supervisor (Joseph Rende) presides and speaks most, so much dialogue is his. All five 2026 members present (Rende, DiGiacinto, Hussain, Berra, Vataj); Matt Milim is not on the 2026 board and was not attributed. Names were garbled: Rende as 'Rendezvous/Rende,' DiGiacinto as 'Digacento/Digacinto,' Hussain as 'Hussein,' Vataj as 'Vitage/Vera,' Berra as 'Vera/F/Bera.' Two ambiguous recusals: (1) the EV level-3 charging law recusal by a councilman who works at IBM is left unattributed by name (could be Hussain, Berra, or Vataj) to avoid invention; (2) the Long Pond Park District recusal ('councilman Vera') is tentatively attributed to Sonny Vataj per the spec's ASR mapping of 'Vera'->Vataj, but it could be Jose Berra (low confidence). The December 10, 2025 minutes abstention is confidently Vataj (the new member not on the prior board). The WD9 roll call named only Vataj, DiGiacinto, Hussain, and Rende as ayes; Berra was not recorded (possible ASR omission or recusal). Special counsel Bob Spolzino was absent ('good thing Bob's not here')."
     },
     {
       "date": "2026-01-28",
@@ -68196,7 +68199,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "leaning-supportive",
               "score": 0.2,
               "themes": [
@@ -68366,7 +68369,7 @@
           "applicationType": "contract/bid",
           "applicant": "Shaw Sports Turf / KSCJ Consulting",
           "status": "adopted",
-          "summary": "The board considered a memo from KSCJ Consulting and Change Order No. 3 (about $75,000) for additional electrical power and data improvements on the community park artificial turf field project, authorizing the Supervisor to sign. DiGiacinto objected to the letter's 'as requested by the town' wording and pressed for detailed justification, learning much of the cost stemmed from rerouting buried electrical lines and adding access boxes discovered during excavation. Vitaj and Berra questioned pricing reasonableness and asked to be notified of change orders in advance; staff confirmed the same approved unit rates applied. The board approved the change order.",
+          "summary": "The board considered a memo from KSCJ Consulting and Change Order No. 3 (about $75,000) for additional electrical power and data improvements on the community park artificial turf field project, authorizing the Supervisor to sign. DiGiacinto objected to the letter's 'as requested by the town' wording and pressed for detailed justification, learning much of the cost stemmed from rerouting buried electrical lines and adding access boxes discovered during excavation. Vataj and Berra questioned pricing reasonableness and asked to be notified of change orders in advance; staff confirmed the same approved unit rates applied. The board approved the change order.",
           "themes": [
             "Budget, taxes & finance",
             "Grants & capital projects",
@@ -68389,7 +68392,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "concerned",
               "score": -0.1,
               "themes": [
@@ -68679,7 +68682,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "All five 2026 board members present and identifiable: Supervisor Joseph Rende (presiding voice), Barbara DiGiacinto, Saleem Hussain, Jose Berra (joined via Zoom, ASR-mangled at the open as 'Jose Vera'), and Sonny Vitaj. Recusals were explicit (Hussain on EV charging for IBM; DiGiacinto on Kent Place lot). Matt Milim was NOT present or attributed (off the board in 2026). 'Jose' consistently disambiguated: presiding/motion-calling voice = Rende, remote member being polled = Berra. Some short procedural exchanges (motions/seconds) could not be pinned to a specific member and were left unattributed rather than guessed."
+      "attributionNote": "All five 2026 board members present and identifiable: Supervisor Joseph Rende (presiding voice), Barbara DiGiacinto, Saleem Hussain, Jose Berra (joined via Zoom, ASR-mangled at the open as 'Jose Vera'), and Sonny Vataj. Recusals were explicit (Hussain on EV charging for IBM; DiGiacinto on Kent Place lot). Matt Milim was NOT present or attributed (off the board in 2026). 'Jose' consistently disambiguated: presiding/motion-calling voice = Rende, remote member being polled = Berra. Some short procedural exchanges (motions/seconds) could not be pinned to a specific member and were left unattributed rather than guessed."
     },
     {
       "date": "2026-02-11",
@@ -68735,7 +68738,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "neutral",
               "score": 0.2,
               "themes": [
@@ -68782,7 +68785,7 @@
           "applicationType": "public hearing",
           "applicant": "Town of North Castle (AI Engineers map/plan/report)",
           "status": "public hearing held",
-          "summary": "The board held a public hearing on extending Water District No. 9 to the Quarry Heights area under Article 12A of Town Law, addressing chronic well-water/PFAS problems among roughly 48 homes. Town Attorney Roland explained that two preliminary resolutions would let the town apply to the State Comptroller and better position the project for grant funding, with a worst-case per-home cost around $46,700 over the life of the bond. Residents spoke strongly in favor (a signed petition and letter were submitted into the record), and the board adopted a 21-day open comment period before both preliminary resolutions passed 5-0 by roll call (Berra, Vitaj, DiGiacinto, Hussain, Rende all aye). Board members voiced unanimous, emphatic support and commitment to pursue grants.",
+          "summary": "The board held a public hearing on extending Water District No. 9 to the Quarry Heights area under Article 12A of Town Law, addressing chronic well-water/PFAS problems among roughly 48 homes. Town Attorney Roland explained that two preliminary resolutions would let the town apply to the State Comptroller and better position the project for grant funding, with a worst-case per-home cost around $46,700 over the life of the bond. Residents spoke strongly in favor (a signed petition and letter were submitted into the record), and the board adopted a 21-day open comment period before both preliminary resolutions passed 5-0 by roll call (Berra, Vataj, DiGiacinto, Hussain, Rende all aye). Board members voiced unanimous, emphatic support and commitment to pursue grants.",
           "themes": [
             "Grants & capital projects",
             "Intermunicipal & county/state",
@@ -68826,7 +68829,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.8,
               "themes": [
@@ -68966,7 +68969,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -69373,7 +69376,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Roll-call votes on the two Water District 9 resolutions clearly named each member (ASR: 'Councilman Bera'=Jose Berra, 'Councilman Vitage/Bataj'=Sonny Vitaj, 'Councilman Digacento'=Barbara DiGiacinto, 'Councilman Hussein'=Saleem Hussain, 'Supervisor Endy'=Joseph Rende), both passing 5-0. Saleem Hussain participated virtually (out of the country) and recused from the EV charging local law due to his IBM employment. Most other items passed by voice vote, so individual attributions there rely on named discussion. Staff (Abbas, Kevin, Roland, Allison, Adam Kaufman, Sal) were kept out of member positions. Matt Milim did not appear and was correctly not attributed as a 2026 board member."
+      "attributionNote": "Roll-call votes on the two Water District 9 resolutions clearly named each member (ASR: 'Councilman Bera'=Jose Berra, 'Councilman Vitage/Bataj'=Sonny Vataj, 'Councilman Digacento'=Barbara DiGiacinto, 'Councilman Hussein'=Saleem Hussain, 'Supervisor Endy'=Joseph Rende), both passing 5-0. Saleem Hussain participated virtually (out of the country) and recused from the EV charging local law due to his IBM employment. Most other items passed by voice vote, so individual attributions there rely on named discussion. Staff (Abbas, Kevin, Roland, Allison, Adam Kaufman, Sal) were kept out of member positions. Matt Milim did not appear and was correctly not attributed as a 2026 board member."
     },
     {
       "date": "2026-02-25",
@@ -69411,7 +69414,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -69497,7 +69500,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -69584,7 +69587,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -69620,7 +69623,7 @@
           "applicationType": "contract/bid",
           "applicant": "Papito Construction",
           "status": "adopted",
-          "summary": "The board approved payment application number six from Papito Construction for site work performed on the Water District No. 4 new well project. Approved by voice vote with no substantive discussion (Vitaj moved, DiGiacinto seconded).",
+          "summary": "The board approved payment application number six from Papito Construction for site work performed on the Water District No. 4 new well project. Approved by voice vote with no substantive discussion (Vataj moved, DiGiacinto seconded).",
           "themes": [
             "Grants & capital projects",
             "Legal, litigation & contracts",
@@ -69638,7 +69641,7 @@
           "applicationType": "contract/bid",
           "applicant": "Recreation & Parks (Superintendent Matt Traynor); vendor Connex West",
           "status": "tabled",
-          "summary": "The board considered a request to purchase two new green storage container units for equipment near the IBM Park turf fields, to be paid from fund balance, replacing rotted existing containers. Vitaj strongly objected that metal containers cheapen a multimillion-dollar turf investment (his \"Ferrari with used tires\" analogy) and pushed for a prefab garage-style structure, while DiGiacinto defended the containers as utilitarian, secure, and cost-conscious but asked for full all-in cost comparisons of any alternative. With no motion made, the item was tabled to the next meeting for staff to bring back options.",
+          "summary": "The board considered a request to purchase two new green storage container units for equipment near the IBM Park turf fields, to be paid from fund balance, replacing rotted existing containers. Vataj strongly objected that metal containers cheapen a multimillion-dollar turf investment (his \"Ferrari with used tires\" analogy) and pushed for a prefab garage-style structure, while DiGiacinto defended the containers as utilitarian, secure, and cost-conscious but asked for full all-in cost comparisons of any alternative. With no motion made, the item was tabled to the next meeting for staff to bring back options.",
           "themes": [
             "Budget, taxes & finance",
             "Grants & capital projects",
@@ -69650,7 +69653,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "opposed",
               "score": -0.6,
               "themes": [
@@ -69747,7 +69750,7 @@
           "applicationType": "resolution",
           "applicant": "Town Administrator Kevin",
           "status": "adopted",
-          "summary": "The board considered salary increases for department-head and non-union employees retroactive to January 1, 2026. DiGiacinto voted no and requested a roll call, objecting not to the raises themselves but to the methodology used to determine them, which she said differs from comparable municipalities; discussion was limited because details were set in executive session. The resolution was adopted 4-1 (Berra aye, Vitaj aye, DiGiacinto no, Hussain aye, Rende yes).",
+          "summary": "The board considered salary increases for department-head and non-union employees retroactive to January 1, 2026. DiGiacinto voted no and requested a roll call, objecting not to the raises themselves but to the methodology used to determine them, which she said differs from comparable municipalities; discussion was limited because details were set in executive session. The resolution was adopted 4-1 (Berra aye, Vataj aye, DiGiacinto no, Hussain aye, Rende yes).",
           "themes": [
             "Budget, taxes & finance",
             "Open government & procedure",
@@ -69769,7 +69772,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -69827,7 +69830,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -69887,7 +69890,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -69915,7 +69918,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -70053,12 +70056,12 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "All five 2026 board members were reliably identified: Saleem Hussain chaired as deputy supervisor (ASR mangled his self-introduction as 'Celine Hussein' and closing thanks as 'Selim'), and Supervisor Joseph Rende participated remotely (ASR 'Rendy'/'Endy'/'Rundy'). The Personnel A roll call explicitly named each member \u2014 'Councilman Vera' (Jose Berra), 'Councilman Vitage' (Sonny Vitaj), 'Councilman G' (Barbara DiGiacinto, the lone 'no'), 'Councilman Hussein' (Saleem Hussain), and 'Supervisor Rendy' (Joseph Rende) \u2014 confirming the corrected 2026 roster. Matt Milim did not appear at all. 'Sunny/Sonny' = Vitaj; 'Jose' in member context = Berra (distinct from Supervisor Rende). Staff (Kaufman, Spolzino/'Bob', Kevin, Abbas, Roland, Allison, Matt Traynor) and outside presenters (TPL's Aberger/Dumoulin, Carrie Kasak, student Jed Schisler) were kept out of member positions. No board members were absent."
+      "attributionNote": "All five 2026 board members were reliably identified: Saleem Hussain chaired as deputy supervisor (ASR mangled his self-introduction as 'Celine Hussein' and closing thanks as 'Selim'), and Supervisor Joseph Rende participated remotely (ASR 'Rendy'/'Endy'/'Rundy'). The Personnel A roll call explicitly named each member \u2014 'Councilman Vera' (Jose Berra), 'Councilman Vitage' (Sonny Vataj), 'Councilman G' (Barbara DiGiacinto, the lone 'no'), 'Councilman Hussein' (Saleem Hussain), and 'Supervisor Rendy' (Joseph Rende) \u2014 confirming the corrected 2026 roster. Matt Milim did not appear at all. 'Sunny/Sonny' = Vataj; 'Jose' in member context = Berra (distinct from Supervisor Rende). Staff (Kaufman, Spolzino/'Bob', Kevin, Abbas, Roland, Allison, Matt Traynor) and outside presenters (TPL's Aberger/Dumoulin, Carrie Kasak, student Jed Schisler) were kept out of member positions. No board members were absent."
     },
     {
       "date": "2026-03-11",
       "meetingSummary": "The North Castle Town Board held its March 2026 monthly meeting, opening with public announcements (town-wide cleanup day, local sports championships, a 'delay until 8' cell-phone program, and an Association of Towns essay/documentary honoring the town's Revolutionary War history). The centerpiece was a public hearing and adoption of a new local law regulating short-term rentals, prompted by resident complaints about an Airbnb-related driveway/towing incident. The board also passed two late-added resolutions (one urging the Governor to pursue SEQRA reform as a standalone bill rather than through the budget, and one authorizing an $8.62M TAP grant application for North Broadway pedestrian improvements), approved water-district payments and well-rehabilitation and personnel actions, and closed in memory of longtime resident Herb Sidney.",
-      "durationNote": "Full board present (Rende, DiGiacinto, Hussain, Berra, Vitaj); reconvened from executive session; no absences noted.",
+      "durationNote": "Full board present (Rende, DiGiacinto, Hussain, Berra, Vataj); reconvened from executive session; no absences noted.",
       "cases": [
         {
           "id": "local-law-short-term-rentals",
@@ -70101,7 +70104,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -70323,7 +70326,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "leaning-supportive",
               "score": 0.4,
               "themes": [
@@ -70375,7 +70378,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -70457,7 +70460,7 @@
           "publicComment": "",
           "memberPositions": [
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -70560,7 +70563,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "neutral",
               "score": 0.1,
               "themes": [
@@ -70679,12 +70682,12 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were identifiable from context and a roll-call vote. ASR mangled several names: 'Endy'/'Jose' (presiding) = Joseph Rende; 'Barra' = Jose Berra; 'Visage'/'Vitage' = Sonny Vitaj; 'Hussein' = Saleem Hussain; 'Celine'/'Selenium' = Saleem Hussain; 'Digacinto' = Barbara DiGiacinto. 2026 board confirmed as Rende, DiGiacinto, Hussain, Berra, Vitaj \u2014 Matt Milim is no longer on the board and did not appear. The only roll-call vote (SEQRA resolution) recorded DiGiacinto/Vitaj/Hussain/Rende aye with Berra abstaining (4-0); all other items passed by voice vote. Full board present; no absences noted."
+      "attributionNote": "Speakers were identifiable from context and a roll-call vote. ASR mangled several names: 'Endy'/'Jose' (presiding) = Joseph Rende; 'Barra' = Jose Berra; 'Visage'/'Vitage' = Sonny Vataj; 'Hussein' = Saleem Hussain; 'Celine'/'Selenium' = Saleem Hussain; 'Digacinto' = Barbara DiGiacinto. 2026 board confirmed as Rende, DiGiacinto, Hussain, Berra, Vataj \u2014 Matt Milim is no longer on the board and did not appear. The only roll-call vote (SEQRA resolution) recorded DiGiacinto/Vataj/Hussain/Rende aye with Berra abstaining (4-0); all other items passed by voice vote. Full board present; no absences noted."
     },
     {
       "date": "2026-03-25",
       "meetingSummary": "The Town Board opened with the promotion of Sergeant Joel Thomas to police lieutenant and a Women's History Month '250th history moment' presented by a local sixth-grade student. It held a public hearing and adopted a special use permit for the Virgin Mary & St. Damian Coptic Orthodox Church to enable handicap access, and authorized up to $1,000 for the 250th anniversary art-contest reception. The board approved a slate of routine items (payment applications, bonds, referrals, conference travel, personnel actions), a state records-management grant application, the police chief's employment agreement, and a highway general-foreman stipend that passed 3-0 with Councilman Berra abstaining. An audit engagement letter was tabled over concerns about its risk-of-misstatement language, and liaison reports covered townwide cleanup day and several capital projects.",
-      "durationNote": "Councilman Sonny Vitaj absent (traveling); quorum of four present (Rende, DiGiacinto, Hussain, Berra). Noted by the board as a short meeting.",
+      "durationNote": "Councilman Sonny Vataj absent (traveling); quorum of four present (Rende, DiGiacinto, Hussain, Berra). Noted by the board as a short meeting.",
       "cases": [
         {
           "id": "police-lieutenant-promotion-joel-thomas",
@@ -71021,7 +71024,7 @@
           "applicationType": "appointment",
           "applicant": "Highway Department",
           "status": "adopted",
-          "summary": "The board considered an annual stipend for Highway General Foreman Jamie Norris, effective January 1, prompted by the discovery that compensation for his additional duties had been unilaterally removed by a prior supervisor and never restored. Councilman Berra praised Norris but objected to setting compensation mid-year rather than during budget sessions and abstained ('stood'). On a roll call the measure passed 3-0 (DiGiacinto aye, Hussain aye, Rende yes; Berra abstained; Vitaj absent). A lengthy exchange followed between Rende and Berra on the meaning and propriety of abstention, with counsel explaining an abstention is a non-vote that still effectively counts against passage since a majority of the full board is required.",
+          "summary": "The board considered an annual stipend for Highway General Foreman Jamie Norris, effective January 1, prompted by the discovery that compensation for his additional duties had been unilaterally removed by a prior supervisor and never restored. Councilman Berra praised Norris but objected to setting compensation mid-year rather than during budget sessions and abstained ('stood'). On a roll call the measure passed 3-0 (DiGiacinto aye, Hussain aye, Rende yes; Berra abstained; Vataj absent). A lengthy exchange followed between Rende and Berra on the meaning and propriety of abstention, with counsel explaining an abstention is a non-vote that still effectively counts against passage since a majority of the full board is required.",
           "themes": [
             "Budget, taxes & finance",
             "Open government & procedure",
@@ -71333,12 +71336,12 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were identified with good confidence. The presiding/supervisor voice is Joseph Rende (ASR 'Rende/Ende'). Saleem Hussain appears mangled as 'Celine'/'Salim'/'Hussein' (he raised the art-contest proportionality point and is the parent of student Paloma Hussain). Jose Berra appears as 'Vera'/'Barra' \u2014 he led the cleanup-day report, raised the audit-letter concern, and abstained on the highway stipend; disambiguated from Supervisor Rende by role (Berra is the member polled in roll call). Barbara DiGiacinto appears as 'Digacinto'/'D. Jento'. Councilman Sonny Vitaj was ABSENT (traveling), garbled as 'Fataj.' Matt Milim did NOT appear and was not attributed (correct for the 2026 board). Town Attorney identity (Roland vs. special counsel Bob Spolzino) is uncertain for the abstention/tabling advice. Presenters Marianne Hamilton (art committee) and Father Paul (church) are non-board and treated as public/staff input; student Zelda Topolski presented the history moment."
+      "attributionNote": "Speakers were identified with good confidence. The presiding/supervisor voice is Joseph Rende (ASR 'Rende/Ende'). Saleem Hussain appears mangled as 'Celine'/'Salim'/'Hussein' (he raised the art-contest proportionality point and is the parent of student Paloma Hussain). Jose Berra appears as 'Vera'/'Barra' \u2014 he led the cleanup-day report, raised the audit-letter concern, and abstained on the highway stipend; disambiguated from Supervisor Rende by role (Berra is the member polled in roll call). Barbara DiGiacinto appears as 'Digacinto'/'D. Jento'. Councilman Sonny Vataj was ABSENT (traveling), garbled as 'Fataj.' Matt Milim did NOT appear and was not attributed (correct for the 2026 board). Town Attorney identity (Roland vs. special counsel Bob Spolzino) is uncertain for the abstention/tabling advice. Presenters Marianne Hamilton (art committee) and Father Paul (church) are non-board and treated as public/staff input; student Zelda Topolski presented the history moment."
     },
     {
       "date": "2026-04-08",
       "meetingSummary": "The Town Board opened after an executive session, then handled a light agenda dominated by community announcements and one substantive item. Former council member Matt Milim, now a private citizen with the Armonk Lions Club, presented a $15,000 check to the North Castle Police Department. The board formally received the Armonk Parking District map plan and report and directed the town attorney to prepare an order calling for a public hearing (targeting June), after an extended debate over cost allocation and included properties. The board also approved special counsel for the Con Edison rate-settlement consortium, a filming permit, several water/sewer and parks appointments, and a librarian step increase on which Councilman Berra abstained.",
-      "durationNote": "Full board present (Rende, DiGiacinto, Hussain, Berra, Vitaj); no absences noted. DiGiacinto recused herself from the parking district item (Item B).",
+      "durationNote": "Full board present (Rende, DiGiacinto, Hussain, Berra, Vataj); no absences noted. DiGiacinto recused herself from the parking district item (Item B).",
       "cases": [
         {
           "id": "lions-club-donation-police-trailer",
@@ -71515,7 +71518,7 @@
           "applicationType": "personnel",
           "applicant": "North Castle Public Library",
           "status": "adopted",
-          "summary": "The board considered a step increase for employee 003949 from Librarian 1 Step 3 to Librarian 1 Step 5, effective April 1, 2026. After an initial voice vote, Councilman Berra sought a roll-call vote and the board moved to rescind and re-vote so he could abstain. On the roll call it passed 4-0 with Berra abstaining (DiGiacinto aye, Vitaj aye, Hussain aye, Rende aye, Berra abstain). Berra said the employee was excellent but that he opposes mid-year compensation changes absent extraordinary circumstances; Supervisor Rende argued at length that speaking against an item and then abstaining is a misuse of the abstention.",
+          "summary": "The board considered a step increase for employee 003949 from Librarian 1 Step 3 to Librarian 1 Step 5, effective April 1, 2026. After an initial voice vote, Councilman Berra sought a roll-call vote and the board moved to rescind and re-vote so he could abstain. On the roll call it passed 4-0 with Berra abstaining (DiGiacinto aye, Vataj aye, Hussain aye, Rende aye, Berra abstain). Berra said the employee was excellent but that he opposes mid-year compensation changes absent extraordinary circumstances; Supervisor Rende argued at length that speaking against an item and then abstaining is a misuse of the abstention.",
           "themes": [
             "Budget, taxes & finance",
             "Open government & procedure",
@@ -71569,7 +71572,7 @@
               "confidence": "high"
             },
             {
-              "member": "Sonny Vitaj",
+              "member": "Sonny Vataj",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -71688,7 +71691,7 @@
         }
       ],
       "attributionCoverage": "high",
-      "attributionNote": "Speakers were identifiable largely by role and by the named roll-call vote on the librarian step increase (DiGiacinto, Vitaj [ASR 'Bataj'], Hussain [ASR 'Hussein'], Rende [ASR 'Rendezv'], Berra [ASR 'Barra'] abstaining). The presiding/supervisor voice is Joseph Rende; the member polled/abstaining is Jose Berra. Matt Milim ('Millam/Milam') appears only as a private citizen for the Lions Club and is kept in publicComment, not memberPositions, per the 2026 roster. DiGiacinto recused from the parking district item (surname ASR-mangled as 'digisono'). Full board present; no absences noted."
+      "attributionNote": "Speakers were identifiable largely by role and by the named roll-call vote on the librarian step increase (DiGiacinto, Vataj [ASR 'Bataj'], Hussain [ASR 'Hussein'], Rende [ASR 'Rendezv'], Berra [ASR 'Barra'] abstaining). The presiding/supervisor voice is Joseph Rende; the member polled/abstaining is Jose Berra. Matt Milim ('Millam/Milam') appears only as a private citizen for the Lions Club and is kept in publicComment, not memberPositions, per the 2026 roster. DiGiacinto recused from the parking district item (surname ASR-mangled as 'digisono'). Full board present; no absences noted."
     }
   ]
 }
