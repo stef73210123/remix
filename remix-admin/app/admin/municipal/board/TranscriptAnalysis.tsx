@@ -74,11 +74,17 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       .finally(() => setLoading(false))
   }, [muni, body])
 
+  // Alphabetical by name (numeric-aware so street numbers order naturally).
+  const byName = (a: CaseRollup, b: CaseRollup) =>
+    a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
   const trackedCases = useMemo(
-    () => (data ? data.cases.filter((c) => c.appearances >= 2) : []),
+    () => (data ? data.cases.filter((c) => c.appearances >= 2).sort(byName) : []),
     [data]
   )
-  const visibleCases = showAllCases ? data?.cases ?? [] : trackedCases
+  const visibleCases = useMemo(
+    () => (showAllCases ? [...(data?.cases ?? [])].sort(byName) : trackedCases),
+    [showAllCases, data, trackedCases]
+  )
 
   if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading transcript analysis…</div>
   if (!data) return null
