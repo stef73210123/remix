@@ -31,6 +31,8 @@ export default function MemberSentiment({
 }: { muni: string; body: string; memberName: string }) {
   const [data, setData] = useState<AnalysisDataset | null>(null)
   const [loading, setLoading] = useState(true)
+  const [evQuery, setEvQuery] = useState('')
+  const [evSort, setEvSort] = useState<'date' | 'high' | 'low'>('date')
 
   useEffect(() => {
     setLoading(true)
@@ -48,6 +50,22 @@ export default function MemberSentiment({
     return map
   }, [data])
 
+  // Filter (keyword) + sort (date / most-positive / most-negative) the comment history.
+  const visibleEvidence = useMemo(() => {
+    const list = profile?.evidence ?? []
+    const q = evQuery.trim().toLowerCase()
+    const filtered = q
+      ? list.filter((e) =>
+          `${e.evidence} ${e.case} ${e.stance} ${e.themes.join(' ')}`.toLowerCase().includes(q)
+        )
+      : list
+    const sorted = [...filtered]
+    if (evSort === 'date') sorted.sort((a, b) => b.date.localeCompare(a.date))
+    else if (evSort === 'high') sorted.sort((a, b) => b.score - a.score)
+    else sorted.sort((a, b) => a.score - b.score)
+    return sorted
+  }, [profile, evQuery, evSort])
+
   if (loading || !data || !profile || profile.totalPositions === 0) return null
 
   const conf = profile.confidenceMix || {}
@@ -58,9 +76,7 @@ export default function MemberSentiment({
     <div style={{ marginBottom: 28 }}>
       <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>{data.meta.board} sentiment</h2>
       <div className="muted" style={{ fontSize: 11, marginBottom: 16, lineHeight: 1.5, maxWidth: 640 }}>
-        From {data.meta.meetings} meeting transcripts. Attribution is name-based (this member is credited only when named
-        or addressed by name), so read it as directional. {profile.totalPositions} attributed positions ·{' '}
-        {Math.round(((conf.high || 0) / total) * 100)}% high-confidence.
+        {profile.totalPositions} attributed positions · {Math.round(((conf.high || 0) / total) * 100)}% high-confidence · directional (name-based)
       </div>
 
       {/* Overall */}
@@ -124,14 +140,41 @@ export default function MemberSentiment({
         )}
       </div>
 
-      {/* Evidence */}
+      {/* Evidence — searchable, sortable comment history */}
       {profile.evidence.length > 0 && (
         <div className="card" style={{ padding: 16 }}>
-          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-            What they said · {profile.evidence.length} moments
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              What they said · {visibleEvidence.length}{visibleEvidence.length !== profile.evidence.length ? ` of ${profile.evidence.length}` : ''}
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                value={evQuery}
+                onChange={(e) => setEvQuery(e.target.value)}
+                placeholder="Search comments…"
+                style={{
+                  fontSize: 12, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)',
+                  border: '1px solid var(--border)', color: 'var(--text)', minWidth: 160,
+                }}
+              />
+              <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
+                {([['date', 'Newest'], ['high', 'Most +'], ['low', 'Most −']] as const).map(([k, label]) => (
+                  <button
+                    key={k}
+                    onClick={() => setEvSort(k)}
+                    className="btn secondary"
+                    style={{ padding: '4px 9px', fontSize: 12, ...(evSort === k ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: 360, overflowY: 'auto' }}>
-            {profile.evidence.map((e, i) => (
+            {visibleEvidence.length === 0 ? (
+              <div className="muted" style={{ fontSize: 13, padding: '8px 0' }}>No comments match “{evQuery}”.</div>
+            ) : visibleEvidence.map((e, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <span style={{ ...sentimentChipStyle(e.score), flexShrink: 0, marginTop: 2 }}>{fmtSent(e.score)}</span>
                 <div style={{ fontSize: 13, lineHeight: 1.5 }}>

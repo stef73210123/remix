@@ -195,36 +195,34 @@ export default function BoardClient({ userName }: { userName: string }) {
             {data.board.meetingPattern ? ` · ${data.board.meetingPattern}` : ''}
           </div>
 
-          {/* Members — horizontal carousel */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-            Board members
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {data.members.length}</span>
-          </h2>
-          {data.members.length > 0 ? (
-            <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 6, marginBottom: 26, WebkitOverflowScrolling: 'touch' }}>
-              {data.members.map((m) => (
-                <a
-                  key={m.id}
-                  href={`/admin/municipal/member?muni=${data.town.key}&body=${data.board.key}&id=${m.id}`}
-                  className="card"
-                  style={{ padding: 14, minWidth: 210, flexShrink: 0, textDecoration: 'none', display: 'block' }}
-                >
-                  <div style={{ fontWeight: 700 }}>{m.full_name}</div>
-                  <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{m.title || '—'}</div>
-                  <span className="badge state" style={{ display: 'inline-block', marginTop: 10 }}>{m.kind.replace(/_/g, ' ')}</span>
-                  {m.email && (
-                    <div className="muted" style={{ fontSize: 12, marginTop: 10, wordBreak: 'break-all' }}>{m.email}</div>
-                  )}
-                  <div style={{ fontSize: 12, marginTop: 10, color: 'var(--primary-light)' }}>View profile →</div>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <div className="card" style={{ marginBottom: 26 }}>
-              <div className="muted" style={{ padding: 20, fontSize: 13 }}>
-                No members recorded yet — run officials enrichment (/admin/api/municipal/officials-refresh?muni={data.town.key}).
+          {/* Members roster — only for boards WITHOUT a transcript dataset. Where a
+              dataset exists, the analysis section below shows members with sentiment,
+              so we don't duplicate (or show an empty roster above it). */}
+          {transcriptDates.size === 0 && data.members.length > 0 && (
+            <>
+              <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
+                Board members
+                <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {data.members.length}</span>
+              </h2>
+              <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 6, marginBottom: 26, WebkitOverflowScrolling: 'touch' }}>
+                {data.members.map((m) => (
+                  <a
+                    key={m.id}
+                    href={`/admin/municipal/member?muni=${data.town.key}&body=${data.board.key}&id=${m.id}`}
+                    className="card"
+                    style={{ padding: 14, minWidth: 210, flexShrink: 0, textDecoration: 'none', display: 'block' }}
+                  >
+                    <div style={{ fontWeight: 700 }}>{m.full_name}</div>
+                    <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{m.title || '—'}</div>
+                    <span className="badge state" style={{ display: 'inline-block', marginTop: 10 }}>{m.kind.replace(/_/g, ' ')}</span>
+                    {m.email && (
+                      <div className="muted" style={{ fontSize: 12, marginTop: 10, wordBreak: 'break-all' }}>{m.email}</div>
+                    )}
+                    <div style={{ fontSize: 12, marginTop: 10, color: 'var(--primary-light)' }}>View profile →</div>
+                  </a>
+                ))}
               </div>
-            </div>
+            </>
           )}
 
           {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}

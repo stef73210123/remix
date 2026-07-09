@@ -4,6 +4,7 @@ import { Fragment, useEffect, useMemo, useState } from 'react'
 import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
+import TranscriptAnalysis from './board/TranscriptAnalysis'
 import AdminNav from '@/app/admin/AdminNav'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
@@ -386,6 +387,21 @@ export default function MunicipalClient({
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
             ))}
           </div>
+
+          {/* Board view — the enriched profile (members, themes, cases, meeting-by-
+              meeting analysis) inline, so it doesn't require a click-through. */}
+          {board !== 'ALL' && town !== 'ALL' && (() => {
+            const m = data.municipalities.find((x) => x.key === town)
+            const bodyKey = m?.bodies.find((b) => b.displayName === board)?.key
+            if (!m || !bodyKey) return null
+            return (
+              <>
+                <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>{board}</h2>
+                <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>{m.name}</div>
+                <TranscriptAnalysis muni={town} body={bodyKey} />
+              </>
+            )
+          })()}
 
           {/* Town profile — shown on the Dashboard tab (board === 'ALL'):
               its boards & committees, then financial analysis + meetings below. */}
