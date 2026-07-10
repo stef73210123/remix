@@ -23,24 +23,50 @@ OUT = sys.argv[2] if len(sys.argv) > 2 else \
 # per-meeting analyses used provisional labels before the roster was confirmed;
 # ALIAS maps those to the real names. Notably the presiding "Chair" and the
 # member addressed as "Christopher" are the SAME person — Christopher Carthy.
-MEMBERS = ["Christopher Carthy", "Steven Sauro", "Michael Pollack", "Thomas Crispi", "Lawrence Ruisi"]
+# Full roster across the 2022–present coverage. One seat turned over in 2025:
+# James (Jim) Jensen served through ~2025-04 and was succeeded by Thomas Crispi.
+# INACTIVE members are kept in the record but de-emphasized in the UI.
+# ALIAS maps the many ASR manglings (from un-diarized transcripts) to canonical
+# names; canon_member() matches exact first, then substring.
+MEMBERS = ["Christopher Carthy", "Steven Sauro", "Michael Pollack", "Thomas Crispi",
+           "Lawrence Ruisi", "James Jensen"]
+INACTIVE = ["James Jensen"]
 MEMBER_ALIAS = {
+    # Chair — Christopher Carthy (ASR: Carthi/Karthi/Karthie/Ross/Cross)
     "chair": "Christopher Carthy",
-    "christopher": "Christopher Carthy",
-    "christopher carthy": "Christopher Carthy",
-    "chris": "Christopher Carthy",
-    "larry ruizi": "Lawrence Ruisi",
-    "lawrence ruisi": "Lawrence Ruisi",
-    "larry": "Lawrence Ruisi",
-    "michael pollock": "Michael Pollack",
-    "michael pollack": "Michael Pollack",
-    "mike": "Michael Pollack",
+    "chairman carthy": "Christopher Carthy", "chairman karthie": "Christopher Carthy",
+    "mr. carthy": "Christopher Carthy",
+    "christopher carthy": "Christopher Carthy", "chris carthy": "Christopher Carthy",
+    "chris carthi": "Christopher Carthy", "christopher ross": "Christopher Carthy",
+    "christopher cross": "Christopher Carthy",
+    "christopher": "Christopher Carthy", "chris": "Christopher Carthy",
+    "carthy": "Christopher Carthy", "carthi": "Christopher Carthy",
+    "karthi": "Christopher Carthy", "karthie": "Christopher Carthy",
+    # Steven Sauro (ASR: Soros/Soro/Sorro/Sorrow/Sorrell)
+    "steven sauro": "Steven Sauro", "steve sauro": "Steven Sauro",
+    "steve soros": "Steven Sauro", "steve soro": "Steven Sauro",
+    "steve sorro": "Steven Sauro", "steve sorrow": "Steven Sauro",
     "steve sorrell": "Steven Sauro",
-    "steven sauro": "Steven Sauro",
-    "steve": "Steven Sauro",
-    "thomas crispi": "Thomas Crispi",
-    "tom crispi": "Thomas Crispi",
-    "tom": "Thomas Crispi",
+    "steve": "Steven Sauro", "sauro": "Steven Sauro", "soros": "Steven Sauro",
+    "sorro": "Steven Sauro", "sorrow": "Steven Sauro", "sorrell": "Steven Sauro",
+    # Michael Pollack (ASR: Pollock)
+    "michael pollack": "Michael Pollack", "michael pollock": "Michael Pollack",
+    "michael": "Michael Pollack", "mike": "Michael Pollack",
+    "pollack": "Michael Pollack", "pollock": "Michael Pollack",
+    # Lawrence Ruisi (ASR: Ruizi/Ruiz/Ruizzi/Ruggiero/Wiese/O'Weese/Owecee)
+    "lawrence ruisi": "Lawrence Ruisi", "larry ruisi": "Lawrence Ruisi",
+    "larry ruizi": "Lawrence Ruisi", "larry ruggiero": "Lawrence Ruisi",
+    "larry wiese": "Lawrence Ruisi", "larry o'weese": "Lawrence Ruisi",
+    "larry": "Lawrence Ruisi", "ruisi": "Lawrence Ruisi", "ruizi": "Lawrence Ruisi",
+    "ruizzi": "Lawrence Ruisi", "ruggiero": "Lawrence Ruisi", "wiese": "Lawrence Ruisi",
+    "owecee": "Lawrence Ruisi", "o'weese": "Lawrence Ruisi",
+    # Thomas Crispi (joined 2025)
+    "thomas crispi": "Thomas Crispi", "tom crispi": "Thomas Crispi",
+    "tom": "Thomas Crispi", "crispi": "Thomas Crispi",
+    # James (Jim) Jensen — former member (ASR: Jansen/Jenson/Cheston)
+    "james jensen": "James Jensen", "jim jensen": "James Jensen",
+    "jim jansen": "James Jensen", "jim jenson": "James Jensen",
+    "jim cheston": "James Jensen", "jim": "James Jensen", "jensen": "James Jensen",
 }
 
 def canon_member(name):
@@ -373,6 +399,7 @@ def main():
             "themes": len(themes),
             "memberPositions": total_positions,
             "roster": MEMBERS,
+            "inactiveMembers": INACTIVE,
             "source": "Meeting video transcripts (ASR, un-diarized); member attribution is name-based with per-position confidence.",
             "errors": errors,
         },
