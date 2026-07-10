@@ -27,8 +27,8 @@ function matchMember(members: MemberProfile[], name: string): MemberProfile | nu
 }
 
 export default function MemberSentiment({
-  muni, body, memberName,
-}: { muni: string; body: string; memberName: string }) {
+  muni, body, memberName, onScore,
+}: { muni: string; body: string; memberName: string; onScore?: (score: number | null) => void }) {
   const [data, setData] = useState<AnalysisDataset | null>(null)
   const [loading, setLoading] = useState(true)
   const [evQuery, setEvQuery] = useState('')
@@ -44,6 +44,18 @@ export default function MemberSentiment({
   }, [muni, body])
 
   const profile = useMemo(() => (data ? matchMember(data.members, memberName) : null), [data, memberName])
+
+  // Surface the overall disposition ("progress score") to the profile header.
+  useEffect(() => {
+    if (!onScore) return
+    onScore(profile && profile.totalPositions > 0 ? profile.avgSentiment : null)
+  }, [profile, onScore])
+
+  // Themes ordered by sentiment (highest → lowest), limited to the most-discussed.
+  const themesBySentiment = useMemo(() => {
+    const t = profile?.byTheme ?? []
+    return [...t].sort((a, b) => b.count - a.count).slice(0, 8).sort((a, b) => b.avgSentiment - a.avgSentiment)
+  }, [profile])
   const caseName = useMemo(() => {
     const map: Record<string, string> = {}
     data?.cases.forEach((c) => { map[c.id] = c.name })
@@ -107,7 +119,7 @@ export default function MemberSentiment({
           <div className="card" style={{ padding: 16 }}>
             <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>Sentiment by theme</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {profile.byTheme.slice(0, 8).map((t) => (
+              {themesBySentiment.map((t) => (
                 <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                   <span style={{ width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.theme}</span>
                   <span className="muted" style={{ width: 20, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{t.count}</span>

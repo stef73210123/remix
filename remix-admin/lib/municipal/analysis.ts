@@ -133,6 +133,63 @@ export function hasAnalysis(muniKey: string, bodyKey: string): boolean {
   return dataDir(muniKey, bodyKey) !== null
 }
 
+/** Body keys under a town that have a transcript-analysis dataset. */
+export function analysisBodiesForMuni(muniKey: string): string[] {
+  return Object.keys(DATA_DIRS)
+    .filter((k) => k.startsWith(`${muniKey}:`))
+    .map((k) => k.split(':')[1])
+}
+
+export interface AggregateThemeStat {
+  theme: string
+  mentions: number
+  avgSentiment: number
+  boards: string[]
+}
+export interface TownIssuesAggregate {
+  town: string
+  years: number[]
+  byYear: Record<string, AggregateThemeStat[]>
+}
+
+/** Aggregate theme volume + sentiment across ALL of a town's boards, by calendar
+ *  year. Built from each board's theme timelines (date-stamped sentiment). */
+export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null {
+  const bodies = analysisBodiesForMuni(muniKey)
+  if (bodies.length === 0) return null
+  let town = ''
+  // year → theme → { sum, n, boards }
+  const perYear = new Map<number, Map<string, { sum: number; n: number; boards: Set<string> }>>()
+  for (const body of bodies) {
+    const data = loadAnalysis(muniKey, body)
+    if (!data) continue
+    town = town || data.meta.town
+    const boardName = data.meta.board
+    for (const theme of data.themes) {
+      for (const pt of theme.timeline) {
+        const year = Number(pt.date.slice(0, 4))
+        if (!Number.isFinite(year)) continue
+        if (!perYear.has(year)) perYear.set(year, new Map())
+        const tm = perYear.get(year)!
+        const cur = tm.get(theme.theme) || { sum: 0, n: 0, boards: new Set<string>() }
+        cur.sum += pt.sentiment
+        cur.n += 1
+        cur.boards.add(boardName)
+        tm.set(theme.theme, cur)
+      }
+    }
+  }
+  if (perYear.size === 0) return null
+  const byYear: Record<string, AggregateThemeStat[]> = {}
+  for (const [year, tm] of perYear) {
+    byYear[String(year)] = [...tm.entries()]
+      .map(([theme, v]) => ({ theme, mentions: v.n, avgSentiment: v.sum / v.n, boards: [...v.boards].sort() }))
+      .sort((a, b) => b.mentions - a.mentions)
+  }
+  const years = [...perYear.keys()].sort((a, b) => b - a)
+  return { town, years, byYear }
+}
+
 const cache = new Map<string, AnalysisDataset | null>()
 export function loadAnalysis(muniKey: string, bodyKey: string): AnalysisDataset | null {
   const dir = dataDir(muniKey, bodyKey)
@@ -182,6 +239,8 @@ export interface MemberDossier {
   role?: string
   email?: string
   emailSource?: string
+  /** Headshot image URL (committed under /public/municipal/headshots or remote). */
+  photo?: string
   bio?: string
   bioConfidence?: 'high' | 'medium' | 'low' | string
   engagement?: {

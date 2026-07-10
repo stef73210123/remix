@@ -37,7 +37,14 @@ interface Ribbon {
   midY: number
 }
 
-export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: BudgetLink[] }) {
+export default function Sankey({
+  nodes, links, totalRevenue, totalExpenditure,
+}: {
+  nodes: BudgetNode[]
+  links: BudgetLink[]
+  totalRevenue?: number
+  totalExpenditure?: number
+}) {
   const [hoverLink, setHoverLink] = useState<string | null>(null)
   const [hoverNode, setHoverNode] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
@@ -55,7 +62,7 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
     })
   }
 
-  const { laid, ribbons, maxLayer } = useMemo(() => {
+  const { laid, ribbons, maxLayer, minLayer } = useMemo(() => {
     // Only show a detail child when its parent is expanded.
     const nodesV = nodes.filter((n) => !n.parent || expanded.has(n.parent))
     const visIds = new Set(nodesV.map((n) => n.id))
@@ -73,7 +80,12 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
     }
     const nodes2 = nodesV
     const links2 = linksV
+    // Position columns by the ORDER of present layers (not raw value), so a
+    // missing layer (e.g. no revenue detail expanded) collapses its gap and
+    // negative layers (revenue drill-down) sit cleanly to the left.
     const layers = Array.from(new Set(nodes2.map((n) => n.layer))).sort((a, b) => a - b)
+    const layerIndex = new Map(layers.map((L, i) => [L, i]))
+    const lastIdx = layers.length - 1
     const maxLayer = layers[layers.length - 1] || 0
     const plotH = H - PAD.top - PAD.bottom
 
@@ -95,7 +107,7 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
       const col = byLayer.get(L)!
       const totalH = col.reduce((s, c) => s + c.value * scale, 0) + (col.length - 1) * GAP
       let y = PAD.top + (plotH - totalH) / 2
-      const x = PAD.left + (maxLayer === 0 ? 0 : (L / maxLayer) * (W - PAD.left - PAD.right - NODE_W))
+      const x = PAD.left + (lastIdx === 0 ? 0 : (layerIndex.get(L)! / lastIdx) * (W - PAD.left - PAD.right - NODE_W))
       for (const c of col) {
         c.x = x
         c.y = y
@@ -138,7 +150,7 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
       t.tOff += th
     }
 
-    return { laid: [...byId.values()], ribbons, maxLayer }
+    return { laid: [...byId.values()], ribbons, maxLayer, minLayer: layers[0] ?? 0 }
   }, [nodes, links, expanded])
 
   const active = hoverLink || hoverNode
@@ -149,8 +161,24 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
 
   return (
     <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+      {(totalRevenue != null || totalExpenditure != null) && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
+          {totalRevenue != null && (
+            <div>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Revenue in</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: '#12a6b8', fontVariantNumeric: 'tabular-nums' }}>{fmtUSD(totalRevenue)}</div>
+            </div>
+          )}
+          {totalExpenditure != null && (
+            <div style={{ textAlign: 'right' }}>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Spending out</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: '#ca615f', fontVariantNumeric: 'tabular-nums' }}>{fmtUSD(totalExpenditure)}</div>
+            </div>
+          )}
+        </div>
+      )}
       <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
-        Click a spending area marked ⊕ to break it down; click ⊖ to roll it back up.
+        Click any item marked ⊕ to break it down; click ⊖ to roll it back up.
       </div>
       <svg
         viewBox={`0 0 ${W} ${H}`}
@@ -176,9 +204,10 @@ export default function Sankey({ nodes, links }: { nodes: BudgetNode[]; links: B
 
         {/* Nodes + labels */}
         {laid.map((n) => {
-          const isLeft = n.node.layer === 0
-          // Middle columns (hub + any expanded parent) label above; rightmost labels to the right.
-          const isMiddle = n.node.layer > 0 && n.node.layer < maxLayer
+          // Leftmost present column labels to the left; rightmost to the right;
+          // interior columns (hub, expanded parents) label above.
+          const isLeft = n.node.layer === minLayer
+          const isMiddle = n.node.layer > minLayer && n.node.layer < maxLayer
           const labelX = isLeft ? n.x - 8 : isMiddle ? n.x + NODE_W / 2 : n.x + NODE_W + 8
           const anchor = isLeft ? 'end' : isMiddle ? 'middle' : 'start'
           const canDrill = expandable.has(n.node.id)

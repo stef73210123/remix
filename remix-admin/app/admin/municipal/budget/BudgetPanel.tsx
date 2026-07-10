@@ -121,15 +121,33 @@ function Breakdown({ title, lines, prevLines, note }: { title: string; lines: Bu
  * lists where every line shows its year-over-year % change and drills down to
  * sub-line detail. Shared by the standalone Budget page and the dashboard.
  */
+function scopeShort(scope: string): string {
+  return /all/i.test(scope) ? 'All funds' : scope
+}
+
 export default function BudgetPanel({ budget }: { budget: TownBudget }) {
   const years = budget.years
-  const [key, setKey] = useState(years[0]?.key || '')
-  const sel: BudgetYear | undefined = years.find((y) => y.key === key) || years[0]
-  // The prior year is the same scope, one fiscal year earlier (so YoY compares
-  // like-for-like); undefined when there's no comparable prior year.
+  // Distinct scopes (All funds / General Fund) become the toggle; the year is a
+  // dropdown of the years available for the chosen scope, newest first.
+  const scopes = useMemo(() => [...new Set(years.map((y) => y.scope))], [years])
+  const [scope, setScope] = useState(scopes[0] || '')
+  const yearsForScope = useMemo(
+    () => years.filter((y) => y.scope === scope).sort((a, b) => Number(b.fiscalYear) - Number(a.fiscalYear)),
+    [years, scope]
+  )
+  const [fiscalYear, setFiscalYear] = useState(yearsForScope[0]?.fiscalYear || '')
+
+  const sel: BudgetYear | undefined = yearsForScope.find((y) => y.fiscalYear === fiscalYear) || yearsForScope[0]
+  // Prior year within the same scope (like-for-like YoY); may be undefined.
   const prev: BudgetYear | undefined = sel
     ? years.find((y) => y.scope === sel.scope && Number(y.fiscalYear) === Number(sel.fiscalYear) - 1)
     : undefined
+
+  function pickScope(s: string) {
+    setScope(s)
+    const newest = years.filter((y) => y.scope === s).sort((a, b) => Number(b.fiscalYear) - Number(a.fiscalYear))[0]
+    if (newest) setFiscalYear(newest.fiscalYear)
+  }
 
   const { nodes, links } = useMemo(() => (sel ? yearToSankey(sel) : { nodes: [], links: [] }), [sel])
 
@@ -137,27 +155,38 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 6 }}>
-        <div className="muted" style={{ fontSize: 13 }}>
-          {budget.townName} · {sel.scope} · FY {sel.fiscalYear} ({sel.status})
-          <br />
-          revenue <strong style={{ color: 'var(--text)' }}>{fmtUSD(sel.totalRevenue)}</strong>
-          {' · '}spending <strong style={{ color: 'var(--text)' }}>{fmtUSD(sel.totalExpenditure)}</strong>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 14 }}>
+        <div className="muted" style={{ fontSize: 13 }}>{budget.townName} · {sel.status}</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          {scopes.length > 1 && (
+            <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
+              {scopes.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => pickScope(s)}
+                  className="btn secondary"
+                  style={{ padding: '5px 12px', fontSize: 13, whiteSpace: 'nowrap', ...(s === scope ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
+                >
+                  {scopeShort(s)}
+                </button>
+              ))}
+            </div>
+          )}
+          {yearsForScope.length > 1 ? (
+            <select
+              value={sel.fiscalYear}
+              onChange={(e) => setFiscalYear(e.target.value)}
+              aria-label="Fiscal year"
+              style={{ fontSize: 14, padding: '6px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+            >
+              {yearsForScope.map((y) => (
+                <option key={y.fiscalYear} value={y.fiscalYear}>FY {y.fiscalYear}</option>
+              ))}
+            </select>
+          ) : (
+            <span className="badge state">FY {sel.fiscalYear}</span>
+          )}
         </div>
-        {years.length > 1 && (
-          <div className="pill-strip" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-            {years.map((y) => (
-              <button
-                key={y.key}
-                onClick={() => setKey(y.key)}
-                className="btn secondary"
-                style={{ padding: '5px 12px', fontSize: 13, whiteSpace: 'nowrap', ...(y.key === sel.key ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
-              >
-                {y.label}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
       {sel.note && (
@@ -171,7 +200,7 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
       )}
 
       <div className="card" style={{ padding: 20, marginBottom: 20 }}>
-        <Sankey nodes={nodes} links={links} />
+        <Sankey nodes={nodes} links={links} totalRevenue={sel.totalRevenue} totalExpenditure={sel.totalExpenditure} />
       </div>
 
       <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
@@ -188,8 +217,6 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
           note={prev ? `▲▼ = change vs FY ${prev.fiscalYear}. Click an area with a marker to break it down.` : 'Click an area with a marker to break it down.'}
         />
       </div>
-
-      <div className="muted" style={{ fontSize: 11, marginTop: 14, lineHeight: 1.5, maxWidth: 820 }}>{budget.sourceNote}</div>
     </>
   )
 }
