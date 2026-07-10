@@ -25,18 +25,11 @@ export default function MemberDossier({
   return (
     <div style={{ marginBottom: 28 }}>
       {/* Background */}
-      {(d.bio || d.email) && (
+      {d.bio && (
         <>
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Background</h2>
           <div className="card" style={{ padding: 16, marginBottom: hasEngagement ? 16 : 0 }}>
-            {d.email && (
-              <div style={{ marginBottom: d.bio ? 12 : 0, fontSize: 13 }}>
-                <span className="muted">Contact: </span>
-                <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)' }}>{d.email}</a>
-                <span className="muted" style={{ fontSize: 11 }}> · from town directory</span>
-              </div>
-            )}
-            {d.bio && <div style={{ fontSize: 14, lineHeight: 1.6 }}>{d.bio}</div>}
+            <div style={{ fontSize: 14, lineHeight: 1.6 }}>{d.bio}</div>
             {d.bioConfidence && d.bioConfidence !== 'high' && (
               <div className="muted" style={{ fontSize: 11, marginTop: 10, fontStyle: 'italic' }}>
                 {d.bioConfidence === 'low' ? 'Low-confidence identification — verify before relying on it.' : 'Medium-confidence identification.'}
@@ -49,10 +42,7 @@ export default function MemberDossier({
       {/* How to engage */}
       {hasEngagement && (
         <>
-          <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>How to engage</h2>
-          <div className="muted" style={{ fontSize: 11, marginBottom: 12 }}>
-            Synthesized from this member&rsquo;s meeting record and public background — a starting read, not a script.
-          </div>
+          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>How to engage</h2>
 
           {eng.keyIssues && eng.keyIssues.length > 0 && (
             <div className="card" style={{ padding: 16, marginBottom: 12 }}>

@@ -68,14 +68,21 @@ export interface BudgetLink {
 }
 
 /** Build the revenue → total → spending Sankey graph for one fiscal year.
- *  Expenditure children become layer-3 drill-down; revenue children surface in
- *  the revenue breakdown list instead. */
+ *  Both sides drill down: revenue children sit at layer -1 (left of their
+ *  source), expenditure children at layer 3 (right of their area). The hub
+ *  ("Total") is layer 1; the renderer positions columns by present-layer order,
+ *  so negative layers lay out cleanly to the left. */
 export function yearToSankey(y: BudgetYear): { nodes: BudgetNode[]; links: BudgetLink[] } {
   const nodes: BudgetNode[] = [{ id: 'total', label: 'Total', layer: 1, color: null }]
   const links: BudgetLink[] = []
   for (const r of y.revenue) {
     nodes.push({ id: `rev_${r.id}`, label: r.label, layer: 0, color: r.color })
     links.push({ source: `rev_${r.id}`, target: 'total', value: r.value })
+    ;(r.children || []).forEach((c, i) => {
+      const cid = `rev_${r.id}__${i}`
+      nodes.push({ id: cid, label: c.label, layer: -1, parent: `rev_${r.id}`, color: r.color })
+      links.push({ source: cid, target: `rev_${r.id}`, value: c.value })
+    })
   }
   for (const e of y.expense) {
     nodes.push({ id: `exp_${e.id}`, label: e.label, layer: 2, color: e.color })

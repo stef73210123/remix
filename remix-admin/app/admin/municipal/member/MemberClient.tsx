@@ -5,6 +5,8 @@ import AdminNav from '@/app/admin/AdminNav'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MemberSentiment from './MemberSentiment'
 import MemberDossier from './MemberDossier'
+import type { MemberDossier as Dossier } from '@/lib/municipal/analysis'
+import { sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
@@ -44,6 +46,9 @@ export default function MemberClient({ userName }: { userName: string }) {
   const [muni, setMuni] = useState('')
   const [fromBody, setFromBody] = useState('')
   const [data, setData] = useState<MemberData | null>(null)
+  const [dossier, setDossier] = useState<Dossier | null>(null)
+  const [photoBroken, setPhotoBroken] = useState(false)
+  const [score, setScore] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -93,6 +98,18 @@ export default function MemberClient({ userName }: { userName: string }) {
       .finally(() => setLoading(false))
   }, [])
 
+  // Researched dossier drives the headshot + authoritative contact email in the
+  // header (the DB record often has neither for these officials).
+  const memberName = data?.member?.full_name
+  useEffect(() => {
+    setPhotoBroken(false)
+    if (!muni || !fromBody || !memberName) { setDossier(null); return }
+    fetch(`/admin/api/municipal/member-dossier?muni=${encodeURIComponent(muni)}&body=${encodeURIComponent(fromBody)}&name=${encodeURIComponent(memberName)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+      .then((x) => setDossier(x && x.available !== false ? x : null))
+      .catch(() => setDossier(null))
+  }, [muni, fromBody, memberName])
+
   // Breadcrumb trail: Dashboard › Town › (Board) › Member.
   const crumbs = useMemo<Crumb[]>(() => {
     const trail: Crumb[] = [{ label: 'Dashboard', href: '/admin/municipal' }]
@@ -135,31 +152,54 @@ export default function MemberClient({ userName }: { userName: string }) {
 
       {member && !loading && (
         <>
-          {/* Identity header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap', marginBottom: 8 }}>
-            <div
-              aria-hidden
-              style={{
-                width: 64, height: 64, borderRadius: '50%', flexShrink: 0,
-                background: 'var(--panel-2)', border: '1px solid var(--border)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 22, fontWeight: 700, color: 'var(--primary-light)',
-              }}
-            >
-              {initials(member.full_name)}
-            </div>
-            <div>
-              <h1 className="page-title" style={{ margin: 0 }}>{member.full_name}</h1>
+          {/* Identity header — headshot, name + progress score, then chips aligned
+              with the name text to the right of the image. */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap', margin: '0 0 24px' }}>
+            {dossier?.photo && !photoBroken ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={dossier.photo}
+                alt={member.full_name}
+                onError={() => setPhotoBroken(true)}
+                style={{
+                  width: 72, height: 72, borderRadius: '50%', flexShrink: 0,
+                  objectFit: 'cover', border: '1px solid var(--border)', background: 'var(--panel-2)',
+                }}
+              />
+            ) : (
+              <div
+                aria-hidden
+                style={{
+                  width: 72, height: 72, borderRadius: '50%', flexShrink: 0,
+                  background: 'var(--panel-2)', border: '1px solid var(--border)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 24, fontWeight: 700, color: 'var(--primary-light)',
+                }}
+              >
+                {initials(member.full_name)}
+              </div>
+            )}
+            <div style={{ minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <h1 className="page-title" style={{ margin: 0 }}>{member.full_name}</h1>
+                {score !== null && (
+                  <span
+                    title={`Progress score · ${sentimentLabel(score)}`}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <span className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Progress score</span>
+                    <span style={sentimentChipStyle(score)}>{fmtSent(score)}</span>
+                  </span>
+                )}
+              </div>
               <div className="muted" style={{ fontSize: 14, marginTop: 4 }}>
                 {member.title || '—'}
                 {data?.town ? ` · ${data.town.name}, ${data.town.state}` : ''}
               </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
+                <span className="badge state">{member.active ? 'Active' : 'Inactive'}</span>
+              </div>
             </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '10px 0 24px' }}>
-            <span className="badge state">{member.kind.replace(/_/g, ' ')}</span>
-            <span className="badge state">{member.active ? 'Active' : 'Inactive'}</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, marginBottom: 26 }}>
@@ -168,13 +208,16 @@ export default function MemberClient({ userName }: { userName: string }) {
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
                 Contact
               </div>
-              {member.email ? (
-                <a href={`mailto:${member.email}`} style={{ color: 'var(--primary-light)', wordBreak: 'break-all', fontSize: 14 }}>
-                  {member.email}
-                </a>
-              ) : (
-                <div className="muted" style={{ fontSize: 13 }}>See Background below.</div>
-              )}
+              {(() => {
+                const email = member.email || dossier?.email
+                return email ? (
+                  <a href={`mailto:${email}`} style={{ color: 'var(--primary-light)', wordBreak: 'break-all', fontSize: 14 }}>
+                    {email}
+                  </a>
+                ) : (
+                  <div className="muted" style={{ fontSize: 13 }}>Not published.</div>
+                )
+              })()}
             </div>
 
             {/* Role */}
@@ -221,7 +264,7 @@ export default function MemberClient({ userName }: { userName: string }) {
 
           {/* Transcript-derived sentiment for this member (where a dataset exists) */}
           {data && fromBody && member.full_name && (
-            <MemberSentiment muni={data.town.key} body={fromBody} memberName={member.full_name} />
+            <MemberSentiment muni={data.town.key} body={fromBody} memberName={member.full_name} onScore={setScore} />
           )}
 
           {/* Climb-back trail at the end of the profile */}

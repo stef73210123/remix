@@ -1,9 +1,17 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import dynamic from 'next/dynamic'
 import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
+import IssuesOverview from './IssuesOverview'
+
+// Leaflet touches `window`, so the map is client-only (no SSR).
+const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
+  ssr: false,
+  loading: () => <div className="card" style={{ height: 420, marginBottom: 30 }} />,
+})
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import AdminNav from '@/app/admin/AdminNav'
@@ -291,19 +299,24 @@ export default function MunicipalClient({
         }
       })
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
-    const up: TimelineItem[] = upcomingRows.map((r, i) => ({
-      key: `u_${i}_${r.bodyKey}`,
-      date: r.date,
-      dateSuffix: r.projected ? ' *' : '',
-      dateTitle: r.projected ? 'Projected from meeting schedule' : undefined,
-      fallbackLabel: r.pattern || 'TBD',
-      board: r.board,
-      boardHref: `/admin/municipal/board?muni=${r.muniKey}&body=${r.bodyKey}`,
-      town: r.town,
-      past: false,
-      projected: r.projected,
-      links: <AgendaLink assets={r.assets} />,
-    }))
+    // Only the single soonest upcoming meeting teases on the right of "Now";
+    // everything else is history on the left.
+    const nextRow = upcomingRows.find((r) => r.date) || upcomingRows[0]
+    const up: TimelineItem[] = nextRow
+      ? [{
+          key: `u_${nextRow.bodyKey}`,
+          date: nextRow.date,
+          dateSuffix: nextRow.projected ? ' *' : '',
+          dateTitle: nextRow.projected ? 'Projected from meeting schedule' : undefined,
+          fallbackLabel: nextRow.pattern || 'TBD',
+          board: nextRow.board,
+          boardHref: `/admin/municipal/board?muni=${nextRow.muniKey}&body=${nextRow.bodyKey}`,
+          town: nextRow.town,
+          past: false,
+          projected: nextRow.projected,
+          links: <AgendaLink assets={nextRow.assets} />,
+        }]
+      : []
     return [...hist, ...up]
   }, [history, upcomingRows])
 
@@ -374,6 +387,12 @@ export default function MunicipalClient({
             )
           })()}
 
+          {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
+          {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
+
+          {/* Town-wide local issues across all boards — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
+
           {/* Demographics — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <Demographics muniKey={town} />}
 
@@ -418,7 +437,7 @@ export default function MunicipalClient({
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
             <h2 style={{ fontSize: 16, margin: 0 }}>
               Meetings
-              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · {upcomingRows.length} upcoming</span>
+              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
             </h2>
           </div>
           <MeetingTimeline
@@ -429,9 +448,7 @@ export default function MunicipalClient({
                 : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
             }
           />
-          <div className="muted" style={{ fontSize: 11, marginBottom: 26 }}>
-            Grey dots are past meetings; coral is the next scheduled meeting per board; slate (*) is projected from the board&apos;s recurring schedule.
-          </div>
+          <div style={{ marginBottom: 26 }} />
 
           {!data.dbOk && data.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>
