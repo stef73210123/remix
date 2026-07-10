@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
       './lib/municipal/data/nc-planning/dossiers.json',
       './lib/municipal/data/nc-townboard/dossiers.json',
     ],
+    // Federates every board's analysis.json, so include them all.
+    '/admin/api/municipal/property': [
+      './lib/municipal/data/nc-planning/analysis.json',
+      './lib/municipal/data/nc-townboard/analysis.json',
+    ],
   },
 }
 
