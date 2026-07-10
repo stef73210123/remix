@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { AnalysisDataset, CaseRollup, MemberProfile, ThemeRollup, MeetingAnalysis } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
+import { propertyId } from '@/lib/municipal/propertyId'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
@@ -159,7 +160,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
         {visibleCases.length === 0 ? (
           <div className="muted" style={{ padding: 16, fontSize: 13 }}>Nothing to show.</div>
         ) : visibleCases.map((c, i) => (
-          <CaseRow key={c.id} c={c} members={data.members} first={i === 0} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
+          <CaseRow key={c.id} c={c} members={data.members} muni={muni} first={i === 0} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
         ))}
       </div>
 
@@ -239,7 +240,8 @@ function ThemeRow({ t, maxMeetings }: { t: ThemeRollup; maxMeetings: number }) {
   )
 }
 
-function CaseRow({ c, members, first, open, onToggle }: { c: CaseRollup; members: MemberProfile[]; first: boolean; open: boolean; onToggle: () => void }) {
+function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; members: MemberProfile[]; muni: string; first: boolean; open: boolean; onToggle: () => void }) {
+  const propId = c.address ? propertyId(c.address) : ''
   // Where each board member stood on this case: their avg sentiment on it + their quotes.
   const stances = useMemo(() => {
     return members
@@ -275,6 +277,12 @@ function CaseRow({ c, members, first, open, onToggle }: { c: CaseRollup; members
                 <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
                   {c.address}{c.address && c.applicant ? ' · ' : ''}{c.applicant ? `Applicant: ${c.applicant}` : ''}
                 </div>
+              )}
+              {propId && (
+                <a href={`/admin/municipal/property?muni=${muni}&id=${propId}`}
+                   style={{ display: 'inline-block', fontSize: 12, color: 'var(--primary-light)', marginBottom: 12 }}>
+                  Property profile →
+                </a>
               )}
               {c.themes.length > 0 && (
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
