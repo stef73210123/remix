@@ -5,7 +5,9 @@ and member profiles.
 
 ## Contents
 - `transcripts/<YYYY-MM-DD>.txt` — raw meeting-video transcripts (automatic speech
-  recognition, **no speaker labels**), one per Planning Board meeting, 12 months.
+  recognition, **no speaker labels**), one per Planning Board meeting. Coverage
+  spans **Jan 2022 → present** (45 meetings with usable transcripts; the 2021–2023
+  Granicus captions were largely empty and are not included).
 - `analysis.json` — structured analysis aggregated from the transcripts: per-meeting
   cases/themes/sentiment, plus roll-ups (themes over time, per-case sentiment
   trajectory, per-member sentiment profiles). Shape defined by
@@ -28,12 +30,15 @@ and member profiles.
    entries to 80 canonical applications. Distinct lots within one subdivision are
    kept separate.
 
-Roster (from the town's official Board Members list): **Christopher Carthy**
-(Chairman — presides, so the un-named presiding voice in the ASR is his),
-**Steven Sauro**, **Michael Pollack**, **Thomas Crispi**, **Lawrence Ruisi**
-(members); Joseline Huerta (Secretary). Staff/consultants heard in meetings:
-Adam Kaufman (Town Planner), John Kellard (Town Engineer), Vincent DeAnno
-(Conservation liaison).
+Roster across the coverage window (derived from roll-calls + the town's official
+Board Members list): **Christopher Carthy** (Chairman — presides, so the un-named
+presiding voice in the ASR is his), **Steven Sauro**, **Michael Pollack**,
+**Lawrence Ruisi**, and **Thomas Crispi**, plus former member **James (Jim)
+Jensen**, who served through ~April 2025 and was succeeded by Crispi. Jensen is
+listed in `meta.inactiveMembers` (kept in the record, de-emphasized in the UI).
+Staff/consultants heard in meetings (not board members): Adam Kaufman (Town
+Planner), John Kellard (Town Engineer), Roland Baroni / Mary Desmond (Town
+Attorney), Valerie Desmond (Secretary).
 
 The per-meeting analyses were run with this confirmed roster (the transcripts
 were re-analyzed once the official Board Members list was available), so members
