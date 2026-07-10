@@ -47,6 +47,7 @@ export default function MemberClient({ userName }: { userName: string }) {
   const [fromBody, setFromBody] = useState('')
   const [data, setData] = useState<MemberData | null>(null)
   const [dossier, setDossier] = useState<Dossier | null>(null)
+  const [photoBroken, setPhotoBroken] = useState(false)
   const [score, setScore] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -101,6 +102,7 @@ export default function MemberClient({ userName }: { userName: string }) {
   // header (the DB record often has neither for these officials).
   const memberName = data?.member?.full_name
   useEffect(() => {
+    setPhotoBroken(false)
     if (!muni || !fromBody || !memberName) { setDossier(null); return }
     fetch(`/admin/api/municipal/member-dossier?muni=${encodeURIComponent(muni)}&body=${encodeURIComponent(fromBody)}&name=${encodeURIComponent(memberName)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
@@ -153,11 +155,12 @@ export default function MemberClient({ userName }: { userName: string }) {
           {/* Identity header — headshot, name + progress score, then chips aligned
               with the name text to the right of the image. */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap', margin: '0 0 24px' }}>
-            {dossier?.photo ? (
+            {dossier?.photo && !photoBroken ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={dossier.photo}
                 alt={member.full_name}
+                onError={() => setPhotoBroken(true)}
                 style={{
                   width: 72, height: 72, borderRadius: '50%', flexShrink: 0,
                   objectFit: 'cover', border: '1px solid var(--border)', background: 'var(--panel-2)',

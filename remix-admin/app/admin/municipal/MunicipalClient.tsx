@@ -1,10 +1,17 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import dynamic from 'next/dynamic'
 import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
+
+// Leaflet touches `window`, so the map is client-only (no SSR).
+const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
+  ssr: false,
+  loading: () => <div className="card" style={{ height: 420, marginBottom: 30 }} />,
+})
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import AdminNav from '@/app/admin/AdminNav'
@@ -379,6 +386,9 @@ export default function MunicipalClient({
               </>
             )
           })()}
+
+          {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
+          {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
 
           {/* Town-wide local issues across all boards — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
