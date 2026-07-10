@@ -12,6 +12,20 @@ export interface IncomeBracket {
   pct: number
 }
 
+export interface HousingType {
+  label: string
+  /** Share of housing units of this structure type, 0–100. */
+  pct: number
+}
+
+/** One year in a demographic trend series (for period-over-period sparklines). */
+export interface DemoSeriesPoint {
+  year: number
+  population: number
+  medianIncomeUsd: number
+  medianHomeValueUsd: number
+}
+
 export interface TownDemographics {
   townKey: string
   townName: string
@@ -23,6 +37,12 @@ export interface TownDemographics {
   medianAgeYears: number
   ownerOccupiedPct: number
   incomeBrackets: IncomeBracket[]
+  /** Median owner-occupied home value (ACS B25077). */
+  medianHomeValueUsd?: number
+  /** Distribution of housing units by structure type (ACS B25024). */
+  housingTypes?: HousingType[]
+  /** Multi-year trend (oldest → newest) for period-over-period growth. */
+  series?: DemoSeriesPoint[]
 }
 
 const BRACKET_LABELS = ['<$50K', '$50–100K', '$100–150K', '$150–200K', '$200K+']
@@ -43,6 +63,14 @@ const NORTH_CASTLE: TownDemographics = {
     { label: BRACKET_LABELS[2], pct: 15 },
     { label: BRACKET_LABELS[3], pct: 14 },
     { label: BRACKET_LABELS[4], pct: 41 },
+  ],
+  medianHomeValueUsd: 985000,
+  housingTypes: [
+    { label: 'Single-family', pct: 86 },
+    { label: '2–4 units', pct: 6 },
+    { label: '5–19 units', pct: 4 },
+    { label: '20+ units', pct: 3 },
+    { label: 'Mobile / other', pct: 1 },
   ],
 }
 

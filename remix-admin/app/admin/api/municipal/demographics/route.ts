@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server'
 import { authorizeMunicipal } from '@/lib/municipal/auth'
 import { getDemographics } from '@/lib/municipal/demographics'
 import { findMunicipality } from '@/lib/municipal/registry'
-import { fetchCensusDemographics } from '@/lib/municipal/census'
+import { fetchCensusDemographics, fetchCensusSeries } from '@/lib/municipal/census'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -24,9 +24,13 @@ export async function GET(req: Request) {
   const townName = findMunicipality(muni)?.name || fallback?.townName || muni
 
   try {
-    const live = await fetchCensusDemographics(muni, townName)
+    // Snapshot + trend series in parallel; the series drives the sparklines.
+    const [live, series] = await Promise.all([
+      fetchCensusDemographics(muni, townName),
+      fetchCensusSeries(muni).catch(() => []),
+    ])
     if (live && live.population > 0) {
-      return NextResponse.json({ demo: live, live: true })
+      return NextResponse.json({ demo: { ...live, series: series.length ? series : undefined }, live: true })
     }
   } catch (e) {
     return NextResponse.json({
