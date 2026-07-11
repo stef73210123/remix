@@ -55,7 +55,7 @@ function Boundary({ muni }: { muni: string }) {
 
 /** Lazily queries Overpass for the single active POI category within the current
  *  view and renders it as labelled dots. Keyless, on-demand. */
-function PoiLayers({ active }: { active: PoiKey | null }) {
+function PoiLayers({ active }: { active: string | null }) {
   const map = useMap()
   const groups = useRef<Record<string, LayerGroup>>({})
   const loaded = useRef<Set<string>>(new Set())
@@ -151,6 +151,102 @@ function Hamlets({ muni }: { muni: string }) {
   return null
 }
 
+// ── Westchester County GIS overlays (one active at a time) ───────────────────
+// North Castle bounding box (WGS84) to clip county-wide layers.
+const NC_BBOX = { xmin: -73.74, ymin: 41.09, xmax: -73.64, ymax: 41.19 }
+const GIS_HOST = 'https://giswww.westchestergov.com/arcgis/rest/services'
+
+interface GisLayer {
+  key: string
+  label: string
+  color: string
+  geom: 'point' | 'line' | 'polygon'
+  service: string
+  /** Matches the layer's name in the service's /layers list (ids aren't stable). */
+  match: RegExp
+  labelField?: string
+}
+const GIS: GisLayer[] = [
+  { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
+  { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
+  { key: 'fire_station', label: 'Fire stations', color: '#ef4444', geom: 'point', service: 'DataHub_CommunityFacilities', match: /fire\s*(station|dept|department|ems)/i, labelField: 'NAME' },
+  { key: 'police', label: 'Police', color: '#3b82f6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /police/i, labelField: 'NAME' },
+  { key: 'park', label: 'Parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
+  { key: 'historic', label: 'Historic sites', color: '#c084a6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /historic/i, labelField: 'RESNAME' },
+  { key: 'trails', label: 'Trails', color: '#84cc16', geom: 'line', service: 'DataHub_EnvironmentandPlanning', match: /trail/i, labelField: 'NAME' },
+  { key: 'flood', label: 'Flood plains', color: '#38bdf8', geom: 'polygon', service: 'MunicipalTaxParcels_Query', match: /flood/i },
+]
+
+// Resolve a layer id by name from the service's /layers list (cached per service).
+const layerIdCache = new Map<string, { id: number; name: string }[]>()
+async function resolveLayerId(service: string, match: RegExp): Promise<number | null> {
+  let layers = layerIdCache.get(service)
+  if (!layers) {
+    const r = await fetch(`${GIS_HOST}/${service}/MapServer/layers?f=json`)
+    if (!r.ok) return null
+    const j = (await r.json()) as { layers?: { id: number; name: string }[] }
+    layers = (j.layers || []).map((l) => ({ id: l.id, name: l.name }))
+    layerIdCache.set(service, layers)
+  }
+  const hit = layers.find((l) => match.test(l.name))
+  return hit ? hit.id : null
+}
+
+/** Fetches the single active county-GIS layer (clipped to North Castle) and
+ *  draws it. Resolves the layer id by name at runtime and fails silently if the
+ *  service/CORS is unavailable, so the map never breaks. */
+function GisLayers({ active, onState }: { active: string | null; onState?: (s: 'loading' | 'ok' | 'empty' | 'error' | null) => void }) {
+  const map = useMap()
+  const groupRef = useRef<LayerGroup | null>(null)
+
+  useEffect(() => {
+    if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    const cfg = GIS.find((g) => g.key === active)
+    if (!cfg) { onState?.(null); return }
+    let cancelled = false
+    const group = L.layerGroup().addTo(map)
+    groupRef.current = group
+    onState?.('loading')
+    ;(async () => {
+      try {
+        const id = await resolveLayerId(cfg.service, cfg.match)
+        if (cancelled) return
+        if (id == null) { onState?.('error'); return }
+        const b = NC_BBOX
+        const url =
+          `${GIS_HOST}/${cfg.service}/MapServer/${id}/query` +
+          `?where=1%3D1&outFields=*&outSR=4326` +
+          `&geometry=${b.xmin}%2C${b.ymin}%2C${b.xmax}%2C${b.ymax}` +
+          `&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson`
+        const r = await fetch(url)
+        if (!r.ok || cancelled) { if (!cancelled) onState?.('error'); return }
+        const data = (await r.json()) as GeoJSON.FeatureCollection
+        if (cancelled) return
+        const count = data?.features?.length ?? 0
+        L.geoJSON(data as GeoJSON.GeoJsonObject, {
+          style: () =>
+            cfg.geom === 'point'
+              ? {}
+              : { color: cfg.color, weight: cfg.geom === 'line' ? 3 : 1.8, fillColor: cfg.color, fillOpacity: cfg.geom === 'polygon' ? 0.14 : 0 },
+          pointToLayer: (_f, latlng) => L.circleMarker(latlng, { radius: 5, color: '#0a0a0a', weight: 1, fillColor: cfg.color, fillOpacity: 0.95 }),
+          onEachFeature: (f, layer) => {
+            const v = cfg.labelField && f.properties ? (f.properties as Record<string, unknown>)[cfg.labelField] : null
+            layer.bindPopup(`<strong>${v ? String(v) : cfg.label}</strong><br>${cfg.label}`)
+          },
+        }).addTo(group)
+        onState?.(count > 0 ? 'ok' : 'empty')
+      } catch {
+        if (!cancelled) onState?.('error')
+      }
+    })()
+    return () => {
+      cancelled = true
+      if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    }
+  }, [active, map, onState])
+  return null
+}
+
 function ResizeFix() {
   const map = useMap()
   useEffect(() => {
@@ -165,18 +261,26 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
   // jurisdiction + hamlet boundaries.
-  const [active, setActive] = useState<PoiKey | null>(null)
+  const [active, setActive] = useState<string | null>(null)
+  const [gisState, setGisState] = useState<'loading' | 'ok' | 'empty' | 'error' | null>(null)
 
   if (!cfg) return null
 
-  function toggle(k: PoiKey) {
+  function toggle(k: string) {
     setActive((cur) => (cur === k ? null : k))
   }
+
+  // County GIS civic layers (North Castle only) come first, then the OSM POIs.
+  const chips: { key: string; label: string; color: string }[] = [
+    ...(muni === 'nc' ? GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) : []),
+    ...POI.map((c) => ({ key: c.key, label: c.label, color: c.color })),
+  ]
+  const activeIsGis = GIS.some((g) => g.key === active)
 
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        {/* Interactive legend overlaid on the map — each pill toggles a POI layer. */}
+        {/* Interactive legend overlaid on the map — each pill toggles one layer. */}
         <div
           className="pill-strip"
           style={{
@@ -184,7 +288,7 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
             display: 'flex', gap: 4, flexWrap: 'wrap', maxWidth: 'calc(100% - 20px)',
           }}
         >
-          {POI.map((c) => {
+          {chips.map((c) => {
             const on = active === c.key
             return (
               <button
@@ -207,6 +311,17 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
               </button>
             )
           })}
+          {activeIsGis && gisState && gisState !== 'ok' && (
+            <span
+              style={{
+                padding: '5px 10px', fontSize: 11, fontWeight: 600, color: '#fff', borderRadius: 999,
+                background: 'rgba(20,24,28,0.72)', border: '1px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)',
+                display: 'inline-flex', alignItems: 'center',
+              }}
+            >
+              {gisState === 'loading' ? 'Loading county layer…' : gisState === 'empty' ? 'No features here' : 'Layer unavailable'}
+            </span>
+          )}
         </div>
         <MapContainer
           center={cfg.center}
@@ -227,6 +342,7 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
           <Boundary muni={muni} />
           <Hamlets muni={muni} />
           <PoiLayers active={active} />
+          <GisLayers active={active} onState={setGisState} />
           <ResizeFix />
         </MapContainer>
       </div>
