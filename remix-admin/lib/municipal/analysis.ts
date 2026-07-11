@@ -255,9 +255,24 @@ export function loadTranscript(muniKey: string, bodyKey: string, date: string): 
 }
 
 // ---- Member dossiers (researched stakeholder profiles) ----
+export interface MemberTerm {
+  /** Year first elected/appointed to this body (career start on the body). */
+  firstYear?: number
+  /** Current term start year (Jan of the year after the election). */
+  start?: number
+  /** Current term end year (term expires Dec 31 of this year). */
+  end?: number
+  /** Term length in years (2 for NC Supervisor, 4 for Council). */
+  lengthYears?: number
+  /** 'elected' or 'appointed' — appointed boards (Planning/ZBA) differ. */
+  type?: 'elected' | 'appointed'
+}
+
 export interface MemberDossier {
   member: string
   role?: string
+  /** Elected/appointed term details, surfaced on the profile page. */
+  term?: MemberTerm
   email?: string
   emailSource?: string
   /** Headshot image URL (committed under /public/municipal/headshots or remote). */

@@ -24,6 +24,23 @@ export interface HomeValueBracket {
   pct: number
 }
 
+/** One uniform 5-year age bin (ACS B01001, male+female), 0–4 … 85+. */
+export interface AgeBin {
+  label: string
+  /** Inclusive lower bound (years). */
+  min: number
+  /** Exclusive upper bound (years); null for the open-ended 85+ bin. */
+  max: number | null
+  /** Share of the population in this bin, 0–100. */
+  pct: number
+}
+
+/** The full age distribution for one ACS vintage. */
+export interface AgeVintage {
+  year: number
+  bins: AgeBin[]
+}
+
 /** One year in a demographic trend series (for period-over-period sparklines). */
 export interface DemoSeriesPoint {
   year: number
@@ -57,6 +74,24 @@ export interface TownDemographics {
   avgHouseholdSizePeople?: number
   /** Multi-year trend (oldest → newest) for period-over-period growth. */
   series?: DemoSeriesPoint[]
+  /** Fine-grained age distribution across ACS vintages (oldest → newest). */
+  ageDistribution?: AgeVintage[]
+}
+
+/** Uniform 5-year bin labels, 0–4 … 85+ (matches AgeVintage.bins order). */
+export const AGE_BIN_LABELS = [
+  '0–4', '5–9', '10–14', '15–19', '20–24', '25–29', '30–34', '35–39', '40–44',
+  '45–49', '50–54', '55–59', '60–64', '65–69', '70–74', '75–79', '80–84', '85+',
+]
+
+/** Build AgeBins from a parallel array of 18 percentages (0–4 … 85+). */
+export function ageBinsFromPercents(pcts: number[]): AgeBin[] {
+  return AGE_BIN_LABELS.map((label, i) => ({
+    label,
+    min: i * 5,
+    max: i === AGE_BIN_LABELS.length - 1 ? null : i * 5 + 5,
+    pct: pcts[i] ?? 0,
+  }))
 }
 
 const BRACKET_LABELS = ['<$50K', '$50–100K', '$100–150K', '$150–200K', '$200K+']
@@ -103,6 +138,18 @@ const NORTH_CASTLE: TownDemographics = {
     { year: 2020, population: 12100, medianIncomeUsd: 160000, medianHomeValueUsd: 910000, medianAgeYears: 46, households: 4290 },
     { year: 2021, population: 12150, medianIncomeUsd: 165000, medianHomeValueUsd: 950000, medianAgeYears: 46, households: 4300 },
     { year: 2022, population: 12100, medianIncomeUsd: 168000, medianHomeValueUsd: 985000, medianAgeYears: 47, households: 4300 },
+  ],
+  // Approximate ACS B01001 age distribution across a ~decade so the chart shows
+  // the shift over time even without a live Census key. (0–4 … 85+)
+  ageDistribution: [
+    {
+      year: 2013,
+      bins: ageBinsFromPercents([5, 8, 10, 8, 3, 4, 5, 7, 10, 11, 9, 7, 5, 3, 2, 1, 1, 1]),
+    },
+    {
+      year: 2022,
+      bins: ageBinsFromPercents([4, 7, 9, 9, 3, 3, 3, 5, 8, 11, 11, 8, 7, 5, 3, 2, 1, 1]),
+    },
   ],
 }
 

@@ -53,16 +53,16 @@ function Boundary({ muni }: { muni: string }) {
   return null
 }
 
-/** Lazily queries Overpass for the enabled POI categories within the current
- *  view and renders them as labelled dots. Keyless, on-demand. */
-function PoiLayers({ enabled }: { enabled: Set<PoiKey> }) {
+/** Lazily queries Overpass for the single active POI category within the current
+ *  view and renders it as labelled dots. Keyless, on-demand. */
+function PoiLayers({ active }: { active: string | null }) {
   const map = useMap()
   const groups = useRef<Record<string, LayerGroup>>({})
   const loaded = useRef<Set<string>>(new Set())
 
   useEffect(() => {
     for (const cat of POI) {
-      const on = enabled.has(cat.key)
+      const on = active === cat.key
       const g = groups.current[cat.key]
       if (on && !g) {
         const group = L.layerGroup().addTo(map)
@@ -93,7 +93,157 @@ function PoiLayers({ enabled }: { enabled: Set<PoiKey> }) {
         loaded.current.delete(cat.key)
       }
     }
-  }, [enabled, map])
+  }, [active, map])
+  return null
+}
+
+// North Castle's three hamlets — drawn as secondary boundaries over the town.
+const HAMLETS: Record<string, string[]> = {
+  nc: ['Armonk, New York', 'Banksville, New York', 'North White Plains, New York'],
+}
+
+/** Draws the town's hamlet/CDP boundaries (fetched at runtime) with labels, so
+ *  Armonk, Banksville and North White Plains read on the map alongside the town
+ *  outline. Fetched sequentially to stay gentle on Nominatim. */
+function Hamlets({ muni }: { muni: string }) {
+  const map = useMap()
+  const groupRef = useRef<LayerGroup | null>(null)
+  useEffect(() => {
+    const names = HAMLETS[muni]
+    if (!names) return
+    let cancelled = false
+    const group = L.layerGroup().addTo(map)
+    groupRef.current = group
+    const label = (text: string) =>
+      L.divIcon({
+        className: '',
+        html: `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,0.9);pointer-events:none;">${text}</div>`,
+        iconSize: [0, 0],
+      })
+    ;(async () => {
+      for (const q of names) {
+        if (cancelled) return
+        try {
+          const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&polygon_geojson=1&limit=1&q=${encodeURIComponent(q)}`
+          const r = await fetch(url, { headers: { Accept: 'application/json' } })
+          if (!r.ok) continue
+          const arr = (await r.json()) as Array<{ geojson?: GeoJSON.Geometry; lat?: string; lon?: string }>
+          const item = arr?.[0]
+          const name = q.split(',')[0]
+          const geom = item?.geojson
+          if (geom && (geom.type === 'Polygon' || geom.type === 'MultiPolygon')) {
+            const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
+              style: { color: '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
+            }).addTo(group)
+            L.marker(layer.getBounds().getCenter(), { icon: label(name), interactive: false }).addTo(group)
+          } else if (item?.lat && item?.lon) {
+            L.marker([Number(item.lat), Number(item.lon)], { icon: label(name), interactive: false }).addTo(group)
+          }
+        } catch { /* skip this hamlet on failure */ }
+        if (!cancelled) await new Promise((res) => setTimeout(res, 350))
+      }
+    })()
+    return () => {
+      cancelled = true
+      if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    }
+  }, [map, muni])
+  return null
+}
+
+// ── Westchester County GIS overlays (one active at a time) ───────────────────
+// North Castle bounding box (WGS84) to clip county-wide layers.
+const NC_BBOX = { xmin: -73.74, ymin: 41.09, xmax: -73.64, ymax: 41.19 }
+const GIS_HOST = 'https://giswww.westchestergov.com/arcgis/rest/services'
+
+interface GisLayer {
+  key: string
+  label: string
+  color: string
+  geom: 'point' | 'line' | 'polygon'
+  service: string
+  /** Matches the layer's name in the service's /layers list (ids aren't stable). */
+  match: RegExp
+  labelField?: string
+}
+const GIS: GisLayer[] = [
+  { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
+  { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
+  { key: 'fire_station', label: 'Fire stations', color: '#ef4444', geom: 'point', service: 'DataHub_CommunityFacilities', match: /fire\s*(station|dept|department|ems)/i, labelField: 'NAME' },
+  { key: 'police', label: 'Police', color: '#3b82f6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /police/i, labelField: 'NAME' },
+  { key: 'park', label: 'Parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
+  { key: 'historic', label: 'Historic sites', color: '#c084a6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /historic/i, labelField: 'RESNAME' },
+  { key: 'trails', label: 'Trails', color: '#84cc16', geom: 'line', service: 'DataHub_EnvironmentandPlanning', match: /trail/i, labelField: 'NAME' },
+  { key: 'flood', label: 'Flood plains', color: '#38bdf8', geom: 'polygon', service: 'MunicipalTaxParcels_Query', match: /flood/i },
+]
+
+// Resolve a layer id by name from the service's /layers list (cached per service).
+const layerIdCache = new Map<string, { id: number; name: string }[]>()
+async function resolveLayerId(service: string, match: RegExp): Promise<number | null> {
+  let layers = layerIdCache.get(service)
+  if (!layers) {
+    const r = await fetch(`${GIS_HOST}/${service}/MapServer/layers?f=json`)
+    if (!r.ok) return null
+    const j = (await r.json()) as { layers?: { id: number; name: string }[] }
+    layers = (j.layers || []).map((l) => ({ id: l.id, name: l.name }))
+    layerIdCache.set(service, layers)
+  }
+  const hit = layers.find((l) => match.test(l.name))
+  return hit ? hit.id : null
+}
+
+/** Fetches the single active county-GIS layer (clipped to North Castle) and
+ *  draws it. Resolves the layer id by name at runtime and fails silently if the
+ *  service/CORS is unavailable, so the map never breaks. */
+function GisLayers({ active, onState }: { active: string | null; onState?: (s: 'loading' | 'ok' | 'empty' | 'error' | null) => void }) {
+  const map = useMap()
+  const groupRef = useRef<LayerGroup | null>(null)
+
+  useEffect(() => {
+    if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    const cfg = GIS.find((g) => g.key === active)
+    if (!cfg) { onState?.(null); return }
+    let cancelled = false
+    const group = L.layerGroup().addTo(map)
+    groupRef.current = group
+    onState?.('loading')
+    ;(async () => {
+      try {
+        const id = await resolveLayerId(cfg.service, cfg.match)
+        if (cancelled) return
+        if (id == null) { onState?.('error'); return }
+        const b = NC_BBOX
+        const url =
+          `${GIS_HOST}/${cfg.service}/MapServer/${id}/query` +
+          `?where=1%3D1&outFields=*&outSR=4326` +
+          `&geometry=${b.xmin}%2C${b.ymin}%2C${b.xmax}%2C${b.ymax}` +
+          `&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson`
+        const r = await fetch(url)
+        if (!r.ok || cancelled) { if (!cancelled) onState?.('error'); return }
+        const data = (await r.json()) as GeoJSON.FeatureCollection
+        if (cancelled) return
+        const count = data?.features?.length ?? 0
+        L.geoJSON(data as GeoJSON.GeoJsonObject, {
+          style: () =>
+            cfg.geom === 'point'
+              ? {}
+              : { color: cfg.color, weight: cfg.geom === 'line' ? 3 : 1.8, fillColor: cfg.color, fillOpacity: cfg.geom === 'polygon' ? 0.14 : 0 },
+          pointToLayer: (_f, latlng) => L.circleMarker(latlng, { radius: 5, color: '#0a0a0a', weight: 1, fillColor: cfg.color, fillOpacity: 0.95 }),
+          onEachFeature: (f, layer) => {
+            const v = cfg.labelField && f.properties ? (f.properties as Record<string, unknown>)[cfg.labelField] : null
+            layer.bindPopup(`<strong>${v ? String(v) : cfg.label}</strong><br>${cfg.label}`)
+          },
+        }).addTo(group)
+        onState?.(count > 0 ? 'ok' : 'empty')
+      } catch {
+        if (!cancelled) onState?.('error')
+      }
+    })()
+    return () => {
+      cancelled = true
+      if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    }
+  }, [active, map, onState])
   return null
 }
 
@@ -109,23 +259,28 @@ function ResizeFix() {
 
 export default function JurisdictionMap({ muni }: { muni: string }) {
   const cfg = MAP[muni]
-  const [enabled, setEnabled] = useState<Set<PoiKey>>(new Set())
+  // Single active overlay at a time (a toggle), shown over the always-on
+  // jurisdiction + hamlet boundaries.
+  const [active, setActive] = useState<string | null>(null)
+  const [gisState, setGisState] = useState<'loading' | 'ok' | 'empty' | 'error' | null>(null)
 
   if (!cfg) return null
 
-  function toggle(k: PoiKey) {
-    setEnabled((prev) => {
-      const next = new Set(prev)
-      if (next.has(k)) next.delete(k)
-      else next.add(k)
-      return next
-    })
+  function toggle(k: string) {
+    setActive((cur) => (cur === k ? null : k))
   }
+
+  // County GIS civic layers (North Castle only) come first, then the OSM POIs.
+  const chips: { key: string; label: string; color: string }[] = [
+    ...(muni === 'nc' ? GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) : []),
+    ...POI.map((c) => ({ key: c.key, label: c.label, color: c.color })),
+  ]
+  const activeIsGis = GIS.some((g) => g.key === active)
 
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        {/* Interactive legend overlaid on the map — each pill toggles a POI layer. */}
+        {/* Interactive legend overlaid on the map — each pill toggles one layer. */}
         <div
           className="pill-strip"
           style={{
@@ -133,8 +288,8 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
             display: 'flex', gap: 4, flexWrap: 'wrap', maxWidth: 'calc(100% - 20px)',
           }}
         >
-          {POI.map((c) => {
-            const on = enabled.has(c.key)
+          {chips.map((c) => {
+            const on = active === c.key
             return (
               <button
                 key={c.key}
@@ -156,6 +311,17 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
               </button>
             )
           })}
+          {activeIsGis && gisState && gisState !== 'ok' && (
+            <span
+              style={{
+                padding: '5px 10px', fontSize: 11, fontWeight: 600, color: '#fff', borderRadius: 999,
+                background: 'rgba(20,24,28,0.72)', border: '1px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)',
+                display: 'inline-flex', alignItems: 'center',
+              }}
+            >
+              {gisState === 'loading' ? 'Loading county layer…' : gisState === 'empty' ? 'No features here' : 'Layer unavailable'}
+            </span>
+          )}
         </div>
         <MapContainer
           center={cfg.center}
@@ -174,7 +340,9 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
             maxZoom={19}
           />
           <Boundary muni={muni} />
-          <PoiLayers enabled={enabled} />
+          <Hamlets muni={muni} />
+          <PoiLayers active={active} />
+          <GisLayers active={active} onState={setGisState} />
           <ResizeFix />
         </MapContainer>
       </div>

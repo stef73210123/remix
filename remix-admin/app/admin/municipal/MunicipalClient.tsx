@@ -7,8 +7,10 @@ import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
+import KeyIssues from './KeyIssues'
 import ElectionResults from './ElectionResults'
 import SchoolDistrict from './SchoolDistrict'
+import AgeDistribution from './AgeDistribution'
 import BoardProgress from './BoardProgress'
 import { isOpen } from '@/lib/flavor'
 
@@ -19,6 +21,7 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
+import MeetingList from './MeetingList'
 
 
 interface Body {
@@ -376,6 +379,9 @@ export default function MunicipalClient({
           {/* Consolidated per-board progress spectrums — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <BoardProgress muniKey={town} />}
 
+          {/* Narrative key-issue synopsis, above the sorted theme bars. */}
+          {board === 'ALL' && town !== 'ALL' && <KeyIssues muniKey={town} />}
+
           {/* Town-wide local issues across all boards — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
 
@@ -387,6 +393,9 @@ export default function MunicipalClient({
 
           {/* School district context — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <SchoolDistrict muniKey={town} />}
+
+          {/* Age distribution over time, with school-age bands — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <AgeDistribution muniKey={town} />}
 
           {/* Financial analysis — the selected town's budget. Dashboard tab only. */}
           {board === 'ALL' && (() => {
@@ -440,6 +449,8 @@ export default function MunicipalClient({
                 : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
             }
           />
+          {/* Compact scrolling list of the same meetings beneath the timeline. */}
+          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
           <div style={{ marginBottom: 26 }} />
 
           {!data.dbOk && data.dbError && (

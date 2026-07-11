@@ -5,7 +5,8 @@ import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import dynamic from 'next/dynamic'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import type { Property } from '@/lib/municipal/property'
-import { sentimentChipStyle, fmtSent, sentimentColor, dispositionLabel } from '../sentiment'
+import { sentimentChipStyle, fmtSent, sentimentColor } from '../sentiment'
+import CaseDetail from './CaseDetail'
 
 const PropertyMap = dynamic(() => import('./PropertyMap'), {
   ssr: false,
@@ -92,18 +93,8 @@ export default function PropertyClient({ userName }: { userName: string }) {
 
       {prop && !loading && (
         <>
-          {/* Header */}
-          <h1 className="page-title" style={{ margin: '0 0 4px' }}>{prop.label}</h1>
-          <div className="muted" style={{ fontSize: 14, marginBottom: 12 }}>{prop.address}</div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
-            {prop.boards.map((b) => (
-              <a key={b.bodyKey} href={`/admin/municipal/board?muni=${muni}&body=${b.bodyKey}`} className="badge state" style={{ textDecoration: 'none' }}>
-                {b.board} · {b.appearances}×
-              </a>
-            ))}
-            {prop.applicationTypes.slice(0, 3).map((t) => <span key={t} className="badge">{t}</span>)}
-            <span style={sentimentChipStyle(prop.avgSentiment)} title={dispositionLabel(prop.avgSentiment)}>{fmtSent(prop.avgSentiment)}</span>
-          </div>
+          {/* Case-at-a-glance detail card (identity, facts, progress, milestones). */}
+          <CaseDetail prop={prop} muni={muni} />
 
           {/* Map + facts */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 26 }}>
