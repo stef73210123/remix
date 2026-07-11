@@ -8,6 +8,7 @@ import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
 import ElectionResults from './ElectionResults'
+import SchoolDistrict from './SchoolDistrict'
 import { isOpen } from '@/lib/flavor'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
@@ -321,11 +322,6 @@ export default function MunicipalClient({
     return [...hist, ...up]
   }, [history, upcomingRows])
 
-  const totalBodies = useMemo(
-    () => (data ? data.municipalities.reduce((n, m) => n + m.bodies.length, 0) : 0),
-    [data]
-  )
-
   // Towns that have budget data — the choices for the "All towns" toggle.
   const budgetTownList = useMemo(
     () => (data ? data.municipalities.filter((m) => budgets[m.key]) : []),
@@ -336,16 +332,7 @@ export default function MunicipalClient({
     <div className="container">
       <MuniHeader userName={userName} />
 
-      <h1 className="page-title">Municipal Dashboard</h1>
-
-      <div className="muted" style={{ fontSize: 13, marginBottom: 16 }}>
-        {data
-          ? `${data.municipalities.length} ${data.municipalities.length === 1 ? 'town' : 'towns'} · ${totalBodies} boards tracked` +
-            (data.dbOk
-              ? ` · ${data.meetings.length} meeting${data.meetings.length === 1 ? '' : 's'} in history`
-              : ' · pipeline DB not connected — showing configured towns only')
-          : 'Municipal meetings, agendas & minutes across tracked towns.'}
-      </div>
+      <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading municipal pipeline…</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
@@ -393,6 +380,9 @@ export default function MunicipalClient({
 
           {/* Demographics — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <Demographics muniKey={town} />}
+
+          {/* School district context — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <SchoolDistrict muniKey={town} />}
 
           {/* Financial analysis — the selected town's budget. Dashboard tab only. */}
           {board === 'ALL' && (() => {

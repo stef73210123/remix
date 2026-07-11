@@ -1,12 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { BudgetNode, BudgetLink } from '@/lib/municipal/budget'
 
 const NEUTRAL = '#7a8590'
 
 const W = 1040
-const H = 640
+const H = 720
 const PAD = { top: 24, bottom: 24, left: 150, right: 170 }
 const NODE_W = 16
 const GAP = 16
@@ -48,6 +48,14 @@ export default function Sankey({
   const [hoverLink, setHoverLink] = useState<string | null>(null)
   const [hoverNode, setHoverNode] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // When the chart overflows horizontally (narrow viewports), open on the
+  // spending (right) side so expenditures are visible without scrolling.
+  useEffect(() => {
+    const el = scrollRef.current
+    if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = el.scrollWidth - el.clientWidth
+  }, [expanded])
 
   // Which nodes can be drilled into (have detail children).
   const expandable = useMemo(() => new Set(nodes.filter((n) => n.parent).map((n) => n.parent!)), [nodes])
@@ -160,7 +168,8 @@ export default function Sankey({
     null
 
   return (
-    <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+    <div>
+      {/* Pinned header: totals + hint stay put while the chart scrolls beneath. */}
       {(totalRevenue != null || totalExpenditure != null) && (
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
           {totalRevenue != null && (
@@ -180,6 +189,7 @@ export default function Sankey({
       <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
         Click any item marked ⊕ to break it down; click ⊖ to roll it back up.
       </div>
+      <div ref={scrollRef} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
       <svg
         viewBox={`0 0 ${W} ${H}`}
         style={{ width: '100%', minWidth: 760, display: 'block' }}
@@ -280,6 +290,7 @@ export default function Sankey({
           <Tooltip x={hovered.x + NODE_W / 2} y={hovered.y + hovered.h / 2} lines={[hovered.node.label, fmtUSD(hovered.value)]} />
         )}
       </svg>
+      </div>
     </div>
   )
 }
