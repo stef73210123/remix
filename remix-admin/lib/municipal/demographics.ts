@@ -18,12 +18,22 @@ export interface HousingType {
   pct: number
 }
 
+export interface HomeValueBracket {
+  label: string
+  /** Share of owner-occupied units in this value range, 0–100. */
+  pct: number
+}
+
 /** One year in a demographic trend series (for period-over-period sparklines). */
 export interface DemoSeriesPoint {
   year: number
   population: number
   medianIncomeUsd: number
   medianHomeValueUsd: number
+  /** Median age (ACS B01002); optional so older data still validates. */
+  medianAgeYears?: number
+  /** Household count (ACS B11001); powers the household-size trend. */
+  households?: number
 }
 
 export interface TownDemographics {
@@ -41,6 +51,10 @@ export interface TownDemographics {
   medianHomeValueUsd?: number
   /** Distribution of housing units by structure type (ACS B25024). */
   housingTypes?: HousingType[]
+  /** Distribution of owner-occupied units by value range (ACS B25075). */
+  homeValueBrackets?: HomeValueBracket[]
+  /** Average household size — people per occupied unit (ACS B25010). */
+  avgHouseholdSizePeople?: number
   /** Multi-year trend (oldest → newest) for period-over-period growth. */
   series?: DemoSeriesPoint[]
 }
@@ -65,12 +79,30 @@ const NORTH_CASTLE: TownDemographics = {
     { label: BRACKET_LABELS[4], pct: 41 },
   ],
   medianHomeValueUsd: 985000,
+  avgHouseholdSizePeople: 2.8,
   housingTypes: [
     { label: 'Single-family', pct: 86 },
     { label: '2–4 units', pct: 6 },
     { label: '5–19 units', pct: 4 },
     { label: '20+ units', pct: 3 },
     { label: 'Mobile / other', pct: 1 },
+  ],
+  homeValueBrackets: [
+    { label: '<$500K', pct: 8 },
+    { label: '$500–750K', pct: 14 },
+    { label: '$750K–1M', pct: 30 },
+    { label: '$1–1.5M', pct: 26 },
+    { label: '$1.5–2M', pct: 12 },
+    { label: '$2M+', pct: 10 },
+  ],
+  // Approximate ACS 5-year trend (oldest → newest) so the dashboard shows
+  // period-over-period movement even without a live Census key.
+  series: [
+    { year: 2018, population: 12000, medianIncomeUsd: 150000, medianHomeValueUsd: 850000, medianAgeYears: 45, households: 4250 },
+    { year: 2019, population: 12050, medianIncomeUsd: 156000, medianHomeValueUsd: 880000, medianAgeYears: 45, households: 4270 },
+    { year: 2020, population: 12100, medianIncomeUsd: 160000, medianHomeValueUsd: 910000, medianAgeYears: 46, households: 4290 },
+    { year: 2021, population: 12150, medianIncomeUsd: 165000, medianHomeValueUsd: 950000, medianAgeYears: 46, households: 4300 },
+    { year: 2022, population: 12100, medianIncomeUsd: 168000, medianHomeValueUsd: 985000, medianAgeYears: 47, households: 4300 },
   ],
 }
 

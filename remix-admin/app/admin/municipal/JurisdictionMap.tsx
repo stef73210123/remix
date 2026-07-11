@@ -124,31 +124,44 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>Jurisdiction</h2>
-        <div className="pill-strip" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-          {POI.map((c) => (
-            <button
-              key={c.key}
-              onClick={() => toggle(c.key)}
-              className="btn secondary"
-              style={{
-                padding: '4px 10px', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 6,
-                ...(enabled.has(c.key) ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}),
-              }}
-            >
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.color, display: 'inline-block' }} />
-              {c.label}
-            </button>
-          ))}
+      <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
+        {/* Interactive legend overlaid on the map — each pill toggles a POI layer. */}
+        <div
+          className="pill-strip"
+          style={{
+            position: 'absolute', top: 10, left: 10, zIndex: 1000,
+            display: 'flex', gap: 4, flexWrap: 'wrap', maxWidth: 'calc(100% - 20px)',
+          }}
+        >
+          {POI.map((c) => {
+            const on = enabled.has(c.key)
+            return (
+              <button
+                key={c.key}
+                onClick={() => toggle(c.key)}
+                aria-pressed={on}
+                style={{
+                  padding: '5px 10px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 999,
+                  border: '1px solid rgba(255,255,255,0.25)',
+                  color: '#fff',
+                  background: on ? c.color : 'rgba(20,24,28,0.72)',
+                  backdropFilter: 'blur(4px)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.35)',
+                  transition: 'background 0.12s',
+                }}
+              >
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.color, display: 'inline-block', border: on ? '1px solid #fff' : 'none' }} />
+                {c.label}
+              </button>
+            )
+          })}
         </div>
-      </div>
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
         <MapContainer
           center={cfg.center}
           zoom={cfg.zoom}
           scrollWheelZoom={false}
-          style={{ height: 420, width: '100%', background: '#0a0a0a' }}
+          style={{ height: 440, width: '100%', background: '#0a0a0a' }}
         >
           <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"

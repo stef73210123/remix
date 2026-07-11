@@ -16,9 +16,13 @@ export default function MuniHeader({ userName }: { userName?: string }) {
       <div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={BRAND.wordmark} alt={BRAND.name} style={{ height: BRAND.wordmarkHeight, width: 'auto', display: 'block' }} />
-        <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>
-          {isOpen ? 'North Castle, New York · public records dashboard' : `Municipal · Signed in as ${userName || ''}`}
-        </div>
+        {/* The public build shows just the wordmark; the admin build keeps the
+            "signed in as" context line. */}
+        {!isOpen && (
+          <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>
+            {`Municipal · Signed in as ${userName || ''}`}
+          </div>
+        )}
       </div>
       {!isOpen && <AdminNav />}
     </header>

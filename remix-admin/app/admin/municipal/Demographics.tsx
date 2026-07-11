@@ -91,9 +91,13 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
   const popSeries = series?.map((s) => s.population)
   const incSeries = series?.map((s) => s.medianIncomeUsd)
   const homeSeries = series?.map((s) => s.medianHomeValueUsd)
+  const ageSeries = series?.map((s) => s.medianAgeYears ?? 0)
   const homeValue = demo.medianHomeValueUsd ?? (homeSeries && homeSeries[homeSeries.length - 1])
   const housingTypes = demo.housingTypes
   const maxHousing = Math.max(...(housingTypes?.map((t) => t.pct) || [1]), 1)
+  const homeValueBrackets = demo.homeValueBrackets
+  const maxHomeVal = Math.max(...(homeValueBrackets?.map((b) => b.pct) || [1]), 1)
+  const avgHouseholdSize = demo.avgHouseholdSizePeople ?? (demo.households ? demo.population / demo.households : null)
   const spanYears = series && series.length > 1 ? `${series[0].year}–${series[series.length - 1].year}` : null
 
   return (
@@ -116,7 +120,18 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
           <Tile label="Median home value" value={fmtUSDshort(homeValue)} growth={popGrowth(series, 'medianHomeValueUsd')} spark={homeSeries} />
         ) : null}
         <Tile label="Households" value={fmtInt(demo.households)} />
-        <Tile label="Median age" value={`${demo.medianAgeYears}`} sub="years" />
+        <Tile
+          label="Household size"
+          value={avgHouseholdSize != null ? avgHouseholdSize.toFixed(1) : '—'}
+          sub="people / household"
+        />
+        <Tile
+          label="Median age"
+          value={`${demo.medianAgeYears}`}
+          sub="years"
+          growth={popGrowth(series, 'medianAgeYears')}
+          spark={ageSeries}
+        />
         <Tile label="Owner-occupied" value={`${demo.ownerOccupiedPct}%`} />
       </div>
 
@@ -137,6 +152,29 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
                   <div style={{ width: 34, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0 }}>{t.pct}%</div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Home value distribution — owner-occupied units by value range */}
+        {homeValueBrackets && homeValueBrackets.length > 0 && (
+          <div className="card" style={{ padding: 16 }}>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+              Home value distribution
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+              {homeValueBrackets.map((b) => (
+                <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 78, fontSize: 12, color: 'var(--muted)', textAlign: 'right', flexShrink: 0 }}>{b.label}</div>
+                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 5, height: 16, overflow: 'hidden' }}>
+                    <div style={{ width: `${(b.pct / maxHomeVal) * 100}%`, background: '#3d9c72', height: '100%', borderRadius: 5, minWidth: b.pct > 0 ? 4 : 0 }} />
+                  </div>
+                  <div style={{ width: 34, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0 }}>{b.pct}%</div>
+                </div>
+              ))}
+            </div>
+            <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
+              Owner-occupied units{homeValue ? ` · median ${fmtUSDshort(homeValue)}` : ''}
             </div>
           </div>
         )}
