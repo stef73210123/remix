@@ -39,8 +39,8 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
       ],
       note:
         'Byram Hills is consistently ranked among the top public districts in Westchester and New York State. ' +
-        'Parts of North Castle lie outside it — North White Plains falls in the Valhalla UFSD (see the toggle above) ' +
-        'and the Banksville area in the Bedford CSD.',
+        'Parts of North Castle lie outside it — North White Plains falls in the Valhalla UFSD and the Banksville ' +
+        'area in the Bedford CSD (both in the toggle above).',
       website: 'https://www.byramhills.org',
       websiteLabel: 'byramhills.org',
     },
@@ -60,6 +60,23 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
         'in neighboring Mount Pleasant. Its Virginia Road School sits on Virginia Road in North White Plains.',
       website: 'https://www.valhallaschools.org',
       websiteLabel: 'valhallaschools.org',
+    },
+    {
+      name: 'Bedford Central School District',
+      short: 'Bedford CSD',
+      serves: 'The Banksville corner of North Castle (plus Bedford, Bedford Hills, Mount Kisco & Pound Ridge)',
+      enrollment: '≈ 3,400 students',
+      schools: [
+        { name: 'Five elementary schools', grades: 'K–5' },
+        { name: 'Fox Lane Middle School', grades: '6–8' },
+        { name: 'Fox Lane High School', grades: '9–12' },
+      ],
+      note:
+        'Bedford Central serves the Banksville area of North Castle. Its five elementary schools — Bedford Village, ' +
+        'Bedford Hills, West Patent, Pound Ridge and Mount Kisco — feed Fox Lane Middle and Fox Lane High School on ' +
+        'the shared Fox Lane campus near I-684.',
+      website: 'https://www.bcsdny.org',
+      websiteLabel: 'bcsdny.org',
     },
   ],
 }
