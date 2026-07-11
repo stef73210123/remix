@@ -7,6 +7,7 @@ import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
+import KeyIssues from './KeyIssues'
 import ElectionResults from './ElectionResults'
 import SchoolDistrict from './SchoolDistrict'
 import AgeDistribution from './AgeDistribution'
@@ -377,6 +378,9 @@ export default function MunicipalClient({
 
           {/* Consolidated per-board progress spectrums — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <BoardProgress muniKey={town} />}
+
+          {/* Narrative key-issue synopsis, above the sorted theme bars. */}
+          {board === 'ALL' && town !== 'ALL' && <KeyIssues muniKey={town} />}
 
           {/* Town-wide local issues across all boards — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
