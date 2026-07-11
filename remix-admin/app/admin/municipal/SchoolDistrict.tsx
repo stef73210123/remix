@@ -1,9 +1,12 @@
 'use client'
 
+import { useState } from 'react'
+
 /**
- * School-district context for a town. North Castle (Armonk) is served chiefly by
- * the Byram Hills Central School District; small portions fall in neighboring
- * districts. Static, committed info — renders nothing for towns without an entry.
+ * School-district context for a town. North Castle is split across districts —
+ * Byram Hills (Armonk and most of the town) and Valhalla (North White Plains) —
+ * so a town can list more than one, toggled here. Static, committed info;
+ * renders nothing for towns without an entry.
  */
 
 interface School {
@@ -21,37 +24,74 @@ interface DistrictInfo {
   websiteLabel: string
 }
 
-const DISTRICTS: Record<string, DistrictInfo> = {
-  nc: {
-    name: 'Byram Hills Central School District',
-    short: 'Byram Hills CSD',
-    serves: 'Armonk and most of the Town of North Castle',
-    enrollment: '≈ 2,400 students',
-    schools: [
-      { name: 'Coman Hill Elementary', grades: 'K–2' },
-      { name: 'Wampus Elementary', grades: '3–5' },
-      { name: 'H.C. Crittenden Middle School', grades: '6–8' },
-      { name: 'Byram Hills High School', grades: '9–12' },
-    ],
-    note:
-      'Byram Hills is consistently ranked among the top public districts in Westchester and New York State. ' +
-      'Small parts of North Castle lie outside it — North White Plains is served by the Valhalla UFSD and ' +
-      'the Banksville area by the Bedford CSD.',
-    website: 'https://www.byramhills.org',
-    websiteLabel: 'byramhills.org',
-  },
+const DISTRICTS: Record<string, DistrictInfo[]> = {
+  nc: [
+    {
+      name: 'Byram Hills Central School District',
+      short: 'Byram Hills CSD',
+      serves: 'Armonk and most of the Town of North Castle',
+      enrollment: '≈ 2,400 students',
+      schools: [
+        { name: 'Coman Hill Elementary', grades: 'K–2' },
+        { name: 'Wampus Elementary', grades: '3–5' },
+        { name: 'H.C. Crittenden Middle School', grades: '6–8' },
+        { name: 'Byram Hills High School', grades: '9–12' },
+      ],
+      note:
+        'Byram Hills is consistently ranked among the top public districts in Westchester and New York State. ' +
+        'Parts of North Castle lie outside it — North White Plains falls in the Valhalla UFSD (see the toggle above) ' +
+        'and the Banksville area in the Bedford CSD.',
+      website: 'https://www.byramhills.org',
+      websiteLabel: 'byramhills.org',
+    },
+    {
+      name: 'Valhalla Union Free School District',
+      short: 'Valhalla UFSD',
+      serves: 'The North White Plains section of North Castle (plus the hamlet of Valhalla)',
+      enrollment: '≈ 1,433 students',
+      schools: [
+        { name: 'Virginia Road School', grades: 'K–2' },
+        { name: 'Kensico School', grades: '3–5' },
+        { name: 'Valhalla Middle School', grades: '6–8' },
+        { name: 'Valhalla High School', grades: '9–12' },
+      ],
+      note:
+        'Valhalla UFSD serves the North White Plains neighborhood of North Castle along with the hamlet of Valhalla ' +
+        'in neighboring Mount Pleasant. Its Virginia Road School sits on Virginia Road in North White Plains.',
+      website: 'https://www.valhallaschools.org',
+      websiteLabel: 'valhallaschools.org',
+    },
+  ],
 }
 
 export default function SchoolDistrict({ muniKey }: { muniKey: string }) {
-  const d = DISTRICTS[muniKey]
-  if (!d) return null
+  const list = DISTRICTS[muniKey]
+  const [idx, setIdx] = useState(0)
+  if (!list || list.length === 0) return null
+  const d = list[Math.min(idx, list.length - 1)]
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-        School district
-        <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {d.short}</span>
-      </h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h2 style={{ fontSize: 16, margin: 0 }}>
+          School district{list.length > 1 ? 's' : ''}
+          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {d.short}</span>
+        </h2>
+        {list.length > 1 && (
+          <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {list.map((x, i) => (
+              <button
+                key={x.short}
+                onClick={() => setIdx(i)}
+                className={i === idx ? 'btn' : 'btn secondary'}
+                style={{ padding: '6px 12px', fontSize: 13 }}
+              >
+                {x.short}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       <div className="card" style={{ padding: 16 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
           <div>
