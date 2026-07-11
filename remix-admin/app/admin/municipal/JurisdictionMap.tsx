@@ -280,12 +280,13 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        {/* Interactive legend overlaid on the map — each pill toggles one layer. */}
+        {/* Interactive legend along the bottom of the map — each pill toggles one
+            layer at a time (single-select). */}
         <div
           className="pill-strip"
           style={{
-            position: 'absolute', top: 10, left: 10, zIndex: 1000,
-            display: 'flex', gap: 4, flexWrap: 'wrap', maxWidth: 'calc(100% - 20px)',
+            position: 'absolute', bottom: 10, left: 10, right: 10, zIndex: 1000,
+            display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'center',
           }}
         >
           {chips.map((c) => {
