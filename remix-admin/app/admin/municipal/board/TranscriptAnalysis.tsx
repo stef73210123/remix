@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import type { AnalysisDataset, CaseRollup, MemberProfile, ThemeRollup, MeetingAnalysis } from '@/lib/municipal/analysis'
-import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
+import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
+import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
 import { propertyId } from '@/lib/municipal/propertyId'
 
 function fmtDate(iso: string): string {
@@ -108,9 +109,26 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
         Sentiment −10 (opposed) to +10 (favorable). Member-level attribution is directional.
       </div>
 
+      {/* ---- Consolidated board progress score ---- */}
+      {(() => {
+        const board = weightedProgressScore(data.members)
+        if (!board) return null
+        return (
+          <div className="card" style={{ padding: 16, marginBottom: 28 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
+              <span style={{ fontSize: 13, fontWeight: 600 }}>{m.board} progress score</span>
+              <span style={sentimentChipStyle(board.score)}>{fmtSent(board.score)}</span>
+              <span className="muted" style={{ fontSize: 13 }}>{sentimentLabel(board.score)}</span>
+              <span className="muted" style={{ fontSize: 12 }}>· {board.positions} positions across {board.members} members</span>
+            </div>
+            <ProgressSpectrum score={board.score} height={16} showScale />
+          </div>
+        )
+      })()}
+
       {/* ---- Board member sentiment ---- */}
       <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-        Board members — overall disposition
+        Board members — progress score
       </h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: data.members.some((m2) => m2.totalPositions === 0) ? 10 : 28 }}>
         {data.members.filter((mem) => mem.totalPositions > 0).map((mem) => (

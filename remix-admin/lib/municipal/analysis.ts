@@ -209,6 +209,24 @@ export function loadAnalysis(muniKey: string, bodyKey: string): AnalysisDataset 
   return val
 }
 
+/**
+ * A board's consolidated "progress score": the position-weighted mean of its
+ * members' average sentiment (−1…+1), or null when the board has no analyzed
+ * positions. Used for the per-board spectrum and the dashboard roll-up.
+ */
+export function boardProgressScore(
+  muniKey: string,
+  bodyKey: string,
+): { score: number; positions: number; members: number } | null {
+  const data = loadAnalysis(muniKey, bodyKey)
+  if (!data) return null
+  const scored = data.members.filter((m) => m.totalPositions > 0)
+  const positions = scored.reduce((s, m) => s + m.totalPositions, 0)
+  if (!positions) return null
+  const score = scored.reduce((s, m) => s + m.avgSentiment * m.totalPositions, 0) / positions
+  return { score, positions, members: scored.length }
+}
+
 /** List transcript dates available for a board. */
 export function listTranscriptDates(muniKey: string, bodyKey: string): string[] {
   const dir = dataDir(muniKey, bodyKey)
