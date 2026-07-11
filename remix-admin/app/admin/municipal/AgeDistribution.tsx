@@ -10,7 +10,9 @@ const SCHOOL_BANDS = [
   { label: 'High', short: '9–12', a: 14, b: 18, color: '#c7913c' },
 ]
 
-const AGE_MAX = 90
+// Focus the chart on school-age children: 0–18 (ACS is 5-year bracketed, so the
+// top bar is the 15–19 bracket, clamped to 18 by the axis).
+const AGE_MAX = 18
 const W = 760
 const H = 300
 const PAD = { top: 40, right: 16, bottom: 40, left: 42 }
@@ -34,14 +36,19 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
   const latest = vintages[vintages.length - 1]
   const earliest = vintages.length > 1 ? vintages[0] : null
 
+  // Scale to the visible (0–18) bins only, so the school-age bars fill the chart.
   const maxPct = useMemo(() => {
     let m = 1
-    for (const v of vintages) for (const b of v.bins) m = Math.max(m, b.pct)
+    for (const v of vintages) for (const b of v.bins) if (b.min < AGE_MAX) m = Math.max(m, b.pct)
     return m
   }, [vintages])
 
   if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading age distribution…</div>
   if (!latest || latest.bins.length === 0) return null
+
+  // Only the 0–18 bins (0–4, 5–9, 10–14, 15–19); the axis clamps 15–19 to 18.
+  const visBins = latest.bins.filter((b) => b.min < AGE_MAX)
+  const earliestVis = earliest ? earliest.bins.filter((b) => b.min < AGE_MAX) : null
 
   const plotW = W - PAD.left - PAD.right
   const plotH = H - PAD.top - PAD.bottom
@@ -49,14 +56,14 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
   const yP = (pct: number) => PAD.top + plotH - (pct / maxPct) * plotH
 
   // Earliest-vintage line through bin centers (to show the shift over time).
-  const linePath = earliest
-    ? earliest.bins
+  const linePath = earliestVis
+    ? earliestVis
         .map((b, i) => `${i === 0 ? 'M' : 'L'}${xA(b.min + 2.5).toFixed(1)},${yP(b.pct).toFixed(1)}`)
         .join(' ')
     : ''
 
-  const hb = hover != null ? latest.bins[hover] : null
-  const eb = hb && earliest ? earliest.bins[hover!] : null
+  const hb = hover != null ? visBins[hover] : null
+  const eb = hb && earliestVis ? earliestVis[hover!] : null
 
   return (
     <div style={{ marginBottom: 30 }}>
@@ -77,7 +84,7 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
         </div>
       </div>
       <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 720 }}>
-        Residents by 5-year age band (U.S. Census ACS). Shaded bands mark the Byram Hills school-age ranges; hover a bar for the exact share and its change over time.
+        School-age residents (ages 0–18) by 5-year band (U.S. Census ACS), as a share of the town&apos;s population. Shaded bands mark the school-age ranges; hover a bar for the exact share and its change over time.
       </div>
 
       <div className="card" style={{ padding: '14px 12px 8px' }}>
@@ -103,7 +110,7 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
           })}
 
           {/* Bars (latest) */}
-          {latest.bins.map((b, i) => {
+          {visBins.map((b, i) => {
             const x0 = xA(b.min)
             const x1 = xA(b.max ?? AGE_MAX)
             const w = Math.max(1, x1 - x0 - 2)
@@ -115,19 +122,19 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
           })}
 
           {/* Earliest line */}
-          {earliest && <path d={linePath} fill="none" stroke="var(--muted)" strokeWidth={1.75} strokeDasharray="4 3" />}
-          {earliest && earliest.bins.map((b, i) => (
+          {earliestVis && <path d={linePath} fill="none" stroke="var(--muted)" strokeWidth={1.75} strokeDasharray="4 3" />}
+          {earliestVis && earliestVis.map((b, i) => (
             <circle key={i} cx={xA(b.min + 2.5)} cy={yP(b.pct)} r={2} fill="var(--muted)" />
           ))}
 
           {/* X ticks */}
-          {[0, 20, 40, 60, 80].map((age) => (
+          {[0, 5, 10, 15, 18].map((age) => (
             <text key={age} x={xA(age)} y={H - PAD.bottom + 16} textAnchor="middle" fontSize={10} fill="var(--muted)">{age}</text>
           ))}
           <text x={PAD.left + plotW / 2} y={H - 6} textAnchor="middle" fontSize={10} fill="var(--muted)">Age (years)</text>
 
           {/* Hover capture (per bin) + tooltip */}
-          {latest.bins.map((b, i) => {
+          {visBins.map((b, i) => {
             const x0 = xA(b.min)
             const x1 = xA(b.max ?? AGE_MAX)
             return (
