@@ -5,14 +5,14 @@
  *   → MemberDossier | { available: false }
  */
 import { NextResponse } from 'next/server'
-import { authorizeMunicipal } from '@/lib/municipal/auth'
+import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { loadDossier } from '@/lib/municipal/analysis'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: Request) {
-  if (!(await authorizeMunicipal())) {
+  if (!(await authorizeMunicipalRead())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   const url = new URL(req.url)

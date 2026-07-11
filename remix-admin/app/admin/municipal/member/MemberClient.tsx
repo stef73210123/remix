@@ -1,14 +1,13 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import AdminNav from '@/app/admin/AdminNav'
+import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MemberSentiment from './MemberSentiment'
 import MemberDossier from './MemberDossier'
 import type { MemberDossier as Dossier } from '@/lib/municipal/analysis'
 import { sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
 
-const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
 interface BodyRef { key: string; displayName: string }
 interface Member {
@@ -132,16 +131,7 @@ export default function MemberClient({ userName }: { userName: string }) {
 
   return (
     <div className="container">
-      <header
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}
-      >
-        <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={WORDMARK} alt="Remix Properties" style={{ height: 34, display: 'block' }} />
-          <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>Municipal · Signed in as {userName}</div>
-        </div>
-        <AdminNav />
-      </header>
+      <MuniHeader userName={userName} />
 
       <div style={{ marginBottom: 20 }}>
         <Breadcrumbs items={crumbs} />
