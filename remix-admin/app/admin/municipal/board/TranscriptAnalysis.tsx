@@ -185,8 +185,11 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       {/* ---- Meeting-by-meeting ---- */}
       <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
         Meeting by meeting
+        <span className="muted" style={{ fontSize: 12, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}> · {data.meetings.length} · scroll for more</span>
       </h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {/* Long lists are capped to a scroll window: a few meetings show, the rest
+          scroll in place, so the section stays a "shorter view". */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 560, overflowY: 'auto', paddingRight: 4 }}>
         {[...data.meetings].sort((a, b) => b.date.localeCompare(a.date)).map((mt) => (
           <MeetingRow
             key={mt.date}

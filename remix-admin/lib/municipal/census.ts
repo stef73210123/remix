@@ -8,11 +8,14 @@
  *
  * The key is read from process.env only — never hard-coded or logged.
  */
-import type { TownDemographics, IncomeBracket, HousingType, HomeValueBracket, DemoSeriesPoint } from './demographics'
+import type { TownDemographics, IncomeBracket, HousingType, HomeValueBracket, DemoSeriesPoint, AgeVintage } from './demographics'
+import { ageBinsFromPercents } from './demographics'
 
 const ACS_YEAR = '2022'
 // ACS 5-year vintages to pull for the trend sparklines (oldest → newest).
 const SERIES_YEARS = [2018, 2019, 2020, 2021, 2022]
+// ACS 5-year vintages for the age-distribution "over time" chart (~decade apart).
+const AGE_YEARS = [2013, 2018, 2022]
 
 // muniKey → Census geography (state + county FIPS) and the town name to match.
 const CENSUS_GEO: Record<string, { state: string; county: string; nameStartsWith: string }> = {
@@ -164,6 +167,71 @@ async function fetchYearPoint(
     medianAgeYears: g('B01002_001E') || undefined,
     households: g('B11001_001E') || undefined,
   }
+}
+
+/** One ACS vintage's age distribution (B01001, male+female) as uniform 5-year
+ *  bins, or null when the year/row is unavailable. */
+async function fetchAgeVintage(
+  year: number,
+  key: string,
+  geo: { state: string; county: string; nameStartsWith: string },
+): Promise<AgeVintage | null> {
+  // B01001: male total 002 + brackets 003..025; female total 026 + 027..049.
+  const male = Array.from({ length: 23 }, (_, i) => `B01001_${String(i + 3).padStart(3, '0')}E`)
+  const female = Array.from({ length: 23 }, (_, i) => `B01001_${String(i + 27).padStart(3, '0')}E`)
+  const vars = ['NAME', ...male, ...female]
+  const url =
+    `https://api.census.gov/data/${year}/acs/acs5?get=${vars.join(',')}` +
+    `&for=county%20subdivision:*&in=state:${geo.state}%20county:${geo.county}&key=${key}`
+  const res = await fetch(url, { signal: AbortSignal.timeout(12000) })
+  if (!res.ok) return null
+  const table = (await res.json()) as string[][]
+  if (!Array.isArray(table) || table.length < 2) return null
+  const header = table[0]
+  const idx = (n: string) => header.indexOf(n)
+  const row = table.slice(1).find((r) => (r[idx('NAME')] || '').startsWith(geo.nameStartsWith))
+  if (!row) return null
+  const g = (v: string) => num(row[idx(v)])
+
+  // Combined count per ACS age bracket k (0..22): male(003+k) + female(027+k).
+  const k = Array.from({ length: 23 }, (_, i) => g(male[i]) + g(female[i]))
+  // Fold the 23 irregular ACS brackets into 18 uniform 5-year bins.
+  const bins = [
+    k[0],                       // 0–4
+    k[1],                       // 5–9
+    k[2],                       // 10–14
+    k[3] + k[4],                // 15–19 (15–17 + 18–19)
+    k[5] + k[6] + k[7],         // 20–24 (20 + 21 + 22–24)
+    k[8],                       // 25–29
+    k[9],                       // 30–34
+    k[10],                      // 35–39
+    k[11],                      // 40–44
+    k[12],                      // 45–49
+    k[13],                      // 50–54
+    k[14],                      // 55–59
+    k[15] + k[16],              // 60–64 (60–61 + 62–64)
+    k[17] + k[18],              // 65–69 (65–66 + 67–69)
+    k[19],                      // 70–74
+    k[20],                      // 75–79
+    k[21],                      // 80–84
+    k[22],                      // 85+
+  ]
+  const total = bins.reduce((s, n) => s + n, 0)
+  if (total <= 0) return null
+  const pcts = bins.map((n) => Math.round((n / total) * 1000) / 10)
+  return { year, bins: ageBinsFromPercents(pcts) }
+}
+
+/** Age distribution across a few ACS vintages (oldest → newest) for the
+ *  over-time age chart. Empty when no key/geo or all years fail. */
+export async function fetchCensusAgeDistribution(muniKey: string): Promise<AgeVintage[]> {
+  const key = process.env.CENSUS_API_KEY
+  const geo = CENSUS_GEO[muniKey]
+  if (!key || !geo) return []
+  const vintages = await Promise.all(
+    AGE_YEARS.map((y) => fetchAgeVintage(y, key, geo).catch(() => null)),
+  )
+  return vintages.filter((v): v is AgeVintage => v != null).sort((a, b) => a.year - b.year)
 }
 
 /** Multi-year trend for the town's population, income and home value (for the

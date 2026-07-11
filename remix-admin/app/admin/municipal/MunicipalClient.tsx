@@ -9,6 +9,7 @@ import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
 import ElectionResults from './ElectionResults'
 import SchoolDistrict from './SchoolDistrict'
+import AgeDistribution from './AgeDistribution'
 import BoardProgress from './BoardProgress'
 import { isOpen } from '@/lib/flavor'
 
@@ -387,6 +388,9 @@ export default function MunicipalClient({
 
           {/* School district context — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <SchoolDistrict muniKey={town} />}
+
+          {/* Age distribution over time, with school-age bands — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <AgeDistribution muniKey={town} />}
 
           {/* Financial analysis — the selected town's budget. Dashboard tab only. */}
           {board === 'ALL' && (() => {
