@@ -114,7 +114,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       </h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: data.members.some((m2) => m2.totalPositions === 0) ? 10 : 28 }}>
         {data.members.filter((mem) => mem.totalPositions > 0).map((mem) => (
-          <MemberCard key={mem.member} mem={mem} muni={muni} body={body} inactive={inactiveSet.has(mem.member)} />
+          <MemberCard key={mem.member} mem={mem} muni={muni} body={body} role={m.roles?.[mem.member]} inactive={inactiveSet.has(mem.member)} />
         ))}
       </div>
       {data.members.filter((mem) => mem.totalPositions === 0).length > 0 && (
@@ -184,7 +184,7 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
   )
 }
 
-function MemberCard({ mem, muni, body, inactive = false }: { mem: MemberProfile; muni: string; body: string; inactive?: boolean }) {
+function MemberCard({ mem, muni, body, role, inactive = false }: { mem: MemberProfile; muni: string; body: string; role?: string; inactive?: boolean }) {
   const conf = mem.confidenceMix || {}
   const total = (conf.high || 0) + (conf.medium || 0) + (conf.low || 0) || 1
   const topThemes = mem.byTheme.slice(0, 3)
@@ -207,6 +207,9 @@ function MemberCard({ mem, muni, body, inactive = false }: { mem: MemberProfile;
         </div>
         <Chip score={mem.avgSentiment} />
       </div>
+      {role && (
+        <div className="muted" style={{ fontSize: 12, marginTop: 3, fontWeight: 600, color: 'var(--primary-light)' }}>{role}</div>
+      )}
       <div style={{ margin: '10px 0 4px' }}><SentBar score={mem.avgSentiment} /></div>
       <div className="muted" style={{ fontSize: 11, marginBottom: 10 }}>
         {mem.totalPositions} positions · {Math.round(((conf.high || 0) / total) * 100)}% high-confidence

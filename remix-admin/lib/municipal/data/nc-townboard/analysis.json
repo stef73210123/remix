@@ -19,6 +19,14 @@
     "inactiveMembers": [
       "Matt Milim"
     ],
+    "roles": {
+      "Joseph Rende": "Supervisor",
+      "Barbara DiGiacinto": "Councilwoman",
+      "Saleem Hussain": "Councilman · Deputy Supervisor",
+      "Jose Berra": "Councilman",
+      "Matt Milim": "Councilman (2024–2025)",
+      "Sonny Vataj": "Councilman"
+    },
     "source": "Meeting video transcripts (ASR, un-diarized); member attribution is name-based with per-position confidence.",
     "errors": []
   },

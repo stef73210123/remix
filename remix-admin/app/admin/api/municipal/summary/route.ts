@@ -17,6 +17,7 @@
 import { NextResponse } from 'next/server'
 import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
+import { isOpen } from '@/lib/flavor'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -48,7 +49,11 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const municipalities = MUNICIPALITIES.map((m) => ({
+  // The public OpenNorthCastle deployment is North Castle only — hide the other
+  // configured towns (e.g. Rockland) that exist for the internal Remix build.
+  const municipalitiesSrc = isOpen ? MUNICIPALITIES.filter((m) => m.key === 'nc') : MUNICIPALITIES
+
+  const municipalities = municipalitiesSrc.map((m) => ({
     key: m.key,
     name: m.name,
     state: m.state,
