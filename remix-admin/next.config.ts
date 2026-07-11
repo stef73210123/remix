@@ -24,6 +24,14 @@ const nextConfig: NextConfig = {
   // cross-origin from this app's own Vercel domain. The public OpenNorthCastle
   // deployment is served at its own domain root, so it needs no asset prefix.
   assetPrefix: process.env.NEXT_PUBLIC_APP_FLAVOR === 'opennorthcastle' ? undefined : 'https://remix-admin-omega.vercel.app',
+  // Pin the project root to THIS directory. On Vercel, outputFileTracingRoot is
+  // otherwise auto-inferred as the monorepo root (/vercel/path0), which makes
+  // Next.js discover the repo-root middleware.ts (it imports files that don't
+  // exist in this app) and trace files outside this app. Setting it equal to
+  // turbopack.root keeps middleware discovery, PostCSS resolution, and file
+  // tracing all scoped to remix-admin — and silences the "both roots must match"
+  // warning. outputFileTracingIncludes globs below are relative to this root.
+  outputFileTracingRoot: path.resolve(__dirname),
   turbopack: {
     root: path.resolve(__dirname),
   },

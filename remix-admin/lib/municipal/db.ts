@@ -21,8 +21,31 @@ function url(): string {
   return u
 }
 
-/** Template-tag query. Use for one-off reads / writes. */
-export const sql = neon(url())
+/**
+ * Template-tag query. Use for one-off reads / writes.
+ *
+ * Lazily initialized: creating the neon client eagerly at module load would
+ * call url() and throw when NEON_DATABASE_URL is unset — which breaks
+ * `next build` page-data collection (and any deploy that omits the var, e.g.
+ * the public OpenNorthCastle build). The Proxy defers client creation to the
+ * first actual query, so merely importing this module is always safe.
+ */
+type SqlFn = ReturnType<typeof neon>
+let _sql: SqlFn | null = null
+function realSql(): SqlFn {
+  if (!_sql) _sql = neon(url())
+  return _sql
+}
+export const sql = new Proxy((() => {}) as unknown as SqlFn, {
+  apply(_target, _thisArg, args: unknown[]) {
+    return (realSql() as unknown as (...a: unknown[]) => unknown)(...args)
+  },
+  get(_target, prop) {
+    const s = realSql() as unknown as Record<PropertyKey, unknown>
+    const v = s[prop]
+    return typeof v === 'function' ? (v as (...a: unknown[]) => unknown).bind(s) : v
+  },
+})
 
 /**
  * Pooled client for transactions.
