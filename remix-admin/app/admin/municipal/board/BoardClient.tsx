@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
+import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
 
 
@@ -258,7 +259,9 @@ export default function BoardClient({ userName }: { userName: string }) {
             <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming</span>
           </h2>
           <MeetingTimeline items={timelineItems} emptyText="No meetings ingested for this board yet." />
-          <div className="muted" style={{ fontSize: 11, marginBottom: 26 }}>
+          {/* Compact scrolling list of the same meetings beneath the timeline. */}
+          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
+          <div className="muted" style={{ fontSize: 11, margin: '10px 0 26px' }}>
             Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
           </div>
 

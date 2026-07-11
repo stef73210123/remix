@@ -20,6 +20,7 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
+import MeetingList from './MeetingList'
 
 
 interface Body {
@@ -444,6 +445,8 @@ export default function MunicipalClient({
                 : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
             }
           />
+          {/* Compact scrolling list of the same meetings beneath the timeline. */}
+          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
           <div style={{ marginBottom: 26 }} />
 
           {!data.dbOk && data.dbError && (
