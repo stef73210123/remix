@@ -94,7 +94,7 @@ export default function MemberSentiment({
       {/* Overall */}
       <div className="card" style={{ padding: 16, marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>Overall disposition</span>
+          <span style={{ fontSize: 13, fontWeight: 600 }}>Progress score</span>
           <span style={sentimentChipStyle(profile.avgSentiment)}>{fmtSent(profile.avgSentiment)}</span>
           <span className="muted" style={{ fontSize: 13 }}>{sentimentLabel(profile.avgSentiment)}</span>
         </div>

@@ -92,7 +92,7 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
         ) : (
           <span className="muted">
             {mode === 'member'
-              ? 'Each column is a meeting; each band a board member (height = how much they weighed in, color = their disposition). Hover for detail.'
+              ? 'Each column is a meeting; each band a board member (height = how much they weighed in, color = their progress score). Hover for detail.'
               : 'Each column is a meeting; each slice an issue discussed (height = attention, color = sentiment toward it). Hover for detail.'}
           </span>
         )}

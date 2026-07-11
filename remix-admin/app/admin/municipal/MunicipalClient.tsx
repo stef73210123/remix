@@ -9,6 +9,7 @@ import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
 import ElectionResults from './ElectionResults'
 import SchoolDistrict from './SchoolDistrict'
+import BoardProgress from './BoardProgress'
 import { isOpen } from '@/lib/flavor'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
@@ -371,6 +372,9 @@ export default function MunicipalClient({
 
           {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
+
+          {/* Consolidated per-board progress spectrums — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <BoardProgress muniKey={town} />}
 
           {/* Town-wide local issues across all boards — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
