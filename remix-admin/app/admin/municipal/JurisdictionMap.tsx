@@ -53,16 +53,16 @@ function Boundary({ muni }: { muni: string }) {
   return null
 }
 
-/** Lazily queries Overpass for the enabled POI categories within the current
- *  view and renders them as labelled dots. Keyless, on-demand. */
-function PoiLayers({ enabled }: { enabled: Set<PoiKey> }) {
+/** Lazily queries Overpass for the single active POI category within the current
+ *  view and renders it as labelled dots. Keyless, on-demand. */
+function PoiLayers({ active }: { active: PoiKey | null }) {
   const map = useMap()
   const groups = useRef<Record<string, LayerGroup>>({})
   const loaded = useRef<Set<string>>(new Set())
 
   useEffect(() => {
     for (const cat of POI) {
-      const on = enabled.has(cat.key)
+      const on = active === cat.key
       const g = groups.current[cat.key]
       if (on && !g) {
         const group = L.layerGroup().addTo(map)
@@ -93,7 +93,61 @@ function PoiLayers({ enabled }: { enabled: Set<PoiKey> }) {
         loaded.current.delete(cat.key)
       }
     }
-  }, [enabled, map])
+  }, [active, map])
+  return null
+}
+
+// North Castle's three hamlets — drawn as secondary boundaries over the town.
+const HAMLETS: Record<string, string[]> = {
+  nc: ['Armonk, New York', 'Banksville, New York', 'North White Plains, New York'],
+}
+
+/** Draws the town's hamlet/CDP boundaries (fetched at runtime) with labels, so
+ *  Armonk, Banksville and North White Plains read on the map alongside the town
+ *  outline. Fetched sequentially to stay gentle on Nominatim. */
+function Hamlets({ muni }: { muni: string }) {
+  const map = useMap()
+  const groupRef = useRef<LayerGroup | null>(null)
+  useEffect(() => {
+    const names = HAMLETS[muni]
+    if (!names) return
+    let cancelled = false
+    const group = L.layerGroup().addTo(map)
+    groupRef.current = group
+    const label = (text: string) =>
+      L.divIcon({
+        className: '',
+        html: `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,0.9);pointer-events:none;">${text}</div>`,
+        iconSize: [0, 0],
+      })
+    ;(async () => {
+      for (const q of names) {
+        if (cancelled) return
+        try {
+          const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&polygon_geojson=1&limit=1&q=${encodeURIComponent(q)}`
+          const r = await fetch(url, { headers: { Accept: 'application/json' } })
+          if (!r.ok) continue
+          const arr = (await r.json()) as Array<{ geojson?: GeoJSON.Geometry; lat?: string; lon?: string }>
+          const item = arr?.[0]
+          const name = q.split(',')[0]
+          const geom = item?.geojson
+          if (geom && (geom.type === 'Polygon' || geom.type === 'MultiPolygon')) {
+            const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
+              style: { color: '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
+            }).addTo(group)
+            L.marker(layer.getBounds().getCenter(), { icon: label(name), interactive: false }).addTo(group)
+          } else if (item?.lat && item?.lon) {
+            L.marker([Number(item.lat), Number(item.lon)], { icon: label(name), interactive: false }).addTo(group)
+          }
+        } catch { /* skip this hamlet on failure */ }
+        if (!cancelled) await new Promise((res) => setTimeout(res, 350))
+      }
+    })()
+    return () => {
+      cancelled = true
+      if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    }
+  }, [map, muni])
   return null
 }
 
@@ -109,17 +163,14 @@ function ResizeFix() {
 
 export default function JurisdictionMap({ muni }: { muni: string }) {
   const cfg = MAP[muni]
-  const [enabled, setEnabled] = useState<Set<PoiKey>>(new Set())
+  // Single active overlay at a time (a toggle), shown over the always-on
+  // jurisdiction + hamlet boundaries.
+  const [active, setActive] = useState<PoiKey | null>(null)
 
   if (!cfg) return null
 
   function toggle(k: PoiKey) {
-    setEnabled((prev) => {
-      const next = new Set(prev)
-      if (next.has(k)) next.delete(k)
-      else next.add(k)
-      return next
-    })
+    setActive((cur) => (cur === k ? null : k))
   }
 
   return (
@@ -134,7 +185,7 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
           }}
         >
           {POI.map((c) => {
-            const on = enabled.has(c.key)
+            const on = active === c.key
             return (
               <button
                 key={c.key}
@@ -174,7 +225,8 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
             maxZoom={19}
           />
           <Boundary muni={muni} />
-          <PoiLayers enabled={enabled} />
+          <Hamlets muni={muni} />
+          <PoiLayers active={active} />
           <ResizeFix />
         </MapContainer>
       </div>

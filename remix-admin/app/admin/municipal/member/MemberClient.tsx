@@ -6,7 +6,7 @@ import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MemberSentiment from './MemberSentiment'
 import MemberDossier from './MemberDossier'
 import MemberElections from './MemberElections'
-import type { MemberDossier as Dossier } from '@/lib/municipal/analysis'
+import type { MemberDossier as Dossier, MemberTerm } from '@/lib/municipal/analysis'
 import { sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
 
 
@@ -33,6 +33,35 @@ function fmtDate(iso: string | null): string {
   const d = new Date(iso)
   if (isNaN(d.getTime())) return iso
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
+function TermDetails({ term }: { term: MemberTerm }) {
+  const now = new Date().getFullYear()
+  const verb = term.type === 'appointed' ? 'appointed' : 'elected'
+  const rows: { label: string; value: string }[] = []
+  if (term.firstYear) rows.push({ label: `First ${verb}`, value: String(term.firstYear) })
+  if (term.start && term.end) rows.push({ label: 'Current term', value: `${term.start}–${term.end}` })
+  if (term.lengthYears) rows.push({ label: 'Term length', value: `${term.lengthYears} years` })
+  const ended = term.end != null && term.end < now
+  const remaining = term.end != null ? term.end - now : null
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {rows.map((r) => (
+        <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 13 }}>
+          <span className="muted">{r.label}</span>
+          <span style={{ fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{r.value}</span>
+        </div>
+      ))}
+      {term.end != null && (
+        <div className="muted" style={{ fontSize: 12, marginTop: 4, lineHeight: 1.4 }}>
+          {ended
+            ? `Term ended Dec 31, ${term.end}`
+            : `Term expires Dec 31, ${term.end}` +
+              (remaining != null && remaining > 0 ? ` · ~${remaining} yr${remaining === 1 ? '' : 's'} remaining` : ' · up this year')}
+        </div>
+      )}
+    </div>
+  )
 }
 
 function initials(name: string): string {
@@ -221,6 +250,16 @@ export default function MemberClient({ userName }: { userName: string }) {
                 {member.kind.replace(/_/g, ' ')} official
               </div>
             </div>
+
+            {/* Term — elected/appointed dates, where researched */}
+            {dossier?.term && (dossier.term.start || dossier.term.firstYear) && (
+              <div className="card" style={{ padding: 16 }}>
+                <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+                  Term
+                </div>
+                <TermDetails term={dossier.term} />
+              </div>
+            )}
           </div>
 
           {/* Researched dossier: background + how-to-engage (where available) */}
