@@ -234,7 +234,7 @@ export default function Sankey({
                   textAnchor="middle"
                   fontSize={13}
                   fontWeight={600}
-                  fill="#fafafa"
+                  fill="var(--text)"
                   style={{ cursor: canDrill ? 'pointer' : 'default' }}
                   onClick={() => toggle(n.node.id)}
                 >
@@ -249,7 +249,7 @@ export default function Sankey({
                     dominantBaseline="middle"
                     fontSize={13}
                     fontWeight={600}
-                    fill="#fafafa"
+                    fill="var(--text)"
                     style={{ cursor: canDrill ? 'pointer' : 'default' }}
                     onClick={() => toggle(n.node.id)}
                   >
@@ -291,7 +291,7 @@ function Tooltip({ x, y, lines }: { x: number; y: number; lines: string[] }) {
   const ty = Math.max(y - h - 12, 4)
   return (
     <g style={{ pointerEvents: 'none' }}>
-      <rect x={tx} y={ty} width={w} height={h} rx={7} fill="#0a0a0a" stroke="#2a2a2a" opacity={0.97} />
+      <rect x={tx} y={ty} width={w} height={h} rx={7} fill="var(--panel)" stroke="var(--border)" opacity={0.97} />
       {lines.map((l, i) => (
         <text
           key={i}
@@ -299,7 +299,7 @@ function Tooltip({ x, y, lines }: { x: number; y: number; lines: string[] }) {
           y={ty + 20 + i * 18}
           fontSize={i === 0 ? 12.5 : 12}
           fontWeight={i === 0 ? 600 : 400}
-          fill={i === 0 ? '#fafafa' : '#c7a3a0'}
+          fill={i === 0 ? 'var(--text)' : 'var(--muted)'}
         >
           {l}
         </text>

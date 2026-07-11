@@ -6,7 +6,7 @@
  *   → { demo: TownDemographics | null, live: boolean, error? }
  */
 import { NextResponse } from 'next/server'
-import { authorizeMunicipal } from '@/lib/municipal/auth'
+import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { getDemographics } from '@/lib/municipal/demographics'
 import { findMunicipality } from '@/lib/municipal/registry'
 import { fetchCensusDemographics, fetchCensusSeries } from '@/lib/municipal/census'
@@ -15,7 +15,7 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: Request) {
-  if (!(await authorizeMunicipal())) {
+  if (!(await authorizeMunicipalRead())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

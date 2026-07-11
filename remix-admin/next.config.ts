@@ -20,7 +20,10 @@ import path from 'path'
  * middleware.ts that references files not in this app.
  */
 const nextConfig: NextConfig = {
-  assetPrefix: 'https://remix-admin-omega.vercel.app',
+  // The dark Remix app is proxied under remixcre.com/admin, so its assets load
+  // cross-origin from this app's own Vercel domain. The public OpenNorthCastle
+  // deployment is served at its own domain root, so it needs no asset prefix.
+  assetPrefix: process.env.NEXT_PUBLIC_APP_FLAVOR === 'opennorthcastle' ? undefined : 'https://remix-admin-omega.vercel.app',
   turbopack: {
     root: path.resolve(__dirname),
   },

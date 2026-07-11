@@ -14,6 +14,19 @@
  */
 import { cookies, headers } from 'next/headers'
 import { verifySession, SESSION_COOKIE } from '@/lib/auth'
+import { isOpen } from '@/lib/flavor'
+
+/**
+ * Authorize a READ-ONLY municipal endpoint. On the public OpenNorthCastle
+ * deployment these are open to everyone; everywhere else they require the same
+ * auth as any other municipal endpoint. Mutation/admin endpoints (ingest,
+ * purge, officials-refresh) must keep using authorizeMunicipal() so they stay
+ * protected even on the public site.
+ */
+export async function authorizeMunicipalRead(): Promise<boolean> {
+  if (isOpen) return true
+  return authorizeMunicipal()
+}
 
 export async function authorizeMunicipal(): Promise<boolean> {
   const h = await headers()

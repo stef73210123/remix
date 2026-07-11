@@ -1,12 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import AdminNav from '@/app/admin/AdminNav'
+import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import TranscriptAnalysis from './TranscriptAnalysis'
 
-const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
 interface Asset { kind: string; sourceUrl: string | null; blobUrl: string | null; pageCount: number | null }
 interface Meeting {
@@ -200,16 +199,7 @@ export default function BoardClient({ userName }: { userName: string }) {
 
   return (
     <div className="container">
-      <header
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}
-      >
-        <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={WORDMARK} alt="Remix Properties" style={{ height: 34, display: 'block' }} />
-          <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>Municipal · Signed in as {userName}</div>
-        </div>
-        <AdminNav />
-      </header>
+      <MuniHeader userName={userName} />
 
       {data && !loading && (
         <div style={{ marginBottom: 20 }}>

@@ -15,7 +15,7 @@
  * are a best-effort DB read layered on top.
  */
 import { NextResponse } from 'next/server'
-import { authorizeMunicipal } from '@/lib/municipal/auth'
+import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
 
 export const runtime = 'nodejs'
@@ -44,7 +44,7 @@ interface MeetingRow {
 }
 
 export async function GET() {
-  if (!(await authorizeMunicipal())) {
+  if (!(await authorizeMunicipalRead())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

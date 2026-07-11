@@ -1,0 +1,94 @@
+/*
+ * OpenNorthCastle skin — a light "Civic Signal" theme layered over the same
+ * markup as the dark Remix app. Everything is scoped under
+ * [data-flavor="opennorthcastle"] so it has zero effect on the default flavor.
+ *
+ * The app is CSS-variable + utility-class driven, so remapping the core tokens
+ * reskins nearly the whole product; the rules below the token block fix the few
+ * places that hard-code dark values. Fonts are loaded via <link> in the layout
+ * only for this flavor.
+ */
+:root[data-flavor='opennorthcastle'] {
+  /* Core token remap → OpenNorthCastle palette (tokens/colors.css). */
+  --bg: #f4f7fb;          /* cool slate page */
+  --off-black: #ffffff;
+  --panel: #ffffff;       /* white cards */
+  --panel-2: #eef2f7;     /* sunken surface / track */
+  --border: #e5ebf2;      /* hairline */
+  --text: #0f1720;        /* ink */
+  --muted: #64748b;       /* slate */
+  --primary: #01068b;     /* royal navy — brand/primary */
+  --primary-light: #2563d6; /* azure — links/accent */
+  --primary-hover: #010568;
+  --a: #01068b;
+  --b: #a16207;
+  --c: #64748b;
+  --warn: #a16207;
+  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+[data-flavor='opennorthcastle'] body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+/* White cards, cooler radius, soft cool shadow (no heavy dark shadows). */
+[data-flavor='opennorthcastle'] .card {
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 16px rgba(15, 23, 42, 0.05);
+}
+
+/* Editorial serif for display headings + big figures. */
+[data-flavor='opennorthcastle'] .page-title,
+[data-flavor='opennorthcastle'] h1,
+[data-flavor='opennorthcastle'] h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Secondary buttons read on the light surface. */
+[data-flavor='opennorthcastle'] .btn.secondary {
+  color: var(--text);
+  background: var(--panel);
+}
+[data-flavor='opennorthcastle'] .btn.secondary:hover {
+  background: var(--panel-2);
+  border-color: var(--primary);
+}
+
+/* Inputs: white field instead of the dark rgba fill. */
+[data-flavor='opennorthcastle'] .input,
+[data-flavor='opennorthcastle'] select,
+[data-flavor='opennorthcastle'] input[type='text'] {
+  background: #ffffff;
+}
+[data-flavor='opennorthcastle'] .input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 214, 0.28);
+}
+
+/* Plain badges (application types, topic tags) are white-on-transparent by
+   default — give them a light chip so they read on the light surface. Tier
+   badges (.A/.B/.C) and .state keep their own fills. */
+[data-flavor='opennorthcastle'] .badge:not(.A):not(.B):not(.C):not(.state) {
+  background: var(--panel-2);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Neutral metadata pill on light. */
+[data-flavor='opennorthcastle'] .badge.state {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* Status text colors legible on light. */
+[data-flavor='opennorthcastle'] .error { color: #b91c1c; }
+[data-flavor='opennorthcastle'] .success { color: #166534; }
+
+/* Links pick up the azure accent (components use --primary-light for links). */
+[data-flavor='opennorthcastle'] a { color: inherit; }

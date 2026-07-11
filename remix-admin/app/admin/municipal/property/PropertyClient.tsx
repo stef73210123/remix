@@ -1,13 +1,12 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import dynamic from 'next/dynamic'
-import AdminNav from '@/app/admin/AdminNav'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import type { Property } from '@/lib/municipal/property'
 import { sentimentChipStyle, fmtSent, sentimentColor, dispositionLabel } from '../sentiment'
 
-const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 const PropertyMap = dynamic(() => import('./PropertyMap'), {
   ssr: false,
   loading: () => <div className="card" style={{ height: 300 }} />,
@@ -84,14 +83,7 @@ export default function PropertyClient({ userName }: { userName: string }) {
 
   return (
     <div className="container">
-      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}>
-        <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={WORDMARK} alt="Remix Properties" style={{ height: 34, display: 'block' }} />
-          <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>Municipal · Signed in as {userName}</div>
-        </div>
-        <AdminNav />
-      </header>
+      <MuniHeader userName={userName} />
 
       <div style={{ marginBottom: 20 }}><Breadcrumbs items={crumbs} /></div>
 
