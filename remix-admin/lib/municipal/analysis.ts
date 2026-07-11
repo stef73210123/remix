@@ -106,6 +106,9 @@ export interface AnalysisMeta {
   roster: string[]
   /** Members on the roster who no longer serve (de-emphasized in the UI). */
   inactiveMembers?: string[]
+  /** Optional title per member (e.g. "Supervisor", "Councilwoman"), shown on
+   *  the board-overview cards so elected roles read at a glance. */
+  roles?: Record<string, string>
   source: string
   errors: string[]
 }

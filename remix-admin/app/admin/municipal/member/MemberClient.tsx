@@ -5,6 +5,7 @@ import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MemberSentiment from './MemberSentiment'
 import MemberDossier from './MemberDossier'
+import MemberElections from './MemberElections'
 import type { MemberDossier as Dossier } from '@/lib/municipal/analysis'
 import { sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
 
@@ -183,7 +184,7 @@ export default function MemberClient({ userName }: { userName: string }) {
                 )}
               </div>
               <div className="muted" style={{ fontSize: 14, marginTop: 4 }}>
-                {member.title || '—'}
+                {dossier?.role || member.title || '—'}
                 {data?.town ? ` · ${data.town.name}, ${data.town.state}` : ''}
               </div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
@@ -215,7 +216,7 @@ export default function MemberClient({ userName }: { userName: string }) {
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
                 Role
               </div>
-              <div style={{ fontSize: 14 }}>{member.title || 'Member'}</div>
+              <div style={{ fontSize: 14 }}>{dossier?.role || member.title || 'Member'}</div>
               <div className="muted" style={{ fontSize: 12, marginTop: 6 }}>
                 {member.kind.replace(/_/g, ' ')} official
               </div>
@@ -250,6 +251,11 @@ export default function MemberClient({ userName }: { userName: string }) {
             <div className="card" style={{ marginBottom: 28 }}>
               <div className="muted" style={{ padding: 20, fontSize: 13 }}>No board memberships on record.</div>
             </div>
+          )}
+
+          {/* Town-election history for this person (Supervisor / Town Board), where any. */}
+          {data && member.full_name && (
+            <MemberElections muniKey={data.town.key} name={member.full_name} />
           )}
 
           {/* Transcript-derived sentiment for this member (where a dataset exists) */}

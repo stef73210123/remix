@@ -7,6 +7,8 @@ import type { TownBudget } from '@/lib/municipal/budget'
 import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
+import ElectionResults from './ElectionResults'
+import { isOpen } from '@/lib/flavor'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
 const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
@@ -350,11 +352,14 @@ export default function MunicipalClient({
 
       {data && !loading && (
         <>
-          <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 8 }}>
-            {data.municipalities.map((m) => (
-              <Chip key={m.key} active={town === m.key} onClick={() => setTown(m.key)}>{m.name}</Chip>
-            ))}
-          </div>
+          {/* Town selector — hidden on the single-town public OpenNorthCastle build. */}
+          {!isOpen && (
+            <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 8 }}>
+              {data.municipalities.map((m) => (
+                <Chip key={m.key} active={town === m.key} onClick={() => setTown(m.key)}>{m.name}</Chip>
+              ))}
+            </div>
+          )}
           <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22 }}>
             <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
             {allBoards.map((b) => (
@@ -382,6 +387,9 @@ export default function MunicipalClient({
 
           {/* Town-wide local issues across all boards — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
+
+          {/* Town election results (Supervisor & Town Board) — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <ElectionResults muniKey={town} />}
 
           {/* Demographics — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <Demographics muniKey={town} />}
