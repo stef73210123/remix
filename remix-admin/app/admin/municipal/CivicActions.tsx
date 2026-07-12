@@ -16,13 +16,15 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
   const [open, setOpen] = useState<null | { url: string; title: string }>(null)
   return (
     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', ...style }}>
-      <button
+      <a
+        href={FOIL_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         className="btn"
-        style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7 }}
-        onClick={() => setOpen({ url: FOIL_URL, title: 'File a FOIL (records) request — Town of North Castle' })}
+        style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7, textDecoration: 'none' }}
       >
-        <span aria-hidden>📄</span> File a FOIL request
-      </button>
+        <span aria-hidden>📄</span> File a FOIL request ↗
+      </a>
       <button
         className="btn secondary"
         style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7 }}
