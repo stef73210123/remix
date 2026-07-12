@@ -98,6 +98,12 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
         'the shared Fox Lane campus near I-684.',
       website: 'https://www.bcsdny.org',
       websiteLabel: 'bcsdny.org',
+      foundation: {
+        name: 'Foundation for Bedford Central Schools',
+        website: 'https://www.foundationforbedfordcentralschools.org/',
+        websiteLabel: 'foundationforbedfordcentralschools.org',
+      },
+      calendarUrl: 'https://www.bcsdny.org/calendars',
     },
   ],
 }
