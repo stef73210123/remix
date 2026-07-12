@@ -9,6 +9,7 @@ import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
 import BoardCaseMap from './BoardCaseMap'
 import BoardStaffCards from './BoardStaffCards'
+import BoardKeyDocs from './BoardKeyDocs'
 import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
@@ -234,6 +235,9 @@ export default function BoardClient({ userName }: { userName: string }) {
 
           {/* Departmental staff cards — at the very top of the page. */}
           <BoardStaffCards muni={muni} bodyKey={body} />
+
+          {/* Key reference documents (Town Code, Zoning Code, etc.) for this board. */}
+          <BoardKeyDocs muni={muni} bodyKey={body} />
 
           {/* Members roster — only for boards WITHOUT a transcript dataset. Where a
               dataset exists, the analysis section below shows members with sentiment,

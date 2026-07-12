@@ -24,6 +24,7 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import BoardCaseMap from './board/BoardCaseMap'
 import BoardStaffCards from './board/BoardStaffCards'
+import BoardKeyDocs from './board/BoardKeyDocs'
 import MeetingAnalysisList from './board/MeetingAnalysisList'
 import CasesList from './board/CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
@@ -539,6 +540,7 @@ export default function MunicipalClient({
                 <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>{board}</h2>
                 <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>{m.name}</div>
                 <BoardStaffCards muni={town} bodyKey={bodyKey} />
+                <BoardKeyDocs muni={town} bodyKey={bodyKey} />
                 <BoardCaseMap dataset={boardAnalysis} muni={town} />
                 {meetingsBlock}
                 <TranscriptAnalysis muni={town} body={bodyKey} onData={setBoardAnalysis} />

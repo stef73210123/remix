@@ -10,6 +10,7 @@ import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/Meetin
 import MeetingList from '@/app/admin/municipal/MeetingList'
 import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipal/permits'
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
+import BoardKeyDocs from '@/app/admin/municipal/board/BoardKeyDocs'
 import { isOpen } from '@/lib/flavor'
 
 const JurisdictionMap = dynamic(() => import('@/app/admin/municipal/JurisdictionMap'), {
@@ -643,6 +644,9 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
               </div>
             </div>
           )}
+
+          {/* Key reference documents (Building Code, Zoning Code). */}
+          <BoardKeyDocs muni={muni} bodyKey="building" />
 
           {/* KPI tiles */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 12, marginBottom: 26 }}>
