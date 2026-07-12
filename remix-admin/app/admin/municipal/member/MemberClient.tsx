@@ -9,6 +9,7 @@ import MemberElections from './MemberElections'
 import type { MemberDossier as Dossier, MemberTerm } from '@/lib/municipal/analysis'
 import { sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
 import { isOpen } from '@/lib/flavor'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 
 interface BodyRef { key: string; displayName: string }
@@ -33,7 +34,7 @@ function fmtDate(iso: string | null): string {
   if (!iso) return '—'
   const d = new Date(iso)
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  return fmtDateShort(d)
 }
 
 function TermDetails({ term }: { term: MemberTerm }) {

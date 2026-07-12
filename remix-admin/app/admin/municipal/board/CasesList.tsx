@@ -4,16 +4,12 @@ import { useMemo, useState } from 'react'
 import type { AnalysisDataset, CaseRollup, MemberProfile } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
 import { propertyId } from '@/lib/municipal/propertyId'
+import { fmtDateShort as fmtDateCompact } from '@/lib/municipal/date'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-}
-function fmtDateShort(iso: string): string {
-  const d = new Date(iso + 'T12:00:00Z')
-  if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return fmtDateCompact(d)
 }
 
 function Chip({ score }: { score: number }) {
@@ -213,7 +209,7 @@ function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; m
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {c.timeline.map((ap, i) => (
                   <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13 }}>
-                    <span className="muted" style={{ width: 62, flexShrink: 0, whiteSpace: 'nowrap' }}>{fmtDateShort(ap.date)}</span>
+                    <span className="muted" style={{ width: 50, flexShrink: 0, whiteSpace: 'nowrap' }}>{fmtDate(ap.date)}</span>
                     <span style={{ ...sentimentChipStyle(ap.sentiment), flexShrink: 0 }}>{fmtSent(ap.sentiment)}</span>
                     <span style={{ flex: 1 }}>
                       {ap.status && <span style={{ fontWeight: 600 }}>{ap.status}. </span>}

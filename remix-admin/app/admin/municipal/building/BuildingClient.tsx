@@ -12,6 +12,7 @@ import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipa
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
 import BoardKeyDocs from '@/app/admin/municipal/board/BoardKeyDocs'
 import { isOpen } from '@/lib/flavor'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 const JurisdictionMap = dynamic(() => import('@/app/admin/municipal/JurisdictionMap'), {
   ssr: false,
@@ -49,7 +50,7 @@ function fmtUSDshort(n: number) {
 function fmtDate(iso: string | null) {
   if (!iso) return ''
   const d = new Date(iso + 'T00:00:00')
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return fmtDateShort(d)
 }
 
 function Tile({ label, value, sub }: { label: string; value: string; sub?: string }) {

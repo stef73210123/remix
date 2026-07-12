@@ -5,11 +5,12 @@ import type { AnalysisDataset, MemberProfile, ThemeRollup } from '@/lib/municipa
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
 import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 function fmtCaptionDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  return fmtDateShort(d)
 }
 
 /** Diverging bar: center = 0, fill extends left (neg) or right (pos). */

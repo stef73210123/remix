@@ -3,11 +3,12 @@
 import { useMemo } from 'react'
 import type { Property } from '@/lib/municipal/property'
 import { sentimentChipStyle, fmtSent, sentimentColor } from '../sentiment'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  return fmtDateShort(d)
 }
 
 // Generic municipal lifecycle stages, inferred from each appearance's status.

@@ -7,6 +7,7 @@ import {
   type ElectionRace,
   type ElectionCandidate,
 } from '@/lib/municipal/elections'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 // Ballot-line → accent color for the party pill. Neutral fallback for anything
 // unmapped so a new line never breaks the layout.
@@ -186,5 +187,5 @@ export default function ElectionResults({ muniKey }: { muniKey: string }) {
 function fmtElectionDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  return fmtDateShort(d)
 }

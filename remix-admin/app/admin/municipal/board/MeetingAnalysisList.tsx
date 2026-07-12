@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import type { MeetingAnalysis } from '@/lib/municipal/analysis'
 import { sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
 import { syncScrollIntoView } from '../syncSelection'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  return fmtDateShort(d)
 }
 
 function Chip({ score }: { score: number }) {
@@ -97,20 +98,24 @@ export function MeetingRow({
     >
       <div
         onClick={() => { onToggle(); onSelect?.() }}
-        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px', cursor: 'pointer', flexWrap: 'wrap' }}
+        style={{ padding: '16px 16px', cursor: 'pointer' }}
       >
-        <span className="muted" style={{ width: 10 }}>{open ? '▾' : '▸'}</span>
-        <span style={{ fontWeight: 700, minWidth: 130 }}>{fmtDate(mt.date)}</span>
-        {boardLabel && (
-          boardHref ? (
-            <a href={boardHref} style={{ fontSize: 13, fontWeight: 600, color: 'var(--primary-light)' }}>{boardLabel}</a>
-          ) : (
-            <span style={{ fontSize: 13, fontWeight: 600 }}>{boardLabel}</span>
-          )
-        )}
-        <span className="muted" style={{ fontSize: 13 }}>{mt.cases.length} item{mt.cases.length === 1 ? '' : 's'}</span>
-        <span style={{ flex: 1 }} />
-        <Chip score={avg} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span className="muted" style={{ width: 10 }}>{open ? '▾' : '▸'}</span>
+          <span style={{ fontWeight: 700, fontSize: 12.5 }}>{fmtDate(mt.date)}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginTop: 6, paddingLeft: 18 }}>
+          {boardLabel && (
+            boardHref ? (
+              <a href={boardHref} style={{ fontSize: 13, fontWeight: 600, color: 'var(--primary-light)' }}>{boardLabel}</a>
+            ) : (
+              <span style={{ fontSize: 13, fontWeight: 600 }}>{boardLabel}</span>
+            )
+          )}
+          <span className="muted" style={{ fontSize: 13 }}>{mt.cases.length} item{mt.cases.length === 1 ? '' : 's'}</span>
+          <span style={{ flex: 1 }} />
+          <Chip score={avg} />
+        </div>
       </div>
       {/* Quick summary, visible even collapsed — a full copy appears above the
           case list when expanded, so this one only shows while closed. Sized
@@ -119,7 +124,7 @@ export function MeetingRow({
         <div
           className="muted"
           style={{
-            fontSize: 12.5, lineHeight: 1.55, padding: '0 16px 14px 38px',
+            fontSize: 12.5, lineHeight: 1.55, padding: '0 16px 14px 18px',
           }}
         >
           {mt.meetingSummary}

@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { AnalysisDataset, MemberProfile } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
+import { fmtDateShort as fmtDateCompact } from '@/lib/municipal/date'
 
 function fmtDateShort(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return fmtDateCompact(d)
 }
 
 /** Match an analysis member to a display name (official full_name or an explicit

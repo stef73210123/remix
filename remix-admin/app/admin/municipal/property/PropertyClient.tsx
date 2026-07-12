@@ -8,6 +8,7 @@ import type { Property } from '@/lib/municipal/property'
 import { sentimentChipStyle, fmtSent, sentimentColor } from '../sentiment'
 import CaseDetail from './CaseDetail'
 import { isOpen } from '@/lib/flavor'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 const PropertyMap = dynamic(() => import('./PropertyMap'), {
   ssr: false,
@@ -21,7 +22,7 @@ interface Summary { municipalities: { key: string; name: string }[]; meetings: M
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  return fmtDateShort(d)
 }
 
 const ROLE_COLOR: Record<string, string> = {

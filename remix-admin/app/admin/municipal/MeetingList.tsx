@@ -4,10 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { type TimelineItem } from './MeetingTimeline'
 import { syncScrollIntoView } from './syncSelection'
 import { MeetingRow } from './board/MeetingAnalysisList'
-
-function fmtDate(d: Date): string {
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-}
+import { fmtDateShort } from '@/lib/municipal/date'
 
 /**
  * Fixed-height meetings list shown beneath the horizontal timeline: newest
@@ -94,7 +91,7 @@ export default function MeetingList({
             ref={registerRef}
             onClick={onSelect ? () => onSelect(it.key) : undefined}
             style={{
-              display: 'flex', alignItems: 'baseline', gap: 12, padding: '16px 16px', flexWrap: 'wrap',
+              padding: '12px 16px',
               borderTop: i ? '1px solid var(--border)' : 'none',
               opacity: it.past ? 0.92 : 1,
               cursor: onSelect ? 'pointer' : undefined,
@@ -102,38 +99,37 @@ export default function MeetingList({
               boxShadow: it.key === selectedKey ? 'inset 0 0 0 1.5px var(--primary)' : undefined,
             }}
           >
-            <span style={{ fontWeight: 700, fontSize: 13, minWidth: 108, whiteSpace: 'nowrap' }} title={it.dateTitle}>
-              {it.date ? `${fmtDate(it.date)}${it.dateSuffix || ''}` : (it.fallbackLabel || 'TBD')}
-            </span>
-            <div style={{ flex: 1, minWidth: 140 }}>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' }}>
+            <div style={{ fontWeight: 700, fontSize: 12.5 }} title={it.dateTitle}>
+              {it.date ? `${fmtDateShort(it.date)}${it.dateSuffix || ''}` : (it.fallbackLabel || 'TBD')}
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap', marginTop: 4 }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap', flex: 1, minWidth: 140 }}>
                 {it.boardHref ? (
                   <a href={it.boardHref} style={{ fontSize: 13, fontWeight: 600, color: 'var(--primary-light)' }}>{it.board}</a>
                 ) : it.board ? (
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{it.board}</span>
                 ) : null}
-                {!it.past && (
-                  <span className="badge" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--primary-light)' }}>
-                    Upcoming
-                  </span>
-                )}
-                {it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
+                {/* Town and the meeting title (usually just "<Board> Meeting")
+                    are redundant with the board link right above for an
+                    upcoming/projected row, so only show them for past,
+                    already-ingested meetings where they carry real info. */}
+                {it.past && it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
               </div>
-              {it.title && (
-                <div className="muted" style={{ fontSize: 12, marginTop: 5, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
-              )}
-              {it.summary && (
-                <div
-                  className="muted"
-                  style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.55, maxHeight: '3.1em', overflow: 'hidden' }}
-                >
-                  {it.summary}
+              {it.links && (
+                <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>
+                  {it.links}
                 </div>
               )}
             </div>
-            {it.links && (
-              <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>
-                {it.links}
+            {it.past && it.title && (
+              <div className="muted" style={{ fontSize: 12, marginTop: 5, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
+            )}
+            {it.summary && (
+              <div
+                className="muted"
+                style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.55, maxHeight: '3.1em', overflow: 'hidden' }}
+              >
+                {it.summary}
               </div>
             )}
           </div>
