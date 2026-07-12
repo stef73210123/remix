@@ -69,11 +69,21 @@ export default function MeetingAnalysisList({ meetings, muni, body, maxHeight = 
   )
 }
 
-function MeetingRow({
-  mt, bordered, open, onToggle, selected, onSelect, registerRef,
+/**
+ * A single expandable meeting row — the date, board's item count and average
+ * sentiment chip, a quick summary while collapsed, and the full case-by-case
+ * breakdown when expanded. Exported so the dashboard's combined, multi-board
+ * Meetings list (`MeetingList`) can render mixed rows (some analyzed, some
+ * not) with this exact same content and formatting, tagging each with which
+ * board it belongs to via `boardLabel`/`boardHref` (omitted on a single-board
+ * page, where the board is already named in the page header above).
+ */
+export function MeetingRow({
+  mt, bordered, open, onToggle, selected, onSelect, registerRef, boardLabel, boardHref,
 }: {
   mt: MeetingAnalysis; bordered: boolean; open: boolean; onToggle: () => void
   selected: boolean; onSelect?: () => void; registerRef: (el: HTMLDivElement | null) => void
+  boardLabel?: string; boardHref?: string
 }) {
   const avg = mt.cases.length ? mt.cases.reduce((s, c) => s + (c.sentimentScore || 0), 0) / mt.cases.length : 0
   return (
@@ -91,6 +101,13 @@ function MeetingRow({
       >
         <span className="muted" style={{ width: 10 }}>{open ? '▾' : '▸'}</span>
         <span style={{ fontWeight: 700, minWidth: 130 }}>{fmtDate(mt.date)}</span>
+        {boardLabel && (
+          boardHref ? (
+            <a href={boardHref} style={{ fontSize: 13, fontWeight: 600, color: 'var(--primary-light)' }}>{boardLabel}</a>
+          ) : (
+            <span style={{ fontSize: 13, fontWeight: 600 }}>{boardLabel}</span>
+          )
+        )}
         <span className="muted" style={{ fontSize: 13 }}>{mt.cases.length} item{mt.cases.length === 1 ? '' : 's'}</span>
         <span style={{ flex: 1 }} />
         <Chip score={avg} />

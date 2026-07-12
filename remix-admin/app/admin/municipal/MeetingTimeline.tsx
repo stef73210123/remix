@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { syncScrollIntoView } from './syncSelection'
+import type { MeetingAnalysis } from '@/lib/municipal/analysis'
 
 export interface TimelineItem {
   key: string
@@ -26,8 +27,13 @@ export interface TimelineItem {
   /** Links / badges rendered at the bottom of the card. */
   links?: ReactNode
   /** Transcript badge — shown on the timeline card but omitted from the
-   *  compact MeetingList row to keep the list dense. */
+   *  MeetingList row to keep the list dense. */
   transcriptLink?: ReactNode
+  /** Full case-level analysis for this meeting, when its board has a
+   *  transcript-analysis dataset. When present, MeetingList renders the same
+   *  expandable row (sentiment chip, item count, case detail) a board's own
+   *  tab shows, instead of the plain summary row. */
+  analysis?: MeetingAnalysis
 }
 
 function fmtDate(d: Date): string {

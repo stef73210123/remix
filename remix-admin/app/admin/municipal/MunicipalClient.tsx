@@ -28,7 +28,7 @@ import BoardStaffCards from './board/BoardStaffCards'
 import BoardKeyDocs from './board/BoardKeyDocs'
 import MeetingAnalysisList from './board/MeetingAnalysisList'
 import CasesList from './board/CasesList'
-import type { AnalysisDataset } from '@/lib/municipal/analysis'
+import type { AnalysisDataset, MeetingAnalysis } from '@/lib/municipal/analysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import MeetingList from './MeetingList'
 import TownBackground from './TownBackground'
@@ -303,13 +303,15 @@ export default function MunicipalClient({
     [data, town]
   )
 
-  // Per-meeting agenda summaries for the selected town's boards, so the
-  // dashboard's combined Meetings list (which spans every board) can show the
-  // same quick preview the single-board analysis view already has. Keyed the
-  // same way as timelineItems below (`${muni}_${body}_${date}`).
-  const [meetingSummaries, setMeetingSummaries] = useState<Map<string, string>>(new Map())
+  // Per-meeting transcript analysis for every one of the selected town's
+  // boards (not just the currently-selected tab), so the dashboard's combined
+  // Meetings list — which spans every board — can attach the same rich,
+  // expandable row (sentiment chip, item count, case detail) that a board's
+  // own tab shows, instead of a plain summary line. Keyed the same way as
+  // timelineItems below (`${muni}_${body}_${date}`).
+  const [meetingAnalysisByKey, setMeetingAnalysisByKey] = useState<Map<string, MeetingAnalysis>>(new Map())
   useEffect(() => {
-    if (town === 'ALL') { setMeetingSummaries(new Map()); return }
+    if (town === 'ALL') { setMeetingAnalysisByKey(new Map()); return }
     const m = data?.municipalities.find((x) => x.key === town)
     if (!m) return
     let cancelled = false
@@ -322,15 +324,15 @@ export default function MunicipalClient({
       )
     ).then((datasets) => {
       if (cancelled) return
-      const lookup = new Map<string, string>()
+      const lookup = new Map<string, MeetingAnalysis>()
       datasets.forEach((ds, i) => {
         if (!ds) return
         const bodyKey = m.bodies[i].key
         for (const mt of ds.meetings) {
-          if (mt.meetingSummary) lookup.set(`${town}_${bodyKey}_${mt.date}`, mt.meetingSummary)
+          lookup.set(`${town}_${bodyKey}_${mt.date}`, mt)
         }
       })
-      setMeetingSummaries(lookup)
+      setMeetingAnalysisByKey(lookup)
     })
     return () => { cancelled = true }
   }, [data, town])
@@ -385,6 +387,7 @@ export default function MunicipalClient({
         const hasDocs = (mtg.assets || []).some((a) => !RECORDING_KINDS.has(a.kind))
         const hasRec = !!recordingHref(mtg.assets)
         const itemKey = `${mtg.muni_key}_${mtg.body_key}_${mtg.scheduled_at.slice(0, 10)}`
+        const analysis = meetingAnalysisByKey.get(itemKey)
         return {
           // Composite muni+body+date key, matching MeetingAnalysisList's row
           // keys, so selecting a meeting in either view (the board tab's
@@ -393,7 +396,11 @@ export default function MunicipalClient({
           key: itemKey,
           date: new Date(mtg.scheduled_at),
           title: mtg.title,
-          summary: meetingSummaries.get(itemKey),
+          summary: analysis?.meetingSummary,
+          // Full case-level analysis, when this meeting's board has a
+          // transcript-analysis dataset — lets MeetingList render the same
+          // expandable row a board's own tab shows, instead of a plain one.
+          analysis,
           board: mtg.body_name,
           boardHref: `/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`,
           town: mtg.muni_name,
@@ -427,7 +434,7 @@ export default function MunicipalClient({
         }]
       : []
     return [...hist, ...up]
-  }, [history, upcomingRows, meetingSummaries])
+  }, [history, upcomingRows, meetingAnalysisByKey])
 
   // Towns that have budget data — the choices for the "All towns" toggle.
   const budgetTownList = useMemo(
@@ -474,7 +481,7 @@ export default function MunicipalClient({
       ) : (
         timelineItems.length > 0 && (
           <div style={{ marginTop: 10 }}>
-            <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} compact />
+            <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
           </div>
         )
       )}
