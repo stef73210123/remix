@@ -12,6 +12,7 @@ import ElectionResults from './ElectionResults'
 import SchoolDistrict from './SchoolDistrict'
 import AgeDistribution from './AgeDistribution'
 import BoardSentiment, { type BoardScore } from './BoardProgress'
+import CivicActions from './CivicActions'
 import { isOpen } from '@/lib/flavor'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
@@ -366,7 +367,12 @@ export default function MunicipalClient({
     <div className="container">
       <MuniHeader userName={userName} />
 
-      <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+        <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
+        {/* On the public OpenNorthCastle build these live in the sticky header
+            (MuniHeader) instead; the paywalled Remix build keeps them here. */}
+        {!isOpen && <CivicActions style={{ marginTop: 4 }} />}
+      </div>
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading municipal pipeline…</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
@@ -386,6 +392,15 @@ export default function MunicipalClient({
             {boardTabs.map((b) => (
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
             ))}
+            {town === 'nc' && (
+              <a
+                href={`/admin/municipal/building?muni=${town}`}
+                className="btn secondary"
+                style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}
+              >
+                Building Dept
+              </a>
+            )}
           </div>
 
           {/* Board view — the enriched profile (members, themes, cases, meeting-by-

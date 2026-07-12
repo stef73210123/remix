@@ -15,10 +15,20 @@ const MAP: Record<string, { center: [number, number]; zoom: number; query: strin
 
 type LayerState = 'loading' | 'ok' | 'empty' | 'error' | null
 
+/** A permit rendered on the map. Geocoded lazily from its address. */
+export interface PermitMarker {
+  id: string
+  address: string
+  title: string
+  sub?: string
+  color: string
+}
+
 // ── OpenStreetMap (Overpass) layers ──────────────────────────────────────────
 // Points of interest, plus real trails (paths/footways/tracks) as lines — the
-// county GIS "trails" layer traced state-road corridors, so trails come from
-// OSM where the geometry is tagged as an actual path.
+// county GIS "trails" name-match resolved to road-corridor geometry (it drew
+// what looked like State Roads), so trails come from OSM where the geometry is
+// tagged as an actual path.
 interface OsmCat {
   key: string
   label: string
@@ -105,7 +115,7 @@ function Boundary({ muni }: { muni: string }) {
 }
 
 /** Lazily queries Overpass for the single active OSM category (POIs as dots,
- *  trails as polylines) within the town bbox. Keyless, on-demand. */
+ *  trails as polylines) within the current view. Keyless, on-demand. */
 function OsmLayers({ active, onState }: { active: string | null; onState?: (s: LayerState) => void }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
@@ -159,79 +169,120 @@ function OsmLayers({ active, onState }: { active: string | null; onState?: (s: L
   return null
 }
 
-// ── SeeClickFix service requests ─────────────────────────────────────────────
-// North Castle runs its 311-style intake on SeeClickFix
-// (northcastleny.com/SeeClickFix). The public API is bbox-based, so border
-// towns bleed in — filter to addresses inside the town/hamlets so the layer
-// shows North Castle's own issues.
-const SCF_STATUS_COLORS: Record<string, string> = {
-  open: '#ef4444',
-  acknowledged: '#f59e0b',
-  closed: '#22a06b',
-  archived: '#7a8590',
+// ── SeeClickFix civic issues (client-side; the portal's own map API) ─────────
+const ISSUE_STATUS_COLOR: Record<string, string> = {
+  Open: '#ef4444', Acknowledged: '#f59e0b', 'In Progress': '#f59e0b',
+  Closed: '#3d9c72', Archived: '#9a9a9a',
 }
+interface ScfIssue {
+  id: number; status?: string; summary?: string; description?: string; address?: string
+  lat?: number; lng?: number; created_at?: string; html_url?: string
+  request_type?: { title?: string }
+}
+// The API is bbox-based, so border towns (Greenwich, Mount Kisco, …) bleed in
+// and can drown out the town's own reports — keep addresses inside the
+// town/hamlets when any match.
 const NC_PLACE_RE = /north castle|armonk|banksville|north white plains/i
 
-interface ScfIssue {
-  id: number
-  status: string
-  summary: string
-  address?: string
-  lat: number
-  lng: number
-  html_url?: string
-  created_at?: string
-}
-
-function ScfLayer({ active, muni, onState }: { active: boolean; muni: string; onState?: (s: LayerState) => void }) {
+/** Fetches SeeClickFix issues within the current view and plots them, colored by
+ *  status. Fails silently (e.g. if the API is unreachable) so the map is fine. */
+function IssueLayer({ active, muni, onState }: { active: boolean; muni: string; onState?: (s: LayerState) => void }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
-
   useEffect(() => {
     if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
-    if (!active) return
+    if (!active) { onState?.(null); return }
     let cancelled = false
     const group = L.layerGroup().addTo(map)
     groupRef.current = group
     onState?.('loading')
     const b = map.getBounds()
     const url =
-      'https://seeclickfix.com/api/v2/issues' +
-      `?min_lat=${b.getSouth()}&min_lng=${b.getWest()}&max_lat=${b.getNorth()}&max_lng=${b.getEast()}` +
-      '&per_page=100&status=open,acknowledged,closed'
+      `https://seeclickfix.com/api/v2/issues?per_page=100&page=1&status=open,acknowledged,closed` +
+      `&min_lat=${b.getSouth()}&min_lng=${b.getWest()}&max_lat=${b.getNorth()}&max_lng=${b.getEast()}`
     fetch(url, { headers: { Accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('scf'))))
       .then((data: { issues?: ScfIssue[] }) => {
         if (cancelled) return
         const all = data.issues || []
-        // Keep the town's own reports; the bbox otherwise pulls Greenwich,
-        // Mount Kisco, etc. If the address filter strips everything (address
-        // formats vary), fall back to the raw bbox set rather than nothing.
-        const own = muni === 'nc' ? all.filter((i) => NC_PLACE_RE.test(i.address || '')) : all
+        // North Castle's own reports first; if the address filter strips
+        // everything (address formats vary), fall back to the raw bbox set.
+        const own = muni === 'nc' ? all.filter((it) => NC_PLACE_RE.test(it.address || '')) : all
         const issues = own.length > 0 ? own : all
-        let count = 0
-        for (const i of issues) {
-          if (i.lat == null || i.lng == null) continue
-          const color = SCF_STATUS_COLORS[i.status?.toLowerCase?.() || ''] ?? '#7a8590'
-          const marker = L.circleMarker([i.lat, i.lng], {
-            radius: 6, color: '#0a0a0a', weight: 1, fillColor: color, fillOpacity: 0.95,
-          })
-          const link = i.html_url ? `<br><a href="${i.html_url}" target="_blank" rel="noopener noreferrer">View on SeeClickFix ↗</a>` : ''
-          marker.bindPopup(
-            `<strong>${(i.summary || 'Service request').replace(/</g, '&lt;')}</strong>` +
-            `<br>${i.status || ''}${i.address ? ` · ${i.address.replace(/</g, '&lt;')}` : ''}${link}`
-          )
-          marker.addTo(group)
-          count++
+        let n = 0
+        for (const it of issues) {
+          if (it.lat == null || it.lng == null) continue
+          const color = ISSUE_STATUS_COLOR[it.status || ''] || '#ef4444'
+          const created = it.created_at ? new Date(it.created_at).toLocaleDateString('en-US') : ''
+          const link = it.html_url ? `<br><a href="${it.html_url}" target="_blank" rel="noopener">View / follow ↗</a>` : ''
+          L.circleMarker([it.lat, it.lng], { radius: 6, color: '#0a0a0a', weight: 1, fillColor: color, fillOpacity: 0.95 })
+            .bindPopup(
+              `<strong>${it.summary || it.request_type?.title || 'Issue'}</strong>` +
+              `<br><span style="color:${color};font-weight:600">${it.status || ''}</span>` +
+              (it.address ? `<br>${it.address}` : '') + (created ? `<br>Reported ${created}` : '') + link,
+            )
+            .addTo(group)
+          n++
         }
-        onState?.(count > 0 ? 'ok' : 'empty')
+        onState?.(n > 0 ? 'ok' : 'empty')
       })
       .catch(() => { if (!cancelled) onState?.('error') })
-    return () => {
-      cancelled = true
-      if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
-    }
+    return () => { cancelled = true; if (groupRef.current) { groupRef.current.remove(); groupRef.current = null } }
   }, [active, map, muni, onState])
+  return null
+}
+
+// ── Recent permits (client-side geocode; opt-in) ─────────────────────────────
+function cachedGeocode(address: string): [number, number] | null {
+  try {
+    const v = localStorage.getItem(`geo:${address}`)
+    if (v) { const [a, b] = JSON.parse(v); if (typeof a === 'number' && typeof b === 'number') return [a, b] }
+  } catch { /* ignore */ }
+  return null
+}
+/** Geocodes recent permits one-by-one (throttled + localStorage-cached) and adds
+ *  markers as they resolve, so nothing blocks and re-opens are instant. */
+function PermitLayer({ active, permits, onState }: { active: boolean; permits: PermitMarker[]; onState?: (s: LayerState) => void }) {
+  const map = useMap()
+  const groupRef = useRef<LayerGroup | null>(null)
+  useEffect(() => {
+    if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    if (!active || permits.length === 0) { onState?.(null); return }
+    let cancelled = false
+    const group = L.layerGroup().addTo(map)
+    groupRef.current = group
+    onState?.('loading')
+    const add = (p: PermitMarker, lat: number, lng: number) => {
+      L.circleMarker([lat, lng], { radius: 5, color: '#0a0a0a', weight: 1, fillColor: p.color, fillOpacity: 0.95 })
+        .bindPopup(`<strong>${p.title}</strong>${p.sub ? `<br>${p.sub}` : ''}<br>${p.address}`)
+        .addTo(group)
+    }
+    ;(async () => {
+      let placed = 0
+      const subset = permits.slice(0, 90) // keep polite to the geocoder
+      for (const p of subset) {
+        if (cancelled) return
+        const hit = cachedGeocode(p.address)
+        if (hit) { add(p, hit[0], hit[1]); placed++; continue }
+        try {
+          const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(`${p.address}, North Castle, NY`)}`
+          const r = await fetch(url, { headers: { Accept: 'application/json' } })
+          if (r.ok) {
+            const arr = (await r.json()) as Array<{ lat?: string; lon?: string }>
+            const it = arr?.[0]
+            if (it?.lat && it?.lon) {
+              const lat = Number(it.lat), lng = Number(it.lon)
+              try { localStorage.setItem(`geo:${p.address}`, JSON.stringify([lat, lng])) } catch { /* ignore */ }
+              if (!cancelled) { add(p, lat, lng); placed++ }
+            }
+          }
+        } catch { /* skip this one */ }
+        if (!cancelled) { onState?.('loading'); await new Promise((res) => setTimeout(res, 340)) }
+      }
+      if (!cancelled) onState?.(placed > 0 ? 'ok' : 'empty')
+    })()
+    return () => { cancelled = true; if (groupRef.current) { groupRef.current.remove(); groupRef.current = null } }
+  }, [active, permits, map, onState])
   return null
 }
 
@@ -304,6 +355,8 @@ interface GisLayer {
   match: RegExp
   labelField?: string
 }
+// "Trails" was removed from this list — the county name-match traced road
+// corridors; the OSM 'trails' layer above renders actual paths instead.
 const GIS: GisLayer[] = [
   { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
   { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
@@ -394,9 +447,97 @@ function ResizeFix() {
   return null
 }
 
-const SCF_KEY = 'scf_issues'
+interface MenuItem { key: string; label: string; color: string }
+interface MenuGroup { group: string; items: MenuItem[] }
 
-export default function JurisdictionMap({ muni }: { muni: string }) {
+/** A single compact "Layers" dropdown that replaces the old wrap-around chip
+ *  strip, so the controls stop covering the map. Single-select. */
+function LayerMenu({
+  groups, active, onPick, statusNote,
+}: {
+  groups: MenuGroup[]; active: string | null; onPick: (k: string | null) => void; statusNote?: string | null
+}) {
+  const [open, setOpen] = useState(false)
+  const activeItem = groups.flatMap((g) => g.items).find((i) => i.key === active) || null
+  return (
+    <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 7, padding: '7px 12px', borderRadius: 999,
+          fontSize: 12.5, fontWeight: 600, cursor: 'pointer', color: '#fff',
+          background: 'rgba(20,24,28,0.82)', border: '1px solid rgba(255,255,255,0.28)',
+          backdropFilter: 'blur(6px)', boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+        }}
+      >
+        {activeItem
+          ? <><span style={{ width: 9, height: 9, borderRadius: '50%', background: activeItem.color, display: 'inline-block' }} />{activeItem.label}</>
+          : <>▦ Layers</>}
+        <span style={{ opacity: 0.7, fontSize: 10 }}>{open ? '▲' : '▼'}</span>
+      </button>
+
+      {activeItem && statusNote && (
+        <span style={{ padding: '4px 9px', fontSize: 11, fontWeight: 600, color: '#fff', borderRadius: 999, background: 'rgba(20,24,28,0.82)', border: '1px solid rgba(255,255,255,0.28)', backdropFilter: 'blur(6px)' }}>
+          {statusNote}
+        </span>
+      )}
+
+      {open && (
+        <div
+          style={{
+            width: 232, maxHeight: 360, overflowY: 'auto', padding: 6, borderRadius: 12,
+            background: 'rgba(16,19,22,0.94)', border: '1px solid rgba(255,255,255,0.16)',
+            backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+          }}
+        >
+          <button
+            onClick={() => { onPick(null); setOpen(false) }}
+            style={{ ...rowStyle, color: active ? '#cfcfcf' : '#fff', fontWeight: active ? 500 : 700 }}
+          >
+            <span style={{ width: 9, height: 9, borderRadius: '50%', border: '1px solid #888', display: 'inline-block' }} />
+            None (boundaries only){!active && <span style={{ marginLeft: 'auto' }}>✓</span>}
+          </button>
+          {groups.map((g) => (
+            <div key={g.group}>
+              <div style={{ padding: '7px 10px 3px', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8a8f96', fontWeight: 700 }}>{g.group}</div>
+              {g.items.map((it) => {
+                const on = active === it.key
+                return (
+                  <button
+                    key={it.key}
+                    onClick={() => { onPick(on ? null : it.key); setOpen(false) }}
+                    style={{ ...rowStyle, background: on ? 'rgba(255,255,255,0.08)' : 'transparent', fontWeight: on ? 700 : 500 }}
+                  >
+                    <span style={{ width: 9, height: 9, borderRadius: '50%', background: it.color, display: 'inline-block' }} />
+                    {it.label}
+                    {on && <span style={{ marginLeft: 'auto' }}>✓</span>}
+                  </button>
+                )
+              })}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+const rowStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 9, width: '100%', textAlign: 'left',
+  padding: '7px 10px', borderRadius: 8, border: 'none', background: 'transparent',
+  color: '#fff', fontSize: 12.5, cursor: 'pointer',
+}
+
+export default function JurisdictionMap({
+  muni, permits, showIssues = true, height = 440,
+}: {
+  muni: string
+  /** When provided, adds an opt-in "Recent permits" layer (geocoded on demand). */
+  permits?: PermitMarker[]
+  /** Include the SeeClickFix "Open issues" layer (default true). */
+  showIssues?: boolean
+  height?: number
+}) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
   // jurisdiction + hamlet boundaries.
@@ -405,71 +546,30 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
 
   if (!cfg) return null
 
-  function toggle(k: string) {
-    setLayerState(null)
-    setActive((cur) => (cur === k ? null : k))
-  }
-
-  // County GIS civic layers (North Castle only) come first, then reported
-  // issues (SeeClickFix), then the OSM layers (trails + POIs).
-  const chips: { key: string; label: string; color: string }[] = [
-    ...(muni === 'nc' ? GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) : []),
-    ...(muni === 'nc' ? [{ key: SCF_KEY, label: 'Reported issues', color: '#f97316' }] : []),
-    ...OSM.map((c) => ({ key: c.key, label: c.label, color: c.color })),
+  // Grouped menu: civic issues, permits (when supplied), county GIS, OSM
+  // trails + points of interest.
+  const groups: MenuGroup[] = [
+    ...(showIssues ? [{ group: 'Civic', items: [{ key: 'issues', label: 'Open issues (SeeClickFix)', color: '#ef4444' }] }] : []),
+    ...(permits && permits.length ? [{ group: 'Building', items: [{ key: 'permits', label: 'Recent permits', color: '#d4767a' }] }] : []),
+    ...(muni === 'nc' ? [{ group: 'County GIS', items: GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
+    { group: 'Trails & points of interest', items: OSM.map((c) => ({ key: c.key, label: c.label, color: c.color })) },
   ]
+
+  const note =
+    layerState === 'loading' ? 'Loading…'
+    : layerState === 'empty' ? 'No features in view'
+    : layerState === 'error' ? 'Layer unavailable'
+    : null
 
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        {/* Interactive legend along the bottom of the map — each pill toggles one
-            layer at a time (single-select). */}
-        <div
-          className="pill-strip"
-          style={{
-            position: 'absolute', bottom: 10, left: 10, right: 10, zIndex: 1000,
-            display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'center',
-          }}
-        >
-          {chips.map((c) => {
-            const on = active === c.key
-            return (
-              <button
-                key={c.key}
-                onClick={() => toggle(c.key)}
-                aria-pressed={on}
-                style={{
-                  padding: '5px 10px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 999,
-                  border: '1px solid rgba(255,255,255,0.25)',
-                  color: '#fff',
-                  background: on ? c.color : 'rgba(20,24,28,0.72)',
-                  backdropFilter: 'blur(4px)',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.35)',
-                  transition: 'background 0.12s',
-                }}
-              >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.color, display: 'inline-block', border: on ? '1px solid #fff' : 'none' }} />
-                {c.label}
-              </button>
-            )
-          })}
-          {active && layerState && layerState !== 'ok' && (
-            <span
-              style={{
-                padding: '5px 10px', fontSize: 11, fontWeight: 600, color: '#fff', borderRadius: 999,
-                background: 'rgba(20,24,28,0.72)', border: '1px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(4px)',
-                display: 'inline-flex', alignItems: 'center',
-              }}
-            >
-              {layerState === 'loading' ? 'Loading layer…' : layerState === 'empty' ? 'No features here' : 'Layer unavailable'}
-            </span>
-          )}
-        </div>
+        <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
         <MapContainer
           center={cfg.center}
           zoom={cfg.zoom}
           scrollWheelZoom={false}
-          style={{ height: 440, width: '100%', background: '#0a0a0a' }}
+          style={{ height, width: '100%', background: '#0a0a0a' }}
         >
           <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
@@ -484,8 +584,9 @@ export default function JurisdictionMap({ muni }: { muni: string }) {
           <Boundary muni={muni} />
           <Hamlets muni={muni} />
           <OsmLayers active={active} onState={setLayerState} />
-          <ScfLayer active={active === SCF_KEY} muni={muni} onState={setLayerState} />
           <GisLayers active={active} onState={setLayerState} />
+          {showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {permits && permits.length > 0 && <PermitLayer active={active === 'permits'} permits={permits} onState={setLayerState} />}
           <ResizeFix />
         </MapContainer>
       </div>
