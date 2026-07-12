@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
+import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
@@ -212,6 +213,7 @@ export default function BoardClient({ userName }: { userName: string }) {
   return (
     <div className="container">
       <MuniHeader userName={userName} />
+      <MuniTabs muni={muni} active={body} />
 
       {data && !loading && (
         <div style={{ marginBottom: 20 }}>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
+import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
 import CivicActions from '@/app/admin/municipal/CivicActions'
 import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/MeetingTimeline'
@@ -398,6 +399,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   return (
     <div className="container">
       <MuniHeader userName={userName} />
+      <MuniTabs muni={muni} active="building" />
       <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <h1 className="page-title" style={{ marginBottom: 6 }}>Building Department</h1>
