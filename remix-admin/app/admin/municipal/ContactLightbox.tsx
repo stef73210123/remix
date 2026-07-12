@@ -59,13 +59,13 @@ export default function ContactLightbox({ onClose }: { onClose: () => void }) {
       style={{
         position: 'fixed', inset: 0, zIndex: 4000,
         background: 'rgba(0,0,0,0.66)', backdropFilter: 'blur(3px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3vh 2vw',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3dvh 2vw',
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 'min(440px, 100%)', maxHeight: '88vh',
+          width: 'min(440px, 100%)', maxHeight: '88dvh',
           display: 'flex', flexDirection: 'column',
           background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 14,
           boxShadow: '0 24px 80px rgba(0,0,0,0.55)', overflow: 'hidden',
@@ -77,7 +77,7 @@ export default function ContactLightbox({ onClose }: { onClose: () => void }) {
           </div>
           <button onClick={onClose} aria-label="Close" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✕</button>
         </div>
-        <div style={{ padding: '10px 18px 18px', overflowY: 'auto', minHeight: 0 }}>
+        <div data-scroll-lock-allow style={{ padding: '10px 18px 18px', overflowY: 'auto', minHeight: 0 }}>
           {status === 'sent' ? (
             <div className="muted" style={{ fontSize: 13.5, lineHeight: 1.55, padding: '8px 0' }}>
               Thanks — your message has been sent. We&apos;ll get back to you as soon as we can.

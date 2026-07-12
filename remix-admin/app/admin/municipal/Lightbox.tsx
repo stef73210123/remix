@@ -40,13 +40,13 @@ export default function Lightbox({
       style={{
         position: 'fixed', inset: 0, zIndex: 4000,
         background: 'rgba(0,0,0,0.66)', backdropFilter: 'blur(3px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3vh 2vw',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3dvh 2vw',
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 'min(1000px, 100%)', height: 'min(88vh, 100%)',
+          width: 'min(1000px, 100%)', height: 'min(88dvh, 100%)',
           background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 14,
           display: 'flex', flexDirection: 'column', overflow: 'hidden',
           boxShadow: '0 24px 80px rgba(0,0,0,0.55)',
@@ -61,7 +61,7 @@ export default function Lightbox({
           </a>
           <button onClick={onClose} aria-label="Close" className="btn secondary" style={{ padding: '6px 11px', fontSize: 15, lineHeight: 1 }}>✕</button>
         </div>
-        <div style={{ position: 'relative', flex: 1, background: '#fff' }}>
+        <div data-scroll-lock-allow style={{ position: 'relative', flex: 1, background: '#fff' }}>
           {!loaded && (
             <div className="muted" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 8, textAlign: 'center', padding: 24, background: 'var(--panel)' }}>
               <div>Loading form…</div>
