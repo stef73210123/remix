@@ -111,8 +111,11 @@ export default function TownBackground({ muniKey, townName }: { muniKey: string;
   if (!bg) return null
 
   return (
-    <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginBottom: 30, alignItems: 'stretch' }}>
-      <div className="card" style={{ padding: 20, flex: '2 1 380px', minWidth: 320 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 30 }}>
+      <div style={{ height: 320 }}>
+        <Carousel slides={bg.slides} />
+      </div>
+      <div className="card" style={{ padding: 20 }}>
         <h2 style={{ fontSize: 16, margin: '0 0 14px' }}>About {townName}</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {bg.sections.map((sec) => (
@@ -124,9 +127,6 @@ export default function TownBackground({ muniKey, townName }: { muniKey: string;
             </div>
           ))}
         </div>
-      </div>
-      <div style={{ flex: '1 1 280px', minWidth: 260, maxWidth: 420 }}>
-        <Carousel slides={bg.slides} />
       </div>
     </div>
   )
