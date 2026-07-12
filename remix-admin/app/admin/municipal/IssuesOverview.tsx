@@ -37,6 +37,8 @@ export default function IssuesOverview({ muni }: { muni: string }) {
   const [agg, setAgg] = useState<Aggregate | null>(null)
   const [loading, setLoading] = useState(true)
   const [year, setYear] = useState<number | null>(null)
+  // Sort direction for the by-sentiment list (true = highest → lowest).
+  const [sentDesc, setSentDesc] = useState(true)
 
   useEffect(() => {
     setLoading(true)
@@ -62,9 +64,10 @@ export default function IssuesOverview({ muni }: { muni: string }) {
   )
   const topByVolume = useMemo(() => [...themes].sort((a, b) => b.mentions - a.mentions).slice(0, 8), [themes])
   const maxMentions = Math.max(1, ...topByVolume.map((t) => t.mentions))
+  // The complete list for the year (no top-N cap) — the card scrolls instead.
   const bySentiment = useMemo(
-    () => themes.filter((t) => t.mentions >= 2).sort((a, b) => b.avgSentiment - a.avgSentiment).slice(0, 12),
-    [themes]
+    () => [...themes].sort((a, b) => (sentDesc ? b.avgSentiment - a.avgSentiment : a.avgSentiment - b.avgSentiment)),
+    [themes, sentDesc]
   )
 
   if (loading) return null
@@ -109,12 +112,25 @@ export default function IssuesOverview({ muni }: { muni: string }) {
             </div>
           </div>
 
-          {/* Issues ranked by sentiment (highest → lowest) */}
+          {/* Issues ranked by sentiment — the complete list, scrollable, with a
+              sort-direction toggle. The year dropdown above filters this card. */}
           <div className="card" style={{ padding: 16 }}>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>Issues by sentiment · highest → lowest</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 12 }}>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Issues by sentiment · all {bySentiment.length}
+              </div>
+              <button
+                onClick={() => setSentDesc((d) => !d)}
+                className="btn secondary"
+                style={{ padding: '4px 10px', fontSize: 11, whiteSpace: 'nowrap' }}
+                title="Flip the sort direction"
+              >
+                {sentDesc ? '↓ Highest → lowest' : '↑ Lowest → highest'}
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxHeight: 320, overflowY: 'auto', paddingRight: 4 }}>
               {bySentiment.map((t) => (
-                <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+                <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, flexShrink: 0 }}>
                   <span style={{ width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={t.theme}>{t.theme}</span>
                   <DivergingBar score={t.avgSentiment} />
                   <span style={{ ...sentimentChipStyle(t.avgSentiment), minWidth: 44 }}>{fmtSent(t.avgSentiment)}</span>

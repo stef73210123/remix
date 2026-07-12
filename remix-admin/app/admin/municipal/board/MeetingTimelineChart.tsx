@@ -24,7 +24,8 @@ const GAP = 4
 const PLOT_H = 200
 
 export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }) {
-  const [mode, setMode] = useState<'member' | 'issue'>('member')
+  // Defaults to the by-issue view; "By member" remains a toggle away.
+  const [mode, setMode] = useState<'member' | 'issue'>('issue')
   const [hover, setHover] = useState<{ col: Col; seg: Seg } | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -67,7 +68,7 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
           Sentiment timeline
         </h3>
         <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
-          {([['member', 'By member'], ['issue', 'By issue']] as const).map(([k, label]) => (
+          {([['issue', 'By issue'], ['member', 'By member']] as const).map(([k, label]) => (
             <button
               key={k}
               onClick={() => setMode(k)}

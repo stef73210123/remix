@@ -15,10 +15,36 @@ import { neon, Pool } from '@neondatabase/serverless'
 
 let _pool: Pool | null = null
 
-function url(): string {
-  const u = process.env.NEON_DATABASE_URL
-  if (!u) throw new Error('NEON_DATABASE_URL env var is not set')
+/**
+ * Resolve the Postgres connection string. NEON_DATABASE_URL is canonical, but
+ * the Vercel↔Neon integration provisions DATABASE_URL / POSTGRES_URL instead —
+ * accept those too so a freshly-linked project (e.g. the OpenNorthCastle
+ * deployment) works without renaming vars. Values are sanitized against the
+ * common copy-paste artifacts from the Neon console: surrounding quotes and a
+ * leading `psql ` from the "psql 'postgresql://…'" snippet.
+ */
+const URL_ENV_VARS = ['NEON_DATABASE_URL', 'DATABASE_URL', 'POSTGRES_URL'] as const
+
+function sanitizeUrl(raw: string): string {
+  let u = raw.trim()
+  if (u.toLowerCase().startsWith('psql ')) u = u.slice(5).trim()
+  if ((u.startsWith("'") && u.endsWith("'")) || (u.startsWith('"') && u.endsWith('"'))) {
+    u = u.slice(1, -1).trim()
+  }
   return u
+}
+
+function url(): string {
+  for (const name of URL_ENV_VARS) {
+    const raw = process.env[name]
+    if (!raw) continue
+    const u = sanitizeUrl(raw)
+    if (!/^postgres(ql)?:\/\//i.test(u)) {
+      throw new Error(`${name} is set but is not a postgres:// URL (got "${u.slice(0, 12)}…")`)
+    }
+    return u
+  }
+  throw new Error(`No database URL configured — set ${URL_ENV_VARS.join(' or ')}`)
 }
 
 /**

@@ -1,6 +1,8 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { type TimelineItem } from './MeetingTimeline'
+import { syncScrollIntoView } from './syncSelection'
 
 function fmtDate(d: Date): string {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -17,11 +19,18 @@ export default function MeetingList({
   items,
   maxHeight = 300,
   emptyText,
+  selectedKey,
+  onSelect,
 }: {
   items: TimelineItem[]
   maxHeight?: number
   emptyText?: string
+  /** Key of the item highlighted/synced from a paired MeetingTimeline, if any. */
+  selectedKey?: string | null
+  onSelect?: (key: string) => void
 }) {
+  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
   // Newest first; items without a date (e.g. a projected/pattern-only row) sort last.
   const rows = [...items].sort((a, b) => {
     if (a.date && b.date) return b.date.getTime() - a.date.getTime()
@@ -29,6 +38,12 @@ export default function MeetingList({
     if (b.date) return 1
     return 0
   })
+
+  // Scroll a selection made elsewhere (e.g. the paired MeetingTimeline) into view here.
+  useEffect(() => {
+    if (!selectedKey) return
+    syncScrollIntoView(itemRefs.current.get(selectedKey))
+  }, [selectedKey])
 
   if (rows.length === 0) {
     return (
@@ -43,10 +58,18 @@ export default function MeetingList({
       {rows.map((it, i) => (
         <div
           key={it.key}
+          ref={(el) => {
+            if (el) itemRefs.current.set(it.key, el)
+            else itemRefs.current.delete(it.key)
+          }}
+          onClick={onSelect ? () => onSelect(it.key) : undefined}
           style={{
             display: 'flex', alignItems: 'baseline', gap: 12, padding: '10px 14px', flexWrap: 'wrap',
             borderTop: i ? '1px solid var(--border)' : 'none',
             opacity: it.past ? 0.92 : 1,
+            cursor: onSelect ? 'pointer' : undefined,
+            background: it.key === selectedKey ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : undefined,
+            boxShadow: it.key === selectedKey ? 'inset 0 0 0 1.5px var(--primary)' : undefined,
           }}
         >
           <span style={{ fontWeight: 700, fontSize: 13, minWidth: 108, whiteSpace: 'nowrap' }} title={it.dateTitle}>
@@ -68,6 +91,14 @@ export default function MeetingList({
             </div>
             {it.title && (
               <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
+            )}
+            {it.summary && (
+              <div
+                className="muted"
+                style={{ fontSize: 12, marginTop: 2, lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+              >
+                {it.summary}
+              </div>
             )}
           </div>
           {it.links && (

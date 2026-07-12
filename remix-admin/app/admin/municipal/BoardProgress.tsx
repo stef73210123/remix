@@ -1,10 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import ProgressSpectrum from './ProgressSpectrum'
 import { sentimentLabel } from './sentiment'
 
-interface BoardScore {
+export interface BoardScore {
   key: string
   displayName: string
   score: number | null
@@ -13,40 +12,31 @@ interface BoardScore {
 }
 
 /**
- * Consolidated roll-up of every board/committee's progress score — one spectrum
- * row each — so the whole governing body's disposition reads at a glance on the
- * dashboard. Boards without a transcript-analysis dataset show as "not yet
- * analyzed" rather than being hidden, so the full slate is visible.
+ * Consolidated roll-up of each analyzed board/committee's sentiment score — one
+ * spectrum row each — so the governing body's disposition reads at a glance on
+ * the dashboard. Boards without a transcript-analysis dataset are hidden here
+ * (and from the board tab strip); the "X of Y analyzed" count keeps the full
+ * slate honest. Scores arrive via props (MunicipalClient owns the fetch so the
+ * tab strip can share them).
  */
-export default function BoardProgress({ muniKey }: { muniKey: string }) {
-  const [boards, setBoards] = useState<BoardScore[] | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    fetch(`/admin/api/municipal/board-scores?muni=${encodeURIComponent(muniKey)}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
-      .then((d) => setBoards(d.boards || []))
-      .catch(() => setBoards(null))
-      .finally(() => setLoading(false))
-  }, [muniKey])
-
-  if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading board progress…</div>
+export default function BoardSentiment({ muniKey, boards, loading }: { muniKey: string; boards: BoardScore[] | null; loading: boolean }) {
+  if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading board sentiment…</div>
   if (!boards || boards.length === 0) return null
 
-  const scored = boards.filter((b) => b.score != null).length
+  const analyzed = boards.filter((b) => b.score != null)
+  if (analyzed.length === 0) return null
 
   return (
     <div style={{ marginBottom: 30 }}>
       <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>
-        Board progress
-        <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {scored} of {boards.length} analyzed</span>
+        Board sentiment
+        <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {analyzed.length} of {boards.length} boards analyzed</span>
       </h2>
       <div className="muted" style={{ fontSize: 11, marginBottom: 12, lineHeight: 1.5, maxWidth: 720 }}>
-        Each board&apos;s progress score — the position-weighted average of its members&apos; sentiment across analyzed meetings — on a −10 (opposed) to +10 (favorable) spectrum.
+        Each analyzed board&apos;s sentiment score — the position-weighted average of its members&apos; sentiment across analyzed meetings — on a −10 (opposed) to +10 (favorable) spectrum. Boards not yet analyzed are omitted.
       </div>
       <div className="card" style={{ padding: 0 }}>
-        {boards.map((b, i) => (
+        {analyzed.map((b, i) => (
           <div
             key={b.key}
             style={{
@@ -61,20 +51,12 @@ export default function BoardProgress({ muniKey }: { muniKey: string }) {
               >
                 {b.displayName}
               </a>
-              {b.score != null ? (
-                <div className="muted" style={{ fontSize: 11, marginTop: 2 }}>
-                  {sentimentLabel(b.score)} · {b.positions} positions
-                </div>
-              ) : (
-                <div className="muted" style={{ fontSize: 11, marginTop: 2 }}>Not yet analyzed</div>
-              )}
+              <div className="muted" style={{ fontSize: 11, marginTop: 2 }}>
+                {sentimentLabel(b.score!)} · {b.positions} positions
+              </div>
             </div>
             <div style={{ flex: 1, minWidth: 200 }}>
-              {b.score != null ? (
-                <ProgressSpectrum score={b.score} height={14} />
-              ) : (
-                <div style={{ height: 14, borderRadius: 7, background: 'var(--panel-2)', opacity: 0.6 }} />
-              )}
+              <ProgressSpectrum score={b.score!} height={14} />
             </div>
           </div>
         ))}

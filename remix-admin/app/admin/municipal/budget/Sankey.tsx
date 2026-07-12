@@ -50,11 +50,35 @@ export default function Sankey({
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // When the chart overflows horizontally (narrow viewports), open on the
-  // spending (right) side so expenditures are visible without scrolling.
+  // When the chart overflows horizontally, keep it pinned to the spending
+  // (right) side so expenditures are visible without scrolling. The pin runs on
+  // mount/expand, again on the next frame (layout can settle late — fonts,
+  // card width), and on container resizes — but stops once the user scrolls
+  // the chart themselves, so it never fights a manual drag.
+  const userScrolledRef = useRef(false)
   useEffect(() => {
     const el = scrollRef.current
-    if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = el.scrollWidth - el.clientWidth
+    if (!el) return
+    const pin = () => {
+      if (!userScrolledRef.current && el.scrollWidth > el.clientWidth) {
+        el.scrollLeft = el.scrollWidth - el.clientWidth
+      }
+    }
+    const markUser = () => { userScrolledRef.current = true }
+    pin()
+    const raf = requestAnimationFrame(pin)
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(pin) : null
+    ro?.observe(el)
+    el.addEventListener('wheel', markUser, { passive: true })
+    el.addEventListener('touchstart', markUser, { passive: true })
+    el.addEventListener('pointerdown', markUser)
+    return () => {
+      cancelAnimationFrame(raf)
+      ro?.disconnect()
+      el.removeEventListener('wheel', markUser)
+      el.removeEventListener('touchstart', markUser)
+      el.removeEventListener('pointerdown', markUser)
+    }
   }, [expanded])
 
   // Which nodes can be drilled into (have detail children).

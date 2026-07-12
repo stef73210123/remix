@@ -49,6 +49,74 @@
   letter-spacing: -0.01em;
 }
 
+/* Sticky civic masthead: full-bleed bar pinned above the map (Leaflet panes and
+   the map legend sit at z-index ≤ 1000). Negative margins cancel .container
+   padding so the bar's background spans edge to edge of the column. */
+[data-flavor='opennorthcastle'] .muni-header {
+  position: sticky;
+  top: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: -24px -20px 20px;
+  padding: 8px 20px;
+  background: rgba(244, 247, 251, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Floating action bar, fixed to the bottom of the viewport, holding the FOIL
+   Request / Report Issue quick actions so they're reachable from anywhere on
+   the page without scrolling back up to the header. .container gets matching
+   bottom padding (below) so page content — and the footer disclaimer — never
+   sits hidden underneath it. */
+[data-flavor='opennorthcastle'] .civic-bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1200;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(244, 247, 251, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+}
+
+[data-flavor='opennorthcastle'] .container {
+  padding-bottom: 68px;
+}
+
+/* Board/tab strip sticky directly below the masthead (top is set inline via JS
+   — MunicipalClient measures .muni-header's real height with a ResizeObserver,
+   since it can vary), so navigation stays reachable while scrolling. */
+[data-flavor='opennorthcastle'] .board-tabs-sticky {
+  position: sticky;
+  z-index: 1150;
+  background: rgba(244, 247, 251, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Primary buttons (and button-styled links, e.g. FOIL Request) must stay white
+   on the navy fill — the flavored `a { color: inherit }` rule below otherwise
+   outranks .btn's white text and renders it ink-on-navy (illegible). */
+[data-flavor='opennorthcastle'] .btn:not(.secondary),
+[data-flavor='opennorthcastle'] a.btn:not(.secondary) {
+  color: #fff;
+}
+
 /* Secondary buttons read on the light surface. */
 [data-flavor='opennorthcastle'] .btn.secondary {
   color: var(--text);

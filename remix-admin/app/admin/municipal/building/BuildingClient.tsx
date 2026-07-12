@@ -3,12 +3,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
+import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
 import CivicActions from '@/app/admin/municipal/CivicActions'
 import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/MeetingTimeline'
 import MeetingList from '@/app/admin/municipal/MeetingList'
 import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipal/permits'
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
+import { isOpen } from '@/lib/flavor'
 
 const JurisdictionMap = dynamic(() => import('@/app/admin/municipal/JurisdictionMap'), {
   ssr: false,
@@ -49,7 +51,6 @@ function fmtDate(iso: string | null) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-const POS = '#3d9c72'
 function Tile({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
     <div className="card" style={{ padding: '14px 16px' }}>
@@ -60,12 +61,36 @@ function Tile({ label, value, sub }: { label: string; value: string; sub?: strin
   )
 }
 
-function SectionHead({ title, sub }: { title: string; sub?: string }) {
+function SectionHead({ title, sub, right }: { title: string; sub?: string; right?: React.ReactNode }) {
   return (
-    <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-      {title}
-      {sub && <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {sub}</span>}
-    </h2>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+      <h2 style={{ fontSize: 16, margin: 0 }}>
+        {title}
+        {sub && <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {sub}</span>}
+      </h2>
+      {right}
+    </div>
+  )
+}
+
+type YearFilter = number | 'ALL'
+
+function YearSelect({ value, years, onChange, allLabel = 'All years' }: {
+  value: YearFilter
+  years: number[]
+  onChange: (v: YearFilter) => void
+  allLabel?: string
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
+      aria-label="Filter by year"
+      style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+    >
+      {years.map((y) => <option key={y} value={y}>{y}</option>)}
+      <option value="ALL">{allLabel}</option>
+    </select>
   )
 }
 
@@ -136,10 +161,244 @@ function MonthlyChart({ monthly }: { monthly: { month: string; count: number }[]
   )
 }
 
+/** Round 1/2/5 × 10^k tick values within [minV, maxV] — a log-scale axis helper. */
+function logTicks(minV: number, maxV: number): number[] {
+  const lo = Math.max(minV, 1)
+  const ticks: number[] = []
+  const minExp = Math.floor(Math.log10(lo))
+  const maxExp = Math.ceil(Math.log10(Math.max(maxV, lo)))
+  for (let e = minExp; e <= maxExp; e++) {
+    for (const m of [1, 2, 5]) {
+      const v = m * 10 ** e
+      if (v >= lo * 0.9 && v <= maxV * 1.1) ticks.push(v)
+    }
+  }
+  return ticks
+}
+
+interface ScatterPoint { cost: number; days: number; category: string; label: string }
+
+/** Permit value (log-scale $) vs. total days application → CO, colored by
+ *  normalized permit category — surfaces whether higher-value projects also
+ *  take disproportionately longer to close out. */
+function ScatterChart({ points }: { points: ScatterPoint[] }) {
+  const [hover, setHover] = useState<number | null>(null)
+  const valid = points.filter((p) => p.cost > 0 && p.days >= 0)
+  const W = 760, H = 320, PAD = { t: 14, r: 16, b: 30, l: 42 }
+  const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
+
+  const categories = useMemo(
+    () => Array.from(new Set(valid.map((p) => p.category))).sort(),
+    [valid]
+  )
+
+  if (valid.length === 0) {
+    return <div className="muted" style={{ fontSize: 13, padding: 16 }}>No permits with both a declared value and a full application-to-CO date range in this selection.</div>
+  }
+
+  const minX = Math.min(...valid.map((p) => p.cost))
+  const maxX = Math.max(...valid.map((p) => p.cost))
+  const maxY = Math.max(...valid.map((p) => p.days), 1)
+  const logMin = Math.log10(Math.max(minX, 1))
+  const logMax = Math.log10(Math.max(maxX, minX * 1.1, 10))
+  const xPos = (v: number) => PAD.l + ((Math.log10(Math.max(v, 1)) - logMin) / (logMax - logMin || 1)) * plotW
+  const yPos = (v: number) => PAD.t + plotH - (v / maxY) * plotH
+  const xTicks = logTicks(minX, maxX)
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(maxY * f))
+  const hp = hover != null ? valid[hover] : null
+
+  return (
+    <div className="card" style={{ padding: '12px 12px 10px' }}>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block' }} role="img" aria-label="Permit value vs. days to complete, by permit type">
+        {yTicks.map((t) => (
+          <g key={`y${t}`}>
+            <line x1={PAD.l} y1={yPos(t)} x2={W - PAD.r} y2={yPos(t)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />
+            <text x={PAD.l - 6} y={yPos(t) + 3} textAnchor="end" fontSize={9} fill="var(--muted)">{fmtInt(t)}d</text>
+          </g>
+        ))}
+        {xTicks.map((t) => (
+          <text key={`x${t}`} x={xPos(t)} y={H - 12} textAnchor="middle" fontSize={9} fill="var(--muted)">{fmtUSDshort(t)}</text>
+        ))}
+        {valid.map((p, i) => (
+          <circle
+            key={i}
+            cx={xPos(p.cost)}
+            cy={yPos(p.days)}
+            r={hover === i ? 5 : 3.4}
+            fill={catColor(p.category)}
+            fillOpacity={hover != null && hover !== i ? 0.3 : 0.8}
+            stroke={hover === i ? 'var(--text)' : 'none'}
+            strokeWidth={1}
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+          />
+        ))}
+      </svg>
+      <div style={{ minHeight: 18, fontSize: 12, marginTop: 2 }}>
+        {hp ? (
+          <span>
+            <strong>{hp.category}</strong>
+            <span className="muted"> · {hp.label} · {fmtUSDshort(hp.cost)} · {fmtInt(hp.days)} days</span>
+          </span>
+        ) : (
+          <span className="muted">Hover a point for details · X = declared value (log scale) · Y = days, application → CO</span>
+        )}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', marginTop: 8 }}>
+        {categories.map((c) => (
+          <span key={c} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11 }}>
+            <span style={{ width: 8, height: 8, borderRadius: 999, background: catColor(c), flexShrink: 0 }} />
+            <span className="muted">{c}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const permitYear = (p: PermitRecord) => (p.permitIso ? Number(p.permitIso.slice(0, 4)) : null)
+
+function daysBetween(aIso: string, bIso: string): number {
+  const a = new Date(aIso + 'T00:00:00').getTime()
+  const b = new Date(bIso + 'T00:00:00').getTime()
+  return Math.round((b - a) / 86_400_000)
+}
+function percentile(sorted: number[], p: number): number {
+  if (sorted.length === 0) return 0
+  const idx = (sorted.length - 1) * p
+  const lo = Math.floor(idx), hi = Math.ceil(idx)
+  if (lo === hi) return sorted[lo]
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo)
+}
+interface StageStat { n: number; median: number; p25: number; p75: number }
+function stageStats(deltas: number[]): StageStat | null {
+  const sorted = deltas.filter((d) => d >= 0).sort((a, b) => a - b)
+  if (sorted.length === 0) return null
+  return {
+    n: sorted.length,
+    median: Math.round(percentile(sorted, 0.5)),
+    p25: Math.round(percentile(sorted, 0.25)),
+    p75: Math.round(percentile(sorted, 0.75)),
+  }
+}
+/** Full permit lifecycle, in the two intervals the data actually timestamps:
+ *  application → permit issued (plan review & corrections happen here) and
+ *  permit issued → closed/CO (inspections happen here) — plus the direct
+ *  application → close span for a true end-to-end median. */
+function pipelineStats(perms: PermitRecord[]) {
+  const stage1: number[] = []
+  const stage2: number[] = []
+  const full: number[] = []
+  for (const p of perms) {
+    if (p.appIso && p.permitIso) stage1.push(daysBetween(p.appIso, p.permitIso))
+    if (p.permitIso && p.closeIso) stage2.push(daysBetween(p.permitIso, p.closeIso))
+    if (p.appIso && p.closeIso) full.push(daysBetween(p.appIso, p.closeIso))
+  }
+  return { stage1: stageStats(stage1), stage2: stageStats(stage2), full: stageStats(full) }
+}
+
+function PipelineRow({ label, sub, stat, max, color }: { label: string; sub?: string; stat: StageStat | null; max: number; color: string }) {
+  if (!stat) {
+    return (
+      <div style={{ padding: '10px 0', borderTop: '1px solid var(--border)' }}>
+        <div style={{ fontWeight: 600, fontSize: 13.5 }}>{label}</div>
+        <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>No permits with both dates recorded in this range.</div>
+      </div>
+    )
+  }
+  const pctP25 = (stat.p25 / max) * 100
+  const pctP75 = (stat.p75 / max) * 100
+  const pctMedian = (stat.median / max) * 100
+  return (
+    <div style={{ padding: '12px 0', borderTop: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
+        <div>
+          <span style={{ fontWeight: 600, fontSize: 13.5 }}>{label}</span>
+          {sub && <span className="muted" style={{ fontSize: 12, marginLeft: 8 }}>{sub}</span>}
+        </div>
+        <span style={{ fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>
+          <strong>{stat.median}d</strong> <span className="muted">median · P25–P75 {stat.p25}–{stat.p75}d · n={fmtInt(stat.n)}</span>
+        </span>
+      </div>
+      <div style={{ position: 'relative', height: 20, background: 'var(--panel-2)', borderRadius: 6 }}>
+        <div
+          style={{ position: 'absolute', left: `${pctP25}%`, width: `${Math.max(0.5, pctP75 - pctP25)}%`, top: 0, bottom: 0, background: color, opacity: 0.3, borderRadius: 6 }}
+          title={`P25–P75: ${stat.p25}–${stat.p75} days`}
+        />
+        <div style={{ position: 'absolute', left: `${pctMedian}%`, top: -3, bottom: -3, width: 3, background: color, borderRadius: 2 }} title={`Median: ${stat.median} days`} />
+      </div>
+    </div>
+  )
+}
+
+/** Approval pipeline — the two intervals the department's own timestamps
+ *  support (application→permit, permit→CO) plus the full application→CO
+ *  span, each as a P25–P75 range bar with a median tick. */
+function PipelineChart({ perms }: { perms: PermitRecord[] }) {
+  const stats = useMemo(() => pipelineStats(perms), [perms])
+  const max = Math.max(30, stats.stage1?.p75 ?? 0, stats.stage2?.p75 ?? 0, stats.full?.p75 ?? 0) * 1.15
+  return (
+    <div className="card" style={{ padding: '16px 16px 12px' }}>
+      <PipelineRow label="Application → Permit Issued" sub="plan review & corrections" stat={stats.stage1} max={max} color="#5a9bd4" />
+      <PipelineRow label="Permit Issued → Certificate of Occupancy" sub="inspections" stat={stats.stage2} max={max} color="#3d9c72" />
+      <PipelineRow label="Full pipeline: Application → CO" sub="all stages" stat={stats.full} max={max} color="var(--primary)" />
+      <div className="muted" style={{ fontSize: 11, marginTop: 12, lineHeight: 1.5 }}>
+        Each bar spans the 25th–75th percentile; the tick marks the median. Based on permits with both dates recorded for the selected year.
+      </div>
+    </div>
+  )
+}
+
+/** Per-year (or all-time) aggregates computed from the full permit set, so the
+ *  charts and contractor list can be filtered by year client-side. */
+function aggregate(perms: PermitRecord[]) {
+  const byCategory = new Map<string, { count: number; cost: number }>()
+  const byClass = new Map<string, number>()
+  const contractors = new Map<string, { count: number; cost: number }>()
+  const buckets: { label: string; min: number; max: number | null; count: number }[] = [
+    { label: '<$25K', min: 0, max: 25_000, count: 0 },
+    { label: '$25–100K', min: 25_000, max: 100_000, count: 0 },
+    { label: '$100–500K', min: 100_000, max: 500_000, count: 0 },
+    { label: '$500K–1M', min: 500_000, max: 1_000_000, count: 0 },
+    { label: '$1M+', min: 1_000_000, max: null, count: 0 },
+  ]
+  for (const p of perms) {
+    const cat = byCategory.get(p.category) ?? { count: 0, cost: 0 }
+    cat.count++; cat.cost += p.cost ?? 0
+    byCategory.set(p.category, cat)
+    byClass.set(p.klass, (byClass.get(p.klass) ?? 0) + 1)
+    if (p.contractor) {
+      const c = contractors.get(p.contractor) ?? { count: 0, cost: 0 }
+      c.count++; c.cost += p.cost ?? 0
+      contractors.set(p.contractor, c)
+    }
+    if (p.cost != null && p.cost > 0) {
+      const b = buckets.find((x) => p.cost! >= x.min && (x.max == null || p.cost! < x.max))
+      if (b) b.count++
+    }
+  }
+  return {
+    byCategory: Array.from(byCategory, ([category, v]) => ({ category, ...v })).sort((a, b) => b.count - a.count),
+    byClass: Array.from(byClass, ([klass, count]) => ({ klass, count })).sort((a, b) => b.count - a.count),
+    valuationBuckets: buckets.filter((b) => b.count > 0).map(({ label, count }) => ({ label, count })),
+    topContractors: Array.from(contractors, ([name, v]) => ({ name, ...v })).sort((a, b) => b.count - a.count).slice(0, 10),
+  }
+}
+
 export default function BuildingClient({ userName, muni }: { userName: string; muni: string }) {
   const [dataset, setDataset] = useState<PermitDataset | null>(null)
   const [dept, setDept] = useState<DepartmentInfo | null>(null)
   const [loading, setLoading] = useState(true)
+  // Full record set (lazy) — powers the map's year slider and the per-year charts.
+  const [fullPermits, setFullPermits] = useState<PermitRecord[] | null>(null)
+  const [mapYear, setMapYear] = useState<YearFilter>('ALL')
+  const [chartYear, setChartYear] = useState<YearFilter | null>(null)
+  // Shared selection between the permit-activity timeline and the list beneath
+  // it — clicking an entry in either highlights and scrolls to the match in the other.
+  const [selectedPermitKey, setSelectedPermitKey] = useState<string | null>(null)
+  const [contractorYear, setContractorYear] = useState<YearFilter | null>(null)
+  const [pipelineYear, setPipelineYear] = useState<YearFilter | null>(null)
+  const [scatterYear, setScatterYear] = useState<YearFilter | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -148,12 +407,35 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       .then((d) => { setDataset(d.dataset || null); setDept(d.department || null) })
       .catch(() => { setDataset(null); setDept(null) })
       .finally(() => setLoading(false))
+    fetch(`/admin/api/municipal/permits?muni=${encodeURIComponent(muni)}&all=1`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+      .then((d) => setFullPermits(d.permits || null))
+      .catch(() => setFullPermits(null))
   }, [muni])
 
+  const years = useMemo(() => {
+    const ys = new Set<number>()
+    for (const p of fullPermits ?? dataset?.recent ?? []) {
+      const y = permitYear(p)
+      if (y) ys.add(y)
+    }
+    return Array.from(ys).sort((a, b) => b - a)
+  }, [fullPermits, dataset])
+  const latestYear = years[0]
+  // Charts default to the most recent year once the year list is known.
+  const activeChartYear: YearFilter = chartYear ?? latestYear ?? 'ALL'
+  const activeContractorYear: YearFilter = contractorYear ?? latestYear ?? 'ALL'
+  const activePipelineYear: YearFilter = pipelineYear ?? latestYear ?? 'ALL'
+  const activeScatterYear: YearFilter = scatterYear ?? latestYear ?? 'ALL'
+
+  // Map markers: every permit with a street address, filtered by the time
+  // slider (the geocoder caps at ~90 pins per view, newest first).
   const permitMarkers = useMemo<PermitMarker[]>(() => {
-    if (!dataset) return []
-    return dataset.recent
+    const src = fullPermits ?? dataset?.recent ?? []
+    return src
       .filter((p) => p.address && /\d/.test(p.address))
+      .filter((p) => mapYear === 'ALL' || permitYear(p) === mapYear)
+      .sort((a, b) => (b.permitIso || '').localeCompare(a.permitIso || ''))
       .map((p: PermitRecord) => ({
         id: p.permitNumber,
         address: p.address,
@@ -161,7 +443,36 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
         sub: [p.type, p.cost ? fmtUSDshort(p.cost) : null, fmtDate(p.permitIso)].filter(Boolean).join(' · '),
         color: catColor(p.category),
       }))
-  }, [dataset])
+  }, [dataset, fullPermits, mapYear])
+
+  // Chart aggregates for the selected year (all-time falls back to the
+  // precomputed dataset until the full set arrives).
+  const chartAgg = useMemo(() => {
+    if (fullPermits) {
+      return aggregate(activeChartYear === 'ALL' ? fullPermits : fullPermits.filter((p) => permitYear(p) === activeChartYear))
+    }
+    return dataset
+      ? { byCategory: dataset.byCategory, byClass: dataset.byClass, valuationBuckets: dataset.valuationBuckets, topContractors: dataset.topContractors }
+      : null
+  }, [fullPermits, dataset, activeChartYear])
+  const contractorRows = useMemo(() => {
+    if (fullPermits) {
+      return aggregate(activeContractorYear === 'ALL' ? fullPermits : fullPermits.filter((p) => permitYear(p) === activeContractorYear)).topContractors
+    }
+    return dataset?.topContractors ?? []
+  }, [fullPermits, dataset, activeContractorYear])
+  const pipelinePerms = useMemo(() => {
+    const src = fullPermits ?? dataset?.recent ?? []
+    return activePipelineYear === 'ALL' ? src : src.filter((p) => permitYear(p) === activePipelineYear)
+  }, [fullPermits, dataset, activePipelineYear])
+  const scatterPoints = useMemo<ScatterPoint[]>(() => {
+    const src = fullPermits ?? dataset?.recent ?? []
+    const filtered = activeScatterYear === 'ALL' ? src : src.filter((p) => permitYear(p) === activeScatterYear)
+    return filtered
+      .filter((p) => p.cost != null && p.cost > 0 && p.appIso && p.closeIso)
+      .map((p) => ({ cost: p.cost as number, days: daysBetween(p.appIso as string, p.closeIso as string), category: p.category, label: p.address }))
+      .filter((p) => p.days >= 0)
+  }, [fullPermits, dataset, activeScatterYear])
 
   const timelineItems = useMemo<TimelineItem[]>(() => {
     if (!dataset) return []
@@ -180,19 +491,24 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
   }, [dataset])
 
+  // OpenNorthCastle is single-jurisdiction, so the town crumb is implied and
+  // skipped there; the paywalled Remix build keeps it (multiple towns).
   const crumbs: Crumb[] = [
-    { label: 'Dashboard', href: `/admin/municipal?town=${muni}` },
-    { label: 'Town of North Castle' },
+    { label: 'Dashboard', href: isOpen ? '/' : `/admin/municipal?town=${muni}` },
+    ...(isOpen ? [] : [{ label: 'Town of North Castle' }]),
     { label: 'Building Department' },
   ]
+
+  const yearLabel = (v: YearFilter) => (v === 'ALL' ? 'all years' : String(v))
 
   return (
     <div className="container">
       <MuniHeader userName={userName} />
+      <MuniTabs muni={muni} active="building" />
       <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <h1 className="page-title" style={{ marginBottom: 6 }}>Building Department</h1>
-        <CivicActions style={{ marginTop: 6 }} />
+        {!isOpen && <CivicActions style={{ marginTop: 6 }} />}
       </div>
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading permit data…</div>}
@@ -247,30 +563,68 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             <Tile label="Median plan-review time" value={dataset.turnaround.medianDays != null ? `${dataset.turnaround.medianDays} days` : '—'} sub={dataset.turnaround.avgDays != null ? `avg ${dataset.turnaround.avgDays} days` : undefined} />
           </div>
 
-          {/* Map */}
-          <div style={{ marginBottom: 4 }}><SectionHead title="Map" sub="civic issues, county layers & recent permits" /></div>
+          {/* Map — permit addresses only, always on, narrowed by the year dropdown. */}
+          <SectionHead
+            title="Map"
+            sub={`${fmtInt(permitMarkers.length)} permit addresses · ${yearLabel(mapYear)}`}
+            right={years.length > 0 ? <YearSelect value={mapYear} years={years} onChange={setMapYear} /> : undefined}
+          />
           <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 720 }}>
-            Use the <strong>Layers</strong> menu (top-right of the map) to overlay one layer at a time — open SeeClickFix issues, county GIS layers, or the most recent permits (geocoded on demand).
+            Permit addresses always shown (pins geocode in as they resolve; color = permit type). Use the dropdown to narrow to a single year.
           </div>
-          <JurisdictionMap muni={muni} permits={permitMarkers} />
+          <JurisdictionMap muni={muni} permits={permitMarkers} onlyPermits />
 
-          {/* Analytics: category + class */}
+          {/* Recent permit activity — directly below the map. */}
+          <div style={{ marginBottom: 8 }}><SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} /></div>
+          <MeetingTimeline
+            items={timelineItems}
+            selectedKey={selectedPermitKey}
+            onSelect={setSelectedPermitKey}
+            emptyText="No recent permits."
+          />
+          <MeetingList
+            items={timelineItems}
+            maxHeight={340}
+            emptyText="No recent permits."
+            selectedKey={selectedPermitKey}
+            onSelect={setSelectedPermitKey}
+          />
+          <div style={{ marginBottom: 26 }} />
+
+          {/* Analytics: category + class, filtered by year (default: latest). */}
+          <SectionHead
+            title="Permit analytics"
+            sub={yearLabel(activeChartYear)}
+            right={years.length > 0 ? <YearSelect value={activeChartYear} years={years} onChange={setChartYear} /> : undefined}
+          />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, marginBottom: 26 }}>
             <div>
-              <SectionHead title="Permits by type" sub="10-year totals" />
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Permits by type</div>
               <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.byCategory.map((c) => ({ label: c.category, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} color={catColor} />
+                {chartAgg && chartAgg.byCategory.length > 0 ? (
+                  <BarList rows={chartAgg.byCategory.map((c) => ({ label: c.category, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} color={catColor} />
+                ) : (
+                  <div className="muted" style={{ fontSize: 13 }}>No permits in {yearLabel(activeChartYear)}.</div>
+                )}
               </div>
             </div>
             <div>
-              <SectionHead title="Residential vs. commercial" sub="by property class" />
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Residential vs. commercial</div>
               <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.byClass.map((c) => ({ label: c.klass, count: c.count }))} />
+                {chartAgg && chartAgg.byClass.length > 0 ? (
+                  <BarList rows={chartAgg.byClass.map((c) => ({ label: c.klass, count: c.count }))} />
+                ) : (
+                  <div className="muted" style={{ fontSize: 13 }}>No permits in {yearLabel(activeChartYear)}.</div>
+                )}
               </div>
               <div style={{ height: 20 }} />
-              <SectionHead title="Declared value" sub="cost-of-construction bands" />
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Declared value · cost-of-construction bands</div>
               <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.valuationBuckets.map((b) => ({ label: b.label, count: b.count }))} />
+                {chartAgg && chartAgg.valuationBuckets.length > 0 ? (
+                  <BarList rows={chartAgg.valuationBuckets.map((b) => ({ label: b.label, count: b.count }))} />
+                ) : (
+                  <div className="muted" style={{ fontSize: 13 }}>No valued permits in {yearLabel(activeChartYear)}.</div>
+                )}
               </div>
             </div>
           </div>
@@ -281,20 +635,39 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             <MonthlyChart monthly={dataset.monthly} />
           </div>
 
-          {/* Top contractors */}
-          {dataset.topContractors.length > 0 && (
-            <div style={{ marginBottom: 26 }}>
-              <SectionHead title="Most active contractors" sub="by permit count" />
-              <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.topContractors.map((c) => ({ label: c.name, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} />
-              </div>
-            </div>
-          )}
+          {/* Approval pipeline — application through Certificate of Occupancy. */}
+          <SectionHead
+            title="Approval pipeline"
+            sub={`application → certificate of occupancy · ${yearLabel(activePipelineYear)}`}
+            right={years.length > 0 ? <YearSelect value={activePipelineYear} years={years} onChange={setPipelineYear} /> : undefined}
+          />
+          <div style={{ marginBottom: 26 }}>
+            <PipelineChart perms={pipelinePerms} />
+          </div>
 
-          {/* Timeline */}
-          <div style={{ marginBottom: 8 }}><SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} /></div>
-          <MeetingTimeline items={timelineItems} emptyText="No recent permits." />
-          <MeetingList items={timelineItems} maxHeight={340} emptyText="No recent permits." />
+          {/* Value vs. duration — does a bigger declared value predict a longer timeline? */}
+          <SectionHead
+            title="Permit value vs. time to complete"
+            sub={`application → certificate of occupancy · ${yearLabel(activeScatterYear)}`}
+            right={years.length > 0 ? <YearSelect value={activeScatterYear} years={years} onChange={setScatterYear} /> : undefined}
+          />
+          <div style={{ marginBottom: 26 }}>
+            <ScatterChart points={scatterPoints} />
+          </div>
+
+          {/* Top contractors */}
+          <SectionHead
+            title="Most active contractors"
+            sub={`by permit count · ${yearLabel(activeContractorYear)}`}
+            right={years.length > 0 ? <YearSelect value={activeContractorYear} years={years} onChange={setContractorYear} /> : undefined}
+          />
+          <div className="card" style={{ padding: 16, marginBottom: 26 }}>
+            {contractorRows.length > 0 ? (
+              <BarList rows={contractorRows.map((c) => ({ label: c.name, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} />
+            ) : (
+              <div className="muted" style={{ fontSize: 13 }}>No contractor-attributed permits in {yearLabel(activeContractorYear)}.</div>
+            )}
+          </div>
 
           <div className="muted" style={{ fontSize: 11, marginTop: 18, lineHeight: 1.5 }}>{dataset.source}</div>
         </>

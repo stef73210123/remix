@@ -13,14 +13,7 @@ const MAP: Record<string, { center: [number, number]; zoom: number; query: strin
   rockland: { center: [41.86, -74.82], zoom: 12, query: 'Town of Rockland, Sullivan County, New York' },
 }
 
-type PoiKey = 'restaurant' | 'attraction' | 'cafe' | 'shop' | 'park'
-const POI: { key: PoiKey; label: string; color: string; filter: string }[] = [
-  { key: 'restaurant', label: 'Restaurants', color: '#e8813a', filter: 'node["amenity"="restaurant"]' },
-  { key: 'cafe', label: 'Cafés', color: '#c9973f', filter: 'node["amenity"~"cafe|fast_food"]' },
-  { key: 'attraction', label: 'Attractions', color: '#9b7fd4', filter: 'node["tourism"~"attraction|museum|viewpoint|artwork|gallery"]' },
-  { key: 'shop', label: 'Shops', color: '#5a9bd4', filter: 'node["shop"]' },
-  { key: 'park', label: 'Parks', color: '#3d9c72', filter: 'nwr["leisure"~"park|nature_reserve"]' },
-]
+type LayerState = 'loading' | 'ok' | 'empty' | 'error' | null
 
 /** A permit rendered on the map. Geocoded lazily from its address. */
 export interface PermitMarker {
@@ -29,6 +22,65 @@ export interface PermitMarker {
   title: string
   sub?: string
   color: string
+}
+
+// ── OpenStreetMap (Overpass) layers ──────────────────────────────────────────
+// Points of interest, plus real trails (paths/footways/tracks) as lines — the
+// county GIS "trails" name-match resolved to road-corridor geometry (it drew
+// what looked like State Roads), so trails come from OSM where the geometry is
+// tagged as an actual path.
+interface OsmCat {
+  key: string
+  label: string
+  color: string
+  geom: 'point' | 'line'
+  filter: string
+}
+const OSM: OsmCat[] = [
+  { key: 'trails', label: 'Trails', color: '#84cc16', geom: 'line', filter: 'way["highway"~"^(path|footway|steps|bridleway|track)$"]' },
+  { key: 'restaurant', label: 'Restaurants', color: '#e8813a', geom: 'point', filter: 'nwr["amenity"="restaurant"]' },
+  { key: 'cafe', label: 'Cafés', color: '#c9973f', geom: 'point', filter: 'nwr["amenity"~"cafe|fast_food"]' },
+  { key: 'attraction', label: 'Attractions', color: '#9b7fd4', geom: 'point', filter: 'nwr["tourism"~"attraction|museum|viewpoint|artwork|gallery"]' },
+  { key: 'shop', label: 'Shops', color: '#5a9bd4', geom: 'point', filter: 'nwr["shop"]' },
+  { key: 'osm_park', label: 'Parks', color: '#3d9c72', geom: 'point', filter: 'nwr["leisure"~"park|nature_reserve"]' },
+]
+
+// Overpass instances, tried in order — the main instance rate-limits browsers
+// aggressively, so failures fall through to the mirrors.
+const OVERPASS_ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
+]
+
+interface OverpassElement {
+  type: string
+  lat?: number
+  lon?: number
+  center?: { lat: number; lon: number }
+  geometry?: { lat: number; lon: number }[]
+  tags?: Record<string, string>
+}
+
+/** POST an Overpass QL query (properly form-encoded — raw bodies are silently
+ *  mis-parsed by some instances), falling through the mirror list. */
+async function overpassFetch(query: string): Promise<OverpassElement[]> {
+  let lastErr: unknown = new Error('overpass unavailable')
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const r = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `data=${encodeURIComponent(query)}`,
+      })
+      if (!r.ok) throw new Error(`overpass ${r.status}`)
+      const data = (await r.json()) as { elements?: OverpassElement[] }
+      return data.elements || []
+    } catch (e) {
+      lastErr = e
+    }
+  }
+  throw lastErr
 }
 
 /** Draws the jurisdiction boundary (fetched at runtime) and fits the map to it. */
@@ -62,47 +114,58 @@ function Boundary({ muni }: { muni: string }) {
   return null
 }
 
-/** Lazily queries Overpass for the single active POI category within the current
- *  view and renders it as labelled dots. Keyless, on-demand. */
-function PoiLayers({ active }: { active: string | null }) {
+/** Lazily queries Overpass for the single active OSM category (POIs as dots,
+ *  trails as polylines) within the current view. Keyless, on-demand. */
+function OsmLayers({ active, onState }: { active: string | null; onState?: (s: LayerState) => void }) {
   const map = useMap()
-  const groups = useRef<Record<string, LayerGroup>>({})
-  const loaded = useRef<Set<string>>(new Set())
+  const groupRef = useRef<LayerGroup | null>(null)
 
   useEffect(() => {
-    for (const cat of POI) {
-      const on = active === cat.key
-      const g = groups.current[cat.key]
-      if (on && !g) {
-        const group = L.layerGroup().addTo(map)
-        groups.current[cat.key] = group
-        const b = map.getBounds()
-        const bbox = `${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()}`
-        const q = `[out:json][timeout:20];(${cat.filter}(${bbox}););out center 80;`
-        fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: q })
-          .then((r) => (r.ok ? r.json() : Promise.reject(new Error('overpass'))))
-          .then((data: { elements?: Array<{ lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> }> }) => {
-            for (const el of data.elements || []) {
-              const lat = el.lat ?? el.center?.lat
-              const lon = el.lon ?? el.center?.lon
-              if (lat == null || lon == null) continue
-              const name = el.tags?.name
-              const marker = L.circleMarker([lat, lon], {
-                radius: 5, color: '#0a0a0a', weight: 1, fillColor: cat.color, fillOpacity: 0.95,
-              })
-              if (name) marker.bindPopup(`<strong>${name}</strong><br>${cat.label.replace(/s$/, '')}`)
-              marker.addTo(group)
-            }
-            loaded.current.add(cat.key)
-          })
-          .catch(() => { /* leave the category empty on failure */ })
-      } else if (!on && g) {
-        g.remove()
-        delete groups.current[cat.key]
-        loaded.current.delete(cat.key)
-      }
+    if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    const cat = OSM.find((c) => c.key === active)
+    if (!cat) return
+    let cancelled = false
+    const group = L.layerGroup().addTo(map)
+    groupRef.current = group
+    onState?.('loading')
+    const b = map.getBounds()
+    const bbox = `${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()}`
+    const out = cat.geom === 'line' ? 'out geom 600;' : 'out center 200;'
+    const q = `[out:json][timeout:25];(${cat.filter}(${bbox}););${out}`
+    overpassFetch(q)
+      .then((elements) => {
+        if (cancelled) return
+        let count = 0
+        for (const el of elements) {
+          if (cat.geom === 'line' && el.geometry && el.geometry.length > 1) {
+            const line = L.polyline(el.geometry.map((p) => [p.lat, p.lon] as [number, number]), {
+              color: cat.color, weight: 3, opacity: 0.9,
+            })
+            const name = el.tags?.name
+            line.bindPopup(`<strong>${name || 'Trail'}</strong><br>${el.tags?.highway || 'path'}`)
+            line.addTo(group)
+            count++
+          } else if (cat.geom === 'point') {
+            const lat = el.lat ?? el.center?.lat
+            const lon = el.lon ?? el.center?.lon
+            if (lat == null || lon == null) continue
+            const name = el.tags?.name
+            const marker = L.circleMarker([lat, lon], {
+              radius: 5, color: '#0a0a0a', weight: 1, fillColor: cat.color, fillOpacity: 0.95,
+            })
+            if (name) marker.bindPopup(`<strong>${name}</strong><br>${cat.label.replace(/s$/, '')}`)
+            marker.addTo(group)
+            count++
+          }
+        }
+        onState?.(count > 0 ? 'ok' : 'empty')
+      })
+      .catch(() => { if (!cancelled) onState?.('error') })
+    return () => {
+      cancelled = true
+      if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     }
-  }, [active, map])
+  }, [active, map, onState])
   return null
 }
 
@@ -116,9 +179,14 @@ interface ScfIssue {
   lat?: number; lng?: number; created_at?: string; html_url?: string
   request_type?: { title?: string }
 }
+// The API is bbox-based, so border towns (Greenwich, Mount Kisco, …) bleed in
+// and can drown out the town's own reports — keep addresses inside the
+// town/hamlets when any match.
+const NC_PLACE_RE = /north castle|armonk|banksville|north white plains/i
+
 /** Fetches SeeClickFix issues within the current view and plots them, colored by
  *  status. Fails silently (e.g. if the API is unreachable) so the map is fine. */
-function IssueLayer({ active, onState }: { active: boolean; onState?: (s: 'loading' | 'ok' | 'empty' | 'error' | null) => void }) {
+function IssueLayer({ active, muni, onState }: { active: boolean; muni: string; onState?: (s: LayerState) => void }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
   useEffect(() => {
@@ -136,7 +204,11 @@ function IssueLayer({ active, onState }: { active: boolean; onState?: (s: 'loadi
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('scf'))))
       .then((data: { issues?: ScfIssue[] }) => {
         if (cancelled) return
-        const issues = data.issues || []
+        const all = data.issues || []
+        // North Castle's own reports first; if the address filter strips
+        // everything (address formats vary), fall back to the raw bbox set.
+        const own = muni === 'nc' ? all.filter((it) => NC_PLACE_RE.test(it.address || '')) : all
+        const issues = own.length > 0 ? own : all
         let n = 0
         for (const it of issues) {
           if (it.lat == null || it.lng == null) continue
@@ -156,7 +228,7 @@ function IssueLayer({ active, onState }: { active: boolean; onState?: (s: 'loadi
       })
       .catch(() => { if (!cancelled) onState?.('error') })
     return () => { cancelled = true; if (groupRef.current) { groupRef.current.remove(); groupRef.current = null } }
-  }, [active, map, onState])
+  }, [active, map, muni, onState])
   return null
 }
 
@@ -170,7 +242,7 @@ function cachedGeocode(address: string): [number, number] | null {
 }
 /** Geocodes recent permits one-by-one (throttled + localStorage-cached) and adds
  *  markers as they resolve, so nothing blocks and re-opens are instant. */
-function PermitLayer({ active, permits, onState }: { active: boolean; permits: PermitMarker[]; onState?: (s: 'loading' | 'ok' | 'empty' | 'error' | null) => void }) {
+function PermitLayer({ active, permits, onState }: { active: boolean; permits: PermitMarker[]; onState?: (s: LayerState) => void }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
   useEffect(() => {
@@ -283,14 +355,15 @@ interface GisLayer {
   match: RegExp
   labelField?: string
 }
+// "Trails" was removed from this list — the county name-match traced road
+// corridors; the OSM 'trails' layer above renders actual paths instead.
 const GIS: GisLayer[] = [
   { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
   { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
   { key: 'fire_station', label: 'Fire stations', color: '#ef4444', geom: 'point', service: 'DataHub_CommunityFacilities', match: /fire\s*(station|dept|department|ems)/i, labelField: 'NAME' },
   { key: 'police', label: 'Police', color: '#3b82f6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /police/i, labelField: 'NAME' },
-  { key: 'park', label: 'Parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
+  { key: 'park', label: 'County parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
   { key: 'historic', label: 'Historic sites', color: '#c084a6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /historic/i, labelField: 'RESNAME' },
-  { key: 'trails', label: 'Trails', color: '#84cc16', geom: 'line', service: 'DataHub_EnvironmentandPlanning', match: /trail/i, labelField: 'NAME' },
   { key: 'flood', label: 'Flood plains', color: '#38bdf8', geom: 'polygon', service: 'MunicipalTaxParcels_Query', match: /flood/i },
 ]
 
@@ -312,14 +385,14 @@ async function resolveLayerId(service: string, match: RegExp): Promise<number | 
 /** Fetches the single active county-GIS layer (clipped to North Castle) and
  *  draws it. Resolves the layer id by name at runtime and fails silently if the
  *  service/CORS is unavailable, so the map never breaks. */
-function GisLayers({ active, onState }: { active: string | null; onState?: (s: 'loading' | 'ok' | 'empty' | 'error' | null) => void }) {
+function GisLayers({ active, onState }: { active: string | null; onState?: (s: LayerState) => void }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
 
   useEffect(() => {
     if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     const cfg = GIS.find((g) => g.key === active)
-    if (!cfg) { onState?.(null); return }
+    if (!cfg) return
     let cancelled = false
     const group = L.layerGroup().addTo(map)
     groupRef.current = group
@@ -456,29 +529,41 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, showIssues = true, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, height = 440,
 }: {
   muni: string
-  /** When provided, adds an opt-in "Recent permits" layer (geocoded on demand). */
+  /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
   permits?: PermitMarker[]
+  /** Menu label / group for the address-marker layer (defaults suit permits). */
+  permitsLabel?: string
+  permitsGroup?: string
+  /** Layer key to activate on mount (e.g. 'permits' to open with markers shown). */
+  defaultActive?: string | null
   /** Include the SeeClickFix "Open issues" layer (default true). */
   showIssues?: boolean
+  /** Locked single-layer mode: no layer menu, no GIS/OSM/SeeClickFix layers —
+   *  just the boundary/hamlets and the permits/marker layer, always on. Used
+   *  where the map has exactly one purpose (board agenda-item maps, the
+   *  Building Department permit map). */
+  onlyPermits?: boolean
   height?: number
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
-  // jurisdiction + hamlet boundaries.
-  const [active, setActive] = useState<string | null>(null)
-  const [layerState, setLayerState] = useState<'loading' | 'ok' | 'empty' | 'error' | null>(null)
+  // jurisdiction + hamlet boundaries. In onlyPermits mode this is permanently
+  // 'permits' — there's no menu to change it.
+  const [active, setActive] = useState<string | null>(onlyPermits ? 'permits' : defaultActive)
+  const [layerState, setLayerState] = useState<LayerState>(null)
 
   if (!cfg) return null
 
-  // Grouped menu: civic issues, permits (when supplied), county GIS, POIs.
-  const groups: MenuGroup[] = [
+  // Grouped menu: civic issues, permits (when supplied), county GIS, OSM
+  // trails + points of interest. Empty (and hidden) in onlyPermits mode.
+  const groups: MenuGroup[] = onlyPermits ? [] : [
     ...(showIssues ? [{ group: 'Civic', items: [{ key: 'issues', label: 'Open issues (SeeClickFix)', color: '#ef4444' }] }] : []),
-    ...(permits && permits.length ? [{ group: 'Building', items: [{ key: 'permits', label: 'Recent permits', color: '#d4767a' }] }] : []),
+    ...(permits && permits.length ? [{ group: permitsGroup, items: [{ key: 'permits', label: permitsLabel, color: '#d4767a' }] }] : []),
     ...(muni === 'nc' ? [{ group: 'County GIS', items: GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
-    { group: 'Points of interest', items: POI.map((c) => ({ key: c.key, label: c.label, color: c.color })) },
+    { group: 'Trails & points of interest', items: OSM.map((c) => ({ key: c.key, label: c.label, color: c.color })) },
   ]
 
   const note =
@@ -490,7 +575,20 @@ export default function JurisdictionMap({
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
+        {!onlyPermits && (
+          <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
+        )}
+        {onlyPermits && note && (
+          <div
+            style={{
+              position: 'absolute', top: 10, right: 10, zIndex: 1000,
+              padding: '4px 9px', fontSize: 11, fontWeight: 600, color: '#fff', borderRadius: 999,
+              background: 'rgba(20,24,28,0.82)', border: '1px solid rgba(255,255,255,0.28)', backdropFilter: 'blur(6px)',
+            }}
+          >
+            {note}
+          </div>
+        )}
         <MapContainer
           center={cfg.center}
           zoom={cfg.zoom}
@@ -509,10 +607,12 @@ export default function JurisdictionMap({
           />
           <Boundary muni={muni} />
           <Hamlets muni={muni} />
-          <PoiLayers active={active} />
-          <GisLayers active={active} onState={setLayerState} />
-          {showIssues && <IssueLayer active={active === 'issues'} onState={setLayerState} />}
-          {permits && permits.length > 0 && <PermitLayer active={active === 'permits'} permits={permits} onState={setLayerState} />}
+          {!onlyPermits && <OsmLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && <GisLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {permits && permits.length > 0 && (
+            <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
+          )}
           <ResizeFix />
         </MapContainer>
       </div>

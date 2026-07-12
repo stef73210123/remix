@@ -7,6 +7,7 @@ import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import type { Property } from '@/lib/municipal/property'
 import { sentimentChipStyle, fmtSent, sentimentColor } from '../sentiment'
 import CaseDetail from './CaseDetail'
+import { isOpen } from '@/lib/flavor'
 
 const PropertyMap = dynamic(() => import('./PropertyMap'), {
   ssr: false,
@@ -76,9 +77,11 @@ export default function PropertyClient({ userName }: { userName: string }) {
     return rows
   }, [prop, summary, muni])
 
+  // OpenNorthCastle is single-jurisdiction, so the town crumb is implied and
+  // skipped there; the paywalled Remix build keeps it (multiple towns).
   const crumbs: Crumb[] = [
-    { label: 'Dashboard', href: '/admin/municipal' },
-    { label: townName, href: `/admin/municipal?town=${muni}` },
+    { label: 'Dashboard', href: isOpen ? '/' : '/admin/municipal' },
+    ...(isOpen ? [] : [{ label: townName, href: `/admin/municipal?town=${muni}` }]),
     { label: prop?.label || 'Property' },
   ]
 

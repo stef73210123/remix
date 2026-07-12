@@ -1,22 +1,18 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { AnalysisDataset, CaseRollup, MemberProfile, ThemeRollup, MeetingAnalysis } from '@/lib/municipal/analysis'
+import dynamic from 'next/dynamic'
+import type { AnalysisDataset, MemberProfile, ThemeRollup } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
 import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
-import { propertyId } from '@/lib/municipal/propertyId'
+import { getBoardDepartments } from '@/lib/municipal/departments'
+import type { PermitMarker } from '../JurisdictionMap'
 
-function fmtDate(iso: string): string {
-  const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
-  if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-}
-function fmtDateShort(iso: string): string {
-  const d = new Date(iso + 'T12:00:00Z')
-  if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
+const JurisdictionMap = dynamic(() => import('../JurisdictionMap'), {
+  ssr: false,
+  loading: () => <div className="card" style={{ height: 380, marginBottom: 30 }} />,
+})
 
 /** Diverging bar: center = 0, fill extends left (neg) or right (pos). */
 function SentBar({ score, height = 8 }: { score: number; height?: number }) {
@@ -35,59 +31,67 @@ function SentBar({ score, height = 8 }: { score: number; height?: number }) {
   )
 }
 
-/** Tiny sentiment trajectory sparkline (points over time). */
-function Spark({ points, w = 88, h = 22 }: { points: number[]; w?: number; h?: number }) {
-  if (points.length === 0) return null
-  const n = points.length
-  const x = (i: number) => (n === 1 ? w / 2 : (i / (n - 1)) * w)
-  const y = (v: number) => h / 2 - (Math.max(-1, Math.min(1, v)) * (h / 2 - 2))
-  const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p).toFixed(1)}`).join(' ')
-  return (
-    <svg width={w} height={h} style={{ display: 'block' }} aria-hidden>
-      <line x1={0} y1={h / 2} x2={w} y2={h / 2} stroke="var(--border)" strokeWidth={1} />
-      {n > 1 && <path d={d} fill="none" stroke="var(--muted)" strokeWidth={1.5} />}
-      {points.map((p, i) => (
-        <circle key={i} cx={x(i)} cy={y(p)} r={2.5} fill={sentimentColor(p)} />
-      ))}
-    </svg>
-  )
-}
-
 function Chip({ score }: { score: number }) {
   return <span style={sentimentChipStyle(score)} title={dispositionLabel(score)}>{fmtSent(score)}</span>
 }
 
-function ThemeTag({ t }: { t: string }) {
-  return <span className="badge" style={{ fontSize: 11 }}>{t}</span>
-}
+type ThemeSort = 'volume' | 'positive' | 'negative'
 
-export default function TranscriptAnalysis({ muni, body }: { muni: string; body: string }) {
+export default function TranscriptAnalysis({ muni, body, onData }: {
+  muni: string
+  body: string
+  /** Lets the host page reuse the dataset (e.g. the Meetings section renders the
+   *  meeting-by-meeting rows attached to its timeline). */
+  onData?: (d: AnalysisDataset | null) => void
+}) {
   const [data, setData] = useState<AnalysisDataset | null>(null)
   const [loading, setLoading] = useState(true)
-  const [showAllCases, setShowAllCases] = useState(false)
-  const [openCase, setOpenCase] = useState<string | null>(null)
-  const [openMeeting, setOpenMeeting] = useState<string | null>(null)
+  const [themeSort, setThemeSort] = useState<ThemeSort>('volume')
+  const [mapYear, setMapYear] = useState<number | 'ALL'>('ALL')
 
   useEffect(() => {
     setLoading(true)
     fetch(`/admin/api/municipal/transcript-analysis?muni=${encodeURIComponent(muni)}&body=${encodeURIComponent(body)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
-      .then((d) => setData(d && d.available !== false ? d : null))
-      .catch(() => setData(null))
+      .then((d) => {
+        const ds = d && d.available !== false ? (d as AnalysisDataset) : null
+        setData(ds)
+        onData?.(ds)
+      })
+      .catch(() => { setData(null); onData?.(null) })
       .finally(() => setLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [muni, body])
 
-  // Alphabetical by name (numeric-aware so street numbers order naturally).
-  const byName = (a: CaseRollup, b: CaseRollup) =>
-    a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
-  const trackedCases = useMemo(
-    () => (data ? data.cases.filter((c) => c.appearances >= 2).sort(byName) : []),
-    [data]
-  )
-  const visibleCases = useMemo(
-    () => (showAllCases ? [...(data?.cases ?? [])].sort(byName) : trackedCases),
-    [showAllCases, data, trackedCases]
-  )
+  // Themes, re-ranked by the selected lens.
+  const themesSorted = useMemo(() => {
+    const t = [...(data?.themes ?? [])]
+    if (themeSort === 'positive') return t.sort((a, b) => b.avgSentiment - a.avgSentiment)
+    if (themeSort === 'negative') return t.sort((a, b) => a.avgSentiment - b.avgSentiment)
+    return t.sort((a, b) => b.meetings - a.meetings)
+  }, [data, themeSort])
+
+  // Map: one pin per case with a street address, filterable by appearance year.
+  const mapYears = useMemo(() => {
+    const ys = new Set<number>()
+    for (const c of data?.cases ?? []) for (const ap of c.timeline) {
+      const y = Number(ap.date.slice(0, 4))
+      if (y) ys.add(y)
+    }
+    return Array.from(ys).sort((a, b) => b - a)
+  }, [data])
+  const caseMarkers = useMemo<PermitMarker[]>(() => {
+    return (data?.cases ?? [])
+      .filter((c) => c.address && /\d/.test(c.address))
+      .filter((c) => mapYear === 'ALL' || c.timeline.some((ap) => Number(ap.date.slice(0, 4)) === mapYear))
+      .map((c) => ({
+        id: c.id,
+        address: c.address as string,
+        title: c.name,
+        sub: [c.applicationType, c.lastStatus, `seen ${c.appearances}×`].filter(Boolean).join(' · '),
+        color: sentimentColor(c.avgSentiment),
+      }))
+  }, [data, mapYear])
 
   if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading transcript analysis…</div>
   if (!data) return null
@@ -98,9 +102,36 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
   const isTownBoard = m.bodyKey === 'town_board'
   const itemNounPlural = isTownBoard ? 'agenda items' : 'applications'
   const itemNounTitle = isTownBoard ? 'agenda items' : 'applications'
+  const departments = getBoardDepartments(muni, m.bodyKey)
 
   return (
     <div style={{ marginBottom: 30 }}>
+      {/* ---- Departmental information (the staff behind this board's business) ---- */}
+      {departments.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12, marginBottom: 24 }}>
+          {departments.map((d) => (
+            <div key={d.department} className="card" style={{ padding: 16 }}>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d.department}</div>
+              <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.person}</div>
+              <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
+              <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{d.blurb}</div>
+              <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
+                {d.phone && <span>📞 {d.phone}</span>}
+                {d.email && <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)' }}>✉ {d.email}</a>}
+                {d.address && <span className="muted">📍 {d.address}</span>}
+              </div>
+              {d.links.length > 0 && (
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
+                  {d.links.map((l) => (
+                    <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>{l.label} ↗</a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>Meeting transcript analysis</h2>
       <div className="muted" style={{ fontSize: 13, marginBottom: 6 }}>
         {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
@@ -147,13 +178,27 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       <MeetingTimelineChart data={data} />
 
       {/* ---- Themes ---- */}
-      <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-        Themes across the year
-      </h3>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
+          Themes across the year
+        </h3>
+        <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
+          {([['volume', 'Most volume'], ['positive', 'Most positive'], ['negative', 'Most negative']] as const).map(([k, label]) => (
+            <button
+              key={k}
+              onClick={() => setThemeSort(k)}
+              className="btn secondary"
+              style={{ padding: '4px 10px', fontSize: 12, ...(themeSort === k ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="card" style={{ padding: 16, marginBottom: 28 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {data.themes.map((t) => (
-            <ThemeRow key={t.theme} t={t} maxMeetings={data.themes[0]?.meetings || 1} />
+          {themesSorted.map((t) => (
+            <ThemeRow key={t.theme} t={t} maxMeetings={Math.max(1, ...themesSorted.map((x) => x.meetings))} />
           ))}
         </div>
         <div className="muted" style={{ fontSize: 11, marginTop: 14, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -165,42 +210,33 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
         </div>
       </div>
 
-      {/* ---- Cases ---- */}
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+      {/* ---- Map of items with a street address — the sole layer, always on
+          (no menu; no GIS/OSM/SeeClickFix layers). Meetings render directly
+          below this on the host page; the Cases/applications table (via
+          onData) renders after that. ---- */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 10px' }}>
         <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-          {showAllCases ? `All ${itemNounTitle} (${data.cases.length})` : `Recurring ${itemNounTitle} (${trackedCases.length})`}
+          {itemNounTitle} on the map
+          <span className="muted" style={{ fontSize: 12, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}> · {caseMarkers.length} with a street address · pin color = sentiment</span>
         </h3>
-        <button className="btn secondary" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => setShowAllCases((v) => !v)}>
-          {showAllCases ? 'Show recurring only' : `Show all ${data.cases.length}`}
-        </button>
+        <select
+          value={mapYear}
+          onChange={(e) => setMapYear(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
+          aria-label="Filter map by year"
+          style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+        >
+          <option value="ALL">All years</option>
+          {mapYears.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
       </div>
-      <div className="card" style={{ padding: 0, marginBottom: 28, maxHeight: showAllCases ? 520 : undefined, overflowY: showAllCases ? 'auto' : undefined }}>
-        {visibleCases.length === 0 ? (
-          <div className="muted" style={{ padding: 16, fontSize: 13 }}>Nothing to show.</div>
-        ) : visibleCases.map((c, i) => (
-          <CaseRow key={c.id} c={c} members={data.members} muni={muni} first={i === 0} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
-        ))}
-      </div>
-
-      {/* ---- Meeting-by-meeting ---- */}
-      <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-        Meeting by meeting
-        <span className="muted" style={{ fontSize: 12, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}> · {data.meetings.length} · scroll for more</span>
-      </h3>
-      {/* Long lists are capped to a scroll window: a few meetings show, the rest
-          scroll in place, so the section stays a "shorter view". */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 560, overflowY: 'auto', paddingRight: 4 }}>
-        {[...data.meetings].sort((a, b) => b.date.localeCompare(a.date)).map((mt) => (
-          <MeetingRow
-            key={mt.date}
-            mt={mt}
-            muni={muni}
-            body={body}
-            open={openMeeting === mt.date}
-            onToggle={() => setOpenMeeting(openMeeting === mt.date ? null : mt.date)}
-          />
-        ))}
-      </div>
+      <JurisdictionMap
+        muni={muni}
+        permits={caseMarkers}
+        permitsLabel={`${itemNounTitle[0].toUpperCase()}${itemNounTitle.slice(1)}`}
+        permitsGroup="This board"
+        onlyPermits
+        height={380}
+      />
     </div>
   )
 }
@@ -260,171 +296,6 @@ function ThemeRow({ t, maxMeetings }: { t: ThemeRollup; maxMeetings: number }) {
       </div>
       <div className="muted" style={{ width: 58, fontSize: 12, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>{t.meetings} mtg</div>
       <span style={{ ...sentimentChipStyle(t.avgSentiment), minWidth: 46 }} title={`avg sentiment ${fmtSent(t.avgSentiment)}`}>{fmtSent(t.avgSentiment)}</span>
-    </div>
-  )
-}
-
-function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; members: MemberProfile[]; muni: string; first: boolean; open: boolean; onToggle: () => void }) {
-  const propId = c.address ? propertyId(c.address) : ''
-  // Where each board member stood on this case: their avg sentiment on it + their quotes.
-  const stances = useMemo(() => {
-    return members
-      .map((mem) => {
-        const bc = mem.byCase.find((x) => x.caseId === c.id)
-        if (!bc) return null
-        const quotes = mem.evidence.filter((e) => e.caseId === c.id)
-        return { member: mem.member, avgSentiment: bc.avgSentiment, count: bc.count, quotes }
-      })
-      .filter((x): x is NonNullable<typeof x> => x !== null)
-      .sort((a, b) => b.avgSentiment - a.avgSentiment)
-  }, [members, c.id])
-
-  return (
-    <div style={{ borderTop: first ? 'none' : '1px solid var(--border)' }}>
-      <div onClick={onToggle} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', padding: '12px 14px', cursor: 'pointer' }}>
-        <span className="muted" style={{ fontSize: 13, lineHeight: '20px', width: 10, flexShrink: 0 }}>{open ? '▾' : '▸'}</span>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 600, fontSize: 14, lineHeight: 1.35 }}>{c.name}</div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 5, fontSize: 12, color: 'var(--muted)' }}>
-            {c.applicationType && <span>{c.applicationType}</span>}
-            <span>· seen {c.appearances}×</span>
-            {c.lastStatus && <span>· {c.lastStatus}</span>}
-            <Spark points={c.trajectory.map((p) => p.sentiment)} />
-          </div>
-        </div>
-        <span style={{ flexShrink: 0 }}><Chip score={c.avgSentiment} /></span>
-      </div>
-      {open && (
-        <div style={{ background: 'var(--panel-2)', padding: '6px 14px 14px 32px' }}>
-          <div>
-              {(c.address || c.applicant) && (
-                <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
-                  {c.address}{c.address && c.applicant ? ' · ' : ''}{c.applicant ? `Applicant: ${c.applicant}` : ''}
-                </div>
-              )}
-              {propId && (
-                <a href={`/admin/municipal/property?muni=${muni}&id=${propId}`}
-                   style={{ display: 'inline-block', fontSize: 12, color: 'var(--primary-light)', marginBottom: 12 }}>
-                  Property profile →
-                </a>
-              )}
-              {c.themes.length > 0 && (
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
-                  {c.themes.map((t) => <ThemeTag key={t} t={t} />)}
-                </div>
-              )}
-
-              {/* Where the board stood — per-member tabulation */}
-              {stances.length > 0 && (
-                <div style={{ marginBottom: 16 }}>
-                  <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                    Where the board stood
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {stances.map((s) => (
-                      <div key={s.member} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13 }}>
-                        <span style={{ width: 130, flexShrink: 0, fontWeight: 600 }}>{s.member}</span>
-                        <span style={{ ...sentimentChipStyle(s.avgSentiment), flexShrink: 0 }}>{fmtSent(s.avgSentiment)}</span>
-                        <span style={{ flex: 1 }}>
-                          {s.quotes.length > 0 ? (
-                            <span className="muted">{s.quotes.map((q) => q.evidence).join(' ')}</span>
-                          ) : (
-                            <span className="muted" style={{ fontStyle: 'italic' }}>{s.count} position{s.count === 1 ? '' : 's'} recorded</span>
-                          )}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Timeline across meetings */}
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                Across meetings
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {c.timeline.map((ap, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13 }}>
-                    <span className="muted" style={{ width: 62, flexShrink: 0, whiteSpace: 'nowrap' }}>{fmtDateShort(ap.date)}</span>
-                    <span style={{ ...sentimentChipStyle(ap.sentiment), flexShrink: 0 }}>{fmtSent(ap.sentiment)}</span>
-                    <span style={{ flex: 1 }}>
-                      {ap.status && <span style={{ fontWeight: 600 }}>{ap.status}. </span>}
-                      <span className="muted">{ap.summary}</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function MeetingRow({
-  mt, muni, body, open, onToggle,
-}: { mt: MeetingAnalysis; muni: string; body: string; open: boolean; onToggle: () => void }) {
-  const avg = mt.cases.length ? mt.cases.reduce((s, c) => s + (c.sentimentScore || 0), 0) / mt.cases.length : 0
-  const transcriptHref = `/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${mt.date}`
-  return (
-    <div className="card" style={{ padding: 0 }}>
-      <div
-        onClick={onToggle}
-        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', cursor: 'pointer', flexWrap: 'wrap' }}
-      >
-        <span className="muted" style={{ width: 10 }}>{open ? '▾' : '▸'}</span>
-        <span style={{ fontWeight: 700, minWidth: 130 }}>{fmtDate(mt.date)}</span>
-        <span className="muted" style={{ fontSize: 13 }}>{mt.cases.length} item{mt.cases.length === 1 ? '' : 's'}</span>
-        <span style={{ flex: 1 }} />
-        <Chip score={avg} />
-        <a
-          href={transcriptHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="badge state"
-          style={{ textDecoration: 'none' }}
-        >
-          Transcript ↗
-        </a>
-      </div>
-      {open && (
-        <div style={{ padding: '0 14px 14px', borderTop: '1px solid var(--border)' }}>
-          <div style={{ fontSize: 13, margin: '12px 0 14px', lineHeight: 1.55 }}>{mt.meetingSummary}</div>
-          {mt.cases.map((c, i) => (
-            <div key={i} style={{ padding: '10px 0', borderTop: i ? '1px solid var(--border)' : 'none' }}>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
-                <span style={{ fontWeight: 600, fontSize: 13 }}>{c.name}</span>
-                {c.status && <span className="badge" style={{ fontSize: 11 }}>{c.status}</span>}
-                <span style={{ ...sentimentChipStyle(c.sentimentScore) }}>{fmtSent(c.sentimentScore)}</span>
-              </div>
-              {c.summary && <div className="muted" style={{ fontSize: 12, margin: '6px 0' }}>{c.summary}</div>}
-              {c.themes.length > 0 && (
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: '6px 0' }}>
-                  {c.themes.map((t) => <ThemeTag key={t} t={t} />)}
-                </div>
-              )}
-              {c.memberPositions.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 6 }}>
-                  {c.memberPositions.map((p, j) => (
-                    <div key={j} style={{ display: 'flex', gap: 8, alignItems: 'baseline', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, width: 108, flexShrink: 0 }}>{p.member}</span>
-                      <span style={{ ...sentimentChipStyle(p.score), flexShrink: 0 }}>{fmtSent(p.score)}</span>
-                      <span className="muted" style={{ flex: 1 }}>
-                        {p.stance}{p.evidence ? ` — ${p.evidence}` : ''}
-                        {p.confidence === 'low' ? ' (low confidence)' : ''}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          {mt.attributionNote && (
-            <div className="muted" style={{ fontSize: 11, marginTop: 12, fontStyle: 'italic' }}>{mt.attributionNote}</div>
-          )}
-        </div>
-      )}
     </div>
   )
 }

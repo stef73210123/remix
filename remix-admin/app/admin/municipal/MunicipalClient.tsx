@@ -11,7 +11,7 @@ import KeyIssues from './KeyIssues'
 import ElectionResults from './ElectionResults'
 import SchoolDistrict from './SchoolDistrict'
 import AgeDistribution from './AgeDistribution'
-import BoardProgress from './BoardProgress'
+import BoardSentiment, { type BoardScore } from './BoardProgress'
 import CivicActions from './CivicActions'
 import { isOpen } from '@/lib/flavor'
 
@@ -21,8 +21,12 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
   loading: () => <div className="card" style={{ height: 420, marginBottom: 30 }} />,
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
+import MeetingAnalysisList from './board/MeetingAnalysisList'
+import CasesList from './board/CasesList'
+import type { AnalysisDataset } from '@/lib/municipal/analysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import MeetingList from './MeetingList'
+import TownBackground from './TownBackground'
 
 
 interface Body {
@@ -224,6 +228,21 @@ export default function MunicipalClient({
       .finally(() => setLoading(false))
   }, [])
 
+  // Per-board sentiment scores for the selected town — drives the Board
+  // Sentiment roll-up AND which boards get a tab (unanalyzed boards are hidden
+  // from both).
+  const [boardScores, setBoardScores] = useState<BoardScore[] | null>(null)
+  const [scoresLoading, setScoresLoading] = useState(true)
+  useEffect(() => {
+    if (town === 'ALL') { setBoardScores(null); setScoresLoading(false); return }
+    setScoresLoading(true)
+    fetch(`/admin/api/municipal/board-scores?muni=${encodeURIComponent(town)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+      .then((d: { boards?: BoardScore[] }) => setBoardScores(d.boards || []))
+      .catch(() => setBoardScores(null))
+      .finally(() => setScoresLoading(false))
+  }, [town])
+
   const allBoards = useMemo(() => {
     if (!data) return [] as string[]
     const seen = new Set<string>()
@@ -234,10 +253,82 @@ export default function MunicipalClient({
     return out
   }, [data])
 
+  // Boards that actually have a transcript-analysis dataset — only these get a
+  // tab. While scores load (or for the multi-town "ALL" view) show everything,
+  // so tabs never flash away for towns we don't score.
+  const boardTabs = useMemo(() => {
+    if (town === 'ALL' || !boardScores) return allBoards
+    const analyzed = new Set(boardScores.filter((b) => b.score != null).map((b) => b.displayName))
+    return allBoards.filter((b) => analyzed.has(b))
+  }, [allBoards, boardScores, town])
+
+  // If the selected board tab loses its analysis (or the town changes), fall
+  // back to the dashboard rather than stranding an orphaned view.
+  useEffect(() => {
+    if (board !== 'ALL' && !boardTabs.includes(board)) setBoard('ALL')
+  }, [board, boardTabs])
+
+  // Analysis dataset surfaced by the inline TranscriptAnalysis (board tabs), so
+  // the Meetings section attaches the meeting-by-meeting rows to its timeline.
+  const [boardAnalysis, setBoardAnalysis] = useState<AnalysisDataset | null>(null)
+  useEffect(() => { setBoardAnalysis(null) }, [board, town])
+
+  // Shared selection between the Meetings timeline and the list beneath it —
+  // clicking an entry in either highlights and scrolls to the match in the other.
+  const [selectedMeetingKey, setSelectedMeetingKey] = useState<string | null>(null)
+  useEffect(() => { setSelectedMeetingKey(null) }, [board, town])
+
+  // ONC only: measure the sticky header's real height so the tab strip below
+  // it can stick flush underneath (the header's height isn't fixed — it wraps
+  // on narrow viewports — so this is tracked live rather than hardcoded).
+  const [headerH, setHeaderH] = useState(0)
+  useEffect(() => {
+    if (!isOpen) return
+    const el = document.querySelector('.muni-header') as HTMLElement | null
+    if (!el) return
+    const update = () => setHeaderH(el.getBoundingClientRect().height)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   const munisShown = useMemo(
     () => (data ? data.municipalities.filter((m) => town === 'ALL' || m.key === town) : []),
     [data, town]
   )
+
+  // Per-meeting agenda summaries for the selected town's boards, so the
+  // dashboard's combined Meetings list (which spans every board) can show the
+  // same quick preview the single-board analysis view already has. Keyed the
+  // same way as timelineItems below (`${muni}_${body}_${date}`).
+  const [meetingSummaries, setMeetingSummaries] = useState<Map<string, string>>(new Map())
+  useEffect(() => {
+    if (town === 'ALL') { setMeetingSummaries(new Map()); return }
+    const m = data?.municipalities.find((x) => x.key === town)
+    if (!m) return
+    let cancelled = false
+    Promise.all(
+      m.bodies.map((b) =>
+        fetch(`/admin/api/municipal/transcript-analysis?muni=${encodeURIComponent(town)}&body=${encodeURIComponent(b.key)}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => (d && d.available !== false ? (d as AnalysisDataset) : null))
+          .catch(() => null)
+      )
+    ).then((datasets) => {
+      if (cancelled) return
+      const lookup = new Map<string, string>()
+      datasets.forEach((ds, i) => {
+        if (!ds) return
+        const bodyKey = m.bodies[i].key
+        for (const mt of ds.meetings) {
+          if (mt.meetingSummary) lookup.set(`${town}_${bodyKey}_${mt.date}`, mt.meetingSummary)
+        }
+      })
+      setMeetingSummaries(lookup)
+    })
+    return () => { cancelled = true }
+  }, [data, town])
 
   const meetingsFiltered = useMemo(() => {
     if (!data) return []
@@ -288,10 +379,16 @@ export default function MunicipalClient({
       .map((mtg) => {
         const hasDocs = (mtg.assets || []).some((a) => !RECORDING_KINDS.has(a.kind))
         const hasRec = !!recordingHref(mtg.assets)
+        const itemKey = `${mtg.muni_key}_${mtg.body_key}_${mtg.scheduled_at.slice(0, 10)}`
         return {
-          key: `h_${mtg.id}`,
+          // Composite muni+body+date key, matching MeetingAnalysisList's row
+          // keys, so selecting a meeting in either view (the board tab's
+          // timeline vs. its meeting-by-meeting list) highlights/scrolls to
+          // the same entry in the other.
+          key: itemKey,
           date: new Date(mtg.scheduled_at),
           title: mtg.title,
+          summary: meetingSummaries.get(itemKey),
           board: mtg.body_name,
           boardHref: `/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`,
           town: mtg.muni_name,
@@ -325,7 +422,7 @@ export default function MunicipalClient({
         }]
       : []
     return [...hist, ...up]
-  }, [history, upcomingRows])
+  }, [history, upcomingRows, meetingSummaries])
 
   // Towns that have budget data — the choices for the "All towns" toggle.
   const budgetTownList = useMemo(
@@ -337,10 +434,15 @@ export default function MunicipalClient({
     <div className="container">
       <MuniHeader userName={userName} />
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-        <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
-        <CivicActions style={{ marginTop: 4 }} />
-      </div>
+      {/* On the public OpenNorthCastle build the wordmark + civic buttons live
+          in the sticky header (MuniHeader) instead, and the page title is
+          redundant with it — so this whole row is Remix-only. */}
+      {!isOpen && (
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+          <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
+          <CivicActions style={{ marginTop: 4 }} />
+        </div>
+      )}
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading municipal pipeline…</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
@@ -355,9 +457,14 @@ export default function MunicipalClient({
               ))}
             </div>
           )}
-          <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22 }}>
+          {/* On ONC this strip sticks directly below the masthead (top =
+              measured header height) so navigation stays reachable. */}
+          <div
+            className={isOpen ? 'pill-strip board-tabs-sticky' : 'pill-strip'}
+            style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22, ...(isOpen ? { top: headerH } : {}) }}
+          >
             <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
-            {allBoards.map((b) => (
+            {boardTabs.map((b) => (
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
             ))}
             {town === 'nc' && (
@@ -381,16 +488,65 @@ export default function MunicipalClient({
               <>
                 <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>{board}</h2>
                 <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>{m.name}</div>
-                <TranscriptAnalysis muni={town} body={bodyKey} />
+                <TranscriptAnalysis muni={town} body={bodyKey} onData={setBoardAnalysis} />
               </>
             )
           })()}
 
+          {/* Town background + image carousel, directly above the map — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && (
+            <TownBackground muniKey={town} townName={data.municipalities.find((m) => m.key === town)?.name || ''} />
+          )}
+
           {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
 
-          {/* Consolidated per-board progress spectrums — Dashboard tab only. */}
-          {board === 'ALL' && town !== 'ALL' && <BoardProgress muniKey={town} />}
+          {/* Meetings — one horizontal timeline: history on the left, the next
+              meeting per board on the right, with a "Now" divider between.
+              Sits just above the board-sentiment roll-up. */}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+            <h2 style={{ fontSize: 16, margin: 0 }}>
+              Meetings
+              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
+            </h2>
+          </div>
+          <MeetingTimeline
+            items={timelineItems}
+            selectedKey={selectedMeetingKey}
+            onSelect={setSelectedMeetingKey}
+            emptyText={
+              data.dbOk
+                ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
+                : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
+            }
+          />
+          {/* Compact scrolling list of the same meetings beneath the timeline —
+              or, on a board tab with an analysis dataset, the meeting-by-meeting
+              analysis rows attached to the same timeline. */}
+          {board !== 'ALL' && town !== 'ALL' && boardAnalysis && boardAnalysis.meetings.length > 0 ? (
+            <div style={{ marginTop: 10 }}>
+              <MeetingAnalysisList
+                meetings={boardAnalysis.meetings}
+                muni={town}
+                body={data.municipalities.find((x) => x.key === town)?.bodies.find((b) => b.displayName === board)?.key || ''}
+                selectedKey={selectedMeetingKey}
+                onSelect={setSelectedMeetingKey}
+              />
+            </div>
+          ) : (
+            timelineItems.length > 0 && (
+              <div style={{ marginTop: 10 }}>
+                <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+              </div>
+            )
+          )}
+          <div style={{ marginBottom: 26 }} />
+
+          {/* Recurring/all applications (or agenda items) table — after Meetings. */}
+          {board !== 'ALL' && town !== 'ALL' && boardAnalysis && <CasesList data={boardAnalysis} muni={town} />}
+
+          {/* Consolidated per-board sentiment spectrums — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <BoardSentiment muniKey={town} boards={boardScores} loading={scoresLoading} />}
 
           {/* Narrative key-issue synopsis, above the sorted theme bars. */}
           {board === 'ALL' && town !== 'ALL' && <KeyIssues muniKey={town} />}
@@ -445,26 +601,6 @@ export default function MunicipalClient({
               </>
             )
           })()}
-
-          {/* Meetings — one horizontal timeline: history on the left, the next
-              meeting per board on the right, with a "Now" divider between. */}
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-            <h2 style={{ fontSize: 16, margin: 0 }}>
-              Meetings
-              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
-            </h2>
-          </div>
-          <MeetingTimeline
-            items={timelineItems}
-            emptyText={
-              data.dbOk
-                ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
-                : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
-            }
-          />
-          {/* Compact scrolling list of the same meetings beneath the timeline. */}
-          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
-          <div style={{ marginBottom: 26 }} />
 
           {!data.dbOk && data.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>

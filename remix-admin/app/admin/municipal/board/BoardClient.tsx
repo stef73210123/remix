@@ -2,10 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
+import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
+import MeetingAnalysisList from './MeetingAnalysisList'
+import CasesList from './CasesList'
+import type { AnalysisDataset } from '@/lib/municipal/analysis'
+import { isOpen } from '@/lib/flavor'
 
 
 interface Asset { kind: string; sourceUrl: string | null; blobUrl: string | null; pageCount: number | null }
@@ -109,6 +114,12 @@ export default function BoardClient({ userName }: { userName: string }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [transcriptDates, setTranscriptDates] = useState<Set<string>>(new Set())
+  // Analysis dataset surfaced by TranscriptAnalysis, so the Meetings section
+  // below can attach the meeting-by-meeting rows to its timeline.
+  const [analysis, setAnalysis] = useState<AnalysisDataset | null>(null)
+  // Shared selection between the Meetings timeline and the list beneath it —
+  // clicking an entry in either highlights and scrolls to the match in the other.
+  const [selectedMeetingKey, setSelectedMeetingKey] = useState<string | null>(null)
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
@@ -159,7 +170,10 @@ export default function BoardClient({ userName }: { userName: string }) {
         const hasTranscript = transcriptDates.has(dateKey)
         const hasDocs = (mtg.assets || []).length > 0
         return {
-          key: mtg.id,
+          // Composite muni+body+date key, matching MeetingAnalysisList's row
+          // keys, so selecting a meeting in either view highlights/scrolls to
+          // the same entry in the other.
+          key: `${muni}_${body}_${dateKey}`,
           date: new Date(mtg.scheduled_at),
           title: mtg.title,
           past,
@@ -190,10 +204,11 @@ export default function BoardClient({ userName }: { userName: string }) {
     return items
   }, [data, transcriptDates, projectedNext, muni, body])
 
-  // Breadcrumb trail: Dashboard › Town › Board (current).
+  // Breadcrumb trail: Dashboard › Town › Board (current). OpenNorthCastle is a
+  // single-jurisdiction site, so the town crumb is implied and skipped there.
   const crumbs = useMemo<Crumb[]>(() => {
-    const trail: Crumb[] = [{ label: 'Dashboard', href: '/admin/municipal' }]
-    if (data?.town) trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
+    const trail: Crumb[] = [{ label: 'Dashboard', href: isOpen ? '/' : '/admin/municipal' }]
+    if (data?.town && !isOpen) trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
     trail.push({ label: data?.board.displayName || 'Board' })
     return trail
   }, [data])
@@ -201,6 +216,7 @@ export default function BoardClient({ userName }: { userName: string }) {
   return (
     <div className="container">
       <MuniHeader userName={userName} />
+      <MuniTabs muni={muni} active={body} />
 
       {data && !loading && (
         <div style={{ marginBottom: 20 }}>
@@ -250,20 +266,45 @@ export default function BoardClient({ userName }: { userName: string }) {
           )}
 
           {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
-          <TranscriptAnalysis muni={muni} body={body} />
+          <TranscriptAnalysis muni={muni} body={body} onData={setAnalysis} />
 
           {/* Meetings — one horizontal timeline: history on the left, upcoming on
-              the right, matching the municipal dashboard. */}
+              the right, matching the municipal dashboard. Where an analysis
+              dataset exists, the meeting-by-meeting rows attach here in place of
+              the plain list. */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
             Meetings
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming</span>
+            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming{analysis ? ' · click a meeting for its analysis' : ''}</span>
           </h2>
-          <MeetingTimeline items={timelineItems} emptyText="No meetings ingested for this board yet." />
-          {/* Compact scrolling list of the same meetings beneath the timeline. */}
-          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
+          <MeetingTimeline
+            items={timelineItems}
+            selectedKey={selectedMeetingKey}
+            onSelect={setSelectedMeetingKey}
+            emptyText="No meetings ingested for this board yet."
+          />
+          {analysis && analysis.meetings.length > 0 ? (
+            <div style={{ marginTop: 10 }}>
+              <MeetingAnalysisList
+                meetings={analysis.meetings}
+                muni={muni}
+                body={body}
+                selectedKey={selectedMeetingKey}
+                onSelect={setSelectedMeetingKey}
+              />
+            </div>
+          ) : (
+            timelineItems.length > 0 && (
+              <div style={{ marginTop: 10 }}>
+                <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+              </div>
+            )
+          )}
           <div className="muted" style={{ fontSize: 11, margin: '10px 0 26px' }}>
             Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
           </div>
+
+          {/* Recurring/all applications (or agenda items) table — after Meetings. */}
+          {analysis && <CasesList data={analysis} muni={muni} />}
 
           {/* Climb-back trail at the end of the board page */}
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginTop: 26 }}>

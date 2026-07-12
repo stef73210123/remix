@@ -30,6 +30,14 @@ What the flavor changes (see `lib/flavor.ts`):
      documents linked on property pages. A read-only/replica URL is ideal since
      this site never writes. Omit it and the app still runs, just without live
      meeting history/documents.
+     - The value must be the bare `postgresql://user:pass@host/db?sslmode=require`
+       string — no surrounding quotes and no leading `psql ` (the app tolerates
+       both, but keep it clean).
+     - `DATABASE_URL` or `POSTGRES_URL` also work — those are the names the
+       Vercel↔Neon integration provisions automatically, so simply connecting
+       the Neon integration to this project is enough.
+     - After adding or fixing the variable you must **redeploy** — env changes
+       don't apply to existing deployments. Verify at `/admin/api/municipal/health`.
    - `CENSUS_API_KEY = <your key>` — enables live demographics + the trend
      sparklines. Optional (falls back to approximate figures).
    - Do **not** set `CRON_SECRET` / `MUNICIPAL_INGEST_TOKEN` here — the ingest

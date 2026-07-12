@@ -8,6 +8,7 @@ import MemberDossier from './MemberDossier'
 import MemberElections from './MemberElections'
 import type { MemberDossier as Dossier, MemberTerm } from '@/lib/municipal/analysis'
 import { sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
+import { isOpen } from '@/lib/flavor'
 
 
 interface BodyRef { key: string; displayName: string }
@@ -139,11 +140,12 @@ export default function MemberClient({ userName }: { userName: string }) {
       .catch(() => setDossier(null))
   }, [muni, fromBody, memberName])
 
-  // Breadcrumb trail: Dashboard › Town › (Board) › Member.
+  // Breadcrumb trail: Dashboard › Town › (Board) › Member. OpenNorthCastle is
+  // single-jurisdiction, so the town crumb is implied and skipped there.
   const crumbs = useMemo<Crumb[]>(() => {
-    const trail: Crumb[] = [{ label: 'Dashboard', href: '/admin/municipal' }]
+    const trail: Crumb[] = [{ label: 'Dashboard', href: isOpen ? '/' : '/admin/municipal' }]
     if (data?.town) {
-      trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
+      if (!isOpen) trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
       // If we arrived from a specific board, include it as a climb-back crumb.
       const board = data.bodies.find((b) => b.key === fromBody)
       if (board) {
