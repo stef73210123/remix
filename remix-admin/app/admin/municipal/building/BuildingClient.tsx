@@ -385,7 +385,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   // OpenNorthCastle is single-jurisdiction, so the town crumb is implied and
   // skipped there; the paywalled Remix build keeps it (multiple towns).
   const crumbs: Crumb[] = [
-    { label: 'Dashboard', href: `/admin/municipal?town=${muni}` },
+    { label: 'Dashboard', href: isOpen ? '/' : `/admin/municipal?town=${muni}` },
     ...(isOpen ? [] : [{ label: 'Town of North Castle' }]),
     { label: 'Building Department' },
   ]

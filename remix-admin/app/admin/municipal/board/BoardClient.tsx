@@ -200,7 +200,7 @@ export default function BoardClient({ userName }: { userName: string }) {
   // Breadcrumb trail: Dashboard › Town › Board (current). OpenNorthCastle is a
   // single-jurisdiction site, so the town crumb is implied and skipped there.
   const crumbs = useMemo<Crumb[]>(() => {
-    const trail: Crumb[] = [{ label: 'Dashboard', href: '/admin/municipal' }]
+    const trail: Crumb[] = [{ label: 'Dashboard', href: isOpen ? '/' : '/admin/municipal' }]
     if (data?.town && !isOpen) trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
     trail.push({ label: data?.board.displayName || 'Board' })
     return trail
