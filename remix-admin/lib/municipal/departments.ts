@@ -39,7 +39,8 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       department: 'Town Clerk',
       person: 'Alison Simon',
       title: 'Town Clerk',
-      phone: '(914) 273-3321',
+      phone: '(914) 273-3321 ext. 42',
+      email: 'asimon@northcastleny.com',
       address: '15 Bedford Road, Armonk, NY 10504',
       blurb:
         'Keeper of the Town record — minutes, adopted laws, budgets, contracts and deeds — and the ' +
@@ -65,7 +66,8 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       department: 'Finance Department',
       person: 'Abbas Sura',
       title: 'Director of Finance',
-      phone: '(914) 273-3000',
+      phone: '(914) 273-3000 ext. 48',
+      email: 'asura@northcastleny.com',
       address: '15 Bedford Road, Armonk, NY 10504',
       blurb:
         'Manages the Town’s finances — budget preparation and monitoring, accounting, payroll, ' +

@@ -114,9 +114,9 @@ function MeetingRow({
         <div
           className="muted"
           style={{
-            fontSize: 12, lineHeight: 1.5, padding: '10px 14px 12px 36px',
+            fontSize: 12, lineHeight: 1.4, padding: '10px 14px 12px 36px',
             marginTop: 2, borderTop: '1px solid var(--border)',
-            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            maxHeight: '4.2em', overflow: 'hidden',
           }}
         >
           {mt.meetingSummary}

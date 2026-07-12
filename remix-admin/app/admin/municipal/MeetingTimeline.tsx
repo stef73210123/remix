@@ -25,6 +25,9 @@ export interface TimelineItem {
   projected?: boolean
   /** Links / badges rendered at the bottom of the card. */
   links?: ReactNode
+  /** Transcript badge — shown on the timeline card but omitted from the
+   *  compact MeetingList row to keep the list dense. */
+  transcriptLink?: ReactNode
 }
 
 function fmtDate(d: Date): string {
@@ -147,9 +150,10 @@ export default function MeetingTimeline({
                     <div style={{ fontSize: 13, marginTop: 3 }}>{it.board}</div>
                   ) : null}
                   {it.town && <div className="muted" style={{ fontSize: 12 }}>{it.town}</div>}
-                  {it.links && (
+                  {(it.links || it.transcriptLink) && (
                     <div style={{ marginTop: 8, display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
                       {it.links}
+                      {it.transcriptLink}
                     </div>
                   )}
                 </div>

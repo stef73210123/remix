@@ -95,7 +95,7 @@ export default function MeetingList({
             {it.summary && (
               <div
                 className="muted"
-                style={{ fontSize: 12, marginTop: 2, lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                style={{ fontSize: 12, marginTop: 2, lineHeight: 1.4, maxHeight: '2.8em', overflow: 'hidden' }}
               >
                 {it.summary}
               </div>
