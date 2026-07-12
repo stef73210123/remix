@@ -67,18 +67,19 @@ export default function ContactLightbox({ onClose }: { onClose: () => void }) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 'min(440px, 100%)',
+          width: 'min(440px, 100%)', maxHeight: '88vh',
+          display: 'flex', flexDirection: 'column',
           background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 14,
           boxShadow: '0 24px 80px rgba(0,0,0,0.55)', overflow: 'hidden',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '16px 18px 4px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '16px 18px 4px', flexShrink: 0 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3 }}>Contact</div>
           </div>
           <button onClick={onClose} aria-label="Close" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✕</button>
         </div>
-        <div style={{ padding: '10px 18px 18px' }}>
+        <div style={{ padding: '10px 18px 18px', overflowY: 'auto', minHeight: 0 }}>
           {status === 'sent' ? (
             <div className="muted" style={{ fontSize: 13.5, lineHeight: 1.55, padding: '8px 0' }}>
               Thanks — your message has been sent. We&apos;ll get back to you as soon as we can.
