@@ -80,7 +80,8 @@ function MeetingRow({
         <div
           className="muted"
           style={{
-            fontSize: 12, lineHeight: 1.5, padding: '0 14px 12px 36px',
+            fontSize: 12, lineHeight: 1.5, padding: '10px 14px 12px 36px',
+            marginTop: 2, borderTop: '1px solid var(--border)',
             display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
           }}
         >

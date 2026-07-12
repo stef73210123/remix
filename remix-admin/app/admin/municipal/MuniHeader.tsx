@@ -7,20 +7,25 @@ import { BRAND, isOpen } from '@/lib/flavor'
 /**
  * Shared municipal page header. Flavor-aware: the dark Remix app shows the Remix
  * wordmark, "Signed in as …", and the admin nav; the public OpenNorthCastle
- * skin shows a sticky civic masthead — larger wordmark plus the FOIL / issue
- * quick-action buttons (CivicActions). Remix (paywalled) markup is untouched.
+ * skin shows a sticky civic masthead with a centered wordmark. The FOIL /
+ * report-issue quick actions (CivicActions) live in a floating bar fixed to
+ * the bottom of the page instead, reachable from anywhere without scrolling
+ * back up. Remix (paywalled) markup is untouched.
  */
 export default function MuniHeader({ userName }: { userName?: string }) {
   if (isOpen) {
     return (
-      <header className="muni-header">
-        <a href="/" style={{ display: 'block', lineHeight: 0 }} aria-label={`${BRAND.name} — Dashboard`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={BRAND.wordmark} alt={BRAND.name} style={{ height: BRAND.wordmarkHeight, width: 'auto', display: 'block' }} />
-        </a>
-        <span style={{ flex: 1 }} />
-        <CivicActions />
-      </header>
+      <>
+        <header className="muni-header">
+          <a href="/" style={{ display: 'block', lineHeight: 0, margin: '0 auto' }} aria-label={`${BRAND.name} — Dashboard`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={BRAND.wordmark} alt={BRAND.name} style={{ height: BRAND.wordmarkHeight, width: 'auto', display: 'block' }} />
+          </a>
+        </header>
+        <div className="civic-bottom-bar">
+          <CivicActions />
+        </div>
+      </>
     )
   }
 

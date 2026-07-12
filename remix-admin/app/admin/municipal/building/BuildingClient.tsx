@@ -297,6 +297,9 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   const [fullPermits, setFullPermits] = useState<PermitRecord[] | null>(null)
   const [mapYear, setMapYear] = useState<YearFilter>('ALL')
   const [chartYear, setChartYear] = useState<YearFilter | null>(null)
+  // Shared selection between the permit-activity timeline and the list beneath
+  // it — clicking an entry in either highlights and scrolls to the match in the other.
+  const [selectedPermitKey, setSelectedPermitKey] = useState<string | null>(null)
   const [contractorYear, setContractorYear] = useState<YearFilter | null>(null)
   const [pipelineYear, setPipelineYear] = useState<YearFilter | null>(null)
 
@@ -398,7 +401,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <h1 className="page-title" style={{ marginBottom: 6 }}>Building Department</h1>
-        <CivicActions style={{ marginTop: 6 }} />
+        {!isOpen && <CivicActions style={{ marginTop: 6 }} />}
       </div>
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading permit data…</div>}
@@ -466,8 +469,19 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
 
           {/* Recent permit activity — directly below the map. */}
           <div style={{ marginBottom: 8 }}><SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} /></div>
-          <MeetingTimeline items={timelineItems} emptyText="No recent permits." />
-          <MeetingList items={timelineItems} maxHeight={340} emptyText="No recent permits." />
+          <MeetingTimeline
+            items={timelineItems}
+            selectedKey={selectedPermitKey}
+            onSelect={setSelectedPermitKey}
+            emptyText="No recent permits."
+          />
+          <MeetingList
+            items={timelineItems}
+            maxHeight={340}
+            emptyText="No recent permits."
+            selectedKey={selectedPermitKey}
+            onSelect={setSelectedPermitKey}
+          />
           <div style={{ marginBottom: 26 }} />
 
           {/* Analytics: category + class, filtered by year (default: latest). */}

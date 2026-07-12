@@ -273,6 +273,11 @@ export default function MunicipalClient({
   const [boardAnalysis, setBoardAnalysis] = useState<AnalysisDataset | null>(null)
   useEffect(() => { setBoardAnalysis(null) }, [board, town])
 
+  // Shared selection between the Meetings timeline and the list beneath it —
+  // clicking an entry in either highlights and scrolls to the match in the other.
+  const [selectedMeetingKey, setSelectedMeetingKey] = useState<string | null>(null)
+  useEffect(() => { setSelectedMeetingKey(null) }, [board, town])
+
   // ONC only: measure the sticky header's real height so the tab strip below
   // it can stick flush underneath (the header's height isn't fixed — it wraps
   // on narrow viewports — so this is tracked live rather than hardcoded).
@@ -469,6 +474,8 @@ export default function MunicipalClient({
           </div>
           <MeetingTimeline
             items={timelineItems}
+            selectedKey={selectedMeetingKey}
+            onSelect={setSelectedMeetingKey}
             emptyText={
               data.dbOk
                 ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
@@ -487,7 +494,11 @@ export default function MunicipalClient({
               />
             </div>
           ) : (
-            timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>
+            timelineItems.length > 0 && (
+              <div style={{ marginTop: 10 }}>
+                <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+              </div>
+            )
           )}
           <div style={{ marginBottom: 26 }} />
 

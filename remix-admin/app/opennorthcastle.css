@@ -68,6 +68,32 @@
   border-bottom: 1px solid var(--border);
 }
 
+/* Floating action bar, fixed to the bottom of the viewport, holding the FOIL
+   Request / Report Issue quick actions so they're reachable from anywhere on
+   the page without scrolling back up to the header. .container gets matching
+   bottom padding (below) so page content — and the footer disclaimer — never
+   sits hidden underneath it. */
+[data-flavor='opennorthcastle'] .civic-bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1200;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(244, 247, 251, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+}
+
+[data-flavor='opennorthcastle'] .container {
+  padding-bottom: 84px;
+}
+
 /* Board/tab strip sticky directly below the masthead (top is set inline via JS
    — MunicipalClient measures .muni-header's real height with a ResizeObserver,
    since it can vary), so navigation stays reachable while scrolling. */

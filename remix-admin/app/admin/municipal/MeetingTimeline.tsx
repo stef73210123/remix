@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useMemo, useRef, type ReactNode } from 'react'
+import { syncScrollIntoView } from './syncSelection'
 
 export interface TimelineItem {
   key: string
@@ -35,9 +36,21 @@ function fmtDate(d: Date): string {
  * The view auto-scrolls so the present sits near the left on load, with recent
  * history reachable by scrolling left and upcoming meetings filling the view.
  */
-export default function MeetingTimeline({ items, emptyText }: { items: TimelineItem[]; emptyText?: string }) {
+export default function MeetingTimeline({
+  items,
+  emptyText,
+  selectedKey,
+  onSelect,
+}: {
+  items: TimelineItem[]
+  emptyText?: string
+  /** Key of the item highlighted/synced from a paired MeetingList, if any. */
+  selectedKey?: string | null
+  onSelect?: (key: string) => void
+}) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const boundaryRef = useRef<HTMLDivElement>(null)
+  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
   // Index of the first upcoming item — where the "Now" divider is inserted.
   const boundary = useMemo(() => items.findIndex((it) => !it.past), [items])
@@ -49,7 +62,14 @@ export default function MeetingTimeline({ items, emptyText }: { items: TimelineI
     // Land the present near the left edge (a little history visible before it);
     // if everything is in the past, show the most recent by scrolling fully right.
     el.scrollLeft = div ? Math.max(0, div.offsetLeft - 210) : el.scrollWidth
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length, boundary])
+
+  // Scroll a selection made elsewhere (e.g. the paired MeetingList) into view here.
+  useEffect(() => {
+    if (!selectedKey) return
+    syncScrollIntoView(itemRefs.current.get(selectedKey))
+  }, [selectedKey])
 
   if (items.length === 0) {
     return (
@@ -87,7 +107,19 @@ export default function MeetingTimeline({ items, emptyText }: { items: TimelineI
                   </span>
                 </div>
               )}
-              <div style={{ flex: '0 0 190px', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 8px' }}>
+              <div
+                ref={(el) => {
+                  if (el) itemRefs.current.set(it.key, el)
+                  else itemRefs.current.delete(it.key)
+                }}
+                onClick={onSelect ? () => onSelect(it.key) : undefined}
+                style={{
+                  flex: '0 0 190px', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '6px 8px',
+                  borderRadius: 8, cursor: onSelect ? 'pointer' : undefined,
+                  background: it.key === selectedKey ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : undefined,
+                  boxShadow: it.key === selectedKey ? 'inset 0 0 0 1.5px var(--primary)' : undefined,
+                }}
+              >
                 {/* rail + dot */}
                 <div style={{ position: 'relative', width: '100%', height: 16, marginBottom: 12 }}>
                   <div style={{ position: 'absolute', top: 7, left: 0, right: 0, height: 2, background: 'var(--border)' }} />

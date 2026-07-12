@@ -116,6 +116,9 @@ export default function BoardClient({ userName }: { userName: string }) {
   // Analysis dataset surfaced by TranscriptAnalysis, so the Meetings section
   // below can attach the meeting-by-meeting rows to its timeline.
   const [analysis, setAnalysis] = useState<AnalysisDataset | null>(null)
+  // Shared selection between the Meetings timeline and the list beneath it —
+  // clicking an entry in either highlights and scrolls to the match in the other.
+  const [selectedMeetingKey, setSelectedMeetingKey] = useState<string | null>(null)
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
@@ -268,11 +271,20 @@ export default function BoardClient({ userName }: { userName: string }) {
             Meetings
             <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming{analysis ? ' · click a meeting for its analysis' : ''}</span>
           </h2>
-          <MeetingTimeline items={timelineItems} emptyText="No meetings ingested for this board yet." />
+          <MeetingTimeline
+            items={timelineItems}
+            selectedKey={selectedMeetingKey}
+            onSelect={setSelectedMeetingKey}
+            emptyText="No meetings ingested for this board yet."
+          />
           {analysis && analysis.meetings.length > 0 ? (
             <div style={{ marginTop: 10 }}><MeetingAnalysisList meetings={analysis.meetings} muni={muni} body={body} /></div>
           ) : (
-            timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>
+            timelineItems.length > 0 && (
+              <div style={{ marginTop: 10 }}>
+                <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+              </div>
+            )
           )}
           <div className="muted" style={{ fontSize: 11, margin: '10px 0 26px' }}>
             Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
