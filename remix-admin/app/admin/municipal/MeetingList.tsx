@@ -21,6 +21,7 @@ export default function MeetingList({
   emptyText,
   selectedKey,
   onSelect,
+  compact = false,
 }: {
   items: TimelineItem[]
   maxHeight?: number
@@ -28,6 +29,10 @@ export default function MeetingList({
   /** Key of the item highlighted/synced from a paired MeetingTimeline, if any. */
   selectedKey?: string | null
   onSelect?: (key: string) => void
+  /** Drop the Upcoming badge, town line, and title line — just date, board
+   *  link, and summary. For lists (e.g. the dashboard's combined feed) where
+   *  the title/town otherwise just restate the board name on every row. */
+  compact?: boolean
 }) {
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
@@ -82,14 +87,14 @@ export default function MeetingList({
               ) : it.board ? (
                 <span style={{ fontSize: 13, fontWeight: 600 }}>{it.board}</span>
               ) : null}
-              {!it.past && (
+              {!compact && !it.past && (
                 <span className="badge" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--primary-light)' }}>
                   Upcoming
                 </span>
               )}
-              {it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
+              {!compact && it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
             </div>
-            {it.title && (
+            {!compact && it.title && (
               <div className="muted" style={{ fontSize: 12, marginTop: 5, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
             )}
             {it.summary && (

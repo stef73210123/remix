@@ -473,7 +473,7 @@ export default function MunicipalClient({
       ) : (
         timelineItems.length > 0 && (
           <div style={{ marginTop: 10 }}>
-            <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+            <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} compact />
           </div>
         )
       )}

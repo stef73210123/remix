@@ -107,6 +107,18 @@
   border-bottom: 1px solid var(--border);
 }
 
+/* .muni-header's own margin-bottom (below) exists for pages that don't have a
+   tab strip directly under it. Where one does (dashboard/board/building),
+   that margin left a gap between header and tabs only at scroll position 0 —
+   the gap vanished the instant you scrolled because sticky positioning then
+   pins the strip flush under the header, ignoring the margin. Canceling the
+   margin here removes the gap outright instead of only hiding it on scroll.
+   General sibling (~), not adjacent (+): MuniHeader's fragment renders
+   .civic-bottom-bar as a sibling in between .muni-header and the tab strip. */
+[data-flavor='opennorthcastle'] .muni-header ~ .board-tabs-sticky {
+  margin-top: -20px;
+}
+
 /* Primary buttons (and button-styled links, e.g. FOIL Request) must stay white
    on the navy fill — the flavored `a { color: inherit }` rule below otherwise
    outranks .btn's white text and renders it ink-on-navy (illegible). */
