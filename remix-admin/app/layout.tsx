@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import './opennorthcastle.css'
 import TopoBackground from './TopoBackground'
+import SiteFooter from './SiteFooter'
 import { FLAVOR, isOpen } from '@/lib/flavor'
 
 export const metadata: Metadata = isOpen
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {!isOpen && <TopoBackground />}
         {children}
+        {isOpen && <SiteFooter />}
       </body>
     </html>
   )
