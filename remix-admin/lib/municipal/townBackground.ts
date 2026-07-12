@@ -20,7 +20,12 @@ export interface CarouselSlide {
   icon: string
   caption: string
   sub: string
-  /** CSS gradient stops — kept as plain hex so the panel reads the same in
+  /** Photo URL. Hotlinked from third-party CDNs — if one ever breaks, the
+   *  carousel falls back to the gradient + icon panel below rather than
+   *  showing a broken image. */
+  img?: string
+  /** CSS gradient stops — the fallback background (and the only background
+   *  when no img is set), kept as plain hex so the panel reads the same in
    *  both the dark Remix theme and the light OpenNorthCastle skin. */
   from: string
   to: string
@@ -76,11 +81,31 @@ const NORTH_CASTLE: TownBackground = {
     },
   ],
   slides: [
-    { key: 'armonk', icon: '🏘️', caption: 'Armonk hamlet center', sub: 'Main Street shops & Wampus corridor', from: '#2563d6', to: '#01068b' },
-    { key: 'ibm', icon: '🏢', caption: 'IBM World Headquarters', sub: 'Armonk, since 1964', from: '#01068b', to: '#141a3d' },
-    { key: 'countryside', icon: '🐎', caption: 'Rolling countryside & horse country', sub: 'Whippoorwill & Bedford Road corridors', from: '#3d9c72', to: '#1f5c42' },
-    { key: 'schools', icon: '🏫', caption: 'Byram Hills schools', sub: 'K–12 in Armonk', from: '#c7913c', to: '#8a5f1f' },
-    { key: 'parks', icon: '🌳', caption: 'Parks & preserves', sub: 'Wampus Brook Park and local trails', from: '#84cc16', to: '#3f6b0a' },
+    {
+      key: 'armonk-square', icon: '🏘️', caption: 'Armonk hamlet center', sub: 'Armonk Square, Main Street',
+      img: 'https://www.ragette.com/thumbs/800x600/r/uploads/Armonk%20Square.PNG',
+      from: '#2563d6', to: '#01068b',
+    },
+    {
+      key: 'ibm-hq', icon: '🏢', caption: 'IBM World Headquarters', sub: 'Armonk, since 1964',
+      img: 'https://azahner.com/wp-content/uploads/2025/11/ibm-world-headquarters-c-zahner-6058.jpg',
+      from: '#01068b', to: '#141a3d',
+    },
+    {
+      key: 'wampus-brook', icon: '🌳', caption: 'Wampus Brook Park', sub: 'Parks & preserves',
+      img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/5b/cb/03/wampas-brook-pond-armonk.jpg?w=1400&h=-1&s=1',
+      from: '#84cc16', to: '#3f6b0a',
+    },
+    {
+      key: 'fol-de-rol', icon: '🎪', caption: 'Armonk Fol-De-Rol', sub: "The town's annual street fair",
+      img: 'https://www.whattododigital.com/wp-content/uploads/2023/05/Armonk-Fol-De-Rol-e1684245819723-960x640.jpg',
+      from: '#c7913c', to: '#8a5f1f',
+    },
+    {
+      key: 'art-show', icon: '🎨', caption: 'Armonk Outdoor Art Show', sub: 'Community arts & culture',
+      img: 'https://armonkoutdoorartshow.org/wp-content/uploads/2023/10/Experience-the-show-2-960x720.jpeg',
+      from: '#3d9c72', to: '#1f5c42',
+    },
   ],
 }
 

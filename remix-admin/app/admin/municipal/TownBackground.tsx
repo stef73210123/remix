@@ -4,14 +4,15 @@ import { useEffect, useState } from 'react'
 import { getTownBackground, type CarouselSlide } from '@/lib/municipal/townBackground'
 
 /**
- * Auto-advancing illustrated carousel. Panels are gradient + glyph "postcards"
- * rather than photographs — the app has no image-hosting/fetch capability, so
- * this stays fully self-contained (no external requests, nothing to ever
- * 404) while still reading as a set of town scenes. Pauses on hover.
+ * Auto-advancing photo carousel. Photos are hotlinked from third-party CDNs
+ * (Tripadvisor, a fabricator's project page, local event sites, …) — if one
+ * ever breaks, that slide falls back to a gradient + glyph "postcard" instead
+ * of a broken-image icon. Pauses on hover.
  */
 function Carousel({ slides }: { slides: CarouselSlide[] }) {
   const [i, setI] = useState(0)
   const [paused, setPaused] = useState(false)
+  const [failed, setFailed] = useState<Record<string, boolean>>({})
   const n = slides.length
 
   useEffect(() => {
@@ -21,6 +22,7 @@ function Carousel({ slides }: { slides: CarouselSlide[] }) {
   }, [paused, n])
 
   const s = slides[i]
+  const showImg = s.img && !failed[s.key]
   return (
     <div
       className="card"
@@ -28,15 +30,29 @@ function Carousel({ slides }: { slides: CarouselSlide[] }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div
-        style={{
-          height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          background: `linear-gradient(155deg, ${s.from}, ${s.to})`, transition: 'background 0.4s ease', padding: 24, textAlign: 'center',
-        }}
-      >
-        <span style={{ fontSize: 52, lineHeight: 1, marginBottom: 14 }} aria-hidden>{s.icon}</span>
-        <div style={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>{s.caption}</div>
-        <div style={{ color: 'rgba(255,255,255,0.82)', fontSize: 12.5, marginTop: 4 }}>{s.sub}</div>
+      <div style={{ position: 'relative', height: '100%', minHeight: 260, background: `linear-gradient(155deg, ${s.from}, ${s.to})`, transition: 'background 0.4s ease' }}>
+        {showImg ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={s.img}
+            alt={s.caption}
+            onError={() => setFailed((f) => ({ ...f, [s.key]: true }))}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        ) : (
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: 52, lineHeight: 1 }} aria-hidden>{s.icon}</span>
+          </div>
+        )}
+        <div
+          style={{
+            position: 'absolute', left: 0, right: 0, bottom: 0, padding: '32px 20px 16px',
+            background: 'linear-gradient(to top, rgba(10,14,20,0.82), rgba(10,14,20,0))',
+          }}
+        >
+          <div style={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>{s.caption}</div>
+          <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 12.5, marginTop: 3 }}>{s.sub}</div>
+        </div>
       </div>
 
       {n > 1 && (
@@ -86,9 +102,9 @@ function navBtnStyle(side: 'left' | 'right'): React.CSSProperties {
 
 /**
  * Short editorial "about the town" panel — history / economy / key industries
- * / character — paired with an illustrated carousel, above the jurisdiction
- * map. Renders on both flavors (Remix admin and OpenNorthCastle); returns
- * null for towns without curated copy.
+ * / character — paired with a photo carousel, above the jurisdiction map.
+ * Renders on both flavors (Remix admin and OpenNorthCastle); returns null for
+ * towns without curated copy.
  */
 export default function TownBackground({ muniKey, townName }: { muniKey: string; townName: string }) {
   const bg = getTownBackground(muniKey)
