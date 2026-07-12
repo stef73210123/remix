@@ -298,6 +298,38 @@ export default function MunicipalClient({
     [data, town]
   )
 
+  // Per-meeting agenda summaries for the selected town's boards, so the
+  // dashboard's combined Meetings list (which spans every board) can show the
+  // same quick preview the single-board analysis view already has. Keyed the
+  // same way as timelineItems below (`${muni}_${body}_${date}`).
+  const [meetingSummaries, setMeetingSummaries] = useState<Map<string, string>>(new Map())
+  useEffect(() => {
+    if (town === 'ALL') { setMeetingSummaries(new Map()); return }
+    const m = data?.municipalities.find((x) => x.key === town)
+    if (!m) return
+    let cancelled = false
+    Promise.all(
+      m.bodies.map((b) =>
+        fetch(`/admin/api/municipal/transcript-analysis?muni=${encodeURIComponent(town)}&body=${encodeURIComponent(b.key)}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => (d && d.available !== false ? (d as AnalysisDataset) : null))
+          .catch(() => null)
+      )
+    ).then((datasets) => {
+      if (cancelled) return
+      const lookup = new Map<string, string>()
+      datasets.forEach((ds, i) => {
+        if (!ds) return
+        const bodyKey = m.bodies[i].key
+        for (const mt of ds.meetings) {
+          if (mt.meetingSummary) lookup.set(`${town}_${bodyKey}_${mt.date}`, mt.meetingSummary)
+        }
+      })
+      setMeetingSummaries(lookup)
+    })
+    return () => { cancelled = true }
+  }, [data, town])
+
   const meetingsFiltered = useMemo(() => {
     if (!data) return []
     return data.meetings.filter(
@@ -347,10 +379,16 @@ export default function MunicipalClient({
       .map((mtg) => {
         const hasDocs = (mtg.assets || []).some((a) => !RECORDING_KINDS.has(a.kind))
         const hasRec = !!recordingHref(mtg.assets)
+        const itemKey = `${mtg.muni_key}_${mtg.body_key}_${mtg.scheduled_at.slice(0, 10)}`
         return {
-          key: `h_${mtg.id}`,
+          // Composite muni+body+date key, matching MeetingAnalysisList's row
+          // keys, so selecting a meeting in either view (the board tab's
+          // timeline vs. its meeting-by-meeting list) highlights/scrolls to
+          // the same entry in the other.
+          key: itemKey,
           date: new Date(mtg.scheduled_at),
           title: mtg.title,
+          summary: meetingSummaries.get(itemKey),
           board: mtg.body_name,
           boardHref: `/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`,
           town: mtg.muni_name,
@@ -384,7 +422,7 @@ export default function MunicipalClient({
         }]
       : []
     return [...hist, ...up]
-  }, [history, upcomingRows])
+  }, [history, upcomingRows, meetingSummaries])
 
   // Towns that have budget data — the choices for the "All towns" toggle.
   const budgetTownList = useMemo(
@@ -491,6 +529,8 @@ export default function MunicipalClient({
                 meetings={boardAnalysis.meetings}
                 muni={town}
                 body={data.municipalities.find((x) => x.key === town)?.bodies.find((b) => b.displayName === board)?.key || ''}
+                selectedKey={selectedMeetingKey}
+                onSelect={setSelectedMeetingKey}
               />
             </div>
           ) : (

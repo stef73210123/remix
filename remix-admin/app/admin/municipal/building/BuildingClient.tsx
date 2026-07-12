@@ -161,6 +161,101 @@ function MonthlyChart({ monthly }: { monthly: { month: string; count: number }[]
   )
 }
 
+/** Round 1/2/5 × 10^k tick values within [minV, maxV] — a log-scale axis helper. */
+function logTicks(minV: number, maxV: number): number[] {
+  const lo = Math.max(minV, 1)
+  const ticks: number[] = []
+  const minExp = Math.floor(Math.log10(lo))
+  const maxExp = Math.ceil(Math.log10(Math.max(maxV, lo)))
+  for (let e = minExp; e <= maxExp; e++) {
+    for (const m of [1, 2, 5]) {
+      const v = m * 10 ** e
+      if (v >= lo * 0.9 && v <= maxV * 1.1) ticks.push(v)
+    }
+  }
+  return ticks
+}
+
+interface ScatterPoint { cost: number; days: number; category: string; label: string }
+
+/** Permit value (log-scale $) vs. total days application → CO, colored by
+ *  normalized permit category — surfaces whether higher-value projects also
+ *  take disproportionately longer to close out. */
+function ScatterChart({ points }: { points: ScatterPoint[] }) {
+  const [hover, setHover] = useState<number | null>(null)
+  const valid = points.filter((p) => p.cost > 0 && p.days >= 0)
+  const W = 760, H = 320, PAD = { t: 14, r: 16, b: 30, l: 42 }
+  const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
+
+  const categories = useMemo(
+    () => Array.from(new Set(valid.map((p) => p.category))).sort(),
+    [valid]
+  )
+
+  if (valid.length === 0) {
+    return <div className="muted" style={{ fontSize: 13, padding: 16 }}>No permits with both a declared value and a full application-to-CO date range in this selection.</div>
+  }
+
+  const minX = Math.min(...valid.map((p) => p.cost))
+  const maxX = Math.max(...valid.map((p) => p.cost))
+  const maxY = Math.max(...valid.map((p) => p.days), 1)
+  const logMin = Math.log10(Math.max(minX, 1))
+  const logMax = Math.log10(Math.max(maxX, minX * 1.1, 10))
+  const xPos = (v: number) => PAD.l + ((Math.log10(Math.max(v, 1)) - logMin) / (logMax - logMin || 1)) * plotW
+  const yPos = (v: number) => PAD.t + plotH - (v / maxY) * plotH
+  const xTicks = logTicks(minX, maxX)
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(maxY * f))
+  const hp = hover != null ? valid[hover] : null
+
+  return (
+    <div className="card" style={{ padding: '12px 12px 10px' }}>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block' }} role="img" aria-label="Permit value vs. days to complete, by permit type">
+        {yTicks.map((t) => (
+          <g key={`y${t}`}>
+            <line x1={PAD.l} y1={yPos(t)} x2={W - PAD.r} y2={yPos(t)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />
+            <text x={PAD.l - 6} y={yPos(t) + 3} textAnchor="end" fontSize={9} fill="var(--muted)">{fmtInt(t)}d</text>
+          </g>
+        ))}
+        {xTicks.map((t) => (
+          <text key={`x${t}`} x={xPos(t)} y={H - 12} textAnchor="middle" fontSize={9} fill="var(--muted)">{fmtUSDshort(t)}</text>
+        ))}
+        {valid.map((p, i) => (
+          <circle
+            key={i}
+            cx={xPos(p.cost)}
+            cy={yPos(p.days)}
+            r={hover === i ? 5 : 3.4}
+            fill={catColor(p.category)}
+            fillOpacity={hover != null && hover !== i ? 0.3 : 0.8}
+            stroke={hover === i ? 'var(--text)' : 'none'}
+            strokeWidth={1}
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+          />
+        ))}
+      </svg>
+      <div style={{ minHeight: 18, fontSize: 12, marginTop: 2 }}>
+        {hp ? (
+          <span>
+            <strong>{hp.category}</strong>
+            <span className="muted"> · {hp.label} · {fmtUSDshort(hp.cost)} · {fmtInt(hp.days)} days</span>
+          </span>
+        ) : (
+          <span className="muted">Hover a point for details · X = declared value (log scale) · Y = days, application → CO</span>
+        )}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', marginTop: 8 }}>
+        {categories.map((c) => (
+          <span key={c} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11 }}>
+            <span style={{ width: 8, height: 8, borderRadius: 999, background: catColor(c), flexShrink: 0 }} />
+            <span className="muted">{c}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const permitYear = (p: PermitRecord) => (p.permitIso ? Number(p.permitIso.slice(0, 4)) : null)
 
 function daysBetween(aIso: string, bIso: string): number {
@@ -303,6 +398,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   const [selectedPermitKey, setSelectedPermitKey] = useState<string | null>(null)
   const [contractorYear, setContractorYear] = useState<YearFilter | null>(null)
   const [pipelineYear, setPipelineYear] = useState<YearFilter | null>(null)
+  const [scatterYear, setScatterYear] = useState<YearFilter | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -330,6 +426,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   const activeChartYear: YearFilter = chartYear ?? latestYear ?? 'ALL'
   const activeContractorYear: YearFilter = contractorYear ?? latestYear ?? 'ALL'
   const activePipelineYear: YearFilter = pipelineYear ?? latestYear ?? 'ALL'
+  const activeScatterYear: YearFilter = scatterYear ?? latestYear ?? 'ALL'
 
   // Map markers: every permit with a street address, filtered by the time
   // slider (the geocoder caps at ~90 pins per view, newest first).
@@ -368,6 +465,14 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
     const src = fullPermits ?? dataset?.recent ?? []
     return activePipelineYear === 'ALL' ? src : src.filter((p) => permitYear(p) === activePipelineYear)
   }, [fullPermits, dataset, activePipelineYear])
+  const scatterPoints = useMemo<ScatterPoint[]>(() => {
+    const src = fullPermits ?? dataset?.recent ?? []
+    const filtered = activeScatterYear === 'ALL' ? src : src.filter((p) => permitYear(p) === activeScatterYear)
+    return filtered
+      .filter((p) => p.cost != null && p.cost > 0 && p.appIso && p.closeIso)
+      .map((p) => ({ cost: p.cost as number, days: daysBetween(p.appIso as string, p.closeIso as string), category: p.category, label: p.address }))
+      .filter((p) => p.days >= 0)
+  }, [fullPermits, dataset, activeScatterYear])
 
   const timelineItems = useMemo<TimelineItem[]>(() => {
     if (!dataset) return []
@@ -538,6 +643,16 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           />
           <div style={{ marginBottom: 26 }}>
             <PipelineChart perms={pipelinePerms} />
+          </div>
+
+          {/* Value vs. duration — does a bigger declared value predict a longer timeline? */}
+          <SectionHead
+            title="Permit value vs. time to complete"
+            sub={`application → certificate of occupancy · ${yearLabel(activeScatterYear)}`}
+            right={years.length > 0 ? <YearSelect value={activeScatterYear} years={years} onChange={setScatterYear} /> : undefined}
+          />
+          <div style={{ marginBottom: 26 }}>
+            <ScatterChart points={scatterPoints} />
           </div>
 
           {/* Top contractors */}

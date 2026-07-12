@@ -92,6 +92,14 @@ export default function MeetingList({
             {it.title && (
               <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
             )}
+            {it.summary && (
+              <div
+                className="muted"
+                style={{ fontSize: 12, marginTop: 2, lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+              >
+                {it.summary}
+              </div>
+            )}
           </div>
           {it.links && (
             <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>

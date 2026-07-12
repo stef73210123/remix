@@ -170,7 +170,10 @@ export default function BoardClient({ userName }: { userName: string }) {
         const hasTranscript = transcriptDates.has(dateKey)
         const hasDocs = (mtg.assets || []).length > 0
         return {
-          key: mtg.id,
+          // Composite muni+body+date key, matching MeetingAnalysisList's row
+          // keys, so selecting a meeting in either view highlights/scrolls to
+          // the same entry in the other.
+          key: `${muni}_${body}_${dateKey}`,
           date: new Date(mtg.scheduled_at),
           title: mtg.title,
           past,
@@ -280,7 +283,15 @@ export default function BoardClient({ userName }: { userName: string }) {
             emptyText="No meetings ingested for this board yet."
           />
           {analysis && analysis.meetings.length > 0 ? (
-            <div style={{ marginTop: 10 }}><MeetingAnalysisList meetings={analysis.meetings} muni={muni} body={body} /></div>
+            <div style={{ marginTop: 10 }}>
+              <MeetingAnalysisList
+                meetings={analysis.meetings}
+                muni={muni}
+                body={body}
+                selectedKey={selectedMeetingKey}
+                onSelect={setSelectedMeetingKey}
+              />
+            </div>
           ) : (
             timelineItems.length > 0 && (
               <div style={{ marginTop: 10 }}>

@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { MeetingAnalysis } from '@/lib/municipal/analysis'
 import { sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
+import { syncScrollIntoView } from '../syncSelection'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
@@ -22,40 +23,72 @@ function ThemeTag({ t }: { t: string }) {
  * Expandable meeting-by-meeting analysis rows. Lives under the Meetings
  * timeline (replacing the plain meeting list where an analysis dataset exists),
  * so per-meeting narrative attaches to the same timeline as everywhere else.
+ * `selectedKey`/`onSelect` mirror MeetingList's — keyed `${muni}_${body}_${date}`
+ * so a click here (or on the paired MeetingTimeline) highlights and scrolls to
+ * the same meeting in both.
  */
-export default function MeetingAnalysisList({ meetings, muni, body, maxHeight = 480 }: {
+export default function MeetingAnalysisList({ meetings, muni, body, maxHeight = 480, selectedKey, onSelect }: {
   meetings: MeetingAnalysis[]
   muni: string
   body: string
   maxHeight?: number
+  selectedKey?: string | null
+  onSelect?: (key: string) => void
 }) {
   const [openMeeting, setOpenMeeting] = useState<string | null>(null)
+  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
+  useEffect(() => {
+    if (!selectedKey) return
+    syncScrollIntoView(itemRefs.current.get(selectedKey))
+  }, [selectedKey])
+
   if (meetings.length === 0) return null
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight, overflowY: 'auto', paddingRight: 4 }}>
-      {[...meetings].sort((a, b) => b.date.localeCompare(a.date)).map((mt) => (
-        <MeetingRow
-          key={mt.date}
-          mt={mt}
-          muni={muni}
-          body={body}
-          open={openMeeting === mt.date}
-          onToggle={() => setOpenMeeting(openMeeting === mt.date ? null : mt.date)}
-        />
-      ))}
+      {[...meetings].sort((a, b) => b.date.localeCompare(a.date)).map((mt) => {
+        const key = `${muni}_${body}_${mt.date}`
+        return (
+          <MeetingRow
+            key={mt.date}
+            mt={mt}
+            muni={muni}
+            body={body}
+            open={openMeeting === mt.date}
+            onToggle={() => setOpenMeeting(openMeeting === mt.date ? null : mt.date)}
+            selected={key === selectedKey}
+            onSelect={onSelect ? () => onSelect(key) : undefined}
+            registerRef={(el) => {
+              if (el) itemRefs.current.set(key, el)
+              else itemRefs.current.delete(key)
+            }}
+          />
+        )
+      })}
     </div>
   )
 }
 
 function MeetingRow({
-  mt, muni, body, open, onToggle,
-}: { mt: MeetingAnalysis; muni: string; body: string; open: boolean; onToggle: () => void }) {
+  mt, muni, body, open, onToggle, selected, onSelect, registerRef,
+}: {
+  mt: MeetingAnalysis; muni: string; body: string; open: boolean; onToggle: () => void
+  selected: boolean; onSelect?: () => void; registerRef: (el: HTMLDivElement | null) => void
+}) {
   const avg = mt.cases.length ? mt.cases.reduce((s, c) => s + (c.sentimentScore || 0), 0) / mt.cases.length : 0
   const transcriptHref = `/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${mt.date}`
   return (
-    <div className="card" style={{ padding: 0, flexShrink: 0 }}>
+    <div
+      ref={registerRef}
+      className="card"
+      style={{
+        padding: 0, flexShrink: 0, borderRadius: 10,
+        background: selected ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : undefined,
+        boxShadow: selected ? 'inset 0 0 0 1.5px var(--primary)' : undefined,
+      }}
+    >
       <div
-        onClick={onToggle}
+        onClick={() => { onToggle(); onSelect?.() }}
         style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', cursor: 'pointer', flexWrap: 'wrap' }}
       >
         <span className="muted" style={{ width: 10 }}>{open ? '▾' : '▸'}</span>
@@ -75,14 +108,15 @@ function MeetingRow({
         </a>
       </div>
       {/* Quick summary, visible even collapsed — a full copy appears above the
-          case list when expanded, so this one only shows while closed. */}
+          case list when expanded, so this one only shows while closed. Kept to
+          one line so it doesn't crowd the header row above it. */}
       {!open && mt.meetingSummary && (
         <div
           className="muted"
           style={{
             fontSize: 12, lineHeight: 1.5, padding: '10px 14px 12px 36px',
             marginTop: 2, borderTop: '1px solid var(--border)',
-            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
           }}
         >
           {mt.meetingSummary}

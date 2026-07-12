@@ -14,6 +14,8 @@ export interface TimelineItem {
   dateTitle?: string
   /** Small secondary line under the date (meeting title). */
   title?: string | null
+  /** One-line agenda summary, shown (truncated) under the title where available. */
+  summary?: string | null
   /** Board name; omit (empty string) on a single-board page. */
   board?: string
   boardHref?: string
