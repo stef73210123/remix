@@ -9,6 +9,7 @@ import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/Meetin
 import MeetingList from '@/app/admin/municipal/MeetingList'
 import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipal/permits'
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
+import { isOpen } from '@/lib/flavor'
 
 const JurisdictionMap = dynamic(() => import('@/app/admin/municipal/JurisdictionMap'), {
   ssr: false,
@@ -161,6 +162,97 @@ function MonthlyChart({ monthly }: { monthly: { month: string; count: number }[]
 
 const permitYear = (p: PermitRecord) => (p.permitIso ? Number(p.permitIso.slice(0, 4)) : null)
 
+function daysBetween(aIso: string, bIso: string): number {
+  const a = new Date(aIso + 'T00:00:00').getTime()
+  const b = new Date(bIso + 'T00:00:00').getTime()
+  return Math.round((b - a) / 86_400_000)
+}
+function percentile(sorted: number[], p: number): number {
+  if (sorted.length === 0) return 0
+  const idx = (sorted.length - 1) * p
+  const lo = Math.floor(idx), hi = Math.ceil(idx)
+  if (lo === hi) return sorted[lo]
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo)
+}
+interface StageStat { n: number; median: number; p25: number; p75: number }
+function stageStats(deltas: number[]): StageStat | null {
+  const sorted = deltas.filter((d) => d >= 0).sort((a, b) => a - b)
+  if (sorted.length === 0) return null
+  return {
+    n: sorted.length,
+    median: Math.round(percentile(sorted, 0.5)),
+    p25: Math.round(percentile(sorted, 0.25)),
+    p75: Math.round(percentile(sorted, 0.75)),
+  }
+}
+/** Full permit lifecycle, in the two intervals the data actually timestamps:
+ *  application → permit issued (plan review & corrections happen here) and
+ *  permit issued → closed/CO (inspections happen here) — plus the direct
+ *  application → close span for a true end-to-end median. */
+function pipelineStats(perms: PermitRecord[]) {
+  const stage1: number[] = []
+  const stage2: number[] = []
+  const full: number[] = []
+  for (const p of perms) {
+    if (p.appIso && p.permitIso) stage1.push(daysBetween(p.appIso, p.permitIso))
+    if (p.permitIso && p.closeIso) stage2.push(daysBetween(p.permitIso, p.closeIso))
+    if (p.appIso && p.closeIso) full.push(daysBetween(p.appIso, p.closeIso))
+  }
+  return { stage1: stageStats(stage1), stage2: stageStats(stage2), full: stageStats(full) }
+}
+
+function PipelineRow({ label, sub, stat, max, color }: { label: string; sub?: string; stat: StageStat | null; max: number; color: string }) {
+  if (!stat) {
+    return (
+      <div style={{ padding: '10px 0', borderTop: '1px solid var(--border)' }}>
+        <div style={{ fontWeight: 600, fontSize: 13.5 }}>{label}</div>
+        <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>No permits with both dates recorded in this range.</div>
+      </div>
+    )
+  }
+  const pctP25 = (stat.p25 / max) * 100
+  const pctP75 = (stat.p75 / max) * 100
+  const pctMedian = (stat.median / max) * 100
+  return (
+    <div style={{ padding: '12px 0', borderTop: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
+        <div>
+          <span style={{ fontWeight: 600, fontSize: 13.5 }}>{label}</span>
+          {sub && <span className="muted" style={{ fontSize: 12, marginLeft: 8 }}>{sub}</span>}
+        </div>
+        <span style={{ fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>
+          <strong>{stat.median}d</strong> <span className="muted">median · P25–P75 {stat.p25}–{stat.p75}d · n={fmtInt(stat.n)}</span>
+        </span>
+      </div>
+      <div style={{ position: 'relative', height: 20, background: 'var(--panel-2)', borderRadius: 6 }}>
+        <div
+          style={{ position: 'absolute', left: `${pctP25}%`, width: `${Math.max(0.5, pctP75 - pctP25)}%`, top: 0, bottom: 0, background: color, opacity: 0.3, borderRadius: 6 }}
+          title={`P25–P75: ${stat.p25}–${stat.p75} days`}
+        />
+        <div style={{ position: 'absolute', left: `${pctMedian}%`, top: -3, bottom: -3, width: 3, background: color, borderRadius: 2 }} title={`Median: ${stat.median} days`} />
+      </div>
+    </div>
+  )
+}
+
+/** Approval pipeline — the two intervals the department's own timestamps
+ *  support (application→permit, permit→CO) plus the full application→CO
+ *  span, each as a P25–P75 range bar with a median tick. */
+function PipelineChart({ perms }: { perms: PermitRecord[] }) {
+  const stats = useMemo(() => pipelineStats(perms), [perms])
+  const max = Math.max(30, stats.stage1?.p75 ?? 0, stats.stage2?.p75 ?? 0, stats.full?.p75 ?? 0) * 1.15
+  return (
+    <div className="card" style={{ padding: '16px 16px 12px' }}>
+      <PipelineRow label="Application → Permit Issued" sub="plan review & corrections" stat={stats.stage1} max={max} color="#5a9bd4" />
+      <PipelineRow label="Permit Issued → Certificate of Occupancy" sub="inspections" stat={stats.stage2} max={max} color="#3d9c72" />
+      <PipelineRow label="Full pipeline: Application → CO" sub="all stages" stat={stats.full} max={max} color="var(--primary)" />
+      <div className="muted" style={{ fontSize: 11, marginTop: 12, lineHeight: 1.5 }}>
+        Each bar spans the 25th–75th percentile; the tick marks the median. Based on permits with both dates recorded for the selected year.
+      </div>
+    </div>
+  )
+}
+
 /** Per-year (or all-time) aggregates computed from the full permit set, so the
  *  charts and contractor list can be filtered by year client-side. */
 function aggregate(perms: PermitRecord[]) {
@@ -206,6 +298,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   const [mapYear, setMapYear] = useState<YearFilter>('ALL')
   const [chartYear, setChartYear] = useState<YearFilter | null>(null)
   const [contractorYear, setContractorYear] = useState<YearFilter | null>(null)
+  const [pipelineYear, setPipelineYear] = useState<YearFilter | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -232,6 +325,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   // Charts default to the most recent year once the year list is known.
   const activeChartYear: YearFilter = chartYear ?? latestYear ?? 'ALL'
   const activeContractorYear: YearFilter = contractorYear ?? latestYear ?? 'ALL'
+  const activePipelineYear: YearFilter = pipelineYear ?? latestYear ?? 'ALL'
 
   // Map markers: every permit with a street address, filtered by the time
   // slider (the geocoder caps at ~90 pins per view, newest first).
@@ -266,6 +360,10 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
     }
     return dataset?.topContractors ?? []
   }, [fullPermits, dataset, activeContractorYear])
+  const pipelinePerms = useMemo(() => {
+    const src = fullPermits ?? dataset?.recent ?? []
+    return activePipelineYear === 'ALL' ? src : src.filter((p) => permitYear(p) === activePipelineYear)
+  }, [fullPermits, dataset, activePipelineYear])
 
   const timelineItems = useMemo<TimelineItem[]>(() => {
     if (!dataset) return []
@@ -284,9 +382,11 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
   }, [dataset])
 
+  // OpenNorthCastle is single-jurisdiction, so the town crumb is implied and
+  // skipped there; the paywalled Remix build keeps it (multiple towns).
   const crumbs: Crumb[] = [
     { label: 'Dashboard', href: `/admin/municipal?town=${muni}` },
-    { label: 'Town of North Castle' },
+    ...(isOpen ? [] : [{ label: 'Town of North Castle' }]),
     { label: 'Building Department' },
   ]
 
@@ -353,41 +453,16 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             <Tile label="Median plan-review time" value={dataset.turnaround.medianDays != null ? `${dataset.turnaround.medianDays} days` : '—'} sub={dataset.turnaround.avgDays != null ? `avg ${dataset.turnaround.avgDays} days` : undefined} />
           </div>
 
-          {/* Map — permit addresses shown by default, narrowed by the time slider. */}
+          {/* Map — permit addresses only, always on, narrowed by the year dropdown. */}
           <SectionHead
             title="Map"
             sub={`${fmtInt(permitMarkers.length)} permit addresses · ${yearLabel(mapYear)}`}
-            right={years.length > 0 ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                <button
-                  className="btn secondary"
-                  style={{ padding: '4px 10px', fontSize: 12, ...(mapYear === 'ALL' ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
-                  onClick={() => setMapYear('ALL')}
-                >
-                  All years
-                </button>
-                <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12.5 }}>
-                  <input
-                    type="range"
-                    min={years[years.length - 1]}
-                    max={years[0]}
-                    step={1}
-                    value={mapYear === 'ALL' ? years[0] : mapYear}
-                    onChange={(e) => setMapYear(Number(e.target.value))}
-                    aria-label="Permit year"
-                    style={{ width: 160 }}
-                  />
-                  <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600, minWidth: 38 }}>
-                    {mapYear === 'ALL' ? '—' : mapYear}
-                  </span>
-                </label>
-              </div>
-            ) : undefined}
+            right={years.length > 0 ? <YearSelect value={mapYear} years={years} onChange={setMapYear} /> : undefined}
           />
           <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 720 }}>
-            Permit addresses plot by default (pins geocode in as they resolve; color = permit type). Drag the slider to a single year, or use the <strong>Layers</strong> menu for SeeClickFix issues, county GIS layers, trails and points of interest.
+            Permit addresses always shown (pins geocode in as they resolve; color = permit type). Use the dropdown to narrow to a single year.
           </div>
-          <JurisdictionMap muni={muni} permits={permitMarkers} defaultActive="permits" />
+          <JurisdictionMap muni={muni} permits={permitMarkers} onlyPermits />
 
           {/* Recent permit activity — directly below the map. */}
           <div style={{ marginBottom: 8 }}><SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} /></div>
@@ -437,6 +512,16 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           <div style={{ marginBottom: 26 }}>
             <SectionHead title="Permits issued over time" sub="by month" />
             <MonthlyChart monthly={dataset.monthly} />
+          </div>
+
+          {/* Approval pipeline — application through Certificate of Occupancy. */}
+          <SectionHead
+            title="Approval pipeline"
+            sub={`application → certificate of occupancy · ${yearLabel(activePipelineYear)}`}
+            right={years.length > 0 ? <YearSelect value={activePipelineYear} years={years} onChange={setPipelineYear} /> : undefined}
+          />
+          <div style={{ marginBottom: 26 }}>
+            <PipelineChart perms={pipelinePerms} />
           </div>
 
           {/* Top contractors */}

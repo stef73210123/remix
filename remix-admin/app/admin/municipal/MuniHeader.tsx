@@ -14,8 +14,10 @@ export default function MuniHeader({ userName }: { userName?: string }) {
   if (isOpen) {
     return (
       <header className="muni-header">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={BRAND.wordmark} alt={BRAND.name} style={{ height: BRAND.wordmarkHeight, width: 'auto', display: 'block' }} />
+        <a href="/admin/municipal" style={{ display: 'block', lineHeight: 0 }} aria-label={`${BRAND.name} — Dashboard`}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={BRAND.wordmark} alt={BRAND.name} style={{ height: BRAND.wordmarkHeight, width: 'auto', display: 'block' }} />
+        </a>
         <span style={{ flex: 1 }} />
         <CivicActions />
       </header>

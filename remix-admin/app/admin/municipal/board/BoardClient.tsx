@@ -7,7 +7,9 @@ import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
 import MeetingAnalysisList from './MeetingAnalysisList'
+import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
+import { isOpen } from '@/lib/flavor'
 
 
 interface Asset { kind: string; sourceUrl: string | null; blobUrl: string | null; pageCount: number | null }
@@ -195,10 +197,11 @@ export default function BoardClient({ userName }: { userName: string }) {
     return items
   }, [data, transcriptDates, projectedNext, muni, body])
 
-  // Breadcrumb trail: Dashboard › Town › Board (current).
+  // Breadcrumb trail: Dashboard › Town › Board (current). OpenNorthCastle is a
+  // single-jurisdiction site, so the town crumb is implied and skipped there.
   const crumbs = useMemo<Crumb[]>(() => {
     const trail: Crumb[] = [{ label: 'Dashboard', href: '/admin/municipal' }]
-    if (data?.town) trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
+    if (data?.town && !isOpen) trail.push({ label: data.town.name, href: `/admin/municipal?town=${data.town.key}` })
     trail.push({ label: data?.board.displayName || 'Board' })
     return trail
   }, [data])
@@ -274,6 +277,9 @@ export default function BoardClient({ userName }: { userName: string }) {
           <div className="muted" style={{ fontSize: 11, margin: '10px 0 26px' }}>
             Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
           </div>
+
+          {/* Recurring/all applications (or agenda items) table — after Meetings. */}
+          {analysis && <CasesList data={analysis} muni={muni} />}
 
           {/* Climb-back trail at the end of the board page */}
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginTop: 26 }}>

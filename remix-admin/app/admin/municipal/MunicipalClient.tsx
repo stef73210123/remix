@@ -22,9 +22,11 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import MeetingAnalysisList from './board/MeetingAnalysisList'
+import CasesList from './board/CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import MeetingList from './MeetingList'
+import TownBackground from './TownBackground'
 
 
 interface Body {
@@ -271,6 +273,21 @@ export default function MunicipalClient({
   const [boardAnalysis, setBoardAnalysis] = useState<AnalysisDataset | null>(null)
   useEffect(() => { setBoardAnalysis(null) }, [board, town])
 
+  // ONC only: measure the sticky header's real height so the tab strip below
+  // it can stick flush underneath (the header's height isn't fixed — it wraps
+  // on narrow viewports — so this is tracked live rather than hardcoded).
+  const [headerH, setHeaderH] = useState(0)
+  useEffect(() => {
+    if (!isOpen) return
+    const el = document.querySelector('.muni-header') as HTMLElement | null
+    if (!el) return
+    const update = () => setHeaderH(el.getBoundingClientRect().height)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   const munisShown = useMemo(
     () => (data ? data.municipalities.filter((m) => town === 'ALL' || m.key === town) : []),
     [data, town]
@@ -374,12 +391,15 @@ export default function MunicipalClient({
     <div className="container">
       <MuniHeader userName={userName} />
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-        <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
-        {/* On the public OpenNorthCastle build these live in the sticky header
-            (MuniHeader) instead; the paywalled Remix build keeps them here. */}
-        {!isOpen && <CivicActions style={{ marginTop: 4 }} />}
-      </div>
+      {/* On the public OpenNorthCastle build the wordmark + civic buttons live
+          in the sticky header (MuniHeader) instead, and the page title is
+          redundant with it — so this whole row is Remix-only. */}
+      {!isOpen && (
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+          <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
+          <CivicActions style={{ marginTop: 4 }} />
+        </div>
+      )}
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading municipal pipeline…</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
@@ -394,7 +414,12 @@ export default function MunicipalClient({
               ))}
             </div>
           )}
-          <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22 }}>
+          {/* On ONC this strip sticks directly below the masthead (top =
+              measured header height) so navigation stays reachable. */}
+          <div
+            className={isOpen ? 'pill-strip board-tabs-sticky' : 'pill-strip'}
+            style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22, ...(isOpen ? { top: headerH } : {}) }}
+          >
             <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
             {boardTabs.map((b) => (
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
@@ -424,6 +449,11 @@ export default function MunicipalClient({
               </>
             )
           })()}
+
+          {/* Town background + image carousel, directly above the map — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && (
+            <TownBackground muniKey={town} townName={data.municipalities.find((m) => m.key === town)?.name || ''} />
+          )}
 
           {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
@@ -460,6 +490,9 @@ export default function MunicipalClient({
             timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>
           )}
           <div style={{ marginBottom: 26 }} />
+
+          {/* Recurring/all applications (or agenda items) table — after Meetings. */}
+          {board !== 'ALL' && town !== 'ALL' && boardAnalysis && <CasesList data={boardAnalysis} muni={town} />}
 
           {/* Consolidated per-board sentiment spectrums — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <BoardSentiment muniKey={town} boards={boardScores} loading={scoresLoading} />}

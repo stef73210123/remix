@@ -529,7 +529,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, height = 440,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -541,19 +541,25 @@ export default function JurisdictionMap({
   defaultActive?: string | null
   /** Include the SeeClickFix "Open issues" layer (default true). */
   showIssues?: boolean
+  /** Locked single-layer mode: no layer menu, no GIS/OSM/SeeClickFix layers —
+   *  just the boundary/hamlets and the permits/marker layer, always on. Used
+   *  where the map has exactly one purpose (board agenda-item maps, the
+   *  Building Department permit map). */
+  onlyPermits?: boolean
   height?: number
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
-  // jurisdiction + hamlet boundaries.
-  const [active, setActive] = useState<string | null>(defaultActive)
+  // jurisdiction + hamlet boundaries. In onlyPermits mode this is permanently
+  // 'permits' — there's no menu to change it.
+  const [active, setActive] = useState<string | null>(onlyPermits ? 'permits' : defaultActive)
   const [layerState, setLayerState] = useState<LayerState>(null)
 
   if (!cfg) return null
 
   // Grouped menu: civic issues, permits (when supplied), county GIS, OSM
-  // trails + points of interest.
-  const groups: MenuGroup[] = [
+  // trails + points of interest. Empty (and hidden) in onlyPermits mode.
+  const groups: MenuGroup[] = onlyPermits ? [] : [
     ...(showIssues ? [{ group: 'Civic', items: [{ key: 'issues', label: 'Open issues (SeeClickFix)', color: '#ef4444' }] }] : []),
     ...(permits && permits.length ? [{ group: permitsGroup, items: [{ key: 'permits', label: permitsLabel, color: '#d4767a' }] }] : []),
     ...(muni === 'nc' ? [{ group: 'County GIS', items: GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
@@ -569,7 +575,20 @@ export default function JurisdictionMap({
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
+        {!onlyPermits && (
+          <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
+        )}
+        {onlyPermits && note && (
+          <div
+            style={{
+              position: 'absolute', top: 10, right: 10, zIndex: 1000,
+              padding: '4px 9px', fontSize: 11, fontWeight: 600, color: '#fff', borderRadius: 999,
+              background: 'rgba(20,24,28,0.82)', border: '1px solid rgba(255,255,255,0.28)', backdropFilter: 'blur(6px)',
+            }}
+          >
+            {note}
+          </div>
+        )}
         <MapContainer
           center={cfg.center}
           zoom={cfg.zoom}
@@ -588,10 +607,12 @@ export default function JurisdictionMap({
           />
           <Boundary muni={muni} />
           <Hamlets muni={muni} />
-          <OsmLayers active={active} onState={setLayerState} />
-          <GisLayers active={active} onState={setLayerState} />
-          {showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
-          {permits && permits.length > 0 && <PermitLayer active={active === 'permits'} permits={permits} onState={setLayerState} />}
+          {!onlyPermits && <OsmLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && <GisLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {permits && permits.length > 0 && (
+            <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
+          )}
           <ResizeFix />
         </MapContainer>
       </div>

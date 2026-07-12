@@ -68,6 +68,21 @@
   border-bottom: 1px solid var(--border);
 }
 
+/* Board/tab strip sticky directly below the masthead (top is set inline via JS
+   — MunicipalClient measures .muni-header's real height with a ResizeObserver,
+   since it can vary), so navigation stays reachable while scrolling. */
+[data-flavor='opennorthcastle'] .board-tabs-sticky {
+  position: sticky;
+  z-index: 1150;
+  background: rgba(244, 247, 251, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
 /* Primary buttons (and button-styled links, e.g. FOIL Request) must stay white
    on the navy fill — the flavored `a { color: inherit }` rule below otherwise
    outranks .btn's white text and renders it ink-on-navy (illegible). */

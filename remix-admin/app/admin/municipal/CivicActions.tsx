@@ -23,14 +23,14 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
         className="btn"
         style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7, textDecoration: 'none' }}
       >
-        <span aria-hidden>📄</span> File a FOIL request ↗
+        <span aria-hidden>📄</span> FOIL Request ↗
       </a>
       <button
         className="btn secondary"
         style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7 }}
         onClick={() => setOpen({ url: ISSUE_URL, title: 'Report an issue — North Castle (SeeClickFix)' })}
       >
-        <span aria-hidden>📍</span> Report an issue
+        <span aria-hidden>📍</span> Report Issue
       </button>
       {open && <Lightbox url={open.url} title={open.title} onClose={() => setOpen(null)} />}
     </div>

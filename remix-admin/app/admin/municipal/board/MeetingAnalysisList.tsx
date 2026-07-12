@@ -74,6 +74,19 @@ function MeetingRow({
           Transcript ↗
         </a>
       </div>
+      {/* Quick summary, visible even collapsed — a full copy appears above the
+          case list when expanded, so this one only shows while closed. */}
+      {!open && mt.meetingSummary && (
+        <div
+          className="muted"
+          style={{
+            fontSize: 12, lineHeight: 1.5, padding: '0 14px 12px 36px',
+            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+          }}
+        >
+          {mt.meetingSummary}
+        </div>
+      )}
       {open && (
         <div style={{ padding: '0 14px 14px', borderTop: '1px solid var(--border)' }}>
           <div style={{ fontSize: 13, margin: '12px 0 14px', lineHeight: 1.55 }}>{mt.meetingSummary}</div>

@@ -77,24 +77,6 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
         evidence:
           '37 meetings addressed budget, taxes & finance; the grants & capital-projects theme (35 meetings, +4.6) repeatedly offset town costs.',
       },
-      {
-        n: 7,
-        title: 'Neighbor concerns & traffic',
-        icon: '🚗',
-        insight:
-          'The most contentious planning debates center on traffic, site access and neighbor impacts — the one theme that trends clearly negative.',
-        evidence:
-          'Neighbor concerns & safety is the lowest-sentiment planning theme (−1.8); contested applications such as 92 & 94 Round Hill Road saw their public hearings continued and adjourned repeatedly.',
-      },
-      {
-        n: 8,
-        title: 'Parks, recreation & community life',
-        icon: '🌳',
-        insight:
-          'Quality-of-life items — parks, events and neighborhood regulation — are frequent and warmly received.',
-        evidence:
-          'Parks, recreation & trails scored +5.3; the board adopted a short-term-rental local law, set a display policy for the Ramadan crescent at Wampus Brook Park, and permitted community events such as the Troy’s Nursery festivals.',
-      },
     ],
   },
 }
