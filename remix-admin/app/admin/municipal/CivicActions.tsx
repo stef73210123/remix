@@ -20,19 +20,19 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
   const [open, setOpen] = useState<null | { url: string; title: string }>(null)
   const [contactOpen, setContactOpen] = useState(false)
   return (
-    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', ...style }}>
+    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', ...style }}>
       <a
         href={FOIL_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="btn"
-        style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7, textDecoration: 'none' }}
+        style={{ padding: '6px 8px', fontSize: 11.5, display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none', whiteSpace: 'nowrap' }}
       >
-        <span aria-hidden>📄</span> FOIL Request ↗
+        <span aria-hidden>📄</span> FOIL Request
       </a>
       <button
         className="btn secondary"
-        style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7 }}
+        style={{ padding: '6px 8px', fontSize: 11.5, display: 'inline-flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}
         onClick={() => setOpen({ url: ISSUE_URL, title: 'Report an issue — North Castle (SeeClickFix)' })}
       >
         <span aria-hidden>📍</span> Report Issue
@@ -40,7 +40,7 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
       {isOpen && (
         <button
           className="btn secondary"
-          style={{ padding: '8px 14px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 7 }}
+          style={{ padding: '6px 8px', fontSize: 11.5, display: 'inline-flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}
           onClick={() => setContactOpen(true)}
         >
           <span aria-hidden>✉</span> Contact
