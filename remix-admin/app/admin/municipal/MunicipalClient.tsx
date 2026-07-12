@@ -9,6 +9,7 @@ import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
 import KeyIssues from './KeyIssues'
 import ElectionResults from './ElectionResults'
+import CommunityCalendar from './CommunityCalendar'
 import SchoolDistrict from './SchoolDistrict'
 import AgeDistribution from './AgeDistribution'
 import BoardSentiment, { type BoardScore } from './BoardProgress'
@@ -500,6 +501,9 @@ export default function MunicipalClient({
 
           {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
+
+          {/* Community events calendar — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <CommunityCalendar muniKey={town} />}
 
           {/* Meetings — one horizontal timeline: history on the left, the next
               meeting per board on the right, with a "Now" divider between.

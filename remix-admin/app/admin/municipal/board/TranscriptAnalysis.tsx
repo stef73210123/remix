@@ -14,6 +14,12 @@ const JurisdictionMap = dynamic(() => import('../JurisdictionMap'), {
   loading: () => <div className="card" style={{ height: 380, marginBottom: 30 }} />,
 })
 
+function fmtCaptionDate(iso: string): string {
+  const d = new Date(iso + 'T12:00:00Z')
+  if (isNaN(d.getTime())) return iso
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
 /** Diverging bar: center = 0, fill extends left (neg) or right (pos). */
 function SentBar({ score, height = 8 }: { score: number; height?: number }) {
   const s = Math.max(-1, Math.min(1, score))
@@ -62,6 +68,13 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
       .finally(() => setLoading(false))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [muni, body])
+
+  // Most recent meeting the analysis covers — shown as a "current as of" caption
+  // so readers know how fresh the ingested/analyzed data is.
+  const latestMeetingDate = useMemo(() => {
+    const dates = (data?.meetings ?? []).map((mt) => mt.date).filter(Boolean).sort()
+    return dates.length ? dates[dates.length - 1] : null
+  }, [data])
 
   // Themes, re-ranked by the selected lens.
   const themesSorted = useMemo(() => {
@@ -136,6 +149,11 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
       <div className="muted" style={{ fontSize: 13, marginBottom: 6 }}>
         {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
       </div>
+      {latestMeetingDate && (
+        <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
+          Data current as of {fmtCaptionDate(latestMeetingDate)} — reflects meetings through that date.
+        </div>
+      )}
       <div className="muted" style={{ fontSize: 11, marginBottom: 18, lineHeight: 1.5, maxWidth: 720 }}>
         Sentiment −10 (opposed) to +10 (favorable). Member-level attribution is directional.
       </div>
