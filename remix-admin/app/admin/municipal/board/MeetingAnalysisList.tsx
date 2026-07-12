@@ -44,16 +44,16 @@ export default function MeetingAnalysisList({ meetings, muni, body, maxHeight = 
   }, [selectedKey])
 
   if (meetings.length === 0) return null
+  const sorted = [...meetings].sort((a, b) => b.date.localeCompare(a.date))
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight, overflowY: 'auto', paddingRight: 4 }}>
-      {[...meetings].sort((a, b) => b.date.localeCompare(a.date)).map((mt) => {
+    <div className="card" style={{ padding: 0, maxHeight, overflowY: 'auto' }}>
+      {sorted.map((mt, i) => {
         const key = `${muni}_${body}_${mt.date}`
         return (
           <MeetingRow
             key={mt.date}
             mt={mt}
-            muni={muni}
-            body={body}
+            bordered={i > 0}
             open={openMeeting === mt.date}
             onToggle={() => setOpenMeeting(openMeeting === mt.date ? null : mt.date)}
             selected={key === selectedKey}
@@ -70,19 +70,17 @@ export default function MeetingAnalysisList({ meetings, muni, body, maxHeight = 
 }
 
 function MeetingRow({
-  mt, muni, body, open, onToggle, selected, onSelect, registerRef,
+  mt, bordered, open, onToggle, selected, onSelect, registerRef,
 }: {
-  mt: MeetingAnalysis; muni: string; body: string; open: boolean; onToggle: () => void
+  mt: MeetingAnalysis; bordered: boolean; open: boolean; onToggle: () => void
   selected: boolean; onSelect?: () => void; registerRef: (el: HTMLDivElement | null) => void
 }) {
   const avg = mt.cases.length ? mt.cases.reduce((s, c) => s + (c.sentimentScore || 0), 0) / mt.cases.length : 0
-  const transcriptHref = `/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${mt.date}`
   return (
     <div
       ref={registerRef}
-      className="card"
       style={{
-        padding: 0, flexShrink: 0, borderRadius: 10,
+        borderTop: bordered ? '1px solid var(--border)' : 'none',
         background: selected ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : undefined,
         boxShadow: selected ? 'inset 0 0 0 1.5px var(--primary)' : undefined,
       }}
@@ -96,27 +94,15 @@ function MeetingRow({
         <span className="muted" style={{ fontSize: 13 }}>{mt.cases.length} item{mt.cases.length === 1 ? '' : 's'}</span>
         <span style={{ flex: 1 }} />
         <Chip score={avg} />
-        <a
-          href={transcriptHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="badge state"
-          style={{ textDecoration: 'none' }}
-        >
-          Transcript ↗
-        </a>
       </div>
       {/* Quick summary, visible even collapsed — a full copy appears above the
-          case list when expanded, so this one only shows while closed. Kept to
-          one line so it doesn't crowd the header row above it. */}
+          case list when expanded, so this one only shows while closed. Sized
+          to its own (short) content rather than a fixed clamp height. */}
       {!open && mt.meetingSummary && (
         <div
           className="muted"
           style={{
-            fontSize: 12.5, lineHeight: 1.55, padding: '12px 16px 14px 38px',
-            marginTop: 2, borderTop: '1px solid var(--border)',
-            maxHeight: '4.7em', overflow: 'hidden',
+            fontSize: 12.5, lineHeight: 1.55, padding: '0 16px 14px 38px',
           }}
         >
           {mt.meetingSummary}
