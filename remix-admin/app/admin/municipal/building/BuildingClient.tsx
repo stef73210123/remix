@@ -114,6 +114,26 @@ function TypeSelect({ value, types, onChange }: {
   )
 }
 
+type ScatterStage = 'app_permit' | 'permit_co'
+const STAGE_LABEL: Record<ScatterStage, string> = {
+  app_permit: 'application → permit issued',
+  permit_co: 'permit issued → certificate of occupancy',
+}
+
+function StageSelect({ value, onChange }: { value: ScatterStage; onChange: (v: ScatterStage) => void }) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value as ScatterStage)}
+      aria-label="Filter by pipeline stage"
+      style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+    >
+      <option value="app_permit">Application → Permit</option>
+      <option value="permit_co">Permit → CO</option>
+    </select>
+  )
+}
+
 /** Horizontal magnitude bars (label · track · value), sorted high→low. */
 function BarList({ rows, color }: { rows: { label: string; count: number; extra?: string }[]; color?: (label: string) => string }) {
   const max = Math.max(...rows.map((r) => r.count), 1)
@@ -198,10 +218,10 @@ function logTicks(minV: number, maxV: number): number[] {
 
 interface ScatterPoint { cost: number; days: number; category: string; label: string }
 
-/** Permit value (log-scale $) vs. total days application → CO, colored by
- *  normalized permit category — surfaces whether higher-value projects also
- *  take disproportionately longer to close out. */
-function ScatterChart({ points }: { points: ScatterPoint[] }) {
+/** Permit value (log-scale $) vs. days spent in the selected pipeline stage,
+ *  colored by normalized permit category — surfaces whether higher-value
+ *  projects also take disproportionately longer to move through that stage. */
+function ScatterChart({ points, stageLabel }: { points: ScatterPoint[]; stageLabel: string }) {
   const [hover, setHover] = useState<number | null>(null)
   const valid = points.filter((p) => p.cost > 0 && p.days >= 0)
   const W = 760, H = 320, PAD = { t: 14, r: 16, b: 30, l: 42 }
@@ -273,7 +293,7 @@ function ScatterChart({ points }: { points: ScatterPoint[] }) {
             <span className="muted"> · {hp.label} · {fmtUSDshort(hp.cost)} · {fmtInt(hp.days)} days{hp.days > maxY ? ' (off top of chart)' : ''}</span>
           </span>
         ) : (
-          <span className="muted">Hover a point for details · X = declared value (log scale) · Y = days, application → CO</span>
+          <span className="muted">Hover a point for details · X = declared value (log scale) · Y = days, {stageLabel}</span>
         )}
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', marginTop: 8 }}>
@@ -440,6 +460,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   const [pipelineType, setPipelineType] = useState<TypeFilter | null>(null)
   const [scatterType, setScatterType] = useState<TypeFilter | null>(null)
   const [contractorType, setContractorType] = useState<TypeFilter | null>(null)
+  const [scatterStage, setScatterStage] = useState<ScatterStage>('app_permit')
 
   useEffect(() => {
     setLoading(true)
@@ -463,11 +484,19 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
     return Array.from(ys).sort((a, b) => b - a)
   }, [fullPermits, dataset])
   const latestYear = years[0]
-  // Charts default to the most recent year once the year list is known.
+  // Dropdown options always include the current year, even before any permits
+  // have been filed under it, so residents can pick ahead of the data.
+  const dropdownYears = useMemo(() => {
+    const ys = new Set(years)
+    ys.add(new Date().getFullYear())
+    return Array.from(ys).sort((a, b) => b - a)
+  }, [years])
+  // Charts default to the most recent year with real data once known.
   const activeChartYear: YearFilter = chartYear ?? latestYear ?? 'ALL'
   const activeContractorYear: YearFilter = contractorYear ?? latestYear ?? 'ALL'
   const activePipelineYear: YearFilter = pipelineYear ?? latestYear ?? 'ALL'
-  const activeScatterYear: YearFilter = scatterYear ?? latestYear ?? 'ALL'
+  // Scatter defaults to all years (long-running permits span multiple years).
+  const activeScatterYear: YearFilter = scatterYear ?? 'ALL'
 
   // Permit categories present in the data, for the type-filter dropdowns —
   // pipeline/scatter/contractors all default to "New construction" once it's
@@ -526,11 +555,13 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
     const src = fullPermits ?? dataset?.recent ?? []
     const byYear = activeScatterYear === 'ALL' ? src : src.filter((p) => permitYear(p) === activeScatterYear)
     const filtered = activeScatterType === 'ALL' ? byYear : byYear.filter((p) => p.category === activeScatterType)
+    const startKey = scatterStage === 'app_permit' ? 'appIso' : 'permitIso'
+    const endKey = scatterStage === 'app_permit' ? 'permitIso' : 'closeIso'
     return filtered
-      .filter((p) => p.cost != null && p.cost > 0 && p.appIso && p.closeIso)
-      .map((p) => ({ cost: p.cost as number, days: daysBetween(p.appIso as string, p.closeIso as string), category: p.category, label: p.address }))
+      .filter((p) => p.cost != null && p.cost > 0 && p[startKey] && p[endKey])
+      .map((p) => ({ cost: p.cost as number, days: daysBetween(p[startKey] as string, p[endKey] as string), category: p.category, label: p.address }))
       .filter((p) => p.days >= 0)
-  }, [fullPermits, dataset, activeScatterYear, activeScatterType])
+  }, [fullPermits, dataset, activeScatterYear, activeScatterType, scatterStage])
 
   const timelineItems = useMemo<TimelineItem[]>(() => {
     if (!dataset) return []
@@ -625,7 +656,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           <SectionHead
             title="Map"
             sub={`${fmtInt(permitMarkers.length)} permit addresses · ${yearLabel(mapYear)}`}
-            right={years.length > 0 ? <YearSelect value={mapYear} years={years} onChange={setMapYear} /> : undefined}
+            right={<YearSelect value={mapYear} years={dropdownYears} onChange={setMapYear} />}
           />
           <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 720 }}>
             Permit addresses always shown (pins geocode in as they resolve; color = permit type). Use the dropdown to narrow to a single year.
@@ -653,7 +684,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           <SectionHead
             title="Permit analytics"
             sub={yearLabel(activeChartYear)}
-            right={years.length > 0 ? <YearSelect value={activeChartYear} years={years} onChange={setChartYear} /> : undefined}
+            right={<YearSelect value={activeChartYear} years={dropdownYears} onChange={setChartYear} />}
           />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, marginBottom: 26 }}>
             <div>
@@ -700,7 +731,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             right={
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {categories.length > 0 && <TypeSelect value={activePipelineType} types={categories} onChange={setPipelineType} />}
-                {years.length > 0 && <YearSelect value={activePipelineYear} years={years} onChange={setPipelineYear} />}
+                <YearSelect value={activePipelineYear} years={dropdownYears} onChange={setPipelineYear} />
               </div>
             }
           />
@@ -711,16 +742,17 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           {/* Value vs. duration — does a bigger declared value predict a longer timeline? */}
           <SectionHead
             title="Permit value vs. time to complete"
-            sub={`application → certificate of occupancy · ${activeScatterType === 'ALL' ? 'all types' : activeScatterType} · ${yearLabel(activeScatterYear)}`}
+            sub={`${STAGE_LABEL[scatterStage]} · ${activeScatterType === 'ALL' ? 'all types' : activeScatterType} · ${yearLabel(activeScatterYear)}`}
             right={
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <StageSelect value={scatterStage} onChange={setScatterStage} />
                 {categories.length > 0 && <TypeSelect value={activeScatterType} types={categories} onChange={setScatterType} />}
-                {years.length > 0 && <YearSelect value={activeScatterYear} years={years} onChange={setScatterYear} />}
+                <YearSelect value={activeScatterYear} years={dropdownYears} onChange={setScatterYear} />
               </div>
             }
           />
           <div style={{ marginBottom: 26 }}>
-            <ScatterChart points={scatterPoints} />
+            <ScatterChart points={scatterPoints} stageLabel={STAGE_LABEL[scatterStage]} />
           </div>
 
           {/* Top contractors */}
@@ -730,7 +762,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             right={
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {categories.length > 0 && <TypeSelect value={activeContractorType} types={categories} onChange={setContractorType} />}
-                {years.length > 0 && <YearSelect value={activeContractorYear} years={years} onChange={setContractorYear} />}
+                <YearSelect value={activeContractorYear} years={dropdownYears} onChange={setContractorYear} />
               </div>
             }
           />

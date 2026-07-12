@@ -69,10 +69,12 @@
 }
 
 /* Floating action bar, fixed to the bottom of the viewport, holding the FOIL
-   Request / Report Issue quick actions so they're reachable from anywhere on
-   the page without scrolling back up to the header. .container gets matching
-   bottom padding (below) so page content — and the footer disclaimer — never
-   sits hidden underneath it. */
+   Request / Report Issue / Contact quick actions so they're reachable from
+   anywhere on the page without scrolling back up to the header. SiteFooter
+   (the true last element on every page) carries its own matching bottom
+   padding so its disclaimer text never sits hidden underneath the bar — the
+   clearance only needs to be reserved once, at the end of the document, not
+   also here on .container, which would just add blank space above the footer. */
 [data-flavor='opennorthcastle'] .civic-bottom-bar {
   position: fixed;
   left: 0;
@@ -88,10 +90,6 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-top: 1px solid var(--border);
-}
-
-[data-flavor='opennorthcastle'] .container {
-  padding-bottom: 68px;
 }
 
 /* Board/tab strip sticky directly below the masthead (top is set inline via JS
