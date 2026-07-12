@@ -43,24 +43,25 @@ export default function EventLightbox({ event, onClose }: { event: CommunityEven
       style={{
         position: 'fixed', inset: 0, zIndex: 4000,
         background: 'rgba(0,0,0,0.66)', backdropFilter: 'blur(3px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3vh 2vw',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3dvh 2vw',
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 'min(480px, 100%)',
+          width: 'min(480px, 100%)', maxHeight: '88dvh',
+          display: 'flex', flexDirection: 'column',
           background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 14,
           boxShadow: '0 24px 80px rgba(0,0,0,0.55)', overflow: 'hidden',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '16px 18px 4px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '16px 18px 4px', flexShrink: 0 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3 }}>{event.title}</div>
           </div>
           <button onClick={onClose} aria-label="Close" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✕</button>
         </div>
-        <div style={{ padding: '10px 18px 18px' }}>
+        <div data-scroll-lock-allow style={{ padding: '10px 18px 18px', overflowY: 'auto', minHeight: 0 }}>
           <div style={{ fontSize: 13.5, marginBottom: 2 }}>{when}{timeRange ? ` · ${timeRange}` : ''}</div>
           <div className="muted" style={{ fontSize: 13 }}>📍 {event.location}</div>
           <div style={{ fontSize: 13.5, lineHeight: 1.55, marginTop: 12 }}>{event.description}</div>
