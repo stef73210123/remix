@@ -58,10 +58,11 @@ const ELECTIONS: Record<string, MunicipalElections> = {
       'fifth term unopposed in 2021 before declining to seek re-election. In November 2023 Democrat ' +
       'Joseph A. (Joe) Rende won the open seat over Republican Councilwoman Barbara DiGiacinto — ' +
       'decided by roughly four votes after absentee canvassing, a manual recount and litigation — and ' +
-      'took office in January 2024. Rende was re-elected essentially unopposed (Democratic and ' +
-      'Conservative lines) in November 2025.',
+      'took office in January 2024. In June 2025 Rende turned back a Democratic primary challenge ' +
+      'from sitting Councilman Jose Berra with roughly 53% of the vote, then was re-elected unopposed ' +
+      '(Democratic and Conservative lines) that November.',
     primaryNote:
-      'No contested town primary (June) was held for Supervisor or Town Board in these cycles — ' +
+      'No contested town primary (June) was held for Supervisor or Town Board in this cycle — ' +
       'the fall general election was the only town-level contest.',
     sources: [
       'https://www.westchestergov.com/boe99/',
@@ -70,8 +71,24 @@ const ELECTIONS: Record<string, MunicipalElections> = {
       'https://www.theexaminernews.com/rende-certified-as-north-castle-supervisor-winner-amidst-fraud-allegations/',
       'https://www.theexaminernews.com/milim-surprises-in-north-castle-incumbents-re-elected-in-mt-pleasant/',
       'https://patch.com/new-york/chappaqua/polls-have-closed-new-castle-mount-kisco-north-castle-election-day-2025-early',
+      'https://www.theexaminernews.com/near-dead-heat-in-race-for-north-castle-supervisor/',
+      'https://westfaironline.com/elections/conley-feiner-among-the-winners-in-democrat-primary-contests/',
     ],
     races: [
+      {
+        year: 2025,
+        type: 'primary',
+        date: '2025-06-24',
+        office: 'Supervisor',
+        seatsUp: 1,
+        candidates: [
+          { name: 'Joseph A. Rende', parties: ['Democratic'], votes: null, won: true, incumbent: true },
+          { name: 'Jose Berra', parties: ['Democratic'], votes: null, won: false, incumbent: false },
+        ],
+        note: 'Democratic primary. Sitting Councilman Jose Berra challenged first-term Supervisor Joe ' +
+          'Rende for the Democratic line; Rende won the nomination with roughly 53% of the vote and went ' +
+          'on to run unopposed in November. Vote totals pending BOE certification transcription.',
+      },
       {
         year: 2025,
         type: 'general',

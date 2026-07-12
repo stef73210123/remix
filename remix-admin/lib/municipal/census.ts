@@ -9,7 +9,7 @@
  * The key is read from process.env only — never hard-coded or logged.
  */
 import type { TownDemographics, IncomeBracket, HousingType, HomeValueBracket, DemoSeriesPoint, AgeVintage } from './demographics'
-import { ageBinsFromPercents } from './demographics'
+import { ageBinsFromCounts } from './demographics'
 
 const ACS_YEAR = '2022'
 // ACS 5-year vintages to pull for the trend sparklines (oldest → newest).
@@ -218,8 +218,7 @@ async function fetchAgeVintage(
   ]
   const total = bins.reduce((s, n) => s + n, 0)
   if (total <= 0) return null
-  const pcts = bins.map((n) => Math.round((n / total) * 1000) / 10)
-  return { year, bins: ageBinsFromPercents(pcts) }
+  return { year, bins: ageBinsFromCounts(bins) }
 }
 
 /** Age distribution across a few ACS vintages (oldest → newest) for the

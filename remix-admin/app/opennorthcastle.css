@@ -49,6 +49,33 @@
   letter-spacing: -0.01em;
 }
 
+/* Sticky civic masthead: full-bleed bar pinned above the map (Leaflet panes and
+   the map legend sit at z-index ≤ 1000). Negative margins cancel .container
+   padding so the bar's background spans edge to edge of the column. */
+[data-flavor='opennorthcastle'] .muni-header {
+  position: sticky;
+  top: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: -24px -20px 20px;
+  padding: 14px 20px;
+  background: rgba(244, 247, 251, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Primary buttons (and button-styled links, e.g. FOIL Request) must stay white
+   on the navy fill — the flavored `a { color: inherit }` rule below otherwise
+   outranks .btn's white text and renders it ink-on-navy (illegible). */
+[data-flavor='opennorthcastle'] .btn:not(.secondary),
+[data-flavor='opennorthcastle'] a.btn:not(.secondary) {
+  color: #fff;
+}
+
 /* Secondary buttons read on the light surface. */
 [data-flavor='opennorthcastle'] .btn.secondary {
   color: var(--text);

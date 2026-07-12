@@ -20,5 +20,5 @@ export const FLAVOR: Flavor =
 export const isOpen = FLAVOR === 'opennorthcastle'
 
 export const BRAND = isOpen
-  ? { name: 'OpenNorthCastle', wordmark: '/opennorthcastle.svg', wordmarkHeight: 52 }
+  ? { name: 'OpenNorthCastle', wordmark: '/opennorthcastle.svg', wordmarkHeight: 68 }
   : { name: 'Remix', wordmark: 'https://remix-admin-omega.vercel.app/remix-wordmark.png', wordmarkHeight: 34 }

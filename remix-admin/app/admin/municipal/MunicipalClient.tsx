@@ -11,7 +11,7 @@ import KeyIssues from './KeyIssues'
 import ElectionResults from './ElectionResults'
 import SchoolDistrict from './SchoolDistrict'
 import AgeDistribution from './AgeDistribution'
-import BoardProgress from './BoardProgress'
+import BoardSentiment, { type BoardScore } from './BoardProgress'
 import { isOpen } from '@/lib/flavor'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
@@ -223,6 +223,21 @@ export default function MunicipalClient({
       .finally(() => setLoading(false))
   }, [])
 
+  // Per-board sentiment scores for the selected town — drives the Board
+  // Sentiment roll-up AND which boards get a tab (unanalyzed boards are hidden
+  // from both).
+  const [boardScores, setBoardScores] = useState<BoardScore[] | null>(null)
+  const [scoresLoading, setScoresLoading] = useState(true)
+  useEffect(() => {
+    if (town === 'ALL') { setBoardScores(null); setScoresLoading(false); return }
+    setScoresLoading(true)
+    fetch(`/admin/api/municipal/board-scores?muni=${encodeURIComponent(town)}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+      .then((d: { boards?: BoardScore[] }) => setBoardScores(d.boards || []))
+      .catch(() => setBoardScores(null))
+      .finally(() => setScoresLoading(false))
+  }, [town])
+
   const allBoards = useMemo(() => {
     if (!data) return [] as string[]
     const seen = new Set<string>()
@@ -232,6 +247,21 @@ export default function MunicipalClient({
         if (!seen.has(b.displayName)) { seen.add(b.displayName); out.push(b.displayName) }
     return out
   }, [data])
+
+  // Boards that actually have a transcript-analysis dataset — only these get a
+  // tab. While scores load (or for the multi-town "ALL" view) show everything,
+  // so tabs never flash away for towns we don't score.
+  const boardTabs = useMemo(() => {
+    if (town === 'ALL' || !boardScores) return allBoards
+    const analyzed = new Set(boardScores.filter((b) => b.score != null).map((b) => b.displayName))
+    return allBoards.filter((b) => analyzed.has(b))
+  }, [allBoards, boardScores, town])
+
+  // If the selected board tab loses its analysis (or the town changes), fall
+  // back to the dashboard rather than stranding an orphaned view.
+  useEffect(() => {
+    if (board !== 'ALL' && !boardTabs.includes(board)) setBoard('ALL')
+  }, [board, boardTabs])
 
   const munisShown = useMemo(
     () => (data ? data.municipalities.filter((m) => town === 'ALL' || m.key === town) : []),
@@ -353,7 +383,7 @@ export default function MunicipalClient({
           )}
           <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22 }}>
             <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
-            {allBoards.map((b) => (
+            {boardTabs.map((b) => (
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
             ))}
           </div>
@@ -376,8 +406,29 @@ export default function MunicipalClient({
           {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
 
-          {/* Consolidated per-board progress spectrums — Dashboard tab only. */}
-          {board === 'ALL' && town !== 'ALL' && <BoardProgress muniKey={town} />}
+          {/* Meetings — one horizontal timeline: history on the left, the next
+              meeting per board on the right, with a "Now" divider between.
+              Sits just above the board-sentiment roll-up. */}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+            <h2 style={{ fontSize: 16, margin: 0 }}>
+              Meetings
+              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
+            </h2>
+          </div>
+          <MeetingTimeline
+            items={timelineItems}
+            emptyText={
+              data.dbOk
+                ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
+                : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
+            }
+          />
+          {/* Compact scrolling list of the same meetings beneath the timeline. */}
+          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
+          <div style={{ marginBottom: 26 }} />
+
+          {/* Consolidated per-board sentiment spectrums — Dashboard tab only. */}
+          {board === 'ALL' && town !== 'ALL' && <BoardSentiment muniKey={town} boards={boardScores} loading={scoresLoading} />}
 
           {/* Narrative key-issue synopsis, above the sorted theme bars. */}
           {board === 'ALL' && town !== 'ALL' && <KeyIssues muniKey={town} />}
@@ -432,26 +483,6 @@ export default function MunicipalClient({
               </>
             )
           })()}
-
-          {/* Meetings — one horizontal timeline: history on the left, the next
-              meeting per board on the right, with a "Now" divider between. */}
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-            <h2 style={{ fontSize: 16, margin: 0 }}>
-              Meetings
-              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
-            </h2>
-          </div>
-          <MeetingTimeline
-            items={timelineItems}
-            emptyText={
-              data.dbOk
-                ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
-                : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
-            }
-          />
-          {/* Compact scrolling list of the same meetings beneath the timeline. */}
-          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
-          <div style={{ marginBottom: 26 }} />
 
           {!data.dbOk && data.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>

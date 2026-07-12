@@ -33,6 +33,9 @@ export interface AgeBin {
   max: number | null
   /** Share of the population in this bin, 0–100. */
   pct: number
+  /** Gross number of residents in this bin (exact from ACS, or estimated
+   *  pct × population for static fallback data). */
+  count?: number
 }
 
 /** The full age distribution for one ACS vintage. */
@@ -84,13 +87,28 @@ export const AGE_BIN_LABELS = [
   '45–49', '50–54', '55–59', '60–64', '65–69', '70–74', '75–79', '80–84', '85+',
 ]
 
-/** Build AgeBins from a parallel array of 18 percentages (0–4 … 85+). */
-export function ageBinsFromPercents(pcts: number[]): AgeBin[] {
+/** Build AgeBins from a parallel array of 18 percentages (0–4 … 85+). Pass the
+ *  vintage's total population to also carry estimated gross counts. */
+export function ageBinsFromPercents(pcts: number[], totalPopulation?: number): AgeBin[] {
   return AGE_BIN_LABELS.map((label, i) => ({
     label,
     min: i * 5,
     max: i === AGE_BIN_LABELS.length - 1 ? null : i * 5 + 5,
     pct: pcts[i] ?? 0,
+    count: totalPopulation ? Math.round(((pcts[i] ?? 0) / 100) * totalPopulation) : undefined,
+  }))
+}
+
+/** Build AgeBins from a parallel array of 18 gross counts (0–4 … 85+) —
+ *  the exact-numbers path for live ACS pulls. */
+export function ageBinsFromCounts(counts: number[]): AgeBin[] {
+  const total = counts.reduce((s, n) => s + (n || 0), 0)
+  return AGE_BIN_LABELS.map((label, i) => ({
+    label,
+    min: i * 5,
+    max: i === AGE_BIN_LABELS.length - 1 ? null : i * 5 + 5,
+    pct: total > 0 ? Math.round(((counts[i] ?? 0) / total) * 1000) / 10 : 0,
+    count: counts[i] ?? 0,
   }))
 }
 
@@ -144,11 +162,11 @@ const NORTH_CASTLE: TownDemographics = {
   ageDistribution: [
     {
       year: 2013,
-      bins: ageBinsFromPercents([5, 8, 10, 8, 3, 4, 5, 7, 10, 11, 9, 7, 5, 3, 2, 1, 1, 1]),
+      bins: ageBinsFromPercents([5, 8, 10, 8, 3, 4, 5, 7, 10, 11, 9, 7, 5, 3, 2, 1, 1, 1], 11800),
     },
     {
       year: 2022,
-      bins: ageBinsFromPercents([4, 7, 9, 9, 3, 3, 3, 5, 8, 11, 11, 8, 7, 5, 3, 2, 1, 1]),
+      bins: ageBinsFromPercents([4, 7, 9, 9, 3, 3, 3, 5, 8, 11, 11, 8, 7, 5, 3, 2, 1, 1], 12100),
     },
   ],
 }
