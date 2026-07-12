@@ -23,6 +23,7 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import BoardCaseMap from './board/BoardCaseMap'
+import BoardStaffCards from './board/BoardStaffCards'
 import MeetingAnalysisList from './board/MeetingAnalysisList'
 import CasesList from './board/CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
@@ -537,6 +538,7 @@ export default function MunicipalClient({
               <>
                 <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>{board}</h2>
                 <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>{m.name}</div>
+                <BoardStaffCards muni={town} bodyKey={bodyKey} />
                 <BoardCaseMap dataset={boardAnalysis} muni={town} />
                 {meetingsBlock}
                 <TranscriptAnalysis muni={town} body={bodyKey} onData={setBoardAnalysis} />
@@ -551,9 +553,6 @@ export default function MunicipalClient({
 
           {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
-
-          {/* Community events calendar — Dashboard tab only. */}
-          {board === 'ALL' && town !== 'ALL' && <CommunityCalendar muniKey={town} />}
 
           {/* Meetings — sits just above the board-sentiment roll-up on the "All"
               dashboard tab. (On a specific board tab, this same block already
@@ -619,6 +618,10 @@ export default function MunicipalClient({
               </>
             )
           })()}
+
+          {/* Community events calendar — Dashboard tab only. Sits at the bottom,
+              after the town's own civic/financial data. */}
+          {board === 'ALL' && town !== 'ALL' && <CommunityCalendar muniKey={town} />}
 
           {!data.dbOk && data.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>

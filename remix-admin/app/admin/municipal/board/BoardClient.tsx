@@ -8,6 +8,7 @@ import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
 import BoardCaseMap from './BoardCaseMap'
+import BoardStaffCards from './BoardStaffCards'
 import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
@@ -230,6 +231,9 @@ export default function BoardClient({ userName }: { userName: string }) {
             {data.town.name}{data.town.county ? ` · ${data.town.county} County` : ''}, {data.town.state}
             {data.board.meetingPattern ? ` · ${data.board.meetingPattern}` : ''}
           </div>
+
+          {/* Departmental staff cards — at the very top of the page. */}
+          <BoardStaffCards muni={muni} bodyKey={body} />
 
           {/* Members roster — only for boards WITHOUT a transcript dataset. Where a
               dataset exists, the analysis section below shows members with sentiment,

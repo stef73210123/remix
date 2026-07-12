@@ -18,6 +18,15 @@ function startOfDayIso(d: Date): string {
   return d.toISOString().slice(0, 10)
 }
 
+function fmtEventDate(iso: string): string {
+  const d = new Date(iso + 'T12:00:00Z')
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+function fmtEventDateShort(iso: string): string {
+  const d = new Date(iso + 'T12:00:00Z')
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
 /** All calendar dates a (possibly multi-day) event should render a marker on. */
 function eventDates(ev: CommunityEvent): string[] {
   if (!ev.endDate || ev.endDate === ev.date) return [ev.date]
@@ -37,6 +46,8 @@ function eventDates(ev: CommunityEvent): string[] {
  * event opens EventLightbox with details plus quick actions (event page /
  * add to Google Calendar).
  */
+type ViewMode = 'list' | 'calendar'
+
 export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
   const events = useMemo(() => getCommunityEvents(muniKey), [muniKey])
 
@@ -44,6 +55,18 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
   const todayIso = useMemo(() => startOfDayIso(today), [today])
   const [cursor, setCursor] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1))
   const [openEvent, setOpenEvent] = useState<CommunityEvent | null>(null)
+  const [view, setView] = useState<ViewMode>('list')
+
+  // Chronological (soonest-ending-first for past-vs-upcoming, then by start
+  // date) — the list view's own sort, independent of the calendar grid below.
+  const sortedEvents = useMemo(
+    () => [...events].sort((a, b) => a.date.localeCompare(b.date)),
+    [events]
+  )
+  const boundaryIdx = useMemo(
+    () => sortedEvents.findIndex((ev) => (ev.endDate ?? ev.date) >= todayIso),
+    [sortedEvents, todayIso]
+  )
 
   const byDate = useMemo(() => {
     const map = new Map<string, CommunityEvent[]>()
@@ -90,8 +113,63 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
           Community events
           <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · town fairs, concerts &amp; civic celebrations</span>
         </h2>
+        <div className="pill-strip" style={{ display: 'flex', gap: 6 }}>
+          <button
+            onClick={() => setView('list')}
+            className={view === 'list' ? 'btn' : 'btn secondary'}
+            style={{ padding: '5px 12px', fontSize: 12.5 }}
+          >
+            List
+          </button>
+          <button
+            onClick={() => setView('calendar')}
+            className={view === 'calendar' ? 'btn' : 'btn secondary'}
+            style={{ padding: '5px 12px', fontSize: 12.5 }}
+          >
+            Calendar
+          </button>
+        </div>
       </div>
 
+      {view === 'list' ? (
+        <div className="card" style={{ padding: 0 }}>
+          {sortedEvents.map((ev, i) => {
+            const isPast = (ev.endDate ?? ev.date) < todayIso
+            const dateLabel = ev.endDate && ev.endDate !== ev.date
+              ? `${fmtEventDateShort(ev.date)} – ${fmtEventDate(ev.endDate)}`
+              : fmtEventDate(ev.date)
+            return (
+              <div key={ev.key}>
+                {i === boundaryIdx && i > 0 && (
+                  <div style={{ padding: '6px 16px', background: 'var(--panel-2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--primary-light)' }}>
+                      Upcoming
+                    </span>
+                  </div>
+                )}
+                <button
+                  onClick={() => setOpenEvent(ev)}
+                  style={{
+                    display: 'flex', alignItems: 'baseline', gap: 12, width: '100%', textAlign: 'left',
+                    padding: '11px 16px', border: 'none', background: 'none', cursor: 'pointer',
+                    borderTop: i && i !== boundaryIdx ? '1px solid var(--border)' : 'none',
+                    opacity: isPast ? 0.6 : 1, font: 'inherit', color: 'inherit',
+                  }}
+                >
+                  <span style={{ fontWeight: 700, fontSize: 13, minWidth: 128, flexShrink: 0, whiteSpace: 'nowrap' }}>{dateLabel}</span>
+                  <span style={{ width: 8, height: 8, borderRadius: 999, background: CATEGORY_COLOR[ev.category], flexShrink: 0 }} />
+                  <span style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 600 }}>{ev.title}</div>
+                    <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      📍 {ev.location}
+                    </div>
+                  </span>
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
       <div className="card" style={{ padding: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <button
@@ -182,6 +260,7 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
           ))}
         </div>
       </div>
+      )}
 
       {openEvent && <EventLightbox event={openEvent} onClose={() => setOpenEvent(null)} />}
     </div>

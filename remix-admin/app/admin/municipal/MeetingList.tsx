@@ -64,7 +64,7 @@ export default function MeetingList({
           }}
           onClick={onSelect ? () => onSelect(it.key) : undefined}
           style={{
-            display: 'flex', alignItems: 'baseline', gap: 12, padding: '10px 14px', flexWrap: 'wrap',
+            display: 'flex', alignItems: 'baseline', gap: 12, padding: '16px 16px', flexWrap: 'wrap',
             borderTop: i ? '1px solid var(--border)' : 'none',
             opacity: it.past ? 0.92 : 1,
             cursor: onSelect ? 'pointer' : undefined,
@@ -90,12 +90,12 @@ export default function MeetingList({
               {it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
             </div>
             {it.title && (
-              <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
+              <div className="muted" style={{ fontSize: 12, marginTop: 5, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
             )}
             {it.summary && (
               <div
                 className="muted"
-                style={{ fontSize: 12, marginTop: 2, lineHeight: 1.4, maxHeight: '2.8em', overflow: 'hidden' }}
+                style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.55, maxHeight: '3.1em', overflow: 'hidden' }}
               >
                 {it.summary}
               </div>

@@ -5,7 +5,6 @@ import type { AnalysisDataset, MemberProfile, ThemeRollup } from '@/lib/municipa
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
 import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
-import { getBoardDepartments } from '@/lib/municipal/departments'
 
 function fmtCaptionDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
@@ -84,36 +83,9 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
   // Board-appropriate noun for the "cases" (Planning = applications; Town Board = agenda items).
   const isTownBoard = m.bodyKey === 'town_board'
   const itemNounPlural = isTownBoard ? 'agenda items' : 'applications'
-  const departments = getBoardDepartments(muni, m.bodyKey)
 
   return (
     <div style={{ marginBottom: 30 }}>
-      {/* ---- Departmental information (the staff behind this board's business) ---- */}
-      {departments.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12, marginBottom: 24 }}>
-          {departments.map((d) => (
-            <div key={d.department} className="card" style={{ padding: 16 }}>
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d.department}</div>
-              <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.person}</div>
-              <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
-              <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{d.blurb}</div>
-              <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
-                {d.phone && <span>📞 {d.phone}</span>}
-                {d.email && <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)' }}>✉ {d.email}</a>}
-                {d.address && <span className="muted">📍 {d.address}</span>}
-              </div>
-              {d.links.length > 0 && (
-                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
-                  {d.links.map((l) => (
-                    <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>{l.label} ↗</a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
       <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>Meeting transcript analysis</h2>
       <div className="muted" style={{ fontSize: 13, marginBottom: 6 }}>
         {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
