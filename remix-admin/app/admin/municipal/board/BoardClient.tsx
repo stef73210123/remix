@@ -6,6 +6,8 @@ import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
+import MeetingAnalysisList from './MeetingAnalysisList'
+import type { AnalysisDataset } from '@/lib/municipal/analysis'
 
 
 interface Asset { kind: string; sourceUrl: string | null; blobUrl: string | null; pageCount: number | null }
@@ -109,6 +111,9 @@ export default function BoardClient({ userName }: { userName: string }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [transcriptDates, setTranscriptDates] = useState<Set<string>>(new Set())
+  // Analysis dataset surfaced by TranscriptAnalysis, so the Meetings section
+  // below can attach the meeting-by-meeting rows to its timeline.
+  const [analysis, setAnalysis] = useState<AnalysisDataset | null>(null)
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
@@ -250,17 +255,22 @@ export default function BoardClient({ userName }: { userName: string }) {
           )}
 
           {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
-          <TranscriptAnalysis muni={muni} body={body} />
+          <TranscriptAnalysis muni={muni} body={body} onData={setAnalysis} />
 
           {/* Meetings — one horizontal timeline: history on the left, upcoming on
-              the right, matching the municipal dashboard. */}
+              the right, matching the municipal dashboard. Where an analysis
+              dataset exists, the meeting-by-meeting rows attach here in place of
+              the plain list. */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
             Meetings
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming</span>
+            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming{analysis ? ' · click a meeting for its analysis' : ''}</span>
           </h2>
           <MeetingTimeline items={timelineItems} emptyText="No meetings ingested for this board yet." />
-          {/* Compact scrolling list of the same meetings beneath the timeline. */}
-          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
+          {analysis && analysis.meetings.length > 0 ? (
+            <div style={{ marginTop: 10 }}><MeetingAnalysisList meetings={analysis.meetings} muni={muni} body={body} /></div>
+          ) : (
+            timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>
+          )}
           <div className="muted" style={{ fontSize: 11, margin: '10px 0 26px' }}>
             Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
           </div>

@@ -1,11 +1,19 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import type { AnalysisDataset, CaseRollup, MemberProfile, ThemeRollup, MeetingAnalysis } from '@/lib/municipal/analysis'
+import dynamic from 'next/dynamic'
+import type { AnalysisDataset, CaseRollup, MemberProfile, ThemeRollup } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
 import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
 import { propertyId } from '@/lib/municipal/propertyId'
+import { getBoardDepartments } from '@/lib/municipal/departments'
+import type { PermitMarker } from '../JurisdictionMap'
+
+const JurisdictionMap = dynamic(() => import('../JurisdictionMap'), {
+  ssr: false,
+  loading: () => <div className="card" style={{ height: 380, marginBottom: 30 }} />,
+})
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''))
@@ -61,33 +69,97 @@ function ThemeTag({ t }: { t: string }) {
   return <span className="badge" style={{ fontSize: 11 }}>{t}</span>
 }
 
-export default function TranscriptAnalysis({ muni, body }: { muni: string; body: string }) {
+/** Last date a case was seen (its latest timeline appearance). */
+function lastSeen(c: CaseRollup): string {
+  let max = ''
+  for (const ap of c.timeline) if (ap.date > max) max = ap.date
+  return max
+}
+
+type ThemeSort = 'volume' | 'positive' | 'negative'
+type CaseSort = 'lastSeen' | 'name'
+
+export default function TranscriptAnalysis({ muni, body, onData }: {
+  muni: string
+  body: string
+  /** Lets the host page reuse the dataset (e.g. the Meetings section renders the
+   *  meeting-by-meeting rows attached to its timeline). */
+  onData?: (d: AnalysisDataset | null) => void
+}) {
   const [data, setData] = useState<AnalysisDataset | null>(null)
   const [loading, setLoading] = useState(true)
   const [showAllCases, setShowAllCases] = useState(false)
   const [openCase, setOpenCase] = useState<string | null>(null)
-  const [openMeeting, setOpenMeeting] = useState<string | null>(null)
+  const [themeSort, setThemeSort] = useState<ThemeSort>('volume')
+  const [caseSort, setCaseSort] = useState<CaseSort>('lastSeen')
+  const [caseQuery, setCaseQuery] = useState('')
+  const [mapYear, setMapYear] = useState<number | 'ALL'>('ALL')
 
   useEffect(() => {
     setLoading(true)
     fetch(`/admin/api/municipal/transcript-analysis?muni=${encodeURIComponent(muni)}&body=${encodeURIComponent(body)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
-      .then((d) => setData(d && d.available !== false ? d : null))
-      .catch(() => setData(null))
+      .then((d) => {
+        const ds = d && d.available !== false ? (d as AnalysisDataset) : null
+        setData(ds)
+        onData?.(ds)
+      })
+      .catch(() => { setData(null); onData?.(null) })
       .finally(() => setLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [muni, body])
 
   // Alphabetical by name (numeric-aware so street numbers order naturally).
   const byName = (a: CaseRollup, b: CaseRollup) =>
     a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+  const byLastSeen = (a: CaseRollup, b: CaseRollup) => lastSeen(b).localeCompare(lastSeen(a))
+
   const trackedCases = useMemo(
-    () => (data ? data.cases.filter((c) => c.appearances >= 2).sort(byName) : []),
+    () => (data ? data.cases.filter((c) => c.appearances >= 2) : []),
     [data]
   )
-  const visibleCases = useMemo(
-    () => (showAllCases ? [...(data?.cases ?? [])].sort(byName) : trackedCases),
-    [showAllCases, data, trackedCases]
-  )
+  const visibleCases = useMemo(() => {
+    const base = showAllCases ? [...(data?.cases ?? [])] : [...trackedCases]
+    const q = caseQuery.trim().toLowerCase()
+    const filtered = q
+      ? base.filter((c) =>
+          [c.name, c.address, c.applicant, c.applicationType, ...(c.themes || [])]
+            .filter(Boolean)
+            .some((s) => String(s).toLowerCase().includes(q)),
+        )
+      : base
+    return filtered.sort(caseSort === 'name' ? byName : byLastSeen)
+  }, [showAllCases, data, trackedCases, caseQuery, caseSort])
+
+  // Themes, re-ranked by the selected lens.
+  const themesSorted = useMemo(() => {
+    const t = [...(data?.themes ?? [])]
+    if (themeSort === 'positive') return t.sort((a, b) => b.avgSentiment - a.avgSentiment)
+    if (themeSort === 'negative') return t.sort((a, b) => a.avgSentiment - b.avgSentiment)
+    return t.sort((a, b) => b.meetings - a.meetings)
+  }, [data, themeSort])
+
+  // Map: one pin per case with a street address, filterable by appearance year.
+  const mapYears = useMemo(() => {
+    const ys = new Set<number>()
+    for (const c of data?.cases ?? []) for (const ap of c.timeline) {
+      const y = Number(ap.date.slice(0, 4))
+      if (y) ys.add(y)
+    }
+    return Array.from(ys).sort((a, b) => b - a)
+  }, [data])
+  const caseMarkers = useMemo<PermitMarker[]>(() => {
+    return (data?.cases ?? [])
+      .filter((c) => c.address && /\d/.test(c.address))
+      .filter((c) => mapYear === 'ALL' || c.timeline.some((ap) => Number(ap.date.slice(0, 4)) === mapYear))
+      .map((c) => ({
+        id: c.id,
+        address: c.address as string,
+        title: c.name,
+        sub: [c.applicationType, c.lastStatus, `seen ${c.appearances}×`].filter(Boolean).join(' · '),
+        color: sentimentColor(c.avgSentiment),
+      }))
+  }, [data, mapYear])
 
   if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading transcript analysis…</div>
   if (!data) return null
@@ -98,9 +170,36 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
   const isTownBoard = m.bodyKey === 'town_board'
   const itemNounPlural = isTownBoard ? 'agenda items' : 'applications'
   const itemNounTitle = isTownBoard ? 'agenda items' : 'applications'
+  const departments = getBoardDepartments(muni, m.bodyKey)
 
   return (
     <div style={{ marginBottom: 30 }}>
+      {/* ---- Departmental information (the staff behind this board's business) ---- */}
+      {departments.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12, marginBottom: 24 }}>
+          {departments.map((d) => (
+            <div key={d.department} className="card" style={{ padding: 16 }}>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d.department}</div>
+              <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.person}</div>
+              <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
+              <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{d.blurb}</div>
+              <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
+                {d.phone && <span>📞 {d.phone}</span>}
+                {d.email && <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)' }}>✉ {d.email}</a>}
+                {d.address && <span className="muted">📍 {d.address}</span>}
+              </div>
+              {d.links.length > 0 && (
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
+                  {d.links.map((l) => (
+                    <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>{l.label} ↗</a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>Meeting transcript analysis</h2>
       <div className="muted" style={{ fontSize: 13, marginBottom: 6 }}>
         {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
@@ -147,13 +246,27 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
       <MeetingTimelineChart data={data} />
 
       {/* ---- Themes ---- */}
-      <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-        Themes across the year
-      </h3>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
+          Themes across the year
+        </h3>
+        <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
+          {([['volume', 'Most volume'], ['positive', 'Most positive'], ['negative', 'Most negative']] as const).map(([k, label]) => (
+            <button
+              key={k}
+              onClick={() => setThemeSort(k)}
+              className="btn secondary"
+              style={{ padding: '4px 10px', fontSize: 12, ...(themeSort === k ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="card" style={{ padding: 16, marginBottom: 28 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {data.themes.map((t) => (
-            <ThemeRow key={t.theme} t={t} maxMeetings={data.themes[0]?.meetings || 1} />
+          {themesSorted.map((t) => (
+            <ThemeRow key={t.theme} t={t} maxMeetings={Math.max(1, ...themesSorted.map((x) => x.meetings))} />
           ))}
         </div>
         <div className="muted" style={{ fontSize: 11, marginTop: 14, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -165,42 +278,76 @@ export default function TranscriptAnalysis({ muni, body }: { muni: string; body:
         </div>
       </div>
 
+      {/* ---- Map of items with a street address ---- */}
+      {(caseMarkers.length > 0 || mapYear !== 'ALL') && (
+        <>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 10px' }}>
+            <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
+              {itemNounTitle} on the map
+              <span className="muted" style={{ fontSize: 12, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}> · {caseMarkers.length} with a street address · pin color = sentiment</span>
+            </h3>
+            <select
+              value={mapYear}
+              onChange={(e) => setMapYear(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
+              aria-label="Filter map by year"
+              style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+            >
+              <option value="ALL">All years</option>
+              {mapYears.map((y) => <option key={y} value={y}>{y}</option>)}
+            </select>
+          </div>
+          <JurisdictionMap
+            muni={muni}
+            permits={caseMarkers}
+            permitsLabel={`${itemNounTitle[0].toUpperCase()}${itemNounTitle.slice(1)}`}
+            permitsGroup="This board"
+            defaultActive="permits"
+            showIssues={false}
+            height={380}
+          />
+        </>
+      )}
+
       {/* ---- Cases ---- */}
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
         <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-          {showAllCases ? `All ${itemNounTitle} (${data.cases.length})` : `Recurring ${itemNounTitle} (${trackedCases.length})`}
+          {showAllCases ? `All ${itemNounTitle} (${visibleCases.length})` : `Recurring ${itemNounTitle} (${visibleCases.length})`}
         </h3>
-        <button className="btn secondary" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => setShowAllCases((v) => !v)}>
-          {showAllCases ? 'Show recurring only' : `Show all ${data.cases.length}`}
-        </button>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+          <input
+            type="search"
+            value={caseQuery}
+            onChange={(e) => setCaseQuery(e.target.value)}
+            placeholder={`Search ${itemNounPlural}…`}
+            aria-label={`Search ${itemNounPlural}`}
+            style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)', minWidth: 170 }}
+          />
+          <select
+            value={caseSort}
+            onChange={(e) => setCaseSort(e.target.value as CaseSort)}
+            aria-label="Sort"
+            style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+          >
+            <option value="lastSeen">Last seen</option>
+            <option value="name">Name</option>
+          </select>
+          <button className="btn secondary" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => setShowAllCases((v) => !v)}>
+            {showAllCases ? 'Show recurring only' : `Show all ${data.cases.length}`}
+          </button>
+        </div>
       </div>
-      <div className="card" style={{ padding: 0, marginBottom: 28, maxHeight: showAllCases ? 520 : undefined, overflowY: showAllCases ? 'auto' : undefined }}>
+      {/* Always a bounded scroll window, so the table stays a shorter view. */}
+      <div className="card" style={{ padding: 0, marginBottom: 28, maxHeight: 440, overflowY: 'auto' }}>
         {visibleCases.length === 0 ? (
-          <div className="muted" style={{ padding: 16, fontSize: 13 }}>Nothing to show.</div>
+          <div className="muted" style={{ padding: 16, fontSize: 13 }}>
+            {caseQuery ? `No ${itemNounPlural} match “${caseQuery}”.` : 'Nothing to show.'}
+          </div>
         ) : visibleCases.map((c, i) => (
           <CaseRow key={c.id} c={c} members={data.members} muni={muni} first={i === 0} open={openCase === c.id} onToggle={() => setOpenCase(openCase === c.id ? null : c.id)} />
         ))}
       </div>
-
-      {/* ---- Meeting-by-meeting ---- */}
-      <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-        Meeting by meeting
-        <span className="muted" style={{ fontSize: 12, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}> · {data.meetings.length} · scroll for more</span>
-      </h3>
-      {/* Long lists are capped to a scroll window: a few meetings show, the rest
-          scroll in place, so the section stays a "shorter view". */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 560, overflowY: 'auto', paddingRight: 4 }}>
-        {[...data.meetings].sort((a, b) => b.date.localeCompare(a.date)).map((mt) => (
-          <MeetingRow
-            key={mt.date}
-            mt={mt}
-            muni={muni}
-            body={body}
-            open={openMeeting === mt.date}
-            onToggle={() => setOpenMeeting(openMeeting === mt.date ? null : mt.date)}
-          />
-        ))}
-      </div>
+      {/* Meeting-by-meeting rows render with the Meetings timeline on the host
+          page (via onData) — no standalone section here anymore. */}
     </div>
   )
 }
@@ -288,6 +435,7 @@ function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; m
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 5, fontSize: 12, color: 'var(--muted)' }}>
             {c.applicationType && <span>{c.applicationType}</span>}
             <span>· seen {c.appearances}×</span>
+            {lastSeen(c) && <span>· last {fmtDate(lastSeen(c))}</span>}
             {c.lastStatus && <span>· {c.lastStatus}</span>}
             <Spark points={c.trajectory.map((p) => p.sentiment)} />
           </div>
@@ -355,74 +503,6 @@ function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; m
                 ))}
               </div>
           </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function MeetingRow({
-  mt, muni, body, open, onToggle,
-}: { mt: MeetingAnalysis; muni: string; body: string; open: boolean; onToggle: () => void }) {
-  const avg = mt.cases.length ? mt.cases.reduce((s, c) => s + (c.sentimentScore || 0), 0) / mt.cases.length : 0
-  const transcriptHref = `/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${mt.date}`
-  return (
-    <div className="card" style={{ padding: 0 }}>
-      <div
-        onClick={onToggle}
-        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', cursor: 'pointer', flexWrap: 'wrap' }}
-      >
-        <span className="muted" style={{ width: 10 }}>{open ? '▾' : '▸'}</span>
-        <span style={{ fontWeight: 700, minWidth: 130 }}>{fmtDate(mt.date)}</span>
-        <span className="muted" style={{ fontSize: 13 }}>{mt.cases.length} item{mt.cases.length === 1 ? '' : 's'}</span>
-        <span style={{ flex: 1 }} />
-        <Chip score={avg} />
-        <a
-          href={transcriptHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="badge state"
-          style={{ textDecoration: 'none' }}
-        >
-          Transcript ↗
-        </a>
-      </div>
-      {open && (
-        <div style={{ padding: '0 14px 14px', borderTop: '1px solid var(--border)' }}>
-          <div style={{ fontSize: 13, margin: '12px 0 14px', lineHeight: 1.55 }}>{mt.meetingSummary}</div>
-          {mt.cases.map((c, i) => (
-            <div key={i} style={{ padding: '10px 0', borderTop: i ? '1px solid var(--border)' : 'none' }}>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap' }}>
-                <span style={{ fontWeight: 600, fontSize: 13 }}>{c.name}</span>
-                {c.status && <span className="badge" style={{ fontSize: 11 }}>{c.status}</span>}
-                <span style={{ ...sentimentChipStyle(c.sentimentScore) }}>{fmtSent(c.sentimentScore)}</span>
-              </div>
-              {c.summary && <div className="muted" style={{ fontSize: 12, margin: '6px 0' }}>{c.summary}</div>}
-              {c.themes.length > 0 && (
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: '6px 0' }}>
-                  {c.themes.map((t) => <ThemeTag key={t} t={t} />)}
-                </div>
-              )}
-              {c.memberPositions.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 6 }}>
-                  {c.memberPositions.map((p, j) => (
-                    <div key={j} style={{ display: 'flex', gap: 8, alignItems: 'baseline', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, width: 108, flexShrink: 0 }}>{p.member}</span>
-                      <span style={{ ...sentimentChipStyle(p.score), flexShrink: 0 }}>{fmtSent(p.score)}</span>
-                      <span className="muted" style={{ flex: 1 }}>
-                        {p.stance}{p.evidence ? ` — ${p.evidence}` : ''}
-                        {p.confidence === 'low' ? ' (low confidence)' : ''}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          {mt.attributionNote && (
-            <div className="muted" style={{ fontSize: 11, marginTop: 12, fontStyle: 'italic' }}>{mt.attributionNote}</div>
-          )}
         </div>
       )}
     </div>

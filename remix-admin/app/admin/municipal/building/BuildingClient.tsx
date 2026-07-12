@@ -49,7 +49,6 @@ function fmtDate(iso: string | null) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-const POS = '#3d9c72'
 function Tile({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
     <div className="card" style={{ padding: '14px 16px' }}>
@@ -60,12 +59,36 @@ function Tile({ label, value, sub }: { label: string; value: string; sub?: strin
   )
 }
 
-function SectionHead({ title, sub }: { title: string; sub?: string }) {
+function SectionHead({ title, sub, right }: { title: string; sub?: string; right?: React.ReactNode }) {
   return (
-    <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-      {title}
-      {sub && <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {sub}</span>}
-    </h2>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+      <h2 style={{ fontSize: 16, margin: 0 }}>
+        {title}
+        {sub && <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {sub}</span>}
+      </h2>
+      {right}
+    </div>
+  )
+}
+
+type YearFilter = number | 'ALL'
+
+function YearSelect({ value, years, onChange, allLabel = 'All years' }: {
+  value: YearFilter
+  years: number[]
+  onChange: (v: YearFilter) => void
+  allLabel?: string
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
+      aria-label="Filter by year"
+      style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+    >
+      {years.map((y) => <option key={y} value={y}>{y}</option>)}
+      <option value="ALL">{allLabel}</option>
+    </select>
   )
 }
 
@@ -136,10 +159,53 @@ function MonthlyChart({ monthly }: { monthly: { month: string; count: number }[]
   )
 }
 
+const permitYear = (p: PermitRecord) => (p.permitIso ? Number(p.permitIso.slice(0, 4)) : null)
+
+/** Per-year (or all-time) aggregates computed from the full permit set, so the
+ *  charts and contractor list can be filtered by year client-side. */
+function aggregate(perms: PermitRecord[]) {
+  const byCategory = new Map<string, { count: number; cost: number }>()
+  const byClass = new Map<string, number>()
+  const contractors = new Map<string, { count: number; cost: number }>()
+  const buckets: { label: string; min: number; max: number | null; count: number }[] = [
+    { label: '<$25K', min: 0, max: 25_000, count: 0 },
+    { label: '$25–100K', min: 25_000, max: 100_000, count: 0 },
+    { label: '$100–500K', min: 100_000, max: 500_000, count: 0 },
+    { label: '$500K–1M', min: 500_000, max: 1_000_000, count: 0 },
+    { label: '$1M+', min: 1_000_000, max: null, count: 0 },
+  ]
+  for (const p of perms) {
+    const cat = byCategory.get(p.category) ?? { count: 0, cost: 0 }
+    cat.count++; cat.cost += p.cost ?? 0
+    byCategory.set(p.category, cat)
+    byClass.set(p.klass, (byClass.get(p.klass) ?? 0) + 1)
+    if (p.contractor) {
+      const c = contractors.get(p.contractor) ?? { count: 0, cost: 0 }
+      c.count++; c.cost += p.cost ?? 0
+      contractors.set(p.contractor, c)
+    }
+    if (p.cost != null && p.cost > 0) {
+      const b = buckets.find((x) => p.cost! >= x.min && (x.max == null || p.cost! < x.max))
+      if (b) b.count++
+    }
+  }
+  return {
+    byCategory: Array.from(byCategory, ([category, v]) => ({ category, ...v })).sort((a, b) => b.count - a.count),
+    byClass: Array.from(byClass, ([klass, count]) => ({ klass, count })).sort((a, b) => b.count - a.count),
+    valuationBuckets: buckets.filter((b) => b.count > 0).map(({ label, count }) => ({ label, count })),
+    topContractors: Array.from(contractors, ([name, v]) => ({ name, ...v })).sort((a, b) => b.count - a.count).slice(0, 10),
+  }
+}
+
 export default function BuildingClient({ userName, muni }: { userName: string; muni: string }) {
   const [dataset, setDataset] = useState<PermitDataset | null>(null)
   const [dept, setDept] = useState<DepartmentInfo | null>(null)
   const [loading, setLoading] = useState(true)
+  // Full record set (lazy) — powers the map's year slider and the per-year charts.
+  const [fullPermits, setFullPermits] = useState<PermitRecord[] | null>(null)
+  const [mapYear, setMapYear] = useState<YearFilter>('ALL')
+  const [chartYear, setChartYear] = useState<YearFilter | null>(null)
+  const [contractorYear, setContractorYear] = useState<YearFilter | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -148,12 +214,33 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       .then((d) => { setDataset(d.dataset || null); setDept(d.department || null) })
       .catch(() => { setDataset(null); setDept(null) })
       .finally(() => setLoading(false))
+    fetch(`/admin/api/municipal/permits?muni=${encodeURIComponent(muni)}&all=1`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
+      .then((d) => setFullPermits(d.permits || null))
+      .catch(() => setFullPermits(null))
   }, [muni])
 
+  const years = useMemo(() => {
+    const ys = new Set<number>()
+    for (const p of fullPermits ?? dataset?.recent ?? []) {
+      const y = permitYear(p)
+      if (y) ys.add(y)
+    }
+    return Array.from(ys).sort((a, b) => b - a)
+  }, [fullPermits, dataset])
+  const latestYear = years[0]
+  // Charts default to the most recent year once the year list is known.
+  const activeChartYear: YearFilter = chartYear ?? latestYear ?? 'ALL'
+  const activeContractorYear: YearFilter = contractorYear ?? latestYear ?? 'ALL'
+
+  // Map markers: every permit with a street address, filtered by the time
+  // slider (the geocoder caps at ~90 pins per view, newest first).
   const permitMarkers = useMemo<PermitMarker[]>(() => {
-    if (!dataset) return []
-    return dataset.recent
+    const src = fullPermits ?? dataset?.recent ?? []
+    return src
       .filter((p) => p.address && /\d/.test(p.address))
+      .filter((p) => mapYear === 'ALL' || permitYear(p) === mapYear)
+      .sort((a, b) => (b.permitIso || '').localeCompare(a.permitIso || ''))
       .map((p: PermitRecord) => ({
         id: p.permitNumber,
         address: p.address,
@@ -161,7 +248,24 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
         sub: [p.type, p.cost ? fmtUSDshort(p.cost) : null, fmtDate(p.permitIso)].filter(Boolean).join(' · '),
         color: catColor(p.category),
       }))
-  }, [dataset])
+  }, [dataset, fullPermits, mapYear])
+
+  // Chart aggregates for the selected year (all-time falls back to the
+  // precomputed dataset until the full set arrives).
+  const chartAgg = useMemo(() => {
+    if (fullPermits) {
+      return aggregate(activeChartYear === 'ALL' ? fullPermits : fullPermits.filter((p) => permitYear(p) === activeChartYear))
+    }
+    return dataset
+      ? { byCategory: dataset.byCategory, byClass: dataset.byClass, valuationBuckets: dataset.valuationBuckets, topContractors: dataset.topContractors }
+      : null
+  }, [fullPermits, dataset, activeChartYear])
+  const contractorRows = useMemo(() => {
+    if (fullPermits) {
+      return aggregate(activeContractorYear === 'ALL' ? fullPermits : fullPermits.filter((p) => permitYear(p) === activeContractorYear)).topContractors
+    }
+    return dataset?.topContractors ?? []
+  }, [fullPermits, dataset, activeContractorYear])
 
   const timelineItems = useMemo<TimelineItem[]>(() => {
     if (!dataset) return []
@@ -185,6 +289,8 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
     { label: 'Town of North Castle' },
     { label: 'Building Department' },
   ]
+
+  const yearLabel = (v: YearFilter) => (v === 'ALL' ? 'all years' : String(v))
 
   return (
     <div className="container">
@@ -247,30 +353,82 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             <Tile label="Median plan-review time" value={dataset.turnaround.medianDays != null ? `${dataset.turnaround.medianDays} days` : '—'} sub={dataset.turnaround.avgDays != null ? `avg ${dataset.turnaround.avgDays} days` : undefined} />
           </div>
 
-          {/* Map */}
-          <div style={{ marginBottom: 4 }}><SectionHead title="Map" sub="civic issues, county layers & recent permits" /></div>
+          {/* Map — permit addresses shown by default, narrowed by the time slider. */}
+          <SectionHead
+            title="Map"
+            sub={`${fmtInt(permitMarkers.length)} permit addresses · ${yearLabel(mapYear)}`}
+            right={years.length > 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <button
+                  className="btn secondary"
+                  style={{ padding: '4px 10px', fontSize: 12, ...(mapYear === 'ALL' ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
+                  onClick={() => setMapYear('ALL')}
+                >
+                  All years
+                </button>
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12.5 }}>
+                  <input
+                    type="range"
+                    min={years[years.length - 1]}
+                    max={years[0]}
+                    step={1}
+                    value={mapYear === 'ALL' ? years[0] : mapYear}
+                    onChange={(e) => setMapYear(Number(e.target.value))}
+                    aria-label="Permit year"
+                    style={{ width: 160 }}
+                  />
+                  <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600, minWidth: 38 }}>
+                    {mapYear === 'ALL' ? '—' : mapYear}
+                  </span>
+                </label>
+              </div>
+            ) : undefined}
+          />
           <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 720 }}>
-            Use the <strong>Layers</strong> menu (top-right of the map) to overlay one layer at a time — open SeeClickFix issues, county GIS layers, or the most recent permits (geocoded on demand).
+            Permit addresses plot by default (pins geocode in as they resolve; color = permit type). Drag the slider to a single year, or use the <strong>Layers</strong> menu for SeeClickFix issues, county GIS layers, trails and points of interest.
           </div>
-          <JurisdictionMap muni={muni} permits={permitMarkers} />
+          <JurisdictionMap muni={muni} permits={permitMarkers} defaultActive="permits" />
 
-          {/* Analytics: category + class */}
+          {/* Recent permit activity — directly below the map. */}
+          <div style={{ marginBottom: 8 }}><SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} /></div>
+          <MeetingTimeline items={timelineItems} emptyText="No recent permits." />
+          <MeetingList items={timelineItems} maxHeight={340} emptyText="No recent permits." />
+          <div style={{ marginBottom: 26 }} />
+
+          {/* Analytics: category + class, filtered by year (default: latest). */}
+          <SectionHead
+            title="Permit analytics"
+            sub={yearLabel(activeChartYear)}
+            right={years.length > 0 ? <YearSelect value={activeChartYear} years={years} onChange={setChartYear} /> : undefined}
+          />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, marginBottom: 26 }}>
             <div>
-              <SectionHead title="Permits by type" sub="10-year totals" />
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Permits by type</div>
               <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.byCategory.map((c) => ({ label: c.category, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} color={catColor} />
+                {chartAgg && chartAgg.byCategory.length > 0 ? (
+                  <BarList rows={chartAgg.byCategory.map((c) => ({ label: c.category, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} color={catColor} />
+                ) : (
+                  <div className="muted" style={{ fontSize: 13 }}>No permits in {yearLabel(activeChartYear)}.</div>
+                )}
               </div>
             </div>
             <div>
-              <SectionHead title="Residential vs. commercial" sub="by property class" />
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Residential vs. commercial</div>
               <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.byClass.map((c) => ({ label: c.klass, count: c.count }))} />
+                {chartAgg && chartAgg.byClass.length > 0 ? (
+                  <BarList rows={chartAgg.byClass.map((c) => ({ label: c.klass, count: c.count }))} />
+                ) : (
+                  <div className="muted" style={{ fontSize: 13 }}>No permits in {yearLabel(activeChartYear)}.</div>
+                )}
               </div>
               <div style={{ height: 20 }} />
-              <SectionHead title="Declared value" sub="cost-of-construction bands" />
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Declared value · cost-of-construction bands</div>
               <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.valuationBuckets.map((b) => ({ label: b.label, count: b.count }))} />
+                {chartAgg && chartAgg.valuationBuckets.length > 0 ? (
+                  <BarList rows={chartAgg.valuationBuckets.map((b) => ({ label: b.label, count: b.count }))} />
+                ) : (
+                  <div className="muted" style={{ fontSize: 13 }}>No valued permits in {yearLabel(activeChartYear)}.</div>
+                )}
               </div>
             </div>
           </div>
@@ -282,19 +440,18 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           </div>
 
           {/* Top contractors */}
-          {dataset.topContractors.length > 0 && (
-            <div style={{ marginBottom: 26 }}>
-              <SectionHead title="Most active contractors" sub="by permit count" />
-              <div className="card" style={{ padding: 16 }}>
-                <BarList rows={dataset.topContractors.map((c) => ({ label: c.name, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} />
-              </div>
-            </div>
-          )}
-
-          {/* Timeline */}
-          <div style={{ marginBottom: 8 }}><SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} /></div>
-          <MeetingTimeline items={timelineItems} emptyText="No recent permits." />
-          <MeetingList items={timelineItems} maxHeight={340} emptyText="No recent permits." />
+          <SectionHead
+            title="Most active contractors"
+            sub={`by permit count · ${yearLabel(activeContractorYear)}`}
+            right={years.length > 0 ? <YearSelect value={activeContractorYear} years={years} onChange={setContractorYear} /> : undefined}
+          />
+          <div className="card" style={{ padding: 16, marginBottom: 26 }}>
+            {contractorRows.length > 0 ? (
+              <BarList rows={contractorRows.map((c) => ({ label: c.name, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} />
+            ) : (
+              <div className="muted" style={{ fontSize: 13 }}>No contractor-attributed permits in {yearLabel(activeContractorYear)}.</div>
+            )}
+          </div>
 
           <div className="muted" style={{ fontSize: 11, marginTop: 18, lineHeight: 1.5 }}>{dataset.source}</div>
         </>

@@ -529,11 +529,16 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, showIssues = true, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, height = 440,
 }: {
   muni: string
-  /** When provided, adds an opt-in "Recent permits" layer (geocoded on demand). */
+  /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
   permits?: PermitMarker[]
+  /** Menu label / group for the address-marker layer (defaults suit permits). */
+  permitsLabel?: string
+  permitsGroup?: string
+  /** Layer key to activate on mount (e.g. 'permits' to open with markers shown). */
+  defaultActive?: string | null
   /** Include the SeeClickFix "Open issues" layer (default true). */
   showIssues?: boolean
   height?: number
@@ -541,7 +546,7 @@ export default function JurisdictionMap({
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
   // jurisdiction + hamlet boundaries.
-  const [active, setActive] = useState<string | null>(null)
+  const [active, setActive] = useState<string | null>(defaultActive)
   const [layerState, setLayerState] = useState<LayerState>(null)
 
   if (!cfg) return null
@@ -550,7 +555,7 @@ export default function JurisdictionMap({
   // trails + points of interest.
   const groups: MenuGroup[] = [
     ...(showIssues ? [{ group: 'Civic', items: [{ key: 'issues', label: 'Open issues (SeeClickFix)', color: '#ef4444' }] }] : []),
-    ...(permits && permits.length ? [{ group: 'Building', items: [{ key: 'permits', label: 'Recent permits', color: '#d4767a' }] }] : []),
+    ...(permits && permits.length ? [{ group: permitsGroup, items: [{ key: 'permits', label: permitsLabel, color: '#d4767a' }] }] : []),
     ...(muni === 'nc' ? [{ group: 'County GIS', items: GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
     { group: 'Trails & points of interest', items: OSM.map((c) => ({ key: c.key, label: c.label, color: c.color })) },
   ]

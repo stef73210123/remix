@@ -9,6 +9,15 @@ export const metadata: Metadata = isOpen
       title: 'OpenNorthCastle',
       description:
         'A free, nonpartisan dashboard tracking North Castle town meetings, officials, budgets, and land-use applications.',
+      // The town-seal eagle from the wordmark, cropped onto a white square.
+      icons: {
+        icon: [
+          { url: '/onc-icon-32.png', type: 'image/png', sizes: '32x32' },
+          { url: '/onc-icon-16.png', type: 'image/png', sizes: '16x16' },
+          { url: '/onc-icon-192.png', type: 'image/png', sizes: '192x192' },
+        ],
+        apple: '/onc-icon-180.png',
+      },
     }
   : {
       title: 'Remix Admin',

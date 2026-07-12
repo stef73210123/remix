@@ -21,6 +21,8 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
   loading: () => <div className="card" style={{ height: 420, marginBottom: 30 }} />,
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
+import MeetingAnalysisList from './board/MeetingAnalysisList'
+import type { AnalysisDataset } from '@/lib/municipal/analysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import MeetingList from './MeetingList'
 
@@ -264,6 +266,11 @@ export default function MunicipalClient({
     if (board !== 'ALL' && !boardTabs.includes(board)) setBoard('ALL')
   }, [board, boardTabs])
 
+  // Analysis dataset surfaced by the inline TranscriptAnalysis (board tabs), so
+  // the Meetings section attaches the meeting-by-meeting rows to its timeline.
+  const [boardAnalysis, setBoardAnalysis] = useState<AnalysisDataset | null>(null)
+  useEffect(() => { setBoardAnalysis(null) }, [board, town])
+
   const munisShown = useMemo(
     () => (data ? data.municipalities.filter((m) => town === 'ALL' || m.key === town) : []),
     [data, town]
@@ -413,7 +420,7 @@ export default function MunicipalClient({
               <>
                 <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>{board}</h2>
                 <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>{m.name}</div>
-                <TranscriptAnalysis muni={town} body={bodyKey} />
+                <TranscriptAnalysis muni={town} body={bodyKey} onData={setBoardAnalysis} />
               </>
             )
           })()}
@@ -438,8 +445,20 @@ export default function MunicipalClient({
                 : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
             }
           />
-          {/* Compact scrolling list of the same meetings beneath the timeline. */}
-          {timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>}
+          {/* Compact scrolling list of the same meetings beneath the timeline —
+              or, on a board tab with an analysis dataset, the meeting-by-meeting
+              analysis rows attached to the same timeline. */}
+          {board !== 'ALL' && town !== 'ALL' && boardAnalysis && boardAnalysis.meetings.length > 0 ? (
+            <div style={{ marginTop: 10 }}>
+              <MeetingAnalysisList
+                meetings={boardAnalysis.meetings}
+                muni={town}
+                body={data.municipalities.find((x) => x.key === town)?.bodies.find((b) => b.displayName === board)?.key || ''}
+              />
+            </div>
+          ) : (
+            timelineItems.length > 0 && <div style={{ marginTop: 10 }}><MeetingList items={timelineItems} /></div>
+          )}
           <div style={{ marginBottom: 26 }} />
 
           {/* Consolidated per-board sentiment spectrums — Dashboard tab only. */}
