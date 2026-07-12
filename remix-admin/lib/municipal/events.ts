@@ -6,8 +6,8 @@
  *
  * Dates/times/locations are sourced from the organizing groups' own listings
  * (Armonk Lions Club, Armonk Chamber of Commerce, Armonk Outdoor Art Show,
- * Friends of Frosty, North Castle Public Library, Byram Hills CSD); see each
- * event's `url`.
+ * Friends of Frosty, North Castle Public Library, North Castle Historical
+ * Society, Byram Hills CSD); see each event's `url`.
  */
 
 export interface CommunityEvent {
@@ -178,6 +178,18 @@ const EVENTS: Record<string, CommunityEvent[]> = {
       description: 'Free outdoor concert series in the heart of downtown Armonk, presented by the Armonk Chamber of Commerce — season closer.',
       url: 'https://www.armonkchamberofcommerce.com/town-events-calendar-copy/',
       category: 'concert',
+    },
+    {
+      key: 'halloween-haunt-2026',
+      title: 'Halloween Haunt',
+      date: '2026-10-24',
+      endDate: '2026-10-25',
+      location: "Smith's Tavern, 440 Bedford Road, Armonk",
+      description:
+        "A haunted house, games, pumpkin painting and ghost stories at the historic Smith's Tavern — " +
+        'a community fundraiser hosted by the North Castle Historical Society.',
+      url: 'https://www.northcastlehistoricalsociety.org/',
+      category: 'festival',
     },
     {
       key: 'frosty-day-2026',
