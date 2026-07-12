@@ -5,8 +5,9 @@
  * elections.ts/departments.ts, so it renders with no DB dependency.
  *
  * Dates/times/locations are sourced from the organizing groups' own listings
- * (Armonk Lions Club, Armonk Chamber of Commerce, Armonk Outdoor Art Show);
- * see each event's `url`.
+ * (Armonk Lions Club, Armonk Chamber of Commerce, Armonk Outdoor Art Show,
+ * Friends of Frosty, North Castle Public Library, Byram Hills CSD); see each
+ * event's `url`.
  */
 
 export interface CommunityEvent {
@@ -185,8 +186,60 @@ const EVENTS: Record<string, CommunityEvent[]> = {
       startTime: '12:00',
       endTime: '17:00',
       location: 'Downtown Armonk',
-      description: 'Holiday festivities in downtown Armonk, noon–5pm, with the parade and tree-lighting ceremony at 3:30pm.',
-      url: 'https://www.armonkchamberofcommerce.com/town-events-calendar-copy/',
+      description:
+        'Holiday festivities in downtown Armonk, noon–5pm, with the parade and tree-lighting ceremony at 3:30pm — ' +
+        'organized by Friends of Frosty, a volunteer nonprofit, with over 40 local groups marching in the parade.',
+      url: 'https://www.armonkfrosty.com/',
+      category: 'holiday',
+    },
+    {
+      key: 'ncpl-friends-gallery-2026',
+      title: 'Friends Gallery Exhibit',
+      date: '2026-04-09',
+      endDate: '2026-07-31',
+      location: 'North Castle Public Library, Armonk',
+      description: 'Rotating art exhibit in the Friends Gallery at the Armonk library, presented by the Friends of the North Castle Public Library.',
+      url: 'https://www.northcastlelibrary.org/',
+      category: 'civic',
+    },
+    {
+      key: 'bhcsd-thanksgiving-recess-2026',
+      title: 'Byram Hills Schools — Thanksgiving Recess',
+      date: '2026-11-26',
+      endDate: '2026-11-27',
+      location: 'Byram Hills Central School District',
+      description: 'No school for Byram Hills CSD students — Thanksgiving recess, per the 2026–27 district calendar.',
+      url: 'https://www.byramhills.org/district/calendar',
+      category: 'holiday',
+    },
+    {
+      key: 'bhcsd-holiday-recess-2026',
+      title: 'Byram Hills Schools — Holiday Recess',
+      date: '2026-12-24',
+      endDate: '2026-12-31',
+      location: 'Byram Hills Central School District',
+      description: 'No school for Byram Hills CSD students — winter holiday recess, per the 2026–27 district calendar.',
+      url: 'https://www.byramhills.org/district/calendar',
+      category: 'holiday',
+    },
+    {
+      key: 'bhcsd-winter-recess-2027',
+      title: 'Byram Hills Schools — Winter Recess',
+      date: '2027-02-15',
+      endDate: '2027-02-19',
+      location: 'Byram Hills Central School District',
+      description: 'No school for Byram Hills CSD students — midwinter recess, per the 2026–27 district calendar.',
+      url: 'https://www.byramhills.org/district/calendar',
+      category: 'holiday',
+    },
+    {
+      key: 'bhcsd-spring-recess-2027',
+      title: 'Byram Hills Schools — Spring Recess',
+      date: '2027-03-22',
+      endDate: '2027-03-26',
+      location: 'Byram Hills Central School District',
+      description: 'No school for Byram Hills CSD students — spring recess, per the 2026–27 district calendar.',
+      url: 'https://www.byramhills.org/district/calendar',
       category: 'holiday',
     },
   ],

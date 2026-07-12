@@ -13,6 +13,11 @@ interface School {
   name: string
   grades: string
 }
+interface Foundation {
+  name: string
+  website: string
+  websiteLabel: string
+}
 interface DistrictInfo {
   name: string
   short: string
@@ -22,6 +27,10 @@ interface DistrictInfo {
   note?: string
   website: string
   websiteLabel: string
+  /** District's own education foundation — grants/fundraising beyond the operating budget. */
+  foundation?: Foundation
+  /** Link to the district's current academic calendar. */
+  calendarUrl?: string
 }
 
 const DISTRICTS: Record<string, DistrictInfo[]> = {
@@ -43,6 +52,12 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
         'area in the Bedford CSD (both in the toggle above).',
       website: 'https://www.byramhills.org',
       websiteLabel: 'byramhills.org',
+      foundation: {
+        name: 'Byram Hills Education Foundation',
+        website: 'https://www.byramhillsfoundation.org/',
+        websiteLabel: 'byramhillsfoundation.org',
+      },
+      calendarUrl: 'https://www.byramhills.org/district/calendar',
     },
     {
       name: 'Valhalla Union Free School District',
@@ -60,6 +75,12 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
         'in neighboring Mount Pleasant. Its Virginia Road School sits on Virginia Road in North White Plains.',
       website: 'https://www.valhallaschools.org',
       websiteLabel: 'valhallaschools.org',
+      foundation: {
+        name: 'Valhalla Schools Foundation',
+        website: 'https://www.valhallasf.org/',
+        websiteLabel: 'valhallasf.org',
+      },
+      calendarUrl: 'https://www.valhallaschools.org/apps/events/',
     },
     {
       name: 'Bedford Central School District',
@@ -130,10 +151,20 @@ export default function SchoolDistrict({ muniKey }: { muniKey: string }) {
         {d.note && (
           <div className="muted" style={{ fontSize: 12, lineHeight: 1.55, marginTop: 10 }}>{d.note}</div>
         )}
-        <div style={{ marginTop: 10 }}>
+        <div style={{ marginTop: 10, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <a href={d.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--primary-light)' }}>
             {d.websiteLabel} ↗
           </a>
+          {d.calendarUrl && (
+            <a href={d.calendarUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--primary-light)' }}>
+              Academic calendar ↗
+            </a>
+          )}
+          {d.foundation && (
+            <a href={d.foundation.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--primary-light)' }}>
+              {d.foundation.name} ↗
+            </a>
+          )}
         </div>
       </div>
     </div>
