@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import type { TownDemographics, DemoSeriesPoint } from '@/lib/municipal/demographics'
+import AgeDistribution from './AgeDistribution'
 
 function fmtInt(n: number): string {
   return n.toLocaleString('en-US')
@@ -228,6 +229,9 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
             {fmtInt(demo.households)} households · {(demo.population / (demo.households || 1)).toFixed(1)} people per household
           </div>
         </div>
+
+        {/* Age distribution over time, with school-age bands — the last chart in this section. */}
+        <AgeDistribution muniKey={muniKey} />
       </div>
     </div>
   )

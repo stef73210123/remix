@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import dynamic from 'next/dynamic'
-import type { TownBudget } from '@/lib/municipal/budget'
-import BudgetPanel from './budget/BudgetPanel'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
 import KeyIssues from './KeyIssues'
@@ -12,7 +10,6 @@ import ElectionResults from './ElectionResults'
 import CommunityCalendar from './CommunityCalendar'
 import CommunityOrgs from './CommunityOrgs'
 import SchoolDistrict from './SchoolDistrict'
-import AgeDistribution from './AgeDistribution'
 import BoardSentiment, { type BoardScore } from './BoardProgress'
 import CivicActions from './CivicActions'
 import { isOpen } from '@/lib/flavor'
@@ -203,19 +200,14 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
 
 export default function MunicipalClient({
   userName,
-  budgets,
 }: {
   userName: string
-  budgets: Record<string, TownBudget>
 }) {
   const [data, setData] = useState<Summary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [town, setTown] = useState<TownFilter>('nc')
   const [board, setBoard] = useState<BoardFilter>('ALL')
-  // When "All towns" is selected, the financial-analysis section shows one
-  // town at a time, chosen with this toggle.
-  const [budgetTown, setBudgetTown] = useState<string>('')
 
   // Deep-link: breadcrumbs and board pages return here with ?town=nc so the
   // right jurisdiction tab is pre-selected.
@@ -436,12 +428,6 @@ export default function MunicipalClient({
     return [...hist, ...up]
   }, [history, upcomingRows, meetingAnalysisByKey])
 
-  // Towns that have budget data — the choices for the "All towns" toggle.
-  const budgetTownList = useMemo(
-    () => (data ? data.municipalities.filter((m) => budgets[m.key]) : []),
-    [data, budgets]
-  )
-
   // Meetings — one horizontal timeline: history on the left, the next meeting
   // per board on the right, with a "Now" divider between. Rendered once and
   // referenced from two different spots below: right under the board's own
@@ -535,6 +521,15 @@ export default function MunicipalClient({
                 Building Dept
               </a>
             )}
+            {town === 'nc' && (
+              <a
+                href={`/admin/municipal/finance?muni=${town}`}
+                className="btn secondary"
+                style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}
+              >
+                Finance
+              </a>
+            )}
           </div>
 
           {/* Board view — the enriched profile (members, themes, cases, meeting-by-
@@ -589,45 +584,6 @@ export default function MunicipalClient({
 
           {/* School district context — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <SchoolDistrict muniKey={town} />}
-
-          {/* Age distribution over time, with school-age bands — Dashboard tab only. */}
-          {board === 'ALL' && town !== 'ALL' && <AgeDistribution muniKey={town} />}
-
-          {/* Financial analysis — the selected town's budget. Dashboard tab only. */}
-          {board === 'ALL' && (() => {
-            const activeKey =
-              town !== 'ALL' ? town : (budgetTown && budgets[budgetTown] ? budgetTown : budgetTownList[0]?.key || '')
-            const activeBudget = activeKey ? budgets[activeKey] : undefined
-            return (
-              <>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-                  <h2 style={{ fontSize: 16, margin: 0 }}>Financial analysis</h2>
-                  {town === 'ALL' && budgetTownList.length > 0 && (
-                    <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap' }}>
-                      {budgetTownList.map((m) => (
-                        <Chip key={m.key} active={activeKey === m.key} onClick={() => setBudgetTown(m.key)}>{m.name}</Chip>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                {activeBudget ? (
-                  <div style={{ marginBottom: 26 }}>
-                    <BudgetPanel budget={activeBudget} />
-                  </div>
-                ) : (
-                  <div className="card" style={{ marginBottom: 26 }}>
-                    <div className="muted" style={{ padding: 20, fontSize: 13 }}>
-                      No budget data for{' '}
-                      {town !== 'ALL'
-                        ? data.municipalities.find((m) => m.key === town)?.name || 'this town'
-                        : 'the tracked towns'}{' '}
-                      yet.
-                    </div>
-                  </div>
-                )}
-              </>
-            )
-          })()}
 
           {/* Community events calendar + the orgs behind them — Dashboard tab
               only. Sits at the bottom, after the town's own civic/financial data. */}

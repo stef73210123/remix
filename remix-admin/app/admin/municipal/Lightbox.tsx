@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useLockBodyScroll } from './useLockBodyScroll'
 
 /**
@@ -9,6 +10,13 @@ import { useLockBodyScroll } from './useLockBodyScroll'
  * X-Frame-Options; the header always carries an "Open in new tab" affordance so
  * the action still works, and a short delay reveals a fallback note if the frame
  * hasn't loaded. Closes on the ✕, a backdrop click, or Escape.
+ *
+ * Rendered via a portal into `document.body`: this component's trigger
+ * (CivicActions) lives inside the bottom action bar, which has a
+ * `backdrop-filter` for its translucent look — and any ancestor with a
+ * backdrop-filter/transform/filter becomes the containing block for its
+ * `position: fixed` descendants, which would otherwise squash this overlay
+ * into that bar's small box instead of centering it in the viewport.
  */
 export default function Lightbox({
   url,
@@ -34,7 +42,7 @@ export default function Lightbox({
     }
   }, [onClose])
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -81,6 +89,7 @@ export default function Lightbox({
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

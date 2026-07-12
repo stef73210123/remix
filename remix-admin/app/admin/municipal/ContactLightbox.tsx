@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useLockBodyScroll } from './useLockBodyScroll'
 
 const RECIPIENTS = ['OpenNorthCastle team', 'Town Board', 'Planning Board', 'Building Department']
@@ -12,6 +13,12 @@ const RECIPIENTS = ['OpenNorthCastle team', 'Town Board', 'Planning Board', 'Bui
  * the department/board dropdown is just routing context in the message
  * itself, since OpenNorthCastle is an independent tool, not an official
  * Town channel.
+ *
+ * Rendered via a portal into `document.body` — its trigger (CivicActions)
+ * lives inside the bottom action bar, which has a `backdrop-filter`; any
+ * ancestor with that property becomes the containing block for `position:
+ * fixed` descendants, which would otherwise squash this overlay into the
+ * bar's small box instead of centering it in the viewport.
  */
 export default function ContactLightbox({ onClose }: { onClose: () => void }) {
   const [recipient, setRecipient] = useState(RECIPIENTS[0])
@@ -53,7 +60,7 @@ export default function ContactLightbox({ onClose }: { onClose: () => void }) {
     background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)',
   }
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -110,6 +117,7 @@ export default function ContactLightbox({ onClose }: { onClose: () => void }) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

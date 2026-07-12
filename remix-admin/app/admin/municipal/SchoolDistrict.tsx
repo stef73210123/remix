@@ -12,6 +12,7 @@ import { useState } from 'react'
 interface School {
   name: string
   grades: string
+  website: string
 }
 interface Foundation {
   name: string
@@ -41,10 +42,10 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
       serves: 'Armonk and most of the Town of North Castle',
       enrollment: '≈ 2,400 students',
       schools: [
-        { name: 'Coman Hill Elementary', grades: 'K–2' },
-        { name: 'Wampus Elementary', grades: '3–5' },
-        { name: 'H.C. Crittenden Middle School', grades: '6–8' },
-        { name: 'Byram Hills High School', grades: '9–12' },
+        { name: 'Coman Hill Elementary', grades: 'K–2', website: 'https://www.byramhills.org/comanhill' },
+        { name: 'Wampus Elementary', grades: '3–5', website: 'https://www.byramhills.org/wampus' },
+        { name: 'H.C. Crittenden Middle School', grades: '6–8', website: 'https://www.byramhills.org/all-about-hcc' },
+        { name: 'Byram Hills High School', grades: '9–12', website: 'https://www.byramhills.org/bhhs' },
       ],
       note:
         'Byram Hills is consistently ranked among the top public districts in Westchester and New York State. ' +
@@ -65,10 +66,10 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
       serves: 'The North White Plains section of North Castle (plus the hamlet of Valhalla)',
       enrollment: '≈ 1,433 students',
       schools: [
-        { name: 'Virginia Road School', grades: 'K–2' },
-        { name: 'Kensico School', grades: '3–5' },
-        { name: 'Valhalla Middle School', grades: '6–8' },
-        { name: 'Valhalla High School', grades: '9–12' },
+        { name: 'Virginia Road School', grades: 'K–2', website: 'https://vres.valhallaschools.org/' },
+        { name: 'Kensico School', grades: '3–5', website: 'https://kes.valhallaschools.org/' },
+        { name: 'Valhalla Middle School', grades: '6–8', website: 'https://vms.valhallaschools.org/' },
+        { name: 'Valhalla High School', grades: '9–12', website: 'https://vhs.valhallaschools.org/' },
       ],
       note:
         'Valhalla UFSD serves the North White Plains neighborhood of North Castle along with the hamlet of Valhalla ' +
@@ -88,9 +89,13 @@ const DISTRICTS: Record<string, DistrictInfo[]> = {
       serves: 'The Banksville corner of North Castle (plus Bedford, Bedford Hills, Mount Kisco & Pound Ridge)',
       enrollment: '≈ 3,400 students',
       schools: [
-        { name: 'Five elementary schools', grades: 'K–5' },
-        { name: 'Fox Lane Middle School', grades: '6–8' },
-        { name: 'Fox Lane High School', grades: '9–12' },
+        { name: 'Bedford Village Elementary', grades: 'K–5', website: 'https://bves.bcsdny.org/' },
+        { name: 'Bedford Hills Elementary', grades: 'K–5', website: 'https://bhes.bcsdny.org/' },
+        { name: 'West Patent Elementary', grades: 'K–5', website: 'https://wpes.bcsdny.org/' },
+        { name: 'Pound Ridge Elementary', grades: 'K–5', website: 'https://pres.bcsdny.org/' },
+        { name: 'Mount Kisco Elementary', grades: 'K–5', website: 'https://mkes.bcsdny.org/' },
+        { name: 'Fox Lane Middle School', grades: '6–8', website: 'https://flms.bcsdny.org/' },
+        { name: 'Fox Lane High School', grades: '9–12', website: 'https://flhs.bcsdny.org/' },
       ],
       note:
         'Bedford Central serves the Banksville area of North Castle. Its five elementary schools — Bedford Village, ' +
@@ -150,6 +155,9 @@ export default function SchoolDistrict({ muniKey }: { muniKey: string }) {
             <div key={s.name} style={{ background: 'var(--panel-2)', borderRadius: 8, padding: '10px 12px' }}>
               <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.3 }}>{s.name}</div>
               <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>Grades {s.grades}</div>
+              <a href={s.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11.5, color: 'var(--primary-light)', marginTop: 4, display: 'inline-block' }}>
+                Website ↗
+              </a>
             </div>
           ))}
         </div>
@@ -177,7 +185,7 @@ export default function SchoolDistrict({ muniKey }: { muniKey: string }) {
           </a>
           {d.calendarUrl && (
             <a href={d.calendarUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--primary-light)' }}>
-              Academic calendar ↗
+              2026–27 calendar ↗
             </a>
           )}
         </div>
