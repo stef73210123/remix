@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { type CommunityEvent, googleCalendarUrl } from '@/lib/municipal/events'
 import { useLockBodyScroll } from './useLockBodyScroll'
 import { fmtDateShort } from '@/lib/municipal/date'
@@ -39,7 +40,7 @@ export default function EventLightbox({ event, onClose }: { event: CommunityEven
     ? `${fmtTime(event.startTime)}${event.endTime ? ` – ${fmtTime(event.endTime)}` : ''}`
     : null
 
-  return (
+  return createPortal(
     <div
       onClick={onClose}
       style={{
@@ -77,6 +78,7 @@ export default function EventLightbox({ event, onClose }: { event: CommunityEven
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

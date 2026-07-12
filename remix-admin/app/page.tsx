@@ -2,8 +2,6 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { verifySession, SESSION_COOKIE } from '@/lib/auth'
 import { isOpen } from '@/lib/flavor'
-import { MUNICIPALITIES } from '@/lib/municipal/registry'
-import { getBudget, type TownBudget } from '@/lib/municipal/budget'
 import MunicipalClient from './admin/municipal/MunicipalClient'
 
 export const dynamic = 'force-dynamic'
@@ -23,11 +21,5 @@ export default async function Home() {
   const store = await cookies()
   const session = await verifySession(store.get(SESSION_COOKIE)?.value)
 
-  const budgets: Record<string, TownBudget> = {}
-  for (const m of MUNICIPALITIES) {
-    const b = getBudget(m.key)
-    if (b) budgets[m.key] = b
-  }
-
-  return <MunicipalClient userName={session?.name ?? ''} budgets={budgets} />
+  return <MunicipalClient userName={session?.name ?? ''} />
 }

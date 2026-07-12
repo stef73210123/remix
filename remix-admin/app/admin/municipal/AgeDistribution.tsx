@@ -56,7 +56,7 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
     return m
   }, [vintages, hasCounts])
 
-  if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading age distribution…</div>
+  if (loading) return <div className="muted" style={{ fontSize: 13, gridColumn: '1 / -1' }}>Loading age distribution…</div>
   if (!selected || selected.bins.length === 0) return null
 
   const visBins = selected.bins
@@ -79,12 +79,12 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
   const eb = hb && compareBins ? compareBins[hover!] : null
 
   return (
-    <div style={{ marginBottom: 30 }}>
+    <div style={{ gridColumn: '1 / -1' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 4px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>
+        <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Age distribution
-          {compare && <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · change since {compare.year}</span>}
-        </h2>
+          {compare && <span> · change since {compare.year}</span>}
+        </div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 11 }} className="muted">
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>

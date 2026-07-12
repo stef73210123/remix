@@ -15,7 +15,7 @@ const BOARD_TABS: { label: string; bodyKey: string }[] = [
  * pages are real routes (not client-side state), so every entry here is a
  * plain link; `active` just controls which one highlights.
  */
-export default function MuniTabs({ muni, active }: { muni: string; active: 'dashboard' | 'building' | string }) {
+export default function MuniTabs({ muni, active }: { muni: string; active: 'dashboard' | 'building' | 'finance' | string }) {
   const [headerH, setHeaderH] = useState(0)
   useEffect(() => {
     if (!isOpen) return
@@ -55,6 +55,13 @@ export default function MuniTabs({ muni, active }: { muni: string; active: 'dash
         style={tabStyle(active === 'building')}
       >
         Building Dept
+      </a>
+      <a
+        href={`/admin/municipal/finance?muni=${muni}`}
+        className={active === 'finance' ? 'btn' : 'btn secondary'}
+        style={tabStyle(active === 'finance')}
+      >
+        Finance
       </a>
     </div>
   )
