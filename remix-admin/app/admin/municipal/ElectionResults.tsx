@@ -153,24 +153,26 @@ export default function ElectionResults({ muniKey }: { muniKey: string }) {
       </div>
 
       <div className="card" style={{ padding: 16 }}>
-        {general.length > 0 && (
-          <>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-              General election{general[0].date ? ` · ${fmtElectionDate(general[0].date)}` : ` · November ${activeYear}`}
-            </div>
-            {general.map((r) => <RaceBlock key={`g-${r.office}`} race={r} />)}
-          </>
-        )}
+        {/* Primary (June) shown before General (November) — chronological order
+            within the election year. */}
         {primary.length > 0 && (
           <>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '10px 0 6px' }}>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
               Primary election{primary[0].date ? ` · ${fmtElectionDate(primary[0].date)}` : ''}
             </div>
             {primary.map((r) => <RaceBlock key={`p-${r.office}`} race={r} />)}
           </>
         )}
         {elections.primaryNote && primary.length === 0 && (
-          <div className="muted" style={{ fontSize: 12, marginTop: 4, marginBottom: 2 }}>{elections.primaryNote}</div>
+          <div className="muted" style={{ fontSize: 12, marginBottom: 12 }}>{elections.primaryNote}</div>
+        )}
+        {general.length > 0 && (
+          <>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', margin: primary.length > 0 || elections.primaryNote ? '10px 0 6px' : '0 0 6px' }}>
+              General election{general[0].date ? ` · ${fmtElectionDate(general[0].date)}` : ` · November ${activeYear}`}
+            </div>
+            {general.map((r) => <RaceBlock key={`g-${r.office}`} race={r} />)}
+          </>
         )}
         <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5 }}>
           Town offices only (Supervisor &amp; Town Board); county, state and federal races omitted.

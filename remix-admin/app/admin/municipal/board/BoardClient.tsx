@@ -7,6 +7,9 @@ import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
+import BoardCaseMap from './BoardCaseMap'
+import BoardStaffCards from './BoardStaffCards'
+import BoardKeyDocs from './BoardKeyDocs'
 import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
@@ -177,23 +180,18 @@ export default function BoardClient({ userName }: { userName: string }) {
           date: new Date(mtg.scheduled_at),
           title: mtg.title,
           past,
-          links:
-            hasDocs || hasTranscript ? (
-              <>
-                {hasDocs && <DocLinks assets={mtg.assets} />}
-                {hasTranscript && (
-                  <a
-                    href={`/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${dateKey}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="badge state"
-                    style={{ textDecoration: 'none' }}
-                  >
-                    Transcript ↗
-                  </a>
-                )}
-              </>
-            ) : undefined,
+          links: hasDocs ? <DocLinks assets={mtg.assets} /> : undefined,
+          transcriptLink: hasTranscript ? (
+            <a
+              href={`/admin/api/municipal/transcript?muni=${muni}&body=${body}&date=${dateKey}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="badge state"
+              style={{ textDecoration: 'none' }}
+            >
+              Transcript ↗
+            </a>
+          ) : undefined,
         }
       })
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
@@ -235,6 +233,12 @@ export default function BoardClient({ userName }: { userName: string }) {
             {data.board.meetingPattern ? ` · ${data.board.meetingPattern}` : ''}
           </div>
 
+          {/* Departmental staff cards — at the very top of the page. */}
+          <BoardStaffCards muni={muni} bodyKey={body} />
+
+          {/* Key reference documents (Town Code, Zoning Code, etc.) for this board. */}
+          <BoardKeyDocs muni={muni} bodyKey={body} />
+
           {/* Members roster — only for boards WITHOUT a transcript dataset. Where a
               dataset exists, the analysis section below shows members with sentiment,
               so we don't duplicate (or show an empty roster above it). */}
@@ -265,8 +269,8 @@ export default function BoardClient({ userName }: { userName: string }) {
             </>
           )}
 
-          {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
-          <TranscriptAnalysis muni={muni} body={body} onData={setAnalysis} />
+          {/* Case/agenda-item map, at the top — Meetings sits directly below it. */}
+          <BoardCaseMap dataset={analysis} muni={muni} />
 
           {/* Meetings — one horizontal timeline: history on the left, upcoming on
               the right, matching the municipal dashboard. Where an analysis
@@ -302,6 +306,9 @@ export default function BoardClient({ userName }: { userName: string }) {
           <div className="muted" style={{ fontSize: 11, margin: '10px 0 26px' }}>
             Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
           </div>
+
+          {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
+          <TranscriptAnalysis muni={muni} body={body} onData={setAnalysis} />
 
           {/* Recurring/all applications (or agenda items) table — after Meetings. */}
           {analysis && <CasesList data={analysis} muni={muni} />}

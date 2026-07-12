@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import './opennorthcastle.css'
 import TopoBackground from './TopoBackground'
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {!isOpen && <TopoBackground />}
         {children}
         {isOpen && <SiteFooter />}
+        <Analytics />
       </body>
     </html>
   )

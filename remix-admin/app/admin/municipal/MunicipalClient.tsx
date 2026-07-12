@@ -9,6 +9,7 @@ import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
 import KeyIssues from './KeyIssues'
 import ElectionResults from './ElectionResults'
+import CommunityCalendar from './CommunityCalendar'
 import SchoolDistrict from './SchoolDistrict'
 import AgeDistribution from './AgeDistribution'
 import BoardSentiment, { type BoardScore } from './BoardProgress'
@@ -21,6 +22,9 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
   loading: () => <div className="card" style={{ height: 420, marginBottom: 30 }} />,
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
+import BoardCaseMap from './board/BoardCaseMap'
+import BoardStaffCards from './board/BoardStaffCards'
+import BoardKeyDocs from './board/BoardKeyDocs'
 import MeetingAnalysisList from './board/MeetingAnalysisList'
 import CasesList from './board/CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
@@ -430,6 +434,53 @@ export default function MunicipalClient({
     [data, budgets]
   )
 
+  // Meetings — one horizontal timeline: history on the left, the next meeting
+  // per board on the right, with a "Now" divider between. Rendered once and
+  // referenced from two different spots below: right under the board's own
+  // case map (a specific board tab) or in its usual place above Board
+  // Sentiment (the "All" dashboard tab) — never both at once.
+  const meetingsBlock = data && (
+    <>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h2 style={{ fontSize: 16, margin: 0 }}>
+          Meetings
+          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
+        </h2>
+      </div>
+      <MeetingTimeline
+        items={timelineItems}
+        selectedKey={selectedMeetingKey}
+        onSelect={setSelectedMeetingKey}
+        emptyText={
+          data.dbOk
+            ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
+            : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
+        }
+      />
+      {/* Compact scrolling list of the same meetings beneath the timeline —
+          or, on a board tab with an analysis dataset, the meeting-by-meeting
+          analysis rows attached to the same timeline. */}
+      {board !== 'ALL' && town !== 'ALL' && boardAnalysis && boardAnalysis.meetings.length > 0 ? (
+        <div style={{ marginTop: 10 }}>
+          <MeetingAnalysisList
+            meetings={boardAnalysis.meetings}
+            muni={town}
+            body={data.municipalities.find((x) => x.key === town)?.bodies.find((b) => b.displayName === board)?.key || ''}
+            selectedKey={selectedMeetingKey}
+            onSelect={setSelectedMeetingKey}
+          />
+        </div>
+      ) : (
+        timelineItems.length > 0 && (
+          <div style={{ marginTop: 10 }}>
+            <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+          </div>
+        )
+      )}
+      <div style={{ marginBottom: 26 }} />
+    </>
+  )
+
   return (
     <div className="container">
       <MuniHeader userName={userName} />
@@ -488,6 +539,10 @@ export default function MunicipalClient({
               <>
                 <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>{board}</h2>
                 <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>{m.name}</div>
+                <BoardStaffCards muni={town} bodyKey={bodyKey} />
+                <BoardKeyDocs muni={town} bodyKey={bodyKey} />
+                <BoardCaseMap dataset={boardAnalysis} muni={town} />
+                {meetingsBlock}
                 <TranscriptAnalysis muni={town} body={bodyKey} onData={setBoardAnalysis} />
               </>
             )
@@ -501,46 +556,10 @@ export default function MunicipalClient({
           {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
 
-          {/* Meetings — one horizontal timeline: history on the left, the next
-              meeting per board on the right, with a "Now" divider between.
-              Sits just above the board-sentiment roll-up. */}
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-            <h2 style={{ fontSize: 16, margin: 0 }}>
-              Meetings
-              <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
-            </h2>
-          </div>
-          <MeetingTimeline
-            items={timelineItems}
-            selectedKey={selectedMeetingKey}
-            onSelect={setSelectedMeetingKey}
-            emptyText={
-              data.dbOk
-                ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
-                : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
-            }
-          />
-          {/* Compact scrolling list of the same meetings beneath the timeline —
-              or, on a board tab with an analysis dataset, the meeting-by-meeting
-              analysis rows attached to the same timeline. */}
-          {board !== 'ALL' && town !== 'ALL' && boardAnalysis && boardAnalysis.meetings.length > 0 ? (
-            <div style={{ marginTop: 10 }}>
-              <MeetingAnalysisList
-                meetings={boardAnalysis.meetings}
-                muni={town}
-                body={data.municipalities.find((x) => x.key === town)?.bodies.find((b) => b.displayName === board)?.key || ''}
-                selectedKey={selectedMeetingKey}
-                onSelect={setSelectedMeetingKey}
-              />
-            </div>
-          ) : (
-            timelineItems.length > 0 && (
-              <div style={{ marginTop: 10 }}>
-                <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
-              </div>
-            )
-          )}
-          <div style={{ marginBottom: 26 }} />
+          {/* Meetings — sits just above the board-sentiment roll-up on the "All"
+              dashboard tab. (On a specific board tab, this same block already
+              rendered above, right under that board's case map.) */}
+          {board === 'ALL' && meetingsBlock}
 
           {/* Recurring/all applications (or agenda items) table — after Meetings. */}
           {board !== 'ALL' && town !== 'ALL' && boardAnalysis && <CasesList data={boardAnalysis} muni={town} />}
@@ -601,6 +620,10 @@ export default function MunicipalClient({
               </>
             )
           })()}
+
+          {/* Community events calendar — Dashboard tab only. Sits at the bottom,
+              after the town's own civic/financial data. */}
+          {board === 'ALL' && town !== 'ALL' && <CommunityCalendar muniKey={town} />}
 
           {!data.dbOk && data.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>

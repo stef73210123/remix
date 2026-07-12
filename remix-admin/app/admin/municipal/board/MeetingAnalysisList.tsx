@@ -89,7 +89,7 @@ function MeetingRow({
     >
       <div
         onClick={() => { onToggle(); onSelect?.() }}
-        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', cursor: 'pointer', flexWrap: 'wrap' }}
+        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 16px', cursor: 'pointer', flexWrap: 'wrap' }}
       >
         <span className="muted" style={{ width: 10 }}>{open ? '▾' : '▸'}</span>
         <span style={{ fontWeight: 700, minWidth: 130 }}>{fmtDate(mt.date)}</span>
@@ -114,9 +114,9 @@ function MeetingRow({
         <div
           className="muted"
           style={{
-            fontSize: 12, lineHeight: 1.5, padding: '10px 14px 12px 36px',
+            fontSize: 12.5, lineHeight: 1.55, padding: '12px 16px 14px 38px',
             marginTop: 2, borderTop: '1px solid var(--border)',
-            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            maxHeight: '4.7em', overflow: 'hidden',
           }}
         >
           {mt.meetingSummary}

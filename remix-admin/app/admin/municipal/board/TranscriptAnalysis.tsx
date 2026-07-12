@@ -1,18 +1,16 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import dynamic from 'next/dynamic'
 import type { AnalysisDataset, MemberProfile, ThemeRollup } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
 import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
-import { getBoardDepartments } from '@/lib/municipal/departments'
-import type { PermitMarker } from '../JurisdictionMap'
 
-const JurisdictionMap = dynamic(() => import('../JurisdictionMap'), {
-  ssr: false,
-  loading: () => <div className="card" style={{ height: 380, marginBottom: 30 }} />,
-})
+function fmtCaptionDate(iso: string): string {
+  const d = new Date(iso + 'T12:00:00Z')
+  if (isNaN(d.getTime())) return iso
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
 
 /** Diverging bar: center = 0, fill extends left (neg) or right (pos). */
 function SentBar({ score, height = 8 }: { score: number; height?: number }) {
@@ -47,7 +45,6 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
   const [data, setData] = useState<AnalysisDataset | null>(null)
   const [loading, setLoading] = useState(true)
   const [themeSort, setThemeSort] = useState<ThemeSort>('volume')
-  const [mapYear, setMapYear] = useState<number | 'ALL'>('ALL')
 
   useEffect(() => {
     setLoading(true)
@@ -63,6 +60,13 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [muni, body])
 
+  // Most recent meeting the analysis covers — shown as a "current as of" caption
+  // so readers know how fresh the ingested/analyzed data is.
+  const latestMeetingDate = useMemo(() => {
+    const dates = (data?.meetings ?? []).map((mt) => mt.date).filter(Boolean).sort()
+    return dates.length ? dates[dates.length - 1] : null
+  }, [data])
+
   // Themes, re-ranked by the selected lens.
   const themesSorted = useMemo(() => {
     const t = [...(data?.themes ?? [])]
@@ -70,28 +74,6 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
     if (themeSort === 'negative') return t.sort((a, b) => a.avgSentiment - b.avgSentiment)
     return t.sort((a, b) => b.meetings - a.meetings)
   }, [data, themeSort])
-
-  // Map: one pin per case with a street address, filterable by appearance year.
-  const mapYears = useMemo(() => {
-    const ys = new Set<number>()
-    for (const c of data?.cases ?? []) for (const ap of c.timeline) {
-      const y = Number(ap.date.slice(0, 4))
-      if (y) ys.add(y)
-    }
-    return Array.from(ys).sort((a, b) => b - a)
-  }, [data])
-  const caseMarkers = useMemo<PermitMarker[]>(() => {
-    return (data?.cases ?? [])
-      .filter((c) => c.address && /\d/.test(c.address))
-      .filter((c) => mapYear === 'ALL' || c.timeline.some((ap) => Number(ap.date.slice(0, 4)) === mapYear))
-      .map((c) => ({
-        id: c.id,
-        address: c.address as string,
-        title: c.name,
-        sub: [c.applicationType, c.lastStatus, `seen ${c.appearances}×`].filter(Boolean).join(' · '),
-        color: sentimentColor(c.avgSentiment),
-      }))
-  }, [data, mapYear])
 
   if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading transcript analysis…</div>
   if (!data) return null
@@ -101,41 +83,18 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
   // Board-appropriate noun for the "cases" (Planning = applications; Town Board = agenda items).
   const isTownBoard = m.bodyKey === 'town_board'
   const itemNounPlural = isTownBoard ? 'agenda items' : 'applications'
-  const itemNounTitle = isTownBoard ? 'agenda items' : 'applications'
-  const departments = getBoardDepartments(muni, m.bodyKey)
 
   return (
     <div style={{ marginBottom: 30 }}>
-      {/* ---- Departmental information (the staff behind this board's business) ---- */}
-      {departments.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12, marginBottom: 24 }}>
-          {departments.map((d) => (
-            <div key={d.department} className="card" style={{ padding: 16 }}>
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d.department}</div>
-              <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.person}</div>
-              <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
-              <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{d.blurb}</div>
-              <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
-                {d.phone && <span>📞 {d.phone}</span>}
-                {d.email && <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)' }}>✉ {d.email}</a>}
-                {d.address && <span className="muted">📍 {d.address}</span>}
-              </div>
-              {d.links.length > 0 && (
-                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
-                  {d.links.map((l) => (
-                    <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>{l.label} ↗</a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
       <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>Meeting transcript analysis</h2>
       <div className="muted" style={{ fontSize: 13, marginBottom: 6 }}>
         {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
       </div>
+      {latestMeetingDate && (
+        <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
+          Data current as of {fmtCaptionDate(latestMeetingDate)} — reflects meetings through that date.
+        </div>
+      )}
       <div className="muted" style={{ fontSize: 11, marginBottom: 18, lineHeight: 1.5, maxWidth: 720 }}>
         Sentiment −10 (opposed) to +10 (favorable). Member-level attribution is directional.
       </div>
@@ -162,7 +121,11 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
         Board members — progress score
       </h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: data.members.some((m2) => m2.totalPositions === 0) ? 10 : 28 }}>
-        {data.members.filter((mem) => mem.totalPositions > 0).map((mem) => (
+        {data.members
+          .filter((mem) => mem.totalPositions > 0)
+          // Active members first (stable within each group); former/inactive members sink to the bottom.
+          .sort((a, b) => Number(inactiveSet.has(a.member)) - Number(inactiveSet.has(b.member)))
+          .map((mem) => (
           <MemberCard key={mem.member} mem={mem} muni={muni} body={body} role={m.roles?.[mem.member]} inactive={inactiveSet.has(mem.member)} />
         ))}
       </div>
@@ -210,33 +173,6 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
         </div>
       </div>
 
-      {/* ---- Map of items with a street address — the sole layer, always on
-          (no menu; no GIS/OSM/SeeClickFix layers). Meetings render directly
-          below this on the host page; the Cases/applications table (via
-          onData) renders after that. ---- */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 10px' }}>
-        <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-          {itemNounTitle} on the map
-          <span className="muted" style={{ fontSize: 12, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}> · {caseMarkers.length} with a street address · pin color = sentiment</span>
-        </h3>
-        <select
-          value={mapYear}
-          onChange={(e) => setMapYear(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
-          aria-label="Filter map by year"
-          style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-        >
-          <option value="ALL">All years</option>
-          {mapYears.map((y) => <option key={y} value={y}>{y}</option>)}
-        </select>
-      </div>
-      <JurisdictionMap
-        muni={muni}
-        permits={caseMarkers}
-        permitsLabel={`${itemNounTitle[0].toUpperCase()}${itemNounTitle.slice(1)}`}
-        permitsGroup="This board"
-        onlyPermits
-        height={380}
-      />
     </div>
   )
 }
