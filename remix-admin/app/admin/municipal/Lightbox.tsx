@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useLockBodyScroll } from './useLockBodyScroll'
 
 /**
  * Full-screen lightbox that embeds an external URL in an iframe. Some civic
@@ -21,15 +22,14 @@ export default function Lightbox({
   const [loaded, setLoaded] = useState(false)
   const [slow, setSlow] = useState(false)
 
+  useLockBodyScroll()
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
     const t = setTimeout(() => setSlow(true), 2500)
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prev
       clearTimeout(t)
     }
   }, [onClose])
