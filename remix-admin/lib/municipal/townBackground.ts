@@ -20,9 +20,9 @@ export interface CarouselSlide {
   icon: string
   caption: string
   sub: string
-  /** Photo URL. Hotlinked from third-party CDNs — if one ever breaks, the
-   *  carousel falls back to the gradient + icon panel below rather than
-   *  showing a broken image. */
+  /** Photo URL — either hotlinked from a third-party CDN or a local path
+   *  under /public. If one ever breaks, the carousel falls back to the
+   *  gradient + icon panel below rather than showing a broken image. */
   img?: string
   /** CSS gradient stops — the fallback background (and the only background
    *  when no img is set), kept as plain hex so the panel reads the same in
@@ -105,6 +105,21 @@ const NORTH_CASTLE: TownBackground = {
       key: 'art-show', icon: '🎨', caption: 'Armonk Outdoor Art Show', sub: 'Community arts & culture',
       img: 'https://armonkoutdoorartshow.org/wp-content/uploads/2023/10/Experience-the-show-2-960x720.jpeg',
       from: '#3d9c72', to: '#1f5c42',
+    },
+    {
+      key: 'nwp-station', icon: '🚉', caption: 'North White Plains Station', sub: 'Metro-North Harlem Line',
+      img: '/town/north-white-plains-station.jpg',
+      from: '#5a9bd4', to: '#1f3a5f',
+    },
+    {
+      key: 'hickory-and-tweed', icon: '🚲', caption: 'Hickory & Tweed Ski & Cycle', sub: 'Main Street, Armonk',
+      img: '/town/hickory-and-tweed.jpg',
+      from: '#c9463f', to: '#7a201c',
+    },
+    {
+      key: 'westchester-airport', icon: '✈️', caption: 'Westchester County Airport', sub: 'Straddles North Castle, Harrison & Rye Brook',
+      img: '/town/westchester-airport.jpg',
+      from: '#64748b', to: '#293241',
     },
   ],
 }
