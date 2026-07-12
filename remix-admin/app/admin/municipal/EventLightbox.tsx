@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { type CommunityEvent, googleCalendarUrl } from '@/lib/municipal/events'
+import { useLockBodyScroll } from './useLockBodyScroll'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
@@ -21,15 +22,12 @@ function fmtTime(t: string): string {
  * iframe, with quick actions to the organizer's page and Google Calendar.
  */
 export default function EventLightbox({ event, onClose }: { event: CommunityEvent; onClose: () => void }) {
+  useLockBodyScroll()
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prev
-    }
+    return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
 
   const when = event.endDate && event.endDate !== event.date

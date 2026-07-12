@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useLockBodyScroll } from './useLockBodyScroll'
 
 const RECIPIENTS = ['OpenNorthCastle team', 'Town Board', 'Planning Board', 'Building Department']
 
@@ -20,15 +21,12 @@ export default function ContactLightbox({ onClose }: { onClose: () => void }) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [error, setError] = useState<string | null>(null)
 
+  useLockBodyScroll()
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prev
-    }
+    return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
 
   async function submit(e: React.FormEvent) {
