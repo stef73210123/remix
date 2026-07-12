@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import type { GeoJSON as LGeoJSON, LayerGroup } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 // Per-town map framing + the OSM/Nominatim query used to fetch the exact
 // jurisdiction boundary at runtime (client-side, so it isn't proxy-blocked).
@@ -213,7 +214,7 @@ function IssueLayer({ active, muni, onState }: { active: boolean; muni: string; 
         for (const it of issues) {
           if (it.lat == null || it.lng == null) continue
           const color = ISSUE_STATUS_COLOR[it.status || ''] || '#ef4444'
-          const created = it.created_at ? new Date(it.created_at).toLocaleDateString('en-US') : ''
+          const created = it.created_at ? fmtDateShort(new Date(it.created_at)) : ''
           const link = it.html_url ? `<br><a href="${it.html_url}" target="_blank" rel="noopener">View / follow ↗</a>` : ''
           L.circleMarker([it.lat, it.lng], { radius: 6, color: '#0a0a0a', weight: 1, fillColor: color, fillOpacity: 0.95 })
             .bindPopup(

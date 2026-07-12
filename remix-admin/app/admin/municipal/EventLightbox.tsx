@@ -3,11 +3,13 @@
 import { useEffect } from 'react'
 import { type CommunityEvent, googleCalendarUrl } from '@/lib/municipal/events'
 import { useLockBodyScroll } from './useLockBodyScroll'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 function fmtDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
   if (isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+  const weekday = d.toLocaleDateString('en-US', { weekday: 'short' })
+  return `${weekday} ${fmtDateShort(d)}`
 }
 function fmtTime(t: string): string {
   const [h, m] = t.split(':').map(Number)

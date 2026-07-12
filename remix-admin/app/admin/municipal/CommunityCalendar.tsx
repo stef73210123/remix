@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { getCommunityEvents, type CommunityEvent } from '@/lib/municipal/events'
 import EventLightbox from './EventLightbox'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 const CATEGORY_COLOR: Record<CommunityEvent['category'], string> = {
   festival: '#c76b2a',
@@ -20,11 +21,7 @@ function startOfDayIso(d: Date): string {
 
 function fmtEventDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-function fmtEventDateShort(iso: string): string {
-  const d = new Date(iso + 'T12:00:00Z')
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return fmtDateShort(d)
 }
 
 /** All calendar dates a (possibly multi-day) event should render a marker on. */
@@ -132,11 +129,11 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
       </div>
 
       {view === 'list' ? (
-        <div className="card" style={{ padding: 0 }}>
+        <div className="card" style={{ padding: 0, maxHeight: 480, overflowY: 'auto' }}>
           {sortedEvents.map((ev, i) => {
             const isPast = (ev.endDate ?? ev.date) < todayIso
             const dateLabel = ev.endDate && ev.endDate !== ev.date
-              ? `${fmtEventDateShort(ev.date)} – ${fmtEventDate(ev.endDate)}`
+              ? `${fmtEventDate(ev.date)} – ${fmtEventDate(ev.endDate)}`
               : fmtEventDate(ev.date)
             return (
               <div key={ev.key}>
@@ -156,7 +153,7 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
                     opacity: isPast ? 0.6 : 1, font: 'inherit', color: 'inherit',
                   }}
                 >
-                  <span style={{ fontWeight: 700, fontSize: 13, minWidth: 128, flexShrink: 0, whiteSpace: 'nowrap' }}>{dateLabel}</span>
+                  <span style={{ fontWeight: 700, fontSize: 13, minWidth: 108, flexShrink: 0, whiteSpace: 'nowrap' }}>{dateLabel}</span>
                   <span style={{ width: 8, height: 8, borderRadius: 999, background: CATEGORY_COLOR[ev.category], flexShrink: 0 }} />
                   <span style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 13.5, fontWeight: 600 }}>{ev.title}</div>

@@ -154,8 +154,22 @@ export default function SchoolDistrict({ muniKey }: { muniKey: string }) {
           ))}
         </div>
 
+        {d.foundation && (
+          <div className="card" style={{ padding: 14, marginTop: 14 }}>
+            <div style={{ fontSize: 15, fontWeight: 700 }}>{d.foundation.name}</div>
+            <div className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.55 }}>
+              The district&apos;s nonprofit education foundation, raising funds for programs and enrichment beyond the operating budget.
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <a href={d.foundation.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>
+                {d.foundation.websiteLabel} ↗
+              </a>
+            </div>
+          </div>
+        )}
+
         {d.note && (
-          <div className="muted" style={{ fontSize: 12, lineHeight: 1.55, marginTop: 10 }}>{d.note}</div>
+          <div className="muted" style={{ fontSize: 12, lineHeight: 1.55, marginTop: 14 }}>{d.note}</div>
         )}
         <div style={{ marginTop: 10, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <a href={d.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--primary-light)' }}>
@@ -164,11 +178,6 @@ export default function SchoolDistrict({ muniKey }: { muniKey: string }) {
           {d.calendarUrl && (
             <a href={d.calendarUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--primary-light)' }}>
               Academic calendar ↗
-            </a>
-          )}
-          {d.foundation && (
-            <a href={d.foundation.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--primary-light)' }}>
-              {d.foundation.name} ↗
             </a>
           )}
         </div>

@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { syncScrollIntoView } from './syncSelection'
 import type { MeetingAnalysis } from '@/lib/municipal/analysis'
+import { fmtDateShort } from '@/lib/municipal/date'
 
 export interface TimelineItem {
   key: string
@@ -34,10 +35,6 @@ export interface TimelineItem {
    *  expandable row (sentiment chip, item count, case detail) a board's own
    *  tab shows, instead of the plain summary row. */
   analysis?: MeetingAnalysis
-}
-
-function fmtDate(d: Date): string {
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
 /**
@@ -141,7 +138,7 @@ export default function MeetingTimeline({
                 {/* content */}
                 <div style={{ textAlign: 'center', width: '100%' }}>
                   <div style={{ fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap', opacity: it.past ? 0.85 : 1 }} title={it.dateTitle}>
-                    {it.date ? `${fmtDate(it.date)}${it.dateSuffix || ''}` : (it.fallbackLabel || 'TBD')}
+                    {it.date ? `${fmtDateShort(it.date)}${it.dateSuffix || ''}` : (it.fallbackLabel || 'TBD')}
                   </div>
                   {it.title && (
                     <div className="muted" style={{ fontSize: 12, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 174, marginLeft: 'auto', marginRight: 'auto' }}>
