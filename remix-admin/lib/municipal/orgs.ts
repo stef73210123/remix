@@ -42,7 +42,7 @@ const ORGS: Record<string, CommunityOrg[]> = {
       key: 'art-show',
       name: 'Armonk Outdoor Art Show',
       blurb: 'Annual juried outdoor art show held every September in downtown Armonk, run by the Friends of the North Castle Public Library as its signature fundraiser.',
-      address: 'Friends of the North Castle Public Library, 19 Whippoorwill Road East, Armonk, NY 10504',
+      address: '19 Whippoorwill Road East, Armonk, NY 10504',
       phone: '(914) 273-9706',
       email: 'info@armonkoutdoorartshow.org',
       website: 'https://armonkoutdoorartshow.org/',

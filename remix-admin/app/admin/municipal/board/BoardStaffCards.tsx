@@ -1,6 +1,5 @@
 'use client'
 
-import { useRef } from 'react'
 import { Phone, Mail, MapPin } from 'lucide-react'
 import { getBoardDepartments } from '@/lib/municipal/departments'
 
@@ -10,33 +9,20 @@ import { getBoardDepartments } from '@/lib/municipal/departments'
  * above the map and Meetings, on every page that has them. Static lookup
  * (no fetch), so it renders instantly with no loading flicker.
  *
- * Laid out as a horizontal carousel (matching the board-members carousel):
- * cards scroll sideways with snap, and ‹ › step one card at a time.
+ * A handful of towns have more than one department card (e.g. Town Board's
+ * Clerk + Administrator) — those scroll horizontally via native
+ * drag/swipe/trackpad (scroll-snap), with no heading or arrow-button row, so
+ * the gap below the page title is identical whether a page has one card or
+ * several.
  */
 export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyKey: string }) {
   const departments = getBoardDepartments(muni, bodyKey)
-  const scrollRef = useRef<HTMLDivElement>(null)
 
   if (departments.length === 0) return null
 
-  const scrollByCard = (dir: number) => {
-    const el = scrollRef.current
-    if (!el) return
-    const card = el.querySelector('[data-staff-card]') as HTMLElement | null
-    const step = card ? card.getBoundingClientRect().width + 12 : el.clientWidth * 0.9
-    el.scrollBy({ left: dir * step, behavior: 'smooth' })
-  }
-
   return (
     <div style={{ marginBottom: 24 }}>
-      {departments.length > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 6, marginBottom: 8 }}>
-          <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
-          <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
-        </div>
-      )}
       <div
-        ref={scrollRef}
         style={{
           display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 6,
           scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
