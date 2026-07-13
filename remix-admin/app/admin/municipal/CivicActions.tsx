@@ -35,7 +35,7 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
         style={{ padding: '6px 8px', fontSize: 11.5, display: 'inline-flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}
         onClick={() => setOpen({ url: ISSUE_URL, title: 'Report an issue — North Castle (SeeClickFix)' })}
       >
-        <span aria-hidden>📍</span> Report Issue
+        <span aria-hidden>🔹</span> Report Issue
       </button>
       {isOpen && (
         <button

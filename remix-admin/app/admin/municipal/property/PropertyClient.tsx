@@ -90,7 +90,7 @@ export default function PropertyClient({ userName }: { userName: string }) {
     <div className="container">
       <MuniHeader userName={userName} />
 
-      <div style={{ marginBottom: 20 }}><Breadcrumbs items={crumbs} /></div>
+      {!isOpen && <div style={{ marginBottom: 20 }}><Breadcrumbs items={crumbs} /></div>}
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading property…</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
@@ -194,7 +194,9 @@ export default function PropertyClient({ userName }: { userName: string }) {
             </div>
           )}
 
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}><Breadcrumbs items={crumbs} /></div>
+          {!isOpen && (
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}><Breadcrumbs items={crumbs} /></div>
+          )}
         </>
       )}
     </div>

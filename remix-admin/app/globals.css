@@ -270,3 +270,31 @@ code {
   border-radius: 4px;
   font-size: 12px;
 }
+
+/* Floating back-to-top button (app/ScrollToTop.tsx). Base position/style is
+   shared by both flavors; OpenNorthCastle overrides the bottom offset in
+   opennorthcastle.css to clear its fixed civic-bottom-bar. */
+.scroll-to-top-btn {
+  position: fixed;
+  right: 16px;
+  bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  z-index: 1300;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.scroll-to-top-btn:hover {
+  transform: translateY(-2px);
+  background: var(--panel-2);
+}

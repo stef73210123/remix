@@ -24,7 +24,7 @@ export default function CommunityOrgs({ muniKey }: { muniKey: string }) {
             <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
               {o.phone && <span>📞 {o.phone}</span>}
               {o.email && <a href={`mailto:${o.email}`} style={{ color: 'var(--primary-light)', wordBreak: 'break-all' }}>✉ {o.email}</a>}
-              {o.address && <span className="muted">📍 {o.address}</span>}
+              {o.address && <span className="muted">🔹 {o.address}</span>}
             </div>
             <div style={{ marginTop: 10 }}>
               <a href={o.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>

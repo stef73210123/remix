@@ -22,7 +22,7 @@ export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyK
           <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
             {d.phone && <span>📞 {d.phone}</span>}
             {d.email && <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)' }}>✉ {d.email}</a>}
-            {d.address && <span className="muted">📍 {d.address}</span>}
+            {d.address && <span className="muted">🔹 {d.address}</span>}
           </div>
           {d.links.length > 0 && (
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>

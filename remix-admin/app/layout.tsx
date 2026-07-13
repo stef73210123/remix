@@ -4,6 +4,7 @@ import './globals.css'
 import './opennorthcastle.css'
 import TopoBackground from './TopoBackground'
 import SiteFooter from './SiteFooter'
+import ScrollToTop from './ScrollToTop'
 import { FLAVOR, isOpen } from '@/lib/flavor'
 
 export const metadata: Metadata = isOpen
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {!isOpen && <TopoBackground />}
         {children}
         {isOpen && <SiteFooter />}
+        <ScrollToTop />
         <Analytics />
       </body>
     </html>
