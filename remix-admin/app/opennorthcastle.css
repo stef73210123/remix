@@ -90,6 +90,13 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-top: 1px solid var(--border);
+  /* iOS Safari lags/detaches position:fixed elements from the true viewport
+     edge during momentum-scroll while its own chrome (URL bar) animates
+     away, briefly exposing blank space below the bar. Promoting it to its
+     own GPU compositing layer keeps it pinned through that animation. */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Board/tab strip sticky directly below the masthead (top is set inline via JS
@@ -170,3 +177,10 @@
 
 /* Links pick up the azure accent (components use --primary-light for links). */
 [data-flavor='opennorthcastle'] a { color: inherit; }
+
+/* Back-to-top button: OpenNorthCastle's civic-bottom-bar occupies the bottom
+   of the viewport, so lift the button clear of it (plus its own safe-area
+   padding) instead of the plain flavor's small fixed offset. */
+[data-flavor='opennorthcastle'] .scroll-to-top-btn {
+  bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+}

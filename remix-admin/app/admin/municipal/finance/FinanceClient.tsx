@@ -47,7 +47,7 @@ export default function FinanceClient({ userName, muni, budgets }: {
     <div className="container">
       <MuniHeader userName={userName} />
       <MuniTabs muni={muni} active="finance" />
-      <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>
+      {!isOpen && <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <h1 className="page-title" style={{ marginBottom: 6 }}>Finance</h1>
         {!isOpen && <CivicActions style={{ marginTop: 6 }} />}

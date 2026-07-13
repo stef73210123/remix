@@ -4,7 +4,7 @@ export default function SiteFooter() {
       style={{
         borderTop: '1px solid var(--border)',
         marginTop: 40,
-        padding: '16px 20px 68px',
+        padding: '16px 20px calc(68px + env(safe-area-inset-bottom, 0px))',
         textAlign: 'center',
       }}
     >

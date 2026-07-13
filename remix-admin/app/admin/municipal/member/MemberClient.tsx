@@ -166,9 +166,11 @@ export default function MemberClient({ userName }: { userName: string }) {
     <div className="container">
       <MuniHeader userName={userName} />
 
-      <div style={{ marginBottom: 20 }}>
-        <Breadcrumbs items={crumbs} />
-      </div>
+      {!isOpen && (
+        <div style={{ marginBottom: 20 }}>
+          <Breadcrumbs items={crumbs} />
+        </div>
+      )}
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading member…</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
@@ -306,9 +308,11 @@ export default function MemberClient({ userName }: { userName: string }) {
           )}
 
           {/* Climb-back trail at the end of the profile */}
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}>
-            <Breadcrumbs items={crumbs} />
-          </div>
+          {!isOpen && (
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}>
+              <Breadcrumbs items={crumbs} />
+            </div>
+          )}
 
           {!data?.dbOk && data?.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>

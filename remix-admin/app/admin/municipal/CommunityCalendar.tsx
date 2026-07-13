@@ -159,7 +159,7 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
                     <span style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 13.5, fontWeight: 600 }}>{ev.title}</div>
                       <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        📍 {ev.location}
+                        🔹 {ev.location}
                       </div>
                     </span>
                   </div>

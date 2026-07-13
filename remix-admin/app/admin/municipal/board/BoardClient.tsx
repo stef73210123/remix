@@ -216,7 +216,7 @@ export default function BoardClient({ userName }: { userName: string }) {
       <MuniHeader userName={userName} />
       <MuniTabs muni={muni} active={body} />
 
-      {data && !loading && (
+      {!isOpen && data && !loading && (
         <div style={{ marginBottom: 20 }}>
           <Breadcrumbs items={crumbs} />
         </div>
@@ -314,9 +314,11 @@ export default function BoardClient({ userName }: { userName: string }) {
           {analysis && <CasesList data={analysis} muni={muni} />}
 
           {/* Climb-back trail at the end of the board page */}
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginTop: 26 }}>
-            <Breadcrumbs items={crumbs} />
-          </div>
+          {!isOpen && (
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginTop: 26 }}>
+              <Breadcrumbs items={crumbs} />
+            </div>
+          )}
 
           {!data.dbOk && data.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>

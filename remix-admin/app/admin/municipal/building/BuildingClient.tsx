@@ -596,7 +596,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
     <div className="container">
       <MuniHeader userName={userName} />
       <MuniTabs muni={muni} active="building" />
-      <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>
+      {!isOpen && <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <h1 className="page-title" style={{ marginBottom: 6 }}>Building Department</h1>
         {!isOpen && <CivicActions style={{ marginTop: 6 }} />}
@@ -617,7 +617,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
                   <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 16px' }}>
                     <span>📞 {dept.phone}</span>
                     <a href={`mailto:${dept.email}`} style={{ color: 'var(--primary-light)' }}>✉ {dept.email}</a>
-                    <span className="muted">📍 {dept.address}</span>
+                    <span className="muted">🔹 {dept.address}</span>
                   </div>
                   <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
                     {dept.links.map((l) => (
