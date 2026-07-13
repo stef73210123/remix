@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
-import type { Metadata } from 'next'
-import { Analytics } from '@vercel/analytics/next'
-=======
 import type { Metadata, Viewport } from 'next'
->>>>>>> Stashed changes
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import './opennorthcastle.css'
 import TopoBackground from './TopoBackground'
