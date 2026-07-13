@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { AnalysisDataset, MemberProfile, ThemeRollup } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
@@ -46,6 +46,7 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
   const [data, setData] = useState<AnalysisDataset | null>(null)
   const [loading, setLoading] = useState(true)
   const [themeSort, setThemeSort] = useState<ThemeSort>('volume')
+  const memberScrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -85,6 +86,14 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
   const isTownBoard = m.bodyKey === 'town_board'
   const itemNounPlural = isTownBoard ? 'agenda items' : 'applications'
 
+  const scrollMembersByCard = (dir: 1 | -1) => {
+    const el = memberScrollRef.current
+    if (!el) return
+    const card = el.querySelector<HTMLElement>('[data-member-card]')
+    const step = (card?.offsetWidth ?? 230) + 12
+    el.scrollBy({ left: dir * step, behavior: 'smooth' })
+  }
+
   return (
     <div style={{ marginBottom: 30 }}>
       <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>Meeting transcript analysis</h2>
@@ -118,10 +127,23 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
       })()}
 
       {/* ---- Board member sentiment ---- */}
-      <h3 style={{ fontSize: 14, margin: '0 0 12px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-        Board members — progress score
-      </h3>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: data.members.some((m2) => m2.totalPositions === 0) ? 10 : 28 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
+          Board members — progress score
+        </h3>
+        <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+          <button onClick={() => scrollMembersByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
+          <button onClick={() => scrollMembersByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
+        </div>
+      </div>
+      <div
+        ref={memberScrollRef}
+        style={{
+          display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4,
+          scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
+          marginBottom: data.members.some((m2) => m2.totalPositions === 0) ? 10 : 28,
+        }}
+      >
         {data.members
           .filter((mem) => mem.totalPositions > 0)
           // Active members first (stable within each group); former/inactive members sink to the bottom.
@@ -186,8 +208,12 @@ function MemberCard({ mem, muni, body, role, inactive = false }: { mem: MemberPr
     <a
       href={`/admin/municipal/member?muni=${muni}&body=${body}&byName=${encodeURIComponent(mem.member)}`}
       className="card"
+      data-member-card
       // Inactive (no-longer-serving) members are de-emphasized but stay fully clickable.
-      style={{ padding: 14, textDecoration: 'none', display: 'block', opacity: inactive ? 0.55 : 1 }}
+      style={{
+        padding: 14, textDecoration: 'none', display: 'block', opacity: inactive ? 0.55 : 1,
+        flex: '0 0 230px', minWidth: 0, scrollSnapAlign: 'start',
+      }}
       title={inactive ? `${mem.member} — former member` : undefined}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>

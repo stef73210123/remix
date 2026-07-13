@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Phone, Mail, MapPin } from 'lucide-react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
@@ -160,46 +160,66 @@ function BarList({ rows, color }: { rows: { label: string; count: number; extra?
   )
 }
 
-/** Permits-per-month column chart with a hover readout. */
+/**
+ * Permits-per-month column chart with a hover readout. Bars have a fixed
+ * pixel width (rather than squeezing all history into one static viewBox),
+ * so the chart scrolls horizontally — it opens scrolled to 2024, with the
+ * full history back to 2018 reachable by scrolling left.
+ */
 function MonthlyChart({ monthly }: { monthly: { month: string; count: number }[] }) {
   const [hover, setHover] = useState<number | null>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const data = monthly.filter((m) => m.month >= '2018-01')
-  const W = 760, H = 200, PAD = { t: 14, r: 8, b: 26, l: 30 }
-  const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
+  const BAR_W = 12
+  const H = 200, PAD = { t: 14, r: 8, b: 26, l: 30 }
+  const plotW = data.length * BAR_W
+  const W = PAD.l + plotW + PAD.r
+  const plotH = H - PAD.t - PAD.b
   const max = Math.max(...data.map((d) => d.count), 1)
-  const bw = plotW / data.length
+  const bw = BAR_W
   const y = (v: number) => PAD.t + plotH - (v / max) * plotH
   const hb = hover != null ? data[hover] : null
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const idx = data.findIndex((d) => d.month >= '2024-01')
+    el.scrollLeft = idx > 0 ? idx * BAR_W : 0
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.length])
+
   return (
     <div className="card" style={{ padding: '12px 12px 6px' }}>
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block' }} role="img" aria-label="Permits issued per month">
-        {[0, 0.5, 1].map((f) => (
-          <g key={f}>
-            <line x1={PAD.l} y1={y(max * f)} x2={W - PAD.r} y2={y(max * f)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />
-            <text x={PAD.l - 5} y={y(max * f) + 3} textAnchor="end" fontSize={9} fill="var(--muted)">{Math.round(max * f)}</text>
-          </g>
-        ))}
-        {data.map((d, i) => (
-          <rect key={d.month} x={PAD.l + i * bw + 0.5} y={y(d.count)} width={Math.max(1, bw - 1)} height={PAD.t + plotH - y(d.count)}
-            fill="var(--primary)" opacity={hover != null && hover !== i ? 0.4 : 0.85} rx={1} />
-        ))}
-        {data.map((d, i) => (
-          d.month.endsWith('-01') && (
-            <text key={d.month} x={PAD.l + i * bw + bw / 2} y={H - 10} textAnchor="middle" fontSize={9} fill="var(--muted)">{d.month.slice(0, 4)}</text>
-          )
-        ))}
-        {data.map((d, i) => (
-          <rect key={`h${d.month}`} x={PAD.l + i * bw} y={PAD.t} width={bw} height={plotH} fill="transparent"
-            onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} />
-        ))}
-        {hb && (
-          <g style={{ pointerEvents: 'none' }}>
-            <rect x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96)} y={2} width={94} height={30} rx={6} fill="var(--panel)" stroke="var(--border)" />
-            <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={15} fontSize={11} fontWeight={600} fill="var(--text)">{hb.count} permits</text>
-            <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={27} fontSize={10} fill="var(--muted)">{hb.month}</text>
-          </g>
-        )}
-      </svg>
+      <div ref={scrollRef} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ display: 'block' }} role="img" aria-label="Permits issued per month">
+          {[0, 0.5, 1].map((f) => (
+            <g key={f}>
+              <line x1={PAD.l} y1={y(max * f)} x2={W - PAD.r} y2={y(max * f)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />
+              <text x={PAD.l - 5} y={y(max * f) + 3} textAnchor="end" fontSize={9} fill="var(--muted)">{Math.round(max * f)}</text>
+            </g>
+          ))}
+          {data.map((d, i) => (
+            <rect key={d.month} x={PAD.l + i * bw + 0.5} y={y(d.count)} width={Math.max(1, bw - 1)} height={PAD.t + plotH - y(d.count)}
+              fill="var(--primary)" opacity={hover != null && hover !== i ? 0.4 : 0.85} rx={1} />
+          ))}
+          {data.map((d, i) => (
+            d.month.endsWith('-01') && (
+              <text key={d.month} x={PAD.l + i * bw + bw / 2} y={H - 10} textAnchor="middle" fontSize={9} fill="var(--muted)">{d.month.slice(0, 4)}</text>
+            )
+          ))}
+          {data.map((d, i) => (
+            <rect key={`h${d.month}`} x={PAD.l + i * bw} y={PAD.t} width={bw} height={plotH} fill="transparent"
+              onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} />
+          ))}
+          {hb && (
+            <g style={{ pointerEvents: 'none' }}>
+              <rect x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96)} y={2} width={94} height={30} rx={6} fill="var(--panel)" stroke="var(--border)" />
+              <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={15} fontSize={11} fontWeight={600} fill="var(--text)">{hb.count} permits</text>
+              <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={27} fontSize={10} fill="var(--muted)">{hb.month}</text>
+            </g>
+          )}
+        </svg>
+      </div>
     </div>
   )
 }
@@ -342,20 +362,17 @@ function stageStats(deltas: number[]): StageStat | null {
     p75: Math.round(percentile(sorted, 0.75)),
   }
 }
-/** Full permit lifecycle, in the two intervals the data actually timestamps:
- *  application → permit issued (plan review & corrections happen here) and
- *  permit issued → closed/CO (inspections happen here) — plus the direct
- *  application → close span for a true end-to-end median. */
+/** Permit lifecycle, in the two intervals the department's own timestamps
+ *  support: application → permit issued (plan review & corrections happen
+ *  here) and permit issued → closed/CO (inspections happen here). */
 function pipelineStats(perms: PermitRecord[]) {
   const stage1: number[] = []
   const stage2: number[] = []
-  const full: number[] = []
   for (const p of perms) {
     if (p.appIso && p.permitIso) stage1.push(daysBetween(p.appIso, p.permitIso))
     if (p.permitIso && p.closeIso) stage2.push(daysBetween(p.permitIso, p.closeIso))
-    if (p.appIso && p.closeIso) full.push(daysBetween(p.appIso, p.closeIso))
   }
-  return { stage1: stageStats(stage1), stage2: stageStats(stage2), full: stageStats(full) }
+  return { stage1: stageStats(stage1), stage2: stageStats(stage2) }
 }
 
 function PipelineRow({ label, sub, stat, max, color }: { label: string; sub?: string; stat: StageStat | null; max: number; color: string }) {
@@ -393,16 +410,15 @@ function PipelineRow({ label, sub, stat, max, color }: { label: string; sub?: st
 }
 
 /** Approval pipeline — the two intervals the department's own timestamps
- *  support (application→permit, permit→CO) plus the full application→CO
- *  span, each as a P25–P75 range bar with a median tick. */
+ *  support (application→permit, permit→CO), each as a P25–P75 range bar
+ *  with a median tick. */
 function PipelineChart({ perms }: { perms: PermitRecord[] }) {
   const stats = useMemo(() => pipelineStats(perms), [perms])
-  const max = Math.max(30, stats.stage1?.p75 ?? 0, stats.stage2?.p75 ?? 0, stats.full?.p75 ?? 0) * 1.15
+  const max = Math.max(30, stats.stage1?.p75 ?? 0, stats.stage2?.p75 ?? 0) * 1.15
   return (
     <div className="card" style={{ padding: '16px 16px 12px' }}>
       <PipelineRow label="Application → Permit Issued" sub="plan review & corrections" stat={stats.stage1} max={max} color="#5a9bd4" />
       <PipelineRow label="Permit Issued → Certificate of Occupancy" sub="inspections" stat={stats.stage2} max={max} color="#3d9c72" />
-      <PipelineRow label="Full pipeline: Application → CO" sub="all stages" stat={stats.full} max={max} color="var(--primary)" />
       <div className="muted" style={{ fontSize: 11, marginTop: 12, lineHeight: 1.5 }}>
         Each bar spans the 25th–75th percentile; the tick marks the median. Based on permits with both dates recorded for the selected year.
       </div>

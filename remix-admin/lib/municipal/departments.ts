@@ -62,6 +62,8 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
         'departments day to day, and manages operations between board meetings.',
       links: [{ label: 'Town Administrator', href: 'https://www.northcastleny.com/596/Town-Administrator' }],
     },
+  ],
+  finance: [
     {
       department: 'Finance Department',
       person: 'Abbas Sura',
