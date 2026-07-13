@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
+import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MemberSentiment from './MemberSentiment'
 import MemberDossier from './MemberDossier'
@@ -165,6 +166,10 @@ export default function MemberClient({ userName }: { userName: string }) {
   return (
     <div className="container">
       <MuniHeader userName={userName} />
+
+      {/* Top menu strip — kept on the person profile too (ONC), so it doesn't
+          vanish when a profile is open. Highlights the board we arrived from. */}
+      <MuniTabs muni={muni || 'nc'} active={fromBody} />
 
       {!isOpen && (
         <div style={{ marginBottom: 20 }}>
