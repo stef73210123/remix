@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { TownDemographics, DemoSeriesPoint } from '@/lib/municipal/demographics'
 import AgeDistribution from './AgeDistribution'
 
@@ -28,25 +28,6 @@ function popGrowth(series: DemoSeriesPoint[] | undefined, key: keyof DemoSeriesP
   return ((b - a) / a) * 100
 }
 
-/** Tiny trend line over the series values. */
-function Spark({ values, w = 128, h = 30 }: { values: number[]; w?: number; h?: number }) {
-  const pts = values.filter((v) => v > 0)
-  if (pts.length < 2) return null
-  const min = Math.min(...pts)
-  const max = Math.max(...pts)
-  const span = max - min || 1
-  const x = (i: number) => (i / (pts.length - 1)) * (w - 4) + 2
-  const y = (v: number) => h - 3 - ((v - min) / span) * (h - 6)
-  const up = pts[pts.length - 1] >= pts[0]
-  const d = pts.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')
-  return (
-    <svg width={w} height={h} style={{ display: 'block', marginTop: 8 }} aria-hidden>
-      <path d={d} fill="none" stroke={up ? POS : NEG} strokeWidth={1.5} />
-      <circle cx={x(pts.length - 1)} cy={y(pts[pts.length - 1])} r={2.5} fill={up ? POS : NEG} />
-    </svg>
-  )
-}
-
 function GrowthBadge({ pct }: { pct: number }) {
   const up = pct >= 0
   return (
@@ -56,16 +37,118 @@ function GrowthBadge({ pct }: { pct: number }) {
   )
 }
 
-function Tile({ label, value, sub, growth, spark }: {
-  label: string; value: string; sub?: string; growth?: number | null; spark?: number[]
+/** KPI value + label, shown atop each card's chart (consolidates what used
+ *  to be a separate stat tile above a duplicate caption under the chart). */
+function KpiHeader({ label, value, sub, growth }: {
+  label: string; value: string; sub?: string; growth?: number | null
 }) {
   return (
-    <div className="card" style={{ padding: '14px 16px' }}>
+    <div style={{ marginBottom: 10 }}>
       <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</div>
-      <div style={{ fontSize: 24, fontWeight: 700, marginTop: 4, lineHeight: 1.1 }}>{value}</div>
-      {sub && <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{sub}</div>}
-      {growth != null && <div style={{ marginTop: 6 }}><GrowthBadge pct={growth} /></div>}
-      {spark && <Spark values={spark} />}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', marginTop: 2 }}>
+        <div style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.1 }}>{value}</div>
+        {sub && <div className="muted" style={{ fontSize: 12 }}>{sub}</div>}
+        {growth != null && <GrowthBadge pct={growth} />}
+      </div>
+    </div>
+  )
+}
+
+/** Compact year → value line chart, x-position scaled by real year (not
+ *  index) so a mix of decade-spaced and annual points reads as a mix —
+ *  sparse gaps look sparse, dense runs look dense. */
+function TrendChart({ points, fmtY, color = 'var(--primary)' }: {
+  points: { year: number; value: number }[]
+  fmtY: (v: number) => string
+  color?: string
+}) {
+  const [hover, setHover] = useState<number | null>(null)
+  const pts = points.filter((p) => p.value > 0).sort((a, b) => a.year - b.year)
+  if (pts.length < 2) return null
+
+  const W = 280, H = 110, PAD = { t: 10, r: 8, b: 18, l: 8 }
+  const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
+  const minYear = pts[0].year, maxYear = pts[pts.length - 1].year
+  const yearSpan = maxYear - minYear || 1
+  const minV = Math.min(...pts.map((p) => p.value))
+  const maxV = Math.max(...pts.map((p) => p.value))
+  const span = maxV - minV || 1
+  const x = (yr: number) => PAD.l + ((yr - minYear) / yearSpan) * plotW
+  const y = (v: number) => PAD.t + plotH - ((v - minV) / span) * plotH
+  const path = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(p.year).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ')
+  const areaPath = `${path} L${x(maxYear).toFixed(1)},${(PAD.t + plotH).toFixed(1)} L${x(minYear).toFixed(1)},${(PAD.t + plotH).toFixed(1)} Z`
+  const hb = hover != null ? pts[hover] : null
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block' }} role="img" aria-label="Trend over time">
+      <path d={areaPath} fill={color} opacity={0.12} />
+      <path d={path} fill="none" stroke={color} strokeWidth={1.75} />
+      {pts.map((p, i) => (
+        <circle key={p.year} cx={x(p.year)} cy={y(p.value)} r={hover === i ? 3.5 : 2.25} fill={color} />
+      ))}
+      {pts.map((p, i) => (
+        <rect key={`h${p.year}`} x={x(p.year) - 10} y={PAD.t} width={20} height={plotH} fill="transparent"
+          onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ cursor: 'pointer' }} />
+      ))}
+      <text x={x(minYear)} y={H - 4} textAnchor="start" fontSize={9} fill="var(--muted)">{minYear}</text>
+      {maxYear !== minYear && (
+        <text x={x(maxYear)} y={H - 4} textAnchor="end" fontSize={9} fill="var(--muted)">{maxYear}</text>
+      )}
+      {hb && (() => {
+        const label = `${hb.year}: ${fmtY(hb.value)}`
+        const tw = label.length * 6 + 14
+        const tx = Math.min(Math.max(x(hb.year) - tw / 2, 2), W - tw - 2)
+        return (
+          <g style={{ pointerEvents: 'none' }}>
+            <rect x={tx} y={2} width={tw} height={20} rx={5} fill="var(--panel)" stroke="var(--border)" />
+            <text x={tx + 7} y={16} fontSize={11} fontWeight={600} fill="var(--text)">{label}</text>
+          </g>
+        )
+      })()}
+    </svg>
+  )
+}
+
+/** Decade-spaced decennial anchors + the annual ACS series, merged by year
+ *  (series wins on overlap) — a longer, mixed-granularity trend than either
+ *  source gives alone. */
+function longSeries(demo: TownDemographics, field: 'population' | 'households'): { year: number; value: number }[] {
+  const byYear = new Map<number, number>()
+  for (const d of demo.decennial ?? []) {
+    const v = d[field]
+    if (v != null) byYear.set(d.year, v)
+  }
+  for (const s of demo.series ?? []) {
+    const v = s[field]
+    if (v != null) byYear.set(s.year, v)
+  }
+  return [...byYear.entries()].sort((a, b) => a[0] - b[0]).map(([year, value]) => ({ year, value }))
+}
+
+function DemoCard({ wide, children }: { wide?: boolean; children: React.ReactNode }) {
+  return (
+    <div
+      data-demo-card
+      className="card"
+      style={{ padding: 16, flex: wide ? '0 0 460px' : '0 0 300px', minWidth: 0, scrollSnapAlign: 'start' }}
+    >
+      {children}
+    </div>
+  )
+}
+
+function BarRows({ rows, max, color }: { rows: { label: string; pct: number }[]; max: number; color: string }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+      {rows.map((r) => (
+        <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 84, fontSize: 12, color: 'var(--muted)', textAlign: 'right', flexShrink: 0 }}>{r.label}</div>
+          <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 5, height: 16, overflow: 'hidden' }}>
+            <div style={{ width: `${(r.pct / max) * 100}%`, background: color, height: '100%', borderRadius: 5, minWidth: r.pct > 0 ? 4 : 0 }} />
+          </div>
+          <div style={{ width: 34, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0 }}>{r.pct}%</div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -73,6 +156,7 @@ function Tile({ label, value, sub, growth, spark }: {
 export default function Demographics({ muniKey }: { muniKey: string }) {
   const [demo, setDemo] = useState<TownDemographics | null>(null)
   const [loading, setLoading] = useState(true)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -86,20 +170,33 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
   if (loading) return <div className="muted" style={{ fontSize: 13, marginBottom: 26 }}>Loading demographics…</div>
   if (!demo) return null
 
+  const scrollByCard = (dir: 1 | -1) => {
+    const el = scrollRef.current
+    if (!el) return
+    const card = el.querySelector<HTMLElement>('[data-demo-card]')
+    const step = (card?.offsetWidth ?? 300) + 12
+    el.scrollBy({ left: dir * step, behavior: 'smooth' })
+  }
+
   const renterPct = Math.max(0, 100 - demo.ownerOccupiedPct)
   const maxBracket = Math.max(...demo.incomeBrackets.map((b) => b.pct), 1)
   const series = demo.series
-  const popSeries = series?.map((s) => s.population)
-  const incSeries = series?.map((s) => s.medianIncomeUsd)
-  const homeSeries = series?.map((s) => s.medianHomeValueUsd)
-  const ageSeries = series?.map((s) => s.medianAgeYears ?? 0)
-  const homeValue = demo.medianHomeValueUsd ?? (homeSeries && homeSeries[homeSeries.length - 1])
+  const homeSeries = series?.map((s) => ({ year: s.year, value: s.medianHomeValueUsd })).filter((p) => p.value > 0)
+  const homeValue = demo.medianHomeValueUsd ?? (homeSeries && homeSeries[homeSeries.length - 1]?.value)
   const housingTypes = demo.housingTypes
   const maxHousing = Math.max(...(housingTypes?.map((t) => t.pct) || [1]), 1)
   const homeValueBrackets = demo.homeValueBrackets
   const maxHomeVal = Math.max(...(homeValueBrackets?.map((b) => b.pct) || [1]), 1)
   const avgHouseholdSize = demo.avgHouseholdSizePeople ?? (demo.households ? demo.population / demo.households : null)
   const spanYears = series && series.length > 1 ? `${series[0].year}–${series[series.length - 1].year}` : null
+
+  const populationSeries = longSeries(demo, 'population')
+  const householdsSeries = longSeries(demo, 'households')
+  const incomeSeries = series?.map((s) => ({ year: s.year, value: s.medianIncomeUsd })).filter((p) => p.value > 0) ?? []
+  const ageSeries = series?.map((s) => ({ year: s.year, value: s.medianAgeYears ?? 0 })).filter((p) => p.value > 0) ?? []
+  const householdSizeSeries = (series ?? [])
+    .filter((s): s is DemoSeriesPoint & { households: number } => !!s.households)
+    .map((s) => ({ year: s.year, value: s.population / s.households }))
 
   return (
     <div style={{ marginBottom: 26 }}>
@@ -108,109 +205,69 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
           Demographics
           {spanYears && <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · trends {spanYears}</span>}
         </h2>
-        {demo.approximate && (
-          <span className="muted" style={{ fontSize: 11 }}>{demo.source}</span>
-        )}
-      </div>
-
-      {/* KPI tiles — population, income & home value carry YoY growth + sparklines. */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 16 }}>
-        <Tile label="Population" value={fmtInt(demo.population)} growth={popGrowth(series, 'population')} spark={popSeries} />
-        <Tile label="Median income" value={fmtUSD0(demo.medianIncomeUsd)} growth={popGrowth(series, 'medianIncomeUsd')} spark={incSeries} />
-        {homeValue ? (
-          <Tile label="Median home value" value={fmtUSDshort(homeValue)} growth={popGrowth(series, 'medianHomeValueUsd')} spark={homeSeries} />
-        ) : null}
-        <Tile label="Households" value={fmtInt(demo.households)} />
-        <Tile
-          label="Household size"
-          value={avgHouseholdSize != null ? avgHouseholdSize.toFixed(1) : '—'}
-          sub="people / household"
-        />
-        <Tile
-          label="Median age"
-          value={`${demo.medianAgeYears}`}
-          sub="years"
-          growth={popGrowth(series, 'medianAgeYears')}
-          spark={ageSeries}
-        />
-        <Tile label="Owner-occupied" value={`${demo.ownerOccupiedPct}%`} />
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-        {/* Housing by structure type */}
-        {housingTypes && housingTypes.length > 0 && (
-          <div className="card" style={{ padding: 16 }}>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-              Housing by type
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-              {housingTypes.map((t) => (
-                <div key={t.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 90, fontSize: 12, color: 'var(--muted)', textAlign: 'right', flexShrink: 0 }}>{t.label}</div>
-                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 5, height: 16, overflow: 'hidden' }}>
-                    <div style={{ width: `${(t.pct / maxHousing) * 100}%`, background: '#5a9bd4', height: '100%', borderRadius: 5, minWidth: t.pct > 0 ? 4 : 0 }} />
-                  </div>
-                  <div style={{ width: 34, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0 }}>{t.pct}%</div>
-                </div>
-              ))}
-            </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          {demo.approximate && <span className="muted" style={{ fontSize: 11 }}>{demo.source}</span>}
+          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+            <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
+            <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
           </div>
-        )}
+        </div>
+      </div>
 
-        {/* Home value distribution — owner-occupied units by value range */}
+      <div
+        ref={scrollRef}
+        style={{
+          display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4,
+          scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
+        }}
+      >
+        <DemoCard>
+          <KpiHeader label="Population" value={fmtInt(demo.population)} growth={popGrowth(series, 'population')} />
+          <TrendChart points={populationSeries} fmtY={fmtInt} />
+        </DemoCard>
+
+        <DemoCard>
+          <KpiHeader label="Households" value={fmtInt(demo.households)} growth={popGrowth(series, 'households')} />
+          <TrendChart points={householdsSeries} fmtY={fmtInt} color="#5a9bd4" />
+        </DemoCard>
+
+        <DemoCard>
+          <KpiHeader label="Median income" value={fmtUSD0(demo.medianIncomeUsd)} growth={popGrowth(series, 'medianIncomeUsd')} />
+          <TrendChart points={incomeSeries} fmtY={fmtUSD0} color="#c7913c" />
+        </DemoCard>
+
+        <DemoCard>
+          <KpiHeader label="Median age" value={`${demo.medianAgeYears}`} sub="years" growth={popGrowth(series, 'medianAgeYears')} />
+          <TrendChart points={ageSeries} fmtY={(v) => `${v.toFixed(0)}y`} color="#9b7fd4" />
+        </DemoCard>
+
+        <DemoCard>
+          <KpiHeader
+            label="Household size"
+            value={avgHouseholdSize != null ? avgHouseholdSize.toFixed(1) : '—'}
+            sub="people / household"
+          />
+          <TrendChart points={householdSizeSeries} fmtY={(v) => v.toFixed(1)} color="#22a06b" />
+        </DemoCard>
+
+        {/* Median home value — the KPI and its distribution used to be two
+            separate things (a tile above, a repeated caption below the
+            histogram); now the KPI sits directly atop the one chart it describes. */}
         {homeValueBrackets && homeValueBrackets.length > 0 && (
-          <div className="card" style={{ padding: 16 }}>
+          <DemoCard>
+            {homeValue != null && (
+              <KpiHeader label="Median home value" value={fmtUSDshort(homeValue)} growth={popGrowth(series, 'medianHomeValueUsd')} />
+            )}
             <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
               Home value distribution
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-              {homeValueBrackets.map((b) => (
-                <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 78, fontSize: 12, color: 'var(--muted)', textAlign: 'right', flexShrink: 0 }}>{b.label}</div>
-                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 5, height: 16, overflow: 'hidden' }}>
-                    <div style={{ width: `${(b.pct / maxHomeVal) * 100}%`, background: '#3d9c72', height: '100%', borderRadius: 5, minWidth: b.pct > 0 ? 4 : 0 }} />
-                  </div>
-                  <div style={{ width: 34, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0 }}>{b.pct}%</div>
-                </div>
-              ))}
-            </div>
-            <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
-              Owner-occupied units{homeValue ? ` · median ${fmtUSDshort(homeValue)}` : ''}
-            </div>
-          </div>
+            <BarRows rows={homeValueBrackets} max={maxHomeVal} color="#3d9c72" />
+          </DemoCard>
         )}
 
-        {/* Income distribution — single-hue magnitude bars */}
-        <div className="card" style={{ padding: 16 }}>
-          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-            Household income distribution
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-            {demo.incomeBrackets.map((b) => (
-              <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 74, fontSize: 12, color: 'var(--muted)', textAlign: 'right', flexShrink: 0 }}>{b.label}</div>
-                <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 5, height: 16, overflow: 'hidden' }}>
-                  <div
-                    style={{
-                      width: `${(b.pct / maxBracket) * 100}%`,
-                      background: 'var(--primary)',
-                      height: '100%',
-                      borderRadius: 5,
-                      minWidth: b.pct > 0 ? 4 : 0,
-                    }}
-                  />
-                </div>
-                <div style={{ width: 34, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0 }}>{b.pct}%</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Housing tenure — two-category split */}
-        <div className="card" style={{ padding: 16 }}>
-          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-            Housing tenure
-          </div>
+        {/* Owner-occupied % — same consolidation, atop the tenure split it summarizes. */}
+        <DemoCard>
+          <KpiHeader label="Owner-occupied" value={`${demo.ownerOccupiedPct}%`} />
           <div style={{ display: 'flex', height: 20, borderRadius: 6, overflow: 'hidden', marginBottom: 12 }}>
             <div style={{ width: `${demo.ownerOccupiedPct}%`, background: '#3d9c72' }} />
             <div style={{ width: `${renterPct}%`, background: '#5a9bd4' }} />
@@ -225,13 +282,28 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
               Renter {renterPct}%
             </span>
           </div>
-          <div className="muted" style={{ fontSize: 12, marginTop: 14 }}>
-            {fmtInt(demo.households)} households · {(demo.population / (demo.households || 1)).toFixed(1)} people per household
-          </div>
-        </div>
+        </DemoCard>
 
-        {/* Age distribution over time, with school-age bands — the last chart in this section. */}
-        <AgeDistribution muniKey={muniKey} />
+        {/* Housing by structure type — a distribution with no single KPI to consolidate. */}
+        {housingTypes && housingTypes.length > 0 && (
+          <DemoCard>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+              Housing by type
+            </div>
+            <BarRows rows={housingTypes} max={maxHousing} color="#5a9bd4" />
+          </DemoCard>
+        )}
+
+        {/* Household income distribution — likewise a distribution on its own. */}
+        <DemoCard>
+          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+            Household income distribution
+          </div>
+          <BarRows rows={demo.incomeBrackets} max={maxBracket} color="var(--primary)" />
+        </DemoCard>
+
+        {/* Age distribution over time, with school-age bands — wider than the other cards. */}
+        <AgeDistribution demo={demo} key={demo.townKey} />
       </div>
     </div>
   )

@@ -38,6 +38,10 @@ export async function GET(req: Request) {
           // Fall back to the town's static age distribution if the live pull came
           // back empty, so the chart still renders.
           ageDistribution: ageDistribution.length ? ageDistribution : fallback?.ageDistribution,
+          // Decennial-census anchors aren't part of the live ACS pull at all —
+          // always carry them over from the static record so the population/
+          // households trend charts can reach further back than the ACS window.
+          decennial: fallback?.decennial,
         },
         live: true,
       })

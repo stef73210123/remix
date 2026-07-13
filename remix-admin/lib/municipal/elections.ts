@@ -60,7 +60,11 @@ const ELECTIONS: Record<string, MunicipalElections> = {
       'decided by roughly four votes after absentee canvassing, a manual recount and litigation — and ' +
       'took office in January 2024. In June 2025 Rende turned back a Democratic primary challenge ' +
       'from sitting Councilman Jose Berra with roughly 53% of the vote, then was re-elected unopposed ' +
-      '(Democratic and Conservative lines) that November.',
+      '(Democratic and Conservative lines) that November. New York\'s 2023 Even-Year Election Law ' +
+      '(upheld by the Court of Appeals in October 2025) recalculated that November 2025 win as a ' +
+      'one-year transitional term, so Rende and Berra faced each other again in a June 2026 Democratic ' +
+      'primary — Rende prevailed a second time — before the seat settles into the normal even-year ' +
+      'cycle going forward.',
     primaryNote:
       'No contested town primary (June) was held for Supervisor or Town Board in this cycle — ' +
       'the fall general election was the only town-level contest.',
@@ -73,8 +77,25 @@ const ELECTIONS: Record<string, MunicipalElections> = {
       'https://patch.com/new-york/chappaqua/polls-have-closed-new-castle-mount-kisco-north-castle-election-day-2025-early',
       'https://www.theexaminernews.com/near-dead-heat-in-race-for-north-castle-supervisor/',
       'https://westfaironline.com/elections/conley-feiner-among-the-winners-in-democrat-primary-contests/',
+      'https://www.blackwestchester.com/your-vote-your-voice-meet-the-candidates-in-westchester-countys-2026-primary-election/',
+      'https://www.brennancenter.org/our-work/research-reports/new-york-even-year-election-law',
     ],
     races: [
+      {
+        year: 2026,
+        type: 'primary',
+        date: '2026-06-23',
+        office: 'Supervisor',
+        seatsUp: 1,
+        candidates: [
+          { name: 'Joseph A. Rende', parties: ['Democratic'], votes: null, won: true, incumbent: true },
+          { name: 'Jose Berra', parties: ['Democratic'], votes: null, won: false, incumbent: false },
+        ],
+        note: 'Democratic primary, a rematch of 2025. Under New York\'s 2023 Even-Year Election Law, ' +
+          'supervisors elected in November 2025 serve only a one-year transitional term and stand again ' +
+          'in 2026 before the cycle moves permanently to even years; Rende again turned back Berra for ' +
+          'the Democratic line. Vote totals pending BOE certification transcription.',
+      },
       {
         year: 2025,
         type: 'primary',
