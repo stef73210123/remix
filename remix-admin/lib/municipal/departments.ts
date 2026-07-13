@@ -77,6 +77,24 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       links: [{ label: 'Finance Department', href: 'https://www.northcastleny.com/158/Finance-Department' }],
     },
   ],
+  building: [
+    {
+      department: 'Building Department',
+      person: 'Rob Melillo',
+      title: 'Building Inspector',
+      phone: '(914) 273-3000 ext. 44',
+      email: 'building@northcastleny.com',
+      address: '17 Bedford Road, Armonk, NY 10504',
+      blurb:
+        'Safeguards life, health, property and public welfare by administering and enforcing the NYS ' +
+        'Uniform Fire Prevention and Building Code and the Town’s adopted laws for all construction in North Castle.',
+      links: [
+        { label: 'Building & Engineering', href: 'https://www.northcastleny.com/180/Building-Engineering' },
+        { label: 'Permit process guide', href: 'https://www.northcastleny.com/213/Customers-Guide-to-the-Building-Permit-P' },
+        { label: 'Online permitting', href: 'https://www.northcastleny.com/218/Online-Permitting' },
+      ],
+    },
+  ],
 }
 
 const BOARD_DEPARTMENTS: Record<string, Record<string, DeptContact[]>> = {
