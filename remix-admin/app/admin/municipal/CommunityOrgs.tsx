@@ -1,3 +1,4 @@
+import { Phone, Mail, MapPin } from 'lucide-react'
 import { getCommunityOrgs } from '@/lib/municipal/orgs'
 
 /**
@@ -22,9 +23,13 @@ export default function CommunityOrgs({ muniKey }: { muniKey: string }) {
             <div style={{ fontSize: 15, fontWeight: 700 }}>{o.name}</div>
             <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{o.blurb}</div>
             <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
-              {o.phone && <span>📞 {o.phone}</span>}
-              {o.email && <a href={`mailto:${o.email}`} style={{ color: 'var(--primary-light)', wordBreak: 'break-all' }}>✉ {o.email}</a>}
-              {o.address && <span className="muted">🔹 {o.address}</span>}
+              {o.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Phone size={12} aria-hidden /> {o.phone}</span>}
+              {o.email && (
+                <a href={`mailto:${o.email}`} style={{ color: 'var(--primary-light)', wordBreak: 'break-all', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <Mail size={12} aria-hidden /> {o.email}
+                </a>
+              )}
+              {o.address && <span className="muted" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><MapPin size={12} aria-hidden /> {o.address}</span>}
             </div>
             <div style={{ marginTop: 10 }}>
               <a href={o.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>

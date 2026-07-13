@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { MapPin } from 'lucide-react'
 import { getCommunityEvents, type CommunityEvent } from '@/lib/municipal/events'
 import EventLightbox from './EventLightbox'
 import { fmtDateShort } from '@/lib/municipal/date'
@@ -159,7 +160,7 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
                     <span style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 13.5, fontWeight: 600 }}>{ev.title}</div>
                       <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        🔹 {ev.location}
+                        <MapPin size={11} aria-hidden style={{ verticalAlign: -1, marginRight: 3 }} />{ev.location}
                       </div>
                     </span>
                   </div>

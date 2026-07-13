@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { Phone, Mail, MapPin } from 'lucide-react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
@@ -615,9 +616,11 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
                   <div style={{ fontSize: 15, fontWeight: 700 }}>{dept.inspector}</div>
                   <div className="muted" style={{ fontSize: 13, marginTop: 6, lineHeight: 1.55 }}>{dept.mission}</div>
                   <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 16px' }}>
-                    <span>📞 {dept.phone}</span>
-                    <a href={`mailto:${dept.email}`} style={{ color: 'var(--primary-light)' }}>✉ {dept.email}</a>
-                    <span className="muted">🔹 {dept.address}</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Phone size={12} aria-hidden /> {dept.phone}</span>
+                    <a href={`mailto:${dept.email}`} style={{ color: 'var(--primary-light)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      <Mail size={12} aria-hidden /> {dept.email}
+                    </a>
+                    <span className="muted" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><MapPin size={12} aria-hidden /> {dept.address}</span>
                   </div>
                   <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
                     {dept.links.map((l) => (

@@ -1,3 +1,4 @@
+import { Phone, Mail, MapPin } from 'lucide-react'
 import { getBoardDepartments } from '@/lib/municipal/departments'
 
 /**
@@ -20,9 +21,13 @@ export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyK
           <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
           <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{d.blurb}</div>
           <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
-            {d.phone && <span>📞 {d.phone}</span>}
-            {d.email && <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)' }}>✉ {d.email}</a>}
-            {d.address && <span className="muted">🔹 {d.address}</span>}
+            {d.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Phone size={12} aria-hidden /> {d.phone}</span>}
+            {d.email && (
+              <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Mail size={12} aria-hidden /> {d.email}
+              </a>
+            )}
+            {d.address && <span className="muted" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><MapPin size={12} aria-hidden /> {d.address}</span>}
           </div>
           {d.links.length > 0 && (
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>

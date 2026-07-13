@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { MapPin } from 'lucide-react'
 import { type CommunityEvent, googleCalendarUrl } from '@/lib/municipal/events'
 import { useLockBodyScroll } from './useLockBodyScroll'
 import { fmtDateShort } from '@/lib/municipal/date'
@@ -66,7 +67,7 @@ export default function EventLightbox({ event, onClose }: { event: CommunityEven
         </div>
         <div data-scroll-lock-allow style={{ padding: '10px 18px 18px', overflowY: 'auto', minHeight: 0 }}>
           <div style={{ fontSize: 13.5, marginBottom: 2 }}>{when}{timeRange ? ` · ${timeRange}` : ''}</div>
-          <div className="muted" style={{ fontSize: 13 }}>🔹 {event.location}</div>
+          <div className="muted" style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 4 }}><MapPin size={13} aria-hidden /> {event.location}</div>
           <div style={{ fontSize: 13.5, lineHeight: 1.55, marginTop: 12 }}>{event.description}</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 18 }}>
             <a href={event.url} target="_blank" rel="noopener noreferrer" className="btn secondary" style={{ padding: '8px 14px', fontSize: 13, textDecoration: 'none' }}>

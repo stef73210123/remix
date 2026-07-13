@@ -6,10 +6,13 @@
  * Planning Board). Committed static data so it renders with no DB dependency.
  */
 
+/** Key of a flat, single-color icon rendered by KeyIssues.tsx (see ICONS there). */
+export type KeyIssueIcon = 'landmark' | 'droplet' | 'hard-hat' | 'tree-pine' | 'shield' | 'dollar-sign'
+
 export interface KeyIssueCard {
   n: number
   title: string
-  icon: string
+  icon: KeyIssueIcon
   insight: string
   evidence: string
 }
@@ -26,7 +29,7 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
       {
         n: 1,
         title: 'Open government & procedure',
-        icon: '🏛️',
+        icon: 'landmark',
         insight:
           'The board spends more time on process, transparency and proper procedure than on any other single topic — a sensitivity heightened after the 2023 supervisor race decided by roughly four votes.',
         evidence:
@@ -35,7 +38,7 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
       {
         n: 2,
         title: 'Water & sewer districts',
-        icon: '💧',
+        icon: 'droplet',
         insight:
           'District infrastructure is a steady, broadly supported priority, with capital work funded largely through the districts and outside grants rather than the general tax levy.',
         evidence:
@@ -44,7 +47,7 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
       {
         n: 3,
         title: 'Land use, zoning & development',
-        icon: '🏗️',
+        icon: 'hard-hat',
         insight:
           'Development pressure concentrates on a few sizable applications, with the board weighing tax base and housing supply against neighborhood character.',
         evidence:
@@ -53,7 +56,7 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
       {
         n: 4,
         title: 'Environment: wetlands, trees & stormwater',
-        icon: '🌲',
+        icon: 'tree-pine',
         insight:
           'Nearly every Planning Board application is scrutinized through an environmental lens — wetland buffers, tree screening and drainage are the dominant filters on new construction.',
         evidence:
@@ -62,7 +65,7 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
       {
         n: 5,
         title: 'Public safety & police',
-        icon: '🚓',
+        icon: 'shield',
         insight:
           'Police staffing and public safety draw strong, consistent support, and the board has prioritized reaching budgeted staffing levels.',
         evidence:
@@ -71,7 +74,7 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
       {
         n: 6,
         title: 'Fiscal responsibility: budget & taxes',
-        icon: '💵',
+        icon: 'dollar-sign',
         insight:
           'Disciplined budgeting is a throughline: leadership leans on grants and cost-sharing to fund projects without pushing up the tax levy.',
         evidence:
