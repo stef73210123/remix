@@ -540,8 +540,7 @@ export default function MunicipalClient({
             if (!m || !bodyKey) return null
             return (
               <>
-                <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>{board}</h2>
-                <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>{m.name}</div>
+                <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 20px' }}>{board}</h2>
                 <BoardStaffCards muni={town} bodyKey={bodyKey} />
                 <BoardKeyDocs muni={town} bodyKey={bodyKey} />
                 <BoardCaseMap dataset={boardAnalysis} muni={town} />

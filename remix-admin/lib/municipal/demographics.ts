@@ -56,6 +56,17 @@ export interface DemoSeriesPoint {
   households?: number
 }
 
+/** One decennial-census anchor point — population/housing-unit counts only
+ *  (income, home value and median age aren't decennial-census concepts, so
+ *  those charts use `series` alone). Sparse and decade-spaced by nature;
+ *  paired with `series` to show a longer, mixed-granularity population and
+ *  households trend than the ACS 5-year window alone supports. */
+export interface DecennialPoint {
+  year: number
+  population?: number
+  households?: number
+}
+
 export interface TownDemographics {
   townKey: string
   townName: string
@@ -79,6 +90,10 @@ export interface TownDemographics {
   series?: DemoSeriesPoint[]
   /** Fine-grained age distribution across ACS vintages (oldest → newest). */
   ageDistribution?: AgeVintage[]
+  /** Decade-spaced decennial-census population/households anchors (oldest →
+   *  newest), extending the population/households trend charts further back
+   *  than the ACS 5-year `series` window supports. */
+  decennial?: DecennialPoint[]
 }
 
 /** Uniform 5-year bin labels, 0–4 … 85+ (matches AgeVintage.bins order). */
@@ -147,6 +162,18 @@ const NORTH_CASTLE: TownDemographics = {
     { label: '$1–1.5M', pct: 26 },
     { label: '$1.5–2M', pct: 12 },
     { label: '$2M+', pct: 10 },
+  ],
+  // Decennial-census population anchors — from the Census Bureau (via the
+  // town's own site and Wikipedia's Census-cited infobox), extending the
+  // population trend chart back past the ACS 5-year `series` window below.
+  // 2000 also carries a households figure; 2010/2020 households couldn't be
+  // confirmed as true decennial occupied-housing-unit counts (only total
+  // housing units, which overcounts vacant units), so those are omitted
+  // rather than guessed.
+  decennial: [
+    { year: 2000, population: 10849, households: 3583 },
+    { year: 2010, population: 11841 },
+    { year: 2020, population: 12408 },
   ],
   // Approximate ACS 5-year trend (oldest → newest) so the dashboard shows
   // period-over-period movement even without a live Census key.

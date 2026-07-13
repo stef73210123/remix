@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { TownDemographics, AgeVintage, AgeBin } from '@/lib/municipal/demographics'
 
 // School-age bands (approx.), aligned to the Byram Hills grade structure.
@@ -17,21 +17,9 @@ const H = 300
 const PAD = { top: 40, right: 16, bottom: 40, left: 48 }
 const BAR = '#6b7bb5' // muted indigo, distinct from the band hues
 
-export default function AgeDistribution({ muniKey }: { muniKey: string }) {
-  const [demo, setDemo] = useState<TownDemographics | null>(null)
-  const [loading, setLoading] = useState(true)
+export default function AgeDistribution({ demo }: { demo: TownDemographics }) {
   const [hover, setHover] = useState<number | null>(null)
   const [year, setYear] = useState<number | null>(null)
-
-  useEffect(() => {
-    setLoading(true)
-    setYear(null)
-    fetch(`/admin/api/municipal/demographics?muni=${encodeURIComponent(muniKey)}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
-      .then((d) => setDemo(d.demo || null))
-      .catch(() => setDemo(null))
-      .finally(() => setLoading(false))
-  }, [muniKey])
 
   const vintages: AgeVintage[] = useMemo(() => demo?.ageDistribution ?? [], [demo])
   const years = useMemo(() => vintages.map((v) => v.year), [vintages])
@@ -56,7 +44,6 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
     return m
   }, [vintages, hasCounts])
 
-  if (loading) return <div className="muted" style={{ fontSize: 13, gridColumn: '1 / -1' }}>Loading age distribution…</div>
   if (!selected || selected.bins.length === 0) return null
 
   const visBins = selected.bins
@@ -79,7 +66,7 @@ export default function AgeDistribution({ muniKey }: { muniKey: string }) {
   const eb = hb && compareBins ? compareBins[hover!] : null
 
   return (
-    <div style={{ gridColumn: '1 / -1' }}>
+    <div style={{ flex: '0 0 640px', minWidth: 0, scrollSnapAlign: 'start' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 4px' }}>
         <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Age distribution

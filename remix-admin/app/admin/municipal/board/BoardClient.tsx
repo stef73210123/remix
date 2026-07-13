@@ -226,7 +226,7 @@ export default function BoardClient({ userName }: { userName: string }) {
       <MuniTabs muni={muni} active={body} />
 
       {!isOpen && data && !loading && (
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 12 }}>
           <Breadcrumbs items={crumbs} />
         </div>
       )}
@@ -236,11 +236,7 @@ export default function BoardClient({ userName }: { userName: string }) {
 
       {data && !loading && (
         <>
-          <h1 className="page-title" style={{ marginBottom: 4 }}>{data.board.displayName}</h1>
-          <div className="muted" style={{ fontSize: 13, marginBottom: 20 }}>
-            {data.town.name}{data.town.county ? ` · ${data.town.county} County` : ''}, {data.town.state}
-            {data.board.meetingPattern ? ` · ${data.board.meetingPattern}` : ''}
-          </div>
+          <h1 className="page-title" style={{ marginBottom: 6 }}>{data.board.displayName}</h1>
 
           {/* Departmental staff cards — at the very top of the page. */}
           <BoardStaffCards muni={muni} bodyKey={body} />
