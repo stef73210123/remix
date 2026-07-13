@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
@@ -117,6 +117,7 @@ export default function BoardClient({ userName }: { userName: string }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [transcriptDates, setTranscriptDates] = useState<Set<string>>(new Set())
+  const memberScrollRef = useRef<HTMLDivElement>(null)
   // Analysis dataset surfaced by TranscriptAnalysis, so the Meetings section
   // below can attach the meeting-by-meeting rows to its timeline.
   const [analysis, setAnalysis] = useState<AnalysisDataset | null>(null)
@@ -211,6 +212,14 @@ export default function BoardClient({ userName }: { userName: string }) {
     return trail
   }, [data])
 
+  const scrollMembersByCard = (dir: 1 | -1) => {
+    const el = memberScrollRef.current
+    if (!el) return
+    const card = el.querySelector<HTMLElement>('[data-board-member-card]')
+    const step = (card?.offsetWidth ?? 210) + 12
+    el.scrollBy({ left: dir * step, behavior: 'smooth' })
+  }
+
   return (
     <div className="container">
       <MuniHeader userName={userName} />
@@ -244,17 +253,30 @@ export default function BoardClient({ userName }: { userName: string }) {
               so we don't duplicate (or show an empty roster above it). */}
           {transcriptDates.size === 0 && data.members.length > 0 && (
             <>
-              <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-                Board members
-                <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {data.members.length}</span>
-              </h2>
-              <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 6, marginBottom: 26, WebkitOverflowScrolling: 'touch' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+                <h2 style={{ fontSize: 16, margin: 0 }}>
+                  Board members
+                  <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {data.members.length}</span>
+                </h2>
+                <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                  <button onClick={() => scrollMembersByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
+                  <button onClick={() => scrollMembersByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
+                </div>
+              </div>
+              <div
+                ref={memberScrollRef}
+                style={{
+                  display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 6, marginBottom: 26,
+                  scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
+                }}
+              >
                 {data.members.map((m) => (
                   <a
                     key={m.id}
                     href={`/admin/municipal/member?muni=${data.town.key}&body=${data.board.key}&id=${m.id}`}
                     className="card"
-                    style={{ padding: 14, minWidth: 210, flexShrink: 0, textDecoration: 'none', display: 'block' }}
+                    data-board-member-card
+                    style={{ padding: 14, flex: '0 0 210px', minWidth: 0, textDecoration: 'none', display: 'block', scrollSnapAlign: 'start' }}
                   >
                     <div style={{ fontWeight: 700 }}>{m.full_name}</div>
                     <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{m.title || '—'}</div>

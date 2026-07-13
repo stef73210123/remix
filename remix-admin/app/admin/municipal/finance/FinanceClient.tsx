@@ -5,6 +5,7 @@ import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
 import CivicActions from '@/app/admin/municipal/CivicActions'
+import BoardStaffCards from '@/app/admin/municipal/board/BoardStaffCards'
 import BudgetPanel from '@/app/admin/municipal/budget/BudgetPanel'
 import type { TownBudget } from '@/lib/municipal/budget'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
@@ -52,6 +53,8 @@ export default function FinanceClient({ userName, muni, budgets }: {
         <h1 className="page-title" style={{ marginBottom: 6 }}>Finance</h1>
         {!isOpen && <CivicActions style={{ marginTop: 6 }} />}
       </div>
+
+      <BoardStaffCards muni={activeTown || muni} bodyKey="finance" />
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
         <h2 style={{ fontSize: 16, margin: 0 }}>Financial analysis</h2>
