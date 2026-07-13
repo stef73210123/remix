@@ -1,7 +1,21 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getTownBackground, type CarouselSlide } from '@/lib/municipal/townBackground'
+import { Landmark, Briefcase, Building2, Trees, Home, Tent, Palette, TrainFront, Bike, Plane } from 'lucide-react'
+import { getTownBackground, type CarouselSlide, type TownIcon } from '@/lib/municipal/townBackground'
+
+const ICONS: Record<TownIcon, typeof Landmark> = {
+  landmark: Landmark,
+  briefcase: Briefcase,
+  'building-2': Building2,
+  trees: Trees,
+  home: Home,
+  tent: Tent,
+  palette: Palette,
+  'train-front': TrainFront,
+  bike: Bike,
+  plane: Plane,
+}
 
 /**
  * Auto-advancing photo carousel. Photos are hotlinked from third-party CDNs
@@ -23,6 +37,7 @@ function Carousel({ slides }: { slides: CarouselSlide[] }) {
 
   const s = slides[i]
   const showImg = s.img && !failed[s.key]
+  const SlideIcon = ICONS[s.icon]
   return (
     <div
       className="card"
@@ -41,7 +56,7 @@ function Carousel({ slides }: { slides: CarouselSlide[] }) {
           />
         ) : (
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: 52, lineHeight: 1 }} aria-hidden>{s.icon}</span>
+            <SlideIcon size={52} strokeWidth={1.5} color="rgba(255,255,255,0.85)" aria-hidden />
           </div>
         )}
         <div
@@ -118,14 +133,17 @@ export default function TownBackground({ muniKey, townName }: { muniKey: string;
       <div className="card" style={{ padding: 20 }}>
         <h2 style={{ fontSize: 16, margin: '0 0 14px' }}>About {townName}</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {bg.sections.map((sec) => (
+          {bg.sections.map((sec) => {
+            const SectionIcon = ICONS[sec.icon]
+            return (
             <div key={sec.key}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 13.5 }}>
-                <span aria-hidden>{sec.icon}</span> {sec.label}
+                <SectionIcon size={15} aria-hidden /> {sec.label}
               </div>
               <div className="muted" style={{ fontSize: 13, lineHeight: 1.6, marginTop: 4 }}>{sec.text}</div>
             </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>

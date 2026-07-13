@@ -8,16 +8,21 @@
  * rendered inline (this is a dashboard blurb, not a footnoted article).
  */
 
+/** Key of a flat, single-color icon rendered by TownBackground.tsx (see ICONS there). */
+export type TownIcon =
+  | 'landmark' | 'briefcase' | 'building-2' | 'trees'
+  | 'home' | 'tent' | 'palette' | 'train-front' | 'bike' | 'plane'
+
 export interface BackgroundSection {
   key: string
   label: string
-  icon: string
+  icon: TownIcon
   text: string
 }
 
 export interface CarouselSlide {
   key: string
-  icon: string
+  icon: TownIcon
   caption: string
   sub: string
   /** Photo URL — either hotlinked from a third-party CDN or a local path
@@ -43,7 +48,7 @@ const NORTH_CASTLE: TownBackground = {
     {
       key: 'history',
       label: 'History',
-      icon: '🏛️',
+      icon: 'landmark',
       text:
         'North Castle held its first town meeting on April 6, 1736, and was formally incorporated in 1788. ' +
         'The name descends from a Siwanoy stronghold — "North Fort" — that once stood on the hillside now ' +
@@ -53,7 +58,7 @@ const NORTH_CASTLE: TownBackground = {
     {
       key: 'economy',
       label: 'Economy',
-      icon: '💼',
+      icon: 'briefcase',
       text:
         'A high-value, low-density tax base: large corporate campuses and executive housing anchor the grand ' +
         'list rather than dense commercial strips. Armonk’s hamlet center carries most of the town’s ' +
@@ -63,7 +68,7 @@ const NORTH_CASTLE: TownBackground = {
     {
       key: 'industries',
       label: 'Key industries',
-      icon: '🏢',
+      icon: 'building-2',
       text:
         'IBM has run its world headquarters from a 432-acre former apple orchard in Armonk since 1964. Swiss ' +
         'Re has based its U.S. reinsurance operations there since 1999. Beyond the corporate campuses, the ' +
@@ -73,7 +78,7 @@ const NORTH_CASTLE: TownBackground = {
     {
       key: 'character',
       label: 'Character',
-      icon: '🌳',
+      icon: 'trees',
       text:
         'Rolling, wooded terrain threaded by the Bedford Road corridor and the Kensico Reservoir watershed. ' +
         'Byram Hills Central School District serves most of the town; North White Plains and Banksville fall ' +
@@ -82,42 +87,42 @@ const NORTH_CASTLE: TownBackground = {
   ],
   slides: [
     {
-      key: 'armonk-square', icon: '🏘️', caption: 'Armonk hamlet center', sub: 'Armonk Square, Main Street',
+      key: 'armonk-square', icon: 'home', caption: 'Armonk hamlet center', sub: 'Armonk Square, Main Street',
       img: 'https://www.ragette.com/thumbs/800x600/r/uploads/Armonk%20Square.PNG',
       from: '#2563d6', to: '#01068b',
     },
     {
-      key: 'ibm-hq', icon: '🏢', caption: 'IBM World Headquarters', sub: 'Armonk, since 1964',
+      key: 'ibm-hq', icon: 'building-2', caption: 'IBM World Headquarters', sub: 'Armonk, since 1964',
       img: 'https://azahner.com/wp-content/uploads/2025/11/ibm-world-headquarters-c-zahner-6058.jpg',
       from: '#01068b', to: '#141a3d',
     },
     {
-      key: 'wampus-brook', icon: '🌳', caption: 'Wampus Brook Park', sub: 'Parks & preserves',
+      key: 'wampus-brook', icon: 'trees', caption: 'Wampus Brook Park', sub: 'Parks & preserves',
       img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/5b/cb/03/wampas-brook-pond-armonk.jpg?w=1400&h=-1&s=1',
       from: '#84cc16', to: '#3f6b0a',
     },
     {
-      key: 'fol-de-rol', icon: '🎪', caption: 'Armonk Fol-De-Rol', sub: "The town's annual street fair",
+      key: 'fol-de-rol', icon: 'tent', caption: 'Armonk Fol-De-Rol', sub: "The town's annual street fair",
       img: 'https://www.whattododigital.com/wp-content/uploads/2023/05/Armonk-Fol-De-Rol-e1684245819723-960x640.jpg',
       from: '#c7913c', to: '#8a5f1f',
     },
     {
-      key: 'art-show', icon: '🎨', caption: 'Armonk Outdoor Art Show', sub: 'Community arts & culture',
+      key: 'art-show', icon: 'palette', caption: 'Armonk Outdoor Art Show', sub: 'Community arts & culture',
       img: 'https://armonkoutdoorartshow.org/wp-content/uploads/2023/10/Experience-the-show-2-960x720.jpeg',
       from: '#3d9c72', to: '#1f5c42',
     },
     {
-      key: 'nwp-station', icon: '🚉', caption: 'North White Plains Station', sub: 'Metro-North Harlem Line',
+      key: 'nwp-station', icon: 'train-front', caption: 'North White Plains Station', sub: 'Metro-North Harlem Line',
       img: '/town/north-white-plains-station.jpg',
       from: '#5a9bd4', to: '#1f3a5f',
     },
     {
-      key: 'hickory-and-tweed', icon: '🚲', caption: 'Hickory & Tweed Ski & Cycle', sub: 'Main Street, Armonk',
+      key: 'hickory-and-tweed', icon: 'bike', caption: 'Hickory & Tweed Ski & Cycle', sub: 'Main Street, Armonk',
       img: '/town/hickory-and-tweed.jpg',
       from: '#c9463f', to: '#7a201c',
     },
     {
-      key: 'westchester-airport', icon: '✈️', caption: 'Westchester County Airport', sub: 'Straddles North Castle, Harrison & Rye Brook',
+      key: 'westchester-airport', icon: 'plane', caption: 'Westchester County Airport', sub: 'Straddles North Castle, Harrison & Rye Brook',
       img: '/town/westchester-airport.jpg',
       from: '#64748b', to: '#293241',
     },

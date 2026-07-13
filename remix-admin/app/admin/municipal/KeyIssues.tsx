@@ -1,7 +1,17 @@
 'use client'
 
 import { useRef } from 'react'
-import { getKeyIssues } from '@/lib/municipal/keyIssues'
+import { Landmark, Droplet, HardHat, TreePine, Shield, DollarSign } from 'lucide-react'
+import { getKeyIssues, type KeyIssueIcon } from '@/lib/municipal/keyIssues'
+
+const ICONS: Record<KeyIssueIcon, typeof Landmark> = {
+  landmark: Landmark,
+  droplet: Droplet,
+  'hard-hat': HardHat,
+  'tree-pine': TreePine,
+  shield: Shield,
+  'dollar-sign': DollarSign,
+}
 
 /**
  * Narrative "playbook" of a town's key civic issues — 6–8 cards, each an
@@ -45,7 +55,9 @@ export default function KeyIssues({ muniKey }: { muniKey: string }) {
           scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
         }}
       >
-        {data.cards.map((c) => (
+        {data.cards.map((c) => {
+          const Icon = ICONS[c.icon]
+          return (
           <div
             key={c.n}
             data-key-issue-card
@@ -56,7 +68,7 @@ export default function KeyIssues({ muniKey }: { muniKey: string }) {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-              <span style={{ fontSize: 20, lineHeight: 1 }} aria-hidden>{c.icon}</span>
+              <Icon size={20} aria-hidden style={{ flexShrink: 0, marginTop: 1 }} />
               <div style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.25 }}>
                 <span className="muted" style={{ fontWeight: 700 }}>{c.n}.</span> {c.title}
               </div>
@@ -70,7 +82,8 @@ export default function KeyIssues({ muniKey }: { muniKey: string }) {
               <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.5 }}>{c.evidence}</div>
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

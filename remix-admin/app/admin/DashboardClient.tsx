@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { Mail } from 'lucide-react'
 import {
   STATE_CODES,
   STATE_NAMES,
@@ -389,7 +390,7 @@ export default function DashboardClient({
                       <td style={{ fontSize: 13 }}>{c.status || '—'}</td>
                       <td className="muted hidden-narrow" style={{ fontSize: 13 }}>{c.amount || '—'}</td>
                       <td style={{ whiteSpace: 'nowrap' }}>
-                        {c.email && <a href={`mailto:${c.email}`} className="muted" title={c.email}>✉</a>}
+                        {c.email && <a href={`mailto:${c.email}`} className="muted" title={c.email} style={{ display: 'inline-flex' }}><Mail size={13} aria-hidden /></a>}
                         {c.linkedin && <> {link(c.linkedin.startsWith('http') ? c.linkedin : `https://${c.linkedin}`, 'in')}</>}
                       </td>
                     </tr>
