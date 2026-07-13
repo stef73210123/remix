@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next'
+=======
+import type { Metadata, Viewport } from 'next'
+>>>>>>> Stashed changes
 import './globals.css'
 import './opennorthcastle.css'
 import TopoBackground from './TopoBackground'
@@ -34,6 +38,17 @@ export const metadata: Metadata = isOpen
         apple: '/favicon-180.png',
       },
     }
+
+// Pin the scale so mobile Safari doesn't auto-zoom when a text field is
+// focused — that zoom was cropping the embedded "report an issue" / contact
+// forms (whose inputs live in a cross-origin iframe we can't restyle, so the
+// viewport is the only lever).
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 // OpenNorthCastle uses IBM Plex Sans/Mono (UI) + Newsreader (display); the dark
 // Remix flavor uses the system stack and doesn't load these.
