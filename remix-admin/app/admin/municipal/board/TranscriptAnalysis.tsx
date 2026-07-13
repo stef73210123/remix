@@ -105,10 +105,6 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
           Data current as of {fmtCaptionDate(latestMeetingDate)} — reflects meetings through that date.
         </div>
       )}
-      <div className="muted" style={{ fontSize: 11, marginBottom: 18, lineHeight: 1.5, maxWidth: 720 }}>
-        Sentiment −10 (opposed) to +10 (favorable). Member-level attribution is directional.
-      </div>
-
       {/* ---- Consolidated board progress score ---- */}
       {(() => {
         const board = weightedProgressScore(data.members)
@@ -156,7 +152,6 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
         <div className="muted" style={{ fontSize: 12, marginBottom: 28 }}>
           No statements confidently attributed yet:{' '}
           {data.members.filter((mem) => mem.totalPositions === 0).map((mem) => mem.member).join(', ')}
-          {' '}— named too rarely in the transcripts to attribute reliably.
         </div>
       )}
 
@@ -188,7 +183,6 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
           ))}
         </div>
         <div className="muted" style={{ fontSize: 11, marginTop: 14, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-          <span>Bar = meetings the theme came up</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
             <span style={{ width: 10, height: 10, borderRadius: 2, background: sentimentColor(-0.6), display: 'inline-block' }} /> concern
             <span style={{ width: 10, height: 10, borderRadius: 2, background: sentimentColor(0.6), display: 'inline-block', marginLeft: 8 }} /> favorable

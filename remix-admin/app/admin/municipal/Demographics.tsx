@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { TownDemographics, DemoSeriesPoint } from '@/lib/municipal/demographics'
-import AgeDistribution from './AgeDistribution'
 
 function fmtInt(n: number): string {
   return n.toLocaleString('en-US')
@@ -80,7 +79,13 @@ function TrendChart({ points, fmtY, color = 'var(--primary)' }: {
   const hb = hover != null ? pts[hover] : null
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block' }} role="img" aria-label="Trend over time">
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      preserveAspectRatio="none"
+      style={{ width: '100%', height: '100%', display: 'block' }}
+      role="img"
+      aria-label="Trend over time"
+    >
       <path d={areaPath} fill={color} opacity={0.12} />
       <path d={path} fill="none" stroke={color} strokeWidth={1.75} />
       {pts.map((p, i) => (
@@ -125,13 +130,29 @@ function longSeries(demo: TownDemographics, field: 'population' | 'households'):
   return [...byYear.entries()].sort((a, b) => a[0] - b[0]).map(([year, value]) => ({ year, value }))
 }
 
-function DemoCard({ wide, children }: { wide?: boolean; children: React.ReactNode }) {
+const CARD_HEIGHT = 260
+
+function DemoCard({ children }: { children: React.ReactNode }) {
   return (
     <div
       data-demo-card
       className="card"
-      style={{ padding: 16, flex: wide ? '0 0 460px' : '0 0 300px', minWidth: 0, scrollSnapAlign: 'start' }}
+      style={{
+        padding: 16, flex: '0 0 300px', minWidth: 0, scrollSnapAlign: 'start',
+        height: CARD_HEIGHT, display: 'flex', flexDirection: 'column',
+      }}
     >
+      {children}
+    </div>
+  )
+}
+
+/** Fills whatever vertical space is left in a DemoCard below its header, so
+ *  every card reads as the same size regardless of how much its own content
+ *  (a chart vs. a handful of bar rows) would naturally need. */
+function CardBody({ children, center }: { children: React.ReactNode; center?: boolean }) {
+  return (
+    <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', ...(center ? { justifyContent: 'center' } : {}) }}>
       {children}
     </div>
   )
@@ -223,22 +244,22 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
       >
         <DemoCard>
           <KpiHeader label="Population" value={fmtInt(demo.population)} growth={popGrowth(series, 'population')} />
-          <TrendChart points={populationSeries} fmtY={fmtInt} />
+          <CardBody><TrendChart points={populationSeries} fmtY={fmtInt} /></CardBody>
         </DemoCard>
 
         <DemoCard>
           <KpiHeader label="Households" value={fmtInt(demo.households)} growth={popGrowth(series, 'households')} />
-          <TrendChart points={householdsSeries} fmtY={fmtInt} color="#5a9bd4" />
+          <CardBody><TrendChart points={householdsSeries} fmtY={fmtInt} color="#5a9bd4" /></CardBody>
         </DemoCard>
 
         <DemoCard>
           <KpiHeader label="Median income" value={fmtUSD0(demo.medianIncomeUsd)} growth={popGrowth(series, 'medianIncomeUsd')} />
-          <TrendChart points={incomeSeries} fmtY={fmtUSD0} color="#c7913c" />
+          <CardBody><TrendChart points={incomeSeries} fmtY={fmtUSD0} color="#c7913c" /></CardBody>
         </DemoCard>
 
         <DemoCard>
           <KpiHeader label="Median age" value={`${demo.medianAgeYears}`} sub="years" growth={popGrowth(series, 'medianAgeYears')} />
-          <TrendChart points={ageSeries} fmtY={(v) => `${v.toFixed(0)}y`} color="#9b7fd4" />
+          <CardBody><TrendChart points={ageSeries} fmtY={(v) => `${v.toFixed(0)}y`} color="#9b7fd4" /></CardBody>
         </DemoCard>
 
         <DemoCard>
@@ -247,7 +268,7 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
             value={avgHouseholdSize != null ? avgHouseholdSize.toFixed(1) : '—'}
             sub="people / household"
           />
-          <TrendChart points={householdSizeSeries} fmtY={(v) => v.toFixed(1)} color="#22a06b" />
+          <CardBody><TrendChart points={householdSizeSeries} fmtY={(v) => v.toFixed(1)} color="#22a06b" /></CardBody>
         </DemoCard>
 
         {/* Median home value — the KPI and its distribution used to be two
@@ -258,52 +279,57 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
             {homeValue != null && (
               <KpiHeader label="Median home value" value={fmtUSDshort(homeValue)} growth={popGrowth(series, 'medianHomeValueUsd')} />
             )}
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-              Home value distribution
-            </div>
-            <BarRows rows={homeValueBrackets} max={maxHomeVal} color="#3d9c72" />
+            <CardBody center>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+                Home value distribution
+              </div>
+              <BarRows rows={homeValueBrackets} max={maxHomeVal} color="#3d9c72" />
+            </CardBody>
           </DemoCard>
         )}
 
         {/* Owner-occupied % — same consolidation, atop the tenure split it summarizes. */}
         <DemoCard>
           <KpiHeader label="Owner-occupied" value={`${demo.ownerOccupiedPct}%`} />
-          <div style={{ display: 'flex', height: 20, borderRadius: 6, overflow: 'hidden', marginBottom: 12 }}>
-            <div style={{ width: `${demo.ownerOccupiedPct}%`, background: '#3d9c72' }} />
-            <div style={{ width: `${renterPct}%`, background: '#5a9bd4' }} />
-          </div>
-          <div style={{ display: 'flex', gap: 18, fontSize: 13, flexWrap: 'wrap' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: '#3d9c72', display: 'inline-block' }} />
-              Owner {demo.ownerOccupiedPct}%
-            </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: '#5a9bd4', display: 'inline-block' }} />
-              Renter {renterPct}%
-            </span>
-          </div>
+          <CardBody center>
+            <div style={{ display: 'flex', height: 20, borderRadius: 6, overflow: 'hidden', marginBottom: 12 }}>
+              <div style={{ width: `${demo.ownerOccupiedPct}%`, background: '#3d9c72' }} />
+              <div style={{ width: `${renterPct}%`, background: '#5a9bd4' }} />
+            </div>
+            <div style={{ display: 'flex', gap: 18, fontSize: 13, flexWrap: 'wrap' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: 2, background: '#3d9c72', display: 'inline-block' }} />
+                Owner {demo.ownerOccupiedPct}%
+              </span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: 2, background: '#5a9bd4', display: 'inline-block' }} />
+                Renter {renterPct}%
+              </span>
+            </div>
+          </CardBody>
         </DemoCard>
 
         {/* Housing by structure type — a distribution with no single KPI to consolidate. */}
         {housingTypes && housingTypes.length > 0 && (
           <DemoCard>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-              Housing by type
-            </div>
-            <BarRows rows={housingTypes} max={maxHousing} color="#5a9bd4" />
+            <CardBody center>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+                Housing by type
+              </div>
+              <BarRows rows={housingTypes} max={maxHousing} color="#5a9bd4" />
+            </CardBody>
           </DemoCard>
         )}
 
         {/* Household income distribution — likewise a distribution on its own. */}
         <DemoCard>
-          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-            Household income distribution
-          </div>
-          <BarRows rows={demo.incomeBrackets} max={maxBracket} color="var(--primary)" />
+          <CardBody center>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+              Household income distribution
+            </div>
+            <BarRows rows={demo.incomeBrackets} max={maxBracket} color="var(--primary)" />
+          </CardBody>
         </DemoCard>
-
-        {/* Age distribution over time, with school-age bands — wider than the other cards. */}
-        <AgeDistribution demo={demo} key={demo.townKey} />
       </div>
     </div>
   )

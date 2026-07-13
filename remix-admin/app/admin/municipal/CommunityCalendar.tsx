@@ -108,10 +108,7 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
   return (
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>
-          Community events
-          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · town fairs, concerts &amp; civic celebrations</span>
-        </h2>
+        <h2 style={{ fontSize: 16, margin: 0 }}>Community events</h2>
         <div className="pill-strip" style={{ display: 'flex', gap: 6 }}>
           <button
             onClick={() => setView('list')}

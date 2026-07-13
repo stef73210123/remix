@@ -296,7 +296,7 @@ export default function BoardClient({ userName }: { userName: string }) {
               the plain list. */}
           <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
             Meetings
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming{analysis ? ' · click a meeting for its analysis' : ''}</span>
+            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming</span>
           </h2>
           <MeetingTimeline
             items={timelineItems}
@@ -305,7 +305,7 @@ export default function BoardClient({ userName }: { userName: string }) {
             emptyText="No meetings ingested for this board yet."
           />
           {analysis && analysis.meetings.length > 0 ? (
-            <div style={{ marginTop: 10 }}>
+            <div style={{ margin: '10px 0 26px' }}>
               <MeetingAnalysisList
                 meetings={analysis.meetings}
                 muni={muni}
@@ -316,15 +316,11 @@ export default function BoardClient({ userName }: { userName: string }) {
             </div>
           ) : (
             timelineItems.length > 0 && (
-              <div style={{ marginTop: 10 }}>
+              <div style={{ margin: '10px 0 26px' }}>
                 <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
               </div>
             )
           )}
-          <div className="muted" style={{ fontSize: 11, margin: '10px 0 26px' }}>
-            Grey dots are past meetings; coral is the next scheduled meeting; slate (*) is projected from the board&apos;s recurring schedule.
-          </div>
-
           {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
           <TranscriptAnalysis muni={muni} body={body} onData={setAnalysis} />
 
