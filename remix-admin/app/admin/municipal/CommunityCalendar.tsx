@@ -147,20 +147,22 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
                 <button
                   onClick={() => setOpenEvent(ev)}
                   style={{
-                    display: 'flex', alignItems: 'baseline', gap: 12, width: '100%', textAlign: 'left',
+                    display: 'block', width: '100%', textAlign: 'left',
                     padding: '11px 16px', border: 'none', background: 'none', cursor: 'pointer',
                     borderTop: i && i !== boundaryIdx ? '1px solid var(--border)' : 'none',
                     opacity: isPast ? 0.6 : 1, font: 'inherit', color: 'inherit',
                   }}
                 >
-                  <span style={{ fontWeight: 700, fontSize: 13, minWidth: 108, flexShrink: 0, whiteSpace: 'nowrap' }}>{dateLabel}</span>
-                  <span style={{ width: 8, height: 8, borderRadius: 999, background: CATEGORY_COLOR[ev.category], flexShrink: 0 }} />
-                  <span style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13.5, fontWeight: 600 }}>{ev.title}</div>
-                    <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      📍 {ev.location}
-                    </div>
-                  </span>
+                  <div style={{ fontWeight: 700, fontSize: 12.5 }}>{dateLabel}</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 4 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: 999, background: CATEGORY_COLOR[ev.category], flexShrink: 0 }} />
+                    <span style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 600 }}>{ev.title}</div>
+                      <div className="muted" style={{ fontSize: 12, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        📍 {ev.location}
+                      </div>
+                    </span>
+                  </div>
                 </button>
               </div>
             )
