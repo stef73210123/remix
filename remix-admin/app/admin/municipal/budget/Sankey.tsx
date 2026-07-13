@@ -210,9 +210,6 @@ export default function Sankey({
           )}
         </div>
       )}
-      <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
-        Click any item marked ⊕ to break it down; click ⊖ to roll it back up.
-      </div>
       <div ref={scrollRef} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
       <svg
         viewBox={`0 0 ${W} ${H}`}

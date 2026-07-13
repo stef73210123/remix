@@ -244,7 +244,7 @@ interface ScatterPoint { cost: number; days: number; category: string; label: st
 /** Permit value (log-scale $) vs. days spent in the selected pipeline stage,
  *  colored by normalized permit category — surfaces whether higher-value
  *  projects also take disproportionately longer to move through that stage. */
-function ScatterChart({ points, stageLabel }: { points: ScatterPoint[]; stageLabel: string }) {
+function ScatterChart({ points }: { points: ScatterPoint[] }) {
   const [hover, setHover] = useState<number | null>(null)
   const valid = points.filter((p) => p.cost > 0 && p.days >= 0)
   const W = 760, H = 320, PAD = { t: 14, r: 16, b: 30, l: 42 }
@@ -269,7 +269,6 @@ function ScatterChart({ points, stageLabel }: { points: ScatterPoint[]; stageLab
   const daysSorted = valid.map((p) => p.days).sort((a, b) => a - b)
   const trueMaxY = daysSorted[daysSorted.length - 1] ?? 1
   const maxY = Math.max(14, Math.min(trueMaxY, Math.ceil(percentile(daysSorted, 0.9) * 1.25)))
-  const clippedCount = valid.filter((p) => p.days > maxY).length
   const logMin = Math.log10(Math.max(minX, 1))
   const logMax = Math.log10(Math.max(maxX, minX * 1.1, 10))
   const xPos = (v: number) => PAD.l + ((Math.log10(Math.max(v, 1)) - logMin) / (logMax - logMin || 1)) * plotW
@@ -315,9 +314,7 @@ function ScatterChart({ points, stageLabel }: { points: ScatterPoint[]; stageLab
             <strong>{hp.category}</strong>
             <span className="muted"> · {hp.label} · {fmtUSDshort(hp.cost)} · {fmtInt(hp.days)} days{hp.days > maxY ? ' (off top of chart)' : ''}</span>
           </span>
-        ) : (
-          <span className="muted">Hover a point for details · X = declared value (log scale) · Y = days, {stageLabel}</span>
-        )}
+        ) : null}
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', marginTop: 8 }}>
         {categories.map((c) => (
@@ -327,12 +324,6 @@ function ScatterChart({ points, stageLabel }: { points: ScatterPoint[]; stageLab
           </span>
         ))}
       </div>
-      {clippedCount > 0 && (
-        <div className="muted" style={{ fontSize: 11, marginTop: 8 }}>
-          Y axis capped at {fmtInt(maxY)}d (90th percentile + headroom) so the typical permit isn&apos;t squeezed into a sliver at the bottom —
-          {' '}{clippedCount} longer-running permit{clippedCount === 1 ? '' : 's'} (dashed outline) plot at the top edge instead of true scale.
-        </div>
-      )}
     </div>
   )
 }
@@ -419,9 +410,6 @@ function PipelineChart({ perms }: { perms: PermitRecord[] }) {
     <div className="card" style={{ padding: '16px 16px 12px' }}>
       <PipelineRow label="Application → Permit Issued" sub="plan review & corrections" stat={stats.stage1} max={max} color="#5a9bd4" />
       <PipelineRow label="Permit Issued → Certificate of Occupancy" sub="inspections" stat={stats.stage2} max={max} color="#3d9c72" />
-      <div className="muted" style={{ fontSize: 11, marginTop: 12, lineHeight: 1.5 }}>
-        Each bar spans the 25th–75th percentile; the tick marks the median. Based on permits with both dates recorded for the selected year.
-      </div>
     </div>
   )
 }
@@ -682,9 +670,6 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             sub={`${fmtInt(permitMarkers.length)} permit addresses · ${yearLabel(mapYear)}`}
             right={<YearSelect value={mapYear} years={dropdownYears} onChange={setMapYear} />}
           />
-          <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 720 }}>
-            Permit addresses always shown (pins geocode in as they resolve; color = permit type). Use the dropdown to narrow to a single year.
-          </div>
           <JurisdictionMap muni={muni} permits={permitMarkers} onlyPermits />
 
           {/* Recent permit activity — directly below the map. */}
@@ -776,7 +761,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             }
           />
           <div style={{ marginBottom: 26 }}>
-            <ScatterChart points={scatterPoints} stageLabel={STAGE_LABEL[scatterStage]} />
+            <ScatterChart points={scatterPoints} />
           </div>
 
           {/* Top contractors */}

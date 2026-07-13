@@ -90,13 +90,7 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
             <span style={{ marginLeft: 8, ...chipInline(hover.seg.sentiment) }}>{fmtSent(hover.seg.sentiment)}</span>
             <span className="muted"> · {hover.seg.count} position{hover.seg.count === 1 ? '' : 's'}</span>
           </span>
-        ) : (
-          <span className="muted">
-            {mode === 'member'
-              ? 'Each column is a meeting; each band a board member (height = how much they weighed in, color = their progress score). Hover for detail.'
-              : 'Each column is a meeting; each slice an issue discussed (height = attention, color = sentiment toward it). Hover for detail.'}
-          </span>
-        )}
+        ) : null}
       </div>
 
       <div className="card" style={{ padding: '14px 12px 10px' }}>
@@ -150,10 +144,6 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
             <span style={{ display: 'inline-block', width: 90, height: 10, borderRadius: 5, background: `linear-gradient(90deg, ${sentimentColor(-1)}, ${sentimentColor(0)}, ${sentimentColor(1)})` }} />
             favorable
           </span>
-          <span className="muted">height = # attributed positions</span>
-          {mode === 'member' && (
-            <span className="muted">bands (bottom→top): {roster.join(', ')}</span>
-          )}
         </div>
       </div>
     </div>

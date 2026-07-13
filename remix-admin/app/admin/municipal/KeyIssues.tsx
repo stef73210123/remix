@@ -35,18 +35,12 @@ export default function KeyIssues({ muniKey }: { muniKey: string }) {
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 4px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>
-          Key issues
-          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · what the town is actually deliberating</span>
-        </h2>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h2 style={{ fontSize: 16, margin: 0 }}>Key issues</h2>
         <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
           <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
           <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
         </div>
-      </div>
-      <div className="muted" style={{ fontSize: 11, marginBottom: 12, lineHeight: 1.5, maxWidth: 720 }}>
-        A plain-language read on the recurring issues, drawn from a year of Town Board and Planning Board meetings.
       </div>
       <div
         ref={scrollRef}

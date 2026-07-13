@@ -133,10 +133,7 @@ export default function ElectionResults({ muniKey }: { muniKey: string }) {
   return (
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>
-          Town elections
-          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · Supervisor &amp; Town Board</span>
-        </h2>
+        <h2 style={{ fontSize: 16, margin: 0 }}>Town elections</h2>
         {years.length > 1 && (
           <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {years.map((y) => (

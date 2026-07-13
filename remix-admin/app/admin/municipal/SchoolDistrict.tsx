@@ -165,9 +165,6 @@ export default function SchoolDistrict({ muniKey }: { muniKey: string }) {
         {d.foundation && (
           <div className="card" style={{ padding: 14, marginTop: 14 }}>
             <div style={{ fontSize: 15, fontWeight: 700 }}>{d.foundation.name}</div>
-            <div className="muted" style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.55 }}>
-              The district&apos;s nonprofit education foundation, raising funds for programs and enrichment beyond the operating budget.
-            </div>
             <div style={{ marginTop: 8 }}>
               <a href={d.foundation.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>
                 {d.foundation.websiteLabel} ↗

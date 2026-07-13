@@ -76,10 +76,7 @@ export default function IssuesOverview({ muni }: { muni: string }) {
   return (
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>
-          Local issues
-          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · across all boards &amp; committees</span>
-        </h2>
+        <h2 style={{ fontSize: 16, margin: 0 }}>Local issues</h2>
         <select
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
