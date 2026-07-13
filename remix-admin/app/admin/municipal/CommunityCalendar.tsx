@@ -55,15 +55,16 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
   const [openEvent, setOpenEvent] = useState<CommunityEvent | null>(null)
   const [view, setView] = useState<ViewMode>('list')
 
-  // Chronological (soonest-ending-first for past-vs-upcoming, then by start
-  // date) — the list view's own sort, independent of the calendar grid below.
+  // Ongoing + upcoming only, by start date. A fully-past event (its own end
+  // date is before today) is hidden even when it falls inside the date range of
+  // another event that started earlier and is still ongoing — the event's own
+  // end date decides, not an overlapping one's.
   const sortedEvents = useMemo(
-    () => [...events].sort((a, b) => a.date.localeCompare(b.date)),
-    [events]
-  )
-  const boundaryIdx = useMemo(
-    () => sortedEvents.findIndex((ev) => (ev.endDate ?? ev.date) >= todayIso),
-    [sortedEvents, todayIso]
+    () =>
+      [...events]
+        .filter((ev) => (ev.endDate ?? ev.date) >= todayIso)
+        .sort((a, b) => a.date.localeCompare(b.date)),
+    [events, todayIso]
   )
 
   const byDate = useMemo(() => {
@@ -131,27 +132,22 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
 
       {view === 'list' ? (
         <div className="card" style={{ padding: 0, maxHeight: 480, overflowY: 'auto' }}>
+          {sortedEvents.length === 0 && (
+            <div className="muted" style={{ padding: 16, fontSize: 13 }}>No upcoming events.</div>
+          )}
           {sortedEvents.map((ev, i) => {
-            const isPast = (ev.endDate ?? ev.date) < todayIso
             const dateLabel = ev.endDate && ev.endDate !== ev.date
               ? `${fmtEventDate(ev.date)} – ${fmtEventDate(ev.endDate)}`
               : fmtEventDate(ev.date)
             return (
               <div key={ev.key}>
-                {i === boundaryIdx && i > 0 && (
-                  <div style={{ padding: '6px 16px', background: 'var(--panel-2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--primary-light)' }}>
-                      Upcoming
-                    </span>
-                  </div>
-                )}
                 <button
                   onClick={() => setOpenEvent(ev)}
                   style={{
                     display: 'block', width: '100%', textAlign: 'left',
                     padding: '11px 16px', border: 'none', background: 'none', cursor: 'pointer',
-                    borderTop: i && i !== boundaryIdx ? '1px solid var(--border)' : 'none',
-                    opacity: isPast ? 0.6 : 1, font: 'inherit', color: 'inherit',
+                    borderTop: i ? '1px solid var(--border)' : 'none',
+                    font: 'inherit', color: 'inherit',
                   }}
                 >
                   <div style={{ fontWeight: 700, fontSize: 12.5 }}>{dateLabel}</div>
