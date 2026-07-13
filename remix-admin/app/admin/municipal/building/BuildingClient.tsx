@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { Phone, Mail, MapPin } from 'lucide-react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
@@ -11,6 +10,7 @@ import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/Meetin
 import MeetingList from '@/app/admin/municipal/MeetingList'
 import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipal/permits'
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
+import BoardStaffCards from '@/app/admin/municipal/board/BoardStaffCards'
 import BoardKeyDocs from '@/app/admin/municipal/board/BoardKeyDocs'
 import { isOpen } from '@/lib/flavor'
 import { fmtDateShort } from '@/lib/municipal/date'
@@ -500,14 +500,16 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   }, [years])
   // Charts default to the most recent year with real data once known.
   const activeChartYear: YearFilter = chartYear ?? latestYear ?? 'ALL'
-  const activeContractorYear: YearFilter = contractorYear ?? latestYear ?? 'ALL'
   const activePipelineYear: YearFilter = pipelineYear ?? latestYear ?? 'ALL'
-  // Scatter defaults to all years (long-running permits span multiple years).
+  // Scatter and contractors default to all years (long-running/rare permits
+  // otherwise get filtered down to nothing on a single-year default).
   const activeScatterYear: YearFilter = scatterYear ?? 'ALL'
+  const activeContractorYear: YearFilter = contractorYear ?? 'ALL'
 
   // Permit categories present in the data, for the type-filter dropdowns —
-  // pipeline/scatter/contractors all default to "New construction" once it's
-  // confirmed present, since that's the most consequential permit type.
+  // pipeline defaults to "New construction" once it's confirmed present, since
+  // that's the most consequential permit type; scatter and contractors default
+  // to "all types" so nothing is filtered out of view by default.
   const categories = useMemo(() => {
     const cats = new Set<string>()
     for (const p of fullPermits ?? dataset?.recent ?? []) if (p.category) cats.add(p.category)
@@ -515,8 +517,8 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   }, [fullPermits, dataset])
   const defaultType: TypeFilter = categories.includes('New construction') ? 'New construction' : 'ALL'
   const activePipelineType: TypeFilter = pipelineType ?? defaultType
-  const activeScatterType: TypeFilter = scatterType ?? defaultType
-  const activeContractorType: TypeFilter = contractorType ?? defaultType
+  const activeScatterType: TypeFilter = scatterType ?? 'ALL'
+  const activeContractorType: TypeFilter = contractorType ?? 'ALL'
 
   // Map markers: every permit with a street address, filtered by the time
   // slider (the geocoder caps at ~90 pins per view, newest first).
@@ -612,43 +614,30 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
 
       {dataset && (
         <>
-          {/* Department info + fees */}
+          {/* Departmental staff card — same presentation as the board pages. */}
+          <BoardStaffCards muni={muni} bodyKey="building" />
+
+          {/* Fee schedule + permit process, as their own cards. */}
           {dept && (
-            <div className="card" style={{ padding: 16, marginBottom: 22 }}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 16 }}>
-                <div style={{ maxWidth: 620 }}>
-                  <div style={{ fontSize: 15, fontWeight: 700 }}>{dept.inspector}</div>
-                  <div className="muted" style={{ fontSize: 13, marginTop: 6, lineHeight: 1.55 }}>{dept.mission}</div>
-                  <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 16px' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Phone size={12} aria-hidden /> {dept.phone}</span>
-                    <a href={`mailto:${dept.email}`} style={{ color: 'var(--primary-light)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                      <Mail size={12} aria-hidden /> {dept.email}
-                    </a>
-                    <span className="muted" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><MapPin size={12} aria-hidden /> {dept.address}</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 22 }}>
+              <div className="card" style={{ padding: 16 }}>
+                <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Fee schedule</div>
+                {dept.fees.map((f) => (
+                  <div key={f.label} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 12.5, padding: '4px 0', borderBottom: '1px solid var(--border)' }}>
+                    <span className="muted">{f.label}</span><span style={{ fontWeight: 600 }}>{f.value}</span>
                   </div>
-                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
-                    {dept.links.map((l) => (
-                      <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>{l.label} ↗</a>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ minWidth: 180 }}>
-                  <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>Fee schedule</div>
-                  {dept.fees.map((f) => (
-                    <div key={f.label} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 12.5, padding: '3px 0', borderBottom: '1px solid var(--border)' }}>
-                      <span className="muted">{f.label}</span><span style={{ fontWeight: 600 }}>{f.value}</span>
-                    </div>
+                ))}
+              </div>
+              <div className="card" style={{ padding: 16 }}>
+                <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Permit process</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                  {dept.lifecycle.map((s, i) => (
+                    <span key={s} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                      <span className="badge state" style={{ fontSize: 11 }}>{s}</span>
+                      {i < dept.lifecycle.length - 1 && <span className="muted" style={{ fontSize: 12 }}>→</span>}
+                    </span>
                   ))}
                 </div>
-              </div>
-              {/* Permit lifecycle */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
-                {dept.lifecycle.map((s, i) => (
-                  <span key={s} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                    <span className="badge state" style={{ fontSize: 11 }}>{s}</span>
-                    {i < dept.lifecycle.length - 1 && <span className="muted" style={{ fontSize: 12 }}>→</span>}
-                  </span>
-                ))}
               </div>
             </div>
           )}

@@ -29,18 +29,12 @@ export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyK
 
   return (
     <div style={{ marginBottom: 24 }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>
-          Relevant staff
-          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {departments.length}</span>
-        </h2>
-        {departments.length > 1 && (
-          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-            <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
-            <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
-          </div>
-        )}
-      </div>
+      {departments.length > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 6, marginBottom: 8 }}>
+          <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
+          <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
+        </div>
+      )}
       <div
         ref={scrollRef}
         style={{
@@ -52,7 +46,9 @@ export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyK
           <div key={d.department} data-staff-card className="card" style={{ padding: 16, flex: '0 0 300px', minWidth: 0, scrollSnapAlign: 'start' }}>
             <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d.department}</div>
             <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.person}</div>
-            <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
+            {d.title.trim().toLowerCase() !== d.department.trim().toLowerCase() && (
+              <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
+            )}
             <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{d.blurb}</div>
             <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
               {d.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Phone size={12} aria-hidden /> {d.phone}</span>}

@@ -65,43 +65,22 @@ function dataDir(muniKey: string): string | null {
 }
 
 /**
- * Static department facts (from the Town of North Castle Building &
- * Engineering pages) so the dashboard has real context even before a record is
- * read. Keyed by muni.
+ * Static fee-schedule and permit-process facts (from the Town of North Castle
+ * Building & Engineering pages), rendered as their own cards below the
+ * department's staff card. Keyed by muni.
  */
 export interface DepartmentInfo {
-  name: string
-  inspector: string
-  phone: string
-  email: string
-  address: string
-  hours?: string
-  mission: string
   lifecycle: string[]
   fees: { label: string; value: string }[]
-  links: { label: string; href: string }[]
 }
 const DEPARTMENTS: Record<string, DepartmentInfo> = {
   nc: {
-    name: 'Building Department',
-    inspector: 'Rob Melillo, Building Inspector',
-    phone: '(914) 273-3000 ext. 44',
-    email: 'building@northcastleny.com',
-    address: '17 Bedford Road, Armonk, NY 10504',
-    mission:
-      'Safeguards life, health, property and public welfare by administering and enforcing the NYS ' +
-      'Uniform Fire Prevention and Building Code and the Town’s adopted laws for all construction in North Castle.',
     lifecycle: ['Application', 'Plan review', 'Corrections', 'Permit issued', 'Inspections', 'Certificate of Occupancy'],
     fees: [
       { label: 'Application fee', value: '$125' },
       { label: 'Certificate fee', value: '$100' },
       { label: 'Cost of construction', value: '$16 / $1,000' },
       { label: 'Fill permit', value: '$125 + $3 / yd' },
-    ],
-    links: [
-      { label: 'Building & Engineering', href: 'https://www.northcastleny.com/180/Building-Engineering' },
-      { label: 'Permit process guide', href: 'https://www.northcastleny.com/213/Customers-Guide-to-the-Building-Permit-P' },
-      { label: 'Online permitting', href: 'https://www.northcastleny.com/218/Online-Permitting' },
     ],
   },
 }
