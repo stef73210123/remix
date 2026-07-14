@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type CSSProperties } from 'react'
 import { NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT } from '@/lib/municipal/budget2026'
+import { Caret } from './FinanceCharts'
 
 function fmtUSDFull(v: number): string {
   return `${v < 0 ? '-' : ''}$${Math.abs(Math.round(v)).toLocaleString('en-US')}`
@@ -41,14 +42,18 @@ export function BondSimulator() {
   const [cost, setCost] = useState(5_000_000)
   const [rate, setRate] = useState(4.5)
   const [term, setTerm] = useState(20)
+  const [showMath, setShowMath] = useState(false)
 
   const result = useMemo(() => {
-    const payment = annualDebtService(cost, rate / 100, term)
+    const r = rate / 100
+    const payment = annualDebtService(cost, r, term)
     const totalPaid = payment * term
     const totalInterest = totalPaid - cost
     const levyImpactPct = CURRENT_LEVY > 0 ? payment / CURRENT_LEVY : 0
     const homeImpact = MEDIAN_HOME_TAX * levyImpactPct
-    return { payment, totalPaid, totalInterest, levyImpactPct, homeImpact }
+    const onePlusR = 1 + r
+    const discountFactor = Math.pow(onePlusR, -term)
+    return { payment, totalPaid, totalInterest, levyImpactPct, homeImpact, r, onePlusR, discountFactor }
   }, [cost, rate, term])
 
   return (
@@ -112,6 +117,28 @@ export function BondSimulator() {
         that the new debt service is layered onto the townwide tax levy and shared across taxpayers the same way
         the existing levy is today. Actual bond structuring, market interest rates, and how a specific project's
         cost is allocated may differ.
+      </div>
+
+      <div style={{ marginTop: 14, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
+        <button
+          onClick={() => setShowMath((s) => !s)}
+          aria-expanded={showMath}
+          style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }}
+        >
+          <Caret open={showMath} /> {showMath ? 'Hide the math' : 'Show the math'}
+        </button>
+        {showMath && (
+          <div style={{ marginTop: 10, fontSize: 12.5, lineHeight: 1.9 }} className="muted">
+            <div>Annual payment = cost × rate ÷ (1 − (1 + rate)⁻ᵗᵉʳᵐ)</div>
+            <div>&nbsp;&nbsp;= {fmtUSDFull(cost)} × {result.r.toFixed(4)} ÷ (1 − {result.onePlusR.toFixed(4)}⁻{term})</div>
+            <div>&nbsp;&nbsp;= {fmtUSDFull(cost)} × {result.r.toFixed(4)} ÷ (1 − {result.discountFactor.toFixed(4)})</div>
+            <div>&nbsp;&nbsp;= <span style={{ color: 'var(--text)', fontWeight: 600 }}>{fmtUSDFull(result.payment)}</span> per year</div>
+            <div style={{ marginTop: 8 }}>Levy impact = annual payment ÷ current townwide levy</div>
+            <div>&nbsp;&nbsp;= {fmtUSDFull(result.payment)} ÷ {fmtUSDFull(CURRENT_LEVY)} = <span style={{ color: 'var(--text)', fontWeight: 600 }}>{fmtPct(result.levyImpactPct)}</span></div>
+            <div style={{ marginTop: 8 }}>Median-home impact = home's current Town tax × levy impact</div>
+            <div>&nbsp;&nbsp;= {fmtUSDFull(MEDIAN_HOME_TAX)} × {fmtPct(result.levyImpactPct)} = <span style={{ color: 'var(--text)', fontWeight: 600 }}>+{fmtUSDFull(result.homeImpact)}</span>/yr</div>
+          </div>
+        )}
       </div>
     </div>
   )
