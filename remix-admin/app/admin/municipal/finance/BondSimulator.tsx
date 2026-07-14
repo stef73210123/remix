@@ -28,6 +28,22 @@ const fieldStyle: CSSProperties = {
   width: '100%', fontSize: 13, padding: '5px 10px', borderRadius: 6, boxSizing: 'border-box',
   background: 'var(--panel)', border: '1px solid var(--border)', color: 'var(--text)',
 }
+const currencyWrapStyle: CSSProperties = {
+  display: 'flex', alignItems: 'center', width: '100%', borderRadius: 6, boxSizing: 'border-box',
+  background: 'var(--panel)', border: '1px solid var(--border)',
+}
+const currencyInputStyle: CSSProperties = {
+  width: '100%', fontSize: 13, padding: '5px 10px 5px 2px', border: 'none', background: 'transparent', color: 'var(--text)',
+}
+
+/** Digits typed into the cost field, as a plain integer — going through
+ *  Number() drops any leading zeros (e.g. "007" -> 7) instead of preserving
+ *  them, and stripping non-digits lets the field stay formatted with commas
+ *  between keystrokes rather than showing the raw unformatted number. */
+function parseCostInput(raw: string): number {
+  const digits = raw.replace(/\D/g, '')
+  return digits ? Number(digits) : 0
+}
 
 /**
  * "Bondable Investment Simulator" — lets a resident model what a hypothetical
@@ -61,15 +77,18 @@ export function BondSimulator() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 14, marginBottom: 18 }}>
         <label style={{ fontSize: 12.5 }}>
           <div className="muted" style={{ marginBottom: 4 }}>Total project cost</div>
-          <input
-            type="number"
-            min={0}
-            step={100000}
-            value={cost}
-            onChange={(e) => setCost(Math.max(0, Number(e.target.value) || 0))}
-            aria-label="Total project cost"
-            style={fieldStyle}
-          />
+          <div style={currencyWrapStyle}>
+            <span className="muted" style={{ paddingLeft: 10 }}>$</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={cost > 0 ? cost.toLocaleString('en-US') : ''}
+              onChange={(e) => setCost(parseCostInput(e.target.value))}
+              placeholder="0"
+              aria-label="Total project cost"
+              style={currencyInputStyle}
+            />
+          </div>
         </label>
         <label style={{ fontSize: 12.5 }}>
           <div className="muted" style={{ marginBottom: 4 }}>Bond term</div>
