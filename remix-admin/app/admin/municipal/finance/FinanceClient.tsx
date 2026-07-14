@@ -11,6 +11,10 @@ import BudgetPanel from '@/app/admin/municipal/budget/BudgetPanel'
 import type { TownBudget } from '@/lib/municipal/budget'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
 import { isOpen } from '@/lib/flavor'
+import {
+  AppropriationsCompositionChart, AppropriationsChangeChart, FundBalanceChart,
+  TaxCapWaterfallChart, HomeownerTaxImpactChart, NC_2026_BUDGET_SOURCE_NOTE,
+} from './FinanceCharts'
 
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -76,6 +80,58 @@ export default function FinanceClient({ userName, muni, budgets }: {
         <div className="card" style={{ marginBottom: 26 }}>
           <div className="muted" style={{ padding: 20, fontSize: 13 }}>
             No budget data for {MUNICIPALITIES.find((m) => m.key === muni)?.name || 'this town'} yet.
+          </div>
+        </div>
+      )}
+
+      {/* 2026 Adopted Budget — the town's own budget-as-adopted schedules,
+          distinct from the FY2025 ACFR actuals driving the Sankey above. */}
+      {activeTown === 'nc' && (
+        <div style={{ marginBottom: 26 }}>
+          <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>2026 Adopted Budget</h2>
+          <div className="muted" style={{ fontSize: 12, marginBottom: 14, lineHeight: 1.5, maxWidth: 760 }}>{NC_2026_BUDGET_SOURCE_NOTE}</div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 20 }}>
+            <div>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                Appropriations by category
+              </div>
+              <div className="card" style={{ padding: 16 }}>
+                <AppropriationsCompositionChart />
+              </div>
+            </div>
+            <div>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                2025 vs. 2026, by category
+              </div>
+              <div className="card" style={{ padding: 16 }}>
+                <AppropriationsChangeChart />
+              </div>
+            </div>
+            <div>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                Financial position — fund equity, 2019–2024
+              </div>
+              <div className="card" style={{ padding: 16 }}>
+                <FundBalanceChart />
+              </div>
+            </div>
+            <div>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                2026 tax levy build-up (cap worksheet)
+              </div>
+              <div className="card" style={{ padding: 16 }}>
+                <TaxCapWaterfallChart />
+              </div>
+            </div>
+            <div>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                Homeowner tax impact
+              </div>
+              <div className="card" style={{ padding: 16 }}>
+                <HomeownerTaxImpactChart />
+              </div>
+            </div>
           </div>
         </div>
       )}
