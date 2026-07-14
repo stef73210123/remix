@@ -5,6 +5,7 @@ import {
   NC_2025_VS_2026, NC_FUND_BALANCE_HISTORY,
   NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT, NC_2026_BUDGET_SOURCE_NOTE,
   NC_BOND_PROFILE, NC_BOND_ISSUES, NC_BOND_SOURCE_NOTE,
+  NC_TOP_TAXPAYERS, NC_TOP_TAXPAYERS_TOTALS, NC_TOP_TAXPAYERS_SOURCE_NOTE,
 } from '@/lib/municipal/budget2026'
 
 function fmtUSD(v: number): string {
@@ -564,4 +565,62 @@ export function BondRatingProfile() {
   )
 }
 
-export { NC_2026_BUDGET_SOURCE_NOTE, NC_BOND_SOURCE_NOTE }
+/** Top 50 Taxpayers — a scrollable ranked list rather than a chart, since 50
+ *  rows of owner/value/share reads far better as a scannable table than any
+ *  chart form would. The source schedule's own "% of Roll" column is
+ *  actually the percent of this Top-50 subtotal (verified: summing it
+ *  reproduces the sheet's own 100.00% subtotal row), not of the Town's full
+ *  taxable roll — labeled "% of Top 50" here to keep that unambiguous. */
+export function TopTaxpayersList() {
+  const t = NC_TOP_TAXPAYERS_TOTALS
+  const rollSharePct = t.rollAssessedValue > 0 ? t.top50AssessedValue / t.rollAssessedValue : 0
+
+  return (
+    <div>
+      <div className="muted" style={{ fontSize: 11.5, marginBottom: 10, lineHeight: 1.5 }}>
+        The 50 largest property owners carry {fmtUSDFull(t.top50AssessedValue)} of assessed value across {t.top50Parcels} parcels
+        — {(rollSharePct * 100).toFixed(1)}% of the Town&rsquo;s entire {fmtUSDFull(t.rollAssessedValue)} taxable assessment roll.
+      </div>
+      <div style={{ maxHeight: 420, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
+        <div
+          style={{
+            position: 'sticky', top: 0, zIndex: 1, display: 'flex', gap: 8, alignItems: 'center',
+            padding: '7px 10px', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em',
+            color: 'var(--muted)', background: 'var(--panel)', borderBottom: '1px solid var(--border)',
+          }}
+        >
+          <span style={{ width: 22, flexShrink: 0 }}>#</span>
+          <span style={{ flex: 1 }}>Owner</span>
+          <span style={{ width: 92, textAlign: 'right', flexShrink: 0 }}>Assessed</span>
+          <span style={{ width: 66, textAlign: 'right', flexShrink: 0 }}>% Top 50</span>
+        </div>
+        {NC_TOP_TAXPAYERS.map((row) => {
+          const caption = [row.notes, row.parcels > 1 ? `${row.parcels} parcels` : null].filter(Boolean).join(' · ')
+          return (
+            <div
+              key={row.rank}
+              style={{
+                display: 'flex', gap: 8, alignItems: 'flex-start', padding: '7px 10px', fontSize: 12.5,
+                borderBottom: row.rank < NC_TOP_TAXPAYERS.length ? '1px solid var(--border)' : 'none',
+              }}
+            >
+              <span className="muted" style={{ width: 22, flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>{row.rank}</span>
+              <span style={{ flex: 1, minWidth: 0 }}>
+                {row.owner}
+                {caption && <div className="muted" style={{ fontSize: 11, marginTop: 1 }}>{caption}</div>}
+              </span>
+              <span style={{ width: 92, textAlign: 'right', flexShrink: 0, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+                {fmtUSDFull(row.assessedValue)}
+              </span>
+              <span className="muted" style={{ width: 66, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
+                {((row.assessedValue / t.top50AssessedValue) * 100).toFixed(2)}%
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export { NC_2026_BUDGET_SOURCE_NOTE, NC_BOND_SOURCE_NOTE, NC_TOP_TAXPAYERS_SOURCE_NOTE }
