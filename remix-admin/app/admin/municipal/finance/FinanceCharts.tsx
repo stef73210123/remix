@@ -156,6 +156,19 @@ export function AppropriationsExplorer() {
           const big = r.w > 90 && r.h > 46
           const medium = !big && r.w > 46 && r.h > 20
           const isHover = hoverCategory === r.category
+          // Second dimension: each category's own funds/districts, sized by
+          // their own 2026 appropriation and packed into a strip below the
+          // category's own header — the same click-to-expand detail below,
+          // now visible directly in the chart rather than only after opening
+          // the list. The header reserves its own flex row (rather than the
+          // sub-squares sharing the category's centered label position) so
+          // the two never overlap regardless of box size.
+          const hasHeader = big || medium
+          const headerFrac = big ? 0.72 : medium ? 0.85 : 1
+          const availH = r.h * headerFrac
+          const subRects = r.funds.length > 1 && availH > 4
+            ? squarify(r.funds.map((f) => ({ ...f, value: f.appropriation2026 })), 0, 0, r.w, availH)
+            : []
           return (
             <div
               key={r.category}
@@ -170,22 +183,54 @@ export function AppropriationsExplorer() {
                 boxSizing: 'border-box', border: '2px solid var(--panel)',
                 background: yoyColor(r.yoy), cursor: 'pointer',
                 opacity: hoverCategory && !isHover ? 0.55 : 1,
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                padding: 4, overflow: 'hidden', textAlign: 'center', transition: 'opacity 0.1s',
+                display: 'flex', flexDirection: 'column', overflow: 'hidden', textAlign: 'center', transition: 'opacity 0.1s',
               }}
             >
-              {(big || medium) && (
-                <div style={{ fontSize: big ? 12.5 : 11, fontWeight: 700, color: '#fff', lineHeight: 1.25, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
-                  {r.category}
+              {hasHeader && (
+                <div style={{ flexShrink: 0, padding: '4px 4px 2px', pointerEvents: 'none' }}>
+                  <div style={{ fontSize: big ? 12.5 : 11, fontWeight: 700, color: '#fff', lineHeight: 1.25, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                    {r.category}
+                  </div>
+                  {big && (
+                    <>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginTop: 2, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>{fmtUSD(r.value)}</div>
+                      <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.92)', marginTop: 1, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                        {(pctOfTotal * 100).toFixed(1)}% of total · {fmtPct(r.yoy)} YoY
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
-              {big && (
-                <>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginTop: 2, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>{fmtUSD(r.value)}</div>
-                  <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.92)', marginTop: 1, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
-                    {(pctOfTotal * 100).toFixed(1)}% of total · {fmtPct(r.yoy)} YoY
-                  </div>
-                </>
+              {subRects.length > 0 && (
+                <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
+                  {subRects.map((sr, si) => {
+                    const subBig = sr.w > 50 && sr.h > 22
+                    const subPctOfCategory = r.value > 0 ? sr.appropriation2026 / r.value : 0
+                    const subYoy = sr.appropriation2025 > 0 ? (sr.appropriation2026 - sr.appropriation2025) / sr.appropriation2025 : 0
+                    return (
+                      <div
+                        key={sr.fund + si}
+                        title={`${r.category} — ${sr.fund}: ${fmtUSDFull(sr.appropriation2026)} · ${(subPctOfCategory * 100).toFixed(0)}% of category · ${fmtPct(subYoy)} YoY`}
+                        style={{
+                          position: 'absolute',
+                          left: `${(sr.x / r.w) * 100}%`, top: `${(sr.y / availH) * 100}%`,
+                          width: `${(sr.w / r.w) * 100}%`, height: `${(sr.h / availH) * 100}%`,
+                          boxSizing: 'border-box', border: '1px solid rgba(255,255,255,0.38)',
+                          display: 'flex', alignItems: 'flex-end', padding: 2, overflow: 'hidden',
+                        }}
+                      >
+                        {subBig && (
+                          <span style={{
+                            fontSize: 8.5, color: 'rgba(255,255,255,0.9)', textShadow: '0 1px 1px rgba(0,0,0,0.5)',
+                            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%',
+                          }}>
+                            {sr.fund}
+                          </span>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
               )}
             </div>
           )
