@@ -271,11 +271,6 @@ function ScatterChart({ points }: { points: ScatterPoint[] }) {
   const W = 760, H = 320, PAD = { t: 14, r: 16, b: 30, l: 42 }
   const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
 
-  const categories = useMemo(
-    () => Array.from(new Set(valid.map((p) => p.category))).sort(),
-    [valid]
-  )
-
   if (valid.length === 0) {
     return <div className="muted" style={{ fontSize: 13, padding: 16 }}>No permits with both a declared value and a full application-to-CO date range in this selection.</div>
   }
@@ -336,14 +331,6 @@ function ScatterChart({ points }: { points: ScatterPoint[] }) {
             <span className="muted"> · {hp.label} · {fmtUSDshort(hp.cost)} · {fmtInt(hp.days)} days{hp.days > maxY ? ' (off top of chart)' : ''}</span>
           </span>
         ) : null}
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', marginTop: 8 }}>
-        {categories.map((c) => (
-          <span key={c} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11 }}>
-            <span style={{ width: 8, height: 8, borderRadius: 999, background: catColor(c), flexShrink: 0 }} />
-            <span className="muted">{c}</span>
-          </span>
-        ))}
       </div>
     </div>
   )

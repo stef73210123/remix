@@ -150,7 +150,7 @@ export function AppropriationsExplorer() {
 
   return (
     <div>
-      <div style={{ position: 'relative', width: '100%', aspectRatio: `${TM_W} / ${TM_H}`, marginBottom: 12 }}>
+      <div className="approp-treemap" style={{ position: 'relative', width: '100%', marginBottom: 12 }}>
         {rects.map((r) => {
           const pctOfTotal = grandTotal > 0 ? r.value / grandTotal : 0
           const big = r.w > 90 && r.h > 46
@@ -467,10 +467,12 @@ export function BondRatingProfile() {
 
 /** Top 50 Taxpayers — a scrollable ranked list rather than a chart, since 50
  *  rows of owner/value/share reads far better as a scannable table than any
- *  chart form would. The source schedule's own "% of Roll" column is
- *  actually the percent of this Top-50 subtotal (verified: summing it
- *  reproduces the sheet's own 100.00% subtotal row), not of the Town's full
- *  taxable roll — labeled "% of Top 50" here to keep that unambiguous. */
+ *  chart form would. Each row's "% of Roll" is computed against the Town's
+ *  entire taxable roll (NC_TOP_TAXPAYERS_TOTALS.rollAssessedValue) — note the
+ *  source schedule's own "% of Roll" column is actually the percent of the
+ *  Top-50 subtotal instead (verified: summing it reproduces the sheet's own
+ *  100.00% subtotal row), so this table's figures intentionally don't match
+ *  that column one-for-one. */
 export function TopTaxpayersList() {
   const t = NC_TOP_TAXPAYERS_TOTALS
   const rollSharePct = t.rollAssessedValue > 0 ? t.top50AssessedValue / t.rollAssessedValue : 0
@@ -494,7 +496,7 @@ export function TopTaxpayersList() {
           <span style={{ width: 22, flexShrink: 0 }}>#</span>
           <span style={{ flex: 1 }}>Owner</span>
           <span style={{ width: 92, textAlign: 'right', flexShrink: 0 }}>Assessed</span>
-          <span style={{ width: 66, textAlign: 'right', flexShrink: 0 }}>% Top 50</span>
+          <span style={{ width: 66, textAlign: 'right', flexShrink: 0 }}>% of Roll</span>
         </div>
         {NC_TOP_TAXPAYERS.map((row) => {
           const caption = [row.notes, row.parcels > 1 ? `${row.parcels} parcels` : null].filter(Boolean).join(' · ')
@@ -515,7 +517,7 @@ export function TopTaxpayersList() {
                 {fmtUSDFull(row.assessedValue)}
               </span>
               <span className="muted" style={{ width: 66, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
-                {((row.assessedValue / t.top50AssessedValue) * 100).toFixed(2)}%
+                {((row.assessedValue / t.rollAssessedValue) * 100).toFixed(2)}%
               </span>
             </div>
           )
