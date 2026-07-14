@@ -12,8 +12,7 @@ import type { TownBudget } from '@/lib/municipal/budget'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
 import { isOpen } from '@/lib/flavor'
 import {
-  AppropriationsExplorer, FundBalanceChart, TaxLevyBuildup,
-  HomeownerTaxImpactStat, BondRatingProfile, TopTaxpayersList,
+  AppropriationsExplorer, FundBalanceChart, BondRatingProfile, TopTaxpayersList,
   NC_2026_BUDGET_SOURCE_NOTE, NC_BOND_SOURCE_NOTE, NC_TOP_TAXPAYERS_SOURCE_NOTE,
 } from './FinanceCharts'
 import { BondSimulator } from './BondSimulator'
@@ -108,22 +107,6 @@ export default function FinanceClient({ userName, muni, budgets }: {
               </div>
               <div className="card" style={{ padding: 16 }}>
                 <FundBalanceChart />
-              </div>
-            </div>
-            <div>
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                2026 tax levy build-up (cap worksheet)
-              </div>
-              <div className="card" style={{ padding: 16 }}>
-                <TaxLevyBuildup />
-              </div>
-            </div>
-            <div>
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                Homeowner tax impact
-              </div>
-              <div className="card" style={{ padding: 16 }}>
-                <HomeownerTaxImpactStat />
               </div>
             </div>
           </div>

@@ -1,9 +1,8 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import {
-  NC_2025_VS_2026, NC_FUND_BALANCE_HISTORY,
-  NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT, NC_2026_BUDGET_SOURCE_NOTE,
+  NC_2025_VS_2026, NC_FUND_BALANCE_HISTORY, NC_2026_BUDGET_SOURCE_NOTE,
   NC_BOND_PROFILE, NC_BOND_ISSUES, NC_BOND_SOURCE_NOTE,
   NC_TOP_TAXPAYERS, NC_TOP_TAXPAYERS_TOTALS, NC_TOP_TAXPAYERS_SOURCE_NOTE,
 } from '@/lib/municipal/budget2026'
@@ -381,119 +380,10 @@ export function FundBalanceChart() {
   )
 }
 
-const WATERFALL_TOTAL_STEPS = NC_TAX_CAP_WATERFALL.filter((s) => s.kind === 'total')
-
-/** How the FYE 12/31/25 levy builds up to the 2026 adopted levy under NY's
- *  tax-cap law — the town's own worksheet. Shown as a 3-stage stepper (the
- *  checkpoint totals, connected by the rate of change alone — a waterfall's
- *  floating bars added visual noise without adding information a plain %
- *  doesn't already give); the individual cap-law adjustments and the voted
- *  override expand below as a plain ledger, which reads the actual line-item
- *  arithmetic more clearly than bars ever could, especially the smaller
- *  adjustments that were barely visible as bars. */
-export function TaxLevyBuildup() {
-  const [expanded, setExpanded] = useState(false)
-  const [start, limit, adopted] = WATERFALL_TOTAL_STEPS
-  const capGrowthPct = (limit.value - start.value) / start.value
-  const overridePct = (adopted.value - limit.value) / limit.value
-  const totalPct = (adopted.value - start.value) / start.value
-
-  let running = 0
-  const ledger = NC_TAX_CAP_WATERFALL.map((s) => {
-    running = s.kind === 'total' ? s.value : running + s.value
-    return { ...s, running }
-  })
-
-  const stages = [
-    { label: 'FYE 12/31/25 levy', value: start.value },
-    { label: 'Tax Levy Limit (cap)', value: limit.value },
-    { label: '2026 Adopted Levy', value: adopted.value },
-  ]
-  const connectors = [capGrowthPct, overridePct]
-
-  return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'stretch', gap: 2 }}>
-        {stages.map((s, i) => (
-          <Fragment key={s.label}>
-            <div style={{ flex: '1 1 0', textAlign: 'center', padding: '4px 2px' }}>
-              <div className="muted" style={{ fontSize: 11 }}>{s.label}</div>
-              <div style={{ fontSize: 19, fontWeight: 700, marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>{fmtUSD(s.value)}</div>
-            </div>
-            {i < stages.length - 1 && (
-              <div style={{ flex: '0 0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 6px' }}>
-                <span style={{ fontSize: 15, color: 'var(--muted)' }}>→</span>
-                <span style={{ fontSize: 12, fontWeight: 700, color: connectors[i] >= 0 ? '#3d9c72' : '#ca615f', whiteSpace: 'nowrap' }}>
-                  {fmtPct(connectors[i])}
-                </span>
-              </div>
-            )}
-          </Fragment>
-        ))}
-      </div>
-      <div className="muted" style={{ fontSize: 11.5, marginTop: 10, textAlign: 'center' }}>
-        {fmtPct(totalPct)} year over year, including the voted override
-      </div>
-
-      <div style={{ marginTop: 14, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
-        <button
-          onClick={() => setExpanded((e) => !e)}
-          aria-expanded={expanded}
-          style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }}
-        >
-          <Caret open={expanded} /> {expanded ? 'Hide the build-up detail' : 'Show how the cap and override are calculated'}
-        </button>
-        {expanded && (
-          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {ledger.map((s) => (
-              <div
-                key={s.label}
-                style={{
-                  display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12.5, padding: '5px 0',
-                  borderTop: s.kind === 'total' ? '1px solid var(--border)' : 'none',
-                  fontWeight: s.kind === 'total' ? 700 : 400,
-                }}
-              >
-                <span>{s.label}</span>
-                <span style={{ fontVariantNumeric: 'tabular-nums', color: s.kind === 'delta' ? (s.value >= 0 ? '#3d9c72' : '#ca615f') : undefined }}>
-                  {s.kind === 'total' ? fmtUSDFull(s.value) : `${s.value >= 0 ? '+' : ''}${fmtUSDFull(s.value)}`}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-/** Median-home Town-tax impact, as a stat tile rather than a chart — a single
- *  before/after comparison is better read as a number than as two bars. */
-export function HomeownerTaxImpactStat() {
-  const d = NC_HOMEOWNER_TAX_IMPACT
-  return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
-        <span style={{ fontSize: 30, fontWeight: 700, color: '#ca615f' }}>+{fmtUSDFull(d.increase)}</span>
-        <span style={{ fontSize: 16, fontWeight: 600, color: '#ca615f' }}>{fmtPct(d.increasePct)}</span>
-        <span className="muted" style={{ fontSize: 12.5 }}>year over year</span>
-      </div>
-      <div style={{ marginTop: 12, fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span className="muted">{fmtUSDFull(d.townTaxes2025)}</span>
-        <span className="muted">→</span>
-        <span style={{ fontWeight: 700 }}>{fmtUSDFull(d.townTaxes2026)}</span>
-      </div>
-      <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
-        On a median ${fmtUSDFull(d.medianHomeValue).slice(1)} home (assessed value {fmtUSDFull(d.assessedValue)}) — Town taxes only; excludes school and county tax bills.
-      </div>
-    </div>
-  )
-}
-
 /** The Town's outstanding bonds and credit standing — Moody's rating, the
  *  debt snapshot at 12/31/2025, and constitutional debt-limit capacity — with
- *  the individual bond issues as an expandable ledger (mirrors
- *  TaxLevyBuildup's ledger pattern). Shown above the Bond Simulator so a
+ *  the individual bond issues as an expandable ledger (mirrors the tax-levy
+ *  build-up worksheet's ledger pattern). Shown above the Bond Simulator so a
  *  resident sees where the Town's actual debt stands before modeling a
  *  hypothetical new bond. */
 export function BondRatingProfile() {
