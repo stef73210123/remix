@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import {
   NC_2026_APPROPRIATIONS, NC_2025_VS_2026, NC_FUND_BALANCE_HISTORY,
   NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT, NC_2026_BUDGET_SOURCE_NOTE,
@@ -57,7 +57,7 @@ function groupSum<T>(rows: T[], keyOf: (r: T) => string, valueOf: (r: T) => numb
   return m
 }
 
-function Caret({ open }: { open: boolean }) {
+export function Caret({ open }: { open: boolean }) {
   return (
     <span style={{ display: 'inline-block', width: 10, fontSize: 10, transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }}>
       ▸
@@ -174,7 +174,7 @@ export function AppropriationsExplorer() {
   const grandTotal2026 = rows.reduce((s, r) => s + r.v2026, 0)
   const grandTotal2025 = rows.reduce((s, r) => s + r.v2025, 0)
   const grandChange = grandTotal2025 > 0 ? (grandTotal2026 - grandTotal2025) / grandTotal2025 : null
-  const max = Math.max(...rows.map((r) => Math.max(r.v2026, r.v2025)), 1)
+  const max = Math.max(...rows.map((r) => r.v2026), 1)
 
   return (
     <div>
@@ -198,18 +198,13 @@ export function AppropriationsExplorer() {
                     <span style={{ width: 9, height: 9, borderRadius: 2, background: color, flexShrink: 0 }} />
                     {r.category}
                   </span>
-                  <span className="muted" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                    {fmtUSD(r.v2025)} → {fmtUSD(r.v2026)}
+                  <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+                    <span style={{ fontWeight: 600 }}>{fmtUSD(r.v2026)}</span>
                     {pct != null && <span style={{ marginLeft: 8, color: change >= 0 ? '#3d9c72' : '#ca615f', fontWeight: 600 }}>{fmtPct(pct)}</span>}
                   </span>
                 </div>
-                <div style={{ display: 'flex', gap: 3 }}>
-                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 4, height: 8, overflow: 'hidden' }}>
-                    <div style={{ width: `${(r.v2025 / max) * 100}%`, height: '100%', background: color, opacity: 0.45 }} />
-                  </div>
-                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 4, height: 8, overflow: 'hidden' }}>
-                    <div style={{ width: `${(r.v2026 / max) * 100}%`, height: '100%', background: color, opacity: 0.9 }} />
-                  </div>
+                <div style={{ height: 8, borderRadius: 4, background: 'var(--panel-2)', overflow: 'hidden' }}>
+                  <div style={{ width: `${Math.max((r.v2026 / max) * 100, 1.5)}%`, height: '100%', background: color, opacity: 0.85 }} />
                 </div>
               </button>
               {open && (
@@ -221,7 +216,7 @@ export function AppropriationsExplorer() {
                       <div key={f.fund} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, gap: 8 }}>
                         <span>{f.fund} <span className="muted">· {f.code}</span></span>
                         <span style={{ fontVariantNumeric: 'tabular-nums' }}>
-                          {fmtUSD(f.appropriation2025)} → {fmtUSD(f.appropriation2026)}
+                          {fmtUSD(f.appropriation2026)}
                           {fpct != null && <span className="muted" style={{ marginLeft: 6 }}>{fmtPct(fpct)}</span>}
                         </span>
                       </div>
@@ -234,8 +229,8 @@ export function AppropriationsExplorer() {
         })}
       </div>
       <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
-        {fmtUSDFull(grandTotal2025)} → {fmtUSDFull(grandTotal2026)}
-        {grandChange != null && <strong style={{ marginLeft: 6, color: grandChange >= 0 ? '#3d9c72' : '#ca615f' }}> {fmtPct(grandChange)}</strong>}
+        {categories.length} categories · {NC_2025_VS_2026.length} funds/districts · {fmtUSDFull(grandTotal2026)} total
+        {grandChange != null && <strong style={{ marginLeft: 6, color: grandChange >= 0 ? '#3d9c72' : '#ca615f' }}> {fmtPct(grandChange)} vs. 2025</strong>}
       </div>
     </div>
   )
@@ -365,85 +360,85 @@ export function FundBalanceChart() {
 const WATERFALL_TOTAL_STEPS = NC_TAX_CAP_WATERFALL.filter((s) => s.kind === 'total')
 
 /** How the FYE 12/31/25 levy builds up to the 2026 adopted levy under NY's
- *  tax-cap law — the town's own worksheet. Opens condensed to the three
- *  checkpoint totals; the full 10-step build-up (each cap adjustment and the
- *  voted override) expands on demand. */
-export function TaxCapWaterfallChart() {
-  const [hover, setHover] = useState<number | null>(null)
+ *  tax-cap law — the town's own worksheet. Shown as a 3-stage stepper (the
+ *  checkpoint totals, connected by the rate of change alone — a waterfall's
+ *  floating bars added visual noise without adding information a plain %
+ *  doesn't already give); the individual cap-law adjustments and the voted
+ *  override expand below as a plain ledger, which reads the actual line-item
+ *  arithmetic more clearly than bars ever could, especially the smaller
+ *  adjustments that were barely visible as bars. */
+export function TaxLevyBuildup() {
   const [expanded, setExpanded] = useState(false)
-  const steps = expanded ? NC_TAX_CAP_WATERFALL : WATERFALL_TOTAL_STEPS
-  let running = 0
-  const bars = steps.map((s) => {
-    const start = s.kind === 'total' ? 0 : running
-    const end = s.kind === 'total' ? s.value : running + s.value
-    running = end
-    return { ...s, start, end }
-  })
-  const maxV = Math.max(...bars.map((b) => Math.max(b.start, b.end)))
+  const [start, limit, adopted] = WATERFALL_TOTAL_STEPS
+  const capGrowthPct = (limit.value - start.value) / start.value
+  const overridePct = (adopted.value - limit.value) / limit.value
+  const totalPct = (adopted.value - start.value) / start.value
 
-  const W = 640, H = 260, PAD = { t: 14, r: 8, b: 46, l: 56 }
-  const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
-  const bw = plotW / bars.length
-  const y = (v: number) => PAD.t + plotH - (v / maxV) * plotH
-  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(maxV * f))
-  const hb = hover != null ? bars[hover] : null
+  let running = 0
+  const ledger = NC_TAX_CAP_WATERFALL.map((s) => {
+    running = s.kind === 'total' ? s.value : running + s.value
+    return { ...s, running }
+  })
+
+  const stages = [
+    { label: 'FYE 12/31/25 levy', value: start.value },
+    { label: 'Tax Levy Limit (cap)', value: limit.value },
+    { label: '2026 Adopted Levy', value: adopted.value },
+  ]
+  const connectors = [capGrowthPct, overridePct]
 
   return (
     <div>
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 'auto', display: 'block' }} role="img" aria-label="Tax levy build-up from FYE 2025 to the 2026 adopted levy">
-        {yTicks.map((t) => (
-          <g key={t}>
-            <line x1={PAD.l} y1={y(t)} x2={W - PAD.r} y2={y(t)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />
-            <text x={PAD.l - 8} y={y(t) + 3} textAnchor="end" fontSize={10} fill="var(--muted)">{fmtUSD(t)}</text>
-          </g>
-        ))}
-        {bars.map((b, i) => {
-          const isTotal = b.kind === 'total'
-          const isPositive = b.value >= 0
-          const color = isTotal ? 'var(--primary)' : isPositive ? '#3d9c72' : '#ca615f'
-          const top = y(Math.max(b.start, b.end))
-          const bottom = y(Math.min(b.start, b.end))
-          const bx = PAD.l + i * bw
-          return (
-            <g key={b.label}>
-              <rect
-                x={bx + bw * 0.12} y={top} width={bw * 0.76} height={Math.max(1, bottom - top)}
-                fill={color} opacity={hover != null && hover !== i ? 0.35 : 0.85} rx={2}
-                onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ cursor: 'pointer' }}
-              />
-              {i > 0 && !isTotal && (
-                <line x1={bx} y1={y(b.start)} x2={bx + bw * 0.12} y2={y(b.start)} stroke="var(--border)" strokeWidth={1} strokeDasharray="2,2" />
-              )}
-            </g>
-          )
-        })}
-      </svg>
-      {/* Labels below the plot — small/rotated-feeling text to fit up to 10
-          categories in a narrow card. */}
-      <div style={{ display: 'flex', marginTop: 2 }}>
-        {bars.map((b) => (
-          <div key={b.label} style={{ flex: 1, fontSize: 8.5, textAlign: 'center', lineHeight: 1.2, padding: '0 1px' }} className="muted">
-            {b.label}
-          </div>
+      <div style={{ display: 'flex', alignItems: 'stretch', gap: 2 }}>
+        {stages.map((s, i) => (
+          <Fragment key={s.label}>
+            <div style={{ flex: '1 1 0', textAlign: 'center', padding: '4px 2px' }}>
+              <div className="muted" style={{ fontSize: 11 }}>{s.label}</div>
+              <div style={{ fontSize: 19, fontWeight: 700, marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>{fmtUSD(s.value)}</div>
+            </div>
+            {i < stages.length - 1 && (
+              <div style={{ flex: '0 0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 6px' }}>
+                <span style={{ fontSize: 15, color: 'var(--muted)' }}>→</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: connectors[i] >= 0 ? '#3d9c72' : '#ca615f', whiteSpace: 'nowrap' }}>
+                  {fmtPct(connectors[i])}
+                </span>
+              </div>
+            )}
+          </Fragment>
         ))}
       </div>
-      <div style={{ minHeight: 20, fontSize: 12.5, marginTop: 8 }}>
-        {hb ? (
-          <span>
-            <strong>{hb.label}</strong>
-            <span className="muted"> · {hb.kind === 'total' ? fmtUSDFull(hb.value) : `${hb.value >= 0 ? '+' : ''}${fmtUSDFull(hb.value)}`} · running total {fmtUSDFull(hb.end)}</span>
-          </span>
-        ) : (
-          <span className="muted">Hover a step for the running total.</span>
+      <div className="muted" style={{ fontSize: 11.5, marginTop: 10, textAlign: 'center' }}>
+        {fmtPct(totalPct)} year over year, including the voted override
+      </div>
+
+      <div style={{ marginTop: 14, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
+        <button
+          onClick={() => setExpanded((e) => !e)}
+          aria-expanded={expanded}
+          style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }}
+        >
+          <Caret open={expanded} /> {expanded ? 'Hide the build-up detail' : 'Show how the cap and override are calculated'}
+        </button>
+        {expanded && (
+          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {ledger.map((s) => (
+              <div
+                key={s.label}
+                style={{
+                  display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12.5, padding: '5px 0',
+                  borderTop: s.kind === 'total' ? '1px solid var(--border)' : 'none',
+                  fontWeight: s.kind === 'total' ? 700 : 400,
+                }}
+              >
+                <span>{s.label}</span>
+                <span style={{ fontVariantNumeric: 'tabular-nums', color: s.kind === 'delta' ? (s.value >= 0 ? '#3d9c72' : '#ca615f') : undefined }}>
+                  {s.kind === 'total' ? fmtUSDFull(s.value) : `${s.value >= 0 ? '+' : ''}${fmtUSDFull(s.value)}`}
+                </span>
+              </div>
+            ))}
+          </div>
         )}
       </div>
-      <button
-        onClick={() => setExpanded((e) => !e)}
-        aria-expanded={expanded}
-        style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, marginTop: 10 }}
-      >
-        <Caret open={expanded} /> {expanded ? 'Show the 3 checkpoint totals only' : `Show the full ${NC_TAX_CAP_WATERFALL.length}-step build-up`}
-      </button>
     </div>
   )
 }
