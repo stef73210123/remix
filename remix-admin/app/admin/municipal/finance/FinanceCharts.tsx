@@ -20,8 +20,11 @@ function fmtPct(v: number): string {
   return `${v >= 0 ? '+' : ''}${(v * 100).toFixed(1)}%`
 }
 
+const selectStyle = { fontSize: 12.5, padding: '4px 9px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' } as const
+
 // Fixed categorical order — never cycled or re-assigned when a filter changes
-// which categories are present.
+// which categories are present. The two appropriations sheets group funds
+// into slightly different categories, so each gets its own map.
 const CATEGORY_COLORS_2026: Record<string, string> = {
   'General Funds': '#5a9bd4',
   'Fire Protection': '#e8813a',
@@ -54,61 +57,176 @@ function groupSum<T>(rows: T[], keyOf: (r: T) => string, valueOf: (r: T) => numb
   return m
 }
 
-/** 2026 appropriations by category, each bar segmented by fund — the "part
- *  of whole" composition of the $43.78M adopted budget. Categories vary by
- *  orders of magnitude (General Funds vs. a single park district), so bars
- *  share one scale rather than each filling its own row — the skew itself
- *  (how dominant General/Highway/Library is) is real and worth showing. */
-export function AppropriationsCompositionChart() {
-  const [hover, setHover] = useState<string | null>(null)
-  const categories = Array.from(new Set(NC_2026_APPROPRIATIONS.map((r) => r.category)))
-  const byCategory = categories.map((cat) => ({
-    category: cat,
-    total: NC_2026_APPROPRIATIONS.filter((r) => r.category === cat).reduce((s, r) => s + r.appropriation, 0),
-    funds: NC_2026_APPROPRIATIONS.filter((r) => r.category === cat),
-  })).sort((a, b) => b.total - a.total)
-  const max = Math.max(...byCategory.map((c) => c.total), 1)
-  const grandTotal = byCategory.reduce((s, c) => s + c.total, 0)
+function Caret({ open }: { open: boolean }) {
+  return (
+    <span style={{ display: 'inline-block', width: 10, fontSize: 10, transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }}>
+      ▸
+    </span>
+  )
+}
+
+type ApproMode = '2026' | 'change'
+const APPROP_MODES: { value: ApproMode; label: string }[] = [
+  { value: '2026', label: '2026 detail, by fund' },
+  { value: 'change', label: '2025 → 2026 change' },
+]
+
+/** Appropriations, as a single drill-down list rather than two always-open
+ *  charts: category rows are condensed to one bar each (the composition or
+ *  the year-over-year comparison, depending on the mode picked from the
+ *  dropdown), and a category expands in place to reveal its individual
+ *  funds/districts — the hierarchy the source sheets actually have, without
+ *  the clutter of a segmented stacked bar or a treemap/sunburst. */
+export function AppropriationsExplorer() {
+  const [mode, setMode] = useState<ApproMode>('2026')
+  const [openCategory, setOpenCategory] = useState<string | null>(null)
+
+  const toggle = (cat: string) => setOpenCategory((c) => (c === cat ? null : cat))
+
+  const header = (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+      <select
+        value={mode}
+        onChange={(e) => { setMode(e.target.value as ApproMode); setOpenCategory(null) }}
+        aria-label="Appropriations view"
+        style={selectStyle}
+      >
+        {APPROP_MODES.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
+      </select>
+    </div>
+  )
+
+  if (mode === '2026') {
+    const categories = Array.from(new Set(NC_2026_APPROPRIATIONS.map((r) => r.category)))
+    const byCategory = categories
+      .map((cat) => {
+        const funds = NC_2026_APPROPRIATIONS.filter((r) => r.category === cat)
+        return { category: cat, total: funds.reduce((s, f) => s + f.appropriation, 0), funds }
+      })
+      .sort((a, b) => b.total - a.total)
+    const grandTotal = byCategory.reduce((s, c) => s + c.total, 0)
+    const max = Math.max(...byCategory.map((c) => c.total), 1)
+
+    return (
+      <div>
+        {header}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {byCategory.map((c) => {
+            const open = openCategory === c.category
+            return (
+              <div key={c.category}>
+                <button
+                  onClick={() => toggle(c.category)}
+                  aria-expanded={open}
+                  style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', padding: '6px 0', boxSizing: 'border-box' }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                      <Caret open={open} />
+                      <span style={{ width: 9, height: 9, borderRadius: 2, background: CATEGORY_COLORS_2026[c.category], flexShrink: 0 }} />
+                      {c.category}
+                      <span className="muted" style={{ fontWeight: 400 }}>· {c.funds.length} fund{c.funds.length > 1 ? 's' : ''}</span>
+                    </span>
+                    <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{fmtUSD(c.total)}</span>
+                  </div>
+                  <div style={{ height: 8, borderRadius: 4, background: 'var(--panel-2)', overflow: 'hidden' }}>
+                    <div style={{ width: `${Math.max((c.total / max) * 100, 1.5)}%`, height: '100%', background: CATEGORY_COLORS_2026[c.category], opacity: 0.85 }} />
+                  </div>
+                </button>
+                {open && (
+                  <div style={{ paddingLeft: 24, marginTop: 6, marginBottom: 8, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    {c.funds.map((f) => (
+                      <div key={f.fund} style={{ fontSize: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                          <span>{f.fund} <span className="muted">· {f.code}</span></span>
+                          <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{fmtUSD(f.appropriation)}</span>
+                        </div>
+                        <div className="muted" style={{ fontSize: 11, marginTop: 2, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                          <span>Revenue {fmtUSD(f.revenue)}</span>
+                          <span>Fund balance used {fmtUSD(f.appropriatedFundBalance)}</span>
+                          <span>Tax levy {fmtUSD(f.taxLevy)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+        <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
+          {categories.length} categories · {NC_2026_APPROPRIATIONS.length} funds/districts · {fmtUSDFull(grandTotal)} total
+        </div>
+      </div>
+    )
+  }
+
+  // mode === 'change'
+  const categories = Array.from(new Set(NC_2025_VS_2026.map((r) => r.category)))
+  const by2026 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2026)
+  const by2025 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2025)
+  const rows = categories
+    .map((cat) => ({
+      category: cat, v2026: by2026.get(cat) ?? 0, v2025: by2025.get(cat) ?? 0,
+      funds: NC_2025_VS_2026.filter((r) => r.category === cat),
+    }))
+    .sort((a, b) => b.v2026 - a.v2026)
+  const grandTotal2026 = rows.reduce((s, r) => s + r.v2026, 0)
+  const grandTotal2025 = rows.reduce((s, r) => s + r.v2025, 0)
+  const grandChange = grandTotal2025 > 0 ? (grandTotal2026 - grandTotal2025) / grandTotal2025 : null
+  const max = Math.max(...rows.map((r) => Math.max(r.v2026, r.v2025)), 1)
 
   return (
     <div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        {byCategory.map((c) => {
-          let running = 0
+      {header}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {rows.map((r) => {
+          const change = r.v2026 - r.v2025
+          const pct = r.v2025 > 0 ? change / r.v2025 : null
+          const color = CATEGORY_COLORS_CHANGE[r.category]
+          const open = openCategory === r.category
           return (
-            <div key={c.category}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ width: 9, height: 9, borderRadius: 2, background: CATEGORY_COLORS_2026[c.category], flexShrink: 0 }} />
-                  {c.category}
-                </span>
-                <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{fmtUSD(c.total)}</span>
-              </div>
-              <div style={{ display: 'flex', height: 18, borderRadius: 5, overflow: 'hidden', background: 'var(--panel-2)', width: `${Math.max((c.total / max) * 100, 1.5)}%`, minWidth: 3 }}>
-                {c.funds.map((f) => {
-                  const w = (f.appropriation / c.total) * 100
-                  running += f.appropriation
-                  const key = `${c.category}__${f.fund}`
-                  return (
-                    <div
-                      key={key}
-                      onMouseEnter={() => setHover(key)}
-                      onMouseLeave={() => setHover((h) => (h === key ? null : h))}
-                      title={`${f.fund}: ${fmtUSDFull(f.appropriation)}`}
-                      style={{
-                        width: `${w}%`, minWidth: f.appropriation > 0 ? 2 : 0, height: '100%',
-                        background: CATEGORY_COLORS_2026[c.category],
-                        opacity: hover && hover !== key ? 0.35 : c.funds.length > 1 ? 0.55 + 0.4 * ((c.funds.indexOf(f) % 2)) : 0.85,
-                        borderRight: c.funds.length > 1 ? '1px solid var(--panel)' : 'none',
-                        cursor: 'default',
-                      }}
-                    />
-                  )
-                })}
-              </div>
-              {hover && hover.startsWith(c.category + '__') && (
-                <div className="muted" style={{ fontSize: 11, marginTop: 3 }}>
-                  {hover.slice(c.category.length + 2)} · {fmtUSDFull(c.funds.find((f) => `${c.category}__${f.fund}` === hover)?.appropriation ?? 0)}
+            <div key={r.category}>
+              <button
+                onClick={() => toggle(r.category)}
+                aria-expanded={open}
+                style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', padding: '6px 0', boxSizing: 'border-box' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5 }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <Caret open={open} />
+                    <span style={{ width: 9, height: 9, borderRadius: 2, background: color, flexShrink: 0 }} />
+                    {r.category}
+                  </span>
+                  <span className="muted" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                    {fmtUSD(r.v2025)} → {fmtUSD(r.v2026)}
+                    {pct != null && <span style={{ marginLeft: 8, color: change >= 0 ? '#3d9c72' : '#ca615f', fontWeight: 600 }}>{fmtPct(pct)}</span>}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: 3 }}>
+                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+                    <div style={{ width: `${(r.v2025 / max) * 100}%`, height: '100%', background: color, opacity: 0.45 }} />
+                  </div>
+                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+                    <div style={{ width: `${(r.v2026 / max) * 100}%`, height: '100%', background: color, opacity: 0.9 }} />
+                  </div>
+                </div>
+              </button>
+              {open && (
+                <div style={{ paddingLeft: 24, marginTop: 6, marginBottom: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {r.funds.map((f) => {
+                    const fchange = f.appropriation2026 - f.appropriation2025
+                    const fpct = f.appropriation2025 > 0 ? fchange / f.appropriation2025 : null
+                    return (
+                      <div key={f.fund} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, gap: 8 }}>
+                        <span>{f.fund} <span className="muted">· {f.code}</span></span>
+                        <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+                          {fmtUSD(f.appropriation2025)} → {fmtUSD(f.appropriation2026)}
+                          {fpct != null && <span className="muted" style={{ marginLeft: 6 }}>{fmtPct(fpct)}</span>}
+                        </span>
+                      </div>
+                    )
+                  })}
                 </div>
               )}
             </div>
@@ -116,68 +234,21 @@ export function AppropriationsCompositionChart() {
         })}
       </div>
       <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
-        {categories.length} categories · {NC_2026_APPROPRIATIONS.length} funds/districts · {fmtUSDFull(grandTotal)} total
-      </div>
-    </div>
-  )
-}
-
-/** 2025 vs 2026 appropriations, grouped by category — direct year-over-year
- *  comparison while keeping the category grouping visible. */
-export function AppropriationsChangeChart() {
-  const categories = Array.from(new Set(NC_2025_VS_2026.map((r) => r.category)))
-  const by2026 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2026)
-  const by2025 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2025)
-  const rows = categories
-    .map((cat) => ({ category: cat, v2026: by2026.get(cat) ?? 0, v2025: by2025.get(cat) ?? 0 }))
-    .sort((a, b) => b.v2026 - a.v2026)
-  const max = Math.max(...rows.map((r) => Math.max(r.v2026, r.v2025)), 1)
-
-  return (
-    <div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {rows.map((r) => {
-          const change = r.v2026 - r.v2025
-          const pct = r.v2025 > 0 ? change / r.v2025 : null
-          const color = CATEGORY_COLORS_CHANGE[r.category]
-          return (
-            <div key={r.category}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ width: 9, height: 9, borderRadius: 2, background: color, flexShrink: 0 }} />
-                  {r.category}
-                </span>
-                <span className="muted" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                  {fmtUSD(r.v2025)} → {fmtUSD(r.v2026)}
-                  {pct != null && <span style={{ marginLeft: 8, color: change >= 0 ? '#3d9c72' : '#ca615f', fontWeight: 600 }}>{fmtPct(pct)}</span>}
-                </span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span className="muted" style={{ fontSize: 10, width: 30, flexShrink: 0 }}>2025</span>
-                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 4, height: 12, overflow: 'hidden' }}>
-                    <div style={{ width: `${(r.v2025 / max) * 100}%`, height: '100%', background: color, opacity: 0.45, borderRadius: 4 }} />
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span className="muted" style={{ fontSize: 10, width: 30, flexShrink: 0 }}>2026</span>
-                  <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 4, height: 12, overflow: 'hidden' }}>
-                    <div style={{ width: `${(r.v2026 / max) * 100}%`, height: '100%', background: color, opacity: 0.9, borderRadius: 4 }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        })}
+        {fmtUSDFull(grandTotal2025)} → {fmtUSDFull(grandTotal2026)}
+        {grandChange != null && <strong style={{ marginLeft: 6, color: grandChange >= 0 ? '#3d9c72' : '#ca615f' }}> {fmtPct(grandChange)}</strong>}
       </div>
     </div>
   )
 }
 
 /** "Financial position" — fund equity (fund balance) at the end of each year,
- *  2019–2024, one line per fund. The town's own multi-year solvency trend. */
+ *  2019–2024, one line per fund, with an expandable panel that breaks a
+ *  chosen fund's equity down into restricted vs. free (unrestricted) reserve
+ *  — the town's own solvency detail, previously unused. */
 export function FundBalanceChart() {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null)
+  const [inspectFund, setInspectFund] = useState('Combined')
+  const [showReserve, setShowReserve] = useState(false)
   const years = NC_FUND_BALANCE_HISTORY[0].years.map((y) => y.year)
   const funds = NC_FUND_BALANCE_HISTORY.map((f) => f.fund)
 
@@ -187,6 +258,9 @@ export function FundBalanceChart() {
   const x = (i: number) => PAD.l + (i / (years.length - 1)) * plotW
   const y = (v: number) => PAD.t + plotH - (v / maxV) * plotH
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(maxV * f))
+
+  const inspected = NC_FUND_BALANCE_HISTORY.find((f) => f.fund === inspectFund) ?? NC_FUND_BALANCE_HISTORY[NC_FUND_BALANCE_HISTORY.length - 1]
+  const reserveMax = Math.max(...inspected.years.map((yy) => yy.fundEquityEnd), 1)
 
   return (
     <div>
@@ -242,15 +316,62 @@ export function FundBalanceChart() {
           </span>
         ))}
       </div>
+
+      <div style={{ marginTop: 14, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
+        <button
+          onClick={() => setShowReserve((s) => !s)}
+          aria-expanded={showReserve}
+          style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600 }}
+        >
+          <Caret open={showReserve} /> Reserve composition — restricted vs. free balance
+        </button>
+        {showReserve && (
+          <div style={{ marginTop: 10 }}>
+            <select
+              value={inspectFund}
+              onChange={(e) => setInspectFund(e.target.value)}
+              aria-label="Fund to inspect"
+              style={{ ...selectStyle, marginBottom: 10 }}
+            >
+              {funds.map((f) => <option key={f} value={f}>{f}</option>)}
+            </select>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {inspected.years.map((yy) => (
+                <div key={yy.year} style={{ fontSize: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+                    <span>{yy.year}</span>
+                    <span className="muted">{fmtUSD(yy.fundEquityEnd)} total · {(yy.unrestrictedPctOfExpenditures * 100).toFixed(0)}% of expenditures unrestricted</span>
+                  </div>
+                  <div style={{ display: 'flex', height: 10, borderRadius: 4, overflow: 'hidden', background: 'var(--panel-2)', width: `${Math.max((yy.fundEquityEnd / reserveMax) * 100, 1.5)}%` }}>
+                    {yy.nonspendableRestricted > 0 && (
+                      <div style={{ width: `${(yy.nonspendableRestricted / yy.fundEquityEnd) * 100}%`, background: '#c9973f', opacity: 0.8 }} title={`Non-spendable/restricted: ${fmtUSDFull(yy.nonspendableRestricted)}`} />
+                    )}
+                    <div style={{ flex: 1, background: FUND_COLORS[inspected.fund], opacity: 0.85 }} title={`Assigned/unrestricted: ${fmtUSDFull(yy.assignedUnrestricted)}`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="muted" style={{ fontSize: 11, marginTop: 8, display: 'flex', gap: 12 }}>
+              <span><span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: 2, background: '#c9973f', marginRight: 4 }} />Non-spendable / restricted</span>
+              <span><span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: 2, background: FUND_COLORS[inspected.fund], marginRight: 4 }} />Assigned / unrestricted (free reserve)</span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
 
+const WATERFALL_TOTAL_STEPS = NC_TAX_CAP_WATERFALL.filter((s) => s.kind === 'total')
+
 /** How the FYE 12/31/25 levy builds up to the 2026 adopted levy under NY's
- *  tax-cap law — the town's own worksheet, as a waterfall. */
+ *  tax-cap law — the town's own worksheet. Opens condensed to the three
+ *  checkpoint totals; the full 10-step build-up (each cap adjustment and the
+ *  voted override) expands on demand. */
 export function TaxCapWaterfallChart() {
   const [hover, setHover] = useState<number | null>(null)
-  const steps = NC_TAX_CAP_WATERFALL
+  const [expanded, setExpanded] = useState(false)
+  const steps = expanded ? NC_TAX_CAP_WATERFALL : WATERFALL_TOTAL_STEPS
   let running = 0
   const bars = steps.map((s) => {
     const start = s.kind === 'total' ? 0 : running
@@ -297,7 +418,8 @@ export function TaxCapWaterfallChart() {
           )
         })}
       </svg>
-      {/* Labels below the plot, rotated to fit 10 categories in a narrow card. */}
+      {/* Labels below the plot — small/rotated-feeling text to fit up to 10
+          categories in a narrow card. */}
       <div style={{ display: 'flex', marginTop: 2 }}>
         {bars.map((b) => (
           <div key={b.label} style={{ flex: 1, fontSize: 8.5, textAlign: 'center', lineHeight: 1.2, padding: '0 1px' }} className="muted">
@@ -315,33 +437,32 @@ export function TaxCapWaterfallChart() {
           <span className="muted">Hover a step for the running total.</span>
         )}
       </div>
+      <button
+        onClick={() => setExpanded((e) => !e)}
+        aria-expanded={expanded}
+        style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, marginTop: 10 }}
+      >
+        <Caret open={expanded} /> {expanded ? 'Show the 3 checkpoint totals only' : `Show the full ${NC_TAX_CAP_WATERFALL.length}-step build-up`}
+      </button>
     </div>
   )
 }
 
-/** Simple 2025 vs 2026 comparison for a median-value home's Town tax bill. */
-export function HomeownerTaxImpactChart() {
+/** Median-home Town-tax impact, as a stat tile rather than a chart — a single
+ *  before/after comparison is better read as a number than as two bars. */
+export function HomeownerTaxImpactStat() {
   const d = NC_HOMEOWNER_TAX_IMPACT
-  const max = Math.max(d.townTaxes2025, d.townTaxes2026)
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 28, height: 140 }}>
-        {[{ label: '2025', value: d.townTaxes2025 }, { label: '2026', value: d.townTaxes2026 }].map((b) => (
-          <div key={b.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flex: '0 0 64px' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{fmtUSDFull(b.value)}</div>
-            <div
-              style={{
-                width: 48, height: `${(b.value / max) * 96}px`, borderRadius: '5px 5px 0 0',
-                background: b.label === '2026' ? 'var(--primary)' : 'var(--panel-2)',
-              }}
-            />
-            <div className="muted" style={{ fontSize: 12 }}>{b.label}</div>
-          </div>
-        ))}
-        <div style={{ marginLeft: 12, alignSelf: 'center' }}>
-          <div style={{ fontSize: 20, fontWeight: 700, color: '#ca615f' }}>+{fmtUSDFull(d.increase)}</div>
-          <div className="muted" style={{ fontSize: 12 }}>{fmtPct(d.increasePct)} year over year</div>
-        </div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 30, fontWeight: 700, color: '#ca615f' }}>+{fmtUSDFull(d.increase)}</span>
+        <span style={{ fontSize: 16, fontWeight: 600, color: '#ca615f' }}>{fmtPct(d.increasePct)}</span>
+        <span className="muted" style={{ fontSize: 12.5 }}>year over year</span>
+      </div>
+      <div style={{ marginTop: 12, fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span className="muted">{fmtUSDFull(d.townTaxes2025)}</span>
+        <span className="muted">→</span>
+        <span style={{ fontWeight: 700 }}>{fmtUSDFull(d.townTaxes2026)}</span>
       </div>
       <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
         On a median ${fmtUSDFull(d.medianHomeValue).slice(1)} home (assessed value {fmtUSDFull(d.assessedValue)}) — Town taxes only; excludes school and county tax bills.

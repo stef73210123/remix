@@ -12,9 +12,10 @@ import type { TownBudget } from '@/lib/municipal/budget'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
 import { isOpen } from '@/lib/flavor'
 import {
-  AppropriationsCompositionChart, AppropriationsChangeChart, FundBalanceChart,
-  TaxCapWaterfallChart, HomeownerTaxImpactChart, NC_2026_BUDGET_SOURCE_NOTE,
+  AppropriationsExplorer, FundBalanceChart, TaxCapWaterfallChart,
+  HomeownerTaxImpactStat, NC_2026_BUDGET_SOURCE_NOTE,
 } from './FinanceCharts'
+import { BondSimulator } from './BondSimulator'
 
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -94,18 +95,10 @@ export default function FinanceClient({ userName, muni, budgets }: {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 20 }}>
             <div>
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                Appropriations by category
+                Appropriations
               </div>
               <div className="card" style={{ padding: 16 }}>
-                <AppropriationsCompositionChart />
-              </div>
-            </div>
-            <div>
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                2025 vs. 2026, by category
-              </div>
-              <div className="card" style={{ padding: 16 }}>
-                <AppropriationsChangeChart />
+                <AppropriationsExplorer />
               </div>
             </div>
             <div>
@@ -129,8 +122,17 @@ export default function FinanceClient({ userName, muni, budgets }: {
                 Homeowner tax impact
               </div>
               <div className="card" style={{ padding: 16 }}>
-                <HomeownerTaxImpactChart />
+                <HomeownerTaxImpactStat />
               </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 26 }}>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+              Bondable Investment Simulator
+            </div>
+            <div className="card" style={{ padding: 16 }}>
+              <BondSimulator />
             </div>
           </div>
         </div>
