@@ -13,7 +13,7 @@ import { MUNICIPALITIES } from '@/lib/municipal/registry'
 import { isOpen } from '@/lib/flavor'
 import {
   AppropriationsExplorer, FundBalanceChart, TaxLevyBuildup,
-  HomeownerTaxImpactStat, NC_2026_BUDGET_SOURCE_NOTE,
+  HomeownerTaxImpactStat, BondRatingProfile, NC_2026_BUDGET_SOURCE_NOTE, NC_BOND_SOURCE_NOTE,
 } from './FinanceCharts'
 import { BondSimulator } from './BondSimulator'
 
@@ -125,6 +125,16 @@ export default function FinanceClient({ userName, muni, budgets }: {
                 <HomeownerTaxImpactStat />
               </div>
             </div>
+          </div>
+
+          <div style={{ marginTop: 26 }}>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+              Town bonds outstanding &amp; credit rating
+            </div>
+            <div className="card" style={{ padding: 16 }}>
+              <BondRatingProfile />
+            </div>
+            <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5, maxWidth: 760 }}>{NC_BOND_SOURCE_NOTE}</div>
           </div>
 
           <div style={{ marginTop: 26 }}>

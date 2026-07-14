@@ -2,8 +2,9 @@
 
 import { Fragment, useState } from 'react'
 import {
-  NC_2026_APPROPRIATIONS, NC_2025_VS_2026, NC_FUND_BALANCE_HISTORY,
+  NC_2025_VS_2026, NC_FUND_BALANCE_HISTORY,
   NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT, NC_2026_BUDGET_SOURCE_NOTE,
+  NC_BOND_PROFILE, NC_BOND_ISSUES, NC_BOND_SOURCE_NOTE,
 } from '@/lib/municipal/budget2026'
 
 function fmtUSD(v: number): string {
@@ -22,18 +23,6 @@ function fmtPct(v: number): string {
 
 const selectStyle = { fontSize: 12.5, padding: '4px 9px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' } as const
 
-// Fixed categorical order — never cycled or re-assigned when a filter changes
-// which categories are present. The two appropriations sheets group funds
-// into slightly different categories, so each gets its own map.
-const CATEGORY_COLORS_2026: Record<string, string> = {
-  'General Funds': '#5a9bd4',
-  'Fire Protection': '#e8813a',
-  'Street Lighting': '#d4767a',
-  'Ambulance': '#0ea5e9',
-  'Park': '#3d9c72',
-  'Sewer Districts': '#9b7fd4',
-  'Water Districts': '#c9973f',
-}
 const FUND_COLORS: Record<string, string> = {
   'General Fund': '#5a9bd4',
   'Highway Fund': '#e8813a',
@@ -129,104 +118,17 @@ function yoyColor(pct: number): string {
   return `color-mix(in srgb, ${hue} ${Math.round(t * 100)}%, #93a0ad)`
 }
 
-type ApproMode = 'treemap' | '2026'
-const APPROP_MODES: { value: ApproMode; label: string }[] = [
-  { value: 'treemap', label: 'Value, % of total, % YoY' },
-  { value: '2026', label: '2026 detail, by fund' },
-]
-
-/** Appropriations, as a single drill-down view rather than several
- *  always-open charts: the default mode is a treemap sized by 2026 value and
- *  colored by year-over-year change, with a category list below it (also
- *  the treemap's table-view fallback, since a couple of the smaller
- *  categories are too small to show a size-legible box) that expands in
- *  place to each category's individual funds/districts. */
+/** Appropriations, as a treemap sized by 2026 value and colored by
+ *  year-over-year change, with a category list below it (also the
+ *  treemap's table-view fallback, since a couple of the smaller categories
+ *  are too small to show a size-legible box) that expands in place to each
+ *  category's individual funds/districts. */
 export function AppropriationsExplorer() {
-  const [mode, setMode] = useState<ApproMode>('treemap')
   const [openCategory, setOpenCategory] = useState<string | null>(null)
   const [hoverCategory, setHoverCategory] = useState<string | null>(null)
 
   const toggle = (cat: string) => setOpenCategory((c) => (c === cat ? null : cat))
 
-  const header = (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
-      <select
-        value={mode}
-        onChange={(e) => { setMode(e.target.value as ApproMode); setOpenCategory(null) }}
-        aria-label="Appropriations view"
-        style={selectStyle}
-      >
-        {APPROP_MODES.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
-      </select>
-    </div>
-  )
-
-  if (mode === '2026') {
-    const categories = Array.from(new Set(NC_2026_APPROPRIATIONS.map((r) => r.category)))
-    const byCategory = categories
-      .map((cat) => {
-        const funds = NC_2026_APPROPRIATIONS.filter((r) => r.category === cat)
-        return { category: cat, total: funds.reduce((s, f) => s + f.appropriation, 0), funds }
-      })
-      .sort((a, b) => b.total - a.total)
-    const grandTotal = byCategory.reduce((s, c) => s + c.total, 0)
-    const max = Math.max(...byCategory.map((c) => c.total), 1)
-
-    return (
-      <div>
-        {header}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {byCategory.map((c) => {
-            const open = openCategory === c.category
-            return (
-              <div key={c.category}>
-                <button
-                  onClick={() => toggle(c.category)}
-                  aria-expanded={open}
-                  style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', padding: '6px 0', boxSizing: 'border-box' }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                      <Caret open={open} />
-                      <span style={{ width: 9, height: 9, borderRadius: 2, background: CATEGORY_COLORS_2026[c.category], flexShrink: 0 }} />
-                      {c.category}
-                      <span className="muted" style={{ fontWeight: 400 }}>· {c.funds.length} fund{c.funds.length > 1 ? 's' : ''}</span>
-                    </span>
-                    <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{fmtUSD(c.total)}</span>
-                  </div>
-                  <div style={{ height: 8, borderRadius: 4, background: 'var(--panel-2)', overflow: 'hidden' }}>
-                    <div style={{ width: `${Math.max((c.total / max) * 100, 1.5)}%`, height: '100%', background: CATEGORY_COLORS_2026[c.category], opacity: 0.85 }} />
-                  </div>
-                </button>
-                {open && (
-                  <div style={{ paddingLeft: 24, marginTop: 6, marginBottom: 8, display: 'flex', flexDirection: 'column', gap: 9 }}>
-                    {c.funds.map((f) => (
-                      <div key={f.fund} style={{ fontSize: 12 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-                          <span>{f.fund} <span className="muted">· {f.code}</span></span>
-                          <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{fmtUSD(f.appropriation)}</span>
-                        </div>
-                        <div className="muted" style={{ fontSize: 11, marginTop: 2, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                          <span>Revenue {fmtUSD(f.revenue)}</span>
-                          <span>Fund balance used {fmtUSD(f.appropriatedFundBalance)}</span>
-                          <span>Tax levy {fmtUSD(f.taxLevy)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
-        <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
-          {categories.length} categories · {NC_2026_APPROPRIATIONS.length} funds/districts · {fmtUSDFull(grandTotal)} total
-        </div>
-      </div>
-    )
-  }
-
-  // mode === 'treemap'
   const categories = Array.from(new Set(NC_2025_VS_2026.map((r) => r.category)))
   const by2026 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2026)
   const by2025 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2025)
@@ -248,7 +150,6 @@ export function AppropriationsExplorer() {
 
   return (
     <div>
-      {header}
       <div style={{ position: 'relative', width: '100%', aspectRatio: `${TM_W} / ${TM_H}`, marginBottom: 12 }}>
         {rects.map((r) => {
           const pctOfTotal = grandTotal > 0 ? r.value / grandTotal : 0
@@ -588,4 +489,79 @@ export function HomeownerTaxImpactStat() {
   )
 }
 
-export { NC_2026_BUDGET_SOURCE_NOTE }
+/** The Town's outstanding bonds and credit standing — Moody's rating, the
+ *  debt snapshot at 12/31/2025, and constitutional debt-limit capacity — with
+ *  the individual bond issues as an expandable ledger (mirrors
+ *  TaxLevyBuildup's ledger pattern). Shown above the Bond Simulator so a
+ *  resident sees where the Town's actual debt stands before modeling a
+ *  hypothetical new bond. */
+export function BondRatingProfile() {
+  const [expanded, setExpanded] = useState(false)
+  const p = NC_BOND_PROFILE
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
+        <span style={{ fontSize: 26, fontWeight: 700 }}>Moody&rsquo;s {p.moodysRating}</span>
+        <span className="muted" style={{ fontSize: 13 }}>Outlook: {p.outlook} · reaffirmed {p.moodysReaffirmedYear}</span>
+      </div>
+      <div className="muted" style={{ fontSize: 12, lineHeight: 1.5, marginBottom: 16, maxWidth: 640 }}>
+        {p.bondSecurity}. NYCLASS, the Town&rsquo;s investment pool for bond proceeds, is rated {p.nyclassRating}.
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
+        <div className="card" style={{ padding: 14, background: 'var(--panel-2)' }}>
+          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total bonded debt</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 4 }}>{fmtUSDFull(p.totalBondedDebt)}</div>
+          <div className="muted" style={{ fontSize: 11.5, marginTop: 4 }}>
+            {p.numberOfIssues} issues · {fmtUSDFull(p.totalLongTermDebt)} incl. unamortized premium
+          </div>
+        </div>
+        <div className="card" style={{ padding: 14, background: 'var(--panel-2)' }}>
+          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>2026 debt service</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 4 }}>{fmtUSDFull(p.debtService2026)}</div>
+          <div className="muted" style={{ fontSize: 11.5, marginTop: 4 }}>
+            {(p.debtServicePctNoncapital2026 * 100).toFixed(1)}% of noncapital expenditures, down from {(p.debtServicePctNoncapital2024 * 100).toFixed(1)}% in 2024
+          </div>
+        </div>
+        <div className="card" style={{ padding: 14, background: 'var(--panel-2)' }}>
+          <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Debt-limit utilization</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 4 }}>{(p.debtLimitUtilizationPct * 100).toFixed(2)}%</div>
+          <div className="muted" style={{ fontSize: 11.5, marginTop: 4 }}>
+            {fmtUSDFull(p.remainingCapacity)} remaining of a {fmtUSDFull(p.debtLimit)} constitutional limit
+          </div>
+        </div>
+      </div>
+
+      <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
+        Final maturity {p.finalMaturityYear} · interest rates {p.interestRateRangeLow.toFixed(3)}%–{p.interestRateRangeHigh.toFixed(2)}% · no bond anticipation notes outstanding.
+      </div>
+
+      <div style={{ marginTop: 14, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
+        <button
+          onClick={() => setExpanded((e) => !e)}
+          aria-expanded={expanded}
+          style={{ all: 'unset', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600 }}
+        >
+          <Caret open={expanded} /> {expanded ? 'Hide individual bond issues' : `Show the ${NC_BOND_ISSUES.length} individual bond issues`}
+        </button>
+        {expanded && (
+          <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {NC_BOND_ISSUES.map((b, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12.5, padding: '5px 0' }}>
+                <span>{b.purpose} <span className="muted">· {b.yearIssued}–{b.maturity} · {b.rate}</span></span>
+                <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{fmtUSDFull(b.balance)}</span>
+              </div>
+            ))}
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, padding: '5px 0', borderTop: '1px solid var(--border)', fontWeight: 700 }}>
+              <span>Total</span>
+              <span style={{ fontVariantNumeric: 'tabular-nums' }}>{fmtUSDFull(p.totalBondedDebt)}</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export { NC_2026_BUDGET_SOURCE_NOTE, NC_BOND_SOURCE_NOTE }
