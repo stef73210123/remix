@@ -1,13 +1,32 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
-import type { AnalysisDataset } from '@/lib/municipal/analysis'
+import type { AnalysisDataset, MeetingCase } from '@/lib/municipal/analysis'
 import { sentimentColor, fmtSent } from '../sentiment'
 
 interface Seg { key: string; label: string; count: number; sentiment: number }
-interface Col { date: string; segments: Seg[]; total: number }
+interface Col { date: string; segments: Seg[]; total: number; cases: MeetingCase[] }
+interface TooltipRow { label: string; score: number }
 
 function mean(a: number[]): number { return a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0 }
+
+/** Issue mode: who (which members) weighed in on the hovered case, and how
+ *  they leaned. Member mode: the flip side — every case the hovered member
+ *  weighed in on that same evening, and their score on each. */
+function tooltipRows(mode: 'member' | 'issue', col: Col, seg: Seg): TooltipRow[] {
+  if (mode === 'issue') {
+    const kase = col.cases.find((c) => (c.id || c.name) === seg.key)
+    return (kase?.memberPositions || [])
+      .map((p) => ({ label: p.member, score: p.score }))
+      .sort((a, b) => b.score - a.score)
+  }
+  const rows: TooltipRow[] = []
+  for (const c of col.cases) {
+    const p = c.memberPositions?.find((mp) => mp.member === seg.key)
+    if (p) rows.push({ label: c.name, score: p.score })
+  }
+  return rows.sort((a, b) => b.score - a.score)
+}
 function fmtDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
   if (isNaN(d.getTime())) return iso
@@ -26,7 +45,7 @@ const PLOT_H = 200
 export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }) {
   // Defaults to the by-issue view; "By member" remains a toggle away.
   const [mode, setMode] = useState<'member' | 'issue'>('issue')
-  const [hover, setHover] = useState<{ col: Col; seg: Seg } | null>(null)
+  const [hover, setHover] = useState<{ col: Col; seg: Seg; x: number; y: number } | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const meetings = useMemo(() => [...data.meetings].sort((a, b) => a.date.localeCompare(b.date)), [data])
@@ -44,13 +63,13 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
         const e = per.get(m)!
         return { key: m, label: m, count: e.c, sentiment: mean(e.s) }
       })
-      return { date: mt.date, segments, total: segments.reduce((s, x) => s + x.count, 0) }
+      return { date: mt.date, segments, total: segments.reduce((s, x) => s + x.count, 0), cases: mt.cases || [] }
     }
     const segments: Seg[] = (mt.cases || [])
       .map((c) => ({ key: c.id || c.name, label: c.name, count: (c.memberPositions || []).length, sentiment: c.sentimentScore }))
       .filter((s) => s.count > 0)
       .sort((a, b) => b.sentiment - a.sentiment)
-    return { date: mt.date, segments, total: segments.reduce((s, x) => s + x.count, 0) }
+    return { date: mt.date, segments, total: segments.reduce((s, x) => s + x.count, 0), cases: mt.cases || [] }
   }), [meetings, mode, roster])
 
   const maxTotal = Math.max(1, ...cols.map((c) => c.total))
@@ -111,8 +130,15 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
                     {col.segments.map((seg) => (
                       <div
                         key={seg.key}
-                        onMouseEnter={() => setHover({ col, seg })}
+                        onMouseEnter={(e) => {
+                          const r = e.currentTarget.getBoundingClientRect()
+                          setHover({ col, seg, x: r.left + r.width / 2, y: r.top })
+                        }}
                         onMouseLeave={() => setHover((h) => (h?.seg === seg ? null : h))}
+                        onClick={(e) => {
+                          const r = e.currentTarget.getBoundingClientRect()
+                          setHover((h) => (h?.seg === seg ? null : { col, seg, x: r.left + r.width / 2, y: r.top }))
+                        }}
                         title={`${fmtDate(col.date)} · ${seg.label} · ${fmtSent(seg.sentiment)} · ${seg.count} position${seg.count === 1 ? '' : 's'}`}
                         style={{
                           height: `${(seg.count / maxTotal) * PLOT_H}px`,
@@ -146,6 +172,40 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
           </span>
         </div>
       </div>
+
+      {/* Floating snapshot tooltip — fixed positioning so it isn't clipped by
+          the chart's own horizontal-scroll container, and reads the same on
+          tap (touch) as on hover. */}
+      {hover && (() => {
+        const rows = tooltipRows(mode, hover.col, hover.seg)
+        if (!rows.length) return null
+        return (
+          <div
+            style={{
+              position: 'fixed', left: hover.x, top: hover.y, transform: 'translate(-50%, calc(-100% - 8px))',
+              zIndex: 1400, background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8,
+              padding: '8px 10px', fontSize: 11, minWidth: 150, maxWidth: 240,
+              boxShadow: '0 8px 24px rgba(0,0,0,0.4)', pointerEvents: 'none',
+            }}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+              <span>{hover.seg.label}</span>
+              <span style={chipInline(hover.seg.sentiment)}>{fmtSent(hover.seg.sentiment)}</span>
+            </div>
+            <div className="muted" style={{ marginBottom: 4 }}>
+              {mode === 'issue' ? 'By member' : `${fmtDate(hover.col.date)} · by issue`}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {rows.map((r) => (
+                <div key={r.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label}</span>
+                  <span style={chipInline(r.score)}>{fmtSent(r.score)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      })()}
     </div>
   )
 }
