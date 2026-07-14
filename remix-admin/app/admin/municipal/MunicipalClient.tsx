@@ -9,6 +9,7 @@ import KeyIssues from './KeyIssues'
 import ElectionResults from './ElectionResults'
 import CommunityCalendar from './CommunityCalendar'
 import CommunityOrgs from './CommunityOrgs'
+import OpenPetitions from './OpenPetitions'
 import SchoolDistrict from './SchoolDistrict'
 import BoardSentiment, { type BoardScore } from './BoardProgress'
 import CivicActions from './CivicActions'
@@ -641,6 +642,7 @@ export default function MunicipalClient({
           {/* Community events calendar + the orgs behind them — Dashboard tab
               only. Sits at the bottom, after the town's own civic/financial data. */}
           {board === 'ALL' && town !== 'ALL' && <CommunityCalendar muniKey={town} />}
+          {board === 'ALL' && town !== 'ALL' && <OpenPetitions muniKey={town} />}
           {board === 'ALL' && town !== 'ALL' && <CommunityOrgs muniKey={town} />}
 
           {!data.dbOk && data.dbError && (
