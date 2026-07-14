@@ -192,3 +192,84 @@ export const NC_HOMEOWNER_TAX_IMPACT: HomeownerTaxImpact = {
 
 export const NC_2026_BUDGET_SOURCE_NOTE =
   'Source: Town of North Castle 2026 Adopted Budget — budget summary, appropriations, fund-balance and tax-cap worksheets prepared by the Finance Department. Distinct from the FY2025 actuals (ACFR) driving the revenue → spending flow above; this is the budget as adopted for 2026.'
+
+export interface BondIssue {
+  purpose: string
+  yearIssued: number
+  maturity: number
+  rate: string
+  balance: number
+}
+
+/** The Town's 9 outstanding general-obligation bond issues, balances as of
+ *  12/31/2025. Balances sum to the $20,701,000 total bonded debt outstanding
+ *  in NC_BOND_PROFILE. */
+export const NC_BOND_ISSUES: BondIssue[] = [
+  { purpose: 'Firehouse acquisition', yearIssued: 2006, maturity: 2026, rate: '3.973%', balance: 60000 },
+  { purpose: 'Sewer No. 2 treatment plant upgrade', yearIssued: 2007, maturity: 2037, rate: '3.630%', balance: 2035000 },
+  { purpose: 'Sewer nitrogen removal — Environmental Facilities Corp.', yearIssued: 2009, maturity: 2033, rate: '4.270%', balance: 1981000 },
+  { purpose: 'Public improvements', yearIssued: 2010, maturity: 2026, rate: '1.250%', balance: 50000 },
+  { purpose: 'Public improvements', yearIssued: 2011, maturity: 2026, rate: '1.50%–2.65%', balance: 205000 },
+  { purpose: 'Public improvements', yearIssued: 2014, maturity: 2044, rate: '1.50%–5.00%', balance: 7420000 },
+  { purpose: 'Water Project — EFC #18170', yearIssued: 2017, maturity: 2037, rate: '1.067%–3.574%', balance: 335000 },
+  { purpose: 'Public improvements', yearIssued: 2017, maturity: 2029, rate: '2.00%–5.00%', balance: 1430000 },
+  { purpose: 'Public improvements', yearIssued: 2021, maturity: 2036, rate: '2.00%–5.00%', balance: 7185000 },
+]
+
+export interface BondProfile {
+  moodysRating: string
+  moodysReaffirmedYear: number
+  outlook: string
+  bondSecurity: string
+  nyclassRating: string
+  totalBondedDebt: number
+  numberOfIssues: number
+  unamortizedPremium: number
+  totalLongTermDebt: number
+  dueWithinOneYear: number
+  principalDue2026: number
+  interestDue2026: number
+  debtService2026: number
+  debtServicePctNoncapital2026: number
+  debtServicePctNoncapital2024: number
+  finalMaturityYear: number
+  interestRateRangeLow: number
+  interestRateRangeHigh: number
+  bansOutstanding: number
+  debtLimit: number
+  netIndebtednessSubjectToLimit: number
+  debtLimitUtilizationPct: number
+  remainingCapacity: number
+}
+
+/** The Town's credit rating and debt-capacity snapshot at 12/31/2025, from
+ *  Moody's 2025 rating action and the Town's debt-service and legal
+ *  debt-margin schedules under NY Local Finance Law §104. */
+export const NC_BOND_PROFILE: BondProfile = {
+  moodysRating: 'Aaa',
+  moodysReaffirmedYear: 2025,
+  outlook: 'Stable',
+  bondSecurity: 'All Town bonds are general obligation bonds, backed by the full faith and credit of the Town, as required by NYS law',
+  nyclassRating: 'AAAm by S&P Global Ratings',
+  totalBondedDebt: 20701000,
+  numberOfIssues: 9,
+  unamortizedPremium: 774032,
+  totalLongTermDebt: 21475032,
+  dueWithinOneYear: 1976577,
+  principalDue2026: 1859000,
+  interestDue2026: 656222,
+  debtService2026: 2515222,
+  debtServicePctNoncapital2026: 0.057,
+  debtServicePctNoncapital2024: 0.068,
+  finalMaturityYear: 2044,
+  interestRateRangeLow: 1.067,
+  interestRateRangeHigh: 5.00,
+  bansOutstanding: 0,
+  debtLimit: 446448361,
+  netIndebtednessSubjectToLimit: 8911457,
+  debtLimitUtilizationPct: 0.02,
+  remainingCapacity: 437536904,
+}
+
+export const NC_BOND_SOURCE_NOTE =
+  'Source: Moody\'s 2025 rating action, and the Town\'s FY2025 debt-service, legal debt-margin, and bond-issue schedules. Balances and ratios as of 12/31/2025.'
