@@ -131,6 +131,39 @@ function nextMeetingDate(pattern: string | null, from: Date): Date | null {
   return best
 }
 
+/** Every date the recurring pattern lands on between `from` and `through`
+ *  (inclusive), not just the single soonest one — used to show a board's
+ *  full remaining-year schedule instead of a one-date tease. */
+function remainingYearMeetingDates(pattern: string | null, from: Date, through: Date): Date[] {
+  if (!pattern) return []
+  const p = pattern.toLowerCase()
+  const weekdayName = Object.keys(WEEKDAYS).find((w) => p.includes(w))
+  if (!weekdayName) return []
+  const weekday = WEEKDAYS[weekdayName]
+  const ords: number[] = []
+  for (const [k, v] of Object.entries(ORDINALS)) {
+    if (new RegExp(`(^|[^a-z0-9])${k}([^a-z0-9]|$)`).test(p)) ords.push(v)
+  }
+  if (ords.length === 0) return []
+  const uniq = Array.from(new Set(ords))
+  const base = new Date(from.getFullYear(), from.getMonth(), from.getDate())
+  const dates: Date[] = []
+  let y = base.getFullYear(), m = base.getMonth()
+  while (new Date(y, m, 1).getTime() <= through.getTime()) {
+    for (const n of uniq) {
+      const d = nthWeekday(y, m, weekday, n)
+      if (d && d.getTime() >= base.getTime() && d.getTime() <= through.getTime()) dates.push(d)
+    }
+    m += 1
+    if (m > 11) { m = 0; y += 1 }
+  }
+  return dates.sort((a, b) => a.getTime() - b.getTime())
+}
+
+function dayKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 
 const RECORDING_KINDS = new Set(['video_mp4', 'audio_mp3'])
 
@@ -342,21 +375,34 @@ export default function MunicipalClient({
   )
 
   // One "next meeting" row per tracked board: prefer a real ingested upcoming
-  // meeting (with its agenda); otherwise project the next date from the schedule.
+  // meeting (with its agenda); otherwise project the next date from the
+  // schedule. Town Board and Planning Board — the two boards this dashboard
+  // actually tracks — instead get every remaining date this calendar year,
+  // not just the next one, so residents can see the full rest-of-year schedule.
   const upcomingRows = useMemo(() => {
     const t0 = startOfToday()
     const today = new Date(t0)
+    const yearEnd = new Date(today.getFullYear(), 11, 31)
     const rows: { town: string; board: string; muniKey: string; bodyKey: string; date: Date | null; assets: Asset[]; pattern: string | null; projected: boolean }[] = []
     const meetings = data?.meetings ?? []
     for (const m of munisShown) {
       for (const b of m.bodies) {
         if (board !== 'ALL' && b.displayName !== board) continue
-        const ingested = meetings
-          .filter((mm) => mm.muni_key === m.key && mm.body_name === b.displayName && new Date(mm.scheduled_at).getTime() >= t0)
-          .sort((a, c) => new Date(a.scheduled_at).getTime() - new Date(c.scheduled_at).getTime())[0]
         const common = { town: m.name, board: b.displayName, muniKey: m.key, bodyKey: b.key, pattern: b.meetingPattern }
-        if (ingested) {
-          rows.push({ ...common, date: new Date(ingested.scheduled_at), assets: ingested.assets, projected: false })
+        const ingestedFuture = meetings
+          .filter((mm) => mm.muni_key === m.key && mm.body_name === b.displayName && new Date(mm.scheduled_at).getTime() >= t0)
+          .sort((a, c) => new Date(a.scheduled_at).getTime() - new Date(c.scheduled_at).getTime())
+
+        if (isOpen && (b.key === 'town_board' || b.key === 'planning')) {
+          for (const mm of ingestedFuture) {
+            rows.push({ ...common, date: new Date(mm.scheduled_at), assets: mm.assets, projected: false })
+          }
+          const ingestedDays = new Set(ingestedFuture.map((mm) => dayKey(new Date(mm.scheduled_at))))
+          for (const d of remainingYearMeetingDates(b.meetingPattern, today, yearEnd)) {
+            if (!ingestedDays.has(dayKey(d))) rows.push({ ...common, date: d, assets: [], projected: true })
+          }
+        } else if (ingestedFuture[0]) {
+          rows.push({ ...common, date: new Date(ingestedFuture[0].scheduled_at), assets: ingestedFuture[0].assets, projected: false })
         } else {
           rows.push({ ...common, date: nextMeetingDate(b.meetingPattern, today), assets: [], projected: true })
         }
@@ -407,24 +453,26 @@ export default function MunicipalClient({
         }
       })
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
-    // Only the single soonest upcoming meeting teases on the right of "Now";
-    // everything else is history on the left.
-    const nextRow = upcomingRows.find((r) => r.date) || upcomingRows[0]
-    const up: TimelineItem[] = nextRow
-      ? [{
-          key: `u_${nextRow.bodyKey}`,
-          date: nextRow.date,
-          dateSuffix: nextRow.projected ? ' *' : '',
-          dateTitle: nextRow.projected ? 'Projected from meeting schedule' : undefined,
-          fallbackLabel: nextRow.pattern || 'TBD',
-          board: nextRow.board,
-          boardHref: `/admin/municipal/board?muni=${nextRow.muniKey}&body=${nextRow.bodyKey}`,
-          town: nextRow.town,
-          past: false,
-          projected: nextRow.projected,
-          links: <AgendaLink assets={nextRow.assets} />,
-        }]
-      : []
+    // Every dated upcoming row teases on the right of "Now" — for most boards
+    // that's just the single soonest meeting, but Town Board and Planning
+    // Board (see upcomingRows above) each contribute their full remaining-year
+    // schedule here. A board with no parseable date at all still falls back
+    // to a single TBD row so it isn't silently dropped from the widget.
+    const dated = upcomingRows.filter((r) => r.date)
+    const upRows = dated.length > 0 ? dated : upcomingRows.slice(0, 1)
+    const up: TimelineItem[] = upRows.map((r) => ({
+      key: `u_${r.bodyKey}_${r.date ? dayKey(r.date) : 'tbd'}`,
+      date: r.date,
+      dateSuffix: r.projected ? ' *' : '',
+      dateTitle: r.projected ? 'Projected from meeting schedule' : undefined,
+      fallbackLabel: r.pattern || 'TBD',
+      board: r.board,
+      boardHref: `/admin/municipal/board?muni=${r.muniKey}&body=${r.bodyKey}`,
+      town: r.town,
+      past: false,
+      projected: r.projected,
+      links: <AgendaLink assets={r.assets} />,
+    }))
     return [...hist, ...up]
   }, [history, upcomingRows, meetingAnalysisByKey])
 

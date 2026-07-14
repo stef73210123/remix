@@ -79,7 +79,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   ],
   building: [
     {
-      department: 'Building Department',
+      department: 'Building Inspector',
       person: 'Rob Melillo',
       title: 'Building Inspector',
       phone: '(914) 273-3000 ext. 44',

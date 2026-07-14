@@ -91,11 +91,25 @@ function TrendChart({ points, fmtY, color = 'var(--primary)' }: {
       {pts.map((p, i) => (
         <circle key={p.year} cx={x(p.year)} cy={y(p.value)} r={hover === i ? 3.5 : 2.25} fill={color} />
       ))}
-      {pts.map((p, i) => (
-        <rect key={`h${p.year}`} x={x(p.year) - 10} y={PAD.t} width={20} height={plotH} fill="transparent"
-          onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ cursor: 'pointer' }} />
-      ))}
+      {/* Hover targets span the midpoint to each neighbor (a Voronoi split along
+          x), not a fixed width — points bunched close together (e.g. 5 annual
+          years squeezed against decade-spaced anchors) would otherwise get
+          overlapping hit-areas and a flickery, "smushed" tooltip. */}
+      {pts.map((p, i) => {
+        const left = i === 0 ? PAD.l : (x(pts[i - 1].year) + x(p.year)) / 2
+        const right = i === pts.length - 1 ? W - PAD.r : (x(p.year) + x(pts[i + 1].year)) / 2
+        return (
+          <rect key={`h${p.year}`} x={left} y={PAD.t} width={Math.max(1, right - left)} height={plotH} fill="transparent"
+            onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ cursor: 'pointer' }} />
+        )
+      })}
       <text x={x(minYear)} y={H - 4} textAnchor="start" fontSize={9} fill="var(--muted)">{minYear}</text>
+      {/* A decennial-census anchor (e.g. 2010) falling strictly between the
+          endpoints gets its own tick, so a long population/households trend
+          reads as three reference points instead of just its two ends. */}
+      {pts.some((p) => p.year === 2010 && p.year > minYear && p.year < maxYear) && (
+        <text x={x(2010)} y={H - 4} textAnchor="middle" fontSize={9} fill="var(--muted)">2010</text>
+      )}
       {maxYear !== minYear && (
         <text x={x(maxYear)} y={H - 4} textAnchor="end" fontSize={9} fill="var(--muted)">{maxYear}</text>
       )}

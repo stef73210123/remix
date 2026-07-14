@@ -152,7 +152,10 @@ export default function MeetingTimeline({
                   ) : it.board ? (
                     <div style={{ fontSize: 13, marginTop: 3 }}>{it.board}</div>
                   ) : null}
-                  {it.town && <div className="muted" style={{ fontSize: 12 }}>{it.town}</div>}
+                  {/* Town name only carries information for a real (past) meeting —
+                      an upcoming/projected row already names its board right above,
+                      so repeating the town there is pure duplication. */}
+                  {it.past && it.town && <div className="muted" style={{ fontSize: 12 }}>{it.town}</div>}
                   {(it.links || it.transcriptLink) && (
                     <div style={{ marginTop: 8, display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
                       {it.links}
