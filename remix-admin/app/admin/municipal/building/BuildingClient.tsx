@@ -9,6 +9,7 @@ import CivicActions from '@/app/admin/municipal/CivicActions'
 import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/MeetingTimeline'
 import MeetingList from '@/app/admin/municipal/MeetingList'
 import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipal/permits'
+import { getContractorWebsite } from '@/lib/municipal/contractorLinks'
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
 import BoardStaffCards from '@/app/admin/municipal/board/BoardStaffCards'
 import BoardKeyDocs from '@/app/admin/municipal/board/BoardKeyDocs'
@@ -138,7 +139,7 @@ function StageSelect({ value, onChange }: { value: ScatterStage; onChange: (v: S
 }
 
 /** Horizontal magnitude bars (label · track · value), sorted high→low. */
-function BarList({ rows, color }: { rows: { label: string; count: number; extra?: string }[]; color?: (label: string) => string }) {
+function BarList({ rows, color }: { rows: { label: string; count: number; extra?: string; href?: string }[]; color?: (label: string) => string }) {
   const max = Math.max(...rows.map((r) => r.count), 1)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -146,7 +147,18 @@ function BarList({ rows, color }: { rows: { label: string; count: number; extra?
         <div key={r.label} style={{ display: 'grid', gridTemplateColumns: '150px 1fr auto', alignItems: 'center', gap: 10 }}>
           <div style={{ fontSize: 12.5, display: 'flex', alignItems: 'center', gap: 7, minWidth: 0 }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: color ? color(r.label) : 'var(--primary)', flex: '0 0 auto' }} />
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label}</span>
+            {r.href ? (
+              <a
+                href={r.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--primary-light)' }}
+              >
+                {r.label}
+              </a>
+            ) : (
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label}</span>
+            )}
           </div>
           <div style={{ background: 'var(--panel-2)', borderRadius: 5, height: 16, overflow: 'hidden' }}>
             <div style={{ width: `${(r.count / max) * 100}%`, height: '100%', background: color ? color(r.label) : 'var(--primary)', opacity: 0.85, borderRadius: 5 }} />
@@ -501,9 +513,9 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   // Charts default to the most recent year with real data once known.
   const activeChartYear: YearFilter = chartYear ?? latestYear ?? 'ALL'
   const activePipelineYear: YearFilter = pipelineYear ?? latestYear ?? 'ALL'
-  // Scatter and contractors default to all years (long-running/rare permits
-  // otherwise get filtered down to nothing on a single-year default).
-  const activeScatterYear: YearFilter = scatterYear ?? 'ALL'
+  // Scatter defaults to 2025; contractors default to all years (long-running/
+  // rare permits otherwise get filtered down to nothing on a single-year default).
+  const activeScatterYear: YearFilter = scatterYear ?? 2025
   const activeContractorYear: YearFilter = contractorYear ?? 'ALL'
 
   // Permit categories present in the data, for the type-filter dropdowns —
@@ -588,6 +600,13 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       }))
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
   }, [dataset])
+  // Most recent permit date in the dataset — flags how fresh the offline PDF
+  // extract actually is, since it doesn't auto-refresh with the Town's own records.
+  const latestPermitDate = useMemo(() => {
+    if (!dataset) return null
+    const dates = dataset.recent.map((p) => p.permitIso).filter((d): d is string => !!d).sort()
+    return dates.length ? dates[dates.length - 1] : null
+  }, [dataset])
 
   // OpenNorthCastle is single-jurisdiction, so the town crumb is implied and
   // skipped there; the paywalled Remix build keeps it (multiple towns).
@@ -662,7 +681,14 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           <JurisdictionMap muni={muni} permits={permitMarkers} onlyPermits />
 
           {/* Recent permit activity — directly below the map. */}
-          <div style={{ marginBottom: 8 }}><SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} /></div>
+          <div style={{ marginBottom: 8 }}>
+            <SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} />
+            {latestPermitDate && (
+              <div className="muted" style={{ fontSize: 11 }}>
+                Data current as of {fmtDate(latestPermitDate)} — more recent permit records have been requested from the Building Department.
+              </div>
+            )}
+          </div>
           <MeetingTimeline
             items={timelineItems}
             selectedKey={selectedPermitKey}
@@ -766,7 +792,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           />
           <div className="card" style={{ padding: 16, marginBottom: 26 }}>
             {contractorRows.length > 0 ? (
-              <BarList rows={contractorRows.map((c) => ({ label: c.name, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined }))} />
+              <BarList rows={contractorRows.map((c) => ({ label: c.name, count: c.count, extra: c.cost ? fmtUSDshort(c.cost) : undefined, href: getContractorWebsite(c.name) }))} />
             ) : (
               <div className="muted" style={{ fontSize: 13 }}>No contractor-attributed permits in {yearLabel(activeContractorYear)}.</div>
             )}
