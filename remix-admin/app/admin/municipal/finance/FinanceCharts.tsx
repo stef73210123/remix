@@ -34,13 +34,6 @@ const CATEGORY_COLORS_2026: Record<string, string> = {
   'Sewer Districts': '#9b7fd4',
   'Water Districts': '#c9973f',
 }
-const CATEGORY_COLORS_CHANGE: Record<string, string> = {
-  'General Funds': '#5a9bd4',
-  'Sewer & Water': '#9b7fd4',
-  'Street Lighting': '#d4767a',
-  'Ambulance': '#0ea5e9',
-  'Other Special Districts': '#e8813a',
-}
 const FUND_COLORS: Record<string, string> = {
   'General Fund': '#5a9bd4',
   'Highway Fund': '#e8813a',
@@ -65,21 +58,93 @@ export function Caret({ open }: { open: boolean }) {
   )
 }
 
-type ApproMode = '2026' | 'change'
+interface TreemapRect { x: number; y: number; w: number; h: number }
+
+/** Squarified treemap layout (Bruls/Huizing/van Wijk) — lays out `items`
+ *  (pre-sorted descending by `.value`) into the box (x, y, w, h), each row
+ *  filling the box's shorter dimension so cells stay close to square rather
+ *  than degenerating into slivers. */
+function squarify<T extends { value: number }>(items: T[], x: number, y: number, w: number, h: number): (T & TreemapRect)[] {
+  const total = items.reduce((s, it) => s + it.value, 0)
+  const area = w * h
+  const scaled = items.map((it) => ({ ...it, area: total > 0 ? (it.value / total) * area : 0 }))
+  const result: (T & TreemapRect)[] = []
+  let remaining = scaled
+  let rx = x, ry = y, rw = w, rh = h
+
+  const rowSum = (row: typeof scaled) => row.reduce((s, it) => s + it.area, 0)
+  const worst = (row: typeof scaled, side: number) => {
+    if (!row.length) return Infinity
+    const sum = rowSum(row)
+    const rmax = Math.max(...row.map((it) => it.area))
+    const rmin = Math.min(...row.map((it) => it.area))
+    const sideSq = side * side
+    const sumSq = sum * sum
+    return Math.max((sideSq * rmax) / sumSq, sumSq / (sideSq * rmin))
+  }
+
+  while (remaining.length) {
+    const side = Math.min(rw, rh)
+    let row = [remaining[0]]
+    let i = 1
+    while (i < remaining.length) {
+      const next = [...row, remaining[i]]
+      if (worst(next, side) <= worst(row, side)) { row = next; i++ } else break
+    }
+    const rowArea = rowSum(row)
+    if (rw <= rh) {
+      const stripH = rw > 0 ? rowArea / rw : 0
+      let cx = rx
+      for (const it of row) {
+        const iw = stripH > 0 ? it.area / stripH : 0
+        result.push({ ...it, x: cx, y: ry, w: iw, h: stripH })
+        cx += iw
+      }
+      ry += stripH
+      rh -= stripH
+    } else {
+      const stripW = rh > 0 ? rowArea / rh : 0
+      let cy = ry
+      for (const it of row) {
+        const ih = stripW > 0 ? it.area / stripW : 0
+        result.push({ ...it, x: rx, y: cy, w: stripW, h: ih })
+        cy += ih
+      }
+      rx += stripW
+      rw -= stripW
+    }
+    remaining = remaining.slice(row.length)
+  }
+  return result
+}
+
+/** Diverging fill for a % year-over-year change — green growth, red decline,
+ *  a fixed neutral gray at 0%, scaled by magnitude (capped at ±15%) rather
+ *  than blended toward the page background, so even a near-zero box reads
+ *  as a visible, legible neutral tile instead of an almost-blank one. */
+function yoyColor(pct: number): string {
+  const cap = 0.15
+  const t = Math.min(Math.abs(pct) / cap, 1)
+  const hue = pct >= 0 ? '#3d9c72' : '#ca615f'
+  return `color-mix(in srgb, ${hue} ${Math.round(t * 100)}%, #93a0ad)`
+}
+
+type ApproMode = 'treemap' | '2026'
 const APPROP_MODES: { value: ApproMode; label: string }[] = [
+  { value: 'treemap', label: 'Value, % of total, % YoY' },
   { value: '2026', label: '2026 detail, by fund' },
-  { value: 'change', label: '2025 → 2026 change' },
 ]
 
-/** Appropriations, as a single drill-down list rather than two always-open
- *  charts: category rows are condensed to one bar each (the composition or
- *  the year-over-year comparison, depending on the mode picked from the
- *  dropdown), and a category expands in place to reveal its individual
- *  funds/districts — the hierarchy the source sheets actually have, without
- *  the clutter of a segmented stacked bar or a treemap/sunburst. */
+/** Appropriations, as a single drill-down view rather than several
+ *  always-open charts: the default mode is a treemap sized by 2026 value and
+ *  colored by year-over-year change, with a category list below it (also
+ *  the treemap's table-view fallback, since a couple of the smaller
+ *  categories are too small to show a size-legible box) that expands in
+ *  place to each category's individual funds/districts. */
 export function AppropriationsExplorer() {
-  const [mode, setMode] = useState<ApproMode>('2026')
+  const [mode, setMode] = useState<ApproMode>('treemap')
   const [openCategory, setOpenCategory] = useState<string | null>(null)
+  const [hoverCategory, setHoverCategory] = useState<string | null>(null)
 
   const toggle = (cat: string) => setOpenCategory((c) => (c === cat ? null : cat))
 
@@ -161,63 +226,121 @@ export function AppropriationsExplorer() {
     )
   }
 
-  // mode === 'change'
+  // mode === 'treemap'
   const categories = Array.from(new Set(NC_2025_VS_2026.map((r) => r.category)))
   const by2026 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2026)
   const by2025 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2025)
   const rows = categories
-    .map((cat) => ({
-      category: cat, v2026: by2026.get(cat) ?? 0, v2025: by2025.get(cat) ?? 0,
-      funds: NC_2025_VS_2026.filter((r) => r.category === cat),
-    }))
-    .sort((a, b) => b.v2026 - a.v2026)
-  const grandTotal2026 = rows.reduce((s, r) => s + r.v2026, 0)
-  const grandTotal2025 = rows.reduce((s, r) => s + r.v2025, 0)
-  const grandChange = grandTotal2025 > 0 ? (grandTotal2026 - grandTotal2025) / grandTotal2025 : null
-  const max = Math.max(...rows.map((r) => r.v2026), 1)
+    .map((cat) => {
+      const value = by2026.get(cat) ?? 0
+      const v2025 = by2025.get(cat) ?? 0
+      return {
+        category: cat, value, v2025,
+        yoy: v2025 > 0 ? (value - v2025) / v2025 : 0,
+        funds: NC_2025_VS_2026.filter((r) => r.category === cat),
+      }
+    })
+    .sort((a, b) => b.value - a.value)
+  const grandTotal = rows.reduce((s, r) => s + r.value, 0)
+
+  const TM_W = 640, TM_H = 200
+  const rects = squarify(rows, 0, 0, TM_W, TM_H)
 
   return (
     <div>
       {header}
+      <div style={{ position: 'relative', width: '100%', aspectRatio: `${TM_W} / ${TM_H}`, marginBottom: 12 }}>
+        {rects.map((r) => {
+          const pctOfTotal = grandTotal > 0 ? r.value / grandTotal : 0
+          const big = r.w > 90 && r.h > 46
+          const medium = !big && r.w > 46 && r.h > 20
+          const isHover = hoverCategory === r.category
+          return (
+            <div
+              key={r.category}
+              onMouseEnter={() => setHoverCategory(r.category)}
+              onMouseLeave={() => setHoverCategory((c) => (c === r.category ? null : c))}
+              onClick={() => toggle(r.category)}
+              title={`${r.category}: ${fmtUSDFull(r.value)} · ${(pctOfTotal * 100).toFixed(1)}% of total · ${fmtPct(r.yoy)} YoY`}
+              style={{
+                position: 'absolute',
+                left: `${(r.x / TM_W) * 100}%`, top: `${(r.y / TM_H) * 100}%`,
+                width: `${(r.w / TM_W) * 100}%`, height: `${(r.h / TM_H) * 100}%`,
+                boxSizing: 'border-box', border: '2px solid var(--panel)',
+                background: yoyColor(r.yoy), cursor: 'pointer',
+                opacity: hoverCategory && !isHover ? 0.55 : 1,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                padding: 4, overflow: 'hidden', textAlign: 'center', transition: 'opacity 0.1s',
+              }}
+            >
+              {(big || medium) && (
+                <div style={{ fontSize: big ? 12.5 : 11, fontWeight: 700, color: '#fff', lineHeight: 1.25, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                  {r.category}
+                </div>
+              )}
+              {big && (
+                <>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginTop: 2, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>{fmtUSD(r.value)}</div>
+                  <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.92)', marginTop: 1, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                    {(pctOfTotal * 100).toFixed(1)}% of total · {fmtPct(r.yoy)} YoY
+                  </div>
+                </>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="muted" style={{ fontSize: 11, display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
+        <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(0.15), marginRight: 4, verticalAlign: 'middle' }} />Growth</span>
+        <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(0), marginRight: 4, verticalAlign: 'middle' }} />Flat</span>
+        <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(-0.15), marginRight: 4, verticalAlign: 'middle' }} />Decline</span>
+        <span style={{ marginLeft: 'auto' }}>Box size = share of {fmtUSDFull(grandTotal)} total</span>
+      </div>
+
+      {/* Doubles as the treemap's table view — the smallest 2-3 categories
+          can't fit a legible box label, so every category's full value / %
+          of total / % YoY is always available here regardless of box size. */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {rows.map((r) => {
-          const change = r.v2026 - r.v2025
-          const pct = r.v2025 > 0 ? change / r.v2025 : null
-          const color = CATEGORY_COLORS_CHANGE[r.category]
           const open = openCategory === r.category
+          const pctOfTotal = grandTotal > 0 ? r.value / grandTotal : 0
           return (
             <div key={r.category}>
               <button
                 onClick={() => toggle(r.category)}
+                onMouseEnter={() => setHoverCategory(r.category)}
+                onMouseLeave={() => setHoverCategory((c) => (c === r.category ? null : c))}
                 aria-expanded={open}
-                style={{ all: 'unset', cursor: 'pointer', display: 'block', width: '100%', padding: '6px 0', boxSizing: 'border-box' }}
+                style={{
+                  all: 'unset', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  width: '100%', padding: '6px 4px', boxSizing: 'border-box', fontSize: 12.5, borderRadius: 4,
+                  background: hoverCategory === r.category ? 'var(--panel-2)' : undefined,
+                }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5 }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                    <Caret open={open} />
-                    <span style={{ width: 9, height: 9, borderRadius: 2, background: color, flexShrink: 0 }} />
-                    {r.category}
-                  </span>
-                  <span style={{ fontVariantNumeric: 'tabular-nums' }}>
-                    <span style={{ fontWeight: 600 }}>{fmtUSD(r.v2026)}</span>
-                    {pct != null && <span style={{ marginLeft: 8, color: change >= 0 ? '#3d9c72' : '#ca615f', fontWeight: 600 }}>{fmtPct(pct)}</span>}
-                  </span>
-                </div>
-                <div style={{ height: 8, borderRadius: 4, background: 'var(--panel-2)', overflow: 'hidden' }}>
-                  <div style={{ width: `${Math.max((r.v2026 / max) * 100, 1.5)}%`, height: '100%', background: color, opacity: 0.85 }} />
-                </div>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <Caret open={open} />
+                  <span style={{ width: 9, height: 9, borderRadius: 2, background: yoyColor(r.yoy), flexShrink: 0 }} />
+                  {r.category}
+                </span>
+                <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  <span style={{ fontWeight: 600 }}>{fmtUSD(r.value)}</span>
+                  <span className="muted" style={{ marginLeft: 8 }}>{(pctOfTotal * 100).toFixed(1)}% of total</span>
+                  <span style={{ marginLeft: 8, fontWeight: 600, color: r.yoy >= 0 ? '#3d9c72' : '#ca615f' }}>{fmtPct(r.yoy)} YoY</span>
+                </span>
               </button>
               {open && (
-                <div style={{ paddingLeft: 24, marginTop: 6, marginBottom: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ paddingLeft: 24, marginTop: 4, marginBottom: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {r.funds.map((f) => {
-                    const fchange = f.appropriation2026 - f.appropriation2025
-                    const fpct = f.appropriation2025 > 0 ? fchange / f.appropriation2025 : null
+                    const fyoy = f.appropriation2025 > 0 ? (f.appropriation2026 - f.appropriation2025) / f.appropriation2025 : null
+                    const fpctOfCategory = r.value > 0 ? f.appropriation2026 / r.value : 0
                     return (
                       <div key={f.fund} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, gap: 8 }}>
                         <span>{f.fund} <span className="muted">· {f.code}</span></span>
                         <span style={{ fontVariantNumeric: 'tabular-nums' }}>
                           {fmtUSD(f.appropriation2026)}
-                          {fpct != null && <span className="muted" style={{ marginLeft: 6 }}>{fmtPct(fpct)}</span>}
+                          <span className="muted" style={{ marginLeft: 6 }}>{(fpctOfCategory * 100).toFixed(0)}% of category</span>
+                          {fyoy != null && <span className="muted" style={{ marginLeft: 6 }}>{fmtPct(fyoy)} YoY</span>}
                         </span>
                       </div>
                     )
@@ -229,8 +352,7 @@ export function AppropriationsExplorer() {
         })}
       </div>
       <div className="muted" style={{ fontSize: 11, marginTop: 12 }}>
-        {categories.length} categories · {NC_2025_VS_2026.length} funds/districts · {fmtUSDFull(grandTotal2026)} total
-        {grandChange != null && <strong style={{ marginLeft: 6, color: grandChange >= 0 ? '#3d9c72' : '#ca615f' }}> {fmtPct(grandChange)} vs. 2025</strong>}
+        {categories.length} categories · {NC_2025_VS_2026.length} funds/districts · {fmtUSDFull(grandTotal)} total
       </div>
     </div>
   )

@@ -34,6 +34,17 @@
   font-family: var(--font-sans);
 }
 
+/* iPadOS/iOS Safari rubber-bands the whole page on overscroll at the very
+   top/bottom of the document, translating everything — including the fixed
+   .civic-bottom-bar and the SiteFooter disclaimer text right above it —
+   along with the bounce. That reads as the footer "scrolling" instead of
+   staying put once you've hit the true bottom of the page. Disabling the
+   bounce removes the glitch outright; scoped to this flavor since only it
+   has the fixed bottom bar this behavior affects. */
+html[data-flavor='opennorthcastle'] {
+  overscroll-behavior-y: none;
+}
+
 /* White cards, cooler radius, soft cool shadow (no heavy dark shadows). */
 [data-flavor='opennorthcastle'] .card {
   border-radius: 10px;
