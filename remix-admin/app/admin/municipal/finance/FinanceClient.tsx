@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import dynamic from 'next/dynamic'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
@@ -16,6 +17,12 @@ import {
   NC_2026_BUDGET_SOURCE_NOTE, NC_BOND_SOURCE_NOTE, NC_TOP_TAXPAYERS_SOURCE_NOTE,
 } from './FinanceCharts'
 import { BondSimulator } from './BondSimulator'
+
+// Leaflet touches `window`, so the map is client-only (no SSR).
+const TopTaxpayersMap = dynamic(() => import('./TopTaxpayersMap'), {
+  ssr: false,
+  loading: () => <div className="card" style={{ height: 240, marginBottom: 12 }} />,
+})
 
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -135,6 +142,7 @@ export default function FinanceClient({ userName, muni, budgets }: {
               Top 50 Taxpayers
             </div>
             <div className="card" style={{ padding: 16 }}>
+              <TopTaxpayersMap />
               <TopTaxpayersList />
             </div>
             <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5, maxWidth: 760 }}>{NC_TOP_TAXPAYERS_SOURCE_NOTE}</div>

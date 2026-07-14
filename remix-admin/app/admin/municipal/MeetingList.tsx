@@ -69,12 +69,6 @@ export default function MeetingList({
           else itemRefs.current.delete(it.key)
         }
 
-        // The town/board name only carries information the first time it
-        // appears in a run of consecutive rows — repeating it on every row
-        // for a board that meets often just clutters the list.
-        const prev = i > 0 ? rows[i - 1] : undefined
-        const showGroup = !prev || prev.board !== it.board || prev.town !== it.town
-
         if (it.analysis) {
           return (
             <MeetingRow
@@ -86,7 +80,7 @@ export default function MeetingList({
               selected={it.key === selectedKey}
               onSelect={onSelect ? () => onSelect(it.key) : undefined}
               registerRef={registerRef}
-              boardLabel={showGroup ? it.board : undefined}
+              boardLabel={it.board}
               boardHref={it.boardHref}
             />
           )
@@ -111,17 +105,15 @@ export default function MeetingList({
             </div>
             <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap', marginTop: 4 }}>
               <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap', flex: 1, minWidth: 140 }}>
-                {showGroup && (
-                  it.boardHref ? (
-                    <a href={it.boardHref} style={{ fontSize: 13, fontWeight: 600, color: 'var(--primary-light)' }}>{it.board}</a>
-                  ) : it.board ? (
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>{it.board}</span>
-                  ) : null
-                )}
+                {it.boardHref ? (
+                  <a href={it.boardHref} style={{ fontSize: 13, fontWeight: 600, color: 'var(--primary-light)' }}>{it.board}</a>
+                ) : it.board ? (
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{it.board}</span>
+                ) : null}
                 {/* Town only carries information on the paywalled Remix build
                     (several towns' boards can appear together there); it's
                     always redundant on single-jurisdiction OpenNorthCastle. */}
-                {!isOpen && showGroup && it.past && it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
+                {!isOpen && it.past && it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
               </div>
               {it.links && (
                 <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>
