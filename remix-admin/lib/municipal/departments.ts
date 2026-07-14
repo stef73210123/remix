@@ -65,7 +65,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   ],
   finance: [
     {
-      department: 'Finance Department',
+      department: 'Director of Finance',
       person: 'Abbas Sura',
       title: 'Director of Finance',
       phone: '(914) 273-3000 ext. 48',
