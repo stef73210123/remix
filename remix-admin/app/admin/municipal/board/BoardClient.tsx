@@ -179,7 +179,6 @@ export default function BoardClient({ userName }: { userName: string }) {
           // the same entry in the other.
           key: `${muni}_${body}_${dateKey}`,
           date: new Date(mtg.scheduled_at),
-          title: mtg.title,
           past,
           links: hasDocs ? <DocLinks assets={mtg.assets} /> : undefined,
           transcriptLink: hasTranscript ? (

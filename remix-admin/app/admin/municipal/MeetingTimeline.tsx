@@ -4,6 +4,7 @@ import { Fragment, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { syncScrollIntoView } from './syncSelection'
 import type { MeetingAnalysis } from '@/lib/municipal/analysis'
 import { fmtDateShort } from '@/lib/municipal/date'
+import { isOpen } from '@/lib/flavor'
 
 export interface TimelineItem {
   key: string
@@ -14,14 +15,14 @@ export interface TimelineItem {
   /** Appended to the formatted date, e.g. ' *' to flag a projected date. */
   dateSuffix?: string
   dateTitle?: string
-  /** Small secondary line under the date (meeting title). */
-  title?: string | null
-  /** One-line agenda summary, shown (truncated) under the title where available. */
+  /** One-line agenda summary, shown (truncated) where available. */
   summary?: string | null
   /** Board name; omit (empty string) on a single-board page. */
   board?: string
   boardHref?: string
-  /** Town name; omit on a single-town page. */
+  /** Town name; omit on a single-town page. Rendered on the paywalled Remix
+   *  build only (it can list several towns' boards together); OpenNorthCastle
+   *  is single-jurisdiction so a repeated town name is pure clutter there. */
   town?: string
   past: boolean
   projected?: boolean
@@ -140,11 +141,6 @@ export default function MeetingTimeline({
                   <div style={{ fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap', opacity: it.past ? 0.85 : 1 }} title={it.dateTitle}>
                     {it.date ? `${fmtDateShort(it.date)}${it.dateSuffix || ''}` : (it.fallbackLabel || 'TBD')}
                   </div>
-                  {it.title && (
-                    <div className="muted" style={{ fontSize: 12, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 174, marginLeft: 'auto', marginRight: 'auto' }}>
-                      {it.title}
-                    </div>
-                  )}
                   {it.boardHref ? (
                     <div style={{ fontSize: 13, marginTop: 3 }}>
                       <a href={it.boardHref} style={{ color: 'var(--primary-light)' }}>{it.board}</a>
@@ -152,10 +148,12 @@ export default function MeetingTimeline({
                   ) : it.board ? (
                     <div style={{ fontSize: 13, marginTop: 3 }}>{it.board}</div>
                   ) : null}
-                  {/* Town name only carries information for a real (past) meeting —
-                      an upcoming/projected row already names its board right above,
-                      so repeating the town there is pure duplication. */}
-                  {it.past && it.town && <div className="muted" style={{ fontSize: 12 }}>{it.town}</div>}
+                  {/* Town name only carries information on the paywalled Remix
+                      build (several towns' boards can appear together there),
+                      and only for a real past meeting — an upcoming/projected
+                      row already names its board right above. OpenNorthCastle
+                      is single-jurisdiction, so it never repeats the town. */}
+                  {!isOpen && it.past && it.town && <div className="muted" style={{ fontSize: 12 }}>{it.town}</div>}
                   {(it.links || it.transcriptLink) && (
                     <div style={{ marginTop: 8, display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
                       {it.links}

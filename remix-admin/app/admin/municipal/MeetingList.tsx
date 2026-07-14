@@ -5,6 +5,7 @@ import { type TimelineItem } from './MeetingTimeline'
 import { syncScrollIntoView } from './syncSelection'
 import { MeetingRow } from './board/MeetingAnalysisList'
 import { fmtDateShort } from '@/lib/municipal/date'
+import { isOpen } from '@/lib/flavor'
 
 /**
  * Fixed-height meetings list shown beneath the horizontal timeline: newest
@@ -117,11 +118,10 @@ export default function MeetingList({
                     <span style={{ fontSize: 13, fontWeight: 600 }}>{it.board}</span>
                   ) : null
                 )}
-                {/* Town and the meeting title (usually just "<Board> Meeting")
-                    are redundant with the board link right above for an
-                    upcoming/projected row, so only show them for past,
-                    already-ingested meetings where they carry real info. */}
-                {showGroup && it.past && it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
+                {/* Town only carries information on the paywalled Remix build
+                    (several towns' boards can appear together there); it's
+                    always redundant on single-jurisdiction OpenNorthCastle. */}
+                {!isOpen && showGroup && it.past && it.town && <span className="muted" style={{ fontSize: 12 }}>{it.town}</span>}
               </div>
               {it.links && (
                 <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'flex-end' }}>
@@ -129,9 +129,6 @@ export default function MeetingList({
                 </div>
               )}
             </div>
-            {it.past && it.title && (
-              <div className="muted" style={{ fontSize: 12, marginTop: 5, overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.title}</div>
-            )}
             {it.summary && (
               <div
                 className="muted"

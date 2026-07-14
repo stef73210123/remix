@@ -433,7 +433,6 @@ export default function MunicipalClient({
           // the same entry in the other.
           key: itemKey,
           date: new Date(mtg.scheduled_at),
-          title: mtg.title,
           summary: analysis?.meetingSummary,
           // Full case-level analysis, when this meeting's board has a
           // transcript-analysis dataset — lets MeetingList render the same
