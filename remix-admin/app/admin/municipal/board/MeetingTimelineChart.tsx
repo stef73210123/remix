@@ -130,11 +130,21 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
                     {col.segments.map((seg) => (
                       <div
                         key={seg.key}
-                        onMouseEnter={(e) => {
+                        onPointerEnter={(e) => {
+                          // Touch taps synthesize a pointerenter/mouseenter right
+                          // before their click, which would otherwise open the
+                          // tooltip and then have the click's toggle immediately
+                          // close it again (a visible flash, needing a second tap
+                          // to "stick"). Only real mice get a live hover preview;
+                          // touch/pen rely solely on the click toggle below.
+                          if (e.pointerType !== 'mouse') return
                           const r = e.currentTarget.getBoundingClientRect()
                           setHover({ col, seg, x: r.left + r.width / 2, y: r.top })
                         }}
-                        onMouseLeave={() => setHover((h) => (h?.seg === seg ? null : h))}
+                        onPointerLeave={(e) => {
+                          if (e.pointerType !== 'mouse') return
+                          setHover((h) => (h?.seg === seg ? null : h))
+                        }}
                         onClick={(e) => {
                           const r = e.currentTarget.getBoundingClientRect()
                           setHover((h) => (h?.seg === seg ? null : { col, seg, x: r.left + r.width / 2, y: r.top }))
