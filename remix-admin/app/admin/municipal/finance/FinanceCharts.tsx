@@ -548,15 +548,25 @@ export function BondRatingProfile() {
         </button>
         {expanded && (
           <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--muted)', paddingBottom: 4 }}>
+              <span style={{ width: 82, textAlign: 'right', flexShrink: 0 }}>Original par</span>
+              <span style={{ width: 82, textAlign: 'right', flexShrink: 0 }}>Balance</span>
+            </div>
             {NC_BOND_ISSUES.map((b, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12.5, padding: '5px 0' }}>
                 <span>{b.purpose} <span className="muted">· {b.yearIssued}–{b.maturity} · {b.rate}</span></span>
-                <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{fmtUSDFull(b.balance)}</span>
+                <span style={{ display: 'flex', gap: 10, fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
+                  <span className="muted" style={{ width: 82, textAlign: 'right' }}>{fmtUSDFull(b.originalPar)}</span>
+                  <span style={{ width: 82, textAlign: 'right', fontWeight: 600 }}>{fmtUSDFull(b.balance)}</span>
+                </span>
               </div>
             ))}
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, padding: '5px 0', borderTop: '1px solid var(--border)', fontWeight: 700 }}>
               <span>Total</span>
-              <span style={{ fontVariantNumeric: 'tabular-nums' }}>{fmtUSDFull(p.totalBondedDebt)}</span>
+              <span style={{ display: 'flex', gap: 10, fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
+                <span style={{ width: 82, textAlign: 'right' }}>{fmtUSDFull(NC_BOND_ISSUES.reduce((s, b) => s + b.originalPar, 0))}</span>
+                <span style={{ width: 82, textAlign: 'right' }}>{fmtUSDFull(p.totalBondedDebt)}</span>
+              </span>
             </div>
           </div>
         )}

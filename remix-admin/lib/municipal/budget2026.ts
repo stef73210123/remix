@@ -198,22 +198,24 @@ export interface BondIssue {
   yearIssued: number
   maturity: number
   rate: string
+  originalPar: number
   balance: number
 }
 
-/** The Town's 9 outstanding general-obligation bond issues, balances as of
- *  12/31/2025. Balances sum to the $20,701,000 total bonded debt outstanding
- *  in NC_BOND_PROFILE. */
+/** The Town's 9 outstanding general-obligation bond issues — original par
+ *  (issue) amount and balance outstanding as of 12/31/2025. Original par
+ *  sums to $35,875,582; balances sum to the $20,701,000 total bonded debt
+ *  outstanding in NC_BOND_PROFILE. */
 export const NC_BOND_ISSUES: BondIssue[] = [
-  { purpose: 'Firehouse acquisition', yearIssued: 2006, maturity: 2026, rate: '3.973%', balance: 60000 },
-  { purpose: 'Sewer No. 2 treatment plant upgrade', yearIssued: 2007, maturity: 2037, rate: '3.630%', balance: 2035000 },
-  { purpose: 'Sewer nitrogen removal — Environmental Facilities Corp.', yearIssued: 2009, maturity: 2033, rate: '4.270%', balance: 1981000 },
-  { purpose: 'Public improvements', yearIssued: 2010, maturity: 2026, rate: '1.250%', balance: 50000 },
-  { purpose: 'Public improvements', yearIssued: 2011, maturity: 2026, rate: '1.50%–2.65%', balance: 205000 },
-  { purpose: 'Public improvements', yearIssued: 2014, maturity: 2044, rate: '1.50%–5.00%', balance: 7420000 },
-  { purpose: 'Water Project — EFC #18170', yearIssued: 2017, maturity: 2037, rate: '1.067%–3.574%', balance: 335000 },
-  { purpose: 'Public improvements', yearIssued: 2017, maturity: 2029, rate: '2.00%–5.00%', balance: 1430000 },
-  { purpose: 'Public improvements', yearIssued: 2021, maturity: 2036, rate: '2.00%–5.00%', balance: 7185000 },
+  { purpose: 'Firehouse acquisition', yearIssued: 2006, maturity: 2026, rate: '3.973%', originalPar: 1100000, balance: 60000 },
+  { purpose: 'Sewer No. 2 treatment plant upgrade', yearIssued: 2007, maturity: 2037, rate: '3.630%', originalPar: 3345000, balance: 2035000 },
+  { purpose: 'Sewer nitrogen removal — Environmental Facilities Corp.', yearIssued: 2009, maturity: 2033, rate: '4.270%', originalPar: 5245000, balance: 1981000 },
+  { purpose: 'Public improvements', yearIssued: 2010, maturity: 2026, rate: '1.250%', originalPar: 645000, balance: 50000 },
+  { purpose: 'Public improvements', yearIssued: 2011, maturity: 2026, rate: '1.50%–2.65%', originalPar: 2500000, balance: 205000 },
+  { purpose: 'Public improvements', yearIssued: 2014, maturity: 2044, rate: '1.50%–5.00%', originalPar: 9545000, balance: 7420000 },
+  { purpose: 'Water Project — EFC #18170', yearIssued: 2017, maturity: 2037, rate: '1.067%–3.574%', originalPar: 535582, balance: 335000 },
+  { purpose: 'Public improvements', yearIssued: 2017, maturity: 2029, rate: '2.00%–5.00%', originalPar: 4000000, balance: 1430000 },
+  { purpose: 'Public improvements', yearIssued: 2021, maturity: 2036, rate: '2.00%–5.00%', originalPar: 8960000, balance: 7185000 },
 ]
 
 export interface BondProfile {
