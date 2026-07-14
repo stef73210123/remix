@@ -183,7 +183,8 @@ function MonthlyChart({ monthly }: { monthly: { month: string; count: number }[]
   const scrollRef = useRef<HTMLDivElement>(null)
   const data = monthly.filter((m) => m.month >= '2018-01')
   const BAR_W = 12
-  const H = 200, PAD = { t: 14, r: 8, b: 26, l: 30 }
+  const AXIS_W = 34
+  const H = 200, PAD = { t: 14, r: 8, b: 26, l: 4 }
   const plotW = data.length * BAR_W
   const W = PAD.l + plotW + PAD.r
   const plotH = H - PAD.t - PAD.b
@@ -202,35 +203,43 @@ function MonthlyChart({ monthly }: { monthly: { month: string; count: number }[]
 
   return (
     <div className="card" style={{ padding: '12px 12px 6px' }}>
-      <div ref={scrollRef} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-        <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ display: 'block' }} role="img" aria-label="Permits issued per month">
+      <div style={{ display: 'flex' }}>
+        {/* Y-axis labels live in their own fixed (non-scrolling) column — the
+            bars svg below is many months wide and scrolls horizontally,
+            opening scrolled to recent years, so labels drawn inside it would
+            be scrolled out of view. */}
+        <svg width={AXIS_W} height={H} style={{ flex: '0 0 auto' }} aria-hidden="true">
           {[0, 0.5, 1].map((f) => (
-            <g key={f}>
-              <line x1={PAD.l} y1={y(max * f)} x2={W - PAD.r} y2={y(max * f)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />
-              <text x={PAD.l - 5} y={y(max * f) + 3} textAnchor="end" fontSize={9} fill="var(--muted)">{Math.round(max * f)}</text>
-            </g>
+            <text key={f} x={AXIS_W - 6} y={y(max * f) + 3} textAnchor="end" fontSize={9} fill="var(--muted)">{Math.round(max * f)}</text>
           ))}
-          {data.map((d, i) => (
-            <rect key={d.month} x={PAD.l + i * bw + 0.5} y={y(d.count)} width={Math.max(1, bw - 1)} height={PAD.t + plotH - y(d.count)}
-              fill="var(--primary)" opacity={hover != null && hover !== i ? 0.4 : 0.85} rx={1} />
-          ))}
-          {data.map((d, i) => (
-            d.month.endsWith('-01') && (
-              <text key={d.month} x={PAD.l + i * bw + bw / 2} y={H - 10} textAnchor="middle" fontSize={9} fill="var(--muted)">{d.month.slice(0, 4)}</text>
-            )
-          ))}
-          {data.map((d, i) => (
-            <rect key={`h${d.month}`} x={PAD.l + i * bw} y={PAD.t} width={bw} height={plotH} fill="transparent"
-              onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} />
-          ))}
-          {hb && (
-            <g style={{ pointerEvents: 'none' }}>
-              <rect x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96)} y={2} width={94} height={30} rx={6} fill="var(--panel)" stroke="var(--border)" />
-              <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={15} fontSize={11} fontWeight={600} fill="var(--text)">{hb.count} permits</text>
-              <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={27} fontSize={10} fill="var(--muted)">{hb.month}</text>
-            </g>
-          )}
         </svg>
+        <div ref={scrollRef} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', flex: 1, minWidth: 0 }}>
+          <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} style={{ display: 'block' }} role="img" aria-label="Permits issued per month">
+            {[0, 0.5, 1].map((f) => (
+              <line key={f} x1={PAD.l} y1={y(max * f)} x2={W - PAD.r} y2={y(max * f)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />
+            ))}
+            {data.map((d, i) => (
+              <rect key={d.month} x={PAD.l + i * bw + 0.5} y={y(d.count)} width={Math.max(1, bw - 1)} height={PAD.t + plotH - y(d.count)}
+                fill="var(--primary)" opacity={hover != null && hover !== i ? 0.4 : 0.85} rx={1} />
+            ))}
+            {data.map((d, i) => (
+              d.month.endsWith('-01') && (
+                <text key={d.month} x={PAD.l + i * bw + bw / 2} y={H - 10} textAnchor="middle" fontSize={9} fill="var(--muted)">{d.month.slice(0, 4)}</text>
+              )
+            ))}
+            {data.map((d, i) => (
+              <rect key={`h${d.month}`} x={PAD.l + i * bw} y={PAD.t} width={bw} height={plotH} fill="transparent"
+                onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} />
+            ))}
+            {hb && (
+              <g style={{ pointerEvents: 'none' }}>
+                <rect x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96)} y={2} width={94} height={30} rx={6} fill="var(--panel)" stroke="var(--border)" />
+                <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={15} fontSize={11} fontWeight={600} fill="var(--text)">{hb.count} permits</text>
+                <text x={Math.min(Math.max(PAD.l + hover! * bw - 40, 2), W - 96) + 8} y={27} fontSize={10} fill="var(--muted)">{hb.month}</text>
+              </g>
+            )}
+          </svg>
+        </div>
       </div>
     </div>
   )

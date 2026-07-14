@@ -20,7 +20,7 @@ export interface DeptContact {
 const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   planning: [
     {
-      department: 'Planning Department',
+      department: 'Director of Planning',
       person: 'Adam R. Kaufman, AICP',
       title: 'Director of Planning',
       phone: '(914) 273-3542',
