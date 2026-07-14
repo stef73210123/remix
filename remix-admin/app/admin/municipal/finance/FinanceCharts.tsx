@@ -481,7 +481,9 @@ export function TopTaxpayersList() {
         The 50 largest property owners carry {fmtUSDFull(t.top50AssessedValue)} of assessed value across {t.top50Parcels} parcels
         — {(rollSharePct * 100).toFixed(1)}% of the Town&rsquo;s entire {fmtUSDFull(t.rollAssessedValue)} taxable assessment roll.
       </div>
-      <div style={{ maxHeight: 420, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
+      {/* ~5 rows visible at once (header + 5), the rest reachable by scrolling
+          in place — full-height was overwhelming on a page already this long. */}
+      <div style={{ maxHeight: 230, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
         <div
           style={{
             position: 'sticky', top: 0, zIndex: 1, display: 'flex', gap: 8, alignItems: 'center',

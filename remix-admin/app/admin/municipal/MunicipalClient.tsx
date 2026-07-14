@@ -480,6 +480,13 @@ export default function MunicipalClient({
   // referenced from two different spots below: right under the board's own
   // case map (a specific board tab) or in its usual place above Board
   // Sentiment (the "All" dashboard tab) — never both at once.
+  //
+  // Until the user clicks a specific meeting, the selection defaults to the
+  // soonest upcoming one (timelineItems' first non-past entry, already sorted
+  // ascending) so the timeline and list highlight the next meeting ahead of
+  // "Now" on load, rather than nothing being selected.
+  const defaultMeetingKey = timelineItems.find((it) => !it.past)?.key ?? null
+  const effectiveMeetingKey = selectedMeetingKey ?? defaultMeetingKey
   const meetingsBlock = data && (
     <>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
@@ -490,7 +497,7 @@ export default function MunicipalClient({
       </div>
       <MeetingTimeline
         items={timelineItems}
-        selectedKey={selectedMeetingKey}
+        selectedKey={effectiveMeetingKey}
         onSelect={setSelectedMeetingKey}
         emptyText={
           data.dbOk
@@ -507,14 +514,14 @@ export default function MunicipalClient({
             meetings={boardAnalysis.meetings}
             muni={town}
             body={data.municipalities.find((x) => x.key === town)?.bodies.find((b) => b.displayName === board)?.key || ''}
-            selectedKey={selectedMeetingKey}
+            selectedKey={effectiveMeetingKey}
             onSelect={setSelectedMeetingKey}
           />
         </div>
       ) : (
         timelineItems.length > 0 && (
           <div style={{ marginTop: 10 }}>
-            <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+            <MeetingList items={timelineItems} selectedKey={effectiveMeetingKey} onSelect={setSelectedMeetingKey} />
           </div>
         )
       )}

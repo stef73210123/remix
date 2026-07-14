@@ -77,6 +77,14 @@ html[data-flavor='opennorthcastle'] {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
+  /* Same GPU-layer promotion as .civic-bottom-bar below — iOS Safari can
+     leave a sticky element mis-positioned (or briefly missing) for a frame
+     during momentum-scroll while its own chrome (URL bar) animates away;
+     forcing its own compositing layer makes it recompute position with the
+     animation instead of waiting for the next repaint. */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 
 /* Floating action bar, fixed to the bottom of the viewport, holding the FOIL
@@ -123,6 +131,10 @@ html[data-flavor='opennorthcastle'] {
   margin-right: -20px;
   padding: 10px 20px;
   border-bottom: 1px solid var(--border);
+  /* Same GPU-layer promotion as .muni-header above. */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 
 /* .muni-header's own margin-bottom (below) exists for pages that don't have a
