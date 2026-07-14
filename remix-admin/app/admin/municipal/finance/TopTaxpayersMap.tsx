@@ -56,7 +56,10 @@ function TaxpayerMarkers({ onState }: { onState: (s: MapState) => void }) {
         if (cancelled) return
         const q = geocodeQueryFor(row)
         const place = (lat: number, lng: number) => {
-          L.circleMarker([lat, lng], { radius: 5, color: '#0a0a0a', weight: 1, fillColor: '#5a9bd4', fillOpacity: 0.9 })
+          // White halo + a bright fill reads clearly over busy satellite
+          // imagery, where the darker outline used on the street-map-based
+          // permit layer would otherwise disappear against similarly dark ground.
+          L.circleMarker([lat, lng], { radius: 8, color: '#ffffff', weight: 2, fillColor: '#ff5a3d', fillOpacity: 0.95 })
             .bindPopup(`<strong>#${row.rank} ${row.owner}</strong><br>${fmtUSDFull(row.assessedValue)} assessed`)
             .addTo(group)
           placed++
@@ -89,13 +92,18 @@ function TaxpayerMarkers({ onState }: { onState: (s: MapState) => void }) {
 /** Best-effort map of the Top 50 taxpayers' properties — plots whichever
  *  resolve from a public geocoder (most single-purpose real-estate LLCs are
  *  named after their street address; a few notes carry one too), and skips
- *  the rest rather than guessing coordinates. */
+ *  the rest rather than guessing coordinates. Satellite basemap (same Esri
+ *  World Imagery tiles as JurisdictionMap) so an owner's actual parcel/
+ *  structure is identifiable, not just a street grid. */
 export default function TopTaxpayersMap() {
   const [state, setState] = useState<MapState>('loading')
   return (
     <div style={{ position: 'relative', height: 240, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 12 }}>
       <MapContainer center={CENTER} zoom={12} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
-        <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <TileLayer
+          attribution="Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community"
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+        />
         <TaxpayerMarkers onState={setState} />
       </MapContainer>
       {state !== 'ok' && (

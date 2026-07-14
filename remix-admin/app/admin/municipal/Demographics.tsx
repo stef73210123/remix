@@ -65,7 +65,12 @@ function TrendChart({ points, fmtY, color = 'var(--primary)' }: {
   const pts = points.filter((p) => p.value > 0).sort((a, b) => a.year - b.year)
   if (pts.length < 2) return null
 
-  const W = 280, H = 110, PAD = { t: 10, r: 8, b: 18, l: 8 }
+  // H is close to the card's real rendered aspect ratio (~280×180, not the
+  // old 280×110) — `preserveAspectRatio="none"` below stretches the SVG to
+  // fill whatever box CardBody gives it, and a viewBox far from that box's
+  // actual aspect ratio stretched every glyph and mark horizontally, reading
+  // as squished/"smushed" text rather than a rendering bug in the text itself.
+  const W = 280, H = 180, PAD = { t: 10, r: 8, b: 20, l: 50 }
   const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
   const minYear = pts[0].year, maxYear = pts[pts.length - 1].year
   const yearSpan = maxYear - minYear || 1
@@ -86,6 +91,14 @@ function TrendChart({ points, fmtY, color = 'var(--primary)' }: {
       role="img"
       aria-label="Trend over time"
     >
+      {/* Quick y-axis — just the two endpoints' values, not a full gridded
+          scale, so the line's own shape still carries the trend. */}
+      {Array.from(new Set([minV, maxV])).map((v) => (
+        <g key={`y${v}`}>
+          <line x1={PAD.l} y1={y(v)} x2={W - PAD.r} y2={y(v)} stroke="var(--border)" strokeWidth={1} opacity={0.4} />
+          <text x={PAD.l - 6} y={y(v) + 3} textAnchor="end" fontSize={9} fill="var(--muted)">{fmtY(v)}</text>
+        </g>
+      ))}
       <path d={areaPath} fill={color} opacity={0.12} />
       <path d={path} fill="none" stroke={color} strokeWidth={1.75} />
       {pts.map((p, i) => (

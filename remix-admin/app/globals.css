@@ -148,6 +148,20 @@ a {
   min-width: 100%;
 }
 
+/* Appropriations treemap: wide/short on desktop (the squarified layout was
+   computed for a 640×200 canvas), but that same ratio leaves too little
+   height on a narrow phone screen for its category labels — a bit taller
+   there shows more of the chart even though it no longer exactly matches
+   the layout's original aspect ratio. */
+.approp-treemap {
+  aspect-ratio: 640 / 200;
+}
+@media (max-width: 640px) {
+  .approp-treemap {
+    aspect-ratio: 640 / 320;
+  }
+}
+
 .page-title {
   font-size: 22px;
   font-weight: 700;
