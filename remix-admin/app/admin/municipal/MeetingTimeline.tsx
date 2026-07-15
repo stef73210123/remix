@@ -120,7 +120,17 @@ export default function MeetingTimeline({
                 <div
                   ref={boundaryRef}
                   aria-hidden
-                  style={{ flex: '0 0 auto', width: 0, alignSelf: 'stretch', borderLeft: '1px dashed var(--primary)', margin: '0 13px', position: 'relative' }}
+                  style={{
+                    flex: '0 0 auto', width: 0, alignSelf: 'stretch', borderLeft: '1px dashed var(--primary)',
+                    // Wide enough that the "Now" label (which straddles the line, so
+                    // roughly half its rendered width sits on each side) never reaches
+                    // a neighboring card — otherwise the card's own background/border
+                    // paints over it and clips it. zIndex keeps it behind cards on both
+                    // sides consistently (flex items otherwise paint in DOM order, so
+                    // without this the divider would render in front of the earlier
+                    // card but behind the later one).
+                    margin: '0 22px', position: 'relative', zIndex: 0,
+                  }}
                 >
                   <span
                     style={{
@@ -144,6 +154,7 @@ export default function MeetingTimeline({
                   borderRadius: 8, cursor: onSelect ? 'pointer' : undefined,
                   background: it.key === selectedKey ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : undefined,
                   boxShadow: it.key === selectedKey ? 'inset 0 0 0 1.5px var(--primary)' : undefined,
+                  position: 'relative', zIndex: 1,
                 }}
               >
                 {/* rail + dot */}
