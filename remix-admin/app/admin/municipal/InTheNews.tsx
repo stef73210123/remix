@@ -45,6 +45,7 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
+  const [paused, setPaused] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -75,6 +76,28 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
     if (q) list = list.filter((n) => [n.title, n.summary, n.source, n.category].some((s) => s.toLowerCase().includes(q)))
     return list
   }, [items, query, category])
+
+  // Auto-advance one card at a time; loops back to the start at the end.
+  // Paused on hover/touch/focus so it never fights a reader mid-interaction,
+  // and skipped entirely for reduced-motion users. Runs above the early
+  // returns below since hooks can't follow a conditional return.
+  useEffect(() => {
+    if (paused || filtered.length < 2) return
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = setInterval(() => {
+      const el = scrollRef.current
+      if (!el) return
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4
+      if (atEnd) {
+        el.scrollTo({ left: 0, behavior: 'smooth' })
+      } else {
+        const card = el.querySelector<HTMLElement>('[data-news-card]')
+        const step = (card?.offsetWidth ?? 280) + 12
+        el.scrollBy({ left: step, behavior: 'smooth' })
+      }
+    }, 5000)
+    return () => clearInterval(id)
+  }, [paused, filtered.length])
 
   if (loading) return null
   if (!items || items.length === 0) return null
@@ -129,6 +152,13 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
       ) : (
         <div
           ref={scrollRef}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setPaused(false)}
+          onTouchCancel={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
           style={{
             display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4,
             scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
@@ -148,15 +178,6 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
                 className="card"
                 style={{ overflow: 'hidden', flex: '0 0 280px', minWidth: 0, scrollSnapAlign: 'start', display: 'block', color: 'inherit', textDecoration: 'none' }}
               >
-                {n.imageUrl && (
-                  <img
-                    src={n.imageUrl}
-                    alt=""
-                    loading="lazy"
-                    onError={(e) => { e.currentTarget.style.display = 'none' }}
-                    style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', background: 'var(--panel-2)' }}
-                  />
-                )}
                 <div style={{ padding: 16 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
                     <Icon size={14} aria-hidden style={{ flexShrink: 0, color: 'var(--muted)' }} />
@@ -180,6 +201,15 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
                     {n.source}{dateLabel ? ` · ${dateLabel}` : ''} ↗
                   </div>
                 </div>
+                {n.imageUrl && (
+                  <img
+                    src={n.imageUrl}
+                    alt=""
+                    loading="lazy"
+                    onError={(e) => { e.currentTarget.style.display = 'none' }}
+                    style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', background: 'var(--panel-2)' }}
+                  />
+                )}
               </a>
             )
           })}

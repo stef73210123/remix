@@ -54,9 +54,17 @@ export default function PreventOverscrollBounce() {
       const deltaY = e.touches[0].clientY - startY
       if (Math.abs(deltaY) <= Math.abs(deltaX)) return
 
-      const doc = document.documentElement
-      const atTop = doc.scrollTop <= 0
-      const atBottom = Math.ceil(doc.scrollTop + window.innerHeight) >= doc.scrollHeight
+      // Same html-vs-body ambiguity the CSS fix above already accounts for:
+      // which element is the page's effective scrolling root can shift after
+      // unrelated layout/content changes, and document.documentElement.scrollTop
+      // reads 0 whenever body ends up the real scroller — silently breaking
+      // atTop/atBottom detection (this is what let the bounce reappear last
+      // time). window.scrollY reflects the visual scroll position regardless
+      // of which element is the root, so it can't go stale the same way.
+      const scrollTop = window.scrollY
+      const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+      const atTop = scrollTop <= 0
+      const atBottom = Math.ceil(scrollTop + window.innerHeight) >= scrollHeight
       if ((atTop && deltaY > 0) || (atBottom && deltaY < 0)) {
         e.preventDefault()
       }

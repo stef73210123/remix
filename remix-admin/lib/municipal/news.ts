@@ -19,8 +19,10 @@
  * (Patch, Daily Voice, The Inside Press/Inside Armonk, Bedford & New Canaan
  * Magazine, Connect to Northern Westchester) — via Perigon's `source` domain
  * filter, combined with the same location search, restricted to the trailing
- * 90 days. Several of these are nationwide/regional networks that cover many
- * other towns too, so a post-fetch relevance check requires one of the
+ * 180 days (a full six-month run, so the widget doesn't run dry between the
+ * hyperlocal outlets' sparser posting cadence). Several of these are
+ * nationwide/regional networks that cover many other towns too, so a
+ * post-fetch relevance check requires one of the
  * town/hamlet names to actually appear in the title or summary (a Pleasantville
  * Music Festival piece slipped through the source-only filter previously).
  * Every article, date, and link below still comes straight from Perigon's
@@ -80,7 +82,7 @@ const NEWS_GEO: Record<string, { cities: string[]; sourceDomains: string[] }> = 
   },
 }
 
-const DAYS_BACK = 90
+const DAYS_BACK = 180
 
 interface PerigonSource {
   name?: string
@@ -154,7 +156,10 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     q,
     from,
     sortBy: 'pubDate',
-    size: '30',
+    // Over a 6-month window, most candidates get dropped by the IBM/
+    // malformed/irrelevance filters below, so a bigger request size keeps
+    // enough real local coverage surviving to fill MAX_ITEMS.
+    size: '100',
   })
   for (const domain of geo.sourceDomains) params.append('source', domain)
 
