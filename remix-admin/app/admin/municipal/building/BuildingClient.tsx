@@ -55,6 +55,32 @@ function fmtDate(iso: string | null) {
   return fmtDateShort(d)
 }
 
+// The fuller set of fields from a permit's full report — beyond the address/
+// category/date already visible on the timeline row — shown only once a row
+// is expanded, so the collapsed view stays scannable.
+function permitDetailRows(p: PermitRecord): { label: string; value: React.ReactNode }[] {
+  const rows: { label: string; value: React.ReactNode }[] = []
+  if (p.description) rows.push({ label: 'Description', value: p.description })
+  if (p.owner) rows.push({ label: 'Owner', value: p.owner })
+  if (p.contractor) {
+    const href = getContractorWebsite(p.contractor)
+    rows.push({
+      label: 'Contractor',
+      value: href
+        ? <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary-light)' }}>{p.contractor} ↗</a>
+        : p.contractor,
+    })
+  }
+  if (p.klass) rows.push({ label: 'Property class', value: p.klass })
+  if (p.zone) rows.push({ label: 'Zoning district', value: p.zone })
+  if (p.cost) rows.push({ label: 'Declared value', value: fmtUSDshort(p.cost) })
+  if (p.fee) rows.push({ label: 'Permit fee', value: fmtUSDshort(p.fee) })
+  if (p.appIso) rows.push({ label: 'Application filed', value: fmtDate(p.appIso) })
+  if (p.permitIso) rows.push({ label: 'Permit issued', value: fmtDate(p.permitIso) })
+  if (p.closeIso) rows.push({ label: 'Closed / CO', value: fmtDate(p.closeIso) })
+  return rows
+}
+
 function Tile({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
     <div className="card" style={{ padding: '14px 16px' }}>
@@ -588,15 +614,27 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
     return dataset.recent
       .filter((p) => p.permitIso)
       .slice(0, 80)
-      .map((p) => ({
-        key: p.permitNumber || `${p.address}-${p.permitIso}`,
-        date: new Date((p.permitIso as string) + 'T00:00:00'),
-        title: p.address + (p.description ? ` — ${p.description}` : ''),
-        board: p.category,
-        town: p.cost ? fmtUSDshort(p.cost) : undefined,
-        past: true,
-        links: p.permitNumber ? <span className="badge">#{p.permitNumber}</span> : undefined,
-      }))
+      .map((p) => {
+        const rows = permitDetailRows(p)
+        return {
+          key: p.permitNumber || `${p.address}-${p.permitIso}`,
+          date: new Date((p.permitIso as string) + 'T00:00:00'),
+          subtitle: p.address,
+          board: p.category,
+          past: true,
+          links: p.permitNumber ? <span className="badge">#{p.permitNumber}</span> : undefined,
+          detail: rows.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {rows.map((r) => (
+                <div key={r.label} style={{ display: 'flex', gap: 10, fontSize: 12.5, lineHeight: 1.5, flexWrap: 'wrap' }}>
+                  <span className="muted" style={{ minWidth: 128, flexShrink: 0 }}>{r.label}</span>
+                  <span>{r.value}</span>
+                </div>
+              ))}
+            </div>
+          ) : undefined,
+        }
+      })
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
   }, [dataset])
   // Most recent permit date in the dataset — flags how fresh the offline PDF

@@ -43,11 +43,13 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
   const [items, setItems] = useState<NewsItem[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
+  const [category, setCategory] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setLoading(true)
     setItems(null)
+    setCategory('')
     fetch(`/admin/api/municipal/news?muni=${encodeURIComponent(muniKey)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
       .then((d: { available?: boolean; items?: NewsItem[] }) => setItems(d.available ? d.items ?? [] : null))
@@ -55,12 +57,23 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
       .finally(() => setLoading(false))
   }, [muniKey])
 
+  // Categories present in this batch, in a fixed sensible order rather than
+  // alphabetical, so the dropdown reads naturally (civic categories first).
+  const categories = useMemo(() => {
+    if (!items) return []
+    const present = new Set(items.map((n) => n.category))
+    const order = ['Government', 'Public Safety', 'Development', 'Schools', 'Sports', 'Weather', 'Community', 'Obituary', 'News']
+    return order.filter((c) => present.has(c))
+  }, [items])
+
   const filtered = useMemo(() => {
     if (!items) return []
+    let list = items
+    if (category) list = list.filter((n) => n.category === category)
     const q = query.trim().toLowerCase()
-    if (!q) return items
-    return items.filter((n) => [n.title, n.summary, n.source, n.category].some((s) => s.toLowerCase().includes(q)))
-  }, [items, query])
+    if (q) list = list.filter((n) => [n.title, n.summary, n.source, n.category].some((s) => s.toLowerCase().includes(q)))
+    return list
+  }, [items, query, category])
 
   if (loading) return null
   if (!items || items.length === 0) return null
@@ -81,6 +94,17 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
           <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {filtered.length}</span>
         </h2>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            aria-label="Filter by category"
+            style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+          >
+            <option value="">All categories</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
           <input
             type="search"
             value={query}
@@ -96,7 +120,11 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
         </div>
       </div>
       {filtered.length === 0 ? (
-        <div className="card"><div className="muted" style={{ padding: 20, fontSize: 13 }}>No news items match &ldquo;{query}&rdquo;.</div></div>
+        <div className="card">
+          <div className="muted" style={{ padding: 20, fontSize: 13 }}>
+            {query ? <>No news items match &ldquo;{query}&rdquo;{category ? ` in ${category}` : ''}.</> : `No news items in ${category}.`}
+          </div>
+        </div>
       ) : (
         <div
           ref={scrollRef}
