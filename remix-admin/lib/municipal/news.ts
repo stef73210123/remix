@@ -95,15 +95,20 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   // can return ANY articles at all.
   if (articles.length === 0) {
     console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
+    // Bisect round 2: a bare `q=Armonk` (round 1) proved the account/key can
+    // return real results. Now test the ACTUAL multi-term OR query with only
+    // country+language added (dropping state/sortBy/size/showReprints/
+    // excludeLabel), to see whether the full `q` string itself, or one of
+    // those other params, is what zeroes the main query out.
     try {
-      const bareParams = new URLSearchParams({ apiKey: key, q: 'Armonk', size: '5' })
-      const bareRes = await fetch(`https://api.perigon.io/v1/all?${bareParams.toString()}`, {
+      const midParams = new URLSearchParams({ apiKey: key, q, country: 'US', language: 'en', size: '10' })
+      const midRes = await fetch(`https://api.perigon.io/v1/all?${midParams.toString()}`, {
         signal: AbortSignal.timeout(15000),
       })
-      const bareRaw = bareRes.ok ? await bareRes.json() : { httpError: bareRes.status }
-      console.log(`[news] muni=${muniKey} BARE-DIAG status=${bareRes.status} body=${JSON.stringify(bareRaw).slice(0, 500)}`)
+      const midRaw = midRes.ok ? await midRes.json() : { httpError: midRes.status }
+      console.log(`[news] muni=${muniKey} MID-DIAG status=${midRes.status} body=${JSON.stringify(midRaw).slice(0, 500)}`)
     } catch (e) {
-      console.log(`[news] muni=${muniKey} BARE-DIAG threw: ${e instanceof Error ? e.message : String(e)}`)
+      console.log(`[news] muni=${muniKey} MID-DIAG threw: ${e instanceof Error ? e.message : String(e)}`)
     }
   }
 
