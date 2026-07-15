@@ -17,6 +17,15 @@ export interface TimelineItem {
   dateTitle?: string
   /** One-line agenda summary, shown (truncated) where available. */
   summary?: string | null
+  /** Secondary line shown under the board/date on both the compact timeline
+   *  card and the list row — e.g. a permit's street address. Always visible
+   *  (unlike `summary`/`detail`, which are list-only and expand-only). */
+  subtitle?: string
+  /** Extra supporting detail revealed when the row is expanded (tap) in
+   *  MeetingList — e.g. a permit's owner, contractor, valuation, and key
+   *  dates pulled from the full report. Independent of `analysis`, which
+   *  drives the richer case-by-case expand for analyzed board meetings. */
+  detail?: ReactNode
   /** Board name; omit (empty string) on a single-board page. */
   board?: string
   boardHref?: string
@@ -158,6 +167,18 @@ export default function MeetingTimeline({
                       row already names its board right above. OpenNorthCastle
                       is single-jurisdiction, so it never repeats the town. */}
                   {!isOpen && it.past && it.town && <div className="muted" style={{ fontSize: 12 }}>{it.town}</div>}
+                  {it.subtitle && (
+                    <div
+                      className="muted"
+                      title={it.subtitle}
+                      style={{
+                        fontSize: 12, marginTop: 3, lineHeight: 1.35,
+                        display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                      }}
+                    >
+                      {it.subtitle}
+                    </div>
+                  )}
                   {(it.links || it.transcriptLink) && (
                     <div style={{ marginTop: 8, display: 'inline-flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
                       {it.links}

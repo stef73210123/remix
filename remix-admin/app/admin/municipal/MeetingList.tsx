@@ -86,24 +86,33 @@ export default function MeetingList({
           )
         }
 
+        const expandable = !!it.detail
+        const rowOpen = expandable && openMeeting === it.key
+
         return (
           <div
             key={it.key}
             ref={registerRef}
-            onClick={onSelect ? () => onSelect(it.key) : undefined}
+            onClick={() => {
+              if (expandable) setOpenMeeting(rowOpen ? null : it.key)
+              onSelect?.(it.key)
+            }}
             style={{
               padding: '12px 16px',
               borderTop: i ? '1px solid var(--border)' : 'none',
               opacity: it.past ? 0.92 : 1,
-              cursor: onSelect ? 'pointer' : undefined,
+              cursor: onSelect || expandable ? 'pointer' : undefined,
               background: it.key === selectedKey ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : undefined,
               boxShadow: it.key === selectedKey ? 'inset 0 0 0 1.5px var(--primary)' : undefined,
             }}
           >
-            <div style={{ fontWeight: 700, fontSize: 12.5 }} title={it.dateTitle}>
-              {it.date ? `${fmtDateShort(it.date)}${it.dateSuffix || ''}` : (it.fallbackLabel || 'TBD')}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {expandable && <span className="muted" style={{ width: 10 }}>{rowOpen ? '▾' : '▸'}</span>}
+              <div style={{ fontWeight: 700, fontSize: 12.5 }} title={it.dateTitle}>
+                {it.date ? `${fmtDateShort(it.date)}${it.dateSuffix || ''}` : (it.fallbackLabel || 'TBD')}
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap', marginTop: 4 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap', marginTop: 4, paddingLeft: expandable ? 18 : 0 }}>
               <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap', flex: 1, minWidth: 140 }}>
                 {it.boardHref ? (
                   <a href={it.boardHref} style={{ fontSize: 13, fontWeight: 600, color: 'var(--primary-light)' }}>{it.board}</a>
@@ -121,12 +130,22 @@ export default function MeetingList({
                 </div>
               )}
             </div>
-            {it.summary && (
+            {it.subtitle && (
+              <div className="muted" style={{ fontSize: 12.5, marginTop: 4, paddingLeft: expandable ? 18 : 0 }}>
+                {it.subtitle}
+              </div>
+            )}
+            {it.summary && !rowOpen && (
               <div
                 className="muted"
-                style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.55, maxHeight: '3.1em', overflow: 'hidden' }}
+                style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.55, maxHeight: '3.1em', overflow: 'hidden', paddingLeft: expandable ? 18 : 0 }}
               >
                 {it.summary}
+              </div>
+            )}
+            {rowOpen && (
+              <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
+                {it.detail}
               </div>
             )}
           </div>
