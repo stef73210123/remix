@@ -85,14 +85,20 @@ const MENTIONS_IBM = /\bIBM\b/i
 // Ordered so a more specific signal (e.g. "town hall") wins over a looser one
 // (e.g. a hotel/townhouse project also being local "development" news).
 const CATEGORY_RULES: { key: NewsCategoryIcon; label: string; test: RegExp }[] = [
+  // Obituary and Weather are checked first: their signal phrases ("passed
+  // away", "tornado") are unambiguous and should win even when the text also
+  // happens to contain a word like "school" (e.g. "Fordham University School
+  // of Business" in an obituary's bio). Schools is checked near the end for
+  // the same reason — "school" is a common substring that otherwise steals
+  // articles that are really about something else.
+  { key: 'flower', label: 'Obituary', test: /\bobituary\b|passed away|survived by|in loving memory/i },
+  { key: 'cloud-rain', label: 'Weather', test: /\btornado\b|\bstorm\b|\bweather\b|heat wave|\bsnow\b|\bflood(ing)?\b|hurricane/i },
   { key: 'landmark', label: 'Government', test: /\btown (hall|board)\b|planning board|zoning board|\bzoning\b|\bbudget\b|\btax(es)?\b|supervisor|councilm(a|e)n|councilwoman|comptroller|\bmunicipal\b|\bordinance\b|\belection\b/i },
   { key: 'shield', label: 'Public Safety', test: /\bpolice\b|sheriff|\barrest(ed)?\b|\bcrime\b|sentenc(ed|ing)|stabb|fire department|firefighter|\bcrash\b|\baccident\b/i },
-  { key: 'graduation-cap', label: 'Schools', test: /\bschool\b|\bstudent(s)?\b|school district|superintendent|\bPTA\b|classroom/i },
-  { key: 'trophy', label: 'Sports', test: /\bgolf\b|\bsoccer\b|\bsoftball\b|\bbasketball\b|\bfootball\b|championship|tournament|\bathlete(s)?\b|\bcoach\b/i },
-  { key: 'cloud-rain', label: 'Weather', test: /\btornado\b|\bstorm\b|\bweather\b|heat wave|\bsnow\b|\bflood(ing)?\b|hurricane/i },
-  { key: 'flower', label: 'Obituary', test: /\bobituary\b|passed away|survived by|in loving memory/i },
+  { key: 'trophy', label: 'Sports', test: /\bgolf\b|\bsoccer\b|\bsoftball\b|\bbasketball\b|\bfootball\b|\blacrosse\b|championship|tournament|\bathlete(s)?\b|\bcoach\b/i },
   { key: 'hard-hat', label: 'Development', test: /\bdevelopment\b|\bconstruction\b|\bproject\b|townhouse|\bcondo(s)?\b|\bhotel\b|\bhousing\b|rezon|\bpermit(s)?\b/i },
-  { key: 'users', label: 'Community', test: /\bfestival\b|\bconcert\b|\blibrary\b|\bchurch\b|synagogue|\bparade\b|\bfair\b/i },
+  { key: 'users', label: 'Community', test: /\bfestival\b|\bconcert\b|\blibrary\b|\bchurch\b|synagogue|\bparade\b|\bfair\b|\bnonprofit\b/i },
+  { key: 'graduation-cap', label: 'Schools', test: /\bschool\b|\bstudent(s)?\b|school district|superintendent|\bPTA\b|classroom/i },
 ]
 
 function classify(title: string, summary: string): { category: string; categoryIcon: NewsCategoryIcon } {
