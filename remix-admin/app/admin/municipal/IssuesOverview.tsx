@@ -16,19 +16,15 @@ type SortBy = 'volume' | 'sentiment'
 
 /** Trailing months of history shown in each row's sparkline. */
 const SPARKLINE_MONTHS = 12
-const SPARK_W = 80
+const SPARK_W = 104
 const SPARK_H = 22
-/** Fixed bar width — small and constant rather than flex-filling the row,
- *  so the theme name and the sparkline (the two things worth more room)
- *  get it instead. */
-const BAR_W = 42
 
 /** Diverging sentiment bar: center = 0, fills right (positive) / left (negative). */
 function DivergingBar({ score }: { score: number }) {
   const s = Math.max(-1, Math.min(1, score))
   const half = Math.abs(s) * 50
   return (
-    <div style={{ position: 'relative', height: 10, background: 'var(--panel-2)', borderRadius: 5, width: BAR_W, flexShrink: 0 }}>
+    <div style={{ position: 'relative', height: 10, background: 'var(--panel-2)', borderRadius: 5, flex: '3 1 50px' }}>
       <div style={{ position: 'absolute', left: '50%', top: -1, bottom: -1, width: 1, background: 'var(--border)' }} />
       <div
         style={{
@@ -100,81 +96,25 @@ function SortControls({
   )
 }
 
-/** One full-width, independently sortable ranked-theme panel — used twice
- *  below (once defaulting to volume, once to sentiment) so both orderings
- *  are always one click away rather than only ever shown one way. */
-function RankedThemesPanel({
-  title, themes, monthlyByTheme, defaultSortBy, barStyle,
-}: {
-  title: string
-  themes: AggregateThemeStat[]
-  monthlyByTheme: Record<string, MonthlyIssueVolume[]>
-  defaultSortBy: SortBy
-  /** Which bar visualization this panel always shows, independent of the
-   *  live sort toggle — keeps the two panels visually distinct (a volume
-   *  bar vs. a diverging sentiment bar) rather than becoming identical
-   *  once both support the same sort options. */
-  barStyle: 'volume' | 'sentiment'
-}) {
-  const [sortBy, setSortBy] = useState<SortBy>(defaultSortBy)
-  const [desc, setDesc] = useState(true)
-
-  const sorted = useMemo(() => {
-    const arr = [...themes]
-    if (sortBy === 'volume') arr.sort((a, b) => (desc ? b.mentions - a.mentions : a.mentions - b.mentions))
-    else arr.sort((a, b) => (desc ? b.avgSentiment - a.avgSentiment : a.avgSentiment - b.avgSentiment))
-    return arr
-  }, [themes, sortBy, desc])
-
-  const maxMentions = Math.max(1, ...themes.map((t) => t.mentions))
-
-  return (
-    <div className="card" style={{ padding: '16px 12px', marginBottom: 16 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
-        <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          {title} · {sorted.length}
-        </div>
-        <SortControls sortBy={sortBy} onSortBy={setSortBy} desc={desc} onToggleDesc={() => setDesc((d) => !d)} />
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxHeight: 420, overflowY: 'auto', paddingRight: 4 }}>
-        {sorted.map((t) => {
-          const spark = (monthlyByTheme[t.theme] || []).slice(-SPARKLINE_MONTHS)
-          return (
-            <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11.5, flexShrink: 0 }}>
-              <span style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={t.theme}>
-                {t.theme}
-              </span>
-              {barStyle === 'volume' ? (
-                <div style={{ width: BAR_W, flexShrink: 0, background: 'var(--panel-2)', borderRadius: 4, height: 12, overflow: 'hidden' }}>
-                  <div style={{ width: `${(t.mentions / maxMentions) * 100}%`, height: '100%', background: sentimentColor(t.avgSentiment), borderRadius: 4, minWidth: 3 }} />
-                </div>
-              ) : (
-                <DivergingBar score={t.avgSentiment} />
-              )}
-              <span className="muted" style={{ width: 18, textAlign: 'right', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }} title={`${t.mentions} meetings`}>{t.mentions}</span>
-              <span style={{ ...sentimentChipStyle(t.avgSentiment), width: 32, flexShrink: 0, textAlign: 'center', padding: '2px 0' }}>{fmtSent(t.avgSentiment)}</span>
-              <Sparkline points={spark} />
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
 /**
- * Town-wide "local issues" overview: themes ranked by volume and by
- * sentiment, aggregated across every tracked board and committee for the
- * selected calendar year. Each panel is full width and independently
- * sortable by either metric; each row carries a trailing-12-month volume
- * sparkline (always the real last 12 months, independent of the year
- * filter above, since that's a "how's it trending lately" signal rather
- * than a historical-year comparison). Defaults to last calendar year.
+ * Town-wide "local issues" overview: one full-width, sortable ranked-theme
+ * list (themes and issues are the same underlying data, so a single panel
+ * replaces what used to be two near-duplicate ones). Sorting by volume shows
+ * a volume bar; sorting by sentiment shows a diverging sentiment bar — the
+ * visualization always matches whatever you're currently ranked by. Both
+ * bar styles flex-grow to fill the row's remaining width (rather than a
+ * fixed size), so they read as a proper proportional bar chart at any
+ * viewport width. Every row also carries a trailing-12-month volume
+ * sparkline, always the real last 12 months regardless of the year filter,
+ * since that's a "how's it trending lately" signal rather than a
+ * historical-year comparison.
  */
 export default function IssuesOverview({ muni }: { muni: string }) {
   const [agg, setAgg] = useState<Aggregate | null>(null)
   const [loading, setLoading] = useState(true)
   const [year, setYear] = useState<number | null>(null)
+  const [sortBy, setSortBy] = useState<SortBy>('volume')
+  const [desc, setDesc] = useState(true)
 
   useEffect(() => {
     setLoading(true)
@@ -199,6 +139,15 @@ export default function IssuesOverview({ muni }: { muni: string }) {
     [agg, year]
   )
 
+  const sorted = useMemo(() => {
+    const arr = [...themes]
+    if (sortBy === 'volume') arr.sort((a, b) => (desc ? b.mentions - a.mentions : a.mentions - b.mentions))
+    else arr.sort((a, b) => (desc ? b.avgSentiment - a.avgSentiment : a.avgSentiment - b.avgSentiment))
+    return arr
+  }, [themes, sortBy, desc])
+
+  const maxMentions = Math.max(1, ...themes.map((t) => t.mentions))
+
   if (loading) return null
   if (!agg || year == null) return null
 
@@ -221,10 +170,36 @@ export default function IssuesOverview({ muni }: { muni: string }) {
       {themes.length === 0 ? (
         <div className="card"><div className="muted" style={{ padding: 20, fontSize: 13 }}>No themes recorded for {year}.</div></div>
       ) : (
-        <>
-          <RankedThemesPanel title="Most-discussed themes" themes={themes} monthlyByTheme={agg.monthlyByTheme} defaultSortBy="volume" barStyle="volume" />
-          <RankedThemesPanel title="Issues by sentiment" themes={themes} monthlyByTheme={agg.monthlyByTheme} defaultSortBy="sentiment" barStyle="sentiment" />
-        </>
+        <div className="card" style={{ padding: '16px 12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Themes · {sorted.length}
+            </div>
+            <SortControls sortBy={sortBy} onSortBy={setSortBy} desc={desc} onToggleDesc={() => setDesc((d) => !d)} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxHeight: 480, overflowY: 'auto', paddingRight: 4 }}>
+            {sorted.map((t) => {
+              const spark = (agg.monthlyByTheme[t.theme] || []).slice(-SPARKLINE_MONTHS)
+              return (
+                <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, flexShrink: 0 }}>
+                  <span style={{ flex: '1 1 90px', minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={t.theme}>
+                    {t.theme}
+                  </span>
+                  {sortBy === 'volume' ? (
+                    <div style={{ flex: '3 1 50px', background: 'var(--panel-2)', borderRadius: 4, height: 12, overflow: 'hidden' }}>
+                      <div style={{ width: `${(t.mentions / maxMentions) * 100}%`, height: '100%', background: sentimentColor(t.avgSentiment), borderRadius: 4, minWidth: 3 }} />
+                    </div>
+                  ) : (
+                    <DivergingBar score={t.avgSentiment} />
+                  )}
+                  <span className="muted" style={{ width: 20, textAlign: 'right', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }} title={`${t.mentions} meetings`}>{t.mentions}</span>
+                  <span style={{ ...sentimentChipStyle(t.avgSentiment), width: 36, flexShrink: 0, textAlign: 'center', padding: '2px 0' }}>{fmtSent(t.avgSentiment)}</span>
+                  <Sparkline points={spark} />
+                </div>
+              )
+            })}
+          </div>
+        </div>
       )}
     </div>
   )
