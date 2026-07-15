@@ -40,6 +40,9 @@ What the flavor changes (see `lib/flavor.ts`):
        don't apply to existing deployments. Verify at `/admin/api/municipal/health`.
    - `CENSUS_API_KEY = <your key>` — enables live demographics + the trend
      sparklines. Optional (falls back to approximate figures).
+   - `PERIGON_API_KEY = <your key>` — powers the "In the news" section
+     (live Perigon News API search, server-side only). Optional; the section
+     just doesn't render without it.
    - Do **not** set `CRON_SECRET` / `MUNICIPAL_INGEST_TOKEN` here — the ingest
      pipeline should only run from the Remix project.
 

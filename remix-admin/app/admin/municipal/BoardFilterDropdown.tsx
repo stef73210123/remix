@@ -48,8 +48,9 @@ export default function BoardFilterDropdown({
         <div
           className="card"
           style={{
-            position: 'absolute', top: '100%', right: 0, marginTop: 4, minWidth: 200, zIndex: 20,
-            padding: 8, display: 'flex', flexDirection: 'column', gap: 2, boxShadow: '0 6px 20px rgba(0,0,0,0.25)',
+            position: 'absolute', top: '100%', right: 0, marginTop: 4, minWidth: 200, maxHeight: 280, zIndex: 20,
+            padding: 8, display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto',
+            boxShadow: '0 6px 20px rgba(0,0,0,0.25)',
           }}
         >
           <button
