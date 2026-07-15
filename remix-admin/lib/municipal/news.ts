@@ -7,14 +7,17 @@
  *
  * Armonk is also IBM's corporate headquarters — and "ARMONK, N.Y." is IBM's
  * standard press-release dateline, so nearly every English-language US
- * article naming the town is IBM corporate/earnings coverage. A bare query
- * (no filters beyond the search term) confirmed live that Perigon has real
- * matches; the full query with `excludeCompanySymbol`/`excludeCompanyDomain`
- * applied came back with a genuine Perigon {numResults: 0}. Working theory:
- * those structured excludes match on company *mention*, not just by-line, so
- * combined with country=US/language=en they filtered out essentially every
- * Armonk-tagged article. Dropped them in favor of relying solely on the
- * post-fetch keyword check below — verify via production logs after deploy.
+ * article naming the town (once scoped by country=US/language=en) turned out
+ * to be IBM corporate/earnings coverage; multiple rounds of live bisection
+ * (see git history on this file) ruled out the account/key, the location
+ * query syntax, and every other param — the broad country+language search
+ * itself just doesn't surface any non-IBM coverage of this specific town.
+ *
+ * Scoped instead to known hyperlocal Westchester outlets that reliably cover
+ * North Castle/Armonk (The Examiner News, lohud/The Journal News) via
+ * Perigon's `source` domain filter, combined with the same location search.
+ * Every article, date, and link below still comes straight from Perigon's
+ * live response — nothing here is hand-curated.
  */
 
 export interface NewsItem {
@@ -26,14 +29,17 @@ export interface NewsItem {
   publishedAt: string
 }
 
-// muniKey → the town + hamlet names to search. Confirmed live (production
-// runtime logs showed Perigon's own response as {status:200, numResults:0}, a
-// genuine zero-match rather than an error) that Perigon's structured `city`
-// filter doesn't resolve these: "North Castle" is a town, not a city, and
-// "Banksville"/"North White Plains" are small hamlets unlikely to exist in
-// Perigon's location taxonomy — so a `q` free-text search is used instead.
-const NEWS_GEO: Record<string, { cities: string[] }> = {
-  nc: { cities: ['Armonk', 'Banksville', 'North White Plains', 'North Castle'] },
+// muniKey → the town + hamlet names to search, and the specific local outlets
+// to restrict results to. The structured `city` location filter doesn't
+// resolve these place names ("North Castle" is a town, not a city; the
+// hamlets are too small for Perigon's location taxonomy — confirmed live via
+// a genuine Perigon {numResults: 0}), so a free-text `q` search is used
+// instead, narrowed to trusted local sources rather than country/language.
+const NEWS_GEO: Record<string, { cities: string[]; sourceDomains: string[] }> = {
+  nc: {
+    cities: ['Armonk', 'Banksville', 'North White Plains', 'North Castle'],
+    sourceDomains: ['theexaminernews.com', 'lohud.com'],
+  },
 }
 
 interface PerigonSource {
@@ -63,25 +69,15 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   if (!key || !geo) return null
 
   // Perigon's boolean query syntax requires balanced parentheses around OR
-  // groups (per their docs) — an earlier version without them came back with
-  // a genuine {numResults: 0} even for country=US/language=en alone, despite
-  // a bare single-term query proving the account/key works.
+  // groups (per their docs).
   const q = `(${geo.cities.map((c) => (c.includes(' ') ? `"${c}"` : c)).join(' OR ')})`
   const params = new URLSearchParams({
     apiKey: key,
     q,
-    state: 'NY',
-    country: 'US',
-    language: 'en',
     sortBy: 'pubDate',
-    // A generous pool: Armonk is also IBM's HQ, so the raw result set skews
-    // heavily toward corporate/earnings coverage that the IBM filter below
-    // strips out — fetching only a handful risked filtering everything away.
-    size: '50',
-    showReprints: 'false',
+    size: '20',
   })
-  params.append('excludeLabel', 'Non-news')
-  params.append('excludeLabel', 'Opinion')
+  for (const domain of geo.sourceDomains) params.append('source', domain)
 
   const res = await fetch(`https://api.perigon.io/v1/all?${params.toString()}`, {
     signal: AbortSignal.timeout(15000),
@@ -91,32 +87,12 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   const raw = (await res.json()) as Record<string, unknown>
   const data = raw as PerigonResponse
   const articles = Array.isArray(data.articles) ? data.articles : []
-  // TEMP diagnostic: both a structured `city` filter and a free-text `q`
-  // search have independently come back with a genuine {numResults: 0} from
-  // Perigon itself — so the location-targeting strategy isn't the issue.
-  // Bisect against the rest of the query (excludes, sortBy, showReprints,
-  // size, state) with a bare-minimum request, to see whether the account/key
-  // can return ANY articles at all.
+  // TEMP diagnostic: earlier rounds (see git history) proved the account/key
+  // works and ruled out the location-query syntax as the cause of the prior
+  // empty results — this logs the raw shape in case source-domain scoping is
+  // also empty, so the next deploy's logs show why.
   if (articles.length === 0) {
     console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
-    // Bisect round 3: rounds 1-2 proved the account/key works (bare single-
-    // term query) and ruled out state/sortBy/size/showReprints/excludeLabel
-    // (the unparenthesized multi-term OR + country/language alone was ALSO
-    // zero). Now that the main query wraps the OR group in parentheses per
-    // Perigon's documented boolean syntax, test that same parenthesized
-    // string with a bare single-term OR (no quoting) to see whether
-    // parenthesization was the fix, or whether even a trivial 2-term
-    // parenthesized OR still zeroes out with country/language applied.
-    try {
-      const round3Params = new URLSearchParams({ apiKey: key, q: '(Armonk OR "North Castle")', country: 'US', language: 'en', size: '10' })
-      const round3Res = await fetch(`https://api.perigon.io/v1/all?${round3Params.toString()}`, {
-        signal: AbortSignal.timeout(15000),
-      })
-      const round3Raw = round3Res.ok ? await round3Res.json() : { httpError: round3Res.status }
-      console.log(`[news] muni=${muniKey} ROUND3-DIAG status=${round3Res.status} body=${JSON.stringify(round3Raw).slice(0, 500)}`)
-    } catch (e) {
-      console.log(`[news] muni=${muniKey} ROUND3-DIAG threw: ${e instanceof Error ? e.message : String(e)}`)
-    }
   }
 
   let droppedIbm = 0
