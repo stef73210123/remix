@@ -1,11 +1,32 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { AnalysisDataset, MemberProfile, ThemeRollup } from '@/lib/municipal/analysis'
+import type { AnalysisDataset, MemberProfile, MonthlyIssueVolume, ThemeRollup } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel, sentimentLabel } from '../sentiment'
 import MeetingTimelineChart from './MeetingTimelineChart'
 import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
+import Sparkline from '../Sparkline'
 import { fmtDateShort } from '@/lib/municipal/date'
+
+/** Trailing months of history shown in each theme row's sparkline. */
+const SPARKLINE_MONTHS = 12
+
+/** Buckets a theme's per-appearance timeline into trailing monthly volume +
+ *  avg sentiment — same shape/aggregation as aggregateTownIssues'
+ *  monthlyByTheme, just scoped to this one board's dataset. */
+function monthlyFromTimeline(timeline: ThemeRollup['timeline']): MonthlyIssueVolume[] {
+  const byMonth = new Map<string, { sum: number; n: number }>()
+  for (const p of timeline) {
+    const month = p.date.slice(0, 7)
+    const cur = byMonth.get(month) || { sum: 0, n: 0 }
+    cur.sum += p.sentiment
+    cur.n += 1
+    byMonth.set(month, cur)
+  }
+  return [...byMonth.entries()]
+    .map(([month, v]) => ({ month, volume: v.n, avgSentiment: v.sum / v.n }))
+    .sort((a, b) => a.month.localeCompare(b.month))
+}
 
 function fmtCaptionDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
@@ -179,7 +200,12 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
       <div className="card" style={{ padding: 16, marginBottom: 28 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {themesSorted.map((t) => (
-            <ThemeRow key={t.theme} t={t} maxMeetings={Math.max(1, ...themesSorted.map((x) => x.meetings))} />
+            <ThemeRow
+              key={t.theme}
+              t={t}
+              maxMeetings={Math.max(1, ...themesSorted.map((x) => x.meetings))}
+              spark={monthlyFromTimeline(t.timeline).slice(-SPARKLINE_MONTHS)}
+            />
           ))}
         </div>
         <div className="muted" style={{ fontSize: 11, marginTop: 14, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -244,15 +270,18 @@ function MemberCard({ mem, muni, body, role, inactive = false }: { mem: MemberPr
   )
 }
 
-function ThemeRow({ t, maxMeetings }: { t: ThemeRollup; maxMeetings: number }) {
+function ThemeRow({ t, maxMeetings, spark }: { t: ThemeRollup; maxMeetings: number; spark: MonthlyIssueVolume[] }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      <div style={{ width: 180, fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 0 }}>{t.theme}</div>
-      <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 5, height: 14, overflow: 'hidden' }}>
-        <div style={{ width: `${(t.meetings / maxMeetings) * 100}%`, height: '100%', background: 'var(--c)', borderRadius: 5, minWidth: 4 }} />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+      <span style={{ flex: '2 1 100px', minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={t.theme}>
+        {t.theme}
+      </span>
+      <div style={{ flex: '3 1 50px', background: 'var(--panel-2)', borderRadius: 5, height: 12, overflow: 'hidden' }}>
+        <div style={{ width: `${(t.meetings / maxMeetings) * 100}%`, height: '100%', background: sentimentColor(t.avgSentiment), borderRadius: 5, minWidth: 4 }} />
       </div>
-      <div className="muted" style={{ width: 58, fontSize: 12, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>{t.meetings} mtg</div>
-      <span style={{ ...sentimentChipStyle(t.avgSentiment), minWidth: 46 }} title={`avg sentiment ${fmtSent(t.avgSentiment)}`}>{fmtSent(t.avgSentiment)}</span>
+      <span className="muted" style={{ width: 44, fontSize: 12, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }} title={`${t.meetings} meetings`}>{t.meetings} mtg</span>
+      <span style={{ ...sentimentChipStyle(t.avgSentiment), width: 36, flexShrink: 0, textAlign: 'center', padding: '2px 0' }} title={`avg sentiment ${fmtSent(t.avgSentiment)}`}>{fmtSent(t.avgSentiment)}</span>
+      <Sparkline points={spark} />
     </div>
   )
 }
