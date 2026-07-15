@@ -59,7 +59,10 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     country: 'US',
     language: 'en',
     sortBy: 'pubDate',
-    size: '20',
+    // A generous pool: Armonk is also IBM's HQ, so the raw result set skews
+    // heavily toward corporate/earnings coverage that the IBM filter below
+    // strips out — fetching only a handful risked filtering everything away.
+    size: '50',
     showReprints: 'false',
     excludeCompanySymbol: 'IBM',
     excludeCompanyDomain: 'ibm.com',
@@ -76,16 +79,19 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   const data = (await res.json()) as PerigonResponse
   const articles = Array.isArray(data.articles) ? data.articles : []
 
+  let droppedIbm = 0
+  let droppedMalformed = 0
   const items: NewsItem[] = []
   for (const a of articles) {
     const title = a.title?.trim()
     const url = a.url || a.link
-    if (!title || !url) continue
+    if (!title || !url) { droppedMalformed++; continue }
     const summary = (a.summary || a.description || '').trim()
-    if (MENTIONS_IBM.test(title) || MENTIONS_IBM.test(summary)) continue
+    if (MENTIONS_IBM.test(title) || MENTIONS_IBM.test(summary)) { droppedIbm++; continue }
     const source = typeof a.source === 'string' ? a.source : a.source?.name || a.source?.domain || 'News'
     items.push({ key: url, title, source, url, summary, publishedAt: a.pubDate || a.date || '' })
     if (items.length >= MAX_ITEMS) break
   }
+  console.log(`[news] muni=${muniKey} raw=${articles.length} dropped(ibm=${droppedIbm}, malformed=${droppedMalformed}) kept=${items.length}`)
   return items
 }
