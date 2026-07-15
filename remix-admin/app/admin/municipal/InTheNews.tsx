@@ -16,6 +16,7 @@ interface NewsItem {
   publishedAt: string
   category: string
   categoryIcon: NewsCategoryIcon
+  imageUrl: string | null
 }
 
 const CATEGORY_ICONS: Record<NewsCategoryIcon, typeof Landmark> = {
@@ -145,28 +146,39 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
                 rel="noopener noreferrer"
                 data-news-card
                 className="card"
-                style={{ padding: 16, flex: '0 0 280px', minWidth: 0, scrollSnapAlign: 'start', display: 'block', color: 'inherit', textDecoration: 'none' }}
+                style={{ overflow: 'hidden', flex: '0 0 280px', minWidth: 0, scrollSnapAlign: 'start', display: 'block', color: 'inherit', textDecoration: 'none' }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                  <Icon size={14} aria-hidden style={{ flexShrink: 0, color: 'var(--muted)' }} />
-                  <span className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{n.category}</span>
-                </div>
-                <div style={{
-                  fontSize: 14, fontWeight: 700, lineHeight: 1.3,
-                  display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                }}>
-                  {n.title}
-                </div>
-                {n.summary && (
-                  <div className="muted" style={{
-                    fontSize: 12.5, marginTop: 8, lineHeight: 1.5,
-                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                  }}>
-                    {n.summary}
-                  </div>
+                {n.imageUrl && (
+                  <img
+                    src={n.imageUrl}
+                    alt=""
+                    loading="lazy"
+                    onError={(e) => { e.currentTarget.style.display = 'none' }}
+                    style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', background: 'var(--panel-2)' }}
+                  />
                 )}
-                <div className="muted" style={{ fontSize: 11.5, marginTop: 10 }}>
-                  {n.source}{dateLabel ? ` · ${dateLabel}` : ''} ↗
+                <div style={{ padding: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                    <Icon size={14} aria-hidden style={{ flexShrink: 0, color: 'var(--muted)' }} />
+                    <span className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{n.category}</span>
+                  </div>
+                  <div style={{
+                    fontSize: 14, fontWeight: 700, lineHeight: 1.3,
+                    display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                  }}>
+                    {n.title}
+                  </div>
+                  {n.summary && (
+                    <div className="muted" style={{
+                      fontSize: 12.5, marginTop: 8, lineHeight: 1.5,
+                      display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                    }}>
+                      {n.summary}
+                    </div>
+                  )}
+                  <div className="muted" style={{ fontSize: 11.5, marginTop: 10 }}>
+                    {n.source}{dateLabel ? ` · ${dateLabel}` : ''} ↗
+                  </div>
                 </div>
               </a>
             )
