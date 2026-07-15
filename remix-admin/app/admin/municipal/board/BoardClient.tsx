@@ -150,14 +150,6 @@ export default function BoardClient({ userName }: { userName: string }) {
       .finally(() => setLoading(false))
   }, [])
 
-  const counts = useMemo(() => {
-    const t0 = startOfToday()
-    const ms = data?.meetings || []
-    return {
-      past: ms.filter((m) => new Date(m.scheduled_at).getTime() < t0).length,
-      upcoming: ms.filter((m) => new Date(m.scheduled_at).getTime() >= t0).length,
-    }
-  }, [data])
   const projectedNext = useMemo(
     () => (data ? nextMeetingDate(data.board.meetingPattern, new Date(startOfToday())) : null),
     [data]
@@ -293,10 +285,7 @@ export default function BoardClient({ userName }: { userName: string }) {
               the right, matching the municipal dashboard. Where an analysis
               dataset exists, the meeting-by-meeting rows attach here in place of
               the plain list. */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>
-            Meetings
-            <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {counts.past} past · {counts.upcoming} upcoming</span>
-          </h2>
+          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Meetings</h2>
           <MeetingTimeline
             items={timelineItems}
             selectedKey={selectedMeetingKey}

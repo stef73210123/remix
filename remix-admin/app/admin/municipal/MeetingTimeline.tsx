@@ -94,7 +94,11 @@ export default function MeetingTimeline({
       className="card"
       style={{ padding: '22px 8px 18px', marginBottom: 8, overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}
     >
-      <div style={{ display: 'flex', minWidth: 'min-content', alignItems: 'stretch' }}>
+      {/* flex-start (not stretch): a past card with several wrapped document
+          badges shouldn't force every other card in the row taller than its
+          own content needs — the "Now" divider still spans the full row
+          height via its own explicit alignSelf: 'stretch' below. */}
+      <div style={{ display: 'flex', minWidth: 'min-content', alignItems: 'flex-start' }}>
         {items.map((it, i) => {
           const dotColor = it.past ? 'var(--muted)' : it.projected ? 'var(--c)' : 'var(--primary)'
           return (
