@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { AggregateThemeStat, MonthlyIssueVolume } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent } from './sentiment'
+import Sparkline from './Sparkline'
 
 interface Aggregate {
   available?: boolean
@@ -16,8 +17,6 @@ type SortBy = 'volume' | 'sentiment'
 
 /** Trailing months of history shown in each row's sparkline. */
 const SPARKLINE_MONTHS = 12
-const SPARK_W = 104
-const SPARK_H = 22
 
 /** Diverging sentiment bar: center = 0, fills right (positive) / left (negative). */
 function DivergingBar({ score }: { score: number }) {
@@ -33,32 +32,6 @@ function DivergingBar({ score }: { score: number }) {
         }}
       />
     </div>
-  )
-}
-
-/** Trailing-12-month volume trend — same visual language as the Recurring
- *  Agenda Items sparkline (board/CasesList.tsx's `Spark`): a full-width
- *  baseline, a thin connecting line, and every point plotted as its own
- *  dot colored by that month's sentiment (not just the latest one). Height
- *  encodes volume off a zero baseline rather than diverging from a
- *  midline, since volume (unlike sentiment) is never negative. */
-function Sparkline({ points }: { points: MonthlyIssueVolume[] }) {
-  if (points.length === 0) {
-    return <span className="muted" style={{ fontSize: 10, width: SPARK_W, display: 'inline-block', textAlign: 'center', flexShrink: 0 }}>—</span>
-  }
-  const n = points.length
-  const maxV = Math.max(1, ...points.map((p) => p.volume))
-  const x = (i: number) => (n === 1 ? SPARK_W / 2 : (i / (n - 1)) * SPARK_W)
-  const y = (v: number) => SPARK_H - 2 - (v / maxV) * (SPARK_H - 4)
-  const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.volume).toFixed(1)}`).join(' ')
-  return (
-    <svg width={SPARK_W} height={SPARK_H} style={{ display: 'block', flexShrink: 0 }} aria-hidden>
-      <line x1={0} y1={SPARK_H - 2} x2={SPARK_W} y2={SPARK_H - 2} stroke="var(--border)" strokeWidth={1} />
-      {n > 1 && <path d={d} fill="none" stroke="var(--muted)" strokeWidth={1.5} />}
-      {points.map((p, i) => (
-        <circle key={i} cx={x(i)} cy={y(p.volume)} r={2.5} fill={sentimentColor(p.avgSentiment)} />
-      ))}
-    </svg>
   )
 }
 
@@ -182,7 +155,7 @@ export default function IssuesOverview({ muni }: { muni: string }) {
               const spark = (agg.monthlyByTheme[t.theme] || []).slice(-SPARKLINE_MONTHS)
               return (
                 <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, flexShrink: 0 }}>
-                  <span style={{ flex: '1 1 90px', minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={t.theme}>
+                  <span style={{ flex: '2 1 100px', minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={t.theme}>
                     {t.theme}
                   </span>
                   {sortBy === 'volume' ? (

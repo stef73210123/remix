@@ -76,8 +76,17 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     next: { revalidate: 3600 },
   })
   if (!res.ok) throw new Error(`perigon HTTP ${res.status}`)
-  const data = (await res.json()) as PerigonResponse
+  const raw = (await res.json()) as Record<string, unknown>
+  const data = raw as PerigonResponse
   const articles = Array.isArray(data.articles) ? data.articles : []
+  // TEMP diagnostic: the query returns raw=0 in production for reasons not yet
+  // understood (not the IBM filter — that only drops articles that made it
+  // through). Log the response shape so the next deploy's logs reveal whether
+  // Perigon is erroring under a different field, paginating differently, or
+  // genuinely matching nothing.
+  if (articles.length === 0) {
+    console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
+  }
 
   let droppedIbm = 0
   let droppedMalformed = 0
