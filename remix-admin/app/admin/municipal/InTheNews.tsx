@@ -14,9 +14,9 @@ interface NewsItem {
 
 /**
  * "In the news" — live local coverage of the town and its hamlets (Perigon
- * News API), right after Community organizations. Fetched like KeyIssues/
- * TopicVolumeChart; renders nothing while loading or if no key is configured
- * server-side. Same horizontally-scrollable card pattern as CommunityOrgs.
+ * News API), right after Community organizations. Fetched like KeyIssues;
+ * renders nothing while loading or if no key is configured server-side.
+ * Same horizontally-scrollable card pattern as CommunityOrgs.
  */
 export default function InTheNews({ muniKey }: { muniKey: string }) {
   const [items, setItems] = useState<NewsItem[] | null>(null)
