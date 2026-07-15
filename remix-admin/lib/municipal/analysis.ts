@@ -149,10 +149,15 @@ export interface AggregateThemeStat {
   avgSentiment: number
   boards: string[]
 }
+export interface MonthlyIssueVolume { month: string; volume: number; avgSentiment: number }
 export interface TownIssuesAggregate {
   town: string
   years: number[]
   byYear: Record<string, AggregateThemeStat[]>
+  /** Total topic mentions per calendar month (every theme timeline point,
+   *  across every analyzed board), oldest → newest, for the dashboard's
+   *  topic-volume trend line. */
+  monthly: MonthlyIssueVolume[]
 }
 
 /** Aggregate theme volume + sentiment across ALL of a town's boards, by calendar
@@ -163,6 +168,8 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
   let town = ''
   // year → theme → { sum, n, boards }
   const perYear = new Map<number, Map<string, { sum: number; n: number; boards: Set<string> }>>()
+  // 'YYYY-MM' → { sum, n } — every theme-mention that month, regardless of theme.
+  const perMonth = new Map<string, { sum: number; n: number }>()
   for (const body of bodies) {
     const data = loadAnalysis(muniKey, body)
     if (!data) continue
@@ -179,6 +186,12 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
         cur.n += 1
         cur.boards.add(boardName)
         tm.set(theme.theme, cur)
+
+        const month = pt.date.slice(0, 7)
+        const mCur = perMonth.get(month) || { sum: 0, n: 0 }
+        mCur.sum += pt.sentiment
+        mCur.n += 1
+        perMonth.set(month, mCur)
       }
     }
   }
@@ -190,7 +203,10 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
       .sort((a, b) => b.mentions - a.mentions)
   }
   const years = [...perYear.keys()].sort((a, b) => b - a)
-  return { town, years, byYear }
+  const monthly = [...perMonth.entries()]
+    .map(([month, v]) => ({ month, volume: v.n, avgSentiment: v.sum / v.n }))
+    .sort((a, b) => a.month.localeCompare(b.month))
+  return { town, years, byYear, monthly }
 }
 
 const cache = new Map<string, AnalysisDataset | null>()
