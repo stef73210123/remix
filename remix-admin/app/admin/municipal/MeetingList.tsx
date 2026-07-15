@@ -39,13 +39,28 @@ export default function MeetingList({
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const [openMeeting, setOpenMeeting] = useState<string | null>(null)
 
-  // Newest first; items without a date (e.g. a projected/pattern-only row) sort last.
-  const rows = [...items].sort((a, b) => {
-    if (a.date && b.date) return b.date.getTime() - a.date.getTime()
-    if (a.date) return -1
-    if (b.date) return 1
-    return 0
-  })
+  // Matches MeetingTimeline's right-edge orientation: the soonest upcoming
+  // meeting leads (visible without scrolling), any further-out projected
+  // meetings follow in chronological order, then history most-recent-first —
+  // rather than a single date-descending sort, which would bury the actual
+  // next meeting under a board's later-in-the-year projected dates.
+  const upcoming = items
+    .filter((it) => !it.past)
+    .sort((a, b) => {
+      if (a.date && b.date) return a.date.getTime() - b.date.getTime()
+      if (a.date) return -1
+      if (b.date) return 1
+      return 0
+    })
+  const past = items
+    .filter((it) => it.past)
+    .sort((a, b) => {
+      if (a.date && b.date) return b.date.getTime() - a.date.getTime()
+      if (a.date) return -1
+      if (b.date) return 1
+      return 0
+    })
+  const rows = [...upcoming, ...past]
 
   // Scroll a selection made elsewhere (e.g. the paired MeetingTimeline) into view here.
   useEffect(() => {
