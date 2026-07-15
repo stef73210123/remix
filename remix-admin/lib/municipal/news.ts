@@ -5,11 +5,16 @@
  * absent or the fetch fails. The key is read from process.env only — never
  * hard-coded or logged.
  *
- * Armonk is also IBM's corporate headquarters, so a plain location search
- * floods with unrelated corporate/earnings coverage. Excluded via Perigon's
- * structured company filters (not a fragile keyword match), plus a
- * defensive keyword check as a second layer in case a mention slips through
- * without being tagged as IBM-company content.
+ * Armonk is also IBM's corporate headquarters — and "ARMONK, N.Y." is IBM's
+ * standard press-release dateline, so nearly every English-language US
+ * article naming the town is IBM corporate/earnings coverage. A bare query
+ * (no filters beyond the search term) confirmed live that Perigon has real
+ * matches; the full query with `excludeCompanySymbol`/`excludeCompanyDomain`
+ * applied came back with a genuine Perigon {numResults: 0}. Working theory:
+ * those structured excludes match on company *mention*, not just by-line, so
+ * combined with country=US/language=en they filtered out essentially every
+ * Armonk-tagged article. Dropped them in favor of relying solely on the
+ * post-fetch keyword check below — verify via production logs after deploy.
  */
 
 export interface NewsItem {
@@ -70,8 +75,6 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     // strips out — fetching only a handful risked filtering everything away.
     size: '50',
     showReprints: 'false',
-    excludeCompanySymbol: 'IBM',
-    excludeCompanyDomain: 'ibm.com',
   })
   params.append('excludeLabel', 'Non-news')
   params.append('excludeLabel', 'Opinion')
