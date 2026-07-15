@@ -40,9 +40,14 @@
    along with the bounce. That reads as the footer "scrolling" instead of
    staying put once you've hit the true bottom of the page. Disabling the
    bounce removes the glitch outright; scoped to this flavor since only it
-   has the fixed bottom bar this behavior affects. */
-html[data-flavor='opennorthcastle'] {
-  overscroll-behavior-y: none;
+   has the fixed bottom bar this behavior affects.
+   Set on both axes and on both html and body: Safari's rubber-band applies
+   to whichever element ends up as the effective scrolling root, and a
+   Y-only override on just `html` has been observed to stop suppressing the
+   bounce after unrelated layout changes shift what that root is. */
+html[data-flavor='opennorthcastle'],
+html[data-flavor='opennorthcastle'] body {
+  overscroll-behavior: none;
 }
 
 /* White cards, cooler radius, soft cool shadow (no heavy dark shadows). */
