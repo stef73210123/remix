@@ -149,10 +149,12 @@ export function MeetingRow({
               {c.memberPositions.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 6 }}>
                   {c.memberPositions.map((p, j) => (
-                    <div key={j} style={{ display: 'flex', gap: 8, alignItems: 'baseline', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, width: 108, flexShrink: 0 }}>{p.member}</span>
-                      <span style={{ ...sentimentChipStyle(p.score), flexShrink: 0 }}>{fmtSent(p.score)}</span>
-                      <span className="muted" style={{ flex: 1 }}>
+                    <div key={j} style={{ fontSize: 12 }}>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <span style={{ fontWeight: 600 }}>{p.member}</span>
+                        <span style={{ ...sentimentChipStyle(p.score) }}>{fmtSent(p.score)}</span>
+                      </div>
+                      <span className="muted" style={{ display: 'block', marginTop: 2 }}>
                         {p.stance}{p.evidence ? ` — ${p.evidence}` : ''}
                         {p.confidence === 'low' ? ' (low confidence)' : ''}
                       </span>

@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
 import KeyIssues from './KeyIssues'
+import TopicVolumeChart from './TopicVolumeChart'
 import ElectionResults from './ElectionResults'
 import CommunityCalendar from './CommunityCalendar'
 import CommunityOrgs from './CommunityOrgs'
@@ -732,6 +733,9 @@ export default function MunicipalClient({
 
           {/* Narrative key-issue synopsis, above the sorted theme bars. */}
           {board === 'ALL' && town !== 'ALL' && <KeyIssues muniKey={town} />}
+
+          {/* Full-width topic-volume trend, directly below Key Issues. */}
+          {board === 'ALL' && town !== 'ALL' && <TopicVolumeChart muni={town} />}
 
           {/* Town-wide local issues across all boards — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
