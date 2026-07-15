@@ -2,12 +2,19 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { sentimentColor, fmtSent } from './sentiment'
+import BoardFilterDropdown from './BoardFilterDropdown'
 
 interface MonthlyIssueVolume { month: string; volume: number; avgSentiment: number }
 interface Aggregate {
   available?: boolean
   monthly?: MonthlyIssueVolume[]
+  boards?: string[]
+  monthlyByBoard?: Record<string, MonthlyIssueVolume[]>
 }
+
+/** Default view is the trailing 12 months — a "how are we doing lately"
+ *  read, not the full multi-year history. */
+const DEFAULT_MONTHS = 12
 
 function monthLabel(iso: string): string {
   const d = new Date(iso + '-01T12:00:00Z')
@@ -21,7 +28,7 @@ function monthLabelFull(iso: string): string {
 }
 
 const W = 900
-const H = 240
+const H = 320
 const PAD = { t: 14, r: 16, b: 30, l: 34 }
 
 /**
@@ -34,10 +41,12 @@ export default function TopicVolumeChart({ muni }: { muni: string }) {
   const [agg, setAgg] = useState<Aggregate | null>(null)
   const [loading, setLoading] = useState(true)
   const [hover, setHover] = useState<number | null>(null)
+  const [hiddenBoards, setHiddenBoards] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     setLoading(true)
     setAgg(null)
+    setHiddenBoards(new Set())
     fetch(`/admin/api/municipal/aggregate?muni=${encodeURIComponent(muni)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
       .then((d: Aggregate) => setAgg(d && d.available !== false ? d : null))
@@ -45,7 +54,28 @@ export default function TopicVolumeChart({ muni }: { muni: string }) {
       .finally(() => setLoading(false))
   }, [muni])
 
-  const points = useMemo(() => agg?.monthly ?? [], [agg])
+  const boards = agg?.boards ?? []
+
+  // Recombine the selected boards' per-month stats client-side, so toggling
+  // the filter never needs a re-fetch. avgSentiment is volume-weighted so the
+  // combined average is exact, not an average-of-averages.
+  const allMonths = useMemo(() => {
+    const selected = boards.filter((b) => !hiddenBoards.has(b))
+    const byMonth = new Map<string, { volume: number; sentSum: number }>()
+    for (const b of selected) {
+      for (const p of agg?.monthlyByBoard?.[b] ?? []) {
+        const cur = byMonth.get(p.month) || { volume: 0, sentSum: 0 }
+        cur.volume += p.volume
+        cur.sentSum += p.avgSentiment * p.volume
+        byMonth.set(p.month, cur)
+      }
+    }
+    return [...byMonth.entries()]
+      .map(([month, v]) => ({ month, volume: v.volume, avgSentiment: v.volume ? v.sentSum / v.volume : 0 }))
+      .sort((a, b) => a.month.localeCompare(b.month))
+  }, [agg, boards, hiddenBoards])
+
+  const points = useMemo(() => allMonths.slice(-DEFAULT_MONTHS), [allMonths])
 
   const plotW = W - PAD.l - PAD.r
   const plotH = H - PAD.t - PAD.b
@@ -65,7 +95,12 @@ export default function TopicVolumeChart({ muni }: { muni: string }) {
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Topic volume by month</h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h2 style={{ fontSize: 16, margin: 0 }}>Topic volume by month</h2>
+        {boards.length > 1 && (
+          <BoardFilterDropdown options={boards} hidden={hiddenBoards} onChange={setHiddenBoards} />
+        )}
+      </div>
       <div className="card" style={{ padding: '14px 12px 10px', position: 'relative' }}>
         <svg
           viewBox={`0 0 ${W} ${H}`}

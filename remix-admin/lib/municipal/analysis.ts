@@ -158,6 +158,13 @@ export interface TownIssuesAggregate {
    *  across every analyzed board), oldest → newest, for the dashboard's
    *  topic-volume trend line. */
   monthly: MonthlyIssueVolume[]
+  /** Board/committee names with an analyzed timeline, in the order their
+   *  data was encountered — the topic-volume chart's board filter options. */
+  boards: string[]
+  /** Same per-month volume/sentiment as `monthly`, split out per board so the
+   *  topic-volume chart's board filter can recombine any subset of boards
+   *  client-side without re-fetching. */
+  monthlyByBoard: Record<string, MonthlyIssueVolume[]>
 }
 
 /** Aggregate theme volume + sentiment across ALL of a town's boards, by calendar
@@ -170,11 +177,17 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
   const perYear = new Map<number, Map<string, { sum: number; n: number; boards: Set<string> }>>()
   // 'YYYY-MM' → { sum, n } — every theme-mention that month, regardless of theme.
   const perMonth = new Map<string, { sum: number; n: number }>()
+  // board → 'YYYY-MM' → { sum, n } — same, split per board for the chart filter.
+  const perMonthByBoard = new Map<string, Map<string, { sum: number; n: number }>>()
+  const boardsSeen: string[] = []
   for (const body of bodies) {
     const data = loadAnalysis(muniKey, body)
     if (!data) continue
     town = town || data.meta.town
     const boardName = data.meta.board
+    if (!boardsSeen.includes(boardName)) boardsSeen.push(boardName)
+    if (!perMonthByBoard.has(boardName)) perMonthByBoard.set(boardName, new Map())
+    const boardMonths = perMonthByBoard.get(boardName)!
     for (const theme of data.themes) {
       for (const pt of theme.timeline) {
         const year = Number(pt.date.slice(0, 4))
@@ -192,6 +205,11 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
         mCur.sum += pt.sentiment
         mCur.n += 1
         perMonth.set(month, mCur)
+
+        const bmCur = boardMonths.get(month) || { sum: 0, n: 0 }
+        bmCur.sum += pt.sentiment
+        bmCur.n += 1
+        boardMonths.set(month, bmCur)
       }
     }
   }
@@ -206,7 +224,13 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
   const monthly = [...perMonth.entries()]
     .map(([month, v]) => ({ month, volume: v.n, avgSentiment: v.sum / v.n }))
     .sort((a, b) => a.month.localeCompare(b.month))
-  return { town, years, byYear, monthly }
+  const monthlyByBoard: Record<string, MonthlyIssueVolume[]> = {}
+  for (const [boardName, months] of perMonthByBoard) {
+    monthlyByBoard[boardName] = [...months.entries()]
+      .map(([month, v]) => ({ month, volume: v.n, avgSentiment: v.sum / v.n }))
+      .sort((a, b) => a.month.localeCompare(b.month))
+  }
+  return { town, years, byYear, monthly, boards: boardsSeen, monthlyByBoard }
 }
 
 const cache = new Map<string, AnalysisDataset | null>()
