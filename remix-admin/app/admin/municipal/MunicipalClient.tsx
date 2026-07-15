@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import dynamic from 'next/dynamic'
 import Demographics from './Demographics'
@@ -232,6 +232,73 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   )
 }
 
+/** Multi-select filter for the Meetings widget — which boards/committees'
+ *  meetings appear on the combined timeline. `hidden` names are excluded;
+ *  everything is shown (checked) by default. */
+function BoardFilterDropdown({
+  options, hidden, onChange,
+}: {
+  options: string[]
+  hidden: Set<string>
+  onChange: (next: Set<string>) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDocClick = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDocClick)
+    return () => document.removeEventListener('mousedown', onDocClick)
+  }, [open])
+
+  const toggle = (b: string) => {
+    const next = new Set(hidden)
+    if (next.has(b)) next.delete(b); else next.add(b)
+    onChange(next)
+  }
+  const shownCount = options.length - hidden.size
+
+  return (
+    <div ref={wrapRef} style={{ position: 'relative' }}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="btn secondary"
+        style={{ padding: '4px 10px', fontSize: 12.5, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+      >
+        Boards
+        <span className="muted">{shownCount}/{options.length}</span>
+        <span style={{ fontSize: 9 }}>▾</span>
+      </button>
+      {open && (
+        <div
+          className="card"
+          style={{
+            position: 'absolute', top: '100%', right: 0, marginTop: 4, minWidth: 200, zIndex: 20,
+            padding: 8, display: 'flex', flexDirection: 'column', gap: 2, boxShadow: '0 6px 20px rgba(0,0,0,0.25)',
+          }}
+        >
+          <button
+            onClick={() => onChange(new Set())}
+            className="muted"
+            style={{ all: 'unset', cursor: 'pointer', fontSize: 12, padding: '4px 6px' }}
+          >
+            Select all
+          </button>
+          {options.map((b) => (
+            <label key={b} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, padding: '4px 6px', cursor: 'pointer' }}>
+              <input type="checkbox" checked={!hidden.has(b)} onChange={() => toggle(b)} />
+              {b}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function MunicipalClient({
   userName,
 }: {
@@ -309,6 +376,13 @@ export default function MunicipalClient({
   const [selectedMeetingKey, setSelectedMeetingKey] = useState<string | null>(null)
   useEffect(() => { setSelectedMeetingKey(null) }, [board, town])
 
+  // Meetings widget's own board/committee filter (distinct from the page-level
+  // `board` tab above) — only meaningful on the combined "Dashboard" tab,
+  // where every board's meetings intermingle in one timeline. A board name in
+  // this set is hidden; empty (the default) shows every board.
+  const [hiddenMeetingBoards, setHiddenMeetingBoards] = useState<Set<string>>(new Set())
+  useEffect(() => { setHiddenMeetingBoards(new Set()) }, [town])
+
   // ONC only: measure the sticky header's real height so the tab strip below
   // it can stick flush underneath (the header's height isn't fixed — it wraps
   // on narrow viewports — so this is tracked live rather than hardcoded).
@@ -375,11 +449,13 @@ export default function MunicipalClient({
     [meetingsFiltered]
   )
 
-  // One "next meeting" row per tracked board: prefer a real ingested upcoming
-  // meeting (with its agenda); otherwise project the next date from the
-  // schedule. Town Board and Planning Board — the two boards this dashboard
-  // actually tracks — instead get every remaining date this calendar year,
-  // not just the next one, so residents can see the full rest-of-year schedule.
+  // One row per upcoming meeting, per tracked board: every board gets its
+  // full remaining-this-calendar-year schedule (every ingested future
+  // meeting, plus every not-yet-ingested date its recurring pattern implies),
+  // not just the single soonest date — so all of a board's known meeting
+  // dates show on the timeline. A board with neither a real upcoming meeting
+  // nor a parseable pattern still falls back to a single TBD row so it isn't
+  // silently dropped from the widget.
   const upcomingRows = useMemo(() => {
     const t0 = startOfToday()
     const today = new Date(t0)
@@ -394,18 +470,23 @@ export default function MunicipalClient({
           .filter((mm) => mm.muni_key === m.key && mm.body_name === b.displayName && new Date(mm.scheduled_at).getTime() >= t0)
           .sort((a, c) => new Date(a.scheduled_at).getTime() - new Date(c.scheduled_at).getTime())
 
-        if (isOpen && (b.key === 'town_board' || b.key === 'planning')) {
+        let addedAny = false
+        if (isOpen) {
           for (const mm of ingestedFuture) {
             rows.push({ ...common, date: new Date(mm.scheduled_at), assets: mm.assets, projected: false })
+            addedAny = true
           }
           const ingestedDays = new Set(ingestedFuture.map((mm) => dayKey(new Date(mm.scheduled_at))))
           for (const d of remainingYearMeetingDates(b.meetingPattern, today, yearEnd)) {
-            if (!ingestedDays.has(dayKey(d))) rows.push({ ...common, date: d, assets: [], projected: true })
+            if (!ingestedDays.has(dayKey(d))) { rows.push({ ...common, date: d, assets: [], projected: true }); addedAny = true }
           }
-        } else if (ingestedFuture[0]) {
-          rows.push({ ...common, date: new Date(ingestedFuture[0].scheduled_at), assets: ingestedFuture[0].assets, projected: false })
-        } else {
-          rows.push({ ...common, date: nextMeetingDate(b.meetingPattern, today), assets: [], projected: true })
+        }
+        if (!addedAny) {
+          if (ingestedFuture[0]) {
+            rows.push({ ...common, date: new Date(ingestedFuture[0].scheduled_at), assets: ingestedFuture[0].assets, projected: false })
+          } else {
+            rows.push({ ...common, date: nextMeetingDate(b.meetingPattern, today), assets: [], projected: true })
+          }
         }
       }
     }
@@ -476,6 +557,27 @@ export default function MunicipalClient({
     return [...hist, ...up]
   }, [history, upcomingRows, meetingAnalysisByKey])
 
+  // Distinct board/committee names actually present on the combined timeline —
+  // the multi-select filter's option list, in the same oldest-board-first
+  // order they appear.
+  const meetingBoardOptions = useMemo(() => {
+    const seen = new Set<string>()
+    const out: string[] = []
+    for (const it of timelineItems) if (it.board && !seen.has(it.board)) { seen.add(it.board); out.push(it.board) }
+    return out
+  }, [timelineItems])
+
+  // The board/committee multi-select filter only makes sense on the combined
+  // "Dashboard" tab (board === 'ALL'), where several boards' meetings
+  // intermingle in one timeline — a single-board tab already shows just that
+  // board, so the filter is a no-op there.
+  const visibleTimelineItems = useMemo(
+    () => (board === 'ALL' && hiddenMeetingBoards.size > 0
+      ? timelineItems.filter((it) => !it.board || !hiddenMeetingBoards.has(it.board))
+      : timelineItems),
+    [timelineItems, board, hiddenMeetingBoards]
+  )
+
   // Meetings — one horizontal timeline: history on the left, the next meeting
   // per board on the right, with a "Now" divider between. Rendered once and
   // referenced from two different spots below: right under the board's own
@@ -483,21 +585,25 @@ export default function MunicipalClient({
   // Sentiment (the "All" dashboard tab) — never both at once.
   //
   // Until the user clicks a specific meeting, the selection defaults to the
-  // soonest upcoming one (timelineItems' first non-past entry, already sorted
-  // ascending) so the timeline and list highlight the next meeting ahead of
-  // "Now" on load, rather than nothing being selected.
-  const defaultMeetingKey = timelineItems.find((it) => !it.past)?.key ?? null
+  // soonest upcoming one (visibleTimelineItems' first non-past entry, already
+  // sorted ascending) so the timeline and list highlight the next meeting
+  // ahead of "Now" on load, rather than nothing being selected.
+  const defaultMeetingKey = visibleTimelineItems.find((it) => !it.past)?.key ?? null
   const effectiveMeetingKey = selectedMeetingKey ?? defaultMeetingKey
   const meetingsBlock = data && (
     <>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>
-          Meetings
-          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {history.length} past · next meeting ahead</span>
-        </h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
+        <h2 style={{ fontSize: 16, margin: 0 }}>Meetings</h2>
+        {board === 'ALL' && meetingBoardOptions.length > 1 && (
+          <BoardFilterDropdown
+            options={meetingBoardOptions}
+            hidden={hiddenMeetingBoards}
+            onChange={setHiddenMeetingBoards}
+          />
+        )}
       </div>
       <MeetingTimeline
-        items={timelineItems}
+        items={visibleTimelineItems}
         selectedKey={effectiveMeetingKey}
         onSelect={setSelectedMeetingKey}
         emptyText={
@@ -520,9 +626,9 @@ export default function MunicipalClient({
           />
         </div>
       ) : (
-        timelineItems.length > 0 && (
+        visibleTimelineItems.length > 0 && (
           <div style={{ marginTop: 10 }}>
-            <MeetingList items={timelineItems} selectedKey={effectiveMeetingKey} onSelect={setSelectedMeetingKey} />
+            <MeetingList items={visibleTimelineItems} selectedKey={effectiveMeetingKey} onSelect={setSelectedMeetingKey} />
           </div>
         )
       )}
