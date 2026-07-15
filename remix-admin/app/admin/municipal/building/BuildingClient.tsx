@@ -126,15 +126,18 @@ const STAGE_LABEL: Record<ScatterStage, string> = {
 
 function StageSelect({ value, onChange }: { value: ScatterStage; onChange: (v: ScatterStage) => void }) {
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value as ScatterStage)}
-      aria-label="Filter by pipeline stage"
-      style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-    >
-      <option value="app_permit">Application → Permit</option>
-      <option value="permit_co">Permit → CO</option>
-    </select>
+    <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
+      {([['app_permit', 'Application → Permit'], ['permit_co', 'Permit → CO']] as const).map(([k, label]) => (
+        <button
+          key={k}
+          onClick={() => onChange(k)}
+          className="btn secondary"
+          style={{ padding: '4px 10px', fontSize: 12, ...(value === k ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
   )
 }
 

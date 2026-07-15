@@ -16,15 +16,19 @@ type SortBy = 'volume' | 'sentiment'
 
 /** Trailing months of history shown in each row's sparkline. */
 const SPARKLINE_MONTHS = 12
-const SPARK_W = 52
-const SPARK_H = 18
+const SPARK_W = 80
+const SPARK_H = 22
+/** Fixed bar width — small and constant rather than flex-filling the row,
+ *  so the theme name and the sparkline (the two things worth more room)
+ *  get it instead. */
+const BAR_W = 42
 
 /** Diverging sentiment bar: center = 0, fills right (positive) / left (negative). */
 function DivergingBar({ score }: { score: number }) {
   const s = Math.max(-1, Math.min(1, score))
   const half = Math.abs(s) * 50
   return (
-    <div style={{ position: 'relative', height: 10, background: 'var(--panel-2)', borderRadius: 5, flex: 1, minWidth: 36 }}>
+    <div style={{ position: 'relative', height: 10, background: 'var(--panel-2)', borderRadius: 5, width: BAR_W, flexShrink: 0 }}>
       <div style={{ position: 'absolute', left: '50%', top: -1, bottom: -1, width: 1, background: 'var(--border)' }} />
       <div
         style={{
@@ -36,20 +40,28 @@ function DivergingBar({ score }: { score: number }) {
   )
 }
 
-/** Minimal trailing-12-month volume trend line — no axes, just the shape. */
+/** Trailing-12-month volume trend — same visual language as the Recurring
+ *  Agenda Items sparkline (board/CasesList.tsx's `Spark`): a full-width
+ *  baseline, a thin connecting line, and every point plotted as its own
+ *  dot colored by that month's sentiment (not just the latest one). Height
+ *  encodes volume off a zero baseline rather than diverging from a
+ *  midline, since volume (unlike sentiment) is never negative. */
 function Sparkline({ points }: { points: MonthlyIssueVolume[] }) {
-  if (points.length < 2) {
-    return <span className="muted" style={{ fontSize: 10, width: SPARK_W, display: 'inline-block', textAlign: 'center' }}>—</span>
+  if (points.length === 0) {
+    return <span className="muted" style={{ fontSize: 10, width: SPARK_W, display: 'inline-block', textAlign: 'center', flexShrink: 0 }}>—</span>
   }
+  const n = points.length
   const maxV = Math.max(1, ...points.map((p) => p.volume))
-  const x = (i: number) => (i / (points.length - 1)) * SPARK_W
-  const y = (v: number) => SPARK_H - (v / maxV) * (SPARK_H - 4) - 2
-  const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.volume).toFixed(1)}`).join(' ')
-  const last = points[points.length - 1]
+  const x = (i: number) => (n === 1 ? SPARK_W / 2 : (i / (n - 1)) * SPARK_W)
+  const y = (v: number) => SPARK_H - 2 - (v / maxV) * (SPARK_H - 4)
+  const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.volume).toFixed(1)}`).join(' ')
   return (
-    <svg width={SPARK_W} height={SPARK_H} viewBox={`0 0 ${SPARK_W} ${SPARK_H}`} aria-hidden style={{ flexShrink: 0 }}>
-      <path d={path} fill="none" stroke="var(--muted)" strokeWidth={1.5} opacity={0.7} />
-      <circle cx={x(points.length - 1)} cy={y(last.volume)} r={2.2} fill={sentimentColor(last.avgSentiment)} />
+    <svg width={SPARK_W} height={SPARK_H} style={{ display: 'block', flexShrink: 0 }} aria-hidden>
+      <line x1={0} y1={SPARK_H - 2} x2={SPARK_W} y2={SPARK_H - 2} stroke="var(--border)" strokeWidth={1} />
+      {n > 1 && <path d={d} fill="none" stroke="var(--muted)" strokeWidth={1.5} />}
+      {points.map((p, i) => (
+        <circle key={i} cx={x(i)} cy={y(p.volume)} r={2.5} fill={sentimentColor(p.avgSentiment)} />
+      ))}
     </svg>
   )
 }
@@ -117,7 +129,7 @@ function RankedThemesPanel({
   const maxMentions = Math.max(1, ...themes.map((t) => t.mentions))
 
   return (
-    <div className="card" style={{ padding: 16, marginBottom: 16 }}>
+    <div className="card" style={{ padding: '16px 12px', marginBottom: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
         <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           {title} · {sorted.length}
@@ -128,19 +140,19 @@ function RankedThemesPanel({
         {sorted.map((t) => {
           const spark = (monthlyByTheme[t.theme] || []).slice(-SPARKLINE_MONTHS)
           return (
-            <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, flexShrink: 0 }}>
-              <span style={{ width: 96, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 0 }} title={t.theme}>
+            <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11.5, flexShrink: 0 }}>
+              <span style={{ flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={t.theme}>
                 {t.theme}
               </span>
               {barStyle === 'volume' ? (
-                <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 4, height: 12, overflow: 'hidden', minWidth: 32 }}>
+                <div style={{ width: BAR_W, flexShrink: 0, background: 'var(--panel-2)', borderRadius: 4, height: 12, overflow: 'hidden' }}>
                   <div style={{ width: `${(t.mentions / maxMentions) * 100}%`, height: '100%', background: sentimentColor(t.avgSentiment), borderRadius: 4, minWidth: 3 }} />
                 </div>
               ) : (
                 <DivergingBar score={t.avgSentiment} />
               )}
-              <span className="muted" style={{ width: 26, textAlign: 'right', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }} title={`${t.mentions} meetings`}>{t.mentions}</span>
-              <span style={{ ...sentimentChipStyle(t.avgSentiment), width: 38, flexShrink: 0, textAlign: 'center', padding: '2px 0' }}>{fmtSent(t.avgSentiment)}</span>
+              <span className="muted" style={{ width: 18, textAlign: 'right', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }} title={`${t.mentions} meetings`}>{t.mentions}</span>
+              <span style={{ ...sentimentChipStyle(t.avgSentiment), width: 32, flexShrink: 0, textAlign: 'center', padding: '2px 0' }}>{fmtSent(t.avgSentiment)}</span>
               <Sparkline points={spark} />
             </div>
           )

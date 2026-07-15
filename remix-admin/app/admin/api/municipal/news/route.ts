@@ -18,9 +18,17 @@ export async function GET(req: Request) {
   const muni = new URL(req.url).searchParams.get('muni') || ''
   try {
     const items = await fetchLocalNews(muni)
-    if (!items) return NextResponse.json({ available: false })
+    if (!items) {
+      // Distinguish "no key/muni configured" from "fetched but empty" in logs —
+      // both currently render nothing client-side, but only one is fixable by
+      // the caller (setting PERIGON_API_KEY).
+      console.log(`[news] muni=${muni} unavailable — no PERIGON_API_KEY or no NEWS_GEO entry for this muni`)
+      return NextResponse.json({ available: false })
+    }
+    console.log(`[news] muni=${muni} returned ${items.length} article(s)`)
     return NextResponse.json({ available: true, items })
   } catch (e) {
+    console.log(`[news] muni=${muni} threw: ${e instanceof Error ? e.message : String(e)}`)
     return NextResponse.json({ available: false, error: e instanceof Error ? e.message : String(e) })
   }
 }
