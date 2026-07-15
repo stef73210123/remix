@@ -8,8 +8,8 @@ interface MonthlyIssueVolume { month: string; volume: number; avgSentiment: numb
 interface Aggregate {
   available?: boolean
   monthly?: MonthlyIssueVolume[]
-  boards?: string[]
-  monthlyByBoard?: Record<string, MonthlyIssueVolume[]>
+  themes?: string[]
+  monthlyByTheme?: Record<string, MonthlyIssueVolume[]>
 }
 
 /** Default view is the trailing 12 months — a "how are we doing lately"
@@ -41,12 +41,12 @@ export default function TopicVolumeChart({ muni }: { muni: string }) {
   const [agg, setAgg] = useState<Aggregate | null>(null)
   const [loading, setLoading] = useState(true)
   const [hover, setHover] = useState<number | null>(null)
-  const [hiddenBoards, setHiddenBoards] = useState<Set<string>>(new Set())
+  const [hiddenThemes, setHiddenThemes] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     setLoading(true)
     setAgg(null)
-    setHiddenBoards(new Set())
+    setHiddenThemes(new Set())
     fetch(`/admin/api/municipal/aggregate?muni=${encodeURIComponent(muni)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
       .then((d: Aggregate) => setAgg(d && d.available !== false ? d : null))
@@ -54,16 +54,16 @@ export default function TopicVolumeChart({ muni }: { muni: string }) {
       .finally(() => setLoading(false))
   }, [muni])
 
-  const boards = agg?.boards ?? []
+  const themes = agg?.themes ?? []
 
-  // Recombine the selected boards' per-month stats client-side, so toggling
+  // Recombine the selected themes' per-month stats client-side, so toggling
   // the filter never needs a re-fetch. avgSentiment is volume-weighted so the
   // combined average is exact, not an average-of-averages.
   const allMonths = useMemo(() => {
-    const selected = boards.filter((b) => !hiddenBoards.has(b))
+    const selected = themes.filter((t) => !hiddenThemes.has(t))
     const byMonth = new Map<string, { volume: number; sentSum: number }>()
-    for (const b of selected) {
-      for (const p of agg?.monthlyByBoard?.[b] ?? []) {
+    for (const t of selected) {
+      for (const p of agg?.monthlyByTheme?.[t] ?? []) {
         const cur = byMonth.get(p.month) || { volume: 0, sentSum: 0 }
         cur.volume += p.volume
         cur.sentSum += p.avgSentiment * p.volume
@@ -73,7 +73,7 @@ export default function TopicVolumeChart({ muni }: { muni: string }) {
     return [...byMonth.entries()]
       .map(([month, v]) => ({ month, volume: v.volume, avgSentiment: v.volume ? v.sentSum / v.volume : 0 }))
       .sort((a, b) => a.month.localeCompare(b.month))
-  }, [agg, boards, hiddenBoards])
+  }, [agg, themes, hiddenThemes])
 
   const points = useMemo(() => allMonths.slice(-DEFAULT_MONTHS), [allMonths])
 
@@ -97,8 +97,8 @@ export default function TopicVolumeChart({ muni }: { muni: string }) {
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
         <h2 style={{ fontSize: 16, margin: 0 }}>Topic volume by month</h2>
-        {boards.length > 1 && (
-          <BoardFilterDropdown options={boards} hidden={hiddenBoards} onChange={setHiddenBoards} />
+        {themes.length > 1 && (
+          <BoardFilterDropdown label="Themes" options={themes} hidden={hiddenThemes} onChange={setHiddenThemes} />
         )}
       </div>
       <div className="card" style={{ padding: '14px 12px 10px', position: 'relative' }}>
