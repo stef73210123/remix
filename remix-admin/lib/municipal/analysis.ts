@@ -154,16 +154,11 @@ export interface TownIssuesAggregate {
   town: string
   years: number[]
   byYear: Record<string, AggregateThemeStat[]>
-  /** Total topic mentions per calendar month (every theme timeline point,
-   *  across every analyzed board), oldest → newest, for the dashboard's
-   *  topic-volume trend line. */
-  monthly: MonthlyIssueVolume[]
-  /** Theme/issue names with an analyzed timeline, sorted by total mentions
-   *  (most-discussed first) — the topic-volume chart's filter options. */
-  themes: string[]
-  /** Same per-month volume/sentiment as `monthly`, split out per theme so the
-   *  topic-volume chart's theme filter can recombine any subset of themes
-   *  client-side without re-fetching. */
+  /** Per-theme monthly mention volume + sentiment, oldest → newest, across
+   *  every analyzed board — the source for each theme's trailing-12-month
+   *  sparkline on the Local Issues panels. Independent of the `byYear`
+   *  calendar-year filter (always the full history; callers slice the
+   *  trailing months they want). */
   monthlyByTheme: Record<string, MonthlyIssueVolume[]>
 }
 
@@ -175,12 +170,8 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
   let town = ''
   // year → theme → { sum, n, boards }
   const perYear = new Map<number, Map<string, { sum: number; n: number; boards: Set<string> }>>()
-  // 'YYYY-MM' → { sum, n } — every theme-mention that month, regardless of theme.
-  const perMonth = new Map<string, { sum: number; n: number }>()
-  // theme → 'YYYY-MM' → { sum, n } — same, split per theme for the chart filter.
+  // theme → 'YYYY-MM' → { sum, n }
   const perMonthByTheme = new Map<string, Map<string, { sum: number; n: number }>>()
-  // theme → total mentions across all years, for the filter's default sort order.
-  const themeMentions = new Map<string, number>()
   for (const body of bodies) {
     const data = loadAnalysis(muniKey, body)
     if (!data) continue
@@ -201,17 +192,10 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
         tm.set(theme.theme, cur)
 
         const month = pt.date.slice(0, 7)
-        const mCur = perMonth.get(month) || { sum: 0, n: 0 }
-        mCur.sum += pt.sentiment
-        mCur.n += 1
-        perMonth.set(month, mCur)
-
         const tmCur = themeMonths.get(month) || { sum: 0, n: 0 }
         tmCur.sum += pt.sentiment
         tmCur.n += 1
         themeMonths.set(month, tmCur)
-
-        themeMentions.set(theme.theme, (themeMentions.get(theme.theme) || 0) + 1)
       }
     }
   }
@@ -223,17 +207,13 @@ export function aggregateTownIssues(muniKey: string): TownIssuesAggregate | null
       .sort((a, b) => b.mentions - a.mentions)
   }
   const years = [...perYear.keys()].sort((a, b) => b - a)
-  const monthly = [...perMonth.entries()]
-    .map(([month, v]) => ({ month, volume: v.n, avgSentiment: v.sum / v.n }))
-    .sort((a, b) => a.month.localeCompare(b.month))
   const monthlyByTheme: Record<string, MonthlyIssueVolume[]> = {}
   for (const [themeName, months] of perMonthByTheme) {
     monthlyByTheme[themeName] = [...months.entries()]
       .map(([month, v]) => ({ month, volume: v.n, avgSentiment: v.sum / v.n }))
       .sort((a, b) => a.month.localeCompare(b.month))
   }
-  const themes = [...themeMentions.entries()].sort((a, b) => b[1] - a[1]).map(([theme]) => theme)
-  return { town, years, byYear, monthly, themes, monthlyByTheme }
+  return { town, years, byYear, monthlyByTheme }
 }
 
 const cache = new Map<string, AnalysisDataset | null>()
