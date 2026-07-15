@@ -327,7 +327,7 @@ export function FundBalanceChart() {
 
   return (
     <div>
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 'auto', display: 'block' }} role="img" aria-label="Fund equity at year end, 2019 to 2024, by fund">
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 'auto', display: 'block' }} role="img" aria-label="Fund balance at year end, 2019 to 2024, by fund">
         {yTicks.map((t) => (
           <g key={t}>
             <line x1={PAD.l} y1={y(t)} x2={W - PAD.r} y2={y(t)} stroke="var(--border)" strokeWidth={1} opacity={0.5} />

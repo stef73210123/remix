@@ -111,7 +111,7 @@ export default function FinanceClient({ userName, muni, budgets }: {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 20 }}>
             <div>
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                Financial position — fund equity, 2019–2024
+                Financial position — fund balance, 2019–2024
               </div>
               <div className="card" style={{ padding: 16 }}>
                 <FundBalanceChart />

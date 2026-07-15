@@ -683,9 +683,9 @@ export default function MunicipalClient({
           {/* Community events calendar + the orgs behind them — Dashboard tab
               only. Sits at the bottom, after the town's own civic/financial data. */}
           {board === 'ALL' && town !== 'ALL' && <CommunityCalendar muniKey={town} />}
-          {board === 'ALL' && town !== 'ALL' && <OpenPetitions muniKey={town} />}
           {board === 'ALL' && town !== 'ALL' && <CommunityOrgs muniKey={town} />}
           {board === 'ALL' && town !== 'ALL' && <InTheNews muniKey={town} />}
+          {board === 'ALL' && town !== 'ALL' && <OpenPetitions muniKey={town} />}
 
           {!data.dbOk && data.dbError && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>
