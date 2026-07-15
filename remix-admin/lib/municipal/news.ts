@@ -15,7 +15,11 @@
  *
  * Scoped instead to known hyperlocal Westchester outlets that reliably cover
  * North Castle/Armonk (The Examiner News, lohud/The Journal News) via
- * Perigon's `source` domain filter, combined with the same location search.
+ * Perigon's `source` domain filter, combined with the same location search,
+ * restricted to the trailing 90 days. Both outlets cover many other
+ * Westchester towns too, so a post-fetch relevance check requires one of the
+ * town/hamlet names to actually appear in the title or summary (a Pleasantville
+ * Music Festival piece slipped through the source-only filter previously).
  * Every article, date, and link below still comes straight from Perigon's
  * live response — nothing here is hand-curated.
  */
@@ -27,7 +31,20 @@ export interface NewsItem {
   url: string
   summary: string
   publishedAt: string
+  category: string
+  categoryIcon: NewsCategoryIcon
 }
+
+export type NewsCategoryIcon =
+  | 'landmark'
+  | 'hard-hat'
+  | 'shield'
+  | 'graduation-cap'
+  | 'trophy'
+  | 'cloud-rain'
+  | 'flower'
+  | 'users'
+  | 'newspaper'
 
 // muniKey → the town + hamlet names to search, and the specific local outlets
 // to restrict results to. The structured `city` location filter doesn't
@@ -41,6 +58,8 @@ const NEWS_GEO: Record<string, { cities: string[]; sourceDomains: string[] }> = 
     sourceDomains: ['theexaminernews.com', 'lohud.com'],
   },
 }
+
+const DAYS_BACK = 90
 
 interface PerigonSource {
   name?: string
@@ -60,8 +79,33 @@ interface PerigonResponse {
   articles?: PerigonArticle[]
 }
 
-const MAX_ITEMS = 12
+const MAX_ITEMS = 20
 const MENTIONS_IBM = /\bIBM\b/i
+
+// Ordered so a more specific signal (e.g. "town hall") wins over a looser one
+// (e.g. a hotel/townhouse project also being local "development" news).
+const CATEGORY_RULES: { key: NewsCategoryIcon; label: string; test: RegExp }[] = [
+  { key: 'landmark', label: 'Government', test: /\btown (hall|board)\b|planning board|zoning board|\bzoning\b|\bbudget\b|\btax(es)?\b|supervisor|councilm(a|e)n|councilwoman|comptroller|\bmunicipal\b|\bordinance\b|\belection\b/i },
+  { key: 'shield', label: 'Public Safety', test: /\bpolice\b|sheriff|\barrest(ed)?\b|\bcrime\b|sentenc(ed|ing)|stabb|fire department|firefighter|\bcrash\b|\baccident\b/i },
+  { key: 'graduation-cap', label: 'Schools', test: /\bschool\b|\bstudent(s)?\b|school district|superintendent|\bPTA\b|classroom/i },
+  { key: 'trophy', label: 'Sports', test: /\bgolf\b|\bsoccer\b|\bsoftball\b|\bbasketball\b|\bfootball\b|championship|tournament|\bathlete(s)?\b|\bcoach\b/i },
+  { key: 'cloud-rain', label: 'Weather', test: /\btornado\b|\bstorm\b|\bweather\b|heat wave|\bsnow\b|\bflood(ing)?\b|hurricane/i },
+  { key: 'flower', label: 'Obituary', test: /\bobituary\b|passed away|survived by|in loving memory/i },
+  { key: 'hard-hat', label: 'Development', test: /\bdevelopment\b|\bconstruction\b|\bproject\b|townhouse|\bcondo(s)?\b|\bhotel\b|\bhousing\b|rezon|\bpermit(s)?\b/i },
+  { key: 'users', label: 'Community', test: /\bfestival\b|\bconcert\b|\blibrary\b|\bchurch\b|synagogue|\bparade\b|\bfair\b/i },
+]
+
+function classify(title: string, summary: string): { category: string; categoryIcon: NewsCategoryIcon } {
+  const text = `${title} ${summary}`
+  for (const rule of CATEGORY_RULES) {
+    if (rule.test.test(text)) return { category: rule.label, categoryIcon: rule.key }
+  }
+  return { category: 'News', categoryIcon: 'newspaper' }
+}
+
+function mentionsTown(text: string, cities: string[]): boolean {
+  return cities.some((c) => text.toLowerCase().includes(c.toLowerCase()))
+}
 
 export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null> {
   const key = process.env.PERIGON_API_KEY
@@ -71,11 +115,13 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   // Perigon's boolean query syntax requires balanced parentheses around OR
   // groups (per their docs).
   const q = `(${geo.cities.map((c) => (c.includes(' ') ? `"${c}"` : c)).join(' OR ')})`
+  const from = new Date(Date.now() - DAYS_BACK * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
   const params = new URLSearchParams({
     apiKey: key,
     q,
+    from,
     sortBy: 'pubDate',
-    size: '20',
+    size: '30',
   })
   for (const domain of geo.sourceDomains) params.append('source', domain)
 
@@ -87,16 +133,13 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   const raw = (await res.json()) as Record<string, unknown>
   const data = raw as PerigonResponse
   const articles = Array.isArray(data.articles) ? data.articles : []
-  // TEMP diagnostic: earlier rounds (see git history) proved the account/key
-  // works and ruled out the location-query syntax as the cause of the prior
-  // empty results — this logs the raw shape in case source-domain scoping is
-  // also empty, so the next deploy's logs show why.
   if (articles.length === 0) {
     console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
   }
 
   let droppedIbm = 0
   let droppedMalformed = 0
+  let droppedIrrelevant = 0
   const items: NewsItem[] = []
   for (const a of articles) {
     const title = a.title?.trim()
@@ -104,10 +147,14 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     if (!title || !url) { droppedMalformed++; continue }
     const summary = (a.summary || a.description || '').trim()
     if (MENTIONS_IBM.test(title) || MENTIONS_IBM.test(summary)) { droppedIbm++; continue }
+    // The source-domain filter alone isn't town-specific — both outlets cover
+    // many other Westchester towns, so require an actual mention of this
+    // town/hamlet in the title or summary.
+    if (!mentionsTown(title, geo.cities) && !mentionsTown(summary, geo.cities)) { droppedIrrelevant++; continue }
     const source = typeof a.source === 'string' ? a.source : a.source?.name || a.source?.domain || 'News'
-    items.push({ key: url, title, source, url, summary, publishedAt: a.pubDate || a.date || '' })
+    items.push({ key: url, title, source, url, summary, publishedAt: a.pubDate || a.date || '', ...classify(title, summary) })
     if (items.length >= MAX_ITEMS) break
   }
-  console.log(`[news] muni=${muniKey} raw=${articles.length} dropped(ibm=${droppedIbm}, malformed=${droppedMalformed}) kept=${items.length}`)
+  console.log(`[news] muni=${muniKey} raw=${articles.length} dropped(ibm=${droppedIbm}, malformed=${droppedMalformed}, irrelevant=${droppedIrrelevant}) kept=${items.length}`)
   return items
 }
