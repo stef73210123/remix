@@ -21,9 +21,12 @@ export interface NewsItem {
   publishedAt: string
 }
 
-// muniKey → the town + hamlet names to search as Perigon's structured
-// location tags (not free-text keywords), so "North White Plains" doesn't
-// also pull in unrelated White Plains city news.
+// muniKey → the town + hamlet names to search. Confirmed live (production
+// runtime logs showed Perigon's own response as {status:200, numResults:0}, a
+// genuine zero-match rather than an error) that Perigon's structured `city`
+// filter doesn't resolve these: "North Castle" is a town, not a city, and
+// "Banksville"/"North White Plains" are small hamlets unlikely to exist in
+// Perigon's location taxonomy — so a `q` free-text search is used instead.
 const NEWS_GEO: Record<string, { cities: string[] }> = {
   nc: { cities: ['Armonk', 'Banksville', 'North White Plains', 'North Castle'] },
 }
@@ -54,8 +57,11 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   const geo = NEWS_GEO[muniKey]
   if (!key || !geo) return null
 
+  const q = geo.cities.map((c) => (c.includes(' ') ? `"${c}"` : c)).join(' OR ')
   const params = new URLSearchParams({
     apiKey: key,
+    q,
+    state: 'NY',
     country: 'US',
     language: 'en',
     sortBy: 'pubDate',
@@ -67,7 +73,6 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     excludeCompanySymbol: 'IBM',
     excludeCompanyDomain: 'ibm.com',
   })
-  for (const city of geo.cities) params.append('city', city)
   params.append('excludeLabel', 'Non-news')
   params.append('excludeLabel', 'Opinion')
 
