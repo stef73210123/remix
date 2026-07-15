@@ -62,7 +62,11 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   const geo = NEWS_GEO[muniKey]
   if (!key || !geo) return null
 
-  const q = geo.cities.map((c) => (c.includes(' ') ? `"${c}"` : c)).join(' OR ')
+  // Perigon's boolean query syntax requires balanced parentheses around OR
+  // groups (per their docs) — an earlier version without them came back with
+  // a genuine {numResults: 0} even for country=US/language=en alone, despite
+  // a bare single-term query proving the account/key works.
+  const q = `(${geo.cities.map((c) => (c.includes(' ') ? `"${c}"` : c)).join(' OR ')})`
   const params = new URLSearchParams({
     apiKey: key,
     q,
@@ -95,20 +99,23 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   // can return ANY articles at all.
   if (articles.length === 0) {
     console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
-    // Bisect round 2: a bare `q=Armonk` (round 1) proved the account/key can
-    // return real results. Now test the ACTUAL multi-term OR query with only
-    // country+language added (dropping state/sortBy/size/showReprints/
-    // excludeLabel), to see whether the full `q` string itself, or one of
-    // those other params, is what zeroes the main query out.
+    // Bisect round 3: rounds 1-2 proved the account/key works (bare single-
+    // term query) and ruled out state/sortBy/size/showReprints/excludeLabel
+    // (the unparenthesized multi-term OR + country/language alone was ALSO
+    // zero). Now that the main query wraps the OR group in parentheses per
+    // Perigon's documented boolean syntax, test that same parenthesized
+    // string with a bare single-term OR (no quoting) to see whether
+    // parenthesization was the fix, or whether even a trivial 2-term
+    // parenthesized OR still zeroes out with country/language applied.
     try {
-      const midParams = new URLSearchParams({ apiKey: key, q, country: 'US', language: 'en', size: '10' })
-      const midRes = await fetch(`https://api.perigon.io/v1/all?${midParams.toString()}`, {
+      const round3Params = new URLSearchParams({ apiKey: key, q: '(Armonk OR "North Castle")', country: 'US', language: 'en', size: '10' })
+      const round3Res = await fetch(`https://api.perigon.io/v1/all?${round3Params.toString()}`, {
         signal: AbortSignal.timeout(15000),
       })
-      const midRaw = midRes.ok ? await midRes.json() : { httpError: midRes.status }
-      console.log(`[news] muni=${muniKey} MID-DIAG status=${midRes.status} body=${JSON.stringify(midRaw).slice(0, 500)}`)
+      const round3Raw = round3Res.ok ? await round3Res.json() : { httpError: round3Res.status }
+      console.log(`[news] muni=${muniKey} ROUND3-DIAG status=${round3Res.status} body=${JSON.stringify(round3Raw).slice(0, 500)}`)
     } catch (e) {
-      console.log(`[news] muni=${muniKey} MID-DIAG threw: ${e instanceof Error ? e.message : String(e)}`)
+      console.log(`[news] muni=${muniKey} ROUND3-DIAG threw: ${e instanceof Error ? e.message : String(e)}`)
     }
   }
 
