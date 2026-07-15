@@ -84,13 +84,24 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   const raw = (await res.json()) as Record<string, unknown>
   const data = raw as PerigonResponse
   const articles = Array.isArray(data.articles) ? data.articles : []
-  // TEMP diagnostic: the query returns raw=0 in production for reasons not yet
-  // understood (not the IBM filter — that only drops articles that made it
-  // through). Log the response shape so the next deploy's logs reveal whether
-  // Perigon is erroring under a different field, paginating differently, or
-  // genuinely matching nothing.
+  // TEMP diagnostic: both a structured `city` filter and a free-text `q`
+  // search have independently come back with a genuine {numResults: 0} from
+  // Perigon itself — so the location-targeting strategy isn't the issue.
+  // Bisect against the rest of the query (excludes, sortBy, showReprints,
+  // size, state) with a bare-minimum request, to see whether the account/key
+  // can return ANY articles at all.
   if (articles.length === 0) {
     console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
+    try {
+      const bareParams = new URLSearchParams({ apiKey: key, q: 'Armonk', size: '5' })
+      const bareRes = await fetch(`https://api.perigon.io/v1/all?${bareParams.toString()}`, {
+        signal: AbortSignal.timeout(15000),
+      })
+      const bareRaw = bareRes.ok ? await bareRes.json() : { httpError: bareRes.status }
+      console.log(`[news] muni=${muniKey} BARE-DIAG status=${bareRes.status} body=${JSON.stringify(bareRaw).slice(0, 500)}`)
+    } catch (e) {
+      console.log(`[news] muni=${muniKey} BARE-DIAG threw: ${e instanceof Error ? e.message : String(e)}`)
+    }
   }
 
   let droppedIbm = 0
