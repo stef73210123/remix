@@ -76,10 +76,14 @@ export default function MeetingTimeline({
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-    const div = boundaryRef.current
-    // Land the present near the left edge (a little history visible before it);
-    // if everything is in the past, show the most recent by scrolling fully right.
-    el.scrollLeft = div ? Math.max(0, div.offsetLeft - 210) : el.scrollWidth
+    // Land the next upcoming meeting at the right edge of the viewport — the
+    // one thing a reader actually needs — with as much history as fits
+    // filling the rest of the view to its left, reachable without scrolling.
+    // Further-out projected meetings (a board's full remaining-year schedule)
+    // sit past the right edge, reachable by scrolling right. If everything is
+    // in the past, show the most recent by scrolling fully right instead.
+    const next = boundary >= 0 ? itemRefs.current.get(items[boundary].key) : undefined
+    el.scrollLeft = next ? Math.max(0, next.offsetLeft + next.offsetWidth - el.clientWidth) : el.scrollWidth
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length, boundary])
 

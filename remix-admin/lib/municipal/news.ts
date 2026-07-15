@@ -108,7 +108,6 @@ interface PerigonResponse {
   articles?: PerigonArticle[]
 }
 
-const MAX_ITEMS = 20
 const MENTIONS_IBM = /\bIBM\b/i
 
 // Ordered so a more specific signal (e.g. "town hall") wins over a looser one
@@ -158,7 +157,9 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     sortBy: 'pubDate',
     // Over a 6-month window, most candidates get dropped by the IBM/
     // malformed/irrelevance filters below, so a bigger request size keeps
-    // enough real local coverage surviving to fill MAX_ITEMS.
+    // enough real local coverage surviving — every article that passes the
+    // filters is returned (no artificial cap), so this is the actual ceiling
+    // on how much of the 6-month window can show up.
     size: '100',
   })
   for (const domain of geo.sourceDomains) params.append('source', domain)
@@ -193,7 +194,6 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     const rawImage = a.imageUrl || a.urlToImage || a.image || null
     const imageUrl = rawImage && /^https?:\/\//i.test(rawImage) ? rawImage : null
     items.push({ key: url, title, source, url, summary, publishedAt: a.pubDate || a.date || '', imageUrl, ...classify(title, summary) })
-    if (items.length >= MAX_ITEMS) break
   }
   console.log(`[news] muni=${muniKey} raw=${articles.length} dropped(ibm=${droppedIbm}, malformed=${droppedMalformed}, irrelevant=${droppedIrrelevant}) kept=${items.length}`)
   return items
