@@ -14,14 +14,24 @@
  * itself just doesn't surface any non-IBM coverage of this specific town.
  *
  * Scoped instead to known hyperlocal Westchester outlets that reliably cover
- * North Castle/Armonk (The Examiner News, lohud/The Journal News) via
- * Perigon's `source` domain filter, combined with the same location search,
- * restricted to the trailing 90 days. Both outlets cover many other
- * Westchester towns too, so a post-fetch relevance check requires one of the
+ * North Castle/Armonk — The Examiner News and lohud/The Journal News, plus a
+ * wider set of local/regional outlets and magazines that also cover the town
+ * (Patch, Daily Voice, The Inside Press/Inside Armonk, Bedford & New Canaan
+ * Magazine, Connect to Northern Westchester) — via Perigon's `source` domain
+ * filter, combined with the same location search, restricted to the trailing
+ * 90 days. Several of these are nationwide/regional networks that cover many
+ * other towns too, so a post-fetch relevance check requires one of the
  * town/hamlet names to actually appear in the title or summary (a Pleasantville
  * Music Festival piece slipped through the source-only filter previously).
  * Every article, date, and link below still comes straight from Perigon's
  * live response — nothing here is hand-curated.
+ *
+ * Note: unlike The Examiner News/lohud (confirmed live to return North Castle
+ * coverage), the added outlets are smaller/hyperlocal and haven't all been
+ * bisected against a live Perigon response — Perigon's source index may not
+ * crawl a given small magazine at all, in which case that domain just quietly
+ * contributes zero articles rather than erroring (same failure mode as an
+ * unindexed source anywhere else in this file).
  */
 
 export interface NewsItem {
@@ -33,6 +43,8 @@ export interface NewsItem {
   publishedAt: string
   category: string
   categoryIcon: NewsCategoryIcon
+  /** Thumbnail/preview image, when Perigon returns one for the article. */
+  imageUrl: string | null
 }
 
 export type NewsCategoryIcon =
@@ -55,7 +67,16 @@ export type NewsCategoryIcon =
 const NEWS_GEO: Record<string, { cities: string[]; sourceDomains: string[] }> = {
   nc: {
     cities: ['Armonk', 'Banksville', 'North White Plains', 'North Castle'],
-    sourceDomains: ['theexaminernews.com', 'lohud.com'],
+    sourceDomains: [
+      'theexaminernews.com',
+      'lohud.com',
+      'patch.com', // Armonk Patch
+      'dailyvoice.com', // Armonk Daily Voice
+      'theinsidepress.com', // Inside Armonk magazine
+      'bedfordnewcanaanmag.com', // Bedford & New Canaan Magazine
+      'connecttomag.com', // Connect to Northern Westchester magazine
+      'bestversionmedia.com', // Armonk Neighbors — small advertorial-format magazine; may not be crawled by Perigon at all
+    ],
   },
 }
 
@@ -74,6 +95,12 @@ interface PerigonArticle {
   description?: string
   summary?: string
   source?: PerigonSource | string
+  /** Perigon's documented field is `imageUrl`; `urlToImage`/`image` are
+   *  defensive fallbacks in case a differently-shaped response ever appears,
+   *  same defensive style as the url/date/summary fields above. */
+  imageUrl?: string | null
+  urlToImage?: string | null
+  image?: string | null
 }
 interface PerigonResponse {
   articles?: PerigonArticle[]
@@ -158,7 +185,9 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     // town/hamlet in the title or summary.
     if (!mentionsTown(title, geo.cities) && !mentionsTown(summary, geo.cities)) { droppedIrrelevant++; continue }
     const source = typeof a.source === 'string' ? a.source : a.source?.name || a.source?.domain || 'News'
-    items.push({ key: url, title, source, url, summary, publishedAt: a.pubDate || a.date || '', ...classify(title, summary) })
+    const rawImage = a.imageUrl || a.urlToImage || a.image || null
+    const imageUrl = rawImage && /^https?:\/\//i.test(rawImage) ? rawImage : null
+    items.push({ key: url, title, source, url, summary, publishedAt: a.pubDate || a.date || '', imageUrl, ...classify(title, summary) })
     if (items.length >= MAX_ITEMS) break
   }
   console.log(`[news] muni=${muniKey} raw=${articles.length} dropped(ibm=${droppedIbm}, malformed=${droppedMalformed}, irrelevant=${droppedIrrelevant}) kept=${items.length}`)

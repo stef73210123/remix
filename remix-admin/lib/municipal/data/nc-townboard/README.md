@@ -1,7 +1,7 @@
 # North Castle Town Board — transcript analysis dataset
 
 Same pipeline as `../nc-planning`, applied to the elected **Town Board** over
-2024–2026 (49 meetings). Served by the board page
+2024–2026 (55 meetings). Served by the board page
 (`/admin/municipal/board?muni=nc&body=town_board`) and member profiles.
 
 ## Contents
