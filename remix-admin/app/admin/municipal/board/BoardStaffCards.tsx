@@ -31,9 +31,17 @@ export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyK
         {departments.map((d) => (
           <div key={d.department} data-staff-card className="card" style={{ padding: 16, flex: '0 0 300px', minWidth: 0, scrollSnapAlign: 'start' }}>
             <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{d.department}</div>
-            <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.person}</div>
-            {d.title.trim().toLowerCase() !== d.department.trim().toLowerCase() && (
-              <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
+            {d.person ? (
+              <>
+                <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.person}</div>
+                {d.title.trim().toLowerCase() !== d.department.trim().toLowerCase() && (
+                  <div className="muted" style={{ fontSize: 12.5 }}>{d.title}</div>
+                )}
+              </>
+            ) : (
+              d.title.trim().toLowerCase() !== d.department.trim().toLowerCase() && (
+                <div style={{ fontSize: 15, fontWeight: 700, marginTop: 4 }}>{d.title}</div>
+              )
             )}
             <div className="muted" style={{ fontSize: 12.5, marginTop: 8, lineHeight: 1.55 }}>{d.blurb}</div>
             <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>

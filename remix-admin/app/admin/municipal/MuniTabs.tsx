@@ -2,11 +2,36 @@
 
 import { useEffect, useState } from 'react'
 import { isOpen } from '@/lib/flavor'
+import { DEPT_PAGES } from '@/lib/municipal/deptPages'
 
-const BOARD_TABS: { label: string; bodyKey: string }[] = [
-  { label: 'Town Board', bodyKey: 'town_board' },
-  { label: 'Planning Board', bodyKey: 'planning' },
+export interface TabDef { label: string; kind: 'board' | 'building' | 'finance' | 'dept'; key: string }
+
+// Town Board and Planning Board stay pinned first (they're the two the site
+// centers on); everything else is alphabetized by label so adding a new
+// board/department doesn't require deciding where it "should" go in the list.
+const PINNED_TABS: TabDef[] = [
+  { label: 'Town Board', kind: 'board', key: 'town_board' },
+  { label: 'Planning Board', kind: 'board', key: 'planning' },
 ]
+
+// Exported so the dashboard's own (separately implemented) tab strip in
+// MunicipalClient.tsx can render the same set in the same order, instead of
+// hand-listing Building Dept/Finance and forgetting to add new entries here.
+export const OTHER_TABS: TabDef[] = [
+  { label: 'Building Dept', kind: 'building' as const, key: 'building' },
+  { label: 'Finance', kind: 'finance' as const, key: 'finance' },
+  { label: 'Parks and Rec', kind: 'board' as const, key: 'parks_rec' },
+  ...DEPT_PAGES.map((d) => ({ label: d.label, kind: 'dept' as const, key: d.key })),
+].sort((a, b) => a.label.localeCompare(b.label))
+
+const ALL_TABS = [...PINNED_TABS, ...OTHER_TABS]
+
+export function hrefFor(muni: string, t: TabDef): string {
+  if (t.kind === 'building') return `/admin/municipal/building?muni=${muni}`
+  if (t.kind === 'finance') return `/admin/municipal/finance?muni=${muni}`
+  if (t.kind === 'dept') return `/admin/municipal/dept?muni=${muni}&key=${t.key}`
+  return `/admin/municipal/board?muni=${muni}&body=${t.key}`
+}
 
 /**
  * Sticky sub-nav shown on every ONC municipal page — the dashboard, board
@@ -39,30 +64,16 @@ export default function MuniTabs({ muni, active }: { muni: string; active: 'dash
       <a href="/" className={active === 'dashboard' ? 'btn' : 'btn secondary'} style={tabStyle(active === 'dashboard')}>
         Dashboard
       </a>
-      {BOARD_TABS.map((b) => (
+      {ALL_TABS.map((t) => (
         <a
-          key={b.bodyKey}
-          href={`/admin/municipal/board?muni=${muni}&body=${b.bodyKey}`}
-          className={active === b.bodyKey ? 'btn' : 'btn secondary'}
-          style={tabStyle(active === b.bodyKey)}
+          key={t.key}
+          href={hrefFor(muni, t)}
+          className={active === t.key ? 'btn' : 'btn secondary'}
+          style={tabStyle(active === t.key)}
         >
-          {b.label}
+          {t.label}
         </a>
       ))}
-      <a
-        href={`/admin/municipal/building?muni=${muni}`}
-        className={active === 'building' ? 'btn' : 'btn secondary'}
-        style={tabStyle(active === 'building')}
-      >
-        Building Dept
-      </a>
-      <a
-        href={`/admin/municipal/finance?muni=${muni}`}
-        className={active === 'finance' ? 'btn' : 'btn secondary'}
-        style={tabStyle(active === 'finance')}
-      >
-        Finance
-      </a>
     </div>
   )
 }
