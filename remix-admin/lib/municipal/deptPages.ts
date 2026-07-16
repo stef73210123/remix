@@ -20,7 +20,7 @@ export interface DeptPageDef {
 export const DEPT_PAGES: DeptPageDef[] = [
   { key: 'police', label: 'Police' },
   { key: 'assessor', label: 'Assessor' },
-  { key: 'water_sewer', label: 'Water and Sewer' },
+  { key: 'water_sewer', label: 'Water & Sewer' },
 ]
 
 export function getDeptPage(key: string): DeptPageDef | undefined {

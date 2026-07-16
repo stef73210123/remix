@@ -17,12 +17,12 @@ const PINNED_TABS: TabDef[] = [
 
 // Exported so the dashboard's own (separately implemented) tab strip in
 // MunicipalClient.tsx can render the same set in the same order, instead of
-// hand-listing Building Dept/Finance and forgetting to add new entries here.
+// hand-listing Building/Finance and forgetting to add new entries here.
 export const OTHER_TABS: TabDef[] = [
-  { label: 'Building Dept', kind: 'building' as const, key: 'building' },
+  { label: 'Building', kind: 'building' as const, key: 'building' },
   { label: 'Finance', kind: 'finance' as const, key: 'finance' },
   { label: 'Highway', kind: 'highway' as const, key: 'highway' },
-  { label: 'Parks and Rec', kind: 'board' as const, key: 'parks_rec' },
+  { label: 'Parks & Rec', kind: 'board' as const, key: 'parks_rec' },
   ...DEPT_PAGES.map((d) => ({ label: d.label, kind: 'dept' as const, key: d.key })),
 ].sort((a, b) => a.label.localeCompare(b.label))
 
@@ -38,7 +38,7 @@ export function hrefFor(muni: string, t: TabDef): string {
 
 /**
  * Sticky sub-nav shown on every ONC municipal page — the dashboard, board
- * pages, and Building Dept — so it stays reachable no matter which page a
+ * pages, and Building — so it stays reachable no matter which page a
  * link lands on, instead of only existing on the dashboard. Board/Building
  * pages are real routes (not client-side state), so every entry here is a
  * plain link; `active` just controls which one highlights.
