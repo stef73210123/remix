@@ -17,6 +17,23 @@ export interface DeptContact {
   links: { label: string; href: string }[]
 }
 
+// Outside counsel, not Town Hall staff — Baroni's firm has handled North
+// Castle's town attorney work since 1982 (Stephens, Baroni, Reilly & Lewis,
+// now folded into Abrams Fensterman, LLP), advising both the Town Board and
+// the Planning Board he staffs on land use, zoning, and environmental
+// matters. No Town Hall phone/email of his own to list, unlike the W-2
+// department contacts below — the professional-profile link is the
+// verifiable public source instead.
+const TOWN_ATTORNEY: DeptContact = {
+  department: 'Town Attorney',
+  person: 'Roland A. Baroni, Jr.',
+  title: 'Town Attorney',
+  blurb:
+    'Outside counsel who has served as North Castle’s Town Attorney since 1982, advising the Town ' +
+    'Board and Planning Board on land use, zoning, and environmental law.',
+  links: [{ label: 'Attorney profile', href: 'https://www.abramslaw.com/attorneys/roland-baroni/' }],
+}
+
 const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   planning: [
     {
@@ -33,6 +50,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
         { label: 'Staff directory', href: 'https://www.northcastleny.com/directory.aspx?EID=34' },
       ],
     },
+    TOWN_ATTORNEY,
   ],
   town_board: [
     {
@@ -62,6 +80,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
         'departments day to day, and manages operations between board meetings.',
       links: [{ label: 'Town Administrator', href: 'https://www.northcastleny.com/596/Town-Administrator' }],
     },
+    TOWN_ATTORNEY,
   ],
   finance: [
     {

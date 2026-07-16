@@ -56,6 +56,15 @@ const ORGS: Record<string, CommunityOrg[]> = {
       websiteLabel: 'armonkfrosty.com',
     },
     {
+      key: 'lions-club',
+      name: 'Armonk Lions Club',
+      blurb: 'Community service organization behind the annual Fol-De-Rol Fair at Wampus Brook Park, plus local service and charitable projects.',
+      address: 'P.O. Box 211, Armonk, NY 10504',
+      phone: '(917) 498-5793',
+      website: 'https://www.armonklionsclub.org/',
+      websiteLabel: 'armonklionsclub.org',
+    },
+    {
       key: 'historical-society',
       name: 'North Castle Historical Society',
       blurb: 'Keeper of the town\'s history, based in the landmarked Smith\'s Tavern — local archives, exhibits, and school programs.',
