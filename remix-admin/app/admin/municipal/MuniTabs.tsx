@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { isOpen } from '@/lib/flavor'
 import { DEPT_PAGES } from '@/lib/municipal/deptPages'
 
-export interface TabDef { label: string; kind: 'board' | 'building' | 'finance' | 'dept'; key: string }
+export interface TabDef { label: string; kind: 'board' | 'building' | 'finance' | 'highway' | 'dept'; key: string }
 
 // Town Board and Planning Board stay pinned first (they're the two the site
 // centers on); everything else is alphabetized by label so adding a new
@@ -20,6 +20,7 @@ const PINNED_TABS: TabDef[] = [
 export const OTHER_TABS: TabDef[] = [
   { label: 'Building Dept', kind: 'building' as const, key: 'building' },
   { label: 'Finance', kind: 'finance' as const, key: 'finance' },
+  { label: 'Highway', kind: 'highway' as const, key: 'highway' },
   { label: 'Parks and Rec', kind: 'board' as const, key: 'parks_rec' },
   ...DEPT_PAGES.map((d) => ({ label: d.label, kind: 'dept' as const, key: d.key })),
 ].sort((a, b) => a.label.localeCompare(b.label))
@@ -29,6 +30,7 @@ const ALL_TABS = [...PINNED_TABS, ...OTHER_TABS]
 export function hrefFor(muni: string, t: TabDef): string {
   if (t.kind === 'building') return `/admin/municipal/building?muni=${muni}`
   if (t.kind === 'finance') return `/admin/municipal/finance?muni=${muni}`
+  if (t.kind === 'highway') return `/admin/municipal/highway?muni=${muni}`
   if (t.kind === 'dept') return `/admin/municipal/dept?muni=${muni}&key=${t.key}`
   return `/admin/municipal/board?muni=${muni}&body=${t.key}`
 }
