@@ -14,6 +14,7 @@ import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
 import { isOpen } from '@/lib/flavor'
+import { nextMeetingDate, remainingYearMeetingDates, dayKey } from '@/lib/municipal/meetingPattern'
 
 
 interface Asset { kind: string; sourceUrl: string | null; blobUrl: string | null; pageCount: number | null }
@@ -76,40 +77,6 @@ function startOfToday(): number {
   return d.getTime()
 }
 
-// Next actual date from a recurring pattern like "2nd & 4th Wednesday 7:30pm".
-const WEEKDAYS: Record<string, number> = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 }
-const ORDINALS: Record<string, number> = { '1st': 1, '2nd': 2, '3rd': 3, '4th': 4, '5th': 5, last: -1 }
-function nthWeekday(year: number, month: number, weekday: number, n: number): Date | null {
-  if (n === -1) {
-    const last = new Date(year, month + 1, 0)
-    return new Date(year, month, last.getDate() - ((last.getDay() - weekday + 7) % 7))
-  }
-  const first = new Date(year, month, 1)
-  const d = new Date(year, month, 1 + ((weekday - first.getDay() + 7) % 7) + (n - 1) * 7)
-  return d.getMonth() === month ? d : null
-}
-function nextMeetingDate(pattern: string | null, from: Date): Date | null {
-  if (!pattern) return null
-  const p = pattern.toLowerCase()
-  const wd = Object.keys(WEEKDAYS).find((w) => p.includes(w))
-  if (!wd) return null
-  const ords: number[] = []
-  for (const [k, v] of Object.entries(ORDINALS)) if (new RegExp(`(^|[^a-z0-9])${k}([^a-z0-9]|$)`).test(p)) ords.push(v)
-  if (!ords.length) return null
-  const base = new Date(from.getFullYear(), from.getMonth(), from.getDate())
-  let best: Date | null = null
-  for (let mo = 0; mo <= 3; mo++) {
-    const total = base.getMonth() + mo
-    const y = base.getFullYear() + Math.floor(total / 12)
-    const m = ((total % 12) + 12) % 12
-    for (const n of Array.from(new Set(ords))) {
-      const d = nthWeekday(y, m, WEEKDAYS[wd], n)
-      if (d && d.getTime() >= base.getTime() && (!best || d < best)) best = d
-    }
-  }
-  return best
-}
-
 export default function BoardClient({ userName }: { userName: string }) {
   const [muni, setMuni] = useState('')
   const [body, setBody] = useState('')
@@ -150,11 +117,6 @@ export default function BoardClient({ userName }: { userName: string }) {
       .finally(() => setLoading(false))
   }, [])
 
-  const projectedNext = useMemo(
-    () => (data ? nextMeetingDate(data.board.meetingPattern, new Date(startOfToday())) : null),
-    [data]
-  )
-
   // One horizontal timeline of this board's meetings: past on the left, upcoming
   // on the right. Each card carries its document + transcript links.
   const timelineItems = useMemo<TimelineItem[]>(() => {
@@ -187,12 +149,34 @@ export default function BoardClient({ userName }: { userName: string }) {
         }
       })
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
-    // If no real upcoming meeting is ingested, project the next one from the schedule.
-    if (!items.some((it) => !it.past) && projectedNext) {
-      items.push({ key: 'projected', date: projectedNext, dateSuffix: ' *', dateTitle: 'Projected from meeting schedule', past: false, projected: true })
+
+    // Fill in every remaining date this year the recurring pattern implies
+    // that isn't already covered by a real ingested meeting — not just a
+    // single placeholder when there's no real upcoming meeting at all.
+    // Otherwise a later real meeting whose agenda happened to post early
+    // (e.g. one in November) hides the gap in the months before it, since
+    // "no real upcoming meeting" would no longer be true.
+    const pattern = data?.board.meetingPattern ?? null
+    const today = new Date(t0)
+    const yearEnd = new Date(today.getFullYear(), 11, 31)
+    const ingestedDays = new Set(items.map((it) => dayKey(it.date!)))
+    let addedProjection = false
+    for (const d of remainingYearMeetingDates(pattern, today, yearEnd)) {
+      if (!ingestedDays.has(dayKey(d))) {
+        items.push({ key: `projected_${dayKey(d)}`, date: d, dateSuffix: ' *', dateTitle: 'Projected from meeting schedule', past: false, projected: true })
+        addedProjection = true
+      }
     }
-    return items
-  }, [data, transcriptDates, projectedNext, muni, body])
+    // Vague patterns ("Monthly", "Quarterly to monthly") can't be projected
+    // above — fall back to the single-soonest-date heuristic so the board
+    // isn't left with nothing upcoming when it also has no real one ingested.
+    if (!addedProjection && !items.some((it) => !it.past)) {
+      const single = nextMeetingDate(pattern, today)
+      if (single) items.push({ key: 'projected', date: single, dateSuffix: ' *', dateTitle: 'Projected from meeting schedule', past: false, projected: true })
+    }
+
+    return items.sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
+  }, [data, transcriptDates, muni, body])
 
   // Breadcrumb trail: Dashboard › Town › Board (current). OpenNorthCastle is a
   // single-jurisdiction site, so the town crumb is implied and skipped there.
