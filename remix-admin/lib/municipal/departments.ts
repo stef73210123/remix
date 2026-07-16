@@ -119,7 +119,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   ],
   parks_rec: [
     {
-      department: 'Parks and Recreation Department',
+      department: 'Superintendent of Parks and Recreation',
       person: 'Matt Trainor',
       title: 'Superintendent of Parks and Recreation',
       phone: '(914) 273-3000 ext. 301',
@@ -130,20 +130,26 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       links: [{ label: 'Parks & Recreation Department', href: 'https://www.northcastleny.com/189/Recreation-Parks-Department' }],
     },
   ],
+  // Chief of Police is the key staff member for this page — same convention
+  // as every other card here (eyebrow/title is the role, not the department
+  // at large). No current officeholder's name is used: the last confirmed
+  // chief, Peter Simonsen, had a retirement walkout scheduled Dec 2025, and
+  // no successor could be confirmed — see the "no reliably confirmed
+  // officeholder" note on DeptContact.person.
   police: [
     {
-      department: 'Police Department',
-      title: 'Police Department',
+      department: 'Chief of Police',
+      title: 'Chief of Police',
       blurb:
-        'North Castle’s police department — patrol, emergency response, and community policing for Armonk, ' +
-        'Banksville, and North White Plains.',
+        'Leads North Castle’s police department — patrol, emergency response, and community policing for ' +
+        'Armonk, Banksville, and North White Plains.',
       links: [{ label: 'Police Department', href: 'https://www.northcastleny.com/229/Police-Department' }],
     },
   ],
   highway: [
     {
-      department: 'Highway Department',
-      title: 'Highway Department',
+      department: 'Superintendent of Highways',
+      title: 'Superintendent of Highways',
       blurb:
         'Maintains and repairs Town roads and storm drainage and services the Town’s vehicles and equipment; ' +
         'handles snow and ice control in winter.',
@@ -165,7 +171,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   ],
   water_sewer: [
     {
-      department: 'Water & Sewer Department',
+      department: 'Director of Water & Sewer Operations',
       person: 'Sal Misiti',
       title: 'Director of Water & Sewer Operations',
       phone: '(914) 273-3000 ext. 55',
