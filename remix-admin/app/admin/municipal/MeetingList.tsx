@@ -9,11 +9,16 @@ import { isOpen } from '@/lib/flavor'
 
 /**
  * Fixed-height meetings list shown beneath the horizontal timeline: newest
- * first, a few visible with the rest scrolling in place. Reuses the
- * timeline's `TimelineItem` shape so no extra data plumbing is needed.
- * `board`/`town` are omitted gracefully on single-board pages. Shared as-is
- * by the municipal dashboard and the board pages, so both show the same
- * content and formatting.
+ * (soonest upcoming, or furthest-out projected) first, oldest last, a few
+ * visible with the rest scrolling in place. On load it auto-scrolls so the
+ * soonest upcoming meeting sits at the top of the visible area — mirroring
+ * MeetingTimeline's right-edge anchor — without disturbing that single
+ * date-descending order (re-ordering around the next meeting instead read as
+ * out of order: dates rising through the upcoming rows then dropping back
+ * down through history). Reuses the timeline's `TimelineItem` shape so no
+ * extra data plumbing is needed. `board`/`town` are omitted gracefully on
+ * single-board pages. Shared as-is by the municipal dashboard and the board
+ * pages, so both show the same content and formatting.
  *
  * A row whose meeting carries `analysis` data (its board has a transcript-
  * analysis dataset) renders via the same expandable `MeetingRow` a board's
@@ -36,31 +41,35 @@ export default function MeetingList({
   selectedKey?: string | null
   onSelect?: (key: string) => void
 }) {
+  const listRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const [openMeeting, setOpenMeeting] = useState<string | null>(null)
 
-  // Matches MeetingTimeline's right-edge orientation: the soonest upcoming
-  // meeting leads (visible without scrolling), any further-out projected
-  // meetings follow in chronological order, then history most-recent-first —
-  // rather than a single date-descending sort, which would bury the actual
-  // next meeting under a board's later-in-the-year projected dates.
-  const upcoming = items
-    .filter((it) => !it.past)
-    .sort((a, b) => {
-      if (a.date && b.date) return a.date.getTime() - b.date.getTime()
-      if (a.date) return -1
-      if (b.date) return 1
-      return 0
-    })
-  const past = items
-    .filter((it) => it.past)
-    .sort((a, b) => {
-      if (a.date && b.date) return b.date.getTime() - a.date.getTime()
-      if (a.date) return -1
-      if (b.date) return 1
-      return 0
-    })
-  const rows = [...upcoming, ...past]
+  // Single date-descending sort — a board's later-in-the-year projected
+  // meetings can outrank the actual next one, but re-ordering around that
+  // (soonest-upcoming-first, then history) made the list read as out of
+  // order: dates rose through the upcoming rows then dropped back down
+  // through history instead of running one direction top to bottom. Keeping
+  // one monotonic order and instead auto-scrolling to the next meeting (like
+  // MeetingTimeline's right-edge anchor) gets the same "next meeting visible
+  // by default" result without breaking the reading order.
+  const rows = [...items].sort((a, b) => {
+    if (a.date && b.date) return b.date.getTime() - a.date.getTime()
+    if (a.date) return -1
+    if (b.date) return 1
+    return 0
+  })
+
+  // The soonest upcoming meeting — last of the (date-descending) non-past
+  // rows, i.e. right at the transition into history.
+  const nextUpcoming = [...rows].reverse().find((it) => !it.past)
+
+  useEffect(() => {
+    const el = listRef.current
+    const target = nextUpcoming ? itemRefs.current.get(nextUpcoming.key) : undefined
+    if (el && target) el.scrollTop = Math.max(0, target.offsetTop - el.offsetTop)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows.length, nextUpcoming?.key])
 
   // Scroll a selection made elsewhere (e.g. the paired MeetingTimeline) into view here.
   useEffect(() => {
@@ -77,7 +86,7 @@ export default function MeetingList({
   }
 
   return (
-    <div className="card" style={{ padding: 0, marginBottom: 8, maxHeight, overflowY: 'auto' }}>
+    <div ref={listRef} className="card" style={{ padding: 0, marginBottom: 8, maxHeight, overflowY: 'auto' }}>
       {rows.map((it, i) => {
         const registerRef = (el: HTMLDivElement | null) => {
           if (el) itemRefs.current.set(it.key, el)
