@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import type { GeoJSON as LGeoJSON, LayerGroup } from 'leaflet'
 import L from 'leaflet'
@@ -464,6 +464,104 @@ function ResizeFix() {
   return null
 }
 
+// ── Highway: roads by jurisdiction (private/local/county/state/federal) ─────
+// Ownership isn't a tag OSM carries directly, so each category is approximated
+// from the road's `highway` class + `ref` prefix — NY state routes and US
+// routes are tagged "NY 22"/"US 1" style refs, Interstates "I 684", and
+// `access=private` is explicit. County vs. town-local has no clean OSM tag at
+// all, so "county" is approximated as numbered `secondary` roads (Westchester
+// County's collector roads) and everything else residential/tertiary/
+// unclassified falls to "local" — a reasonable best-effort read, not a legal
+// jurisdiction record.
+interface RoadCat { key: string; label: string; color: string; weight: number; dash?: string; filter: string }
+const ROAD_CATS: RoadCat[] = [
+  { key: 'federal', label: 'Federal (Interstate)', color: '#7c3aed', weight: 4, filter: 'way["highway"]["ref"~"^I ", i]' },
+  { key: 'state', label: 'State', color: '#ef4444', weight: 3.5, filter: 'way["highway"]["ref"~"^(NY|US) ", i]' },
+  { key: 'county', label: 'County', color: '#f59e0b', weight: 3, filter: 'way["highway"="secondary"]["ref"!~"^(NY|US|I) ", i]["access"!="private"]' },
+  { key: 'local', label: 'Local (Town)', color: '#3d9c72', weight: 2, filter: 'way["highway"~"^(tertiary|unclassified|residential)$"]["ref"!~"^(NY|US|I) ", i]["access"!="private"]' },
+  { key: 'private', label: 'Private', color: '#9a9a9a', weight: 2, dash: '5 5', filter: 'way["highway"~"^(service|track|residential|unclassified)$"]["access"="private"]' },
+]
+
+/** One road-jurisdiction category, queried and drawn independently of the
+ *  others — several are meant to be visible at once here (it's a
+ *  classification map), unlike the rest of this file's single-select layers. */
+function RoadLayer({ cat, active, onState }: { cat: RoadCat; active: boolean; onState?: (key: string, s: LayerState) => void }) {
+  const map = useMap()
+  const groupRef = useRef<LayerGroup | null>(null)
+  useEffect(() => {
+    if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    if (!active) { onState?.(cat.key, null); return }
+    let cancelled = false
+    const group = L.layerGroup().addTo(map)
+    groupRef.current = group
+    onState?.(cat.key, 'loading')
+    const b = map.getBounds()
+    const bbox = `${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()}`
+    const q = `[out:json][timeout:25];(${cat.filter}(${bbox}););out geom 800;`
+    overpassFetch(q)
+      .then((elements) => {
+        if (cancelled) return
+        let count = 0
+        for (const el of elements) {
+          if (!el.geometry || el.geometry.length < 2) continue
+          const line = L.polyline(el.geometry.map((p) => [p.lat, p.lon] as [number, number]), {
+            color: cat.color, weight: cat.weight, opacity: 0.9, dashArray: cat.dash,
+          })
+          const name = el.tags?.name || el.tags?.ref || cat.label
+          line.bindPopup(
+            `<strong>${name}</strong><br><span style="color:${cat.color};font-weight:600">${cat.label}</span>` +
+            (el.tags?.ref && el.tags.ref !== name ? `<br>${el.tags.ref}` : ''),
+          )
+          line.addTo(group)
+          count++
+        }
+        onState?.(cat.key, count > 0 ? 'ok' : 'empty')
+      })
+      .catch(() => { if (!cancelled) onState?.(cat.key, 'error') })
+    return () => {
+      cancelled = true
+      if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    }
+  }, [active, cat, map, onState])
+  return null
+}
+
+/** Always-visible legend for the roads map — each category has its own
+ *  checkbox (rather than the single-select "Layers" menu used elsewhere),
+ *  since the whole point is comparing several jurisdictions at once. */
+function RoadsLegend({
+  enabled, onToggle, states,
+}: {
+  enabled: Set<string>; onToggle: (key: string) => void; states: Record<string, LayerState>
+}) {
+  return (
+    <div
+      style={{
+        position: 'absolute', top: 10, right: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
+        padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+        backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+      }}
+    >
+      <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8a8f96', fontWeight: 700 }}>
+        Road jurisdiction
+      </div>
+      {ROAD_CATS.map((cat) => {
+        const on = enabled.has(cat.key)
+        const st = states[cat.key]
+        return (
+          <label key={cat.key} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            <input type="checkbox" checked={on} onChange={() => onToggle(cat.key)} style={{ margin: 0, accentColor: cat.color }} />
+            <span style={{ width: 20, height: 0, display: 'inline-block', borderTop: `${Math.max(2, cat.weight - 1)}px ${cat.dash ? 'dashed' : 'solid'} ${cat.color}` }} />
+            {cat.label}
+            {on && st === 'loading' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>…</span>}
+            {on && st === 'empty' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>none in view</span>}
+          </label>
+        )
+      })}
+    </div>
+  )
+}
+
 interface MenuItem { key: string; label: string; color: string }
 interface MenuGroup { group: string; items: MenuItem[] }
 
@@ -546,7 +644,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, height = 440,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -563,20 +661,33 @@ export default function JurisdictionMap({
    *  where the map has exactly one purpose (board agenda-item maps, the
    *  Building Department permit map). */
   onlyPermits?: boolean
+  /** Locked multi-layer roads mode: the Highway Department's private/local/
+   *  county/state/federal jurisdiction map, each independently toggleable —
+   *  no other layers, no single-select menu. */
+  onlyRoads?: boolean
   height?: number
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
   // jurisdiction + hamlet boundaries. In onlyPermits mode this is permanently
-  // 'permits' — there's no menu to change it.
+  // 'permits' — there's no menu to change it. Unused in onlyRoads mode, which
+  // has its own multi-select state below.
   const [active, setActive] = useState<string | null>(onlyPermits ? 'permits' : defaultActive)
   const [layerState, setLayerState] = useState<LayerState>(null)
+  const [roadsEnabled, setRoadsEnabled] = useState<Set<string>>(() => new Set(ROAD_CATS.map((c) => c.key)))
+  const [roadStates, setRoadStates] = useState<Record<string, LayerState>>({})
+  // Stable across renders (unlike an inline arrow prop) — RoadLayer depends on
+  // this identity in its effect, so a fresh function every render would
+  // re-trigger the effect (and re-fetch) in a loop.
+  const handleRoadState = useCallback((key: string, s: LayerState) => {
+    setRoadStates((prev) => ({ ...prev, [key]: s }))
+  }, [])
 
   if (!cfg) return null
 
   // Grouped menu: civic issues, permits (when supplied), county GIS, OSM
-  // trails + points of interest. Empty (and hidden) in onlyPermits mode.
-  const groups: MenuGroup[] = onlyPermits ? [] : [
+  // trails + points of interest. Empty (and hidden) in onlyPermits/onlyRoads mode.
+  const groups: MenuGroup[] = onlyPermits || onlyRoads ? [] : [
     ...(showIssues ? [{ group: 'Civic', items: [{ key: 'issues', label: 'Open issues (SeeClickFix)', color: '#ef4444' }] }] : []),
     ...(permits && permits.length ? [{ group: permitsGroup, items: [{ key: 'permits', label: permitsLabel, color: '#d4767a' }] }] : []),
     ...(muni === 'nc' ? [{ group: 'County GIS', items: GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
@@ -592,7 +703,7 @@ export default function JurisdictionMap({
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        {!onlyPermits && (
+        {!onlyPermits && !onlyRoads && (
           <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
         )}
         {onlyPermits && note && (
@@ -605,6 +716,17 @@ export default function JurisdictionMap({
           >
             {note}
           </div>
+        )}
+        {onlyRoads && (
+          <RoadsLegend
+            enabled={roadsEnabled}
+            states={roadStates}
+            onToggle={(key) => setRoadsEnabled((prev) => {
+              const next = new Set(prev)
+              if (next.has(key)) next.delete(key); else next.add(key)
+              return next
+            })}
+          />
         )}
         <MapContainer
           center={cfg.center}
@@ -624,12 +746,20 @@ export default function JurisdictionMap({
           />
           <Boundary muni={muni} />
           <Hamlets muni={muni} />
-          {!onlyPermits && <OsmLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && <GisLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
-          {permits && permits.length > 0 && (
+          {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && !onlyRoads && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {permits && permits.length > 0 && !onlyRoads && (
             <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
           )}
+          {onlyRoads && ROAD_CATS.map((cat) => (
+            <RoadLayer
+              key={cat.key}
+              cat={cat}
+              active={roadsEnabled.has(cat.key)}
+              onState={handleRoadState}
+            />
+          ))}
           <ResizeFix />
         </MapContainer>
       </div>

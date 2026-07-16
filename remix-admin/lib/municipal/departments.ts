@@ -140,6 +140,8 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
     {
       department: 'Chief of Police',
       title: 'Chief of Police',
+      phone: '(914) 273-9500',
+      address: '15 Bedford Road, Armonk, NY 10504',
       blurb:
         'Leads North Castle’s police department — patrol, emergency response, and community policing for ' +
         'Armonk, Banksville, and North White Plains.',
@@ -149,7 +151,10 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   highway: [
     {
       department: 'Superintendent of Highways',
+      person: 'Jamie Norris',
       title: 'Superintendent of Highways',
+      phone: '(914) 273-3000 ext. 45',
+      address: '17 Bedford Road, Armonk, NY 10504',
       blurb:
         'Maintains and repairs Town roads and storm drainage and services the Town’s vehicles and equipment; ' +
         'handles snow and ice control in winter.',
