@@ -57,13 +57,18 @@ function bodyKeyFromCategory(name: string): BodyKey | null {
 }
 
 /**
- * Classify a published file. Only the primary Agenda and Minutes are ingested;
- * "Agenda Packet" and other supplementary files are ignored (M1).
+ * Classify a published file. Agenda and Agenda Packet both feed the same
+ * 'agenda' slot downstream — when a meeting has both, the packet (agenda plus
+ * the backup/supporting materials) is what a resident actually wants to read,
+ * so it's preferred over the bare agenda; the UI still just labels it
+ * "Agenda" either way (see the packet-preference in `discover()` below).
+ * Other supplementary files are ignored (M1).
  */
-function fileKind(file: any): 'agenda' | 'minutes' | null {
+function fileKind(file: any): 'agenda' | 'agenda_packet' | 'minutes' | null {
   const type = `${file?.type ?? ''}`.toLowerCase().trim()
   const name = `${file?.name ?? file?.fileName ?? ''}`.toLowerCase()
   if (type === 'minutes' || (!type && /minute/.test(name))) return 'minutes'
+  if (type === 'agenda packet' || (!type && /agenda/.test(name) && /packet/.test(name))) return 'agenda_packet'
   if (type === 'agenda' || (!type && /agenda/.test(name) && !/packet/.test(name))) return 'agenda'
   return null
 }
@@ -132,12 +137,21 @@ async function* discover(
 
     const files: any[] = pick(ev, ['publishedFiles', 'eventFiles', 'files']) ?? []
     const externalUrls: DiscoveredMeeting['externalUrls'] = {}
+    let agendaPacketUrl: string | null = null
+    let agendaPlainUrl: string | null = null
     for (const f of files) {
       const kind = fileKind(f)
-      if (!kind || externalUrls[kind]) continue
+      if (!kind) continue
       const url = fileUrl(api, f)
-      if (url) externalUrls[kind] = url
+      if (!url) continue
+      if (kind === 'agenda_packet') { if (!agendaPacketUrl) agendaPacketUrl = url }
+      else if (kind === 'agenda') { if (!agendaPlainUrl) agendaPlainUrl = url }
+      else if (!externalUrls[kind]) externalUrls[kind] = url
     }
+    // Prefer the fuller agenda packet when the portal published one for this
+    // meeting; fall back to the plain agenda otherwise.
+    const agendaUrl = agendaPacketUrl || agendaPlainUrl
+    if (agendaUrl) externalUrls.agenda = agendaUrl
 
     yield {
       bodyKey,
