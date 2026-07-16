@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import { OTHER_TABS, hrefFor } from '@/app/admin/municipal/MuniTabs'
+import { useTabScrollRestore } from './useTabScroll'
 import dynamic from 'next/dynamic'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
@@ -323,6 +324,7 @@ export default function MunicipalClient({
   // it can stick flush underneath (the header's height isn't fixed — it wraps
   // on narrow viewports — so this is tracked live rather than hardcoded).
   const [headerH, setHeaderH] = useState(0)
+  const tabScrollRef = useTabScrollRestore<HTMLDivElement>()
   useEffect(() => {
     if (!isOpen) return
     const el = document.querySelector('.muni-header') as HTMLElement | null
@@ -602,6 +604,7 @@ export default function MunicipalClient({
           {/* On ONC this strip sticks directly below the masthead (top =
               measured header height) so navigation stays reachable. */}
           <div
+            ref={tabScrollRef}
             className={isOpen ? 'pill-strip board-tabs-sticky' : 'pill-strip'}
             style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22, ...(isOpen ? { top: headerH } : {}) }}
           >

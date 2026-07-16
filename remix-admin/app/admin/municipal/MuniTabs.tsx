@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { isOpen } from '@/lib/flavor'
 import { DEPT_PAGES } from '@/lib/municipal/deptPages'
+import { useTabScrollRestore } from './useTabScroll'
 
 export interface TabDef { label: string; kind: 'board' | 'building' | 'finance' | 'highway' | 'dept'; key: string }
 
@@ -44,6 +45,7 @@ export function hrefFor(muni: string, t: TabDef): string {
  */
 export default function MuniTabs({ muni, active }: { muni: string; active: 'dashboard' | 'building' | 'finance' | string }) {
   const [headerH, setHeaderH] = useState(0)
+  const scrollRef = useTabScrollRestore<HTMLDivElement>()
   useEffect(() => {
     if (!isOpen) return
     const el = document.querySelector('.muni-header') as HTMLElement | null
@@ -62,7 +64,7 @@ export default function MuniTabs({ muni, active }: { muni: string; active: 'dash
   })
 
   return (
-    <div className="pill-strip board-tabs-sticky" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22, top: headerH }}>
+    <div ref={scrollRef} className="pill-strip board-tabs-sticky" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22, top: headerH }}>
       <a href="/" className={active === 'dashboard' ? 'btn' : 'btn secondary'} style={tabStyle(active === 'dashboard')}>
         Dashboard
       </a>
