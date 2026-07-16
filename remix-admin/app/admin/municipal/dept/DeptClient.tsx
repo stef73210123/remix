@@ -10,6 +10,7 @@ import BoardKeyDocs from '../board/BoardKeyDocs'
 import { getDeptPage } from '@/lib/municipal/deptPages'
 import { isOpen } from '@/lib/flavor'
 import { TopTaxpayersList, NC_TOP_TAXPAYERS_SOURCE_NOTE } from '@/app/admin/municipal/finance/FinanceCharts'
+import AllTaxParcelsList from './AllTaxParcelsList'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
 const JurisdictionMap = dynamic(() => import('@/app/admin/municipal/JurisdictionMap'), {
@@ -80,6 +81,13 @@ export default function DeptClient({ userName }: { userName: string }) {
                 <TopTaxpayersList />
               </div>
               <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5, maxWidth: 760 }}>{NC_TOP_TAXPAYERS_SOURCE_NOTE}</div>
+
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '22px 0 8px' }}>
+                All Tax Parcels
+              </div>
+              <div className="card" style={{ padding: 16 }}>
+                <AllTaxParcelsList />
+              </div>
             </div>
           )}
 

@@ -367,26 +367,33 @@ interface GisLayer {
   label: string
   color: string
   geom: 'point' | 'line' | 'polygon'
-  service: string
-  /** Matches the layer's name in the service's /layers list (ids aren't stable). */
-  match: RegExp
+  /** Relative to GIS_HOST (Westchester County's ArcGIS server) — ignored when
+   *  `baseUrl` is set. */
+  service?: string
+  /** Matches the layer's name in the service's /layers list (ids aren't
+   *  stable) — ignored when `baseUrl` is set. */
+  match?: RegExp
+  /** Full base URL (host + path through the layer index) for a layer hosted
+   *  outside GIS_HOST — e.g. the NYS/county parcels dataset is a hosted
+   *  ArcGIS Online feature service on its own services6.arcgis.com
+   *  subdomain, not the county's giswww.westchestergov.com server. Bypasses
+   *  the GIS_HOST + resolveLayerId lookup entirely when set. */
+  baseUrl?: string
+  /** Attribute filter (defaults to '1=1') — scopes a county- or state-wide
+   *  composite layer down to just this town (confirmed via the live service:
+   *  MUNI_NAME='North Castle' for parcels, MUN='NOC' for zoning), since the
+   *  bbox clip alone can pick up slivers of neighboring towns near the border. */
+  where?: string
   labelField?: string
   /** Renders a per-feature choropleth (fill scaled by a numeric field) instead
    *  of this layer's flat `color` — used for Assessment, where the point is
-   *  comparing parcels' value rather than showing one uniform fill. The live
-   *  ArcGIS schema wasn't reachable to confirm field names from this
-   *  environment, so `valueFields`/`ownerFields` are tried in priority order
-   *  against each feature's properties; if none resolve, it falls back to a
-   *  flat outline (same as any other polygon layer here) rather than
-   *  guessing wrong silently. */
+   *  comparing parcels' value rather than showing one uniform fill. */
   choropleth?: { valueFields: string[]; ownerFields?: string[] }
-  /** Renders each feature colored by a distinct category (e.g. zoning district
+  /** Renders each feature colored by a distinct category (zoning district
    *  code) instead of one flat fill — a zoning map's entire point is telling
-   *  districts apart, so a single color would defeat it. `fields` are tried in
-   *  priority order (same unconfirmed-schema caveat as `choropleth` above);
-   *  colors are assigned deterministically in sorted-value order from
-   *  CATEGORICAL_PALETTE, since the actual set of district codes isn't known
-   *  ahead of time. */
+   *  districts apart, so a single color would defeat it. Colors are assigned
+   *  deterministically in sorted-value order from CATEGORICAL_PALETTE, since
+   *  the actual set of district codes varies by query. */
   categorical?: { fields: string[] }
 }
 // "Trails" was removed from this list — the county name-match traced road
@@ -394,23 +401,31 @@ interface GisLayer {
 const GIS: GisLayer[] = [
   { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
   { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
+  // Confirmed live: DataHub_EnvironmentandPlanning/207 ("Zoning Districts"),
+  // filtered to North Castle via MUN='NOC'. ZONING holds the actual district
+  // code (e.g. "R-10", "CB"); ZONE_NAME is the friendly description shown in
+  // the popup.
   {
     key: 'zoning', label: 'Zoning districts', color: '#4ade80', geom: 'polygon',
-    service: 'Datahub_Boundaries', match: /zoning/i,
-    categorical: { fields: ['ZONE_DIST', 'ZONING', 'ZONE', 'ZONECODE', 'ZONE_CODE', 'DISTRICT'] },
+    service: 'DataHub_EnvironmentandPlanning', match: /zoning\s*districts/i,
+    where: "MUN='NOC'",
+    categorical: { fields: ['ZONING'] },
+    labelField: 'ZONE_NAME',
   },
   { key: 'fire_station', label: 'Fire stations', color: '#ef4444', geom: 'point', service: 'DataHub_CommunityFacilities', match: /fire\s*(station|dept|department|ems)/i, labelField: 'NAME' },
   { key: 'police', label: 'Police', color: '#3b82f6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /police/i, labelField: 'NAME' },
   { key: 'park', label: 'County parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
   { key: 'historic', label: 'Historic sites', color: '#c084a6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /historic/i, labelField: 'RESNAME' },
   { key: 'flood', label: 'Flood plains', color: '#38bdf8', geom: 'polygon', service: 'MunicipalTaxParcels_Query', match: /flood/i },
+  // Confirmed live: NYS/Westchester County's hosted tax-parcel feature
+  // service (2024-2025 parcel data joined to the NYS ORPTS assessment roll),
+  // filtered to North Castle via MUNI_NAME. TOTAL_AV is the assessed value;
+  // PRIMARY_OWNER the owner of record.
   {
     key: 'assessment', label: 'Assessment (tax parcels)', color: '#f59e0b', geom: 'polygon',
-    service: 'MunicipalTaxParcels_Query', match: /parcel/i,
-    choropleth: {
-      valueFields: ['TOTAL_AV', 'TOTALAV', 'ASSESSEDVAL', 'ASSESSED_VALUE', 'ASSESSED_VAL', 'FULLVAL', 'FULL_VAL', 'FULL_MKT_VAL', 'AV_TOTAL'],
-      ownerFields: ['OWNER', 'OWNER1', 'OWNERNAME', 'OWNER_NAME'],
-    },
+    baseUrl: 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0',
+    where: "MUNI_NAME='North Castle'",
+    choropleth: { valueFields: ['TOTAL_AV'], ownerFields: ['PRIMARY_OWNER'] },
   },
 ]
 
@@ -504,13 +519,17 @@ function GisLayers({
     onState?.('loading')
     ;(async () => {
       try {
-        const id = await resolveLayerId(cfg.service, cfg.match)
-        if (cancelled) return
-        if (id == null) { onState?.('error'); return }
+        let base = cfg.baseUrl
+        if (!base) {
+          const id = await resolveLayerId(cfg.service!, cfg.match!)
+          if (cancelled) return
+          if (id == null) { onState?.('error'); return }
+          base = `${GIS_HOST}/${cfg.service}/MapServer/${id}`
+        }
         const b = NC_BBOX
         const url =
-          `${GIS_HOST}/${cfg.service}/MapServer/${id}/query` +
-          `?where=1%3D1&outFields=*&outSR=4326` +
+          `${base}/query` +
+          `?where=${encodeURIComponent(cfg.where ?? '1=1')}&outFields=*&outSR=4326` +
           `&geometry=${b.xmin}%2C${b.ymin}%2C${b.xmax}%2C${b.ymax}` +
           `&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson`
         const r = await fetch(url)
