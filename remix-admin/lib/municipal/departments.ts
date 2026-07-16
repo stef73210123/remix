@@ -8,7 +8,10 @@
 
 export interface DeptContact {
   department: string
-  person: string
+  /** Omitted for offices whose current officeholder isn't reliably confirmed
+   *  (e.g. an elected position that turns over) — the card falls back to the
+   *  title/department alone rather than risk publishing a stale name. */
+  person?: string
   title: string
   phone?: string
   email?: string
@@ -112,6 +115,66 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
         { label: 'Permit process guide', href: 'https://www.northcastleny.com/213/Customers-Guide-to-the-Building-Permit-P' },
         { label: 'Online permitting', href: 'https://www.northcastleny.com/218/Online-Permitting' },
       ],
+    },
+  ],
+  parks_rec: [
+    {
+      department: 'Parks and Recreation Department',
+      person: 'Matt Trainor',
+      title: 'Superintendent of Parks and Recreation',
+      phone: '(914) 273-3000 ext. 301',
+      address: '40 Maple Avenue, Hergenhan Community Center, Armonk, NY 10504',
+      blurb:
+        'Runs the Town’s parks and playing fields and the Hergenhan Community Center, and organizes youth, ' +
+        'adult, and senior recreation programs.',
+      links: [{ label: 'Parks & Recreation Department', href: 'https://www.northcastleny.com/189/Recreation-Parks-Department' }],
+    },
+  ],
+  police: [
+    {
+      department: 'Police Department',
+      title: 'Police Department',
+      blurb:
+        'North Castle’s police department — patrol, emergency response, and community policing for Armonk, ' +
+        'Banksville, and North White Plains.',
+      links: [{ label: 'Police Department', href: 'https://www.northcastleny.com/229/Police-Department' }],
+    },
+  ],
+  highway: [
+    {
+      department: 'Highway Department',
+      title: 'Highway Department',
+      blurb:
+        'Maintains and repairs Town roads and storm drainage and services the Town’s vehicles and equipment; ' +
+        'handles snow and ice control in winter.',
+      links: [{ label: 'Highway Department', href: 'https://www.northcastleny.com/161/Highway-Department' }],
+    },
+  ],
+  receiver_of_taxes: [
+    {
+      department: 'Receiver of Taxes',
+      person: 'Patrick Ricci',
+      title: 'Receiver of Taxes',
+      phone: '(914) 273-3000 ext. 46',
+      address: 'Town Hall Annex, 17 Bedford Road, Armonk, NY 10504',
+      blurb:
+        'Collects Town, County, and special-district property taxes and disburses them to the Town, ' +
+        'Westchester County, and the local school districts.',
+      links: [{ label: 'Receiver of Taxes', href: 'https://www.northcastleny.com/587/Receiver-of-Taxes' }],
+    },
+  ],
+  water_sewer: [
+    {
+      department: 'Water & Sewer Department',
+      person: 'Sal Misiti',
+      title: 'Director of Water & Sewer Operations',
+      phone: '(914) 273-3000 ext. 55',
+      email: 'smisiti@northcastleny.com',
+      address: '15 Business Park Drive, Armonk, NY 10504',
+      blurb:
+        'Operates and maintains the Town’s water distribution and sanitary sewer systems across North ' +
+        'Castle’s water and sewer districts.',
+      links: [{ label: 'Water & Sewer Department', href: 'https://www.northcastleny.com/636/Water-Sewer' }],
     },
   ],
 }

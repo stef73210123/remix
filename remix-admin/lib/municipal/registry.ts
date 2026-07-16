@@ -101,6 +101,12 @@ export const MUNICIPALITIES: MunicipalityConfig[] = [
         meetingPattern: 'Quarterly to monthly',
         granicusViewId: 2,
       },
+      {
+        key: 'parks_rec',
+        displayName: 'Parks and Recreation',
+        meetingPattern: 'Monthly',
+        granicusViewId: 2,
+      },
     ],
   },
   {

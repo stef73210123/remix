@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
+import { OTHER_TABS, hrefFor } from '@/app/admin/municipal/MuniTabs'
 import dynamic from 'next/dynamic'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
@@ -608,24 +609,16 @@ export default function MunicipalClient({
             {boardTabs.map((b) => (
               <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
             ))}
-            {town === 'nc' && (
+            {town === 'nc' && OTHER_TABS.map((t) => (
               <a
-                href={`/admin/municipal/building?muni=${town}`}
+                key={t.key}
+                href={hrefFor(town, t)}
                 className="btn secondary"
                 style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}
               >
-                Building Dept
+                {t.label}
               </a>
-            )}
-            {town === 'nc' && (
-              <a
-                href={`/admin/municipal/finance?muni=${town}`}
-                className="btn secondary"
-                style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}
-              >
-                Finance
-              </a>
-            )}
+            ))}
           </div>
 
           {/* Board view — the enriched profile (members, themes, cases, meeting-by-
