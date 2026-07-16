@@ -180,17 +180,23 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       links: [{ label: 'Highway Department', href: 'https://www.northcastleny.com/161/Highway-Department' }],
     },
   ],
-  receiver_of_taxes: [
+  // Assessor's office — distinct from the Receiver of Taxes (who collects
+  // already-levied bills) and previously mislabeled as such on this page.
+  // The office's current officeholder isn't reliably confirmed from this
+  // environment (no reachable source), so `person`/`phone`/a page link are
+  // left out per the DeptContact convention above rather than risk publishing
+  // a stale or wrong name. This is also where the Top 50 Taxpayers schedule
+  // lives (it's drawn from the Assessor's own Tentative Assessment Roll) —
+  // see BoardKeyDocs / the Top 50 Taxpayers section on the Assessor page.
+  assessor: [
     {
-      department: 'Receiver of Taxes',
-      person: 'Patrick Ricci',
-      title: 'Receiver of Taxes',
-      phone: '(914) 273-3000 ext. 46',
+      department: 'Assessor',
+      title: 'Assessor',
       address: 'Town Hall Annex, 17 Bedford Road, Armonk, NY 10504',
       blurb:
-        'Collects Town, County, and special-district property taxes and disburses them to the Town, ' +
-        'Westchester County, and the local school districts.',
-      links: [{ label: 'Receiver of Taxes', href: 'https://www.northcastleny.com/587/Receiver-of-Taxes' }],
+        'Determines the assessed value of every property in Town for tax purposes, maintains the annual ' +
+        'assessment roll, and administers property-tax exemptions (STAR, senior, veterans, and others).',
+      links: [],
     },
   ],
   water_sewer: [

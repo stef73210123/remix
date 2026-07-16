@@ -371,6 +371,15 @@ interface GisLayer {
   /** Matches the layer's name in the service's /layers list (ids aren't stable). */
   match: RegExp
   labelField?: string
+  /** Renders a per-feature choropleth (fill scaled by a numeric field) instead
+   *  of this layer's flat `color` — used for Assessment, where the point is
+   *  comparing parcels' value rather than showing one uniform fill. The live
+   *  ArcGIS schema wasn't reachable to confirm field names from this
+   *  environment, so `valueFields`/`ownerFields` are tried in priority order
+   *  against each feature's properties; if none resolve, it falls back to a
+   *  flat outline (same as any other polygon layer here) rather than
+   *  guessing wrong silently. */
+  choropleth?: { valueFields: string[]; ownerFields?: string[] }
 }
 // "Trails" was removed from this list — the county name-match traced road
 // corridors; the OSM 'trails' layer above renders actual paths instead.
@@ -382,7 +391,56 @@ const GIS: GisLayer[] = [
   { key: 'park', label: 'County parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
   { key: 'historic', label: 'Historic sites', color: '#c084a6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /historic/i, labelField: 'RESNAME' },
   { key: 'flood', label: 'Flood plains', color: '#38bdf8', geom: 'polygon', service: 'MunicipalTaxParcels_Query', match: /flood/i },
+  {
+    key: 'assessment', label: 'Assessment (tax parcels)', color: '#f59e0b', geom: 'polygon',
+    service: 'MunicipalTaxParcels_Query', match: /parcel/i,
+    choropleth: {
+      valueFields: ['TOTAL_AV', 'TOTALAV', 'ASSESSEDVAL', 'ASSESSED_VALUE', 'ASSESSED_VAL', 'FULLVAL', 'FULL_VAL', 'FULL_MKT_VAL', 'AV_TOTAL'],
+      ownerFields: ['OWNER', 'OWNER1', 'OWNERNAME', 'OWNER_NAME'],
+    },
+  },
 ]
+
+// Sequential single-hue ramp (light → dark amber), light→dark by magnitude —
+// distinct from every other GIS layer's hue above.
+const ASSESSMENT_RAMP = ['#fde68a', '#fbbf24', '#f59e0b', '#d97706', '#92400e']
+
+function pickNumericField(props: Record<string, unknown>, candidates: string[]): number | null {
+  for (const k of candidates) {
+    const v = props[k]
+    if (typeof v === 'number' && v > 0) return v
+    if (typeof v === 'string' && v.trim() && !isNaN(Number(v)) && Number(v) > 0) return Number(v)
+  }
+  return null
+}
+function pickTextField(props: Record<string, unknown>, candidates: string[]): string | null {
+  for (const k of candidates) {
+    const v = props[k]
+    if (typeof v === 'string' && v.trim()) return v.trim()
+  }
+  return null
+}
+/** Quantile breakpoints (not fixed dollar bands) — assessed value is heavily
+ *  right-skewed (a few large commercial parcels dwarf everything else), so
+ *  fixed bands would put nearly every parcel in the bottom bucket. */
+function quantileBreaks(values: number[], buckets: number): number[] {
+  const sorted = [...values].sort((a, b) => a - b)
+  const breaks: number[] = []
+  for (let i = 1; i < buckets; i++) {
+    breaks.push(sorted[Math.min(sorted.length - 1, Math.floor((sorted.length * i) / buckets))])
+  }
+  return breaks
+}
+function rampColor(value: number, breaks: number[]): string {
+  let i = 0
+  while (i < breaks.length && value > breaks[i]) i++
+  return ASSESSMENT_RAMP[Math.min(i, ASSESSMENT_RAMP.length - 1)]
+}
+function fmtUSDShort(v: number): string {
+  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`
+  if (v >= 1_000) return `$${Math.round(v / 1000)}K`
+  return `$${Math.round(v)}`
+}
 
 // Resolve a layer id by name from the service's /layers list (cached per service).
 const layerIdCache = new Map<string, { id: number; name: string }[]>()
@@ -399,15 +457,24 @@ async function resolveLayerId(service: string, match: RegExp): Promise<number | 
   return hit ? hit.id : null
 }
 
+export interface AssessmentLegend { breaks: number[]; max: number }
+
 /** Fetches the single active county-GIS layer (clipped to North Castle) and
  *  draws it. Resolves the layer id by name at runtime and fails silently if the
  *  service/CORS is unavailable, so the map never breaks. */
-function GisLayers({ active, onState }: { active: string | null; onState?: (s: LayerState) => void }) {
+function GisLayers({
+  active, onState, onLegend,
+}: {
+  active: string | null
+  onState?: (s: LayerState) => void
+  onLegend?: (l: AssessmentLegend | null) => void
+}) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
 
   useEffect(() => {
     if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    onLegend?.(null)
     const cfg = GIS.find((g) => g.key === active)
     if (!cfg) return
     let cancelled = false
@@ -430,13 +497,46 @@ function GisLayers({ active, onState }: { active: string | null; onState?: (s: L
         const data = (await r.json()) as GeoJSON.FeatureCollection
         if (cancelled) return
         const count = data?.features?.length ?? 0
+
+        const choropleth = cfg.choropleth
+        let breaks: number[] | null = null
+        if (choropleth) {
+          const values: number[] = []
+          for (const f of data.features || []) {
+            const v = f.properties ? pickNumericField(f.properties as Record<string, unknown>, choropleth.valueFields) : null
+            if (v != null) values.push(v)
+          }
+          // Only trust the choropleth if most features actually resolved a
+          // value — otherwise the field-name guesses are probably wrong for
+          // this schema, and a flat outline is more honest than a fake scale.
+          if (values.length >= (data.features?.length ?? 0) * 0.5 && values.length > 0) {
+            breaks = quantileBreaks(values, ASSESSMENT_RAMP.length)
+            onLegend?.({ breaks, max: Math.max(...values) })
+          }
+        }
+
         L.geoJSON(data as GeoJSON.GeoJsonObject, {
-          style: () =>
-            cfg.geom === 'point'
-              ? {}
-              : { color: cfg.color, weight: cfg.geom === 'line' ? 3 : 1.8, fillColor: cfg.color, fillOpacity: cfg.geom === 'polygon' ? 0.14 : 0 },
+          style: (feature) => {
+            if (cfg.geom === 'point') return {}
+            if (choropleth && breaks) {
+              const v = feature?.properties ? pickNumericField(feature.properties as Record<string, unknown>, choropleth.valueFields) : null
+              return {
+                color: '#2a1c08', weight: 0.6,
+                fillColor: v != null ? rampColor(v, breaks) : cfg.color,
+                fillOpacity: v != null ? 0.55 : 0.1,
+              }
+            }
+            return { color: cfg.color, weight: cfg.geom === 'line' ? 3 : 1.8, fillColor: cfg.color, fillOpacity: cfg.geom === 'polygon' ? 0.14 : 0 }
+          },
           pointToLayer: (_f, latlng) => L.circleMarker(latlng, { radius: 5, color: '#0a0a0a', weight: 1, fillColor: cfg.color, fillOpacity: 0.95 }),
           onEachFeature: (f, layer) => {
+            if (choropleth) {
+              const props = (f.properties || {}) as Record<string, unknown>
+              const owner = choropleth.ownerFields ? pickTextField(props, choropleth.ownerFields) : null
+              const v = pickNumericField(props, choropleth.valueFields)
+              layer.bindPopup(`<strong>${owner || cfg.label}</strong>${v != null ? `<br>${fmtUSDShort(v)} assessed` : ''}`)
+              return
+            }
             const v = cfg.labelField && f.properties ? (f.properties as Record<string, unknown>)[cfg.labelField] : null
             layer.bindPopup(`<strong>${v ? String(v) : cfg.label}</strong><br>${cfg.label}`)
           },
@@ -450,7 +550,7 @@ function GisLayers({ active, onState }: { active: string | null; onState?: (s: L
       cancelled = true
       if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     }
-  }, [active, map, onState])
+  }, [active, map, onState, onLegend])
   return null
 }
 
@@ -674,6 +774,7 @@ export default function JurisdictionMap({
   // has its own multi-select state below.
   const [active, setActive] = useState<string | null>(onlyPermits ? 'permits' : defaultActive)
   const [layerState, setLayerState] = useState<LayerState>(null)
+  const [assessmentLegend, setAssessmentLegend] = useState<AssessmentLegend | null>(null)
   const [roadsEnabled, setRoadsEnabled] = useState<Set<string>>(() => new Set(ROAD_CATS.map((c) => c.key)))
   const [roadStates, setRoadStates] = useState<Record<string, LayerState>>({})
   // Stable across renders (unlike an inline arrow prop) — RoadLayer depends on
@@ -705,6 +806,28 @@ export default function JurisdictionMap({
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
         {!onlyPermits && !onlyRoads && (
           <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
+        )}
+        {!onlyPermits && !onlyRoads && active === 'assessment' && assessmentLegend && (
+          <div
+            style={{
+              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
+              padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+              backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+            }}
+          >
+            <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8a8f96', fontWeight: 700 }}>
+              Assessed value
+            </div>
+            <div style={{ display: 'flex', gap: 2 }}>
+              {ASSESSMENT_RAMP.map((c) => (
+                <span key={c} style={{ width: 20, height: 10, background: c, display: 'inline-block', borderRadius: 2 }} />
+              ))}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#fff' }}>
+              <span>Low</span>
+              <span>{fmtUSDShort(assessmentLegend.max)}+</span>
+            </div>
+          </div>
         )}
         {onlyPermits && note && (
           <div
@@ -747,7 +870,7 @@ export default function JurisdictionMap({
           <Boundary muni={muni} />
           <Hamlets muni={muni} />
           {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} onLegend={setAssessmentLegend} />}
           {!onlyPermits && !onlyRoads && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
           {permits && permits.length > 0 && !onlyRoads && (
             <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
