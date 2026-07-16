@@ -35,16 +35,18 @@
  * quietly contributes zero articles rather than erroring (same failure mode
  * as an unindexed source anywhere else in this file).
  *
- * Pagination: live production logs showed raw=100 (our full requested page)
- * with 80 of those dropped as irrelevant — these source domains publish a lot
- * of general Westchester content, so the single most-recent 100 candidates
- * (Perigon sorts by pubDate) skew mostly irrelevant, and the ~20 that pass the
- * town-relevance check cluster in just the most recent ~2-3 months instead of
- * spanning the full 180-day window. Fetching only page 0 therefore silently
- * truncates the effective date range long before DAYS_BACK is reached — the
- * fix is to page deeper into Perigon's results (0-indexed `page` + `size`,
- * max size 100 per Perigon's docs) so genuinely-relevant articles further
- * back in the window get a chance to surface past the noise.
+ * Known limitation: live production logs showed raw=100 (our full requested
+ * page) with 80 of those dropped as irrelevant — these source domains publish
+ * a lot of general Westchester content, so the single most-recent 100
+ * candidates (Perigon sorts by pubDate) skew mostly irrelevant, and the ~20
+ * that pass the town-relevance check cluster in just the most recent ~2-3
+ * months instead of spanning the full 180-day window. A `page` query param
+ * was tried to reach deeper into the results (per a search-engine summary of
+ * Perigon's docs, which turned out to be unreliable) — every request
+ * including `page=0` came back `400` live in production, a real outage this
+ * file has now recovered from by dropping the param entirely. Do not re-add
+ * `page`/pagination without confirming the real mechanism directly against
+ * Perigon's own docs or support — not a search-engine summary of them.
  */
 
 export interface NewsItem {
@@ -122,12 +124,6 @@ interface PerigonResponse {
 }
 
 const MENTIONS_IBM = /\bIBM\b/i
-const PAGE_SIZE = 100
-// How many pages of raw candidates to page through in the worst case. Each
-// page is a real HTTP round-trip, so this is a cost/thoroughness tradeoff —
-// 5 pages (up to 500 raw candidates) comfortably reaches back through a full
-// 180-day window even with these sources' low (~20%) town-relevance hit rate.
-const MAX_PAGES = 5
 
 // Ordered so a more specific signal (e.g. "town hall") wins over a looser one
 // (e.g. a hotel/townhouse project also being local "development" news).
@@ -169,60 +165,35 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
   // groups (per their docs).
   const q = `(${geo.cities.map((c) => (c.includes(' ') ? `"${c}"` : c)).join(' OR ')})`
   const from = new Date(Date.now() - DAYS_BACK * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
-  const baseParams = new URLSearchParams({
+  const params = new URLSearchParams({
     apiKey: key,
     q,
     from,
     sortBy: 'pubDate',
-    size: String(PAGE_SIZE),
+    size: '100',
   })
-  for (const domain of geo.sourceDomains) baseParams.append('source', domain)
+  for (const domain of geo.sourceDomains) params.append('source', domain)
 
-  // Page through up to MAX_PAGES (0-indexed, per Perigon's docs) rather than
-  // taking just the first page: these source domains publish a lot of
-  // general Westchester content alongside North Castle coverage, so the
-  // single most-recent page of raw candidates skews mostly irrelevant, and
-  // stopping there silently truncated the effective date range to just the
-  // first couple of months instead of the full 180-day window. Stops early
-  // once a page comes back short of a full page (no more results) or empty.
-  const allArticles: PerigonArticle[] = []
-  let pagesFetched = 0
-  for (let page = 0; page < MAX_PAGES; page++) {
-    const params = new URLSearchParams(baseParams)
-    params.set('page', String(page))
-    const res = await fetch(`https://api.perigon.io/v1/all?${params.toString()}`, {
-      signal: AbortSignal.timeout(15000),
-      next: { revalidate: 3600 },
-    })
-    if (!res.ok) throw new Error(`perigon HTTP ${res.status}`)
-    const raw = (await res.json()) as Record<string, unknown>
-    const data = raw as PerigonResponse
-    const pageArticles = Array.isArray(data.articles) ? data.articles : []
-    pagesFetched++
-    if (pageArticles.length === 0) {
-      if (page === 0) {
-        console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
-      }
-      break
-    }
-    allArticles.push(...pageArticles)
-    if (pageArticles.length < PAGE_SIZE) break
+  const res = await fetch(`https://api.perigon.io/v1/all?${params.toString()}`, {
+    signal: AbortSignal.timeout(15000),
+    next: { revalidate: 3600 },
+  })
+  if (!res.ok) throw new Error(`perigon HTTP ${res.status}`)
+  const raw = (await res.json()) as Record<string, unknown>
+  const data = raw as PerigonResponse
+  const articles = Array.isArray(data.articles) ? data.articles : []
+  if (articles.length === 0) {
+    console.log(`[news] muni=${muniKey} EMPTY-DIAG keys=${Object.keys(raw).join(',')} body=${JSON.stringify(raw).slice(0, 500)}`)
   }
 
   let droppedIbm = 0
   let droppedMalformed = 0
   let droppedIrrelevant = 0
-  const seenUrls = new Set<string>()
   const items: NewsItem[] = []
-  for (const a of allArticles) {
+  for (const a of articles) {
     const title = a.title?.trim()
     const url = a.url || a.link
     if (!title || !url) { droppedMalformed++; continue }
-    // Belt-and-suspenders against a paginated request unexpectedly repeating
-    // a prior page's results (e.g. an ignored `page` param) — de-dupe by URL
-    // rather than trust that every page is distinct.
-    if (seenUrls.has(url)) continue
-    seenUrls.add(url)
     const summary = (a.summary || a.description || '').trim()
     if (MENTIONS_IBM.test(title) || MENTIONS_IBM.test(summary)) { droppedIbm++; continue }
     // The source-domain filter alone isn't town-specific — both outlets cover
@@ -234,6 +205,6 @@ export async function fetchLocalNews(muniKey: string): Promise<NewsItem[] | null
     const imageUrl = rawImage && /^https?:\/\//i.test(rawImage) ? rawImage : null
     items.push({ key: url, title, source, url, summary, publishedAt: a.pubDate || a.date || '', imageUrl, ...classify(title, summary) })
   }
-  console.log(`[news] muni=${muniKey} raw=${allArticles.length} pages=${pagesFetched} dropped(ibm=${droppedIbm}, malformed=${droppedMalformed}, irrelevant=${droppedIrrelevant}) kept=${items.length}`)
+  console.log(`[news] muni=${muniKey} raw=${articles.length} dropped(ibm=${droppedIbm}, malformed=${droppedMalformed}, irrelevant=${droppedIrrelevant}) kept=${items.length}`)
   return items
 }
