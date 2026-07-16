@@ -177,13 +177,20 @@ const ISSUE_STATUS_COLOR: Record<string, string> = {
 }
 interface ScfIssue {
   id: number; status?: string; summary?: string; description?: string; address?: string
-  lat?: number; lng?: number; created_at?: string; html_url?: string
+  lat?: number; lng?: number; created_at?: string; acknowledged_at?: string | null; closed_at?: string | null
+  html_url?: string
   request_type?: { title?: string }
 }
 // The API is bbox-based, so border towns (Greenwich, Mount Kisco, …) bleed in
 // and can drown out the town's own reports — keep addresses inside the
 // town/hamlets when any match.
 const NC_PLACE_RE = /north castle|armonk|banksville|north white plains/i
+
+/** Whole days between two ISO timestamps, floored at 0 (a same-day ack/close
+ *  shouldn't read as negative from rounding). */
+function daysBetween(fromIso: string, toIso: string): number {
+  return Math.max(0, Math.round((new Date(toIso).getTime() - new Date(fromIso).getTime()) / 86400000))
+}
 
 /** Fetches SeeClickFix issues within the current view and plots them, colored by
  *  status. Fails silently (e.g. if the API is unreachable) so the map is fine. */
@@ -201,26 +208,35 @@ function IssueLayer({ active, muni, onState }: { active: boolean; muni: string; 
     const url =
       `https://seeclickfix.com/api/v2/issues?per_page=100&page=1&status=open,acknowledged,closed` +
       `&min_lat=${b.getSouth()}&min_lng=${b.getWest()}&max_lat=${b.getNorth()}&max_lng=${b.getEast()}`
-    fetch(url, { headers: { Accept: 'application/json' } })
+    fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('scf'))))
       .then((data: { issues?: ScfIssue[] }) => {
         if (cancelled) return
         const all = data.issues || []
-        // North Castle's own reports first; if the address filter strips
-        // everything (address formats vary), fall back to the raw bbox set.
+        // North Castle's own reports first; but if the address regex only
+        // catches a sliver of a much bigger bbox result (address formats vary
+        // a lot in practice), that's a sign the filter is under-matching
+        // rather than the bbox genuinely being mostly border-town noise — fall
+        // back to the full set so real North Castle issues aren't silently
+        // dropped.
         const own = muni === 'nc' ? all.filter((it) => NC_PLACE_RE.test(it.address || '')) : all
-        const issues = own.length > 0 ? own : all
+        const issues = own.length >= Math.max(3, all.length * 0.3) ? own : all
         let n = 0
         for (const it of issues) {
           if (it.lat == null || it.lng == null) continue
           const color = ISSUE_STATUS_COLOR[it.status || ''] || '#ef4444'
           const created = it.created_at ? fmtDateShort(new Date(it.created_at)) : ''
+          const ackDays = it.created_at && it.acknowledged_at ? daysBetween(it.created_at, it.acknowledged_at) : null
+          const closeDays = it.created_at && it.closed_at ? daysBetween(it.created_at, it.closed_at) : null
+          const ackLine = ackDays != null ? `<br>Acknowledged in ${ackDays} day${ackDays === 1 ? '' : 's'}` : ''
+          const closeLine = closeDays != null ? `<br>Closed in ${closeDays} day${closeDays === 1 ? '' : 's'}` : ''
           const link = it.html_url ? `<br><a href="${it.html_url}" target="_blank" rel="noopener">View / follow ↗</a>` : ''
           L.circleMarker([it.lat, it.lng], { radius: 6, color: '#0a0a0a', weight: 1, fillColor: color, fillOpacity: 0.95 })
             .bindPopup(
               `<strong>${it.summary || it.request_type?.title || 'Issue'}</strong>` +
               `<br><span style="color:${color};font-weight:600">${it.status || ''}</span>` +
-              (it.address ? `<br>${it.address}` : '') + (created ? `<br>Reported ${created}` : '') + link,
+              (it.address ? `<br>${it.address}` : '') + (created ? `<br>Reported ${created}` : '') +
+              ackLine + closeLine + link,
             )
             .addTo(group)
           n++
