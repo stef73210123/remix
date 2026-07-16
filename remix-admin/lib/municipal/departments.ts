@@ -31,6 +31,7 @@ const TOWN_ATTORNEY: DeptContact = {
   department: 'Town Attorney',
   person: 'Roland A. Baroni, Jr.',
   title: 'Town Attorney',
+  email: 'rbaroni@abramslaw.com',
   blurb:
     'Outside counsel who has served as North Castle’s Town Attorney since 1982, advising the Town ' +
     'Board and Planning Board on land use, zoning, and environmental law.',
@@ -132,19 +133,37 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   ],
   // Chief of Police is the key staff member for this page — same convention
   // as every other card here (eyebrow/title is the role, not the department
-  // at large). No current officeholder's name is used: the last confirmed
-  // chief, Peter Simonsen, had a retirement walkout scheduled Dec 2025, and
-  // no successor could be confirmed — see the "no reliably confirmed
-  // officeholder" note on DeptContact.person.
+  // at large). Regen Hufnagle was unanimously appointed Chief at the 1/28/26
+  // Town Board meeting, succeeding Peter Simonsen (whose retirement walkout
+  // was scheduled Dec 2025) — confirmed via the department's own staff
+  // directory, not the earlier unconfirmed-name placeholder.
   police: [
     {
       department: 'Chief of Police',
+      person: 'Regen Hufnagle',
       title: 'Chief of Police',
-      phone: '(914) 273-9500',
+      phone: '(914) 273-3000',
       address: '15 Bedford Road, Armonk, NY 10504',
       blurb:
         'Leads North Castle’s police department — patrol, emergency response, and community policing for ' +
-        'Armonk, Banksville, and North White Plains.',
+        'Armonk, Banksville, and North White Plains. Appointed Chief in January 2026.',
+      links: [{ label: 'Police Department', href: 'https://www.northcastleny.com/229/Police-Department' }],
+    },
+    {
+      department: 'Secretary / Records',
+      person: 'Kathy Giaccio',
+      title: 'Secretary / Records',
+      address: '15 Bedford Road, Armonk, NY 10504',
+      blurb: 'Handles departmental records and administrative support for the Police Department.',
+      links: [{ label: 'Police Department', href: 'https://www.northcastleny.com/229/Police-Department' }],
+    },
+    {
+      department: 'Animal Warden / Parking Enforcement Officer',
+      person: 'Mary Madsen',
+      title: 'Animal Warden / Parking Enforcement Officer',
+      phone: '(914) 273-3000 ext. 231',
+      address: '15 Bedford Road, Armonk, NY 10504',
+      blurb: 'Handles animal control matters and parking enforcement for the Town.',
       links: [{ label: 'Police Department', href: 'https://www.northcastleny.com/229/Police-Department' }],
     },
   ],
