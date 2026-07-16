@@ -73,6 +73,7 @@ export default function BoardCaseMap({ dataset, muni }: { dataset: AnalysisDatas
         permitsLabel={`${itemNounTitle[0].toUpperCase()}${itemNounTitle.slice(1)}`}
         permitsGroup="This board"
         onlyPermits
+        showZoning={dataset.meta.bodyKey === 'planning'}
         height={380}
       />
     </div>

@@ -380,12 +380,25 @@ interface GisLayer {
    *  flat outline (same as any other polygon layer here) rather than
    *  guessing wrong silently. */
   choropleth?: { valueFields: string[]; ownerFields?: string[] }
+  /** Renders each feature colored by a distinct category (e.g. zoning district
+   *  code) instead of one flat fill — a zoning map's entire point is telling
+   *  districts apart, so a single color would defeat it. `fields` are tried in
+   *  priority order (same unconfirmed-schema caveat as `choropleth` above);
+   *  colors are assigned deterministically in sorted-value order from
+   *  CATEGORICAL_PALETTE, since the actual set of district codes isn't known
+   *  ahead of time. */
+  categorical?: { fields: string[] }
 }
 // "Trails" was removed from this list — the county name-match traced road
 // corridors; the OSM 'trails' layer above renders actual paths instead.
 const GIS: GisLayer[] = [
   { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
   { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
+  {
+    key: 'zoning', label: 'Zoning districts', color: '#4ade80', geom: 'polygon',
+    service: 'Datahub_Boundaries', match: /zoning/i,
+    categorical: { fields: ['ZONE_DIST', 'ZONING', 'ZONE', 'ZONECODE', 'ZONE_CODE', 'DISTRICT'] },
+  },
   { key: 'fire_station', label: 'Fire stations', color: '#ef4444', geom: 'point', service: 'DataHub_CommunityFacilities', match: /fire\s*(station|dept|department|ems)/i, labelField: 'NAME' },
   { key: 'police', label: 'Police', color: '#3b82f6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /police/i, labelField: 'NAME' },
   { key: 'park', label: 'County parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
@@ -400,6 +413,12 @@ const GIS: GisLayer[] = [
     },
   },
 ]
+
+// Qualitative palette for zoning districts — colors are assigned by sorted
+// district-code order (not a fixed semantic mapping, since the actual codes
+// aren't known ahead of time), so this is a reasonable spread rather than a
+// literal "residential = green" convention.
+const CATEGORICAL_PALETTE = ['#e879f9', '#fb923c', '#facc15', '#4ade80', '#22d3ee', '#818cf8', '#f472b6', '#a3e635', '#fca5a5', '#94a3b8']
 
 // Sequential single-hue ramp (light → dark amber), light→dark by magnitude —
 // distinct from every other GIS layer's hue above.
@@ -457,7 +476,9 @@ async function resolveLayerId(service: string, match: RegExp): Promise<number | 
   return hit ? hit.id : null
 }
 
-export interface AssessmentLegend { breaks: number[]; max: number }
+export type MapLegend =
+  | { kind: 'choropleth'; breaks: number[]; max: number }
+  | { kind: 'categorical'; items: { label: string; color: string }[] }
 
 /** Fetches the single active county-GIS layer (clipped to North Castle) and
  *  draws it. Resolves the layer id by name at runtime and fails silently if the
@@ -467,7 +488,7 @@ function GisLayers({
 }: {
   active: string | null
   onState?: (s: LayerState) => void
-  onLegend?: (l: AssessmentLegend | null) => void
+  onLegend?: (l: MapLegend | null) => void
 }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
@@ -511,7 +532,25 @@ function GisLayers({
           // this schema, and a flat outline is more honest than a fake scale.
           if (values.length >= (data.features?.length ?? 0) * 0.5 && values.length > 0) {
             breaks = quantileBreaks(values, ASSESSMENT_RAMP.length)
-            onLegend?.({ breaks, max: Math.max(...values) })
+            onLegend?.({ kind: 'choropleth', breaks, max: Math.max(...values) })
+          }
+        }
+
+        const categorical = cfg.categorical
+        let categoryColor: ((v: string) => string) | null = null
+        if (categorical) {
+          const values = new Set<string>()
+          for (const f of data.features || []) {
+            const v = f.properties ? pickTextField(f.properties as Record<string, unknown>, categorical.fields) : null
+            if (v) values.add(v)
+          }
+          // Same "don't fake it" rule as choropleth — only color by category if
+          // most features actually resolved one of the guessed field names.
+          if (values.size > 0 && values.size <= 40 /* a runaway match (e.g. a unique parcel id) isn't a category */) {
+            const sorted = Array.from(values).sort()
+            const colorFor = (v: string) => CATEGORICAL_PALETTE[sorted.indexOf(v) % CATEGORICAL_PALETTE.length]
+            categoryColor = colorFor
+            onLegend?.({ kind: 'categorical', items: sorted.map((v) => ({ label: v, color: colorFor(v) })) })
           }
         }
 
@@ -526,6 +565,14 @@ function GisLayers({
                 fillOpacity: v != null ? 0.55 : 0.1,
               }
             }
+            if (categorical && categoryColor) {
+              const v = feature?.properties ? pickTextField(feature.properties as Record<string, unknown>, categorical.fields) : null
+              return {
+                color: '#1a1a1a', weight: 0.8,
+                fillColor: v != null ? categoryColor(v) : cfg.color,
+                fillOpacity: v != null ? 0.45 : 0.1,
+              }
+            }
             return { color: cfg.color, weight: cfg.geom === 'line' ? 3 : 1.8, fillColor: cfg.color, fillOpacity: cfg.geom === 'polygon' ? 0.14 : 0 }
           },
           pointToLayer: (_f, latlng) => L.circleMarker(latlng, { radius: 5, color: '#0a0a0a', weight: 1, fillColor: cfg.color, fillOpacity: 0.95 }),
@@ -535,6 +582,11 @@ function GisLayers({
               const owner = choropleth.ownerFields ? pickTextField(props, choropleth.ownerFields) : null
               const v = pickNumericField(props, choropleth.valueFields)
               layer.bindPopup(`<strong>${owner || cfg.label}</strong>${v != null ? `<br>${fmtUSDShort(v)} assessed` : ''}`)
+              return
+            }
+            if (categorical) {
+              const v = f.properties ? pickTextField(f.properties as Record<string, unknown>, categorical.fields) : null
+              layer.bindPopup(`<strong>${v || cfg.label}</strong><br>${cfg.label}`)
               return
             }
             const v = cfg.labelField && f.properties ? (f.properties as Record<string, unknown>)[cfg.labelField] : null
@@ -662,6 +714,39 @@ function RoadsLegend({
   )
 }
 
+function ZoningLegendSwatches({ items }: { items: { label: string; color: string }[] }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 3, maxHeight: 160, overflowY: 'auto' }}>
+      {items.map((it) => (
+        <div key={it.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#fff' }}>
+          <span style={{ width: 10, height: 10, borderRadius: 2, background: it.color, display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Floating legend for the general-menu case (zoning picked from the "Layers"
+ *  dropdown on a non-restricted map) — the dedicated onlyPermits toggle below
+ *  renders its swatches inline in its own panel instead of this wrapper. */
+function ZoningLegend({ items }: { items: { label: string; color: string }[] }) {
+  return (
+    <div
+      style={{
+        position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
+        padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+        backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)', maxWidth: 220,
+      }}
+    >
+      <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8a8f96', fontWeight: 700 }}>
+        Zoning districts
+      </div>
+      <ZoningLegendSwatches items={items} />
+    </div>
+  )
+}
+
 interface MenuItem { key: string; label: string; color: string }
 interface MenuGroup { group: string; items: MenuItem[] }
 
@@ -744,7 +829,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, height = 440,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -765,6 +850,11 @@ export default function JurisdictionMap({
    *  county/state/federal jurisdiction map, each independently toggleable —
    *  no other layers, no single-select menu. */
   onlyRoads?: boolean
+  /** Adds an independent "Zoning districts" checkbox toggle (with its own
+   *  legend), available even in onlyPermits/onlyRoads locked modes — used on
+   *  the Planning Board page, whose case map is locked to onlyPermits (so the
+   *  general County GIS menu, which also lists 'zoning', isn't reachable there). */
+  showZoning?: boolean
   height?: number
 }) {
   const cfg = MAP[muni]
@@ -774,7 +864,10 @@ export default function JurisdictionMap({
   // has its own multi-select state below.
   const [active, setActive] = useState<string | null>(onlyPermits ? 'permits' : defaultActive)
   const [layerState, setLayerState] = useState<LayerState>(null)
-  const [assessmentLegend, setAssessmentLegend] = useState<AssessmentLegend | null>(null)
+  const [menuLegend, setMenuLegend] = useState<MapLegend | null>(null)
+  const [zoningOn, setZoningOn] = useState(false)
+  const [zoningState, setZoningState] = useState<LayerState>(null)
+  const [zoningLegend, setZoningLegend] = useState<MapLegend | null>(null)
   const [roadsEnabled, setRoadsEnabled] = useState<Set<string>>(() => new Set(ROAD_CATS.map((c) => c.key)))
   const [roadStates, setRoadStates] = useState<Record<string, LayerState>>({})
   // Stable across renders (unlike an inline arrow prop) — RoadLayer depends on
@@ -807,7 +900,7 @@ export default function JurisdictionMap({
         {!onlyPermits && !onlyRoads && (
           <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
         )}
-        {!onlyPermits && !onlyRoads && active === 'assessment' && assessmentLegend && (
+        {!onlyPermits && !onlyRoads && active === 'assessment' && menuLegend?.kind === 'choropleth' && (
           <div
             style={{
               position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
@@ -825,8 +918,29 @@ export default function JurisdictionMap({
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#fff' }}>
               <span>Low</span>
-              <span>{fmtUSDShort(assessmentLegend.max)}+</span>
+              <span>{fmtUSDShort(menuLegend.max)}+</span>
             </div>
+          </div>
+        )}
+        {!onlyPermits && !onlyRoads && active === 'zoning' && menuLegend?.kind === 'categorical' && (
+          <ZoningLegend items={menuLegend.items} />
+        )}
+        {showZoning && (
+          <div
+            style={{
+              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
+              padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+              backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)', maxWidth: 220,
+            }}
+          >
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: '#fff', cursor: 'pointer' }}>
+              <input type="checkbox" checked={zoningOn} onChange={() => setZoningOn((v) => !v)} style={{ margin: 0, accentColor: '#4ade80' }} />
+              Zoning districts
+              {zoningOn && zoningState === 'loading' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>…</span>}
+              {zoningOn && zoningState === 'empty' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>none in view</span>}
+              {zoningOn && zoningState === 'error' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>unavailable</span>}
+            </label>
+            {zoningOn && zoningLegend?.kind === 'categorical' && <ZoningLegendSwatches items={zoningLegend.items} />}
           </div>
         )}
         {onlyPermits && note && (
@@ -870,8 +984,12 @@ export default function JurisdictionMap({
           <Boundary muni={muni} />
           <Hamlets muni={muni} />
           {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} onLegend={setAssessmentLegend} />}
+          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} onLegend={setMenuLegend} />}
           {!onlyPermits && !onlyRoads && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {/* Independent of the single-select menu above (and mounted even in
+              onlyPermits/onlyRoads) — reuses the same GisLayers fetch/render
+              logic for just the 'zoning' entry, driven by its own toggle. */}
+          {showZoning && <GisLayers active={zoningOn ? 'zoning' : null} onState={setZoningState} onLegend={setZoningLegend} />}
           {permits && permits.length > 0 && !onlyRoads && (
             <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
           )}
