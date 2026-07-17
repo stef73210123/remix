@@ -34,6 +34,27 @@
   font-family: var(--font-sans);
 }
 
+/* Sticky-footer shell: on short pages (a contact-card dept page with no long
+   dashboard content below the fold), the footer used to sit right after that
+   short content instead of anchoring to the bottom of the viewport, leaving a
+   large blank gap between it and the fixed .civic-bottom-bar. `.onc-shell` is
+   a flex column at least one viewport tall; `.onc-shell-content` (everything
+   but SiteFooter) grows to fill any leftover space, pushing the footer down
+   to the bottom. On pages taller than the viewport this has no effect at all
+   — the flex column just grows past its min-height and the page scrolls
+   exactly as it did before. `dvh` (dynamic viewport height) is used over
+   `vh` where supported so iOS Safari's animating URL-bar chrome doesn't
+   itself reintroduce the gap; `vh` stays as the fallback for older browsers. */
+[data-flavor='opennorthcastle'] .onc-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+[data-flavor='opennorthcastle'] .onc-shell-content {
+  flex: 1 0 auto;
+}
+
 /* iPadOS/iOS Safari rubber-bands the whole page on overscroll at the very
    top/bottom of the document, translating everything — including the fixed
    .civic-bottom-bar and the SiteFooter disclaimer text right above it —
