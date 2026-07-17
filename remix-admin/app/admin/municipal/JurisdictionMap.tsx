@@ -85,7 +85,7 @@ async function overpassFetch(query: string): Promise<OverpassElement[]> {
 }
 
 /** Draws the jurisdiction boundary (fetched at runtime) and fits the map to it. */
-function Boundary({ muni }: { muni: string }) {
+function Boundary({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean }) {
   const map = useMap()
   const layerRef = useRef<LGeoJSON | null>(null)
   useEffect(() => {
@@ -100,7 +100,10 @@ function Boundary({ muni }: { muni: string }) {
         const geom = arr?.[0]?.geojson
         if (!geom || (geom.type !== 'Polygon' && geom.type !== 'MultiPolygon')) return
         const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
-          style: { color: '#ffd24a', weight: 2.5, fill: false, dashArray: '4 3' },
+          // The bright gold reads well against dark satellite ground but
+          // washes out on the light gray canvas basemap — a dark amber holds
+          // contrast either way.
+          style: { color: lightBasemap ? '#92400e' : '#ffd24a', weight: 2.5, fill: false, dashArray: '4 3' },
         })
         layer.addTo(map)
         layerRef.current = layer
@@ -111,7 +114,7 @@ function Boundary({ muni }: { muni: string }) {
       cancelled = true
       if (layerRef.current) { layerRef.current.remove(); layerRef.current = null }
     }
-  }, [map, muni])
+  }, [map, muni, lightBasemap])
   return null
 }
 
@@ -311,7 +314,7 @@ const HAMLETS: Record<string, string[]> = {
 /** Draws the town's hamlet/CDP boundaries (fetched at runtime) with labels, so
  *  Armonk, Banksville and North White Plains read on the map alongside the town
  *  outline. Fetched sequentially to stay gentle on Nominatim. */
-function Hamlets({ muni }: { muni: string }) {
+function Hamlets({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
   useEffect(() => {
@@ -320,10 +323,14 @@ function Hamlets({ muni }: { muni: string }) {
     let cancelled = false
     const group = L.layerGroup().addTo(map)
     groupRef.current = group
+    // White-on-dark-shadow reads well over satellite imagery of any
+    // brightness; on the light gray canvas basemap it flips to dark-on-light-halo.
     const label = (text: string) =>
       L.divIcon({
         className: '',
-        html: `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,0.9);pointer-events:none;">${text}</div>`,
+        html: lightBasemap
+          ? `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#1a1a1a;white-space:nowrap;text-shadow:0 1px 2px rgba(255,255,255,0.9),0 0 3px rgba(255,255,255,0.9);pointer-events:none;">${text}</div>`
+          : `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,0.9);pointer-events:none;">${text}</div>`,
         iconSize: [0, 0],
       })
     ;(async () => {
@@ -339,7 +346,7 @@ function Hamlets({ muni }: { muni: string }) {
           const geom = item?.geojson
           if (geom && (geom.type === 'Polygon' || geom.type === 'MultiPolygon')) {
             const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
-              style: { color: '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
+              style: { color: lightBasemap ? '#3a3a3a' : '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
             }).addTo(group)
             L.marker(layer.getBounds().getCenter(), { icon: label(name), interactive: false }).addTo(group)
           } else if (item?.lat && item?.lon) {
@@ -353,7 +360,7 @@ function Hamlets({ muni }: { muni: string }) {
       cancelled = true
       if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     }
-  }, [map, muni])
+  }, [map, muni, lightBasemap])
   return null
 }
 
@@ -400,7 +407,14 @@ interface GisLayer {
 // corridors; the OSM 'trails' layer above renders actual paths instead.
 const GIS: GisLayer[] = [
   { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
-  { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
+  // Confirmed live: Datahub_Boundaries' "Water Districts" layer (151) carries
+  // a MUNICIPALITY field ("NOC" for North Castle, comma-joined for districts
+  // shared with a neighboring town, e.g. "NOC, NEC") — LIKE '%NOC%' catches both.
+  { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, where: "MUNICIPALITY LIKE '%NOC%'", labelField: 'PWS_NAME' },
+  // "County Sewer Districts" (147) has no municipality field at all — only
+  // NAME — so unlike every other North-Castle-filtered layer here, this one
+  // can only be clipped by the map's bounding box, not a real attribute filter.
+  { key: 'sewer_dist', label: 'Sewer districts', color: '#f472b6', geom: 'polygon', service: 'Datahub_Boundaries', match: /county\s*sewer\s*districts/i, labelField: 'NAME' },
   // Confirmed live: DataHub_EnvironmentandPlanning/207 ("Zoning Districts"),
   // filtered to North Castle via MUN='NOC'. ZONING holds the actual district
   // code (e.g. "R-10", "CB"); ZONE_NAME is the friendly description shown in
@@ -848,7 +862,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -874,6 +888,11 @@ export default function JurisdictionMap({
    *  the Planning Board page, whose case map is locked to onlyPermits (so the
    *  general County GIS menu, which also lists 'zoning', isn't reachable there). */
   showZoning?: boolean
+  /** Light gray canvas basemap instead of the default satellite imagery —
+   *  used on the Assessor page, where a neutral light background reads the
+   *  Assessment choropleth's fill colors more clearly than dark satellite
+   *  ground does. */
+  lightBasemap?: boolean
   height?: number
 }) {
   const cfg = MAP[muni]
@@ -988,20 +1007,38 @@ export default function JurisdictionMap({
           center={cfg.center}
           zoom={cfg.zoom}
           scrollWheelZoom={false}
-          style={{ height, width: '100%', background: '#0a0a0a' }}
+          style={{ height, width: '100%', background: lightBasemap ? '#f2efe9' : '#0a0a0a' }}
         >
-          <TileLayer
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-            attribution="Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community"
-            maxZoom={19}
-          />
-          {/* Place/road labels over the imagery, so it reads like a normal map. */}
-          <TileLayer
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
-            maxZoom={19}
-          />
-          <Boundary muni={muni} />
-          <Hamlets muni={muni} />
+          {lightBasemap ? (
+            <>
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+                attribution="Tiles &copy; Esri — Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community"
+                maxZoom={16}
+              />
+              {/* Labels/reference overlay for the light canvas basemap, matching
+                  the imagery basemap's separate labels layer below. */}
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+                maxZoom={16}
+              />
+            </>
+          ) : (
+            <>
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                attribution="Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community"
+                maxZoom={19}
+              />
+              {/* Place/road labels over the imagery, so it reads like a normal map. */}
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+                maxZoom={19}
+              />
+            </>
+          )}
+          <Boundary muni={muni} lightBasemap={lightBasemap} />
+          <Hamlets muni={muni} lightBasemap={lightBasemap} />
           {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
           {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} onLegend={setMenuLegend} />}
           {!onlyPermits && !onlyRoads && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
