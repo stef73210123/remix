@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { MapContainer, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import type { GeoJSON as LGeoJSON, LayerGroup } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -14,7 +14,7 @@ const MAP: Record<string, { center: [number, number]; zoom: number; query: strin
   rockland: { center: [41.86, -74.82], zoom: 12, query: 'Town of Rockland, Sullivan County, New York' },
 }
 
-type LayerState = 'loading' | 'ok' | 'empty' | 'error' | null
+type LayerState = 'loading' | 'ok' | 'empty' | 'error' | 'zoomIn' | null
 
 /** A permit rendered on the map. Geocoded lazily from its address. */
 export interface PermitMarker {
@@ -84,8 +84,10 @@ async function overpassFetch(query: string): Promise<OverpassElement[]> {
   throw lastErr
 }
 
-/** Draws the jurisdiction boundary (fetched at runtime) and fits the map to it. */
-function Boundary({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean }) {
+/** Draws the jurisdiction boundary (fetched at runtime) and, unless a caller
+ *  has requested a specific initial focus (`skipFitBounds`), fits the map to
+ *  it. */
+function Boundary({ muni, lightBasemap, skipFitBounds }: { muni: string; lightBasemap?: boolean; skipFitBounds?: boolean }) {
   const map = useMap()
   const layerRef = useRef<LGeoJSON | null>(null)
   useEffect(() => {
@@ -107,14 +109,16 @@ function Boundary({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean
         })
         layer.addTo(map)
         layerRef.current = layer
-        try { map.fitBounds(layer.getBounds(), { padding: [16, 16] }) } catch { /* keep default view */ }
+        if (!skipFitBounds) {
+          try { map.fitBounds(layer.getBounds(), { padding: [16, 16] }) } catch { /* keep default view */ }
+        }
       })
       .catch(() => { /* fall back to the town-centered default view */ })
     return () => {
       cancelled = true
       if (layerRef.current) { layerRef.current.remove(); layerRef.current = null }
     }
-  }, [map, muni, lightBasemap])
+  }, [map, muni, lightBasemap, skipFitBounds])
   return null
 }
 
@@ -402,6 +406,19 @@ interface GisLayer {
    *  deterministically in sorted-value order from CATEGORICAL_PALETTE, since
    *  the actual set of district codes varies by query. */
   categorical?: { fields: string[] }
+  /** Renders lightweight centroid dots (via `returnCentroid`, no polygon
+   *  geometry fetched) queried against the CURRENT MAP VIEWPORT instead of
+   *  the fixed town-wide NC_BBOX, and refetches on pan/zoom — used for
+   *  Assessment, whose ~4,800 parcels townwide silently exceed the service's
+   *  default max-record-count when queried all at once (rendering as
+   *  scattered gaps where truncated features just don't come back), and
+   *  whose full polygon geometry isn't worth the payload at a zoom level
+   *  where individual parcels are indistinguishable anyway. */
+  pointsOnly?: boolean
+  /** Below this zoom level, the layer doesn't fetch at all — shows a
+   *  "zoom in" prompt instead of an incomplete or overwhelming render.
+   *  Only meaningful alongside `pointsOnly`. */
+  minZoom?: number
 }
 // "Trails" was removed from this list — the county name-match traced road
 // corridors; the OSM 'trails' layer above renders actual paths instead.
@@ -436,10 +453,16 @@ const GIS: GisLayer[] = [
   // filtered to North Castle via MUNI_NAME. TOTAL_AV is the assessed value;
   // PRIMARY_OWNER the owner of record.
   {
-    key: 'assessment', label: 'Assessment (tax parcels)', color: '#f59e0b', geom: 'polygon',
+    key: 'assessment', label: 'Assessment (tax parcels)', color: '#f59e0b', geom: 'point',
     baseUrl: 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0',
     where: "MUNI_NAME='North Castle'",
     choropleth: { valueFields: ['TOTAL_AV'], ownerFields: ['PRIMARY_OWNER'] },
+    pointsOnly: true,
+    // North Castle's densest area (downtown Armonk) still has ~700-750
+    // parcels in a typical zoom-15 view (confirmed live) — comfortably under
+    // the service's record cap; below zoom 15 a full-viewport query risks
+    // the same silent truncation this mode exists to avoid.
+    minZoom: 15,
   },
 ]
 
@@ -513,11 +536,19 @@ export type MapLegend =
  *  draws it. Resolves the layer id by name at runtime and fails silently if the
  *  service/CORS is unavailable, so the map never breaks. */
 function GisLayers({
-  active, onState, onLegend,
+  active, onState, onLegend, onFeatureClick, viewTick,
 }: {
   active: string | null
   onState?: (s: LayerState) => void
   onLegend?: (l: MapLegend | null) => void
+  /** Fires with a clicked feature's raw attributes (currently only wired for
+   *  choropleth layers, i.e. Assessment) — lets a parent sync a clicked
+   *  parcel to e.g. a list widget elsewhere on the page. */
+  onFeatureClick?: (props: Record<string, unknown>) => void
+  /** Bumped on every map pan/zoom settle (see `MapViewTracker`) — only
+   *  relevant to `pointsOnly` layers, which refetch against the current
+   *  viewport; other layers ignore it (their fixed-bbox query never changes). */
+  viewTick?: number
 }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
@@ -527,6 +558,10 @@ function GisLayers({
     onLegend?.(null)
     const cfg = GIS.find((g) => g.key === active)
     if (!cfg) return
+    if (cfg.minZoom != null && map.getZoom() < cfg.minZoom) {
+      onState?.('zoomIn')
+      return
+    }
     let cancelled = false
     const group = L.layerGroup().addTo(map)
     groupRef.current = group
@@ -540,6 +575,47 @@ function GisLayers({
           if (id == null) { onState?.('error'); return }
           base = `${GIS_HOST}/${cfg.service}/MapServer/${id}`
         }
+
+        if (cfg.pointsOnly) {
+          const b = map.getBounds()
+          const url =
+            `${base}/query` +
+            `?where=${encodeURIComponent(cfg.where ?? '1=1')}&outFields=*&returnGeometry=false&returnCentroid=true&outSR=4326` +
+            `&geometry=${b.getWest()}%2C${b.getSouth()}%2C${b.getEast()}%2C${b.getNorth()}` +
+            `&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects` +
+            `&resultRecordCount=2000&f=json`
+          const r = await fetch(url)
+          if (!r.ok || cancelled) { if (!cancelled) onState?.('error'); return }
+          const data = (await r.json()) as { features?: { attributes: Record<string, unknown>; centroid?: { x: number; y: number } }[] }
+          if (cancelled) return
+          const feats = (data.features ?? []).filter((f) => f.centroid)
+          const count = feats.length
+
+          const choropleth = cfg.choropleth
+          let breaks: number[] | null = null
+          if (choropleth) {
+            const values = feats
+              .map((f) => pickNumericField(f.attributes, choropleth.valueFields))
+              .filter((v): v is number => v != null)
+            if (values.length > 0) {
+              breaks = quantileBreaks(values, ASSESSMENT_RAMP.length)
+              onLegend?.({ kind: 'choropleth', breaks, max: Math.max(...values) })
+            }
+          }
+
+          for (const f of feats) {
+            const v = choropleth ? pickNumericField(f.attributes, choropleth.valueFields) : null
+            const color = v != null && breaks ? rampColor(v, breaks) : cfg.color
+            const owner = choropleth?.ownerFields ? pickTextField(f.attributes, choropleth.ownerFields) : null
+            L.circleMarker([f.centroid!.y, f.centroid!.x], { radius: 4, color: '#2a1c08', weight: 0.6, fillColor: color, fillOpacity: 0.85 })
+              .bindPopup(`<strong>${owner || cfg.label}</strong>${v != null ? `<br>${fmtUSDShort(v)} assessed` : ''}`)
+              .on('click', () => onFeatureClick?.(f.attributes))
+              .addTo(group)
+          }
+          onState?.(count > 0 ? 'ok' : 'empty')
+          return
+        }
+
         const b = NC_BBOX
         const url =
           `${base}/query` +
@@ -615,6 +691,7 @@ function GisLayers({
               const owner = choropleth.ownerFields ? pickTextField(props, choropleth.ownerFields) : null
               const v = pickNumericField(props, choropleth.valueFields)
               layer.bindPopup(`<strong>${owner || cfg.label}</strong>${v != null ? `<br>${fmtUSDShort(v)} assessed` : ''}`)
+              layer.on('click', () => onFeatureClick?.(props))
               return
             }
             if (categorical) {
@@ -635,7 +712,15 @@ function GisLayers({
       cancelled = true
       if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     }
-  }, [active, map, onState, onLegend])
+  }, [active, map, onState, onLegend, onFeatureClick, viewTick])
+  return null
+}
+
+/** Bumps a counter on every pan/zoom settle — mounted only while the active
+ *  layer is `pointsOnly`, so other (fixed-bbox) layers never re-fetch on
+ *  every pan for no reason. */
+function MapViewTracker({ onChange }: { onChange: () => void }) {
+  useMapEvents({ moveend: onChange })
   return null
 }
 
@@ -862,7 +947,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440, onParcelClick, focus,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -894,6 +979,17 @@ export default function JurisdictionMap({
    *  ground does. */
   lightBasemap?: boolean
   height?: number
+  /** Fires with a clicked parcel's raw attributes when the Assessment layer
+   *  is active — pass a stable reference (e.g. a useState setter) rather
+   *  than an inline arrow, since it's an effect dependency in GisLayers and
+   *  a fresh identity every render would re-run (and re-fetch) that effect. */
+  onParcelClick?: (props: Record<string, unknown>) => void
+  /** Overrides the town's default center/zoom for this map instance (e.g. the
+   *  Assessor page opens on downtown Armonk, already zoomed in past the
+   *  Assessment layer's `minZoom`, instead of the whole-town default) — also
+   *  suppresses `Boundary`'s auto-fitBounds, which would otherwise zoom back
+   *  out to the full town outline right after this initial view is set. */
+  focus?: { center: [number, number]; zoom: number }
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
@@ -914,8 +1010,12 @@ export default function JurisdictionMap({
   const handleRoadState = useCallback((key: string, s: LayerState) => {
     setRoadStates((prev) => ({ ...prev, [key]: s }))
   }, [])
+  const [viewTick, setViewTick] = useState(0)
+  const bumpViewTick = useCallback(() => setViewTick((t) => t + 1), [])
 
   if (!cfg) return null
+
+  const activeGisCfg = GIS.find((g) => g.key === active)
 
   // Grouped menu: civic issues, permits (when supplied), county GIS, OSM
   // trails + points of interest. Empty (and hidden) in onlyPermits/onlyRoads mode.
@@ -928,6 +1028,7 @@ export default function JurisdictionMap({
 
   const note =
     layerState === 'loading' ? 'Loading…'
+    : layerState === 'zoomIn' ? 'Zoom in to see parcels'
     : layerState === 'empty' ? 'No features in view'
     : layerState === 'error' ? 'Layer unavailable'
     : null
@@ -1004,8 +1105,8 @@ export default function JurisdictionMap({
           />
         )}
         <MapContainer
-          center={cfg.center}
-          zoom={cfg.zoom}
+          center={focus?.center ?? cfg.center}
+          zoom={focus?.zoom ?? cfg.zoom}
           scrollWheelZoom={false}
           style={{ height, width: '100%', background: lightBasemap ? '#f2efe9' : '#0a0a0a' }}
         >
@@ -1037,10 +1138,13 @@ export default function JurisdictionMap({
               />
             </>
           )}
-          <Boundary muni={muni} lightBasemap={lightBasemap} />
+          <Boundary muni={muni} lightBasemap={lightBasemap} skipFitBounds={!!focus} />
           <Hamlets muni={muni} lightBasemap={lightBasemap} />
           {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} onLegend={setMenuLegend} />}
+          {!onlyPermits && !onlyRoads && activeGisCfg?.pointsOnly && <MapViewTracker onChange={bumpViewTick} />}
+          {!onlyPermits && !onlyRoads && (
+            <GisLayers active={active} onState={setLayerState} onLegend={setMenuLegend} onFeatureClick={onParcelClick} viewTick={viewTick} />
+          )}
           {!onlyPermits && !onlyRoads && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
           {/* Independent of the single-select menu above (and mounted even in
               onlyPermits/onlyRoads) — reuses the same GisLayers fetch/render

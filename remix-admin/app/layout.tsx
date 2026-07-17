@@ -62,8 +62,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       )}
       <body>
         {!isOpen && <TopoBackground />}
-        {children}
-        {isOpen && <SiteFooter />}
+        {isOpen ? (
+          <div className="onc-shell">
+            <div className="onc-shell-content">{children}</div>
+            <SiteFooter />
+          </div>
+        ) : (
+          children
+        )}
         {isOpen && <PreventOverscrollBounce />}
         <ScrollToTop />
         <Analytics />

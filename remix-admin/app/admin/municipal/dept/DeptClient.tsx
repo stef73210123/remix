@@ -9,8 +9,8 @@ import BoardStaffCards from '../board/BoardStaffCards'
 import BoardKeyDocs from '../board/BoardKeyDocs'
 import { getDeptPage } from '@/lib/municipal/deptPages'
 import { isOpen } from '@/lib/flavor'
-import { TopTaxpayersList, NC_TOP_TAXPAYERS_SOURCE_NOTE } from '@/app/admin/municipal/finance/FinanceCharts'
-import AllTaxParcelsList from './AllTaxParcelsList'
+import AllTaxParcelsList, { type SelectedParcelInfo } from './AllTaxParcelsList'
+import AssessmentAnalytics from './AssessmentAnalytics'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
 const JurisdictionMap = dynamic(() => import('@/app/admin/municipal/JurisdictionMap'), {
@@ -24,15 +24,15 @@ const JurisdictionMap = dynamic(() => import('@/app/admin/municipal/Jurisdiction
  * Meetings/timeline section, since these aren't multi-member bodies that hold
  * public deliberative meetings the way the boards do.
  *
- * The Assessor page additionally gets the Top 50 Taxpayers schedule (drawn
- * from the Assessor's own Tentative Assessment Roll, so it belongs here
- * rather than on the Finance page) and the map's Assessment layer, opened by
- * default — parcels colored by assessed value instead of the old per-owner
- * pin map, which only a handful of the 50 owner names could ever be geocoded to.
+ * The Assessor page additionally gets the map's Assessment layer (parcels
+ * colored by assessed value), analytics on the roll's composition, and the
+ * full parcel/owner list — clicking a parcel on the map surfaces it in the
+ * list via `selectedParcel`.
  */
 export default function DeptClient({ userName }: { userName: string }) {
   const [muni, setMuni] = useState('')
   const [key, setKey] = useState('')
+  const [selectedParcel, setSelectedParcel] = useState<SelectedParcelInfo | null>(null)
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
@@ -72,21 +72,28 @@ export default function DeptClient({ userName }: { userName: string }) {
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                 Assessment map
               </div>
-              <JurisdictionMap muni={muni} defaultActive="assessment" showIssues={false} lightBasemap height={380} />
+              <JurisdictionMap
+                muni={muni}
+                defaultActive="assessment"
+                showIssues={false}
+                lightBasemap
+                height={380}
+                onParcelClick={setSelectedParcel}
+                focus={{ center: [41.1294, -73.7131], zoom: 16 }}
+              />
 
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                Top 50 Taxpayers
+                Assessment analytics
               </div>
-              <div className="card" style={{ padding: 16 }}>
-                <TopTaxpayersList />
+              <div style={{ marginBottom: 22 }}>
+                <AssessmentAnalytics />
               </div>
-              <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5, maxWidth: 760 }}>{NC_TOP_TAXPAYERS_SOURCE_NOTE}</div>
 
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '22px 0 8px' }}>
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                 All Tax Parcels
               </div>
               <div className="card" style={{ padding: 16 }}>
-                <AllTaxParcelsList />
+                <AllTaxParcelsList selectedParcel={selectedParcel} />
               </div>
             </div>
           )}
