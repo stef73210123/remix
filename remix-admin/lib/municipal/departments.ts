@@ -61,7 +61,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       department: 'Town Clerk',
       person: 'Alison Simon',
       title: 'Town Clerk',
-      phone: '(914) 273-3321 ext. 42',
+      phone: '(914) 273-3000 ext. 42',
       email: 'asimon@northcastleny.com',
       address: '15 Bedford Road, Armonk, NY 10504',
       blurb:
@@ -76,7 +76,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       department: 'Town Administrator',
       person: 'Kevin Hay',
       title: 'Town Administrator',
-      phone: '(914) 273-3000',
+      phone: '(914) 273-3000 ext. 52',
       email: 'khay@northcastleny.com',
       address: '15 Bedford Road, Armonk, NY 10504',
       blurb:
@@ -102,9 +102,9 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   ],
   building: [
     {
-      department: 'Building Inspector',
-      person: 'Rob Melillo',
-      title: 'Building Inspector',
+      department: 'Building / Fire Inspector',
+      person: 'Robert Melillo',
+      title: 'Building / Fire Inspector',
       phone: '(914) 273-3000 ext. 44',
       email: 'building@northcastleny.com',
       address: '17 Bedford Road, Armonk, NY 10504',
@@ -124,6 +124,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       person: 'Matt Trainor',
       title: 'Superintendent of Parks and Recreation',
       phone: '(914) 273-3000 ext. 301',
+      email: 'mtrainor@northcastleny.com',
       address: '40 Maple Avenue, Hergenhan Community Center, Armonk, NY 10504',
       blurb:
         'Runs the Town’s parks and playing fields and the Hergenhan Community Center, and organizes youth, ' +
@@ -169,10 +170,11 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
   ],
   highway: [
     {
-      department: 'Superintendent of Highways',
+      department: 'Highway General Foreman',
       person: 'Jamie Norris',
-      title: 'Superintendent of Highways',
+      title: 'Highway General Foreman',
       phone: '(914) 273-3000 ext. 45',
+      email: 'highway@northcastleny.com',
       address: '17 Bedford Road, Armonk, NY 10504',
       blurb:
         'Maintains and repairs Town roads and storm drainage and services the Town’s vehicles and equipment; ' +
@@ -180,17 +182,23 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       links: [{ label: 'Highway Department', href: 'https://www.northcastleny.com/161/Highway-Department' }],
     },
   ],
-  receiver_of_taxes: [
+  // Assessor's office — distinct from the Receiver of Taxes (who collects
+  // already-levied bills) and previously mislabeled as such on this page.
+  // This is also where the Top 50 Taxpayers schedule lives (it's drawn from
+  // the Assessor's own Tentative Assessment Roll) — see BoardKeyDocs / the
+  // Top 50 Taxpayers section on the Assessor page.
+  assessor: [
     {
-      department: 'Receiver of Taxes',
-      person: 'Patrick Ricci',
-      title: 'Receiver of Taxes',
-      phone: '(914) 273-3000 ext. 46',
-      address: 'Town Hall Annex, 17 Bedford Road, Armonk, NY 10504',
+      department: 'Assessor',
+      person: 'Georgann Richardson',
+      title: 'Assessor',
+      phone: '(914) 273-3000 ext. 47',
+      email: 'assessor@northcastleny.com',
+      address: '17 Bedford Road, Armonk, NY 10504',
       blurb:
-        'Collects Town, County, and special-district property taxes and disburses them to the Town, ' +
-        'Westchester County, and the local school districts.',
-      links: [{ label: 'Receiver of Taxes', href: 'https://www.northcastleny.com/587/Receiver-of-Taxes' }],
+        'Determines the assessed value of every property in Town for tax purposes, maintains the annual ' +
+        'assessment roll, and administers property-tax exemptions (STAR, senior, veterans, and others).',
+      links: [{ label: 'Assessor', href: 'https://www.northcastleny.com/157/Assessor' }],
     },
   ],
   water_sewer: [

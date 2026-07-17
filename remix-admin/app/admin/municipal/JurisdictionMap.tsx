@@ -85,7 +85,7 @@ async function overpassFetch(query: string): Promise<OverpassElement[]> {
 }
 
 /** Draws the jurisdiction boundary (fetched at runtime) and fits the map to it. */
-function Boundary({ muni }: { muni: string }) {
+function Boundary({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean }) {
   const map = useMap()
   const layerRef = useRef<LGeoJSON | null>(null)
   useEffect(() => {
@@ -100,7 +100,10 @@ function Boundary({ muni }: { muni: string }) {
         const geom = arr?.[0]?.geojson
         if (!geom || (geom.type !== 'Polygon' && geom.type !== 'MultiPolygon')) return
         const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
-          style: { color: '#ffd24a', weight: 2.5, fill: false, dashArray: '4 3' },
+          // The bright gold reads well against dark satellite ground but
+          // washes out on the light gray canvas basemap — a dark amber holds
+          // contrast either way.
+          style: { color: lightBasemap ? '#92400e' : '#ffd24a', weight: 2.5, fill: false, dashArray: '4 3' },
         })
         layer.addTo(map)
         layerRef.current = layer
@@ -111,7 +114,7 @@ function Boundary({ muni }: { muni: string }) {
       cancelled = true
       if (layerRef.current) { layerRef.current.remove(); layerRef.current = null }
     }
-  }, [map, muni])
+  }, [map, muni, lightBasemap])
   return null
 }
 
@@ -311,7 +314,7 @@ const HAMLETS: Record<string, string[]> = {
 /** Draws the town's hamlet/CDP boundaries (fetched at runtime) with labels, so
  *  Armonk, Banksville and North White Plains read on the map alongside the town
  *  outline. Fetched sequentially to stay gentle on Nominatim. */
-function Hamlets({ muni }: { muni: string }) {
+function Hamlets({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
   useEffect(() => {
@@ -320,10 +323,14 @@ function Hamlets({ muni }: { muni: string }) {
     let cancelled = false
     const group = L.layerGroup().addTo(map)
     groupRef.current = group
+    // White-on-dark-shadow reads well over satellite imagery of any
+    // brightness; on the light gray canvas basemap it flips to dark-on-light-halo.
     const label = (text: string) =>
       L.divIcon({
         className: '',
-        html: `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,0.9);pointer-events:none;">${text}</div>`,
+        html: lightBasemap
+          ? `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#1a1a1a;white-space:nowrap;text-shadow:0 1px 2px rgba(255,255,255,0.9),0 0 3px rgba(255,255,255,0.9);pointer-events:none;">${text}</div>`
+          : `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,0.9);pointer-events:none;">${text}</div>`,
         iconSize: [0, 0],
       })
     ;(async () => {
@@ -339,7 +346,7 @@ function Hamlets({ muni }: { muni: string }) {
           const geom = item?.geojson
           if (geom && (geom.type === 'Polygon' || geom.type === 'MultiPolygon')) {
             const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
-              style: { color: '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
+              style: { color: lightBasemap ? '#3a3a3a' : '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
             }).addTo(group)
             L.marker(layer.getBounds().getCenter(), { icon: label(name), interactive: false }).addTo(group)
           } else if (item?.lat && item?.lon) {
@@ -353,7 +360,7 @@ function Hamlets({ muni }: { muni: string }) {
       cancelled = true
       if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     }
-  }, [map, muni])
+  }, [map, muni, lightBasemap])
   return null
 }
 
@@ -367,22 +374,121 @@ interface GisLayer {
   label: string
   color: string
   geom: 'point' | 'line' | 'polygon'
-  service: string
-  /** Matches the layer's name in the service's /layers list (ids aren't stable). */
-  match: RegExp
+  /** Relative to GIS_HOST (Westchester County's ArcGIS server) — ignored when
+   *  `baseUrl` is set. */
+  service?: string
+  /** Matches the layer's name in the service's /layers list (ids aren't
+   *  stable) — ignored when `baseUrl` is set. */
+  match?: RegExp
+  /** Full base URL (host + path through the layer index) for a layer hosted
+   *  outside GIS_HOST — e.g. the NYS/county parcels dataset is a hosted
+   *  ArcGIS Online feature service on its own services6.arcgis.com
+   *  subdomain, not the county's giswww.westchestergov.com server. Bypasses
+   *  the GIS_HOST + resolveLayerId lookup entirely when set. */
+  baseUrl?: string
+  /** Attribute filter (defaults to '1=1') — scopes a county- or state-wide
+   *  composite layer down to just this town (confirmed via the live service:
+   *  MUNI_NAME='North Castle' for parcels, MUN='NOC' for zoning), since the
+   *  bbox clip alone can pick up slivers of neighboring towns near the border. */
+  where?: string
   labelField?: string
+  /** Renders a per-feature choropleth (fill scaled by a numeric field) instead
+   *  of this layer's flat `color` — used for Assessment, where the point is
+   *  comparing parcels' value rather than showing one uniform fill. */
+  choropleth?: { valueFields: string[]; ownerFields?: string[] }
+  /** Renders each feature colored by a distinct category (zoning district
+   *  code) instead of one flat fill — a zoning map's entire point is telling
+   *  districts apart, so a single color would defeat it. Colors are assigned
+   *  deterministically in sorted-value order from CATEGORICAL_PALETTE, since
+   *  the actual set of district codes varies by query. */
+  categorical?: { fields: string[] }
 }
 // "Trails" was removed from this list — the county name-match traced road
 // corridors; the OSM 'trails' layer above renders actual paths instead.
 const GIS: GisLayer[] = [
   { key: 'school_dist', label: 'School districts', color: '#a855f7', geom: 'polygon', service: 'Datahub_Boundaries', match: /school\s*district/i, labelField: 'DISTNAME' },
-  { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, labelField: 'PWS_NAME' },
+  // Confirmed live: Datahub_Boundaries' "Water Districts" layer (151) carries
+  // a MUNICIPALITY field ("NOC" for North Castle, comma-joined for districts
+  // shared with a neighboring town, e.g. "NOC, NEC") — LIKE '%NOC%' catches both.
+  { key: 'water_dist', label: 'Water districts', color: '#0ea5e9', geom: 'polygon', service: 'Datahub_Boundaries', match: /water\s*district/i, where: "MUNICIPALITY LIKE '%NOC%'", labelField: 'PWS_NAME' },
+  // "County Sewer Districts" (147) has no municipality field at all — only
+  // NAME — so unlike every other North-Castle-filtered layer here, this one
+  // can only be clipped by the map's bounding box, not a real attribute filter.
+  { key: 'sewer_dist', label: 'Sewer districts', color: '#f472b6', geom: 'polygon', service: 'Datahub_Boundaries', match: /county\s*sewer\s*districts/i, labelField: 'NAME' },
+  // Confirmed live: DataHub_EnvironmentandPlanning/207 ("Zoning Districts"),
+  // filtered to North Castle via MUN='NOC'. ZONING holds the actual district
+  // code (e.g. "R-10", "CB"); ZONE_NAME is the friendly description shown in
+  // the popup.
+  {
+    key: 'zoning', label: 'Zoning districts', color: '#4ade80', geom: 'polygon',
+    service: 'DataHub_EnvironmentandPlanning', match: /zoning\s*districts/i,
+    where: "MUN='NOC'",
+    categorical: { fields: ['ZONING'] },
+    labelField: 'ZONE_NAME',
+  },
   { key: 'fire_station', label: 'Fire stations', color: '#ef4444', geom: 'point', service: 'DataHub_CommunityFacilities', match: /fire\s*(station|dept|department|ems)/i, labelField: 'NAME' },
   { key: 'police', label: 'Police', color: '#3b82f6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /police/i, labelField: 'NAME' },
   { key: 'park', label: 'County parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
   { key: 'historic', label: 'Historic sites', color: '#c084a6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /historic/i, labelField: 'RESNAME' },
   { key: 'flood', label: 'Flood plains', color: '#38bdf8', geom: 'polygon', service: 'MunicipalTaxParcels_Query', match: /flood/i },
+  // Confirmed live: NYS/Westchester County's hosted tax-parcel feature
+  // service (2024-2025 parcel data joined to the NYS ORPTS assessment roll),
+  // filtered to North Castle via MUNI_NAME. TOTAL_AV is the assessed value;
+  // PRIMARY_OWNER the owner of record.
+  {
+    key: 'assessment', label: 'Assessment (tax parcels)', color: '#f59e0b', geom: 'polygon',
+    baseUrl: 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0',
+    where: "MUNI_NAME='North Castle'",
+    choropleth: { valueFields: ['TOTAL_AV'], ownerFields: ['PRIMARY_OWNER'] },
+  },
 ]
+
+// Qualitative palette for zoning districts — colors are assigned by sorted
+// district-code order (not a fixed semantic mapping, since the actual codes
+// aren't known ahead of time), so this is a reasonable spread rather than a
+// literal "residential = green" convention.
+const CATEGORICAL_PALETTE = ['#e879f9', '#fb923c', '#facc15', '#4ade80', '#22d3ee', '#818cf8', '#f472b6', '#a3e635', '#fca5a5', '#94a3b8']
+
+// Sequential single-hue ramp (light → dark amber), light→dark by magnitude —
+// distinct from every other GIS layer's hue above.
+const ASSESSMENT_RAMP = ['#fde68a', '#fbbf24', '#f59e0b', '#d97706', '#92400e']
+
+function pickNumericField(props: Record<string, unknown>, candidates: string[]): number | null {
+  for (const k of candidates) {
+    const v = props[k]
+    if (typeof v === 'number' && v > 0) return v
+    if (typeof v === 'string' && v.trim() && !isNaN(Number(v)) && Number(v) > 0) return Number(v)
+  }
+  return null
+}
+function pickTextField(props: Record<string, unknown>, candidates: string[]): string | null {
+  for (const k of candidates) {
+    const v = props[k]
+    if (typeof v === 'string' && v.trim()) return v.trim()
+  }
+  return null
+}
+/** Quantile breakpoints (not fixed dollar bands) — assessed value is heavily
+ *  right-skewed (a few large commercial parcels dwarf everything else), so
+ *  fixed bands would put nearly every parcel in the bottom bucket. */
+function quantileBreaks(values: number[], buckets: number): number[] {
+  const sorted = [...values].sort((a, b) => a - b)
+  const breaks: number[] = []
+  for (let i = 1; i < buckets; i++) {
+    breaks.push(sorted[Math.min(sorted.length - 1, Math.floor((sorted.length * i) / buckets))])
+  }
+  return breaks
+}
+function rampColor(value: number, breaks: number[]): string {
+  let i = 0
+  while (i < breaks.length && value > breaks[i]) i++
+  return ASSESSMENT_RAMP[Math.min(i, ASSESSMENT_RAMP.length - 1)]
+}
+function fmtUSDShort(v: number): string {
+  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`
+  if (v >= 1_000) return `$${Math.round(v / 1000)}K`
+  return `$${Math.round(v)}`
+}
 
 // Resolve a layer id by name from the service's /layers list (cached per service).
 const layerIdCache = new Map<string, { id: number; name: string }[]>()
@@ -399,15 +505,26 @@ async function resolveLayerId(service: string, match: RegExp): Promise<number | 
   return hit ? hit.id : null
 }
 
+export type MapLegend =
+  | { kind: 'choropleth'; breaks: number[]; max: number }
+  | { kind: 'categorical'; items: { label: string; color: string }[] }
+
 /** Fetches the single active county-GIS layer (clipped to North Castle) and
  *  draws it. Resolves the layer id by name at runtime and fails silently if the
  *  service/CORS is unavailable, so the map never breaks. */
-function GisLayers({ active, onState }: { active: string | null; onState?: (s: LayerState) => void }) {
+function GisLayers({
+  active, onState, onLegend,
+}: {
+  active: string | null
+  onState?: (s: LayerState) => void
+  onLegend?: (l: MapLegend | null) => void
+}) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
 
   useEffect(() => {
     if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
+    onLegend?.(null)
     const cfg = GIS.find((g) => g.key === active)
     if (!cfg) return
     let cancelled = false
@@ -416,13 +533,17 @@ function GisLayers({ active, onState }: { active: string | null; onState?: (s: L
     onState?.('loading')
     ;(async () => {
       try {
-        const id = await resolveLayerId(cfg.service, cfg.match)
-        if (cancelled) return
-        if (id == null) { onState?.('error'); return }
+        let base = cfg.baseUrl
+        if (!base) {
+          const id = await resolveLayerId(cfg.service!, cfg.match!)
+          if (cancelled) return
+          if (id == null) { onState?.('error'); return }
+          base = `${GIS_HOST}/${cfg.service}/MapServer/${id}`
+        }
         const b = NC_BBOX
         const url =
-          `${GIS_HOST}/${cfg.service}/MapServer/${id}/query` +
-          `?where=1%3D1&outFields=*&outSR=4326` +
+          `${base}/query` +
+          `?where=${encodeURIComponent(cfg.where ?? '1=1')}&outFields=*&outSR=4326` +
           `&geometry=${b.xmin}%2C${b.ymin}%2C${b.xmax}%2C${b.ymax}` +
           `&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson`
         const r = await fetch(url)
@@ -430,13 +551,77 @@ function GisLayers({ active, onState }: { active: string | null; onState?: (s: L
         const data = (await r.json()) as GeoJSON.FeatureCollection
         if (cancelled) return
         const count = data?.features?.length ?? 0
+
+        const choropleth = cfg.choropleth
+        let breaks: number[] | null = null
+        if (choropleth) {
+          const values: number[] = []
+          for (const f of data.features || []) {
+            const v = f.properties ? pickNumericField(f.properties as Record<string, unknown>, choropleth.valueFields) : null
+            if (v != null) values.push(v)
+          }
+          // Only trust the choropleth if most features actually resolved a
+          // value — otherwise the field-name guesses are probably wrong for
+          // this schema, and a flat outline is more honest than a fake scale.
+          if (values.length >= (data.features?.length ?? 0) * 0.5 && values.length > 0) {
+            breaks = quantileBreaks(values, ASSESSMENT_RAMP.length)
+            onLegend?.({ kind: 'choropleth', breaks, max: Math.max(...values) })
+          }
+        }
+
+        const categorical = cfg.categorical
+        let categoryColor: ((v: string) => string) | null = null
+        if (categorical) {
+          const values = new Set<string>()
+          for (const f of data.features || []) {
+            const v = f.properties ? pickTextField(f.properties as Record<string, unknown>, categorical.fields) : null
+            if (v) values.add(v)
+          }
+          // Same "don't fake it" rule as choropleth — only color by category if
+          // most features actually resolved one of the guessed field names.
+          if (values.size > 0 && values.size <= 40 /* a runaway match (e.g. a unique parcel id) isn't a category */) {
+            const sorted = Array.from(values).sort()
+            const colorFor = (v: string) => CATEGORICAL_PALETTE[sorted.indexOf(v) % CATEGORICAL_PALETTE.length]
+            categoryColor = colorFor
+            onLegend?.({ kind: 'categorical', items: sorted.map((v) => ({ label: v, color: colorFor(v) })) })
+          }
+        }
+
         L.geoJSON(data as GeoJSON.GeoJsonObject, {
-          style: () =>
-            cfg.geom === 'point'
-              ? {}
-              : { color: cfg.color, weight: cfg.geom === 'line' ? 3 : 1.8, fillColor: cfg.color, fillOpacity: cfg.geom === 'polygon' ? 0.14 : 0 },
+          style: (feature) => {
+            if (cfg.geom === 'point') return {}
+            if (choropleth && breaks) {
+              const v = feature?.properties ? pickNumericField(feature.properties as Record<string, unknown>, choropleth.valueFields) : null
+              return {
+                color: '#2a1c08', weight: 0.6,
+                fillColor: v != null ? rampColor(v, breaks) : cfg.color,
+                fillOpacity: v != null ? 0.55 : 0.1,
+              }
+            }
+            if (categorical && categoryColor) {
+              const v = feature?.properties ? pickTextField(feature.properties as Record<string, unknown>, categorical.fields) : null
+              return {
+                color: '#1a1a1a', weight: 0.8,
+                fillColor: v != null ? categoryColor(v) : cfg.color,
+                fillOpacity: v != null ? 0.45 : 0.1,
+              }
+            }
+            return { color: cfg.color, weight: cfg.geom === 'line' ? 3 : 1.8, fillColor: cfg.color, fillOpacity: cfg.geom === 'polygon' ? 0.14 : 0 }
+          },
           pointToLayer: (_f, latlng) => L.circleMarker(latlng, { radius: 5, color: '#0a0a0a', weight: 1, fillColor: cfg.color, fillOpacity: 0.95 }),
           onEachFeature: (f, layer) => {
+            if (choropleth) {
+              const props = (f.properties || {}) as Record<string, unknown>
+              const owner = choropleth.ownerFields ? pickTextField(props, choropleth.ownerFields) : null
+              const v = pickNumericField(props, choropleth.valueFields)
+              layer.bindPopup(`<strong>${owner || cfg.label}</strong>${v != null ? `<br>${fmtUSDShort(v)} assessed` : ''}`)
+              return
+            }
+            if (categorical) {
+              const v = f.properties ? pickTextField(f.properties as Record<string, unknown>, categorical.fields) : null
+              layer.bindPopup(`<strong>${v || cfg.label}</strong><br>${cfg.label}`)
+              return
+            }
             const v = cfg.labelField && f.properties ? (f.properties as Record<string, unknown>)[cfg.labelField] : null
             layer.bindPopup(`<strong>${v ? String(v) : cfg.label}</strong><br>${cfg.label}`)
           },
@@ -450,7 +635,7 @@ function GisLayers({ active, onState }: { active: string | null; onState?: (s: L
       cancelled = true
       if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     }
-  }, [active, map, onState])
+  }, [active, map, onState, onLegend])
   return null
 }
 
@@ -562,6 +747,39 @@ function RoadsLegend({
   )
 }
 
+function ZoningLegendSwatches({ items }: { items: { label: string; color: string }[] }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 3, maxHeight: 160, overflowY: 'auto' }}>
+      {items.map((it) => (
+        <div key={it.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#fff' }}>
+          <span style={{ width: 10, height: 10, borderRadius: 2, background: it.color, display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Floating legend for the general-menu case (zoning picked from the "Layers"
+ *  dropdown on a non-restricted map) — the dedicated onlyPermits toggle below
+ *  renders its swatches inline in its own panel instead of this wrapper. */
+function ZoningLegend({ items }: { items: { label: string; color: string }[] }) {
+  return (
+    <div
+      style={{
+        position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
+        padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+        backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)', maxWidth: 220,
+      }}
+    >
+      <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8a8f96', fontWeight: 700 }}>
+        Zoning districts
+      </div>
+      <ZoningLegendSwatches items={items} />
+    </div>
+  )
+}
+
 interface MenuItem { key: string; label: string; color: string }
 interface MenuGroup { group: string; items: MenuItem[] }
 
@@ -644,7 +862,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, height = 440,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -665,6 +883,16 @@ export default function JurisdictionMap({
    *  county/state/federal jurisdiction map, each independently toggleable —
    *  no other layers, no single-select menu. */
   onlyRoads?: boolean
+  /** Adds an independent "Zoning districts" checkbox toggle (with its own
+   *  legend), available even in onlyPermits/onlyRoads locked modes — used on
+   *  the Planning Board page, whose case map is locked to onlyPermits (so the
+   *  general County GIS menu, which also lists 'zoning', isn't reachable there). */
+  showZoning?: boolean
+  /** Light gray canvas basemap instead of the default satellite imagery —
+   *  used on the Assessor page, where a neutral light background reads the
+   *  Assessment choropleth's fill colors more clearly than dark satellite
+   *  ground does. */
+  lightBasemap?: boolean
   height?: number
 }) {
   const cfg = MAP[muni]
@@ -674,6 +902,10 @@ export default function JurisdictionMap({
   // has its own multi-select state below.
   const [active, setActive] = useState<string | null>(onlyPermits ? 'permits' : defaultActive)
   const [layerState, setLayerState] = useState<LayerState>(null)
+  const [menuLegend, setMenuLegend] = useState<MapLegend | null>(null)
+  const [zoningOn, setZoningOn] = useState(false)
+  const [zoningState, setZoningState] = useState<LayerState>(null)
+  const [zoningLegend, setZoningLegend] = useState<MapLegend | null>(null)
   const [roadsEnabled, setRoadsEnabled] = useState<Set<string>>(() => new Set(ROAD_CATS.map((c) => c.key)))
   const [roadStates, setRoadStates] = useState<Record<string, LayerState>>({})
   // Stable across renders (unlike an inline arrow prop) — RoadLayer depends on
@@ -706,6 +938,49 @@ export default function JurisdictionMap({
         {!onlyPermits && !onlyRoads && (
           <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
         )}
+        {!onlyPermits && !onlyRoads && active === 'assessment' && menuLegend?.kind === 'choropleth' && (
+          <div
+            style={{
+              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
+              padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+              backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+            }}
+          >
+            <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8a8f96', fontWeight: 700 }}>
+              Assessed value
+            </div>
+            <div style={{ display: 'flex', gap: 2 }}>
+              {ASSESSMENT_RAMP.map((c) => (
+                <span key={c} style={{ width: 20, height: 10, background: c, display: 'inline-block', borderRadius: 2 }} />
+              ))}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#fff' }}>
+              <span>Low</span>
+              <span>{fmtUSDShort(menuLegend.max)}+</span>
+            </div>
+          </div>
+        )}
+        {!onlyPermits && !onlyRoads && active === 'zoning' && menuLegend?.kind === 'categorical' && (
+          <ZoningLegend items={menuLegend.items} />
+        )}
+        {showZoning && (
+          <div
+            style={{
+              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
+              padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+              backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)', maxWidth: 220,
+            }}
+          >
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: '#fff', cursor: 'pointer' }}>
+              <input type="checkbox" checked={zoningOn} onChange={() => setZoningOn((v) => !v)} style={{ margin: 0, accentColor: '#4ade80' }} />
+              Zoning districts
+              {zoningOn && zoningState === 'loading' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>…</span>}
+              {zoningOn && zoningState === 'empty' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>none in view</span>}
+              {zoningOn && zoningState === 'error' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>unavailable</span>}
+            </label>
+            {zoningOn && zoningLegend?.kind === 'categorical' && <ZoningLegendSwatches items={zoningLegend.items} />}
+          </div>
+        )}
         {onlyPermits && note && (
           <div
             style={{
@@ -732,23 +1007,45 @@ export default function JurisdictionMap({
           center={cfg.center}
           zoom={cfg.zoom}
           scrollWheelZoom={false}
-          style={{ height, width: '100%', background: '#0a0a0a' }}
+          style={{ height, width: '100%', background: lightBasemap ? '#f2efe9' : '#0a0a0a' }}
         >
-          <TileLayer
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-            attribution="Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community"
-            maxZoom={19}
-          />
-          {/* Place/road labels over the imagery, so it reads like a normal map. */}
-          <TileLayer
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
-            maxZoom={19}
-          />
-          <Boundary muni={muni} />
-          <Hamlets muni={muni} />
+          {lightBasemap ? (
+            <>
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+                attribution="Tiles &copy; Esri — Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community"
+                maxZoom={16}
+              />
+              {/* Labels/reference overlay for the light canvas basemap, matching
+                  the imagery basemap's separate labels layer below. */}
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+                maxZoom={16}
+              />
+            </>
+          ) : (
+            <>
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                attribution="Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community"
+                maxZoom={19}
+              />
+              {/* Place/road labels over the imagery, so it reads like a normal map. */}
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+                maxZoom={19}
+              />
+            </>
+          )}
+          <Boundary muni={muni} lightBasemap={lightBasemap} />
+          <Hamlets muni={muni} lightBasemap={lightBasemap} />
           {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && !onlyRoads && <GisLayers active={active} onState={setLayerState} onLegend={setMenuLegend} />}
           {!onlyPermits && !onlyRoads && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {/* Independent of the single-select menu above (and mounted even in
+              onlyPermits/onlyRoads) — reuses the same GisLayers fetch/render
+              logic for just the 'zoning' entry, driven by its own toggle. */}
+          {showZoning && <GisLayers active={zoningOn ? 'zoning' : null} onState={setZoningState} onLegend={setZoningLegend} />}
           {permits && permits.length > 0 && !onlyRoads && (
             <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
           )}
