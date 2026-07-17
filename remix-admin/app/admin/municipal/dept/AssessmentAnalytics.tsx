@@ -19,6 +19,95 @@ function classGroupLabel(code: string): string {
   return (digit && CLASS_GROUPS[digit]) || 'Other/unclassified'
 }
 
+// Categorical color assigned by entity identity (fixed order, never cycled,
+// never re-derived from sort rank) — 8 validated hues plus one gray fallback
+// shared by the two least-common/uncategorized buckets.
+const FALLBACK_COLOR = '#8a8f98'
+const CLASS_COLORS: Record<string, string> = {
+  'Agricultural': '#2a78d6',
+  'Residential': '#1baf7a',
+  'Vacant land': '#eda100',
+  'Commercial': '#008300',
+  'Recreation & entertainment': '#4a3aa7',
+  'Community services': '#e34948',
+  'Industrial': '#e87ba4',
+  'Public services': '#eb6834',
+  'Wild, forest & parks': FALLBACK_COLOR,
+  'Other/unclassified': FALLBACK_COLOR,
+}
+
+interface DonutSegment { label: string; value: number; color: string }
+
+/** Reusable inline-SVG donut: rounded track, 2px surface gaps between
+ *  segments, a center figure, and a legend with swatch + value + share so
+ *  identity is never color-alone. */
+function DonutChart({
+  segments, size = 148, thickness = 24, centerValue, centerLabel,
+}: {
+  segments: DonutSegment[]
+  size?: number
+  thickness?: number
+  centerValue: string
+  centerLabel: string
+}) {
+  const total = segments.reduce((s, seg) => s + seg.value, 0)
+  const r = (size - thickness) / 2
+  const cx = size / 2
+  const cy = size / 2
+  const circumference = 2 * Math.PI * r
+  const gap = total > 0 ? 2 : 0
+  let offset = 0
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ flexShrink: 0 }}>
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--panel-2)" strokeWidth={thickness} />
+        <g transform={`rotate(-90 ${cx} ${cy})`}>
+          {segments.map((seg) => {
+            const frac = total > 0 ? seg.value / total : 0
+            const len = frac * circumference
+            const dash = Math.max(len - gap, 0)
+            const el = (
+              <circle
+                key={seg.label}
+                cx={cx}
+                cy={cy}
+                r={r}
+                fill="none"
+                stroke={seg.color}
+                strokeWidth={thickness}
+                strokeDasharray={`${dash} ${circumference - dash}`}
+                strokeDashoffset={-offset}
+              >
+                <title>{`${seg.label}: ${fmtUSDFull(seg.value)} (${total > 0 ? ((seg.value / total) * 100).toFixed(1) : '0'}%)`}</title>
+              </circle>
+            )
+            offset += len
+            return el
+          })}
+        </g>
+        <text x={cx} y={cy - 5} textAnchor="middle" style={{ fontSize: 15, fontWeight: 700, fill: 'var(--fg)' }}>
+          {centerValue}
+        </text>
+        <text x={cx} y={cy + 13} textAnchor="middle" style={{ fontSize: 9.5, fill: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          {centerLabel}
+        </text>
+      </svg>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 5, fontSize: 12, flex: '1 1 160px', minWidth: 140 }}>
+        {segments.map((seg) => (
+          <div key={seg.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ width: 9, height: 9, borderRadius: 2, background: seg.color, display: 'inline-block', flexShrink: 0 }} />
+            <span style={{ flex: 1, color: 'var(--muted)' }}>{seg.label}</span>
+            <span style={{ fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+              {fmtUSD(seg.value)} <span style={{ color: 'var(--muted)', fontWeight: 400 }}>({total > 0 ? ((seg.value / total) * 100).toFixed(1) : '0'}%)</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 interface Summary {
   rollTotal: number
   parcelCount: number
@@ -116,9 +205,7 @@ export default function AssessmentAnalytics() {
     return <div className="muted" style={{ padding: 20, fontSize: 12.5, textAlign: 'center' }}>Loading…</div>
   }
 
-  const maxGroupTotal = Math.max(...classGroups.map((g) => g.total), 1)
   const taxablePct = summary.rollTotal > 0 ? (summary.taxableTotal / summary.rollTotal) * 100 : 0
-  const exemptPct = 100 - taxablePct
   const avgAssessed = summary.parcelCount > 0 ? summary.rollTotal / summary.parcelCount : 0
 
   return (
@@ -139,43 +226,29 @@ export default function AssessmentAnalytics() {
       </div>
 
       <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-        <div className="card" style={{ padding: 16, flex: '2 1 380px', minWidth: 0 }}>
+        <div className="card" style={{ padding: 16, flex: '2 1 420px', minWidth: 0 }}>
           <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
             Assessed value by property type
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {classGroups.map((g) => (
-              <div key={g.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 150, fontSize: 12, color: 'var(--muted)', textAlign: 'right', flexShrink: 0 }}>{g.label}</div>
-                <div style={{ flex: 1, background: 'var(--panel-2)', borderRadius: 5, height: 16, overflow: 'hidden' }}>
-                  <div style={{ width: `${(g.total / maxGroupTotal) * 100}%`, background: '#f59e0b', height: '100%', borderRadius: 5, minWidth: g.total > 0 ? 4 : 0 }} />
-                </div>
-                <div style={{ width: 68, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
-                  {fmtUSD(g.total)}
-                </div>
-              </div>
-            ))}
-          </div>
+          <DonutChart
+            segments={classGroups.map((g) => ({ label: g.label, value: g.total, color: CLASS_COLORS[g.label] ?? FALLBACK_COLOR }))}
+            centerValue={fmtUSD(summary.rollTotal)}
+            centerLabel="Total assessed"
+          />
         </div>
 
-        <div className="card" style={{ padding: 16, flex: '1 1 220px', minWidth: 0 }}>
+        <div className="card" style={{ padding: 16, flex: '1 1 300px', minWidth: 0 }}>
           <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
             Taxable vs. exempt
           </div>
-          <div style={{ display: 'flex', height: 20, borderRadius: 6, overflow: 'hidden', marginBottom: 12 }}>
-            <div style={{ width: `${taxablePct}%`, background: '#3d9c72' }} />
-            <div style={{ width: `${exemptPct}%`, background: '#5a9bd4' }} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: '#3d9c72', display: 'inline-block', flexShrink: 0 }} />
-              Taxable — {fmtUSD(summary.taxableTotal)} ({taxablePct.toFixed(1)}%)
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 10, height: 10, borderRadius: 2, background: '#5a9bd4', display: 'inline-block', flexShrink: 0 }} />
-              Exempt/other — {fmtUSD(summary.exemptTotal)} ({exemptPct.toFixed(1)}%)
-            </div>
-          </div>
+          <DonutChart
+            segments={[
+              { label: 'Taxable', value: summary.taxableTotal, color: '#2a78d6' },
+              { label: 'Exempt/other', value: summary.exemptTotal, color: FALLBACK_COLOR },
+            ]}
+            centerValue={`${taxablePct.toFixed(1)}%`}
+            centerLabel="Taxable"
+          />
         </div>
       </div>
     </div>

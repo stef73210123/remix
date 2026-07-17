@@ -407,19 +407,29 @@ interface GisLayer {
    *  the actual set of district codes varies by query. */
   categorical?: { fields: string[] }
   /** Renders lightweight centroid dots (via `returnCentroid`, no polygon
-   *  geometry fetched) queried against the CURRENT MAP VIEWPORT instead of
-   *  the fixed town-wide NC_BBOX, and refetches on pan/zoom — used for
-   *  Assessment, whose ~4,800 parcels townwide silently exceed the service's
-   *  default max-record-count when queried all at once (rendering as
-   *  scattered gaps where truncated features just don't come back), and
-   *  whose full polygon geometry isn't worth the payload at a zoom level
-   *  where individual parcels are indistinguishable anyway. */
+   *  geometry fetched) instead of full parcel outlines — used for the "Tax
+   *  assessment" layer's centroid view. Ignored when `minZoom` isn't also
+   *  set, since it exists to pair with viewport-bound fetching (see below). */
   pointsOnly?: boolean
-  /** Below this zoom level, the layer doesn't fetch at all — shows a
-   *  "zoom in" prompt instead of an incomplete or overwhelming render.
-   *  Only meaningful alongside `pointsOnly`. */
+  /** Below this zoom level, the layer doesn't fetch at all — shows a "zoom
+   *  in" prompt instead of an incomplete or overwhelming render. Also
+   *  switches the query's bounding box from the fixed town-wide NC_BBOX to
+   *  the CURRENT MAP VIEWPORT (refetched on pan/zoom) — used for the two
+   *  Assessment layers, whose ~4,800 parcels townwide silently exceed the
+   *  service's default max-record-count when queried all at once (rendering
+   *  as scattered gaps where truncated features just don't come back). */
   minZoom?: number
 }
+// The NYS/Westchester County hosted tax-parcel feature service (2024-2025
+// parcel data joined to the NYS ORPTS assessment roll). TOTAL_AV is the
+// assessed value; PRIMARY_OWNER the owner of record.
+const PARCELS_URL = 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0'
+const NC_MUNI_WHERE = "MUNI_NAME='North Castle'"
+// North Castle's densest area (downtown Armonk) still has ~700-750 parcels in
+// a typical zoom-15 view (confirmed live) — comfortably under the service's
+// record cap; below zoom 15 a full-viewport query risks the same silent
+// truncation this mode exists to avoid.
+const PARCELS_MIN_ZOOM = 15
 // "Trails" was removed from this list — the county name-match traced road
 // corridors; the OSM 'trails' layer above renders actual paths instead.
 const GIS: GisLayer[] = [
@@ -448,21 +458,21 @@ const GIS: GisLayer[] = [
   { key: 'park', label: 'County parks', color: '#22a06b', geom: 'point', service: 'DataHub_CommunityFacilities', match: /park/i, labelField: 'NAME' },
   { key: 'historic', label: 'Historic sites', color: '#c084a6', geom: 'point', service: 'DataHub_CommunityFacilities', match: /historic/i, labelField: 'RESNAME' },
   { key: 'flood', label: 'Flood plains', color: '#38bdf8', geom: 'polygon', service: 'MunicipalTaxParcels_Query', match: /flood/i },
-  // Confirmed live: NYS/Westchester County's hosted tax-parcel feature
-  // service (2024-2025 parcel data joined to the NYS ORPTS assessment roll),
-  // filtered to North Castle via MUNI_NAME. TOTAL_AV is the assessed value;
-  // PRIMARY_OWNER the owner of record.
+  // Two views of the same parcel/assessment data — centroid dots (cheap,
+  // legible at any qualifying zoom) and full parcel outlines (heavier, but
+  // shows actual boundaries) — both viewport-bound + zoom-gated identically.
   {
-    key: 'assessment', label: 'Assessment (tax parcels)', color: '#f59e0b', geom: 'point',
-    baseUrl: 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0',
-    where: "MUNI_NAME='North Castle'",
+    key: 'assessment', label: 'Tax assessment (centroids)', color: '#f59e0b', geom: 'point',
+    baseUrl: PARCELS_URL, where: NC_MUNI_WHERE,
     choropleth: { valueFields: ['TOTAL_AV'], ownerFields: ['PRIMARY_OWNER'] },
     pointsOnly: true,
-    // North Castle's densest area (downtown Armonk) still has ~700-750
-    // parcels in a typical zoom-15 view (confirmed live) — comfortably under
-    // the service's record cap; below zoom 15 a full-viewport query risks
-    // the same silent truncation this mode exists to avoid.
-    minZoom: 15,
+    minZoom: PARCELS_MIN_ZOOM,
+  },
+  {
+    key: 'parcel_boundaries', label: 'Parcel boundaries', color: '#f59e0b', geom: 'polygon',
+    baseUrl: PARCELS_URL, where: NC_MUNI_WHERE,
+    choropleth: { valueFields: ['TOTAL_AV'], ownerFields: ['PRIMARY_OWNER'] },
+    minZoom: PARCELS_MIN_ZOOM,
   },
 ]
 
@@ -546,8 +556,9 @@ function GisLayers({
    *  parcel to e.g. a list widget elsewhere on the page. */
   onFeatureClick?: (props: Record<string, unknown>) => void
   /** Bumped on every map pan/zoom settle (see `MapViewTracker`) — only
-   *  relevant to `pointsOnly` layers, which refetch against the current
-   *  viewport; other layers ignore it (their fixed-bbox query never changes). */
+   *  relevant to zoom-gated (`minZoom`) layers, which refetch against the
+   *  current viewport; other layers ignore it (their fixed-bbox query never
+   *  changes). */
   viewTick?: number
 }) {
   const map = useMap()
@@ -616,7 +627,13 @@ function GisLayers({
           return
         }
 
-        const b = NC_BBOX
+        // Zoom-gated layers (Parcel boundaries) query the current viewport
+        // instead of the fixed town-wide NC_BBOX, for the same reason the
+        // centroid path above does — thousands of parcels townwide would
+        // otherwise silently truncate against the service's record cap.
+        const b = cfg.minZoom != null
+          ? (() => { const vb = map.getBounds(); return { xmin: vb.getWest(), ymin: vb.getSouth(), xmax: vb.getEast(), ymax: vb.getNorth() } })()
+          : NC_BBOX
         const url =
           `${base}/query` +
           `?where=${encodeURIComponent(cfg.where ?? '1=1')}&outFields=*&outSR=4326` +
@@ -717,8 +734,8 @@ function GisLayers({
 }
 
 /** Bumps a counter on every pan/zoom settle — mounted only while the active
- *  layer is `pointsOnly`, so other (fixed-bbox) layers never re-fetch on
- *  every pan for no reason. */
+ *  layer is zoom-gated (`minZoom`), so other (fixed-bbox) layers never
+ *  re-fetch on every pan for no reason. */
 function MapViewTracker({ onChange }: { onChange: () => void }) {
   useMapEvents({ moveend: onChange })
   return null
@@ -947,7 +964,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440, onParcelClick, focus,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440, onParcelClick, focus, onlyLayers,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -990,6 +1007,11 @@ export default function JurisdictionMap({
    *  suppresses `Boundary`'s auto-fitBounds, which would otherwise zoom back
    *  out to the full town outline right after this initial view is set. */
   focus?: { center: [number, number]; zoom: number }
+  /** Restricts the "Layers" menu to just these County GIS keys and drops the
+   *  Trails & points of interest group entirely — used on the Assessor page,
+   *  whose map has exactly one purpose (tax assessment) and shouldn't expose
+   *  the other GIS layers relevant elsewhere in the app. */
+  onlyLayers?: string[]
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
@@ -1019,11 +1041,14 @@ export default function JurisdictionMap({
 
   // Grouped menu: civic issues, permits (when supplied), county GIS, OSM
   // trails + points of interest. Empty (and hidden) in onlyPermits/onlyRoads mode.
+  // `onlyLayers` (single-purpose maps like the Assessor page) restricts the
+  // County GIS list to just those keys and drops the Trails/POI group.
+  const gisLayers = onlyLayers ? GIS.filter((g) => onlyLayers.includes(g.key)) : GIS
   const groups: MenuGroup[] = onlyPermits || onlyRoads ? [] : [
     ...(showIssues ? [{ group: 'Civic', items: [{ key: 'issues', label: 'Open issues (SeeClickFix)', color: '#ef4444' }] }] : []),
     ...(permits && permits.length ? [{ group: permitsGroup, items: [{ key: 'permits', label: permitsLabel, color: '#d4767a' }] }] : []),
-    ...(muni === 'nc' ? [{ group: 'County GIS', items: GIS.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
-    { group: 'Trails & points of interest', items: OSM.map((c) => ({ key: c.key, label: c.label, color: c.color })) },
+    ...(muni === 'nc' ? [{ group: 'County GIS', items: gisLayers.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
+    ...(onlyLayers ? [] : [{ group: 'Trails & points of interest', items: OSM.map((c) => ({ key: c.key, label: c.label, color: c.color })) }]),
   ]
 
   const note =
@@ -1039,7 +1064,7 @@ export default function JurisdictionMap({
         {!onlyPermits && !onlyRoads && (
           <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
         )}
-        {!onlyPermits && !onlyRoads && active === 'assessment' && menuLegend?.kind === 'choropleth' && (
+        {!onlyPermits && !onlyRoads && menuLegend?.kind === 'choropleth' && (
           <div
             style={{
               position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
@@ -1141,7 +1166,7 @@ export default function JurisdictionMap({
           <Boundary muni={muni} lightBasemap={lightBasemap} skipFitBounds={!!focus} />
           <Hamlets muni={muni} lightBasemap={lightBasemap} />
           {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && !onlyRoads && activeGisCfg?.pointsOnly && <MapViewTracker onChange={bumpViewTick} />}
+          {!onlyPermits && !onlyRoads && activeGisCfg?.minZoom != null && <MapViewTracker onChange={bumpViewTick} />}
           {!onlyPermits && !onlyRoads && (
             <GisLayers active={active} onState={setLayerState} onLegend={setMenuLegend} onFeatureClick={onParcelClick} viewTick={viewTick} />
           )}

@@ -70,6 +70,13 @@ export default function DeptClient({ userName }: { userName: string }) {
           {def.key === 'assessor' && (
             <div style={{ marginTop: 26 }}>
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+                Assessment analytics
+              </div>
+              <div style={{ marginBottom: 22 }}>
+                <AssessmentAnalytics />
+              </div>
+
+              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                 Assessment map
               </div>
               <JurisdictionMap
@@ -80,14 +87,8 @@ export default function DeptClient({ userName }: { userName: string }) {
                 height={380}
                 onParcelClick={setSelectedParcel}
                 focus={{ center: [41.1294, -73.7131], zoom: 16 }}
+                onlyLayers={['assessment', 'parcel_boundaries']}
               />
-
-              <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                Assessment analytics
-              </div>
-              <div style={{ marginBottom: 22 }}>
-                <AssessmentAnalytics />
-              </div>
 
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                 All Tax Parcels

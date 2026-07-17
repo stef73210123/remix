@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 /**
  * Every North Castle tax parcel — the county- and state-wide "Westchester
@@ -9,8 +9,10 @@ import { useEffect, useMemo, useState } from 'react'
  * server-side so a 4,800+ row town never has to load at once. Two views:
  * ranked by parcel (largest assessed value first) or rolled up by owner
  * (owners with multiple parcels combined). Search matches owner name or
- * address; clicking a parcel on the Assessment map above surfaces it here
- * via `selectedParcel`, regardless of the current search/page.
+ * address. Tapping a row expands it in place with fuller parcel detail;
+ * tapping a parcel on the Assessment map above jumps this list to the page
+ * that parcel falls on (switching to parcel mode and clearing any search)
+ * and expands its row automatically.
  */
 const PARCELS_BASE = 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0'
 const NC_WHERE = "MUNI_NAME='North Castle'"
@@ -32,12 +34,14 @@ interface OwnerRow {
 }
 
 /** Raw attributes as they come back from a click on the map's Assessment
- *  layer — that layer queries `outFields=*`, so this is a loose subset. */
+ *  layer (either the centroid or parcel-boundary layer) — both query
+ *  `outFields=*`, so this is a loose subset. */
 export interface SelectedParcelInfo {
   SBL?: unknown
   PARCEL_ADDR?: unknown
   PRIMARY_OWNER?: unknown
   TOTAL_AV?: unknown
+  [key: string]: unknown
 }
 
 function fmtUSD(v: number): string {
@@ -51,6 +55,37 @@ function sqlEscape(s: string): string {
   return s.replace(/'/g, "''")
 }
 
+/** Fuller parcel detail shown when a row (or the map-linked row) is expanded —
+ *  fields beyond the four the base list query fetches, loaded on demand. */
+function ParcelDetailPanel({ attrs, rollTotal }: { attrs: Record<string, unknown>; rollTotal: number | null }) {
+  const sbl = attrs.SBL != null ? String(attrs.SBL) : null
+  const propClass = attrs.PROP_CLASS != null ? String(attrs.PROP_CLASS).trim() : null
+  const acres = typeof attrs.ACRES === 'number' ? attrs.ACRES : Number(attrs.ACRES ?? NaN)
+  const landAv = typeof attrs.LAND_AV === 'number' ? attrs.LAND_AV : Number(attrs.LAND_AV ?? NaN)
+  const fullMarket = typeof attrs.FULL_MARKET_VAL === 'number' ? attrs.FULL_MARKET_VAL : Number(attrs.FULL_MARKET_VAL ?? NaN)
+  const totalAv = Number(attrs.TOTAL_AV ?? 0)
+  const fields: { label: string; value: string }[] = [
+    ...(sbl ? [{ label: 'SBL', value: sbl }] : []),
+    ...(propClass ? [{ label: 'Property class', value: propClass }] : []),
+    ...(!isNaN(acres) && acres > 0 ? [{ label: 'Acres', value: acres.toFixed(2) }] : []),
+    ...(!isNaN(landAv) && landAv > 0 ? [{ label: 'Land value', value: fmtUSD(landAv) }] : []),
+    ...(!isNaN(fullMarket) && fullMarket > 0 ? [{ label: 'Full market value', value: fmtUSD(fullMarket) }] : []),
+    ...(rollTotal ? [{ label: '% of Roll', value: `${((totalAv / rollTotal) * 100).toFixed(2)}%` }] : []),
+  ]
+  return (
+    <div style={{ padding: '4px 10px 12px 10px', background: 'var(--panel-2)', display: 'flex', flexWrap: 'wrap', gap: '4px 20px' }}>
+      {fields.length === 0 ? (
+        <span className="muted" style={{ fontSize: 12 }}>No additional detail available.</span>
+      ) : fields.map((f) => (
+        <div key={f.label} style={{ fontSize: 12 }}>
+          <span className="muted">{f.label}: </span>
+          <span style={{ fontWeight: 600 }}>{f.value}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?: SelectedParcelInfo | null }) {
   const [mode, setMode] = useState<ViewMode>('parcel')
   const [page, setPage] = useState(0)
@@ -61,14 +96,19 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
   const [parcelRows, setParcelRows] = useState<ParcelRow[] | null>(null)
   const [ownerRows, setOwnerRows] = useState<OwnerRow[] | null>(null)
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
+  const [expandedSbl, setExpandedSbl] = useState<string | null>(null)
+  const [detailCache, setDetailCache] = useState<Record<string, Record<string, unknown>>>({})
+  const containerRef = useRef<HTMLDivElement | null>(null)
 
-  // Debounce the search box so every keystroke doesn't fire a query.
+  // Debounce the search box so every keystroke doesn't fire a query — skipped
+  // once searchInput already matches the committed `search` (true right after
+  // a programmatic clear from a map click, so that doesn't also reset the page).
   useEffect(() => {
-    const t = setTimeout(() => { setSearch(searchInput.trim()); setPage(0) }, 350)
+    const trimmed = searchInput.trim()
+    if (trimmed === search) return
+    const t = setTimeout(() => { setSearch(trimmed); setPage(0) }, 350)
     return () => clearTimeout(t)
-  }, [searchInput])
-
-  useEffect(() => { setPage(0) }, [mode])
+  }, [searchInput, search])
 
   // Town-wide roll total (all North Castle parcels' assessed value, unfiltered
   // by search) — the denominator for every row's "% of Roll", fetched once.
@@ -82,6 +122,34 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
       .catch(() => { /* % of Roll just won't render */ })
     return () => { cancelled = true }
   }, [])
+
+  // A tap on the map: jump the list to that parcel's page (by rank in the
+  // unfiltered, value-sorted order) and expand its row once loaded.
+  useEffect(() => {
+    if (!selectedParcel) return
+    const sbl = selectedParcel.SBL != null ? String(selectedParcel.SBL) : ''
+    if (!sbl) return
+    const value = Number(selectedParcel.TOTAL_AV ?? 0)
+    setMode('parcel')
+    setSearchInput('')
+    setSearch('')
+    setDetailCache((prev) => ({ ...prev, [sbl]: selectedParcel }))
+    setExpandedSbl(sbl)
+    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    let cancelled = false
+    // Rank = how many parcels (townwide, unfiltered) have a strictly greater
+    // assessed value — same order the list itself sorts by, so this lands on
+    // (or, for parcels tied on assessed value, very near) the right page.
+    fetch(`${PARCELS_BASE}/query?where=${encodeURIComponent(`${NC_WHERE} AND TOTAL_AV > ${value}`)}&returnCountOnly=true&f=json`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('rank'))))
+      .then((j: { count?: number }) => {
+        if (cancelled) return
+        setPage(Math.floor((j.count ?? 0) / PAGE_SIZE))
+      })
+      .catch(() => { /* leave page as-is */ })
+    return () => { cancelled = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fires per distinct click, not per render
+  }, [selectedParcel])
 
   const whereClause = useMemo(() => {
     if (!search) return NC_WHERE
@@ -151,6 +219,24 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
     return () => { cancelled = true }
   }, [mode, whereClause, page])
 
+  async function ensureDetail(sbl: string) {
+    if (!sbl || detailCache[sbl]) return
+    try {
+      const r = await fetch(`${PARCELS_BASE}/query?where=${encodeURIComponent(`SBL='${sqlEscape(sbl)}'`)}&outFields=*&returnGeometry=false&f=json`)
+      if (!r.ok) return
+      const j = (await r.json()) as { features?: { attributes: Record<string, unknown> }[] }
+      const attrs = j.features?.[0]?.attributes
+      if (attrs) setDetailCache((prev) => ({ ...prev, [sbl]: attrs }))
+    } catch { /* expand panel just shows what little the row already has */ }
+  }
+
+  function toggleRow(sbl: string) {
+    if (!sbl) return
+    if (expandedSbl === sbl) { setExpandedSbl(null); return }
+    setExpandedSbl(sbl)
+    ensureDetail(sbl)
+  }
+
   const rows = mode === 'parcel' ? parcelRows : ownerRows
   const pageCount = mode === 'parcel' && total != null ? Math.max(1, Math.ceil(total / PAGE_SIZE)) : null
   const rangeStart = page * PAGE_SIZE + 1
@@ -159,46 +245,14 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
     ? (pageCount != null ? page + 1 < pageCount : (rows?.length ?? 0) >= PAGE_SIZE)
     : (rows?.length ?? 0) >= PAGE_SIZE
 
-  const selected = useMemo(() => {
-    if (!selectedParcel) return null
-    return {
-      sbl: selectedParcel.SBL != null ? String(selectedParcel.SBL) : '',
-      address: selectedParcel.PARCEL_ADDR != null ? String(selectedParcel.PARCEL_ADDR).trim() || '—' : '—',
-      owner: selectedParcel.PRIMARY_OWNER != null ? String(selectedParcel.PRIMARY_OWNER).trim() || '—' : '—',
-      assessedValue: Number(selectedParcel.TOTAL_AV ?? 0),
-    }
-  }, [selectedParcel])
-
   return (
-    <div>
-      {selected && (
-        <div
-          style={{
-            display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10,
-            padding: '10px 12px', marginBottom: 12, borderRadius: 8,
-            background: 'var(--panel-2)', border: '1px solid var(--border)',
-          }}
-        >
-          <div style={{ minWidth: 0 }}>
-            <div className="muted" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 3 }}>
-              Selected from map
-            </div>
-            <div style={{ fontSize: 13, fontWeight: 600 }}>{selected.owner}</div>
-            <div className="muted" style={{ fontSize: 12.5 }}>{selected.address}</div>
-            <div style={{ fontSize: 13, marginTop: 2 }}>
-              {fmtUSD(selected.assessedValue)} assessed
-              {rollTotal ? <span className="muted"> · {((selected.assessedValue / rollTotal) * 100).toFixed(2)}% of roll</span> : null}
-            </div>
-          </div>
-        </div>
-      )}
-
+    <div ref={containerRef}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
         <div style={{ display: 'inline-flex', borderRadius: 8, border: '1px solid var(--border)', overflow: 'hidden' }}>
           {(['parcel', 'owner'] as ViewMode[]).map((m) => (
             <button
               key={m}
-              onClick={() => setMode(m)}
+              onClick={() => { setMode(m); setPage(0) }}
               style={{
                 padding: '5px 12px', fontSize: 12.5, fontWeight: 600, border: 'none', cursor: 'pointer',
                 background: mode === m ? 'var(--primary)' : 'transparent',
@@ -229,7 +283,7 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
               : 'Loading…'}
       </div>
 
-      <div style={{ maxHeight: 420, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
+      <div style={{ maxHeight: 480, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
         <div
           style={{
             position: 'sticky', top: 0, zIndex: 1, display: 'flex', gap: 8, alignItems: 'center',
@@ -254,22 +308,27 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
         )}
 
         {mode === 'parcel' && parcelRows?.map((row, i) => (
-          <div
-            key={row.sbl || i}
-            style={{
-              display: 'flex', gap: 8, alignItems: 'flex-start', padding: '7px 10px', fontSize: 12.5,
-              borderBottom: i < parcelRows.length - 1 ? '1px solid var(--border)' : 'none',
-              background: selected && row.sbl && row.sbl === selected.sbl ? 'var(--panel-2)' : 'transparent',
-            }}
-          >
-            <span style={{ flex: 1.3, minWidth: 0 }}>{row.owner}</span>
-            <span className="muted" style={{ flex: 1, minWidth: 0 }}>{row.address}</span>
-            <span style={{ width: 100, textAlign: 'right', flexShrink: 0, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
-              {fmtUSD(row.assessedValue)}
-            </span>
-            <span className="muted" style={{ width: 66, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
-              {rollTotal ? `${((row.assessedValue / rollTotal) * 100).toFixed(2)}%` : '—'}
-            </span>
+          <div key={row.sbl || i}>
+            <div
+              onClick={() => toggleRow(row.sbl)}
+              style={{
+                display: 'flex', gap: 8, alignItems: 'flex-start', padding: '7px 10px', fontSize: 12.5, cursor: row.sbl ? 'pointer' : 'default',
+                borderBottom: expandedSbl === row.sbl || i < parcelRows.length - 1 ? '1px solid var(--border)' : 'none',
+                background: row.sbl && row.sbl === expandedSbl ? 'var(--panel-2)' : 'transparent',
+              }}
+            >
+              <span style={{ flex: 1.3, minWidth: 0 }}>{row.owner}</span>
+              <span className="muted" style={{ flex: 1, minWidth: 0 }}>{row.address}</span>
+              <span style={{ width: 100, textAlign: 'right', flexShrink: 0, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
+                {fmtUSD(row.assessedValue)}
+              </span>
+              <span className="muted" style={{ width: 66, textAlign: 'right', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
+                {rollTotal ? `${((row.assessedValue / rollTotal) * 100).toFixed(2)}%` : '—'}
+              </span>
+            </div>
+            {row.sbl && expandedSbl === row.sbl && (
+              <ParcelDetailPanel attrs={detailCache[row.sbl] ?? { ...row, TOTAL_AV: row.assessedValue }} rollTotal={rollTotal} />
+            )}
           </div>
         ))}
 
@@ -318,8 +377,8 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
       <div className="muted" style={{ fontSize: 10.5, marginTop: 10 }}>
         Source: NYS ITS Geospatial Services / Westchester County — 2024-2025 parcel data joined to the NYS ORPTS assessment
         roll. Includes exempt parcels (schools, government land), which don&rsquo;t actually pay property tax despite
-        carrying an assessed value. &ldquo;% of Roll&rdquo; is each row&rsquo;s share of the Town&rsquo;s entire
-        {rollTotal ? ` ${fmtUSD(rollTotal)}` : ''} taxable assessment roll.
+        carrying an assessed value. Tap a row for more detail. &ldquo;% of Roll&rdquo; is each row&rsquo;s share of the
+        Town&rsquo;s entire{rollTotal ? ` ${fmtUSD(rollTotal)}` : ''} taxable assessment roll.
       </div>
     </div>
   )
