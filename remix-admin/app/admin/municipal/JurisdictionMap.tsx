@@ -267,7 +267,7 @@ function cachedGeocode(address: string): [number, number] | null {
 }
 /** Geocodes recent permits one-by-one (throttled + localStorage-cached) and adds
  *  markers as they resolve, so nothing blocks and re-opens are instant. */
-function PermitLayer({ active, permits, onState }: { active: boolean; permits: PermitMarker[]; onState?: (s: LayerState) => void }) {
+function PermitLayer({ active, permits, onState, onPermitClick }: { active: boolean; permits: PermitMarker[]; onState?: (s: LayerState) => void; onPermitClick?: (p: PermitMarker) => void }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
   useEffect(() => {
@@ -280,6 +280,7 @@ function PermitLayer({ active, permits, onState }: { active: boolean; permits: P
     const add = (p: PermitMarker, lat: number, lng: number) => {
       L.circleMarker([lat, lng], { radius: 5, color: '#0a0a0a', weight: 1, fillColor: p.color, fillOpacity: 0.95 })
         .bindPopup(`<strong>${p.title}</strong>${p.sub ? `<br>${p.sub}` : ''}<br>${p.address}`)
+        .on('click', () => onPermitClick?.(p))
         .addTo(group)
     }
     ;(async () => {
@@ -307,7 +308,7 @@ function PermitLayer({ active, permits, onState }: { active: boolean; permits: P
       if (!cancelled) onState?.(placed > 0 ? 'ok' : 'empty')
     })()
     return () => { cancelled = true; if (groupRef.current) { groupRef.current.remove(); groupRef.current = null } }
-  }, [active, permits, map, onState])
+  }, [active, permits, map, onState, onPermitClick])
   return null
 }
 
@@ -775,6 +776,53 @@ function FlyToParcel({ sbl }: { sbl: string | null }) {
   return null
 }
 
+/** Reverse of `PermitLayer`'s marker click — pans to and opens the popup for
+ *  a permit selected elsewhere on the page (e.g. a row tap in the permit list
+ *  below). Reuses the same geocode cache/lookup as `PermitLayer` (keyed by
+ *  address) so a permit already on-screen resolves instantly; a cache miss
+ *  falls back to the same Nominatim query. Draws a standalone marker rather
+ *  than reaching into the permits layer group, so this works whether or not
+ *  that layer is currently active. */
+function FlyToPermit({ permit }: { permit: PermitMarker | null }) {
+  const map = useMap()
+  const markerRef = useRef<L.CircleMarker | null>(null)
+
+  useEffect(() => {
+    if (markerRef.current) { markerRef.current.remove(); markerRef.current = null }
+    if (!permit) return
+    let cancelled = false
+    const place = (lat: number, lng: number) => {
+      if (cancelled) return
+      map.flyTo([lat, lng], Math.max(map.getZoom(), 17), { duration: 0.75 })
+      const marker = L.circleMarker([lat, lng], { radius: 7, color: '#fff', weight: 2, fillColor: permit.color, fillOpacity: 0.95 })
+        .bindPopup(`<strong>${permit.title}</strong>${permit.sub ? `<br>${permit.sub}` : ''}<br>${permit.address}`)
+        .addTo(map)
+      marker.openPopup()
+      markerRef.current = marker
+    }
+    const cached = cachedGeocode(permit.address)
+    if (cached) { place(cached[0], cached[1]); return }
+    ;(async () => {
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(`${permit.address}, North Castle, NY`)}`
+        const r = await fetch(url, { headers: { Accept: 'application/json' } })
+        if (r.ok) {
+          const arr = (await r.json()) as Array<{ lat?: string; lon?: string }>
+          const it = arr?.[0]
+          if (it?.lat && it?.lon) {
+            const lat = Number(it.lat), lng = Number(it.lon)
+            try { localStorage.setItem(`geo:${permit.address}`, JSON.stringify([lat, lng])) } catch { /* ignore */ }
+            if (!cancelled) place(lat, lng)
+          }
+        }
+      } catch { /* selection just won't visually jump */ }
+    })()
+    return () => { cancelled = true }
+  }, [permit, map])
+
+  return null
+}
+
 /** Bumps a counter on every pan/zoom settle — mounted only while the active
  *  layer is zoom-gated (`minZoom`), so other (fixed-bbox) layers never
  *  re-fetch on every pan for no reason. */
@@ -1035,7 +1083,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles, flyToSbl,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles, flyToSbl, onPermitClick, flyToPermit,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -1100,6 +1148,12 @@ export default function JurisdictionMap({
    *  selected elsewhere on the page (e.g. a table row), looked up by SBL.
    *  Set to a new value (even the same SBL re-selected) to re-trigger. */
   flyToSbl?: string | null
+  /** Fires with the clicked permit marker when the permits layer is active —
+   *  pass a stable reference for the same reason as `onParcelClick`. */
+  onPermitClick?: (p: PermitMarker) => void
+  /** Reverse of `onPermitClick` — pans to and opens the popup for a permit
+   *  selected elsewhere on the page (e.g. a permit-list row). */
+  flyToPermit?: PermitMarker | null
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
@@ -1287,6 +1341,7 @@ export default function JurisdictionMap({
           <Boundary muni={muni} lightBasemap={useLightBasemap} skipFitBounds={!!focus} />
           <Hamlets muni={muni} lightBasemap={useLightBasemap} />
           {flyToSbl !== undefined && <FlyToParcel sbl={flyToSbl} />}
+          {flyToPermit !== undefined && <FlyToPermit permit={flyToPermit} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && <OsmLayers active={active} onState={setLayerState} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && activeGisCfg?.minZoom != null && <MapViewTracker onChange={bumpViewTick} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && (
@@ -1308,7 +1363,7 @@ export default function JurisdictionMap({
               logic for just the 'zoning' entry, driven by its own toggle. */}
           {showZoning && <GisLayers active={zoningOn ? 'zoning' : null} onState={setZoningState} onLegend={setZoningLegend} />}
           {permits && permits.length > 0 && !onlyRoads && (
-            <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
+            <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} onPermitClick={onPermitClick} />
           )}
           {onlyRoads && ROAD_CATS.map((cat, i) => (
             <RoadLayer
