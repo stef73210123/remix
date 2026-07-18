@@ -6,6 +6,7 @@ import type { GeoJSON as LGeoJSON, LayerGroup } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { fmtDateShort } from '@/lib/municipal/date'
+import { ROAD_CATS, type RoadCat } from '@/lib/municipal/roadCats'
 
 // Per-town map framing + the OSM/Nominatim query used to fetch the exact
 // jurisdiction boundary at runtime (client-side, so it isn't proxy-blocked).
@@ -752,27 +753,43 @@ function ResizeFix() {
 }
 
 // ── Highway: roads by jurisdiction (private/local/county/state/federal) ─────
-// Ownership isn't a tag OSM carries directly, so each category is approximated
-// from the road's `highway` class + `ref` prefix — NY state routes and US
-// routes are tagged "NY 22"/"US 1" style refs, Interstates "I 684", and
-// `access=private` is explicit. County vs. town-local has no clean OSM tag at
-// all, so "county" is approximated as numbered `secondary` roads (Westchester
-// County's collector roads) and everything else residential/tertiary/
-// unclassified falls to "local" — a reasonable best-effort read, not a legal
-// jurisdiction record.
-interface RoadCat { key: string; label: string; color: string; weight: number; dash?: string; filter: string }
-const ROAD_CATS: RoadCat[] = [
-  { key: 'federal', label: 'Federal (Interstate)', color: '#7c3aed', weight: 4, filter: 'way["highway"]["ref"~"^I ", i]' },
-  { key: 'state', label: 'State', color: '#ef4444', weight: 3.5, filter: 'way["highway"]["ref"~"^(NY|US) ", i]' },
-  { key: 'county', label: 'County', color: '#f59e0b', weight: 3, filter: 'way["highway"="secondary"]["ref"!~"^(NY|US|I) ", i]["access"!="private"]' },
-  { key: 'local', label: 'Local (Town)', color: '#3d9c72', weight: 2, filter: 'way["highway"~"^(tertiary|unclassified|residential)$"]["ref"!~"^(NY|US|I) ", i]["access"!="private"]' },
-  { key: 'private', label: 'Private', color: '#9a9a9a', weight: 2, dash: '5 5', filter: 'way["highway"~"^(service|track|residential|unclassified)$"]["access"="private"]' },
-]
+// Category metadata (labels, colors, Overpass filters) lives in
+// lib/municipal/roadCats.ts, not here — that file has no Leaflet import, so
+// pages needing just the category list (e.g. the Highway page's mileage
+// chart) can import it without pulling this browser-only module into SSR.
+/** Great-circle length of a lat/lon polyline, in miles — summed segment by
+ *  segment (Haversine), since `Shape__Length`-style precomputed lengths
+ *  aren't available from Overpass's own geometry output. */
+function haversineMiles(a: { lat: number; lon: number }, b: { lat: number; lon: number }): number {
+  const R = 3958.8
+  const dLat = (b.lat - a.lat) * Math.PI / 180
+  const dLon = (b.lon - a.lon) * Math.PI / 180
+  const s = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLon / 2) ** 2
+  return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s))
+}
+function wayMiles(points: { lat: number; lon: number }[]): number {
+  let total = 0
+  for (let i = 1; i < points.length; i++) total += haversineMiles(points[i - 1], points[i])
+  return total
+}
 
 /** One road-jurisdiction category, queried and drawn independently of the
  *  others — several are meant to be visible at once here (it's a
- *  classification map), unlike the rest of this file's single-select layers. */
-function RoadLayer({ cat, active, onState }: { cat: RoadCat; active: boolean; onState?: (key: string, s: LayerState) => void }) {
+ *  classification map), unlike the rest of this file's single-select layers.
+ *  `delayMs` staggers the initial fetch: all 5 categories mounting at once
+ *  otherwise fire simultaneous Overpass requests, which the public instance
+ *  reliably rate-limits (a bare 406, no retry-after) — spacing them out a
+ *  few hundred ms apart avoids that instead of racing it. One retry after a
+ *  failure covers the rest. */
+function RoadLayer({
+  cat, active, delayMs = 0, onState, onMiles,
+}: {
+  cat: RoadCat
+  active: boolean
+  delayMs?: number
+  onState?: (key: string, s: LayerState) => void
+  onMiles?: (key: string, miles: number) => void
+}) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
   useEffect(() => {
@@ -784,32 +801,44 @@ function RoadLayer({ cat, active, onState }: { cat: RoadCat; active: boolean; on
     onState?.(cat.key, 'loading')
     const b = map.getBounds()
     const bbox = `${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()}`
-    const q = `[out:json][timeout:25];(${cat.filter}(${bbox}););out geom 800;`
-    overpassFetch(q)
-      .then((elements) => {
-        if (cancelled) return
-        let count = 0
-        for (const el of elements) {
-          if (!el.geometry || el.geometry.length < 2) continue
-          const line = L.polyline(el.geometry.map((p) => [p.lat, p.lon] as [number, number]), {
-            color: cat.color, weight: cat.weight, opacity: 0.9, dashArray: cat.dash,
-          })
-          const name = el.tags?.name || el.tags?.ref || cat.label
-          line.bindPopup(
-            `<strong>${name}</strong><br><span style="color:${cat.color};font-weight:600">${cat.label}</span>` +
-            (el.tags?.ref && el.tags.ref !== name ? `<br>${el.tags.ref}` : ''),
-          )
-          line.addTo(group)
-          count++
-        }
-        onState?.(cat.key, count > 0 ? 'ok' : 'empty')
-      })
-      .catch(() => { if (!cancelled) onState?.(cat.key, 'error') })
+    const q = `[out:json][timeout:25];(${cat.filter}(${bbox}););out geom 2000;`
+
+    const run = (attempt: number): void => {
+      overpassFetch(q)
+        .then((elements) => {
+          if (cancelled) return
+          let count = 0
+          let miles = 0
+          for (const el of elements) {
+            if (!el.geometry || el.geometry.length < 2) continue
+            const line = L.polyline(el.geometry.map((p) => [p.lat, p.lon] as [number, number]), {
+              color: cat.color, weight: cat.weight, opacity: 0.9, dashArray: cat.dash,
+            })
+            const name = el.tags?.name || el.tags?.ref || cat.label
+            line.bindPopup(
+              `<strong>${name}</strong><br><span style="color:${cat.color};font-weight:600">${cat.label}</span>` +
+              (el.tags?.ref && el.tags.ref !== name ? `<br>${el.tags.ref}` : ''),
+            )
+            line.addTo(group)
+            count++
+            miles += wayMiles(el.geometry)
+          }
+          onState?.(cat.key, count > 0 ? 'ok' : 'empty')
+          onMiles?.(cat.key, miles)
+        })
+        .catch(() => {
+          if (cancelled) return
+          if (attempt < 1) { setTimeout(() => run(attempt + 1), 1200); return }
+          onState?.(cat.key, 'error')
+        })
+    }
+    const t = setTimeout(() => run(0), delayMs)
     return () => {
       cancelled = true
+      clearTimeout(t)
       if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
     }
-  }, [active, cat, map, onState])
+  }, [active, cat, map, onState, onMiles, delayMs])
   return null
 }
 
@@ -842,6 +871,7 @@ function RoadsLegend({
             {cat.label}
             {on && st === 'loading' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>…</span>}
             {on && st === 'empty' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>none in view</span>}
+            {on && st === 'error' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>unavailable</span>}
           </label>
         )
       })}
@@ -964,7 +994,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -990,11 +1020,13 @@ export default function JurisdictionMap({
    *  the Planning Board page, whose case map is locked to onlyPermits (so the
    *  general County GIS menu, which also lists 'zoning', isn't reachable there). */
   showZoning?: boolean
-  /** Light gray canvas basemap instead of the default satellite imagery —
-   *  used on the Assessor page, where a neutral light background reads the
-   *  Assessment choropleth's fill colors more clearly than dark satellite
-   *  ground does. */
-  lightBasemap?: boolean
+  /** Light gray canvas basemap (instead of the default satellite imagery)
+   *  while one of these GIS layer keys is active — used on the Assessor
+   *  page, where a neutral light background reads the Assessment
+   *  choropleth's fill colors more clearly than dark satellite ground does,
+   *  while the centroid layer's dots read fine (and look better) over
+   *  satellite imagery. Layers not listed here always use satellite. */
+  lightBasemapLayers?: string[]
   height?: number
   /** Fires with a clicked parcel's raw attributes when the Assessment layer
    *  is active — pass a stable reference (e.g. a useState setter) rather
@@ -1018,6 +1050,11 @@ export default function JurisdictionMap({
    *  exactly one purpose best shown as an overlay pair (the Water & Sewer
    *  page's water + sewer district boundaries together). */
   simultaneousLayers?: string[]
+  /** onlyRoads mode only — fires with each category's total in-view road
+   *  length (miles) as it's computed, keyed by `ROAD_CATS` key. Pass a
+   *  stable reference (e.g. a useState setter) for the same reason as
+   *  `onParcelClick`. */
+  onRoadMiles?: (miles: Record<string, number>) => void
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
@@ -1034,16 +1071,23 @@ export default function JurisdictionMap({
   const [zoningLegend, setZoningLegend] = useState<MapLegend | null>(null)
   const [roadsEnabled, setRoadsEnabled] = useState<Set<string>>(() => new Set(ROAD_CATS.map((c) => c.key)))
   const [roadStates, setRoadStates] = useState<Record<string, LayerState>>({})
+  const [roadMiles, setRoadMiles] = useState<Record<string, number>>({})
   // Stable across renders (unlike an inline arrow prop) — RoadLayer depends on
   // this identity in its effect, so a fresh function every render would
   // re-trigger the effect (and re-fetch) in a loop.
   const handleRoadState = useCallback((key: string, s: LayerState) => {
     setRoadStates((prev) => ({ ...prev, [key]: s }))
   }, [])
+  const handleRoadMiles = useCallback((key: string, miles: number) => {
+    setRoadMiles((prev) => ({ ...prev, [key]: miles }))
+  }, [])
+  useEffect(() => { onRoadMiles?.(roadMiles) }, [roadMiles, onRoadMiles])
   const [viewTick, setViewTick] = useState(0)
   const bumpViewTick = useCallback(() => setViewTick((t) => t + 1), [])
 
   if (!cfg) return null
+
+  const useLightBasemap = active != null && !!lightBasemapLayers?.includes(active)
 
   const activeGisCfg = GIS.find((g) => g.key === active)
 
@@ -1165,9 +1209,9 @@ export default function JurisdictionMap({
           center={focus?.center ?? cfg.center}
           zoom={focus?.zoom ?? cfg.zoom}
           scrollWheelZoom={false}
-          style={{ height, width: '100%', background: lightBasemap ? '#f2efe9' : '#0a0a0a' }}
+          style={{ height, width: '100%', background: useLightBasemap ? '#f2efe9' : '#0a0a0a' }}
         >
-          {lightBasemap ? (
+          {useLightBasemap ? (
             <>
               <TileLayer
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
@@ -1195,8 +1239,8 @@ export default function JurisdictionMap({
               />
             </>
           )}
-          <Boundary muni={muni} lightBasemap={lightBasemap} skipFitBounds={!!focus} />
-          <Hamlets muni={muni} lightBasemap={lightBasemap} />
+          <Boundary muni={muni} lightBasemap={useLightBasemap} skipFitBounds={!!focus} />
+          <Hamlets muni={muni} lightBasemap={useLightBasemap} />
           {!onlyPermits && !onlyRoads && !simultaneousLayers && <OsmLayers active={active} onState={setLayerState} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && activeGisCfg?.minZoom != null && <MapViewTracker onChange={bumpViewTick} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && (
@@ -1220,12 +1264,14 @@ export default function JurisdictionMap({
           {permits && permits.length > 0 && !onlyRoads && (
             <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} />
           )}
-          {onlyRoads && ROAD_CATS.map((cat) => (
+          {onlyRoads && ROAD_CATS.map((cat, i) => (
             <RoadLayer
               key={cat.key}
               cat={cat}
               active={roadsEnabled.has(cat.key)}
+              delayMs={i * 500}
               onState={handleRoadState}
+              onMiles={handleRoadMiles}
             />
           ))}
           <ResizeFix />

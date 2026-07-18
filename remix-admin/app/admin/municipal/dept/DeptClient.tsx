@@ -83,7 +83,7 @@ export default function DeptClient({ userName }: { userName: string }) {
                 muni={muni}
                 defaultActive="assessment"
                 showIssues={false}
-                lightBasemap
+                lightBasemapLayers={['parcel_boundaries']}
                 height={380}
                 onParcelClick={setSelectedParcel}
                 focus={{ center: [41.1294, -73.7131], zoom: 16 }}
