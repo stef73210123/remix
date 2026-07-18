@@ -116,13 +116,15 @@ interface Summary {
 }
 interface ClassGroupRow { label: string; total: number }
 
+interface AVStats { median: number; p95: number }
+
 /** Every parcel's TOTAL_AV, ascending — the only way to get an exact median,
  *  since ArcGIS's outStatistics has no median. Paginated (the service caps
  *  records per request well under the town's ~4,800 parcels, so pagination
  *  has to advance by however many rows actually came back and stop on an
  *  empty page, never on "fewer than requested" — that's the normal case
  *  here); each page is just one numeric field, so this stays light. */
-async function fetchMedianAssessedValue(): Promise<number> {
+async function fetchAssessedValueStats(): Promise<AVStats> {
   const values: number[] = []
   let offset = 0
   for (;;) {
@@ -138,8 +140,33 @@ async function fetchMedianAssessedValue(): Promise<number> {
     for (const f of feats) values.push(Number(f.attributes.TOTAL_AV ?? 0))
     offset += feats.length
   }
-  return values.length > 0 ? values[Math.floor(values.length / 2)] : 0
+  if (values.length === 0) return { median: 0, p95: 0 }
+  return {
+    median: values[Math.floor(values.length / 2)],
+    // The slider's top end — a handful of commercial/institutional parcels
+    // run into the millions and would otherwise squash every residential
+    // value into the first few pixels of travel. The number field beside
+    // the slider still reaches any value directly.
+    p95: values[Math.floor(values.length * 0.95)],
+  }
 }
+
+// Per $1,000 of assessed value, 2025-2026 tax year. County and Town rates
+// are townwide; School varies by district, since North Castle is split
+// across three (a resident's actual bill depends on which one their parcel
+// falls in — the ArcGIS service's own SCHOOL_NAME field, not a guess).
+// Source: Westchester County Tax Commission's official rate tables —
+// 2026 City/Town Tax Rates, 2025 Municipal County Tax Rates (County
+// General Levy), and 2025-2026 School District Tax Rates.
+const COUNTY_RATE_PER_1000 = 127.268788
+const TOWN_RATE_PER_1000 = 181.689369
+const SCHOOL_RATE_PER_1000: Record<string, number> = {
+  'Byram Hills': 773.388838,
+  'Bedford': 747.794426,
+  'Valhalla': 957.924050,
+}
+const TAX_ESTIMATOR_SOURCE_NOTE =
+  'Source: Westchester County Tax Commission, 2025-2026 tax rates per $1,000 of assessed value — County, Town of North Castle, and School District (Byram Hills/Bedford/Valhalla, the three districts serving North Castle). Estimate only: excludes special districts (fire, water, sewer, lighting, ambulance) that apply to some parcels but not others, and rates are set annually.'
 
 function fmtUSD(v: number): string {
   if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(v >= 10_000_000 ? 1 : 2)}M`
@@ -158,13 +185,21 @@ export default function AssessmentAnalytics() {
   const [summary, setSummary] = useState<Summary | null>(null)
   const [classGroups, setClassGroups] = useState<ClassGroupRow[] | null>(null)
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
-  const [median, setMedian] = useState<number | null>(null)
+  const [avStats, setAvStats] = useState<AVStats | null>(null)
+  const [selectedAV, setSelectedAV] = useState<number | null>(null)
+  const [avInput, setAvInput] = useState('')
+  const [district, setDistrict] = useState<keyof typeof SCHOOL_RATE_PER_1000>('Byram Hills')
 
   useEffect(() => {
     let cancelled = false
-    fetchMedianAssessedValue()
-      .then((m) => { if (!cancelled) setMedian(m) })
-      .catch(() => { /* median stat tile just won't render */ })
+    fetchAssessedValueStats()
+      .then((s) => {
+        if (cancelled) return
+        setAvStats(s)
+        setSelectedAV(s.median)
+        setAvInput(String(Math.round(s.median)))
+      })
+      .catch(() => { /* median stat tile / estimator just won't render */ })
     return () => { cancelled = true }
   }, [])
 
@@ -240,6 +275,21 @@ export default function AssessmentAnalytics() {
   }
 
   const taxablePct = summary.rollTotal > 0 ? (summary.taxableTotal / summary.rollTotal) * 100 : 0
+  const av = selectedAV ?? 0
+  const countyTax = (av / 1000) * COUNTY_RATE_PER_1000
+  const townTax = (av / 1000) * TOWN_RATE_PER_1000
+  const schoolTax = (av / 1000) * SCHOOL_RATE_PER_1000[district]
+
+  function setAV(v: number) {
+    const clamped = Math.max(0, v)
+    setSelectedAV(clamped)
+    setAvInput(String(Math.round(clamped)))
+  }
+  function onAvInputChange(text: string) {
+    setAvInput(text)
+    const n = Number(text.replace(/[^0-9.]/g, ''))
+    if (!isNaN(n) && n >= 0) setSelectedAV(n)
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -254,7 +304,7 @@ export default function AssessmentAnalytics() {
         </div>
         <div className="card" style={{ padding: 14, flex: '1 1 160px' }}>
           <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Median assessed value</div>
-          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{median != null ? fmtUSDFull(median) : '—'}</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{avStats ? fmtUSDFull(avStats.median) : '—'}</div>
         </div>
       </div>
 
@@ -284,6 +334,58 @@ export default function AssessmentAnalytics() {
           />
         </div>
       </div>
+
+      {avStats && (
+        <div className="card" style={{ padding: 16 }}>
+          <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+            Estimate your tax bill
+          </div>
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
+            <select
+              value={district}
+              onChange={(e) => setDistrict(e.target.value as keyof typeof SCHOOL_RATE_PER_1000)}
+              aria-label="School district"
+              style={{ fontSize: 12.5, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+            >
+              {Object.keys(SCHOOL_RATE_PER_1000).map((d) => (
+                <option key={d} value={d}>{d} schools</option>
+              ))}
+            </select>
+            <input
+              type="range"
+              min={0}
+              max={Math.max(avStats.p95, 1)}
+              step={100}
+              value={Math.min(av, avStats.p95)}
+              onChange={(e) => setAV(Number(e.target.value))}
+              style={{ flex: '1 1 200px', minWidth: 140 }}
+              aria-label="Assessed value"
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span className="muted" style={{ fontSize: 13 }}>$</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={avInput}
+                onChange={(e) => onAvInputChange(e.target.value)}
+                className="input"
+                style={{ width: 100, fontSize: 12.5, padding: '5px 8px' }}
+                aria-label="Assessed value (exact)"
+              />
+            </div>
+          </div>
+          <DonutChart
+            segments={[
+              { label: 'County', value: countyTax, color: '#2a78d6' },
+              { label: 'Town', value: townTax, color: '#1baf7a' },
+              { label: 'School', value: schoolTax, color: '#4a3aa7' },
+            ]}
+            centerValue={fmtUSDFull(countyTax + townTax + schoolTax)}
+            centerLabel="Est. annual taxes"
+          />
+          <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{TAX_ESTIMATOR_SOURCE_NOTE}</div>
+        </div>
+      )}
     </div>
   )
 }
