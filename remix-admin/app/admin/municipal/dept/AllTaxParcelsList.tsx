@@ -91,7 +91,14 @@ function ParcelDetailPanel({ attrs, rollTotal }: { attrs: Record<string, unknown
   )
 }
 
-export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?: SelectedParcelInfo | null }) {
+export default function AllTaxParcelsList({
+  selectedParcel, onSelectParcel,
+}: {
+  selectedParcel?: SelectedParcelInfo | null
+  /** Fires when a row is clicked (expanded or not) — lets a parent pan the
+   *  map above to that parcel, the reverse of the map-click sync below. */
+  onSelectParcel?: (sbl: string) => void
+}) {
   const [mode, setMode] = useState<ViewMode>('parcel')
   const [page, setPage] = useState(0)
   const [search, setSearch] = useState('')
@@ -237,12 +244,20 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
   // Once a map-jump's target page has loaded, scroll the selected row to the
   // top of the list's own scroll container — computed from bounding rects
   // (not scrollIntoView) so only this inner container moves, never the page.
+  // This effect also fires immediately when `expandedSbl` is first set (still
+  // on the *previous* page, before the rank lookup above has resolved and
+  // `setPage` has swapped in the target page's rows), which used to find no
+  // matching row and clear `pendingScrollRef` anyway — silently giving up
+  // before the real target page ever loaded. Only clear the flag once the
+  // row is actually found and scrolled to; otherwise leave it set so this
+  // re-fires the next time `parcelRows` changes (i.e. once the correct page
+  // arrives).
   useEffect(() => {
     if (!pendingScrollRef.current || !expandedSbl || !parcelRows) return
-    pendingScrollRef.current = false
     const container = listRef.current
     const row = container?.querySelector<HTMLElement>(`[data-sbl="${CSS.escape(expandedSbl)}"]`)
     if (container && row) {
+      pendingScrollRef.current = false
       const containerRect = container.getBoundingClientRect()
       const rowRect = row.getBoundingClientRect()
       container.scrollTop += rowRect.top - containerRect.top
@@ -341,7 +356,7 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
           <div key={row.sbl || i}>
             <div
               data-sbl={row.sbl || undefined}
-              onClick={() => toggleRow(row.sbl)}
+              onClick={() => { toggleRow(row.sbl); if (row.sbl) onSelectParcel?.(row.sbl) }}
               style={{
                 display: 'flex', gap: 8, alignItems: 'flex-start', padding: '7px 10px', fontSize: 12.5, cursor: row.sbl ? 'pointer' : 'default',
                 borderBottom: expandedSbl === row.sbl || i < parcelRows.length - 1 ? '1px solid var(--border)' : 'none',

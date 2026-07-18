@@ -33,6 +33,7 @@ export default function DeptClient({ userName }: { userName: string }) {
   const [muni, setMuni] = useState('')
   const [key, setKey] = useState('')
   const [selectedParcel, setSelectedParcel] = useState<SelectedParcelInfo | null>(null)
+  const [flyToSbl, setFlyToSbl] = useState<string | null>(null)
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
@@ -88,13 +89,14 @@ export default function DeptClient({ userName }: { userName: string }) {
                 onParcelClick={setSelectedParcel}
                 focus={{ center: [41.1294, -73.7131], zoom: 16 }}
                 onlyLayers={['assessment', 'parcel_boundaries']}
+                flyToSbl={flyToSbl}
               />
 
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                 All Tax Parcels
               </div>
               <div className="card" style={{ padding: 16 }}>
-                <AllTaxParcelsList selectedParcel={selectedParcel} />
+                <AllTaxParcelsList selectedParcel={selectedParcel} onSelectParcel={setFlyToSbl} />
               </div>
             </div>
           )}

@@ -734,6 +734,47 @@ function GisLayers({
   return null
 }
 
+/** Reverse of `onParcelClick` — pans the map to a parcel selected elsewhere
+ *  on the page (e.g. a row tap in the All Tax Parcels table below) and opens
+ *  its popup there, the same content a click on its own map dot would show.
+ *  Draws a standalone marker rather than reaching into whatever GisLayers is
+ *  currently showing, so this works regardless of which layer (or none) is
+ *  active. Looked up by SBL against the same parcels service the table and
+ *  the Assessment layer both already use. */
+function FlyToParcel({ sbl }: { sbl: string | null }) {
+  const map = useMap()
+  const markerRef = useRef<L.CircleMarker | null>(null)
+
+  useEffect(() => {
+    if (markerRef.current) { markerRef.current.remove(); markerRef.current = null }
+    if (!sbl) return
+    let cancelled = false
+    const url =
+      `${PARCELS_URL}/query?where=${encodeURIComponent(`SBL='${sbl.replace(/'/g, "''")}'`)}` +
+      `&outFields=SBL,PARCEL_ADDR,PRIMARY_OWNER,TOTAL_AV&returnCentroid=true&outSR=4326&f=json`
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('parcel'))))
+      .then((j: { features?: { attributes: Record<string, unknown>; centroid?: { x: number; y: number } }[] }) => {
+        if (cancelled) return
+        const f = j.features?.[0]
+        if (!f?.centroid) return
+        const owner = f.attributes.PRIMARY_OWNER ? String(f.attributes.PRIMARY_OWNER).trim() : null
+        const value = Number(f.attributes.TOTAL_AV ?? 0)
+        const latlng: [number, number] = [f.centroid.y, f.centroid.x]
+        map.flyTo(latlng, Math.max(map.getZoom(), 17), { duration: 0.75 })
+        const marker = L.circleMarker(latlng, { radius: 7, color: '#fff', weight: 2, fillColor: '#f59e0b', fillOpacity: 0.95 })
+          .bindPopup(`<strong>${owner || 'Parcel'}</strong>${value ? `<br>${fmtUSDShort(value)} assessed` : ''}`)
+          .addTo(map)
+        marker.openPopup()
+        markerRef.current = marker
+      })
+      .catch(() => { /* selection just won't visually jump */ })
+    return () => { cancelled = true }
+  }, [sbl, map])
+
+  return null
+}
+
 /** Bumps a counter on every pan/zoom settle — mounted only while the active
  *  layer is zoom-gated (`minZoom`), so other (fixed-bbox) layers never
  *  re-fetch on every pan for no reason. */
@@ -994,7 +1035,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles, flyToSbl,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -1055,6 +1096,10 @@ export default function JurisdictionMap({
    *  stable reference (e.g. a useState setter) for the same reason as
    *  `onParcelClick`. */
   onRoadMiles?: (miles: Record<string, number>) => void
+  /** Reverse of `onParcelClick` — pans to and opens the popup for a parcel
+   *  selected elsewhere on the page (e.g. a table row), looked up by SBL.
+   *  Set to a new value (even the same SBL re-selected) to re-trigger. */
+  flyToSbl?: string | null
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
@@ -1241,6 +1286,7 @@ export default function JurisdictionMap({
           )}
           <Boundary muni={muni} lightBasemap={useLightBasemap} skipFitBounds={!!focus} />
           <Hamlets muni={muni} lightBasemap={useLightBasemap} />
+          {flyToSbl !== undefined && <FlyToParcel sbl={flyToSbl} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && <OsmLayers active={active} onState={setLayerState} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && activeGisCfg?.minZoom != null && <MapViewTracker onChange={bumpViewTick} />}
           {!onlyPermits && !onlyRoads && !simultaneousLayers && (
