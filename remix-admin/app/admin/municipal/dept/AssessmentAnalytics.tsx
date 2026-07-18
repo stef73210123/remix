@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import BoardFilterDropdown from '../BoardFilterDropdown'
 
 const PARCELS_BASE = 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0'
 const NC_WHERE = "MUNI_NAME='North Castle'"
@@ -177,6 +178,146 @@ function fmtUSDFull(v: number): string {
   return `$${Math.round(v).toLocaleString('en-US')}`
 }
 
+// NYS ORPTS's own historical roll archive (Socrata, data.ny.gov) — the live
+// county ArcGIS parcels layer only ever carries the current roll year, with
+// no history, so a 5-year trend has to come from this separate source. No
+// geometry here (tabular only), so it's used for this aggregate widget only;
+// the map keeps using the ArcGIS layer.
+const HISTORY_BASE = 'https://data.ny.gov/resource/7vem-aaz7.json'
+const NC_SWIS = '553800'
+const HISTORY_SOURCE_NOTE =
+  'Source: NYS Dept. of Taxation & Finance (ORPTS), Property Assessment Data from Local Assessment Rolls. Improvement value is derived (assessed total − land) per ORPTS convention. Grand totals across the whole roll, including exempt parcels.'
+
+interface HistoryYear { year: number; groups: Record<string, { land: number; total: number }> }
+
+/** One row per (roll year × property-class group) for North Castle, summed
+ *  from the parcel-level roll — grouped server-side (via SoQL) so this stays
+ *  a handful of rows instead of thousands. */
+async function fetchAssessmentHistory(): Promise<HistoryYear[]> {
+  const url =
+    `${HISTORY_BASE}?$select=roll_year,property_class,sum(assessment_land) as land,sum(assessment_total) as total` +
+    `&$where=${encodeURIComponent(`swis_code='${NC_SWIS}'`)}` +
+    `&$group=roll_year,property_class&$limit=5000`
+  const r = await fetch(url)
+  if (!r.ok) throw new Error('history')
+  const rows = (await r.json()) as { roll_year?: string; property_class?: string; land?: string; total?: string }[]
+
+  const byYear = new Map<number, Record<string, { land: number; total: number }>>()
+  for (const row of rows) {
+    const year = Number(row.roll_year)
+    const code = row.property_class
+    if (!year || !code) continue
+    const group = classGroupLabel(code)
+    const yearMap = byYear.get(year) ?? {}
+    const cur = yearMap[group] ?? { land: 0, total: 0 }
+    cur.land += Number(row.land ?? 0)
+    cur.total += Number(row.total ?? 0)
+    yearMap[group] = cur
+    byYear.set(year, yearMap)
+  }
+  return Array.from(byYear.entries())
+    .map(([year, groups]) => ({ year, groups }))
+    .sort((a, b) => a.year - b.year)
+    .slice(-5)
+}
+
+/** Vertical stacked bars (land at the base, improvement on top) — one flat
+ *  color per series since both segments always coexist as a shared legend,
+ *  not a per-bar identity; a 2px surface gap separates the two fills within
+ *  each bar. */
+function LandImprovementChart({ data }: { data: { year: number; land: number; improvement: number }[] }) {
+  const max = Math.max(...data.map((d) => d.land + d.improvement), 1)
+  const barMaxHeight = 170
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 14, marginBottom: 14, fontSize: 12 }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 9, height: 9, borderRadius: 2, background: '#1baf7a', display: 'inline-block' }} /> Land
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 9, height: 9, borderRadius: 2, background: '#4a3aa7', display: 'inline-block' }} /> Improvement
+        </span>
+      </div>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
+        {data.map((d) => {
+          const total = d.land + d.improvement
+          const totalH = (total / max) * barMaxHeight
+          const landH = total > 0 ? (d.land / total) * totalH : 0
+          const imprH = Math.max(totalH - landH - (landH > 0 && totalH - landH > 0 ? 2 : 0), 0)
+          return (
+            <div key={d.year} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, minWidth: 0 }}>
+              <div className="muted" style={{ fontSize: 10, fontVariantNumeric: 'tabular-nums' }}>{fmtUSD(total)}</div>
+              <div style={{ width: '100%', maxWidth: 56, height: barMaxHeight, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+                <div
+                  style={{ height: imprH, background: '#4a3aa7', borderRadius: '3px 3px 0 0', marginBottom: landH > 0 && imprH > 0 ? 2 : 0 }}
+                  title={`Improvement: ${fmtUSDFull(d.improvement)}`}
+                />
+                <div
+                  style={{ height: landH, background: '#1baf7a', borderRadius: imprH === 0 ? '3px 3px 0 0' : 0 }}
+                  title={`Land: ${fmtUSDFull(d.land)}`}
+                />
+              </div>
+              <div style={{ fontSize: 11.5, fontWeight: 600 }}>{d.year}</div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+/** Town-wide land vs. improvement assessment, by roll year — the last 5 years
+ *  available from the state's own historical roll archive, filterable by
+ *  property-type group (all shown by default). Separate widget from the tax
+ *  estimator above it since it answers a different question (how the roll's
+ *  composition has shifted over time, not what one parcel would owe). */
+function LandImprovementWidget() {
+  const [history, setHistory] = useState<HistoryYear[] | null>(null)
+  const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
+  const [hiddenGroups, setHiddenGroups] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    let cancelled = false
+    fetchAssessmentHistory()
+      .then((h) => { if (!cancelled) { setHistory(h); setStatus('ok') } })
+      .catch(() => { if (!cancelled) setStatus('error') })
+    return () => { cancelled = true }
+  }, [])
+
+  if (status === 'error') {
+    return <div className="muted" style={{ padding: 20, fontSize: 12.5, textAlign: 'center' }}>Unable to load assessment history right now.</div>
+  }
+  if (status === 'loading' || !history) {
+    return <div className="muted" style={{ padding: 20, fontSize: 12.5, textAlign: 'center' }}>Loading…</div>
+  }
+
+  const allGroups = Array.from(new Set(history.flatMap((h) => Object.keys(h.groups)))).sort()
+  const chartData = history.map((h) => {
+    let land = 0
+    let total = 0
+    for (const [group, v] of Object.entries(h.groups)) {
+      if (hiddenGroups.has(group)) continue
+      land += v.land
+      total += v.total
+    }
+    return { year: h.year, land, improvement: Math.max(total - land, 0) }
+  })
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
+        <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          Land vs. improvement assessment, by year
+        </div>
+        <BoardFilterDropdown label="Property types" options={allGroups} hidden={hiddenGroups} onChange={setHiddenGroups} />
+      </div>
+      <LandImprovementChart data={chartData} />
+      <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{HISTORY_SOURCE_NOTE}</div>
+    </div>
+  )
+}
+
 /** Analytics widgets for the Assessment roll: total assessed value grouped by
  *  NYS property-class category, the taxable-vs-exempt split, and a handful of
  *  headline stats — complements the parcel/owner list above with the
@@ -336,62 +477,72 @@ export default function AssessmentAnalytics() {
         </div>
       </div>
 
-      {avStats && (
-        <div className="card" style={{ padding: 16 }}>
-          <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-            Tax assessment breakdown
-          </div>
-          {/* Assessed value (the slider/input) drives all three tax figures below —
-              it leads the row so it reads as the primary control; the school-district
-              picker is a secondary refinement (County and Town rates are the same
-              townwide, only School varies by district), not the whole point of the
-              widget. */}
-          <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
-            <input
-              type="range"
-              min={0}
-              max={Math.max(avStats.p95, 1)}
-              step={100}
-              value={Math.min(av, avStats.p95)}
-              onChange={(e) => setAV(Number(e.target.value))}
-              style={{ flex: '1 1 200px', minWidth: 140 }}
-              aria-label="Assessed value"
-            />
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span className="muted" style={{ fontSize: 13 }}>$</span>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={avInput}
-                onChange={(e) => onAvInputChange(e.target.value)}
-                className="input"
-                style={{ width: 112, fontSize: 12.5, padding: '5px 8px' }}
-                aria-label="Assessed value (exact)"
-              />
+      <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+        {avStats && (
+          <div className="card" style={{ padding: 16, flex: '1 1 420px', minWidth: 0 }}>
+            <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+              Tax assessment breakdown
             </div>
-            <select
-              value={district}
-              onChange={(e) => setDistrict(e.target.value as keyof typeof SCHOOL_RATE_PER_1000)}
-              aria-label="School district"
-              style={{ fontSize: 12.5, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-            >
-              {Object.keys(SCHOOL_RATE_PER_1000).map((d) => (
-                <option key={d} value={d}>{d} schools</option>
-              ))}
-            </select>
+            {/* Assessed value (the slider/input) drives all three tax figures below —
+                it leads the row so it reads as the primary control; the school-district
+                picker is a secondary refinement (County and Town rates are the same
+                townwide, only School varies by district), not the whole point of the
+                widget. */}
+            <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
+              <input
+                type="range"
+                min={0}
+                // Grows past the p95 default ceiling whenever the typed value
+                // exceeds it, so the slider's fill position always matches what
+                // the $ input and donut are showing instead of visually
+                // clamping at max while the real value keeps climbing.
+                max={Math.max(avStats.p95, av, 1)}
+                step={100}
+                value={av}
+                onChange={(e) => setAV(Number(e.target.value))}
+                style={{ flex: '1 1 200px', minWidth: 140 }}
+                aria-label="Assessed value"
+              />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span className="muted" style={{ fontSize: 13 }}>$</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={avInput}
+                  onChange={(e) => onAvInputChange(e.target.value)}
+                  className="input"
+                  style={{ width: 112, fontSize: 12.5, padding: '5px 8px' }}
+                  aria-label="Assessed value (exact)"
+                />
+              </div>
+              <select
+                value={district}
+                onChange={(e) => setDistrict(e.target.value as keyof typeof SCHOOL_RATE_PER_1000)}
+                aria-label="School district"
+                style={{ fontSize: 12.5, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+              >
+                {Object.keys(SCHOOL_RATE_PER_1000).map((d) => (
+                  <option key={d} value={d}>{d} schools</option>
+                ))}
+              </select>
+            </div>
+            <DonutChart
+              segments={[
+                { label: 'County', value: countyTax, color: '#2a78d6' },
+                { label: 'Town', value: townTax, color: '#1baf7a' },
+                { label: 'School', value: schoolTax, color: '#4a3aa7' },
+              ]}
+              centerValue={fmtUSDFull(countyTax + townTax + schoolTax)}
+              centerLabel="Est. total taxes"
+            />
+            <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{TAX_ESTIMATOR_SOURCE_NOTE}</div>
           </div>
-          <DonutChart
-            segments={[
-              { label: 'County', value: countyTax, color: '#2a78d6' },
-              { label: 'Town', value: townTax, color: '#1baf7a' },
-              { label: 'School', value: schoolTax, color: '#4a3aa7' },
-            ]}
-            centerValue={fmtUSDFull(countyTax + townTax + schoolTax)}
-            centerLabel="Est. total taxes"
-          />
-          <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{TAX_ESTIMATOR_SOURCE_NOTE}</div>
+        )}
+
+        <div className="card" style={{ padding: 16, flex: '1 1 420px', minWidth: 0 }}>
+          <LandImprovementWidget />
         </div>
-      )}
+      </div>
     </div>
   )
 }

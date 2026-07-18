@@ -6,6 +6,7 @@ import TopoBackground from './TopoBackground'
 import SiteFooter from './SiteFooter'
 import ScrollToTop from './ScrollToTop'
 import PreventOverscrollBounce from './PreventOverscrollBounce'
+import PinBottomBar from './PinBottomBar'
 import { FLAVOR, isOpen } from '@/lib/flavor'
 
 export const metadata: Metadata = isOpen
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           children
         )}
         {isOpen && <PreventOverscrollBounce />}
+        {isOpen && <PinBottomBar />}
         <ScrollToTop />
         <Analytics />
       </body>
