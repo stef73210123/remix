@@ -114,14 +114,18 @@ function TabGroupDropdown({
   )
 }
 
-/** The Boards ▾ / Committees ▾ / Departments ▾ trio — factored out so
- *  MunicipalClient's dashboard-only strip can append the same groups after
- *  its own board-analysis chip row, without duplicating the dropdown logic. */
+/** The Boards ▾ / Departments ▾ pair — factored out so MunicipalClient's
+ *  dashboard-only strip can append the same groups after its own
+ *  board-analysis chip row, without duplicating the dropdown logic.
+ *  Committees stays hidden from the menu (see COMMITTEE_TABS above) until
+ *  there's at least one real committee page to link to. */
 export function TabDropdownGroups({ muni, active }: { muni: string; active: string }) {
   return (
     <>
       <TabGroupDropdown label="Boards" tabs={BOARD_TABS} muni={muni} active={active} />
-      <TabGroupDropdown label="Committees" tabs={COMMITTEE_TABS} muni={muni} active={active} placeholder="Committee pages are coming soon." />
+      {COMMITTEE_TABS.length > 0 && (
+        <TabGroupDropdown label="Committees" tabs={COMMITTEE_TABS} muni={muni} active={active} placeholder="Committee pages are coming soon." />
+      )}
       <TabGroupDropdown label="Departments" tabs={DEPARTMENT_TABS} muni={muni} active={active} />
     </>
   )
