@@ -103,13 +103,22 @@ async function main() {
       console.log(`skip (not staged): ${entry.title}`)
       continue
     }
-    const fullText = await readFile(txtPath, 'utf8')
-    const perCharDensity = fullText.length // pages unknown here; flag on absolute size instead
-    const lowText = perCharDensity < LOW_TEXT_CHAR_THRESHOLD
+    const extractedText = await readFile(txtPath, 'utf8')
+    const lowText = extractedText.length < LOW_TEXT_CHAR_THRESHOLD
     if (lowText) {
       stats.lowText++
-      console.log(`LOW TEXT (${fullText.length} chars) — likely scanned/image-only: ${entry.title}`)
+      console.log(`LOW TEXT (${extractedText.length} chars) — likely scanned/image-only: ${entry.title}`)
     }
+    // A few hundred garbled OCR-fragment characters from a scanned PDF is
+    // worse than nothing for full-text search (spurious matches on noise) —
+    // swap in an honest placeholder instead. The row (title, date, citation
+    // URL) still exists for completeness/audit, but since `document.tsv` is
+    // generated from full_text alone, this placeholder essentially never
+    // surfaces as a search hit, which is the right degradation: point
+    // whoever's looking at the real PDF rather than pretend we indexed it.
+    const fullText = lowText
+      ? `[This document is a scanned image PDF with no machine-readable text layer — OCR was not run in this ingestion pass. See the source PDF at ${entry.sourceUrl} for the full document.]`
+      : extractedText
 
     if (!DRY_RUN) {
       await upsertDocument(client, muniId, {
