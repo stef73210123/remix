@@ -8,28 +8,30 @@
  * Unlike Phase 1 (backfill-rag-phase1.mjs), the source PDFs live in Google
  * Drive, not this repo — there's no standing, credentialed Drive
  * integration in the deployed app, so this script can't fetch them itself.
- * Instead it's a two-step process:
- *
- *   1. A Drive-connected session downloads each file in
- *      rag-manifests/phase2-budgets-financials-locallaws.json (by
- *      `driveFileId`) and extracts its text with `pdf-parse`, writing one
- *      `<idx>_<slug>.txt` per entry into a staging directory. This step
- *      isn't scripted here — it requires interactive Drive access — and
- *      isn't committed to the repo (the manifest is small and durable; the
- *      extracted text is regenerable from Drive + this script, so keeping
- *      ~150MB of PDFs/text out of git is deliberate, same reasoning as not
- *      committing the raw PDFs themselves).
- *   2. This script reads that staging directory and the manifest, and
- *      upserts each staged file into `document`.
+ * The one-time fetch+extract already happened in a Drive-connected session
+ * (for each entry in rag-manifests/phase2-budgets-financials-locallaws.json,
+ * downloading by `driveFileId` and extracting text with `pdf-parse`) and its
+ * output — one `<idx>_<slug>.txt` per manifest entry, ~5MB total — is
+ * committed at rag-staging/phase2/ (the default --staging-dir below), so
+ * this script is fully reproducible from the repo alone; re-running the
+ * Drive fetch is only needed to pick up new/updated source documents later.
  *
  * Usage:
- *   NEON_DATABASE_URL=postgres://... node scripts/municipal/backfill-rag-phase2.mjs --staging-dir=/path/to/staged/txt
- *   node scripts/municipal/backfill-rag-phase2.mjs --staging-dir=/path/to/staged/txt --dry-run
+ *   NEON_DATABASE_URL=postgres://... node scripts/municipal/backfill-rag-phase2.mjs
+ *   node scripts/municipal/backfill-rag-phase2.mjs --dry-run
+ *   node scripts/municipal/backfill-rag-phase2.mjs --staging-dir=/path/to/refreshed/txt  # after a new Drive fetch
  *
  * Entries in the manifest with no matching staged file are skipped (logged,
  * not silently dropped) — the run doesn't have to cover 100% of the
- * manifest to be useful. Idempotent — upserts on (municipality_id,
- * source_url), same as Phase 1's document rows.
+ * manifest to be useful. As of the last Drive fetch, 56/57 files staged (1
+ * transient download failure on the 2008 Adopted Budget — a scanned PDF per
+ * its metadata anyway, so low-impact; re-fetch it from
+ * https://www.northcastleny.gov/ArchiveCenter/ViewFile/Item/70 to close the
+ * gap). 19 of the 56 staged files are themselves scanned/image-only PDFs
+ * (mostly pre-2017 Adopted Budgets and pre-2012 financial reports) with no
+ * real text layer — those get an honest placeholder instead of garbled OCR
+ * noise (see below). Idempotent — upserts on (municipality_id, source_url),
+ * same as Phase 1's document rows.
  */
 import { readFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
@@ -45,7 +47,7 @@ const MUNI_KEY = 'nc'
 const MUNI_NAME = 'Town of North Castle'
 
 const stagingArg = process.argv.find((a) => a.startsWith('--staging-dir='))
-const STAGING_DIR = stagingArg ? stagingArg.slice('--staging-dir='.length) : null
+const STAGING_DIR = stagingArg ? stagingArg.slice('--staging-dir='.length) : join(SCRIPT_DIR, 'rag-staging', 'phase2')
 
 // A PDF that extracted to almost nothing per page is very likely a scanned
 // image with no real text layer — pdf-parse can't OCR it. Still ingested
@@ -76,9 +78,9 @@ async function upsertDocument(client, muniId, { title, sourceUrl, fullText, effe
 }
 
 async function main() {
-  if (!STAGING_DIR) {
-    console.error('Usage: node scripts/municipal/backfill-rag-phase2.mjs --staging-dir=/path/to/staged/txt [--dry-run]')
-    console.error('The staging dir should contain one "<idx>_<slug>.txt" file per manifest entry (see this file’s header comment for how that’s produced).')
+  if (!existsSync(STAGING_DIR)) {
+    console.error(`Staging dir not found: ${STAGING_DIR}`)
+    console.error('Usage: node scripts/municipal/backfill-rag-phase2.mjs [--staging-dir=/path/to/staged/txt] [--dry-run]')
     process.exit(1)
   }
 
