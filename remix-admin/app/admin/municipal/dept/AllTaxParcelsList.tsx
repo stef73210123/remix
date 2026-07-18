@@ -41,6 +41,7 @@ export interface SelectedParcelInfo {
   PARCEL_ADDR?: unknown
   PRIMARY_OWNER?: unknown
   TOTAL_AV?: unknown
+  OBJECTID?: unknown
   [key: string]: unknown
 }
 
@@ -64,11 +65,15 @@ function ParcelDetailPanel({ attrs, rollTotal }: { attrs: Record<string, unknown
   const landAv = typeof attrs.LAND_AV === 'number' ? attrs.LAND_AV : Number(attrs.LAND_AV ?? NaN)
   const fullMarket = typeof attrs.FULL_MARKET_VAL === 'number' ? attrs.FULL_MARKET_VAL : Number(attrs.FULL_MARKET_VAL ?? NaN)
   const totalAv = Number(attrs.TOTAL_AV ?? 0)
+  // NYS assessed value = land + improvements; the service only carries the
+  // land and total figures, so improvement value is the difference.
+  const improvementAv = !isNaN(landAv) && totalAv > 0 ? Math.max(totalAv - landAv, 0) : NaN
   const fields: { label: string; value: string }[] = [
     ...(sbl ? [{ label: 'SBL', value: sbl }] : []),
     ...(propClass ? [{ label: 'Property class', value: propClass }] : []),
     ...(!isNaN(acres) && acres > 0 ? [{ label: 'Acres', value: acres.toFixed(2) }] : []),
     ...(!isNaN(landAv) && landAv > 0 ? [{ label: 'Land value', value: fmtUSD(landAv) }] : []),
+    ...(!isNaN(improvementAv) ? [{ label: 'Improvement value', value: fmtUSD(improvementAv) }] : []),
     ...(!isNaN(fullMarket) && fullMarket > 0 ? [{ label: 'Full market value', value: fmtUSD(fullMarket) }] : []),
     ...(rollTotal ? [{ label: '% of Roll', value: `${((totalAv / rollTotal) * 100).toFixed(2)}%` }] : []),
   ]
@@ -98,7 +103,10 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
   const [expandedSbl, setExpandedSbl] = useState<string | null>(null)
   const [detailCache, setDetailCache] = useState<Record<string, Record<string, unknown>>>({})
-  const containerRef = useRef<HTMLDivElement | null>(null)
+  const listRef = useRef<HTMLDivElement | null>(null)
+  // Set on a map click, consumed once the target page's rows arrive — scrolls
+  // the selected row to the top of the list's own scroll area (not the page).
+  const pendingScrollRef = useRef(false)
 
   // Debounce the search box so every keystroke doesn't fire a query — skipped
   // once searchInput already matches the committed `search` (true right after
@@ -130,17 +138,24 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
     const sbl = selectedParcel.SBL != null ? String(selectedParcel.SBL) : ''
     if (!sbl) return
     const value = Number(selectedParcel.TOTAL_AV ?? 0)
+    const objectId = Number(selectedParcel.OBJECTID ?? NaN)
     setMode('parcel')
     setSearchInput('')
     setSearch('')
     setDetailCache((prev) => ({ ...prev, [sbl]: selectedParcel }))
     setExpandedSbl(sbl)
-    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    pendingScrollRef.current = true
     let cancelled = false
-    // Rank = how many parcels (townwide, unfiltered) have a strictly greater
-    // assessed value — same order the list itself sorts by, so this lands on
-    // (or, for parcels tied on assessed value, very near) the right page.
-    fetch(`${PARCELS_BASE}/query?where=${encodeURIComponent(`${NC_WHERE} AND TOTAL_AV > ${value}`)}&returnCountOnly=true&f=json`)
+    // Rank = how many parcels (townwide, unfiltered) sort strictly ahead of
+    // this one in the list's own TOTAL_AV DESC, OBJECTID DESC order. A lot of
+    // parcels share the same round assessed value (ties are common here), so
+    // "TOTAL_AV > value" alone can miss the tie cluster's exact ArcGIS
+    // ordering — OBJECTID as the same secondary key both queries use closes
+    // that gap when the clicked feature's OBJECTID is known.
+    const rankWhere = !isNaN(objectId)
+      ? `${NC_WHERE} AND (TOTAL_AV > ${value} OR (TOTAL_AV = ${value} AND OBJECTID > ${objectId}))`
+      : `${NC_WHERE} AND TOTAL_AV > ${value}`
+    fetch(`${PARCELS_BASE}/query?where=${encodeURIComponent(rankWhere)}&returnCountOnly=true&f=json`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('rank'))))
       .then((j: { count?: number }) => {
         if (cancelled) return
@@ -177,7 +192,7 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
       const url =
         `${PARCELS_BASE}/query?where=${encodeURIComponent(whereClause)}` +
         `&outFields=SBL,PARCEL_ADDR,PRIMARY_OWNER,TOTAL_AV` +
-        `&orderByFields=TOTAL_AV+DESC&resultOffset=${page * PAGE_SIZE}&resultRecordCount=${PAGE_SIZE}` +
+        `&orderByFields=TOTAL_AV+DESC,OBJECTID+DESC&resultOffset=${page * PAGE_SIZE}&resultRecordCount=${PAGE_SIZE}` +
         `&returnGeometry=false&f=json`
       fetch(url)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error('query'))))
@@ -219,6 +234,21 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
     return () => { cancelled = true }
   }, [mode, whereClause, page])
 
+  // Once a map-jump's target page has loaded, scroll the selected row to the
+  // top of the list's own scroll container — computed from bounding rects
+  // (not scrollIntoView) so only this inner container moves, never the page.
+  useEffect(() => {
+    if (!pendingScrollRef.current || !expandedSbl || !parcelRows) return
+    pendingScrollRef.current = false
+    const container = listRef.current
+    const row = container?.querySelector<HTMLElement>(`[data-sbl="${CSS.escape(expandedSbl)}"]`)
+    if (container && row) {
+      const containerRect = container.getBoundingClientRect()
+      const rowRect = row.getBoundingClientRect()
+      container.scrollTop += rowRect.top - containerRect.top
+    }
+  }, [parcelRows, expandedSbl])
+
   async function ensureDetail(sbl: string) {
     if (!sbl || detailCache[sbl]) return
     try {
@@ -246,7 +276,7 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
     : (rows?.length ?? 0) >= PAGE_SIZE
 
   return (
-    <div ref={containerRef}>
+    <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
         <div style={{ display: 'inline-flex', borderRadius: 8, border: '1px solid var(--border)', overflow: 'hidden' }}>
           {(['parcel', 'owner'] as ViewMode[]).map((m) => (
@@ -283,7 +313,7 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
               : 'Loading…'}
       </div>
 
-      <div style={{ maxHeight: 480, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
+      <div ref={listRef} style={{ maxHeight: 480, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
         <div
           style={{
             position: 'sticky', top: 0, zIndex: 1, display: 'flex', gap: 8, alignItems: 'center',
@@ -310,6 +340,7 @@ export default function AllTaxParcelsList({ selectedParcel }: { selectedParcel?:
         {mode === 'parcel' && parcelRows?.map((row, i) => (
           <div key={row.sbl || i}>
             <div
+              data-sbl={row.sbl || undefined}
               onClick={() => toggleRow(row.sbl)}
               style={{
                 display: 'flex', gap: 8, alignItems: 'flex-start', padding: '7px 10px', fontSize: 12.5, cursor: row.sbl ? 'pointer' : 'default',

@@ -116,6 +116,31 @@ interface Summary {
 }
 interface ClassGroupRow { label: string; total: number }
 
+/** Every parcel's TOTAL_AV, ascending — the only way to get an exact median,
+ *  since ArcGIS's outStatistics has no median. Paginated (the service caps
+ *  records per request well under the town's ~4,800 parcels, so pagination
+ *  has to advance by however many rows actually came back and stop on an
+ *  empty page, never on "fewer than requested" — that's the normal case
+ *  here); each page is just one numeric field, so this stays light. */
+async function fetchMedianAssessedValue(): Promise<number> {
+  const values: number[] = []
+  let offset = 0
+  for (;;) {
+    const url =
+      `${PARCELS_BASE}/query?where=${encodeURIComponent(NC_WHERE)}` +
+      `&outFields=TOTAL_AV&orderByFields=TOTAL_AV+ASC` +
+      `&resultOffset=${offset}&resultRecordCount=2000&returnGeometry=false&f=json`
+    const r = await fetch(url)
+    if (!r.ok) throw new Error('values')
+    const j = (await r.json()) as { features?: { attributes: { TOTAL_AV?: number } }[] }
+    const feats = j.features ?? []
+    if (feats.length === 0) break
+    for (const f of feats) values.push(Number(f.attributes.TOTAL_AV ?? 0))
+    offset += feats.length
+  }
+  return values.length > 0 ? values[Math.floor(values.length / 2)] : 0
+}
+
 function fmtUSD(v: number): string {
   if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(v >= 10_000_000 ? 1 : 2)}M`
   if (v >= 1_000) return `$${Math.round(v / 1000)}K`
@@ -133,6 +158,15 @@ export default function AssessmentAnalytics() {
   const [summary, setSummary] = useState<Summary | null>(null)
   const [classGroups, setClassGroups] = useState<ClassGroupRow[] | null>(null)
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
+  const [median, setMedian] = useState<number | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchMedianAssessedValue()
+      .then((m) => { if (!cancelled) setMedian(m) })
+      .catch(() => { /* median stat tile just won't render */ })
+    return () => { cancelled = true }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -206,7 +240,6 @@ export default function AssessmentAnalytics() {
   }
 
   const taxablePct = summary.rollTotal > 0 ? (summary.taxableTotal / summary.rollTotal) * 100 : 0
-  const avgAssessed = summary.parcelCount > 0 ? summary.rollTotal / summary.parcelCount : 0
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -220,8 +253,8 @@ export default function AssessmentAnalytics() {
           <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{summary.parcelCount.toLocaleString()}</div>
         </div>
         <div className="card" style={{ padding: 14, flex: '1 1 160px' }}>
-          <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Average assessed value</div>
-          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{fmtUSDFull(avgAssessed)}</div>
+          <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Median assessed value</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{median != null ? fmtUSDFull(median) : '—'}</div>
         </div>
       </div>
 

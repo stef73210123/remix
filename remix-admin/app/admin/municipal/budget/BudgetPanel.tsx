@@ -44,18 +44,16 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
         <div className="muted" style={{ fontSize: 13 }}>{budget.townName} · {sel.status}</div>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
           {scopes.length > 1 && (
-            <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
+            <select
+              value={scope}
+              onChange={(e) => pickScope(e.target.value)}
+              aria-label="Budget scope"
+              style={{ fontSize: 14, padding: '6px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+            >
               {scopes.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => pickScope(s)}
-                  className="btn secondary"
-                  style={{ padding: '5px 12px', fontSize: 13, whiteSpace: 'nowrap', ...(s === scope ? { background: 'var(--primary)', color: '#fff', borderColor: 'var(--primary)' } : {}) }}
-                >
-                  {scopeShort(s)}
-                </button>
+                <option key={s} value={s}>{scopeShort(s)}</option>
               ))}
-            </div>
+            </select>
           )}
           {yearsForScope.length > 1 ? (
             <select
