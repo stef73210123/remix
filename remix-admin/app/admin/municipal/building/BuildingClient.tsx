@@ -650,9 +650,10 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       .filter((p) => p.days >= 0)
   }, [fullPermits, dataset, activeScatterYear, activeScatterType, scatterStage])
 
-  // Matching-address results search the full permit set (once loaded), not
-  // just the latest 80, since an older permit at a given address should still
-  // be findable; an empty search falls back to the plain "most recent" view.
+  // Matching-address results search the full permit set (once loaded) —
+  // same source the unfiltered list below now shows in its entirety, so a
+  // search only ever narrows what's already there rather than reaching
+  // further back than the plain list does.
   const addressTerm = addressSearch.trim().toLowerCase()
   const permitSearchResults = useMemo(() => {
     if (!addressTerm) return null
@@ -661,14 +662,15 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       .filter((p) => p.permitIso && p.address?.toLowerCase().includes(addressTerm))
       .sort((a, b) => (b.permitIso || '').localeCompare(a.permitIso || ''))
   }, [fullPermits, dataset, addressTerm])
+  // The full permit database, not a recent-N slice — `fullPermits` (the
+  // `all=1` fetch) once it's arrived, falling back to `dataset.recent` only
+  // for the brief window before it does.
   const timelineItems = useMemo<TimelineItem[]>(() => {
-    const src = permitSearchResults ?? (dataset ? dataset.recent.filter((p) => p.permitIso) : null)
-    if (!src) return []
+    const src = permitSearchResults ?? (fullPermits ?? dataset?.recent ?? []).filter((p) => p.permitIso)
     return src
-      .slice(0, 80)
       .map(permitToTimelineItem)
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
-  }, [dataset, permitSearchResults])
+  }, [dataset, fullPermits, permitSearchResults])
   // Most recent permit date in the dataset — flags how fresh the offline PDF
   // extract actually is, since it doesn't auto-refresh with the Town's own records.
   const latestPermitDate = useMemo(() => {
@@ -763,8 +765,8 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
               title="Permit database"
               sub={
                 permitSearchResults
-                  ? `${fmtInt(permitSearchResults.length)} match${permitSearchResults.length === 1 ? '' : 'es'} for "${addressSearch.trim()}"${permitSearchResults.length > 80 ? ' · showing 80 most recent' : ''}`
-                  : `latest ${Math.min(80, timelineItems.length)} permits issued`
+                  ? `${fmtInt(permitSearchResults.length)} match${permitSearchResults.length === 1 ? '' : 'es'} for "${addressSearch.trim()}"`
+                  : `${fmtInt(timelineItems.length)} permits`
               }
               right={
                 <ClearableInput
