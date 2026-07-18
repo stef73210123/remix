@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import ClearableInput from '@/app/ClearableInput'
-import { NC_TOTAL_TAX_LEVY_HISTORY } from '@/lib/municipal/budget2026'
+import { NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT, type WaterfallStep } from '@/lib/municipal/budget2026'
 
 const PARCELS_BASE = 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0'
 const NC_WHERE = "MUNI_NAME='North Castle'"
@@ -172,69 +172,105 @@ function fmtUSDFull(v: number): string {
   return `$${Math.round(v).toLocaleString('en-US')}`
 }
 
-const LEVY_SOURCE_NOTE =
-  'Total town-wide tax levy — general town, highway, fire protection, and dependent special districts (lighting/sewer/water), net of sales-tax credits. Excludes the county levy, independent fire districts, and school levies, which are set separately. Source: NYS Comptroller’s Real Property Tax Levies dataset (FY2020-2024) and the Town’s own tax-cap-law worksheet (FY2025-2026, including the 2026 voted override above the state cap).'
+const LEVY_WATERFALL_SOURCE_NOTE =
+  'Source: Town of North Castle 2026 Adopted Budget — the tax-cap-law worksheet (General Municipal Law §3-c) and homeowner-impact analysis prepared by the Finance Department. "Override" reflects the Town Board’s vote to adopt a levy above the state-calculated cap.'
 
-/** A diverging (increase/decrease) horizontal bar per year, centered on a
- *  zero baseline — orange/blue rather than red/green so it doesn't read as
- *  "bad/good," just up/down, and stays distinguishable for color-blind
- *  readers. Bar length is relative to the largest |change| in the window, so
- *  a real standout (the 2026 cap override) reads as a real standout. */
-function LevyChangeChart({ rows }: { rows: { year: number; pct: number }[] }) {
-  const maxAbs = Math.max(...rows.map((r) => Math.abs(r.pct)), 0.01)
+interface WaterfallRow extends WaterfallStep {
+  barStart: number
+  barEnd: number
+  isCheckpoint: boolean
+}
+
+/** Turns the raw {label, value, kind} steps into bar spans: a 'total' step
+ *  is a full bar from zero (a checkpoint the running total must land on —
+ *  verified by construction, since the data itself is a real cumulative
+ *  bridge); a 'delta' step floats from the running total left by the
+ *  previous step to the new one, in whichever direction it moves. */
+function toWaterfallRows(steps: WaterfallStep[]): WaterfallRow[] {
+  let running = 0
+  return steps.map((s) => {
+    if (s.kind === 'total') {
+      running = s.value
+      return { ...s, barStart: 0, barEnd: s.value, isCheckpoint: true }
+    }
+    const start = running
+    running += s.value
+    return { ...s, barStart: Math.min(start, running), barEnd: Math.max(start, running), isCheckpoint: false }
+  })
+}
+
+/** Horizontal bridge/waterfall: checkpoints (the starting levy, the state
+ *  cap limit, the adopted levy) get a solid full-length bar; each step in
+ *  between floats a bar spanning just its own contribution — so the chart
+ *  reads left-to-right as the actual arithmetic behind the final number,
+ *  not a single opaque percentage. Orange/blue (not red/green) for
+ *  increase/decrease, consistent with the rest of this page; checkpoints
+ *  get a third, distinct color since they're a different kind of thing. */
+function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
+  const rows = toWaterfallRows(steps)
+  const maxValue = Math.max(...rows.map((r) => r.barEnd), 1)
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      {rows.map((r) => {
-        const halfWidthPct = (Math.abs(r.pct) / maxAbs) * 50
-        const positive = r.pct >= 0
-        return (
-          <div key={r.year} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ width: 34, fontSize: 12, fontWeight: 600, flexShrink: 0 }}>{r.year}</span>
-            <div style={{ flex: 1, position: 'relative', height: 18, background: 'var(--panel-2)', borderRadius: 4 }}>
-              <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'var(--border)' }} />
-              <div
-                style={{
-                  position: 'absolute', top: 2, bottom: 2,
-                  left: positive ? '50%' : `${50 - halfWidthPct}%`,
-                  width: `${halfWidthPct}%`,
-                  background: positive ? '#eb6834' : '#2a78d6',
-                  borderRadius: 3,
-                }}
-              />
+    <div>
+      <div style={{ display: 'flex', gap: 14, marginBottom: 12, fontSize: 11.5, flexWrap: 'wrap' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 9, height: 9, borderRadius: 2, background: '#4a3aa7', display: 'inline-block' }} /> Checkpoint
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 9, height: 9, borderRadius: 2, background: '#eb6834', display: 'inline-block' }} /> Adds to the levy
+        </span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 9, height: 9, borderRadius: 2, background: '#2a78d6', display: 'inline-block' }} /> Reduces the levy
+        </span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+        {rows.map((r) => {
+          const startPct = (r.barStart / maxValue) * 100
+          const widthPct = Math.max(((r.barEnd - r.barStart) / maxValue) * 100, 0.6)
+          const color = r.isCheckpoint ? '#4a3aa7' : r.value >= 0 ? '#eb6834' : '#2a78d6'
+          return (
+            <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ width: 128, flexShrink: 0, fontSize: 10.5, lineHeight: 1.25, color: 'var(--muted)' }}>{r.label}</span>
+              <div style={{ flex: 1, position: 'relative', height: 15, background: 'var(--panel-2)', borderRadius: 3, minWidth: 0 }}>
+                <div
+                  style={{
+                    position: 'absolute', left: `${startPct}%`, width: `${widthPct}%`, top: 1, bottom: 1,
+                    background: color, borderRadius: 2,
+                  }}
+                  title={`${r.label}: ${r.isCheckpoint ? fmtUSDFull(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSDFull(Math.abs(r.value))}`}`}
+                />
+              </div>
+              <span style={{ width: 76, textAlign: 'right', flexShrink: 0, fontSize: 11, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
+                {r.isCheckpoint ? fmtUSDFull(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSDFull(Math.abs(r.value))}`}
+              </span>
             </div>
-            <span
-              style={{
-                width: 58, textAlign: 'right', fontSize: 12.5, fontWeight: 700, fontVariantNumeric: 'tabular-nums',
-                color: positive ? '#eb6834' : '#2a78d6',
-              }}
-            >
-              {positive ? '+' : ''}{r.pct.toFixed(2)}%
-            </span>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }
 
-/** Total tax levy, year-over-year % change — the last 5 fiscal years. A
- *  separate question from the tax estimator above it (what the whole levy
- *  did year to year, not what one parcel would owe), and from static,
- *  already-verified figures (NC_TOTAL_TAX_LEVY_HISTORY) rather than a live
- *  query, since no live-queryable source publishes this figure. */
-function LevyChangeWidget() {
-  const rows = NC_TOTAL_TAX_LEVY_HISTORY
-    .slice(1)
-    .map((y, i) => ({ year: y.year, pct: ((y.levy - NC_TOTAL_TAX_LEVY_HISTORY[i].levy) / NC_TOTAL_TAX_LEVY_HISTORY[i].levy) * 100 }))
-    .slice(-5)
-
+/** "Why the levy changed" — replaces a single YoY % (which flattens tax-base
+ *  growth, PILOTs, the 2% state cap, exclusions, and the 2026 voted override
+ *  into one misleading number) with the actual build-up, plus what it means
+ *  in dollars for a typical homeowner. Both figures are already-committed,
+ *  already-verified constants (NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT)
+ *  — this is their first time being charted anywhere on the site. */
+function LevyWaterfallWidget() {
   return (
     <div>
       <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 14 }}>
-        Total tax levy, year-over-year % change
+        Why the 2026 levy changed
       </div>
-      <LevyChangeChart rows={rows} />
-      <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{LEVY_SOURCE_NOTE}</div>
+      <LevyWaterfallChart steps={NC_TAX_CAP_WATERFALL} />
+      <div style={{ marginTop: 14, padding: '10px 12px', borderRadius: 8, background: 'var(--panel-2)', fontSize: 12.5, lineHeight: 1.5 }}>
+        For North Castle’s median-value home ({fmtUSD(NC_HOMEOWNER_TAX_IMPACT.medianHomeValue)}), this means Town taxes go from{' '}
+        <strong>{fmtUSDFull(NC_HOMEOWNER_TAX_IMPACT.townTaxes2025)}</strong> to{' '}
+        <strong>{fmtUSDFull(NC_HOMEOWNER_TAX_IMPACT.townTaxes2026)}</strong>{' '}
+        ({NC_HOMEOWNER_TAX_IMPACT.increase >= 0 ? '+' : ''}{fmtUSDFull(NC_HOMEOWNER_TAX_IMPACT.increase)},{' '}
+        {NC_HOMEOWNER_TAX_IMPACT.increasePct >= 0 ? '+' : ''}{(NC_HOMEOWNER_TAX_IMPACT.increasePct * 100).toFixed(1)}%).
+      </div>
+      <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{LEVY_WATERFALL_SOURCE_NOTE}</div>
     </div>
   )
 }
@@ -449,7 +485,7 @@ export default function AssessmentAnalytics() {
         )}
 
         <div className="card" style={{ padding: 16, flex: '1 1 420px', minWidth: 0 }}>
-          <LevyChangeWidget />
+          <LevyWaterfallWidget />
         </div>
       </div>
     </div>
