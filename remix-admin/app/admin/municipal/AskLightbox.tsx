@@ -6,7 +6,8 @@ import { Sparkles, Send } from 'lucide-react'
 import { useLockBodyScroll } from './useLockBodyScroll'
 import ClearableInput from '@/app/ClearableInput'
 
-interface ChatTurn { role: 'user' | 'assistant'; content: string }
+interface AskSource { title: string; date: string | null; url: string | null }
+interface ChatTurn { role: 'user' | 'assistant'; content: string; sources?: AskSource[] }
 
 const STARTERS = [
   "What's in the 2026 budget?",
@@ -27,8 +28,31 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  // The overlay is `position: fixed`, which mobile Safari/Chrome anchor to
+  // the *layout* viewport — that doesn't shrink when the on-screen keyboard
+  // opens, only the *visual* viewport does. Without this, the flex-centered
+  // card keeps centering (and sizing its maxHeight) against the full,
+  // keyboard-obscured layout viewport, so the input row at the card's
+  // bottom ends up hidden behind the keyboard instead of pinned above it.
+  // Tracking visualViewport directly (same fix as PinBottomBar.tsx) keeps
+  // the overlay's own rect — and the card's max height — matched to
+  // whatever's actually visible at all times.
+  const [viewportRect, setViewportRect] = useState<{ top: number; height: number } | null>(null)
 
   useLockBodyScroll()
+
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+    const update = () => setViewportRect({ top: vv.offsetTop, height: vv.height })
+    update()
+    vv.addEventListener('resize', update)
+    vv.addEventListener('scroll', update)
+    return () => {
+      vv.removeEventListener('resize', update)
+      vv.removeEventListener('scroll', update)
+    }
+  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -56,7 +80,8 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data.error || 'Something went wrong.')
-      setTurns([...nextTurns, { role: 'assistant', content: data.answer as string }])
+      const sources = Array.isArray(data.sources) ? (data.sources as AskSource[]) : undefined
+      setTurns([...nextTurns, { role: 'assistant', content: data.answer as string, sources }])
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong.')
     } finally {
@@ -78,7 +103,10 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
     <div
       onClick={onClose}
       style={{
-        position: 'fixed', inset: 0, zIndex: 4000,
+        position: 'fixed', zIndex: 4000,
+        ...(viewportRect
+          ? { top: viewportRect.top, height: viewportRect.height, left: 0, right: 0 }
+          : { inset: 0 }),
         background: 'rgba(0,0,0,0.66)', backdropFilter: 'blur(3px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3dvh 2vw',
       }}
@@ -86,7 +114,8 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 'min(480px, 100%)', maxHeight: '88dvh',
+          width: 'min(480px, 100%)',
+          maxHeight: viewportRect ? Math.round(viewportRect.height * 0.92) : '88dvh',
           display: 'flex', flexDirection: 'column',
           background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 14,
           boxShadow: '0 24px 80px rgba(0,0,0,0.55)', overflow: 'hidden',
@@ -132,20 +161,35 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
               {turns.map((t, i) => (
                 <div
                   key={i}
-                  style={{
-                    alignSelf: t.role === 'user' ? 'flex-end' : 'flex-start',
-                    maxWidth: '88%',
-                    background: t.role === 'user' ? 'var(--primary)' : 'var(--panel-2)',
-                    color: t.role === 'user' ? '#fff' : 'var(--text)',
-                    border: t.role === 'user' ? 'none' : '1px solid var(--border)',
-                    borderRadius: 12,
-                    padding: '8px 12px',
-                    fontSize: 13.5,
-                    lineHeight: 1.5,
-                    whiteSpace: 'pre-wrap',
-                  }}
+                  style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: t.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '88%' }}
                 >
-                  {t.content}
+                  <div
+                    style={{
+                      background: t.role === 'user' ? 'var(--primary)' : 'var(--panel-2)',
+                      color: t.role === 'user' ? '#fff' : 'var(--text)',
+                      border: t.role === 'user' ? 'none' : '1px solid var(--border)',
+                      borderRadius: 12,
+                      padding: '8px 12px',
+                      fontSize: 13.5,
+                      lineHeight: 1.5,
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {t.content}
+                  </div>
+                  {t.sources && t.sources.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '0 4px', maxWidth: '100%' }}>
+                      <span className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Sources</span>
+                      {t.sources.map((s, si) => (
+                        <span key={si} className="muted" style={{ fontSize: 11, lineHeight: 1.4 }}>
+                          {s.url ? (
+                            <a href={s.url} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>{s.title}</a>
+                          ) : s.title}
+                          {s.date ? ` (${s.date})` : ''}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
               {sending && (
