@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
-import { TabDropdownGroups } from '@/app/admin/municipal/MuniTabs'
+import MuniTabs, { TabDropdownGroups } from '@/app/admin/municipal/MuniTabs'
 import { useTabScrollRestore } from './useTabScroll'
 import dynamic from 'next/dynamic'
 import Demographics from './Demographics'
@@ -238,21 +238,9 @@ export default function MunicipalClient({
   const [hiddenMeetingBoards, setHiddenMeetingBoards] = useState<Set<string>>(new Set())
   useEffect(() => { setHiddenMeetingBoards(new Set()) }, [town])
 
-  // ONC only: measure the sticky header's real height so the tab strip below
-  // it can stick flush underneath (the header's height isn't fixed — it wraps
-  // on narrow viewports — so this is tracked live rather than hardcoded).
-  const [headerH, setHeaderH] = useState(0)
+  // Remix (non-ONC) only — ONC now renders the shared <MuniTabs> component
+  // below, which measures the sticky header height itself.
   const tabScrollRef = useTabScrollRestore<HTMLDivElement>()
-  useEffect(() => {
-    if (!isOpen) return
-    const el = document.querySelector('.muni-header') as HTMLElement | null
-    if (!el) return
-    const update = () => setHeaderH(el.getBoundingClientRect().height)
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
 
   const munisShown = useMemo(
     () => (data ? data.municipalities.filter((m) => town === 'ALL' || m.key === town) : []),
@@ -519,24 +507,24 @@ export default function MunicipalClient({
               ))}
             </div>
           )}
-          {/* On ONC this strip sticks directly below the masthead (top =
-              measured header height) so navigation stays reachable. The
-              board-analysis chips scroll horizontally in their own inner
-              strip; the Boards/Committees/Departments dropdown buttons sit
-              outside that overflow container so their open menus don't get
-              clipped by it. */}
-          <div
-            className={isOpen ? 'board-tabs-sticky' : undefined}
-            style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 22, ...(isOpen ? { top: headerH } : {}) }}
-          >
-            <div ref={tabScrollRef} className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', minWidth: 0 }}>
-              <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
-              {boardTabs.map((b) => (
-                <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
-              ))}
+          {/* ONC: the same Dashboard / Boards▾ / Committees▾ / Departments▾ strip
+              every other page uses — no separate per-board chips, since the
+              Boards dropdown already covers Town Board/Planning Board. Remix
+              (internal, multi-town) keeps its own board-analysis chip row,
+              which drives the inline board-profile view below. */}
+          {isOpen ? (
+            <MuniTabs muni={town} active="dashboard" />
+          ) : (
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 22 }}>
+              <div ref={tabScrollRef} className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', minWidth: 0 }}>
+                <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
+                {boardTabs.map((b) => (
+                  <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
+                ))}
+              </div>
+              {town === 'nc' && <TabDropdownGroups muni={town} active="" />}
             </div>
-            {town === 'nc' && <TabDropdownGroups muni={town} active="" />}
-          </div>
+          )}
 
           {/* Board view — the enriched profile (members, themes, cases, meeting-by-
               meeting analysis) inline, so it doesn't require a click-through. */}
