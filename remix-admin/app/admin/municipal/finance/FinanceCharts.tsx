@@ -117,27 +117,35 @@ function yoyColor(pct: number): string {
   return `color-mix(in srgb, ${hue} ${Math.round(t * 100)}%, #93a0ad)`
 }
 
-/** Appropriations, as a treemap sized by 2026 value and colored by
- *  year-over-year change, with a category list below it (also the
- *  treemap's table-view fallback, since a couple of the smaller categories
- *  are too small to show a size-legible box) that expands in place to each
- *  category's individual funds/districts. */
+const APPROP_YEARS = ['2026', '2025'] as const
+type AppropYear = (typeof APPROP_YEARS)[number]
+
+/** Appropriations, as a treemap sized by the selected year's value (2026
+ *  by default) and colored by year-over-year change, with a category list
+ *  below it (also the treemap's table-view fallback, since a couple of the
+ *  smaller categories are too small to show a size-legible box) that
+ *  expands in place to each category's individual funds/districts. YoY only
+ *  applies to 2026 (vs. 2025) — there's no 2024 figure to compare 2025 against. */
 export function AppropriationsExplorer() {
+  const [year, setYear] = useState<AppropYear>('2026')
   const [openCategory, setOpenCategory] = useState<string | null>(null)
   const [hoverCategory, setHoverCategory] = useState<string | null>(null)
 
   const toggle = (cat: string) => setOpenCategory((c) => (c === cat ? null : cat))
+  const showYoy = year === '2026'
+  const valueFor = (r: { appropriation2026: number; appropriation2025: number }) =>
+    year === '2026' ? r.appropriation2026 : r.appropriation2025
 
   const categories = Array.from(new Set(NC_2025_VS_2026.map((r) => r.category)))
-  const by2026 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2026)
+  const byYear = groupSum(NC_2025_VS_2026, (r) => r.category, valueFor)
   const by2025 = groupSum(NC_2025_VS_2026, (r) => r.category, (r) => r.appropriation2025)
   const rows = categories
     .map((cat) => {
-      const value = by2026.get(cat) ?? 0
+      const value = byYear.get(cat) ?? 0
       const v2025 = by2025.get(cat) ?? 0
       return {
         category: cat, value, v2025,
-        yoy: v2025 > 0 ? (value - v2025) / v2025 : 0,
+        yoy: showYoy && v2025 > 0 ? (value - v2025) / v2025 : 0,
         funds: NC_2025_VS_2026.filter((r) => r.category === cat),
       }
     })
@@ -149,24 +157,38 @@ export function AppropriationsExplorer() {
 
   return (
     <div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
+        <select
+          value={year}
+          onChange={(e) => setYear(e.target.value as AppropYear)}
+          aria-label="Appropriations year"
+          style={selectStyle}
+        >
+          {APPROP_YEARS.map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
+      </div>
       <div className="approp-treemap" style={{ position: 'relative', width: '100%', marginBottom: 12 }}>
         {rects.map((r) => {
           const pctOfTotal = grandTotal > 0 ? r.value / grandTotal : 0
           const big = r.w > 90 && r.h > 46
           const medium = !big && r.w > 46 && r.h > 20
           const isHover = hoverCategory === r.category
+          const boxColor = showYoy ? yoyColor(r.yoy) : '#5a9bd4'
           // Second dimension: each category's own funds/districts, sized by
-          // their own 2026 appropriation and packed into a strip below the
-          // category's own header — the same click-to-expand detail below,
-          // now visible directly in the chart rather than only after opening
-          // the list. The header reserves its own flex row (rather than the
-          // sub-squares sharing the category's centered label position) so
-          // the two never overlap regardless of box size.
+          // their own selected-year appropriation and packed into a strip
+          // below the category's own header — the same click-to-expand
+          // detail below, now visible directly in the chart rather than
+          // only after opening the list. The header reserves its own flex
+          // row (rather than the sub-squares sharing the category's
+          // centered label position) so the two never overlap regardless
+          // of box size.
           const hasHeader = big || medium
           const headerFrac = big ? 0.72 : medium ? 0.85 : 1
           const availH = r.h * headerFrac
           const subRects = r.funds.length > 1 && availH > 4
-            ? squarify(r.funds.map((f) => ({ ...f, value: f.appropriation2026 })), 0, 0, r.w, availH)
+            ? squarify(r.funds.map((f) => ({ ...f, value: valueFor(f) })), 0, 0, r.w, availH)
             : []
           return (
             <div
@@ -174,13 +196,13 @@ export function AppropriationsExplorer() {
               onMouseEnter={() => setHoverCategory(r.category)}
               onMouseLeave={() => setHoverCategory((c) => (c === r.category ? null : c))}
               onClick={() => toggle(r.category)}
-              title={`${r.category}: ${fmtUSDFull(r.value)} · ${(pctOfTotal * 100).toFixed(1)}% of total · ${fmtPct(r.yoy)} YoY`}
+              title={`${r.category}: ${fmtUSDFull(r.value)} · ${(pctOfTotal * 100).toFixed(1)}% of total${showYoy ? ` · ${fmtPct(r.yoy)} YoY` : ''}`}
               style={{
                 position: 'absolute',
                 left: `${(r.x / TM_W) * 100}%`, top: `${(r.y / TM_H) * 100}%`,
                 width: `${(r.w / TM_W) * 100}%`, height: `${(r.h / TM_H) * 100}%`,
                 boxSizing: 'border-box', border: '2px solid var(--panel)',
-                background: yoyColor(r.yoy), cursor: 'pointer',
+                background: boxColor, cursor: 'pointer',
                 opacity: hoverCategory && !isHover ? 0.55 : 1,
                 display: 'flex', flexDirection: 'column', overflow: 'hidden', textAlign: 'center', transition: 'opacity 0.1s',
               }}
@@ -194,7 +216,7 @@ export function AppropriationsExplorer() {
                     <>
                       <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginTop: 2, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>{fmtUSD(r.value)}</div>
                       <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.92)', marginTop: 1, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
-                        {(pctOfTotal * 100).toFixed(1)}% of total · {fmtPct(r.yoy)} YoY
+                        {(pctOfTotal * 100).toFixed(1)}% of total{showYoy && <> · {fmtPct(r.yoy)} YoY</>}
                       </div>
                     </>
                   )}
@@ -204,12 +226,13 @@ export function AppropriationsExplorer() {
                 <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>
                   {subRects.map((sr, si) => {
                     const subBig = sr.w > 50 && sr.h > 22
-                    const subPctOfCategory = r.value > 0 ? sr.appropriation2026 / r.value : 0
-                    const subYoy = sr.appropriation2025 > 0 ? (sr.appropriation2026 - sr.appropriation2025) / sr.appropriation2025 : 0
+                    const subValue = valueFor(sr)
+                    const subPctOfCategory = r.value > 0 ? subValue / r.value : 0
+                    const subYoy = showYoy && sr.appropriation2025 > 0 ? (sr.appropriation2026 - sr.appropriation2025) / sr.appropriation2025 : 0
                     return (
                       <div
                         key={sr.fund + si}
-                        title={`${r.category} — ${sr.fund}: ${fmtUSDFull(sr.appropriation2026)} · ${(subPctOfCategory * 100).toFixed(0)}% of category · ${fmtPct(subYoy)} YoY`}
+                        title={`${r.category} — ${sr.fund}: ${fmtUSDFull(subValue)} · ${(subPctOfCategory * 100).toFixed(0)}% of category${showYoy ? ` · ${fmtPct(subYoy)} YoY` : ''}`}
                         style={{
                           position: 'absolute',
                           left: `${(sr.x / r.w) * 100}%`, top: `${(sr.y / availH) * 100}%`,
@@ -237,9 +260,13 @@ export function AppropriationsExplorer() {
       </div>
 
       <div className="muted" style={{ fontSize: 11, display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
-        <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(0.15), marginRight: 4, verticalAlign: 'middle' }} />Growth</span>
-        <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(0), marginRight: 4, verticalAlign: 'middle' }} />Flat</span>
-        <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(-0.15), marginRight: 4, verticalAlign: 'middle' }} />Decline</span>
+        {showYoy && (
+          <>
+            <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(0.15), marginRight: 4, verticalAlign: 'middle' }} />Growth</span>
+            <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(0), marginRight: 4, verticalAlign: 'middle' }} />Flat</span>
+            <span><span style={{ display: 'inline-block', width: 20, height: 8, borderRadius: 2, background: yoyColor(-0.15), marginRight: 4, verticalAlign: 'middle' }} />Decline</span>
+          </>
+        )}
         <span style={{ marginLeft: 'auto' }}>Box size = share of {fmtUSDFull(grandTotal)} total</span>
       </div>
 
@@ -265,25 +292,26 @@ export function AppropriationsExplorer() {
               >
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                   <Caret open={open} />
-                  <span style={{ width: 9, height: 9, borderRadius: 2, background: yoyColor(r.yoy), flexShrink: 0 }} />
+                  <span style={{ width: 9, height: 9, borderRadius: 2, background: showYoy ? yoyColor(r.yoy) : '#5a9bd4', flexShrink: 0 }} />
                   {r.category}
                 </span>
                 <span style={{ fontVariantNumeric: 'tabular-nums' }}>
                   <span style={{ fontWeight: 600 }}>{fmtUSD(r.value)}</span>
                   <span className="muted" style={{ marginLeft: 8 }}>{(pctOfTotal * 100).toFixed(1)}% of total</span>
-                  <span style={{ marginLeft: 8, fontWeight: 600, color: r.yoy >= 0 ? '#3d9c72' : '#ca615f' }}>{fmtPct(r.yoy)} YoY</span>
+                  {showYoy && <span style={{ marginLeft: 8, fontWeight: 600, color: r.yoy >= 0 ? '#3d9c72' : '#ca615f' }}>{fmtPct(r.yoy)} YoY</span>}
                 </span>
               </button>
               {open && (
                 <div style={{ paddingLeft: 24, marginTop: 4, marginBottom: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {r.funds.map((f) => {
-                    const fyoy = f.appropriation2025 > 0 ? (f.appropriation2026 - f.appropriation2025) / f.appropriation2025 : null
-                    const fpctOfCategory = r.value > 0 ? f.appropriation2026 / r.value : 0
+                    const fValue = valueFor(f)
+                    const fyoy = showYoy && f.appropriation2025 > 0 ? (f.appropriation2026 - f.appropriation2025) / f.appropriation2025 : null
+                    const fpctOfCategory = r.value > 0 ? fValue / r.value : 0
                     return (
                       <div key={f.fund} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, gap: 8 }}>
                         <span>{f.fund} <span className="muted">· {f.code}</span></span>
                         <span style={{ fontVariantNumeric: 'tabular-nums' }}>
-                          {fmtUSD(f.appropriation2026)}
+                          {fmtUSD(fValue)}
                           <span className="muted" style={{ marginLeft: 6 }}>{(fpctOfCategory * 100).toFixed(0)}% of category</span>
                           {fyoy != null && <span className="muted" style={{ marginLeft: 6 }}>{fmtPct(fyoy)} YoY</span>}
                         </span>

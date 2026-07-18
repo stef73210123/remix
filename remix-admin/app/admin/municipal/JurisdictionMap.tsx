@@ -964,7 +964,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440, onParcelClick, focus, onlyLayers,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemap = false, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -1012,15 +1012,23 @@ export default function JurisdictionMap({
    *  whose map has exactly one purpose (tax assessment) and shouldn't expose
    *  the other GIS layers relevant elsewhere in the app. */
   onlyLayers?: string[]
+  /** Locked multi-layer mode: renders every one of these County GIS keys
+   *  simultaneously (each its own always-on overlay, not a single-select
+   *  toggle), with no layer menu and no other layers — used where a map has
+   *  exactly one purpose best shown as an overlay pair (the Water & Sewer
+   *  page's water + sewer district boundaries together). */
+  simultaneousLayers?: string[]
 }) {
   const cfg = MAP[muni]
   // Single active overlay at a time (a toggle), shown over the always-on
   // jurisdiction + hamlet boundaries. In onlyPermits mode this is permanently
   // 'permits' — there's no menu to change it. Unused in onlyRoads mode, which
-  // has its own multi-select state below.
+  // has its own multi-select state below, and in simultaneousLayers mode,
+  // which renders its own fixed set of GisLayers instances instead.
   const [active, setActive] = useState<string | null>(onlyPermits ? 'permits' : defaultActive)
   const [layerState, setLayerState] = useState<LayerState>(null)
   const [menuLegend, setMenuLegend] = useState<MapLegend | null>(null)
+  const [simulStates, setSimulStates] = useState<Record<string, LayerState>>({})
   const [zoningOn, setZoningOn] = useState(false)
   const [zoningState, setZoningState] = useState<LayerState>(null)
   const [zoningLegend, setZoningLegend] = useState<MapLegend | null>(null)
@@ -1044,7 +1052,7 @@ export default function JurisdictionMap({
   // `onlyLayers` (single-purpose maps like the Assessor page) restricts the
   // County GIS list to just those keys and drops the Trails/POI group.
   const gisLayers = onlyLayers ? GIS.filter((g) => onlyLayers.includes(g.key)) : GIS
-  const groups: MenuGroup[] = onlyPermits || onlyRoads ? [] : [
+  const groups: MenuGroup[] = onlyPermits || onlyRoads || simultaneousLayers ? [] : [
     ...(showIssues ? [{ group: 'Civic', items: [{ key: 'issues', label: 'Open issues (SeeClickFix)', color: '#ef4444' }] }] : []),
     ...(permits && permits.length ? [{ group: permitsGroup, items: [{ key: 'permits', label: permitsLabel, color: '#d4767a' }] }] : []),
     ...(muni === 'nc' ? [{ group: 'County GIS', items: gisLayers.map((g) => ({ key: g.key, label: g.label, color: g.color })) }] : []),
@@ -1061,10 +1069,34 @@ export default function JurisdictionMap({
   return (
     <div style={{ marginBottom: 30 }}>
       <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-        {!onlyPermits && !onlyRoads && (
+        {!onlyPermits && !onlyRoads && !simultaneousLayers && (
           <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
         )}
-        {!onlyPermits && !onlyRoads && menuLegend?.kind === 'choropleth' && (
+        {simultaneousLayers && (
+          <div
+            style={{
+              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
+              padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
+              backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
+            }}
+          >
+            {simultaneousLayers.map((key) => {
+              const g = GIS.find((x) => x.key === key)
+              if (!g) return null
+              const s = simulStates[key]
+              return (
+                <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: '#fff' }}>
+                  <span style={{ width: 10, height: 10, borderRadius: 2, background: g.color, display: 'inline-block', flexShrink: 0 }} />
+                  {g.label}
+                  {s === 'loading' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>…</span>}
+                  {s === 'empty' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>none in view</span>}
+                  {s === 'error' && <span style={{ opacity: 0.6, fontSize: 10.5 }}>unavailable</span>}
+                </div>
+              )
+            })}
+          </div>
+        )}
+        {!onlyPermits && !onlyRoads && !simultaneousLayers && menuLegend?.kind === 'choropleth' && (
           <div
             style={{
               position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
@@ -1086,7 +1118,7 @@ export default function JurisdictionMap({
             </div>
           </div>
         )}
-        {!onlyPermits && !onlyRoads && active === 'zoning' && menuLegend?.kind === 'categorical' && (
+        {!onlyPermits && !onlyRoads && !simultaneousLayers && active === 'zoning' && menuLegend?.kind === 'categorical' && (
           <ZoningLegend items={menuLegend.items} />
         )}
         {showZoning && (
@@ -1165,12 +1197,22 @@ export default function JurisdictionMap({
           )}
           <Boundary muni={muni} lightBasemap={lightBasemap} skipFitBounds={!!focus} />
           <Hamlets muni={muni} lightBasemap={lightBasemap} />
-          {!onlyPermits && !onlyRoads && <OsmLayers active={active} onState={setLayerState} />}
-          {!onlyPermits && !onlyRoads && activeGisCfg?.minZoom != null && <MapViewTracker onChange={bumpViewTick} />}
-          {!onlyPermits && !onlyRoads && (
+          {!onlyPermits && !onlyRoads && !simultaneousLayers && <OsmLayers active={active} onState={setLayerState} />}
+          {!onlyPermits && !onlyRoads && !simultaneousLayers && activeGisCfg?.minZoom != null && <MapViewTracker onChange={bumpViewTick} />}
+          {!onlyPermits && !onlyRoads && !simultaneousLayers && (
             <GisLayers active={active} onState={setLayerState} onLegend={setMenuLegend} onFeatureClick={onParcelClick} viewTick={viewTick} />
           )}
-          {!onlyPermits && !onlyRoads && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {!onlyPermits && !onlyRoads && !simultaneousLayers && showIssues && <IssueLayer active={active === 'issues'} muni={muni} onState={setLayerState} />}
+          {/* simultaneousLayers: every listed key rendered as its own always-on
+              GisLayers instance (not a single-select toggle), each tracking its
+              own load state for the legend above. */}
+          {simultaneousLayers?.map((key) => (
+            <GisLayers
+              key={key}
+              active={key}
+              onState={(s) => setSimulStates((prev) => ({ ...prev, [key]: s }))}
+            />
+          ))}
           {/* Independent of the single-select menu above (and mounted even in
               onlyPermits/onlyRoads) — reuses the same GisLayers fetch/render
               logic for just the 'zoning' entry, driven by its own toggle. */}
