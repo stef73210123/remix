@@ -16,6 +16,7 @@ import {
 } from '@/lib/crm'
 import type { FundraisingContact } from '@/lib/fundraising'
 import AdminNav from '@/app/admin/AdminNav'
+import ClearableInput from '@/app/ClearableInput'
 
 type TabKey = 'rfps' | CrmCategory | 'fundraising'
 type StateFilter = 'ALL' | StateCode
@@ -209,12 +210,12 @@ export default function DashboardClient({
 
       {/* Search */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 14, alignItems: 'center' }}>
-        <input
+        <ClearableInput
           className="input"
           placeholder="Search…"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ maxWidth: 320 }}
+          onChange={setQuery}
+          wrapperStyle={{ maxWidth: 320 }}
         />
         <span className="muted" style={{ fontSize: 13 }}>
           {tab === 'rfps'
