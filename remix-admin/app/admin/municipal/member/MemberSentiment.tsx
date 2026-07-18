@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { AnalysisDataset, MemberProfile } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
 import { fmtDateShort as fmtDateCompact } from '@/lib/municipal/date'
+import ClearableInput from '@/app/ClearableInput'
 
 function fmtDateShort(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
@@ -161,15 +162,16 @@ export default function MemberSentiment({
               What they said · {visibleEvidence.length}{visibleEvidence.length !== profile.evidence.length ? ` of ${profile.evidence.length}` : ''}
             </div>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-              <input
+              <ClearableInput
                 value={evQuery}
-                onChange={(e) => setEvQuery(e.target.value)}
+                onChange={setEvQuery}
                 placeholder="Search comments…"
+                wrapperStyle={{ minWidth: 160, maxWidth: '100%' }}
                 style={{
                   // 16px prevents iOS Safari from auto-zooming (and shifting the
                   // layout) when the field is focused.
                   fontSize: 16, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)',
-                  border: '1px solid var(--border)', color: 'var(--text)', minWidth: 160, maxWidth: '100%',
+                  border: '1px solid var(--border)', color: 'var(--text)',
                 }}
               />
               <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>

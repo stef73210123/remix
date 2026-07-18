@@ -171,6 +171,30 @@ export const NC_TAX_CAP_WATERFALL: WaterfallStep[] = [
   { label: '2026 Adopted Levy', value: 25789560, kind: 'total' },
 ]
 
+export interface LevyYear { year: number; levy: number }
+
+/** North Castle's total town-wide tax levy (general town + highway + fire
+ *  protection + dependent special districts, net of sales-tax credits — the
+ *  same "Total Tax Levy" the county levy, school levies, and independent
+ *  fire districts are explicitly excluded from), FY2020-2026.
+ *  2020-2024: NYS Comptroller's "Real Property Tax Levies, Taxable Full
+ *  Value and Full Value Tax Rates" annual workbooks (Town tab, North Castle
+ *  row, municipal code 550359000000) — osc.ny.gov/local-government/data.
+ *  2025-2026: the Town's own tax-cap-law worksheet (NC_TAX_CAP_WATERFALL
+ *  above) — used instead of OSC's independently-sourced 2025 figure
+ *  ($24,278,359.75, within 0.03% of this one) so the 2026 change chains
+ *  continuously from the exact base the Town itself calculated from. OSC
+ *  hasn't published a 2026 workbook yet (they lag roughly a year). */
+export const NC_TOTAL_TAX_LEVY_HISTORY: LevyYear[] = [
+  { year: 2020, levy: 24308335.16 },
+  { year: 2021, levy: 24390811.69 },
+  { year: 2022, levy: 24311171.13 },
+  { year: 2023, levy: 24240904.33 },
+  { year: 2024, levy: 24154836.55 },
+  { year: 2025, levy: 24271973 },
+  { year: 2026, levy: 25789560 },
+]
+
 export interface HomeownerTaxImpact {
   medianHomeValue: number
   assessedValue: number

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Sparkles, Send } from 'lucide-react'
 import { useLockBodyScroll } from './useLockBodyScroll'
+import ClearableInput from '@/app/ClearableInput'
 
 interface ChatTurn { role: 'user' | 'assistant'; content: string }
 
@@ -69,7 +70,7 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
   }
 
   const fieldStyle: React.CSSProperties = {
-    flex: 1, fontSize: 13.5, padding: '9px 12px', borderRadius: 8,
+    fontSize: 13.5, padding: '9px 12px', borderRadius: 8,
     background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)',
   }
 
@@ -163,11 +164,12 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
         </div>
 
         <form onSubmit={submit} style={{ display: 'flex', gap: 8, padding: '10px 18px 18px', flexShrink: 0 }}>
-          <input
+          <ClearableInput
             autoFocus
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={setInput}
             placeholder="Ask about budgets, boards, permits…"
+            wrapperStyle={{ flex: 1 }}
             style={fieldStyle}
           />
           <button type="submit" className="btn" disabled={sending || !input.trim()} aria-label="Send" style={{ padding: '9px 14px' }}>

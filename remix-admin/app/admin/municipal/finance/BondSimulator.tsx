@@ -3,6 +3,7 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT } from '@/lib/municipal/budget2026'
 import { Caret } from './FinanceCharts'
+import ClearableInput from '@/app/ClearableInput'
 
 function fmtUSDFull(v: number): string {
   return `${v < 0 ? '-' : ''}$${Math.abs(Math.round(v)).toLocaleString('en-US')}`
@@ -79,13 +80,14 @@ export function BondSimulator() {
           <div className="muted" style={{ marginBottom: 4 }}>Total project cost</div>
           <div style={currencyWrapStyle}>
             <span className="muted" style={{ paddingLeft: 10 }}>$</span>
-            <input
+            <ClearableInput
               type="text"
               inputMode="numeric"
               value={cost > 0 ? cost.toLocaleString('en-US') : ''}
-              onChange={(e) => setCost(parseCostInput(e.target.value))}
+              onChange={(v) => setCost(parseCostInput(v))}
               placeholder="0"
               aria-label="Total project cost"
+              wrapperStyle={{ flex: 1, minWidth: 0 }}
               style={currencyInputStyle}
             />
           </div>

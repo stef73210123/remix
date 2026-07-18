@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import ClearableInput from '@/app/ClearableInput'
 
 /**
  * Every North Castle tax parcel — the county- and state-wide "Westchester
@@ -111,6 +112,11 @@ export default function AllTaxParcelsList({
   const [expandedSbl, setExpandedSbl] = useState<string | null>(null)
   const [detailCache, setDetailCache] = useState<Record<string, Record<string, unknown>>>({})
   const listRef = useRef<HTMLDivElement | null>(null)
+  // The sticky column-header row inside the scroll container — its height has
+  // to be subtracted from the scroll target below, or "top of container"
+  // lands the selected row directly underneath it, cut off by the same
+  // amount as the header is tall.
+  const headerRef = useRef<HTMLDivElement | null>(null)
   // Set on a map click, consumed once the target page's rows arrive — scrolls
   // the selected row to the top of the list's own scroll area (not the page).
   const pendingScrollRef = useRef(false)
@@ -260,7 +266,10 @@ export default function AllTaxParcelsList({
       pendingScrollRef.current = false
       const containerRect = container.getBoundingClientRect()
       const rowRect = row.getBoundingClientRect()
-      container.scrollTop += rowRect.top - containerRect.top
+      // Land the row just below the sticky header, not flush behind it —
+      // the header's own height plus a small breathing-room gap.
+      const headerH = headerRef.current?.getBoundingClientRect().height ?? 0
+      container.scrollTop += rowRect.top - containerRect.top - headerH - 6
     }
   }, [parcelRows, expandedSbl])
 
@@ -308,13 +317,14 @@ export default function AllTaxParcelsList({
             </button>
           ))}
         </div>
-        <input
+        <ClearableInput
           type="text"
           value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          onChange={setSearchInput}
           placeholder="Search owner or address…"
           className="input"
-          style={{ flex: '1 1 220px', maxWidth: 320, fontSize: 12.5, padding: '5px 10px' }}
+          wrapperStyle={{ flex: '1 1 220px', maxWidth: 320 }}
+          style={{ fontSize: 12.5, padding: '5px 10px' }}
         />
       </div>
 
@@ -330,6 +340,7 @@ export default function AllTaxParcelsList({
 
       <div ref={listRef} style={{ maxHeight: 480, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 8 }}>
         <div
+          ref={headerRef}
           style={{
             position: 'sticky', top: 0, zIndex: 1, display: 'flex', gap: 8, alignItems: 'center',
             padding: '7px 10px', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em',

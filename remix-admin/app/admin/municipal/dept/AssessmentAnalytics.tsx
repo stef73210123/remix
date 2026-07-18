@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import BoardFilterDropdown from '../BoardFilterDropdown'
+import ClearableInput from '@/app/ClearableInput'
+import { NC_TOTAL_TAX_LEVY_HISTORY } from '@/lib/municipal/budget2026'
 
 const PARCELS_BASE = 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0'
 const NC_WHERE = "MUNI_NAME='North Castle'"
@@ -117,7 +118,7 @@ interface Summary {
 }
 interface ClassGroupRow { label: string; total: number }
 
-interface AVStats { median: number; p95: number }
+interface AVStats { median: number }
 
 /** Every parcel's TOTAL_AV, ascending — the only way to get an exact median,
  *  since ArcGIS's outStatistics has no median. Paginated (the service caps
@@ -141,15 +142,8 @@ async function fetchAssessedValueStats(): Promise<AVStats> {
     for (const f of feats) values.push(Number(f.attributes.TOTAL_AV ?? 0))
     offset += feats.length
   }
-  if (values.length === 0) return { median: 0, p95: 0 }
-  return {
-    median: values[Math.floor(values.length / 2)],
-    // The slider's top end — a handful of commercial/institutional parcels
-    // run into the millions and would otherwise squash every residential
-    // value into the first few pixels of travel. The number field beside
-    // the slider still reaches any value directly.
-    p95: values[Math.floor(values.length * 0.95)],
-  }
+  if (values.length === 0) return { median: 0 }
+  return { median: values[Math.floor(values.length / 2)] }
 }
 
 // Per $1,000 of assessed value, 2025-2026 tax year. County and Town rates
@@ -167,7 +161,7 @@ const SCHOOL_RATE_PER_1000: Record<string, number> = {
   'Valhalla': 957.924050,
 }
 const TAX_ESTIMATOR_SOURCE_NOTE =
-  'Source: Westchester County Tax Commission, 2025-2026 tax rates per $1,000 of assessed value — County, Town of North Castle, and School District (Byram Hills/Bedford/Valhalla, the three districts serving North Castle). Estimate only: excludes special districts (fire, water, sewer, lighting, ambulance) that apply to some parcels but not others, and rates are set annually.'
+  'Your total is split across County, Town of North Castle, and School District (Byram Hills/Bedford/Valhalla, the three districts serving North Castle) proportional to each one’s share of the combined 2025-2026 tax rate per $1,000 of assessed value. Source: Westchester County Tax Commission. Estimate only: excludes special districts (fire, water, sewer, lighting, ambulance) that apply to some parcels but not others, and rates are set annually.'
 
 function fmtUSD(v: number): string {
   if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(v >= 10_000_000 ? 1 : 2)}M`
@@ -178,142 +172,69 @@ function fmtUSDFull(v: number): string {
   return `$${Math.round(v).toLocaleString('en-US')}`
 }
 
-// NYS ORPTS's own historical roll archive (Socrata, data.ny.gov) — the live
-// county ArcGIS parcels layer only ever carries the current roll year, with
-// no history, so a 5-year trend has to come from this separate source. No
-// geometry here (tabular only), so it's used for this aggregate widget only;
-// the map keeps using the ArcGIS layer.
-const HISTORY_BASE = 'https://data.ny.gov/resource/7vem-aaz7.json'
-const NC_SWIS = '553800'
-const HISTORY_SOURCE_NOTE =
-  'Source: NYS Dept. of Taxation & Finance (ORPTS), Property Assessment Data from Local Assessment Rolls. Improvement value is derived (assessed total − land) per ORPTS convention. Grand totals across the whole roll, including exempt parcels.'
+const LEVY_SOURCE_NOTE =
+  'Total town-wide tax levy — general town, highway, fire protection, and dependent special districts (lighting/sewer/water), net of sales-tax credits. Excludes the county levy, independent fire districts, and school levies, which are set separately. Source: NYS Comptroller’s Real Property Tax Levies dataset (FY2020-2024) and the Town’s own tax-cap-law worksheet (FY2025-2026, including the 2026 voted override above the state cap).'
 
-interface HistoryYear { year: number; groups: Record<string, { land: number; total: number }> }
-
-/** One row per (roll year × property-class group) for North Castle, summed
- *  from the parcel-level roll — grouped server-side (via SoQL) so this stays
- *  a handful of rows instead of thousands. */
-async function fetchAssessmentHistory(): Promise<HistoryYear[]> {
-  const url =
-    `${HISTORY_BASE}?$select=roll_year,property_class,sum(assessment_land) as land,sum(assessment_total) as total` +
-    `&$where=${encodeURIComponent(`swis_code='${NC_SWIS}'`)}` +
-    `&$group=roll_year,property_class&$limit=5000`
-  const r = await fetch(url)
-  if (!r.ok) throw new Error('history')
-  const rows = (await r.json()) as { roll_year?: string; property_class?: string; land?: string; total?: string }[]
-
-  const byYear = new Map<number, Record<string, { land: number; total: number }>>()
-  for (const row of rows) {
-    const year = Number(row.roll_year)
-    const code = row.property_class
-    if (!year || !code) continue
-    const group = classGroupLabel(code)
-    const yearMap = byYear.get(year) ?? {}
-    const cur = yearMap[group] ?? { land: 0, total: 0 }
-    cur.land += Number(row.land ?? 0)
-    cur.total += Number(row.total ?? 0)
-    yearMap[group] = cur
-    byYear.set(year, yearMap)
-  }
-  return Array.from(byYear.entries())
-    .map(([year, groups]) => ({ year, groups }))
-    .sort((a, b) => a.year - b.year)
-    .slice(-5)
-}
-
-/** Vertical stacked bars (land at the base, improvement on top) — one flat
- *  color per series since both segments always coexist as a shared legend,
- *  not a per-bar identity; a 2px surface gap separates the two fills within
- *  each bar. */
-function LandImprovementChart({ data }: { data: { year: number; land: number; improvement: number }[] }) {
-  const max = Math.max(...data.map((d) => d.land + d.improvement), 1)
-  const barMaxHeight = 170
-
+/** A diverging (increase/decrease) horizontal bar per year, centered on a
+ *  zero baseline — orange/blue rather than red/green so it doesn't read as
+ *  "bad/good," just up/down, and stays distinguishable for color-blind
+ *  readers. Bar length is relative to the largest |change| in the window, so
+ *  a real standout (the 2026 cap override) reads as a real standout. */
+function LevyChangeChart({ rows }: { rows: { year: number; pct: number }[] }) {
+  const maxAbs = Math.max(...rows.map((r) => Math.abs(r.pct)), 0.01)
   return (
-    <div>
-      <div style={{ display: 'flex', gap: 14, marginBottom: 14, fontSize: 12 }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 9, height: 9, borderRadius: 2, background: '#1baf7a', display: 'inline-block' }} /> Land
-        </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 9, height: 9, borderRadius: 2, background: '#4a3aa7', display: 'inline-block' }} /> Improvement
-        </span>
-      </div>
-      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
-        {data.map((d) => {
-          const total = d.land + d.improvement
-          const totalH = (total / max) * barMaxHeight
-          const landH = total > 0 ? (d.land / total) * totalH : 0
-          const imprH = Math.max(totalH - landH - (landH > 0 && totalH - landH > 0 ? 2 : 0), 0)
-          return (
-            <div key={d.year} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, minWidth: 0 }}>
-              <div className="muted" style={{ fontSize: 10, fontVariantNumeric: 'tabular-nums' }}>{fmtUSD(total)}</div>
-              <div style={{ width: '100%', maxWidth: 56, height: barMaxHeight, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-                <div
-                  style={{ height: imprH, background: '#4a3aa7', borderRadius: '3px 3px 0 0', marginBottom: landH > 0 && imprH > 0 ? 2 : 0 }}
-                  title={`Improvement: ${fmtUSDFull(d.improvement)}`}
-                />
-                <div
-                  style={{ height: landH, background: '#1baf7a', borderRadius: imprH === 0 ? '3px 3px 0 0' : 0 }}
-                  title={`Land: ${fmtUSDFull(d.land)}`}
-                />
-              </div>
-              <div style={{ fontSize: 11.5, fontWeight: 600 }}>{d.year}</div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {rows.map((r) => {
+        const halfWidthPct = (Math.abs(r.pct) / maxAbs) * 50
+        const positive = r.pct >= 0
+        return (
+          <div key={r.year} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ width: 34, fontSize: 12, fontWeight: 600, flexShrink: 0 }}>{r.year}</span>
+            <div style={{ flex: 1, position: 'relative', height: 18, background: 'var(--panel-2)', borderRadius: 4 }}>
+              <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'var(--border)' }} />
+              <div
+                style={{
+                  position: 'absolute', top: 2, bottom: 2,
+                  left: positive ? '50%' : `${50 - halfWidthPct}%`,
+                  width: `${halfWidthPct}%`,
+                  background: positive ? '#eb6834' : '#2a78d6',
+                  borderRadius: 3,
+                }}
+              />
             </div>
-          )
-        })}
-      </div>
+            <span
+              style={{
+                width: 58, textAlign: 'right', fontSize: 12.5, fontWeight: 700, fontVariantNumeric: 'tabular-nums',
+                color: positive ? '#eb6834' : '#2a78d6',
+              }}
+            >
+              {positive ? '+' : ''}{r.pct.toFixed(2)}%
+            </span>
+          </div>
+        )
+      })}
     </div>
   )
 }
 
-/** Town-wide land vs. improvement assessment, by roll year — the last 5 years
- *  available from the state's own historical roll archive, filterable by
- *  property-type group (all shown by default). Separate widget from the tax
- *  estimator above it since it answers a different question (how the roll's
- *  composition has shifted over time, not what one parcel would owe). */
-function LandImprovementWidget() {
-  const [history, setHistory] = useState<HistoryYear[] | null>(null)
-  const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
-  const [hiddenGroups, setHiddenGroups] = useState<Set<string>>(new Set())
-
-  useEffect(() => {
-    let cancelled = false
-    fetchAssessmentHistory()
-      .then((h) => { if (!cancelled) { setHistory(h); setStatus('ok') } })
-      .catch(() => { if (!cancelled) setStatus('error') })
-    return () => { cancelled = true }
-  }, [])
-
-  if (status === 'error') {
-    return <div className="muted" style={{ padding: 20, fontSize: 12.5, textAlign: 'center' }}>Unable to load assessment history right now.</div>
-  }
-  if (status === 'loading' || !history) {
-    return <div className="muted" style={{ padding: 20, fontSize: 12.5, textAlign: 'center' }}>Loading…</div>
-  }
-
-  const allGroups = Array.from(new Set(history.flatMap((h) => Object.keys(h.groups)))).sort()
-  const chartData = history.map((h) => {
-    let land = 0
-    let total = 0
-    for (const [group, v] of Object.entries(h.groups)) {
-      if (hiddenGroups.has(group)) continue
-      land += v.land
-      total += v.total
-    }
-    return { year: h.year, land, improvement: Math.max(total - land, 0) }
-  })
+/** Total tax levy, year-over-year % change — the last 5 fiscal years. A
+ *  separate question from the tax estimator above it (what the whole levy
+ *  did year to year, not what one parcel would owe), and from static,
+ *  already-verified figures (NC_TOTAL_TAX_LEVY_HISTORY) rather than a live
+ *  query, since no live-queryable source publishes this figure. */
+function LevyChangeWidget() {
+  const rows = NC_TOTAL_TAX_LEVY_HISTORY
+    .slice(1)
+    .map((y, i) => ({ year: y.year, pct: ((y.levy - NC_TOTAL_TAX_LEVY_HISTORY[i].levy) / NC_TOTAL_TAX_LEVY_HISTORY[i].levy) * 100 }))
+    .slice(-5)
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
-        <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Land vs. improvement assessment, by year
-        </div>
-        <BoardFilterDropdown label="Property types" options={allGroups} hidden={hiddenGroups} onChange={setHiddenGroups} />
+      <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 14 }}>
+        Total tax levy, year-over-year % change
       </div>
-      <LandImprovementChart data={chartData} />
-      <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{HISTORY_SOURCE_NOTE}</div>
+      <LevyChangeChart rows={rows} />
+      <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{LEVY_SOURCE_NOTE}</div>
     </div>
   )
 }
@@ -327,8 +248,8 @@ export default function AssessmentAnalytics() {
   const [classGroups, setClassGroups] = useState<ClassGroupRow[] | null>(null)
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
   const [avStats, setAvStats] = useState<AVStats | null>(null)
-  const [selectedAV, setSelectedAV] = useState<number | null>(null)
-  const [avInput, setAvInput] = useState('')
+  const [selectedTax, setSelectedTax] = useState<number | null>(null)
+  const [taxInput, setTaxInput] = useState('')
   const [district, setDistrict] = useState<keyof typeof SCHOOL_RATE_PER_1000>('Byram Hills')
 
   useEffect(() => {
@@ -337,8 +258,12 @@ export default function AssessmentAnalytics() {
       .then((s) => {
         if (cancelled) return
         setAvStats(s)
-        setSelectedAV(s.median)
-        setAvInput(Math.round(s.median).toLocaleString('en-US'))
+        // Seed the box with what the median-assessed home would owe (at the
+        // default district's rate) — a realistic starting point, not zero.
+        const totalRate = COUNTY_RATE_PER_1000 + TOWN_RATE_PER_1000 + SCHOOL_RATE_PER_1000['Byram Hills']
+        const seedTax = Math.round((s.median / 1000) * totalRate)
+        setSelectedTax(seedTax)
+        setTaxInput(seedTax.toLocaleString('en-US'))
       })
       .catch(() => { /* median stat tile / estimator just won't render */ })
     return () => { cancelled = true }
@@ -416,21 +341,20 @@ export default function AssessmentAnalytics() {
   }
 
   const taxablePct = summary.rollTotal > 0 ? (summary.taxableTotal / summary.rollTotal) * 100 : 0
-  const av = selectedAV ?? 0
-  const countyTax = (av / 1000) * COUNTY_RATE_PER_1000
-  const townTax = (av / 1000) * TOWN_RATE_PER_1000
-  const schoolTax = (av / 1000) * SCHOOL_RATE_PER_1000[district]
+  // The typed number IS the total tax bill — split into the three components
+  // by each jurisdiction's share of the combined rate, so they always sum
+  // back to exactly what was typed (never a different, confusing total).
+  const totalTax = selectedTax ?? 0
+  const combinedRate = COUNTY_RATE_PER_1000 + TOWN_RATE_PER_1000 + SCHOOL_RATE_PER_1000[district]
+  const countyTax = totalTax * (COUNTY_RATE_PER_1000 / combinedRate)
+  const townTax = totalTax * (TOWN_RATE_PER_1000 / combinedRate)
+  const schoolTax = totalTax * (SCHOOL_RATE_PER_1000[district] / combinedRate)
 
-  function setAV(v: number) {
-    const clamped = Math.max(0, v)
-    setSelectedAV(clamped)
-    setAvInput(clamped.toLocaleString('en-US'))
-  }
-  function onAvInputChange(text: string) {
+  function onTaxInputChange(text: string) {
     const digits = text.replace(/[^0-9]/g, '')
     const n = digits === '' ? 0 : Number(digits)
-    setAvInput(digits === '' ? '' : n.toLocaleString('en-US'))
-    setSelectedAV(n)
+    setTaxInput(digits === '' ? '' : n.toLocaleString('en-US'))
+    setSelectedTax(n)
   }
 
   return (
@@ -483,36 +407,21 @@ export default function AssessmentAnalytics() {
             <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
               Tax assessment breakdown
             </div>
-            {/* Assessed value (the slider/input) drives all three tax figures below —
-                it leads the row so it reads as the primary control; the school-district
-                picker is a secondary refinement (County and Town rates are the same
-                townwide, only School varies by district), not the whole point of the
-                widget. */}
+            <div className="muted" style={{ fontSize: 11.5, marginBottom: 10 }}>
+              Type a total annual tax bill to see how it splits across County, Town, and School.
+            </div>
             <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
-              <input
-                type="range"
-                min={0}
-                // Grows past the p95 default ceiling whenever the typed value
-                // exceeds it, so the slider's fill position always matches what
-                // the $ input and donut are showing instead of visually
-                // clamping at max while the real value keeps climbing.
-                max={Math.max(avStats.p95, av, 1)}
-                step={100}
-                value={av}
-                onChange={(e) => setAV(Number(e.target.value))}
-                style={{ flex: '1 1 200px', minWidth: 140 }}
-                aria-label="Assessed value"
-              />
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span className="muted" style={{ fontSize: 13 }}>$</span>
-                <input
+                <ClearableInput
                   type="text"
                   inputMode="numeric"
-                  value={avInput}
-                  onChange={(e) => onAvInputChange(e.target.value)}
+                  value={taxInput}
+                  onChange={onTaxInputChange}
                   className="input"
-                  style={{ width: 112, fontSize: 12.5, padding: '5px 8px' }}
-                  aria-label="Assessed value (exact)"
+                  wrapperStyle={{ width: 128 }}
+                  style={{ fontSize: 12.5, padding: '5px 8px' }}
+                  aria-label="Annual tax bill"
                 />
               </div>
               <select
@@ -532,7 +441,7 @@ export default function AssessmentAnalytics() {
                 { label: 'Town', value: townTax, color: '#1baf7a' },
                 { label: 'School', value: schoolTax, color: '#4a3aa7' },
               ]}
-              centerValue={fmtUSDFull(countyTax + townTax + schoolTax)}
+              centerValue={fmtUSDFull(totalTax)}
               centerLabel="Est. total taxes"
             />
             <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{TAX_ESTIMATOR_SOURCE_NOTE}</div>
@@ -540,7 +449,7 @@ export default function AssessmentAnalytics() {
         )}
 
         <div className="card" style={{ padding: 16, flex: '1 1 420px', minWidth: 0 }}>
-          <LandImprovementWidget />
+          <LevyChangeWidget />
         </div>
       </div>
     </div>
