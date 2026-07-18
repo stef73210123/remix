@@ -96,6 +96,45 @@ a {
   border-color: var(--primary);
 }
 
+/* "Ask" action button — deliberately distinct from the neutral .btn/.btn
+   secondary actions beside it (blue, always, regardless of flavor accent)
+   with a slow gradient sweep to draw a first-time visitor's eye without
+   being an actual blinking/attention-grabbing animation. */
+.btn-ask {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(110deg, #1d4ed8, #3b82f6, #7dd3fc, #3b82f6, #1d4ed8);
+  background-size: 250% 100%;
+  animation: btn-ask-shimmer 5s ease-in-out infinite;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35), 0 2px 10px rgba(29, 78, 216, 0.35);
+  transition: box-shadow 0.15s ease;
+}
+
+.btn-ask:hover {
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.55), 0 4px 16px rgba(29, 78, 216, 0.5);
+}
+
+@keyframes btn-ask-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-ask {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+
 /* Horizontal-scroll strip for pill/chip rows on narrow screens.
    Pills stay on one line and scroll sideways instead of stacking. */
 .pill-strip {
@@ -111,6 +150,24 @@ a {
 .pill-strip > .btn {
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+/* Dropdown menu items inside MuniTabs' Boards/Committees/Departments groups. */
+.tabnav-item {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-decoration: none;
+  color: var(--text);
+  white-space: nowrap;
+}
+.tabnav-item:hover {
+  background: var(--panel-2);
+}
+.tabnav-item.active {
+  background: var(--primary);
+  color: #fff;
 }
 
 .input {

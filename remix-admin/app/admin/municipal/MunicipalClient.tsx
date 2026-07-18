@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
-import { OTHER_TABS, hrefFor } from '@/app/admin/municipal/MuniTabs'
+import { TabDropdownGroups } from '@/app/admin/municipal/MuniTabs'
 import { useTabScrollRestore } from './useTabScroll'
 import dynamic from 'next/dynamic'
 import Demographics from './Demographics'
@@ -520,26 +520,22 @@ export default function MunicipalClient({
             </div>
           )}
           {/* On ONC this strip sticks directly below the masthead (top =
-              measured header height) so navigation stays reachable. */}
+              measured header height) so navigation stays reachable. The
+              board-analysis chips scroll horizontally in their own inner
+              strip; the Boards/Committees/Departments dropdown buttons sit
+              outside that overflow container so their open menus don't get
+              clipped by it. */}
           <div
-            ref={tabScrollRef}
-            className={isOpen ? 'pill-strip board-tabs-sticky' : 'pill-strip'}
-            style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', marginBottom: 22, ...(isOpen ? { top: headerH } : {}) }}
+            className={isOpen ? 'board-tabs-sticky' : undefined}
+            style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 22, ...(isOpen ? { top: headerH } : {}) }}
           >
-            <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
-            {boardTabs.map((b) => (
-              <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
-            ))}
-            {town === 'nc' && OTHER_TABS.map((t) => (
-              <a
-                key={t.key}
-                href={hrefFor(town, t)}
-                className="btn secondary"
-                style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}
-              >
-                {t.label}
-              </a>
-            ))}
+            <div ref={tabScrollRef} className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', minWidth: 0 }}>
+              <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
+              {boardTabs.map((b) => (
+                <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
+              ))}
+            </div>
+            {town === 'nc' && <TabDropdownGroups muni={town} active="" />}
           </div>
 
           {/* Board view — the enriched profile (members, themes, cases, meeting-by-
