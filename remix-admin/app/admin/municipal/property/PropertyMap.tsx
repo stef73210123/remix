@@ -32,6 +32,10 @@ function Sat({ lat, lng, zoom, height }: { lat: number; lng: number; zoom: numbe
         attribution="Tiles &copy; Esri"
         maxZoom={19}
       />
+      {/* Roads, then place/boundary labels on top — together with the imagery
+          base above, this is Esri's standard "hybrid" combo (imagery alone,
+          with no road overlay, reads as plain satellite). */}
+      <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}" maxZoom={19} />
       <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" maxZoom={19} />
       <Marker position={[lat, lng]} icon={dot} />
       <Recenter lat={lat} lng={lng} zoom={zoom} />

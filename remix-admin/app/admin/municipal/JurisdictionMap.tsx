@@ -1109,12 +1109,12 @@ export default function JurisdictionMap({
    *  the Planning Board page, whose case map is locked to onlyPermits (so the
    *  general County GIS menu, which also lists 'zoning', isn't reachable there). */
   showZoning?: boolean
-  /** Light gray canvas basemap (instead of the default satellite imagery)
+  /** Light gray canvas basemap (instead of the default hybrid imagery+roads)
    *  while one of these GIS layer keys is active — used on the Assessor
    *  page, where a neutral light background reads the Assessment
    *  choropleth's fill colors more clearly than dark satellite ground does,
    *  while the centroid layer's dots read fine (and look better) over
-   *  satellite imagery. Layers not listed here always use satellite. */
+   *  imagery. Layers not listed here always use the hybrid basemap. */
   lightBasemapLayers?: string[]
   height?: number
   /** Fires with a clicked parcel's raw attributes when the Assessment layer
@@ -1331,7 +1331,13 @@ export default function JurisdictionMap({
                 attribution="Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community"
                 maxZoom={19}
               />
-              {/* Place/road labels over the imagery, so it reads like a normal map. */}
+              {/* Roads, then place/boundary labels over the imagery — together
+                  this is Esri's standard "hybrid" combo; imagery alone (no
+                  road overlay) reads as plain satellite. */}
+              <TileLayer
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}"
+                maxZoom={19}
+              />
               <TileLayer
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
                 maxZoom={19}
