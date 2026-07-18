@@ -8,6 +8,7 @@ import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
 import CivicActions from '@/app/admin/municipal/CivicActions'
 import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/MeetingTimeline'
 import MeetingList from '@/app/admin/municipal/MeetingList'
+import ClearableInput from '@/app/ClearableInput'
 import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipal/permits'
 import { getContractorWebsite } from '@/lib/municipal/contractorLinks'
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
@@ -79,6 +80,28 @@ function permitDetailRows(p: PermitRecord): { label: string; value: React.ReactN
   if (p.permitIso) rows.push({ label: 'Permit issued', value: fmtDate(p.permitIso) })
   if (p.closeIso) rows.push({ label: 'Closed / CO', value: fmtDate(p.closeIso) })
   return rows
+}
+
+function permitToTimelineItem(p: PermitRecord): TimelineItem {
+  const rows = permitDetailRows(p)
+  return {
+    key: p.permitNumber || `${p.address}-${p.permitIso}`,
+    date: new Date((p.permitIso as string) + 'T00:00:00'),
+    subtitle: p.address,
+    board: p.category,
+    past: true,
+    links: p.permitNumber ? <span className="badge">#{p.permitNumber}</span> : undefined,
+    detail: rows.length > 0 ? (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {rows.map((r) => (
+          <div key={r.label} style={{ display: 'flex', gap: 10, fontSize: 12.5, lineHeight: 1.5, flexWrap: 'wrap' }}>
+            <span className="muted" style={{ minWidth: 128, flexShrink: 0 }}>{r.label}</span>
+            <span>{r.value}</span>
+          </div>
+        ))}
+      </div>
+    ) : undefined,
+  }
 }
 
 function Tile({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -505,6 +528,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
   const [scatterType, setScatterType] = useState<TypeFilter | null>(null)
   const [contractorType, setContractorType] = useState<TypeFilter | null>(null)
   const [scatterStage, setScatterStage] = useState<ScatterStage>('app_permit')
+  const [addressSearch, setAddressSearch] = useState('')
 
   useEffect(() => {
     setLoading(true)
@@ -609,34 +633,25 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       .filter((p) => p.days >= 0)
   }, [fullPermits, dataset, activeScatterYear, activeScatterType, scatterStage])
 
+  // Matching-address results search the full permit set (once loaded), not
+  // just the latest 80, since an older permit at a given address should still
+  // be findable; an empty search falls back to the plain "most recent" view.
+  const addressTerm = addressSearch.trim().toLowerCase()
+  const permitSearchResults = useMemo(() => {
+    if (!addressTerm) return null
+    const src = fullPermits ?? dataset?.recent ?? []
+    return src
+      .filter((p) => p.permitIso && p.address?.toLowerCase().includes(addressTerm))
+      .sort((a, b) => (b.permitIso || '').localeCompare(a.permitIso || ''))
+  }, [fullPermits, dataset, addressTerm])
   const timelineItems = useMemo<TimelineItem[]>(() => {
-    if (!dataset) return []
-    return dataset.recent
-      .filter((p) => p.permitIso)
+    const src = permitSearchResults ?? (dataset ? dataset.recent.filter((p) => p.permitIso) : null)
+    if (!src) return []
+    return src
       .slice(0, 80)
-      .map((p) => {
-        const rows = permitDetailRows(p)
-        return {
-          key: p.permitNumber || `${p.address}-${p.permitIso}`,
-          date: new Date((p.permitIso as string) + 'T00:00:00'),
-          subtitle: p.address,
-          board: p.category,
-          past: true,
-          links: p.permitNumber ? <span className="badge">#{p.permitNumber}</span> : undefined,
-          detail: rows.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {rows.map((r) => (
-                <div key={r.label} style={{ display: 'flex', gap: 10, fontSize: 12.5, lineHeight: 1.5, flexWrap: 'wrap' }}>
-                  <span className="muted" style={{ minWidth: 128, flexShrink: 0 }}>{r.label}</span>
-                  <span>{r.value}</span>
-                </div>
-              ))}
-            </div>
-          ) : undefined,
-        }
-      })
+      .map(permitToTimelineItem)
       .sort((a, b) => (a.date!.getTime() - b.date!.getTime()))
-  }, [dataset])
+  }, [dataset, permitSearchResults])
   // Most recent permit date in the dataset — flags how fresh the offline PDF
   // extract actually is, since it doesn't auto-refresh with the Town's own records.
   const latestPermitDate = useMemo(() => {
@@ -719,7 +734,25 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
 
           {/* Recent permit activity — directly below the map. */}
           <div style={{ marginBottom: 8 }}>
-            <SectionHead title="Recent permit activity" sub={`latest ${Math.min(80, timelineItems.length)} permits issued`} />
+            <SectionHead
+              title="Permit database"
+              sub={
+                permitSearchResults
+                  ? `${fmtInt(permitSearchResults.length)} match${permitSearchResults.length === 1 ? '' : 'es'} for "${addressSearch.trim()}"${permitSearchResults.length > 80 ? ' · showing 80 most recent' : ''}`
+                  : `latest ${Math.min(80, timelineItems.length)} permits issued`
+              }
+              right={
+                <ClearableInput
+                  type="text"
+                  value={addressSearch}
+                  onChange={setAddressSearch}
+                  placeholder="Search by address…"
+                  className="input"
+                  wrapperStyle={{ flex: '1 1 220px', maxWidth: 280 }}
+                  style={{ fontSize: 12.5, padding: '5px 10px' }}
+                />
+              }
+            />
             {latestPermitDate && (
               <div className="muted" style={{ fontSize: 11 }}>
                 Data current as of {fmtDate(latestPermitDate)} — more recent permit records have been requested from the Building Department.
@@ -730,12 +763,12 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             items={timelineItems}
             selectedKey={selectedPermitKey}
             onSelect={setSelectedPermitKey}
-            emptyText="No recent permits."
+            emptyText="No permits match that address."
           />
           <MeetingList
             items={timelineItems}
             maxHeight={340}
-            emptyText="No recent permits."
+            emptyText="No permits match that address."
             selectedKey={selectedPermitKey}
             onSelect={setSelectedPermitKey}
           />
