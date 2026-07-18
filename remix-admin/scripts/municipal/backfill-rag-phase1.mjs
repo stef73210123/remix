@@ -236,9 +236,11 @@ async function ingestBudgetDocuments(client, muniId, stats) {
   {
     const lines = ['How North Castle’s 2026 total tax levy was calculated, step by step, under New York’s tax-cap law (General Municipal Law §3-c):']
     for (const step of budget2026.NC_TAX_CAP_WATERFALL) {
-      lines.push(step.kind === 'total'
-        ? `${step.label}: ${fmtUSD(step.value)}`
-        : `  ${step.value >= 0 ? 'Add' : 'Subtract'} ${step.label}: ${fmtUSD(Math.abs(step.value))}`)
+      lines.push(step.kind === 'delta'
+        ? `  ${step.value >= 0 ? 'Add' : 'Subtract'} ${step.label}: ${fmtUSD(Math.abs(step.value))}`
+        : step.kind === 'benchmark'
+          ? `${step.label} (state-calculated cap): ${fmtUSD(step.value)}`
+          : `${step.label}: ${fmtUSD(step.value)}`)
     }
     docs.push({
       title: 'How North Castle’s 2026 Tax Levy Was Calculated (Tax Cap Worksheet)',

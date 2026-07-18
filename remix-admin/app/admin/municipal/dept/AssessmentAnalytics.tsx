@@ -179,6 +179,27 @@ interface WaterfallRow extends WaterfallStep {
   barStart: number
   barEnd: number
   isCheckpoint: boolean
+  /** % change vs. the value immediately behind this step (a delta's own
+   *  size relative to the running total before it; a checkpoint's
+   *  cumulative change from the walk's starting checkpoint). Null for the
+   *  very first row, which has no prior value to compare against. */
+  pctChange: number | null
+}
+
+/** A 'benchmark' step doesn't get a bar row of its own — it's drawn as a
+ *  vertical reference line across the whole chart instead (see
+ *  BENCHMARK_COLOR below). pctChange is always vs. the walk's starting
+ *  checkpoint, matching the checkpoint rows' convention. */
+interface BenchmarkMarker {
+  label: string
+  value: number
+  pctChange: number | null
+}
+
+const BENCHMARK_COLOR = '#c9424a'
+
+function fmtPct(pct: number): string {
+  return `${pct >= 0 ? '+' : '-'}${Math.abs(pct).toFixed(1)}%`
 }
 
 /** Rounds a raw axis-padding amount up to a "nice" 1/2/5×10^n step, so a
@@ -191,20 +212,23 @@ function niceStep(raw: number): number {
   return mult * magnitude
 }
 
-/** The checkpoints in this walk (the FYE levy, the state cap, the adopted
- *  levy) sit within ~6% of each other — and every step in between is
- *  smaller still. Scaling bars from $0 makes the checkpoints look nearly
- *  identical and shrinks every delta to an illegible sliver (some below a
- *  pixel). A bridge/waterfall chart's job is to show the shape of a walk
- *  from a start value to an end value, not to compare that walk to zero —
- *  every real bridge-chart tool (Excel, Tableau, PowerBI) auto-scales this
- *  same way — so the axis is zoomed to the walk's own range instead, with
- *  ~12% padding rounded to a clean step. The chart discloses this (it isn't
- *  a $0 baseline) via the axis labels and caption below it. */
+/** The two remaining bar checkpoints (the FYE levy and the adopted levy)
+ *  sit within ~6% of each other — and every step in between is smaller
+ *  still. Scaling bars from $0 makes them look nearly identical and shrinks
+ *  every delta to an illegible sliver (some below a pixel). A bridge/
+ *  waterfall chart's job is to show the shape of a walk from a start value
+ *  to an end value, not to compare that walk to zero — every real bridge-
+ *  chart tool (Excel, Tableau, PowerBI) auto-scales this same way — so the
+ *  axis is zoomed to the walk's own range instead, with ~12% padding
+ *  rounded to a clean step. The chart discloses this (it isn't a $0
+ *  baseline) via the axis labels and caption below it. A 'benchmark' step
+ *  doesn't add to the running total (it's a reference line, not a levied
+ *  amount or a contribution) — its waypoint is wherever the walk already is. */
 function waterfallDomain(steps: WaterfallStep[]): [number, number] {
   let running = 0
   const waypoints = steps.map((s) => {
-    running = s.kind === 'total' ? s.value : running + s.value
+    if (s.kind === 'total') running = s.value
+    else if (s.kind === 'delta') running += s.value
     return running
   })
   const rawMin = Math.min(...waypoints)
@@ -215,38 +239,61 @@ function waterfallDomain(steps: WaterfallStep[]): [number, number] {
 }
 
 /** Turns the raw {label, value, kind} steps into bar spans, against the
- *  zoomed domain above rather than absolute zero: a 'total' step is a
- *  checkpoint bar running from the domain's left edge to its value (so its
- *  length is comparable to the other checkpoints and to the deltas); a
- *  'delta' step floats from the running total left by the previous step to
- *  the new one, in whichever direction it moves. */
-function toWaterfallRows(steps: WaterfallStep[], domainMin: number): WaterfallRow[] {
+ *  zoomed domain above rather than absolute zero, plus a separate list of
+ *  benchmark markers (no bar, no effect on the running total — see
+ *  waterfallDomain above): a 'total' step is a checkpoint bar running from
+ *  the domain's left edge to its value (so its length is comparable to the
+ *  other checkpoint and to the deltas); a 'delta' step floats from the
+ *  running total left by the previous step to the new one, in whichever
+ *  direction it moves. */
+function toWaterfallRows(steps: WaterfallStep[], domainMin: number): { rows: WaterfallRow[]; benchmarks: BenchmarkMarker[] } {
   let running = 0
-  return steps.map((s) => {
+  const baseValue = steps.find((s) => s.kind === 'total')?.value ?? 0
+  const rows: WaterfallRow[] = []
+  const benchmarks: BenchmarkMarker[] = []
+  for (const s of steps) {
     if (s.kind === 'total') {
+      const pctChange = rows.length === 0 ? null : ((s.value - baseValue) / baseValue) * 100
       running = s.value
-      return { ...s, barStart: domainMin, barEnd: s.value, isCheckpoint: true }
+      rows.push({ ...s, barStart: domainMin, barEnd: s.value, isCheckpoint: true, pctChange })
+    } else if (s.kind === 'delta') {
+      const start = running
+      running += s.value
+      const pctChange = start !== 0 ? (s.value / start) * 100 : null
+      rows.push({ ...s, barStart: Math.min(start, running), barEnd: Math.max(start, running), isCheckpoint: false, pctChange })
+    } else {
+      benchmarks.push({ label: s.label, value: s.value, pctChange: baseValue !== 0 ? ((s.value - baseValue) / baseValue) * 100 : null })
     }
-    const start = running
-    running += s.value
-    return { ...s, barStart: Math.min(start, running), barEnd: Math.max(start, running), isCheckpoint: false }
-  })
+  }
+  return { rows, benchmarks }
 }
 
-/** Horizontal bridge/waterfall: checkpoints (the starting levy, the state
- *  cap limit, the adopted levy) get a solid bar from the zoomed axis's left
- *  edge; each step in between floats a bar spanning just its own
- *  contribution — so the chart reads left-to-right as the actual arithmetic
- *  behind the final number, not a single opaque percentage, and (thanks to
- *  the zoomed domain) every step's bar length is actually legible instead
- *  of the checkpoints swallowing the whole track. Orange/blue (not
- *  red/green) for increase/decrease, consistent with the rest of this page;
- *  checkpoints get a third, distinct color since they're a different kind
- *  of thing. */
+// The row layout below is label(128) + gap(8) + track(flex) + gap(8) + value(118) —
+// fixed on both sides of the flexible track, so a benchmark line's horizontal
+// position within the track can be placed with plain CSS calc() against these
+// same constants rather than measuring the DOM.
+const ROW_LABEL_W = 128
+const ROW_VALUE_W = 118
+const ROW_SIDE_W = ROW_LABEL_W + 8 + 8 + ROW_VALUE_W
+
+/** Horizontal bridge/waterfall: checkpoints (the starting and adopted levy)
+ *  get a solid bar from the zoomed axis's left edge; each step in between
+ *  floats a bar spanning just its own contribution — so the chart reads
+ *  left-to-right as the actual arithmetic behind the final number, not a
+ *  single opaque percentage, and (thanks to the zoomed domain) every step's
+ *  bar length is actually legible instead of the checkpoints swallowing the
+ *  whole track. The state-calculated Tax Levy Limit isn't a levied amount
+ *  the walk passes through like the others — it's a threshold — so it's
+ *  drawn as a dashed vertical line across every row instead of a bar of its
+ *  own; the "Override" bar right after it visibly starts exactly where the
+ *  line sits, showing the override for what it is. Orange/blue (not red/
+ *  green) for increase/decrease, consistent with the rest of this page;
+ *  checkpoints get a third, distinct color, and the benchmark line a
+ *  fourth, since they're each a different kind of thing. */
 function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
   const [domainMin, domainMax] = waterfallDomain(steps)
   const domainSpan = domainMax - domainMin
-  const rows = toWaterfallRows(steps, domainMin)
+  const { rows, benchmarks } = toWaterfallRows(steps, domainMin)
   return (
     <div>
       <div style={{ display: 'flex', gap: 14, marginBottom: 12, fontSize: 11.5, flexWrap: 'wrap' }}>
@@ -259,42 +306,79 @@ function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
         <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ width: 9, height: 9, borderRadius: 2, background: '#2a78d6', display: 'inline-block' }} /> Reduces the levy
         </span>
+        {benchmarks.map((b) => (
+          <span key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ width: 14, height: 0, borderTop: `2px dashed ${BENCHMARK_COLOR}`, display: 'inline-block' }} /> {b.label} (state cap)
+          </span>
+        ))}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-        {rows.map((r) => {
-          const startPct = ((r.barStart - domainMin) / domainSpan) * 100
-          const widthPct = Math.max(((r.barEnd - r.barStart) / domainSpan) * 100, 0.6)
-          const color = r.isCheckpoint ? '#4a3aa7' : r.value >= 0 ? '#eb6834' : '#2a78d6'
+      <div style={{ position: 'relative', paddingTop: 16 }}>
+        {benchmarks.map((b) => {
+          const fraction = Math.min(1, Math.max(0, (b.value - domainMin) / domainSpan))
+          const left = `calc(${ROW_LABEL_W + 8}px + (100% - ${ROW_SIDE_W}px) * ${fraction})`
           return (
-            <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ width: 128, flexShrink: 0, fontSize: 10.5, lineHeight: 1.25, color: 'var(--muted)' }}>{r.label}</span>
-              <div style={{ flex: 1, position: 'relative', height: 15, background: 'var(--panel-2)', borderRadius: 3, minWidth: 0 }}>
-                <div
-                  style={{
-                    position: 'absolute', left: `${startPct}%`, width: `${widthPct}%`, top: 1, bottom: 1,
-                    background: color, borderRadius: 2,
-                  }}
-                  title={`${r.label}: ${r.isCheckpoint ? fmtUSDFull(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSDFull(Math.abs(r.value))}`}`}
-                />
+            <div key={b.label}>
+              <div
+                style={{
+                  position: 'absolute', top: 16, bottom: 0, left, width: 0,
+                  borderLeft: `2px dashed ${BENCHMARK_COLOR}`, pointerEvents: 'none',
+                }}
+                title={`${b.label}: ${fmtUSDFull(b.value)}${b.pctChange != null ? ` (${fmtPct(b.pctChange)} vs. the starting levy)` : ''}`}
+              />
+              <div
+                style={{
+                  position: 'absolute', top: 0, left, transform: 'translateX(-50%)',
+                  fontSize: 9, fontWeight: 700, color: BENCHMARK_COLOR, whiteSpace: 'nowrap',
+                }}
+              >
+                Cap: {fmtUSD(b.value)}
               </div>
-              <span style={{ width: 76, textAlign: 'right', flexShrink: 0, fontSize: 11, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
-                {r.isCheckpoint ? fmtUSDFull(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSDFull(Math.abs(r.value))}`}
-              </span>
             </div>
           )
         })}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+          {rows.map((r) => {
+            const startPct = ((r.barStart - domainMin) / domainSpan) * 100
+            const widthPct = Math.max(((r.barEnd - r.barStart) / domainSpan) * 100, 0.6)
+            const color = r.isCheckpoint ? '#4a3aa7' : r.value >= 0 ? '#eb6834' : '#2a78d6'
+            const dollarText = r.isCheckpoint ? fmtUSDFull(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSDFull(Math.abs(r.value))}`
+            const pctColor = r.pctChange != null && r.pctChange < 0 ? '#2a78d6' : '#eb6834'
+            return (
+              <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ width: ROW_LABEL_W, flexShrink: 0, fontSize: 10.5, lineHeight: 1.25, color: 'var(--muted)' }}>{r.label}</span>
+                <div style={{ flex: 1, position: 'relative', height: 15, background: 'var(--panel-2)', borderRadius: 3, minWidth: 0 }}>
+                  <div
+                    style={{
+                      position: 'absolute', left: `${startPct}%`, width: `${widthPct}%`, top: 1, bottom: 1,
+                      background: color, borderRadius: 2,
+                    }}
+                    title={`${r.label}: ${dollarText}${r.pctChange != null ? ` (${fmtPct(r.pctChange)})` : ''}`}
+                  />
+                </div>
+                <span style={{ width: ROW_VALUE_W, textAlign: 'right', flexShrink: 0 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{dollarText}</span>
+                  {r.pctChange != null && (
+                    <span style={{ fontSize: 9.5, fontWeight: 600, marginLeft: 5, color: pctColor, fontVariantNumeric: 'tabular-nums' }}>
+                      {fmtPct(r.pctChange)}
+                    </span>
+                  )}
+                </span>
+              </div>
+            )
+          })}
+        </div>
       </div>
       {/* Axis bounds, so the zoomed (non-zero) scale is disclosed rather than implied. */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-        <span style={{ width: 128, flexShrink: 0 }} />
+        <span style={{ width: ROW_LABEL_W, flexShrink: 0 }} />
         <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--muted)', fontVariantNumeric: 'tabular-nums' }}>
           <span>{fmtUSD(domainMin)}</span>
           <span>{fmtUSD(domainMax)}</span>
         </div>
-        <span style={{ width: 76, flexShrink: 0 }} />
+        <span style={{ width: ROW_VALUE_W, flexShrink: 0 }} />
       </div>
       <div className="muted" style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.4 }}>
-        Bars are scaled to {fmtUSD(domainMin)}–{fmtUSD(domainMax)}, not from $0, so each step in the walk is visible — the checkpoints themselves differ by only about 6%.
+        Bars are scaled to {fmtUSD(domainMin)}–{fmtUSD(domainMax)}, not from $0, so each step in the walk is visible. The dashed line marks the state-calculated Tax Levy Limit the Town Board voted to override.
       </div>
     </div>
   )

@@ -151,9 +151,16 @@ export const NC_FUND_BALANCE_HISTORY: FundBalanceSeries[] = [
 export interface WaterfallStep {
   label: string
   value: number
-  /** 'total' bars are drawn from zero (an absolute checkpoint); 'delta' bars
-   *  float from the running total left by the previous step. */
-  kind: 'total' | 'delta'
+  /** 'total' steps are real, actually-levied dollar checkpoints (the prior
+   *  year's levy, the adopted levy); 'delta' steps float from the running
+   *  total left by the previous step. 'benchmark' is a third kind: a
+   *  reference threshold (the state-calculated cap) the walk passes through
+   *  rather than a levied amount — the chart draws it as an overlay line
+   *  across the other bars instead of a bar of its own, since visually
+   *  stacking it in the sequence implied it was another checkpoint on equal
+   *  footing with the real dollar totals. Its value must still equal the
+   *  running total at that point in the walk (unchanged by this step). */
+  kind: 'total' | 'delta' | 'benchmark'
 }
 
 /** How the FYE 12/31/25 tax levy builds up, under NY's tax-cap law, to the
@@ -166,7 +173,7 @@ export const NC_TAX_CAP_WATERFALL: WaterfallStep[] = [
   { label: 'Less: PILOTs receivable (2026)', value: -540000, kind: 'delta' },
   { label: 'Carryover from FYE 2025', value: 127496, kind: 'delta' },
   { label: 'Police & fire retirement exclusion', value: 51621, kind: 'delta' },
-  { label: 'Tax Levy Limit', value: 25195480, kind: 'total' },
+  { label: 'Tax Levy Limit', value: 25195480, kind: 'benchmark' },
   { label: 'Override (voted above cap)', value: 594080, kind: 'delta' },
   { label: '2026 Adopted Levy', value: 25789560, kind: 'total' },
 ]
