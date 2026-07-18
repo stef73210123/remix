@@ -6,7 +6,7 @@ import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
 import CivicActions from '@/app/admin/municipal/CivicActions'
-import MeetingTimeline, { type TimelineItem } from '@/app/admin/municipal/MeetingTimeline'
+import { type TimelineItem } from '@/app/admin/municipal/MeetingTimeline'
 import MeetingList from '@/app/admin/municipal/MeetingList'
 import ClearableInput from '@/app/ClearableInput'
 import type { PermitDataset, DepartmentInfo, PermitRecord } from '@/lib/municipal/permits'
@@ -57,10 +57,13 @@ function fmtDate(iso: string | null) {
 }
 
 // The fuller set of fields from a permit's full report — beyond the address/
-// category/date already visible on the timeline row — shown only once a row
-// is expanded, so the collapsed view stays scannable.
+// type of work already visible on the collapsed row — shown only once a row
+// is expanded, so the collapsed view stays scannable. Permit number lives
+// here (not on the collapsed row) since it's an internal reference number,
+// not something a resident scanning the list needs up front.
 function permitDetailRows(p: PermitRecord): { label: string; value: React.ReactNode }[] {
   const rows: { label: string; value: React.ReactNode }[] = []
+  if (p.permitNumber) rows.push({ label: 'Permit #', value: p.permitNumber })
   if (p.description) rows.push({ label: 'Description', value: p.description })
   if (p.owner) rows.push({ label: 'Owner', value: p.owner })
   if (p.contractor) {
@@ -90,7 +93,6 @@ function permitToTimelineItem(p: PermitRecord): TimelineItem {
     subtitle: p.address,
     board: p.category,
     past: true,
-    links: p.permitNumber ? <span className="badge">#{p.permitNumber}</span> : undefined,
     detail: rows.length > 0 ? (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {rows.map((r) => (
@@ -598,6 +600,21 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       }))
   }, [dataset, fullPermits, mapYear])
 
+  // Links the map and the permit list below it: a row click looks up that
+  // permit's marker (by permit number) and flies the map to it; a marker
+  // click does the reverse, and also fills the address search so the list —
+  // capped to the latest 80 by default — is guaranteed to actually contain
+  // the clicked permit (an older permit's marker would otherwise have
+  // nothing to highlight in an unfiltered list).
+  const selectedPermitMarker = useMemo(
+    () => (selectedPermitKey ? permitMarkers.find((m) => m.id === selectedPermitKey) ?? null : null),
+    [permitMarkers, selectedPermitKey],
+  )
+  function handlePermitMarkerClick(p: PermitMarker) {
+    setAddressSearch(p.address)
+    setSelectedPermitKey(p.id)
+  }
+
   // Chart aggregates for the selected year (all-time falls back to the
   // precomputed dataset until the full set arrives).
   const chartAgg = useMemo(() => {
@@ -730,9 +747,17 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
             sub={`${fmtInt(permitMarkers.length)} permit addresses · ${yearLabel(mapYear)}`}
             right={<YearSelect value={mapYear} years={dropdownYears} onChange={setMapYear} />}
           />
-          <JurisdictionMap muni={muni} permits={permitMarkers} onlyPermits />
+          <JurisdictionMap
+            muni={muni}
+            permits={permitMarkers}
+            onlyPermits
+            onPermitClick={handlePermitMarkerClick}
+            flyToPermit={selectedPermitMarker}
+          />
 
-          {/* Recent permit activity — directly below the map. */}
+          {/* Permit database — directly below the map, and linked to it: a row
+              click flies the map to that permit's marker, a marker click
+              filters/scrolls this list to that permit. */}
           <div style={{ marginBottom: 8 }}>
             <SectionHead
               title="Permit database"
@@ -759,15 +784,9 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
               </div>
             )}
           </div>
-          <MeetingTimeline
-            items={timelineItems}
-            selectedKey={selectedPermitKey}
-            onSelect={setSelectedPermitKey}
-            emptyText="No permits match that address."
-          />
           <MeetingList
             items={timelineItems}
-            maxHeight={340}
+            maxHeight={420}
             emptyText="No permits match that address."
             selectedKey={selectedPermitKey}
             onSelect={setSelectedPermitKey}
