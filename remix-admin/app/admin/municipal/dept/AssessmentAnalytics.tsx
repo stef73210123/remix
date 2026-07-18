@@ -181,17 +181,51 @@ interface WaterfallRow extends WaterfallStep {
   isCheckpoint: boolean
 }
 
-/** Turns the raw {label, value, kind} steps into bar spans: a 'total' step
- *  is a full bar from zero (a checkpoint the running total must land on —
- *  verified by construction, since the data itself is a real cumulative
- *  bridge); a 'delta' step floats from the running total left by the
- *  previous step to the new one, in whichever direction it moves. */
-function toWaterfallRows(steps: WaterfallStep[]): WaterfallRow[] {
+/** Rounds a raw axis-padding amount up to a "nice" 1/2/5×10^n step, so a
+ *  zoomed domain lands on clean numbers instead of an arbitrary-looking crop. */
+function niceStep(raw: number): number {
+  if (raw <= 0) return 1
+  const magnitude = Math.pow(10, Math.floor(Math.log10(raw)))
+  const residual = raw / magnitude
+  const mult = residual < 1.5 ? 1 : residual < 3.5 ? 2 : residual < 7.5 ? 5 : 10
+  return mult * magnitude
+}
+
+/** The checkpoints in this walk (the FYE levy, the state cap, the adopted
+ *  levy) sit within ~6% of each other — and every step in between is
+ *  smaller still. Scaling bars from $0 makes the checkpoints look nearly
+ *  identical and shrinks every delta to an illegible sliver (some below a
+ *  pixel). A bridge/waterfall chart's job is to show the shape of a walk
+ *  from a start value to an end value, not to compare that walk to zero —
+ *  every real bridge-chart tool (Excel, Tableau, PowerBI) auto-scales this
+ *  same way — so the axis is zoomed to the walk's own range instead, with
+ *  ~12% padding rounded to a clean step. The chart discloses this (it isn't
+ *  a $0 baseline) via the axis labels and caption below it. */
+function waterfallDomain(steps: WaterfallStep[]): [number, number] {
+  let running = 0
+  const waypoints = steps.map((s) => {
+    running = s.kind === 'total' ? s.value : running + s.value
+    return running
+  })
+  const rawMin = Math.min(...waypoints)
+  const rawMax = Math.max(...waypoints)
+  const pad = Math.max((rawMax - rawMin) * 0.12, 1)
+  const step = niceStep(pad)
+  return [Math.floor((rawMin - pad) / step) * step, Math.ceil((rawMax + pad) / step) * step]
+}
+
+/** Turns the raw {label, value, kind} steps into bar spans, against the
+ *  zoomed domain above rather than absolute zero: a 'total' step is a
+ *  checkpoint bar running from the domain's left edge to its value (so its
+ *  length is comparable to the other checkpoints and to the deltas); a
+ *  'delta' step floats from the running total left by the previous step to
+ *  the new one, in whichever direction it moves. */
+function toWaterfallRows(steps: WaterfallStep[], domainMin: number): WaterfallRow[] {
   let running = 0
   return steps.map((s) => {
     if (s.kind === 'total') {
       running = s.value
-      return { ...s, barStart: 0, barEnd: s.value, isCheckpoint: true }
+      return { ...s, barStart: domainMin, barEnd: s.value, isCheckpoint: true }
     }
     const start = running
     running += s.value
@@ -200,15 +234,19 @@ function toWaterfallRows(steps: WaterfallStep[]): WaterfallRow[] {
 }
 
 /** Horizontal bridge/waterfall: checkpoints (the starting levy, the state
- *  cap limit, the adopted levy) get a solid full-length bar; each step in
- *  between floats a bar spanning just its own contribution — so the chart
- *  reads left-to-right as the actual arithmetic behind the final number,
- *  not a single opaque percentage. Orange/blue (not red/green) for
- *  increase/decrease, consistent with the rest of this page; checkpoints
- *  get a third, distinct color since they're a different kind of thing. */
+ *  cap limit, the adopted levy) get a solid bar from the zoomed axis's left
+ *  edge; each step in between floats a bar spanning just its own
+ *  contribution — so the chart reads left-to-right as the actual arithmetic
+ *  behind the final number, not a single opaque percentage, and (thanks to
+ *  the zoomed domain) every step's bar length is actually legible instead
+ *  of the checkpoints swallowing the whole track. Orange/blue (not
+ *  red/green) for increase/decrease, consistent with the rest of this page;
+ *  checkpoints get a third, distinct color since they're a different kind
+ *  of thing. */
 function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
-  const rows = toWaterfallRows(steps)
-  const maxValue = Math.max(...rows.map((r) => r.barEnd), 1)
+  const [domainMin, domainMax] = waterfallDomain(steps)
+  const domainSpan = domainMax - domainMin
+  const rows = toWaterfallRows(steps, domainMin)
   return (
     <div>
       <div style={{ display: 'flex', gap: 14, marginBottom: 12, fontSize: 11.5, flexWrap: 'wrap' }}>
@@ -224,8 +262,8 @@ function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
         {rows.map((r) => {
-          const startPct = (r.barStart / maxValue) * 100
-          const widthPct = Math.max(((r.barEnd - r.barStart) / maxValue) * 100, 0.6)
+          const startPct = ((r.barStart - domainMin) / domainSpan) * 100
+          const widthPct = Math.max(((r.barEnd - r.barStart) / domainSpan) * 100, 0.6)
           const color = r.isCheckpoint ? '#4a3aa7' : r.value >= 0 ? '#eb6834' : '#2a78d6'
           return (
             <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -245,6 +283,18 @@ function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
             </div>
           )
         })}
+      </div>
+      {/* Axis bounds, so the zoomed (non-zero) scale is disclosed rather than implied. */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+        <span style={{ width: 128, flexShrink: 0 }} />
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--muted)', fontVariantNumeric: 'tabular-nums' }}>
+          <span>{fmtUSD(domainMin)}</span>
+          <span>{fmtUSD(domainMax)}</span>
+        </div>
+        <span style={{ width: 76, flexShrink: 0 }} />
+      </div>
+      <div className="muted" style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.4 }}>
+        Bars are scaled to {fmtUSD(domainMin)}–{fmtUSD(domainMax)}, not from $0, so each step in the walk is visible — the checkpoints themselves differ by only about 6%.
       </div>
     </div>
   )
