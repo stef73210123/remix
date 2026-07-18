@@ -116,6 +116,43 @@ interface Summary {
 }
 interface ClassGroupRow { label: string; total: number }
 
+interface AVDistribution {
+  median: number
+  sliderMin: number
+  sliderMax: number
+}
+
+/** Every parcel's TOTAL_AV, ascending — the only way to get an exact median
+ *  and usable percentile bounds, since ArcGIS's outStatistics has no median.
+ *  Paginated (the service caps records per request well under the town's
+ *  ~4,800 parcels); each page is just one numeric field, so this stays light. */
+async function fetchAssessedValueDistribution(): Promise<AVDistribution> {
+  const values: number[] = []
+  const pageSize = 2000
+  let offset = 0
+  for (;;) {
+    const url =
+      `${PARCELS_BASE}/query?where=${encodeURIComponent(NC_WHERE)}` +
+      `&outFields=TOTAL_AV&orderByFields=TOTAL_AV+ASC` +
+      `&resultOffset=${offset}&resultRecordCount=${pageSize}&returnGeometry=false&f=json`
+    const r = await fetch(url)
+    if (!r.ok) throw new Error('values')
+    const j = (await r.json()) as { features?: { attributes: { TOTAL_AV?: number } }[] }
+    const feats = j.features ?? []
+    for (const f of feats) values.push(Number(f.attributes.TOTAL_AV ?? 0))
+    if (feats.length < pageSize) break
+    offset += pageSize
+  }
+  if (values.length === 0) return { median: 0, sliderMin: 0, sliderMax: 0 }
+  const median = values[Math.floor(values.length / 2)]
+  // Slider spans up to the 95th percentile — a handful of commercial/
+  // institutional parcels run into the millions and would otherwise
+  // squash every residential value into the first few pixels of travel.
+  // The number field below the slider still reaches any value directly.
+  const sliderMax = values[Math.floor(values.length * 0.95)]
+  return { median, sliderMin: 0, sliderMax }
+}
+
 function fmtUSD(v: number): string {
   if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(v >= 10_000_000 ? 1 : 2)}M`
   if (v >= 1_000) return `$${Math.round(v / 1000)}K`
@@ -133,6 +170,22 @@ export default function AssessmentAnalytics() {
   const [summary, setSummary] = useState<Summary | null>(null)
   const [classGroups, setClassGroups] = useState<ClassGroupRow[] | null>(null)
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
+  const [avDist, setAvDist] = useState<AVDistribution | null>(null)
+  const [selectedAV, setSelectedAV] = useState<number | null>(null)
+  const [avInput, setAvInput] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+    fetchAssessedValueDistribution()
+      .then((d) => {
+        if (cancelled) return
+        setAvDist(d)
+        setSelectedAV(d.median)
+        setAvInput(String(Math.round(d.median)))
+      })
+      .catch(() => { /* estimator just won't render */ })
+    return () => { cancelled = true }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -206,7 +259,6 @@ export default function AssessmentAnalytics() {
   }
 
   const taxablePct = summary.rollTotal > 0 ? (summary.taxableTotal / summary.rollTotal) * 100 : 0
-  const avgAssessed = summary.parcelCount > 0 ? summary.rollTotal / summary.parcelCount : 0
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -220,8 +272,8 @@ export default function AssessmentAnalytics() {
           <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{summary.parcelCount.toLocaleString()}</div>
         </div>
         <div className="card" style={{ padding: 14, flex: '1 1 160px' }}>
-          <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Average assessed value</div>
-          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{fmtUSDFull(avgAssessed)}</div>
+          <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Median assessed value</div>
+          <div style={{ fontSize: 20, fontWeight: 700, marginTop: 3 }}>{avDist ? fmtUSDFull(avDist.median) : '—'}</div>
         </div>
       </div>
 
