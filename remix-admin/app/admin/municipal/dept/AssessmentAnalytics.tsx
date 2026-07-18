@@ -197,7 +197,7 @@ export default function AssessmentAnalytics() {
         if (cancelled) return
         setAvStats(s)
         setSelectedAV(s.median)
-        setAvInput(String(Math.round(s.median)))
+        setAvInput(Math.round(s.median).toLocaleString('en-US'))
       })
       .catch(() => { /* median stat tile / estimator just won't render */ })
     return () => { cancelled = true }
@@ -283,12 +283,13 @@ export default function AssessmentAnalytics() {
   function setAV(v: number) {
     const clamped = Math.max(0, v)
     setSelectedAV(clamped)
-    setAvInput(String(Math.round(clamped)))
+    setAvInput(clamped.toLocaleString('en-US'))
   }
   function onAvInputChange(text: string) {
-    setAvInput(text)
-    const n = Number(text.replace(/[^0-9.]/g, ''))
-    if (!isNaN(n) && n >= 0) setSelectedAV(n)
+    const digits = text.replace(/[^0-9]/g, '')
+    const n = digits === '' ? 0 : Number(digits)
+    setAvInput(digits === '' ? '' : n.toLocaleString('en-US'))
+    setSelectedAV(n)
   }
 
   return (
@@ -338,19 +339,14 @@ export default function AssessmentAnalytics() {
       {avStats && (
         <div className="card" style={{ padding: 16 }}>
           <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-            Estimate your tax bill
+            Tax assessment breakdown
           </div>
+          {/* Assessed value (the slider/input) drives all three tax figures below —
+              it leads the row so it reads as the primary control; the school-district
+              picker is a secondary refinement (County and Town rates are the same
+              townwide, only School varies by district), not the whole point of the
+              widget. */}
           <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
-            <select
-              value={district}
-              onChange={(e) => setDistrict(e.target.value as keyof typeof SCHOOL_RATE_PER_1000)}
-              aria-label="School district"
-              style={{ fontSize: 12.5, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-            >
-              {Object.keys(SCHOOL_RATE_PER_1000).map((d) => (
-                <option key={d} value={d}>{d} schools</option>
-              ))}
-            </select>
             <input
               type="range"
               min={0}
@@ -369,10 +365,20 @@ export default function AssessmentAnalytics() {
                 value={avInput}
                 onChange={(e) => onAvInputChange(e.target.value)}
                 className="input"
-                style={{ width: 100, fontSize: 12.5, padding: '5px 8px' }}
+                style={{ width: 112, fontSize: 12.5, padding: '5px 8px' }}
                 aria-label="Assessed value (exact)"
               />
             </div>
+            <select
+              value={district}
+              onChange={(e) => setDistrict(e.target.value as keyof typeof SCHOOL_RATE_PER_1000)}
+              aria-label="School district"
+              style={{ fontSize: 12.5, padding: '5px 9px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)' }}
+            >
+              {Object.keys(SCHOOL_RATE_PER_1000).map((d) => (
+                <option key={d} value={d}>{d} schools</option>
+              ))}
+            </select>
           </div>
           <DonutChart
             segments={[
@@ -381,7 +387,7 @@ export default function AssessmentAnalytics() {
               { label: 'School', value: schoolTax, color: '#4a3aa7' },
             ]}
             centerValue={fmtUSDFull(countyTax + townTax + schoolTax)}
-            centerLabel="Est. annual taxes"
+            centerLabel="Est. total taxes"
           />
           <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{TAX_ESTIMATOR_SOURCE_NOTE}</div>
         </div>
