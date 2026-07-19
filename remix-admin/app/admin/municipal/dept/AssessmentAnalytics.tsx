@@ -344,7 +344,10 @@ function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
             const startPct = ((r.barStart - domainMin) / domainSpan) * 100
             const widthPct = Math.max(((r.barEnd - r.barStart) / domainSpan) * 100, 0.6)
             const color = r.isCheckpoint ? '#4a3aa7' : r.value >= 0 ? '#eb6834' : '#2a78d6'
-            const dollarText = r.isCheckpoint ? fmtUSDFull(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSDFull(Math.abs(r.value))}`
+            // Abbreviated for the visible label (matches the rest of the
+            // page); the hover tooltip keeps the exact figure.
+            const dollarText = r.isCheckpoint ? fmtUSD(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSD(Math.abs(r.value))}`
+            const dollarTextFull = r.isCheckpoint ? fmtUSDFull(r.value) : `${r.value >= 0 ? '+' : '-'}${fmtUSDFull(Math.abs(r.value))}`
             const pctColor = r.pctChange != null && r.pctChange < 0 ? '#2a78d6' : '#eb6834'
             return (
               <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -355,7 +358,7 @@ function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
                       position: 'absolute', left: `${startPct}%`, width: `${widthPct}%`, top: 1, bottom: 1,
                       background: color, borderRadius: 2,
                     }}
-                    title={`${r.label}: ${dollarText}${r.pctChange != null ? ` (${fmtPct(r.pctChange)})` : ''}`}
+                    title={`${r.label}: ${dollarTextFull}${r.pctChange != null ? ` (${fmtPct(r.pctChange)})` : ''}`}
                   />
                 </div>
                 <span style={{ width: ROW_VALUE_W, textAlign: 'right', flexShrink: 0 }}>
@@ -387,7 +390,7 @@ function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
   )
 }
 
-/** "Why the levy changed" — replaces a single YoY % (which flattens tax-base
+/** "Town Tax Levy" — replaces a single YoY % (which flattens tax-base
  *  growth, PILOTs, the 2% state cap, exclusions, and the 2026 voted override
  *  into one misleading number) with the actual build-up, plus what it means
  *  in dollars for a typical homeowner. Both figures are already-committed,
@@ -397,14 +400,14 @@ function LevyWaterfallWidget() {
   return (
     <div>
       <div className="muted" style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 14 }}>
-        Why the 2026 levy changed
+        Town Tax Levy
       </div>
       <LevyWaterfallChart steps={NC_TAX_CAP_WATERFALL} />
       <div style={{ marginTop: 14, padding: '10px 12px', borderRadius: 8, background: 'var(--panel-2)', fontSize: 12.5, lineHeight: 1.5 }}>
         For North Castle’s median-value home ({fmtUSD(NC_HOMEOWNER_TAX_IMPACT.medianHomeValue)}), this means Town taxes go from{' '}
-        <strong>{fmtUSDFull(NC_HOMEOWNER_TAX_IMPACT.townTaxes2025)}</strong> to{' '}
-        <strong>{fmtUSDFull(NC_HOMEOWNER_TAX_IMPACT.townTaxes2026)}</strong>{' '}
-        ({NC_HOMEOWNER_TAX_IMPACT.increase >= 0 ? '+' : ''}{fmtUSDFull(NC_HOMEOWNER_TAX_IMPACT.increase)},{' '}
+        <strong>{fmtUSD(NC_HOMEOWNER_TAX_IMPACT.townTaxes2025)}</strong> to{' '}
+        <strong>{fmtUSD(NC_HOMEOWNER_TAX_IMPACT.townTaxes2026)}</strong>{' '}
+        ({NC_HOMEOWNER_TAX_IMPACT.increase >= 0 ? '+' : ''}{fmtUSD(NC_HOMEOWNER_TAX_IMPACT.increase)},{' '}
         {NC_HOMEOWNER_TAX_IMPACT.increasePct >= 0 ? '+' : ''}{(NC_HOMEOWNER_TAX_IMPACT.increasePct * 100).toFixed(1)}%).
       </div>
       <div className="muted" style={{ fontSize: 10.5, marginTop: 14, lineHeight: 1.5 }}>{LEVY_WATERFALL_SOURCE_NOTE}</div>
