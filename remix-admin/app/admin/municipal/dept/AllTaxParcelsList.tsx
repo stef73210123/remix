@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ClearableInput from '@/app/ClearableInput'
+import { ALL_CLASS_GROUP_LABELS, CLASS_GROUP_DIGITS } from './propertyClass'
 
 /**
  * Every North Castle tax parcel — the county- and state-wide "Westchester
@@ -57,6 +58,106 @@ function sqlEscape(s: string): string {
   return s.replace(/'/g, "''")
 }
 
+/** Builds the OR'd `PROP_CLASS` clause for a set of selected group labels —
+ *  `null` when nothing (or everything) is selected, i.e. no filter needed. */
+function typeClause(selected: Set<string>): string | null {
+  if (selected.size === 0 || selected.size === ALL_CLASS_GROUP_LABELS.length) return null
+  const parts: string[] = []
+  let wantsOther = false
+  for (const label of selected) {
+    const digit = CLASS_GROUP_DIGITS[label]
+    if (digit) parts.push(`PROP_CLASS LIKE '${digit}%'`)
+    else wantsOther = true
+  }
+  if (wantsOther) {
+    const known = Object.values(CLASS_GROUP_DIGITS).map((d) => `PROP_CLASS NOT LIKE '${d}%'`).join(' AND ')
+    parts.push(`(PROP_CLASS IS NULL OR (${known}))`)
+  }
+  return parts.length ? `(${parts.join(' OR ')})` : null
+}
+
+/** Self-contained checkbox popover for filtering by NYS ORPTS property-type
+ *  group — closes on an outside click or Escape. */
+function TypeMultiSelect({
+  selected, onChange,
+}: {
+  selected: Set<string>
+  onChange: (next: Set<string>) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onDocEvent(e: MouseEvent | KeyboardEvent) {
+      if (e instanceof KeyboardEvent) { if (e.key === 'Escape') setOpen(false); return }
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDocEvent)
+    document.addEventListener('keydown', onDocEvent)
+    return () => {
+      document.removeEventListener('mousedown', onDocEvent)
+      document.removeEventListener('keydown', onDocEvent)
+    }
+  }, [open])
+
+  function toggle(label: string) {
+    const next = new Set(selected)
+    if (next.has(label)) next.delete(label)
+    else next.add(label)
+    onChange(next)
+  }
+
+  const label = selected.size === 0 || selected.size === ALL_CLASS_GROUP_LABELS.length
+    ? 'Property type'
+    : selected.size === 1
+      ? [...selected][0]
+      : `Property type (${selected.size})`
+
+  return (
+    <div ref={rootRef} style={{ position: 'relative' }}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="btn secondary"
+        style={{ padding: '5px 10px', fontSize: 12.5, display: 'flex', alignItems: 'center', gap: 6 }}
+      >
+        {label}
+        <span className="muted" style={{ fontSize: 10 }}>{open ? '▲' : '▼'}</span>
+      </button>
+      {open && (
+        <div
+          style={{
+            position: 'absolute', top: 'calc(100% + 4px)', left: 0, zIndex: 20, minWidth: 210,
+            background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.18)', padding: 6,
+          }}
+        >
+          {ALL_CLASS_GROUP_LABELS.map((l) => (
+            <label
+              key={l}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 6px', fontSize: 12.5, cursor: 'pointer', borderRadius: 5 }}
+            >
+              <input type="checkbox" checked={selected.has(l)} onChange={() => toggle(l)} style={{ margin: 0 }} />
+              {l}
+            </label>
+          ))}
+          {selected.size > 0 && (
+            <button
+              type="button"
+              onClick={() => onChange(new Set())}
+              className="btn secondary"
+              style={{ width: '100%', marginTop: 4, padding: '4px 0', fontSize: 11.5 }}
+            >
+              Clear
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 /** Fuller parcel detail shown when a row (or the map-linked row) is expanded —
  *  fields beyond the four the base list query fetches, loaded on demand. */
 function ParcelDetailPanel({ attrs, rollTotal }: { attrs: Record<string, unknown>; rollTotal: number | null }) {
@@ -104,6 +205,7 @@ export default function AllTaxParcelsList({
   const [page, setPage] = useState(0)
   const [search, setSearch] = useState('')
   const [searchInput, setSearchInput] = useState('')
+  const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set())
   const [total, setTotal] = useState<number | null>(null)
   const [rollTotal, setRollTotal] = useState<number | null>(null)
   const [parcelRows, setParcelRows] = useState<ParcelRow[] | null>(null)
@@ -155,6 +257,7 @@ export default function AllTaxParcelsList({
     setMode('parcel')
     setSearchInput('')
     setSearch('')
+    setSelectedTypes(new Set())
     setDetailCache((prev) => ({ ...prev, [sbl]: selectedParcel }))
     setExpandedSbl(sbl)
     pendingScrollRef.current = true
@@ -180,10 +283,15 @@ export default function AllTaxParcelsList({
   }, [selectedParcel])
 
   const whereClause = useMemo(() => {
-    if (!search) return NC_WHERE
-    const esc = sqlEscape(search)
-    return `${NC_WHERE} AND (UPPER(PRIMARY_OWNER) LIKE UPPER('%${esc}%') OR UPPER(PARCEL_ADDR) LIKE UPPER('%${esc}%'))`
-  }, [search])
+    const clauses = [NC_WHERE]
+    if (search) {
+      const esc = sqlEscape(search)
+      clauses.push(`(UPPER(PRIMARY_OWNER) LIKE UPPER('%${esc}%') OR UPPER(PARCEL_ADDR) LIKE UPPER('%${esc}%'))`)
+    }
+    const types = typeClause(selectedTypes)
+    if (types) clauses.push(types)
+    return clauses.join(' AND ')
+  }, [search, selectedTypes])
 
   // Total row count for the active mode+search (drives pagination) — parcel
   // mode only; a distinct-owner count isn't a plain ArcGIS statistic, so
@@ -317,6 +425,10 @@ export default function AllTaxParcelsList({
             </button>
           ))}
         </div>
+        <TypeMultiSelect
+          selected={selectedTypes}
+          onChange={(next) => { setSelectedTypes(next); setPage(0) }}
+        />
         <ClearableInput
           type="text"
           value={searchInput}

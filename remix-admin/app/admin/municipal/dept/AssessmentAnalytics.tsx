@@ -3,23 +3,10 @@
 import { useEffect, useState } from 'react'
 import ClearableInput from '@/app/ClearableInput'
 import { NC_TAX_CAP_WATERFALL, NC_HOMEOWNER_TAX_IMPACT, type WaterfallStep } from '@/lib/municipal/budget2026'
+import { classGroupLabel } from './propertyClass'
 
 const PARCELS_BASE = 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/Westchester_County_Parcels/FeatureServer/0'
 const NC_WHERE = "MUNI_NAME='North Castle'"
-
-// NYS ORPTS property classification system groups every 3-digit class code
-// under a first-digit category (210 "Residential — one family" rolls up to
-// "200 Residential", etc.) — the service only carries the raw code, not a
-// description field, so the group label is derived client-side.
-const CLASS_GROUPS: Record<string, string> = {
-  '1': 'Agricultural', '2': 'Residential', '3': 'Vacant land', '4': 'Commercial',
-  '5': 'Recreation & entertainment', '6': 'Community services', '7': 'Industrial',
-  '8': 'Public services', '9': 'Wild, forest & parks',
-}
-function classGroupLabel(code: string): string {
-  const digit = code.trim()[0]
-  return (digit && CLASS_GROUPS[digit]) || 'Other/unclassified'
-}
 
 // Categorical color assigned by entity identity (fixed order, never cycled,
 // never re-derived from sort rank) — 8 validated hues plus one gray fallback

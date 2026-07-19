@@ -88,7 +88,7 @@ async function overpassFetch(query: string): Promise<OverpassElement[]> {
 /** Draws the jurisdiction boundary (fetched at runtime) and, unless a caller
  *  has requested a specific initial focus (`skipFitBounds`), fits the map to
  *  it. */
-function Boundary({ muni, lightBasemap, skipFitBounds }: { muni: string; lightBasemap?: boolean; skipFitBounds?: boolean }) {
+function Boundary({ muni, lightBasemap, skipFitBounds, zoomBoost }: { muni: string; lightBasemap?: boolean; skipFitBounds?: boolean; zoomBoost?: number }) {
   const map = useMap()
   const layerRef = useRef<LGeoJSON | null>(null)
   useEffect(() => {
@@ -111,7 +111,10 @@ function Boundary({ muni, lightBasemap, skipFitBounds }: { muni: string; lightBa
         layer.addTo(map)
         layerRef.current = layer
         if (!skipFitBounds) {
-          try { map.fitBounds(layer.getBounds(), { padding: [16, 16] }) } catch { /* keep default view */ }
+          try {
+            map.fitBounds(layer.getBounds(), { padding: [16, 16] })
+            if (zoomBoost) map.setZoom(map.getZoom() + zoomBoost)
+          } catch { /* keep default view */ }
         }
       })
       .catch(() => { /* fall back to the town-centered default view */ })
@@ -119,7 +122,7 @@ function Boundary({ muni, lightBasemap, skipFitBounds }: { muni: string; lightBa
       cancelled = true
       if (layerRef.current) { layerRef.current.remove(); layerRef.current = null }
     }
-  }, [map, muni, lightBasemap, skipFitBounds])
+  }, [map, muni, lightBasemap, skipFitBounds, zoomBoost])
   return null
 }
 
@@ -935,9 +938,18 @@ function RoadLayer({
  *  checkbox (rather than the single-select "Layers" menu used elsewhere),
  *  since the whole point is comparing several jurisdictions at once. */
 function RoadsLegend({
-  enabled, onToggle, states,
+  enabled, onToggle, states, permits, permitsLabel, permitsOn, onTogglePermits,
 }: {
-  enabled: Set<string>; onToggle: (key: string) => void; states: Record<string, LayerState>
+  enabled: Set<string>
+  onToggle: (key: string) => void
+  states: Record<string, LayerState>
+  /** Optional address-marker overlay (e.g. public parking) shown alongside
+   *  the road-jurisdiction toggles — its own checkbox row, dot swatch
+   *  instead of a line, since it's points rather than road segments. */
+  permits?: PermitMarker[]
+  permitsLabel?: string
+  permitsOn?: boolean
+  onTogglePermits?: () => void
 }) {
   return (
     <div
@@ -964,6 +976,17 @@ function RoadsLegend({
           </label>
         )
       })}
+      {permits && permits.length > 0 && permitsLabel && (
+        <>
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.16)', margin: '1px 0' }} />
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            <input type="checkbox" checked={!!permitsOn} onChange={() => onTogglePermits?.()} style={{ margin: 0, accentColor: permits[0].color }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', display: 'inline-block', background: permits[0].color, flexShrink: 0 }} />
+            {permitsLabel}
+            <span style={{ opacity: 0.6, fontSize: 10.5 }}>· {permits.length}</span>
+          </label>
+        </>
+      )}
     </div>
   )
 }
@@ -1083,7 +1106,7 @@ const rowStyle: React.CSSProperties = {
 }
 
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles, flyToSbl, onPermitClick, flyToPermit,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, forceLightBasemap = false, zoomBoost, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles, flyToSbl, onPermitClick, flyToPermit,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -1116,6 +1139,16 @@ export default function JurisdictionMap({
    *  while the centroid layer's dots read fine (and look better) over
    *  imagery. Layers not listed here always use the hybrid basemap. */
   lightBasemapLayers?: string[]
+  /** Forces the light gray canvas basemap regardless of the active layer —
+   *  for locked modes like `onlyRoads` that have no single "active" layer
+   *  concept for `lightBasemapLayers` to key off of, but where road lines
+   *  still read more clearly on a light background than on dark imagery. */
+  forceLightBasemap?: boolean
+  /** Nudges the zoom level in by this many steps right after `Boundary`'s
+   *  auto-fitBounds — e.g. `1` to land one level closer than a bare
+   *  fit-to-town-outline would. Ignored when `focus` is set (fitBounds is
+   *  skipped entirely then, so there's nothing to nudge from). */
+  zoomBoost?: number
   height?: number
   /** Fires with a clicked parcel's raw attributes when the Assessment layer
    *  is active — pass a stable reference (e.g. a useState setter) rather
@@ -1171,6 +1204,9 @@ export default function JurisdictionMap({
   const [roadsEnabled, setRoadsEnabled] = useState<Set<string>>(() => new Set(ROAD_CATS.map((c) => c.key)))
   const [roadStates, setRoadStates] = useState<Record<string, LayerState>>({})
   const [roadMiles, setRoadMiles] = useState<Record<string, number>>({})
+  // onlyRoads mode's optional address-marker overlay (e.g. public parking) —
+  // its own on/off toggle in RoadsLegend, defaulting to visible.
+  const [permitsOn, setPermitsOn] = useState(true)
   // Stable across renders (unlike an inline arrow prop) — RoadLayer depends on
   // this identity in its effect, so a fresh function every render would
   // re-trigger the effect (and re-fetch) in a loop.
@@ -1186,7 +1222,7 @@ export default function JurisdictionMap({
 
   if (!cfg) return null
 
-  const useLightBasemap = active != null && !!lightBasemapLayers?.includes(active)
+  const useLightBasemap = forceLightBasemap || (active != null && !!lightBasemapLayers?.includes(active))
 
   const activeGisCfg = GIS.find((g) => g.key === active)
 
@@ -1302,6 +1338,10 @@ export default function JurisdictionMap({
               if (next.has(key)) next.delete(key); else next.add(key)
               return next
             })}
+            permits={permits}
+            permitsLabel={permitsLabel}
+            permitsOn={permitsOn}
+            onTogglePermits={() => setPermitsOn((o) => !o)}
           />
         )}
         <MapContainer
@@ -1344,7 +1384,7 @@ export default function JurisdictionMap({
               />
             </>
           )}
-          <Boundary muni={muni} lightBasemap={useLightBasemap} skipFitBounds={!!focus} />
+          <Boundary muni={muni} lightBasemap={useLightBasemap} skipFitBounds={!!focus} zoomBoost={zoomBoost} />
           <Hamlets muni={muni} lightBasemap={useLightBasemap} />
           {flyToSbl !== undefined && <FlyToParcel sbl={flyToSbl} />}
           {flyToPermit !== undefined && <FlyToPermit permit={flyToPermit} />}
@@ -1368,8 +1408,13 @@ export default function JurisdictionMap({
               onlyPermits/onlyRoads) — reuses the same GisLayers fetch/render
               logic for just the 'zoning' entry, driven by its own toggle. */}
           {showZoning && <GisLayers active={zoningOn ? 'zoning' : null} onState={setZoningState} onLegend={setZoningLegend} />}
-          {permits && permits.length > 0 && !onlyRoads && (
-            <PermitLayer active={onlyPermits ? true : active === 'permits'} permits={permits} onState={setLayerState} onPermitClick={onPermitClick} />
+          {permits && permits.length > 0 && (
+            <PermitLayer
+              active={onlyPermits || onlyRoads ? (onlyRoads ? permitsOn : true) : active === 'permits'}
+              permits={permits}
+              onState={onlyRoads ? undefined : setLayerState}
+              onPermitClick={onPermitClick}
+            />
           )}
           {onlyRoads && ROAD_CATS.map((cat, i) => (
             <RoadLayer
