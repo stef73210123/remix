@@ -48,10 +48,11 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
-// OpenNorthCastle uses IBM Plex Sans/Mono (UI) + Newsreader (display); the dark
-// Remix flavor uses the system stack and doesn't load these.
+// OpenNorthCastle uses Public Sans (UI/body) + Zilla Slab (display) + Courier
+// Prime (docket-style labels/metadata); the dark Remix flavor uses the system
+// stack and doesn't load these.
 const ONC_FONTS =
-  'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap'
+  'https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Public+Sans:ital,wght@0,300..800;1,400;1,600&display=swap'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
