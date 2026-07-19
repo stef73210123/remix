@@ -165,7 +165,10 @@ const TAX_ESTIMATOR_SOURCE_NOTE =
 
 function fmtUSD(v: number): string {
   if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(v >= 10_000_000 ? 1 : 2)}M`
-  if (v >= 1_000) return `$${Math.round(v / 1000)}K`
+  // One decimal (not a rounded whole K) — the tax assessment breakdown's
+  // county/town/school splits land in this range, where rounding to the
+  // nearest $1,000 was too coarse to be useful for a single property's estimate.
+  if (v >= 1_000) return `$${(v / 1000).toFixed(1)}K`
   return `$${Math.round(v)}`
 }
 function fmtUSDFull(v: number): string {
