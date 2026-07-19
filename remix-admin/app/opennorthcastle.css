@@ -1,31 +1,39 @@
 /*
- * OpenNorthCastle skin — a light "Civic Signal" theme layered over the same
+ * OpenNorthCastle skin — the OpenDocket design system layered over the same
  * markup as the dark Remix app. Everything is scoped under
  * [data-flavor="opennorthcastle"] so it has zero effect on the default flavor.
  *
  * The app is CSS-variable + utility-class driven, so remapping the core tokens
  * reskins nearly the whole product; the rules below the token block fix the few
  * places that hard-code dark values. Fonts are loaded via <link> in the layout
- * only for this flavor.
+ * only for this flavor. Values are pulled 1:1 from OpenDocket's own token
+ * files (tokens/colors.css, tokens/typography.css, tokens/effects.css) —
+ * brand navy (#01068b) is unchanged from the site's prior palette, so this is
+ * an evolution of the existing brand, not a swap to a new one. The wordmark
+ * stays the Town's own eagle logo (lib/flavor.ts's BRAND.wordmark) — not
+ * OpenDocket's stamp logo, which is a placeholder for a different product.
  */
 :root[data-flavor='opennorthcastle'] {
-  /* Core token remap → OpenNorthCastle palette (tokens/colors.css). */
-  --bg: #f4f7fb;          /* cool slate page */
+  /* Core token remap → OpenDocket palette. */
+  --bg: #fbfaf6;           /* warm paper (--paper) */
   --off-black: #ffffff;
-  --panel: #ffffff;       /* white cards */
-  --panel-2: #eef2f7;     /* sunken surface / track */
-  --border: #e5ebf2;      /* hairline */
-  --text: #0f1720;        /* ink */
-  --muted: #64748b;       /* slate */
-  --primary: #01068b;     /* royal navy — brand/primary */
-  --primary-light: #2563d6; /* azure — links/accent */
-  --primary-hover: #010568;
+  --panel: #ffffff;        /* white cards (--surface-card) */
+  --panel-2: #f7f6f2;      /* sunken surface / track (--ink-050) */
+  --border: #d9d9dc;       /* hairline (--border-line / --ink-200) */
+  --text: #111111;         /* ink (--ink-900) */
+  --muted: #6b6b73;        /* warm gray (--ink-500) */
+  --primary: #01068b;      /* royal navy — brand/primary, unchanged (--navy-900) */
+  --primary-light: #0a0fa6; /* --navy-800 — links (--text-link) */
+  --primary-hover: #0a0fa6; /* --navy-800 — matches OpenDocket's button hover state */
+  --accent: #ff3130;       /* the stamp red (--red-600) — emphasis, "live" markers */
+  --accent-hover: #d81f1c; /* --red-700 */
   --a: #01068b;
-  --b: #a16207;
-  --c: #64748b;
-  --warn: #a16207;
-  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
-  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --b: #b6791b;            /* --status-pending amber */
+  --c: #6b6b73;
+  --warn: #b6791b;
+  --font-display: 'Zilla Slab', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Courier Prime', 'Courier New', ui-monospace, monospace;
 }
 
 [data-flavor='opennorthcastle'] body {
@@ -71,19 +79,22 @@ html[data-flavor='opennorthcastle'] body {
   overscroll-behavior: none;
 }
 
-/* White cards, cooler radius, soft cool shadow (no heavy dark shadows). */
+/* White cards, document-like: crisp hairline border, small radius, minimal
+   flat shadow rather than a soft "floating" one — OpenDocket's house style
+   treats cards as paper, not glass. */
 [data-flavor='opennorthcastle'] .card {
-  border-radius: 10px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 16px rgba(15, 23, 42, 0.05);
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(17, 17, 17, 0.06);
 }
 
-/* Editorial serif for display headings + big figures. */
+/* Slab-serif display headings + big figures — the "Open" half of the
+   OpenDocket wordmark, carried through to page headings. */
 [data-flavor='opennorthcastle'] .page-title,
 [data-flavor='opennorthcastle'] h1,
 [data-flavor='opennorthcastle'] h2 {
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 /* Sticky civic masthead: full-bleed bar pinned above the map (Leaflet panes and
@@ -99,7 +110,7 @@ html[data-flavor='opennorthcastle'] body {
   flex-wrap: wrap;
   margin: -24px -20px 20px;
   padding: 8px 20px;
-  background: rgba(244, 247, 251, 0.94);
+  background: rgba(251, 250, 246, 0.94);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
@@ -131,7 +142,7 @@ html[data-flavor='opennorthcastle'] body {
   gap: 4px;
   flex-wrap: wrap;
   padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
-  background: rgba(244, 247, 251, 0.94);
+  background: rgba(251, 250, 246, 0.94);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-top: 1px solid var(--border);
@@ -150,7 +161,7 @@ html[data-flavor='opennorthcastle'] body {
 [data-flavor='opennorthcastle'] .board-tabs-sticky {
   position: sticky;
   z-index: 1150;
-  background: rgba(244, 247, 251, 0.94);
+  background: rgba(251, 250, 246, 0.94);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   margin-left: -20px;
@@ -177,7 +188,12 @@ html[data-flavor='opennorthcastle'] body {
 
 /* Primary buttons (and button-styled links, e.g. FOIL Request) must stay white
    on the navy fill — the flavored `a { color: inherit }` rule below otherwise
-   outranks .btn's white text and renders it ink-on-navy (illegible). */
+   outranks .btn's white text and renders it ink-on-navy (illegible). Radius
+   tightened to OpenDocket's --radius-sm (buttons read crisper/smaller than
+   the base flavor's 8px). */
+[data-flavor='opennorthcastle'] .btn {
+  border-radius: 4px;
+}
 [data-flavor='opennorthcastle'] .btn:not(.secondary),
 [data-flavor='opennorthcastle'] a.btn:not(.secondary) {
   color: #fff;
@@ -193,38 +209,54 @@ html[data-flavor='opennorthcastle'] body {
   border-color: var(--primary);
 }
 
-/* Inputs: white field instead of the dark rgba fill. */
+/* Inputs: white field instead of the dark rgba fill, tightened radius to
+   match buttons/cards. */
 [data-flavor='opennorthcastle'] .input,
 [data-flavor='opennorthcastle'] select,
 [data-flavor='opennorthcastle'] input[type='text'] {
   background: #ffffff;
+  border-radius: 4px;
 }
 [data-flavor='opennorthcastle'] .input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 214, 0.28);
+  box-shadow: 0 0 0 3px rgba(1, 6, 139, 0.14);
 }
 
 /* Plain badges (application types, topic tags) are white-on-transparent by
-   default — give them a light chip so they read on the light surface. Tier
-   badges (.A/.B/.C) and .state keep their own fills. */
+   default — give them a light chip so they read on the light surface, with
+   OpenDocket's mono/uppercase/tracked "docket label" treatment. Tier badges
+   (.A/.B/.C) and .state keep their own fills. */
 [data-flavor='opennorthcastle'] .badge:not(.A):not(.B):not(.C):not(.state) {
   background: var(--panel-2);
   color: var(--text);
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 2px;
 }
 
-/* Neutral metadata pill on light. */
+/* Neutral metadata pill on light — full pill, matching OpenDocket's
+   StatusBadge shape. */
 [data-flavor='opennorthcastle'] .badge.state {
   background: var(--panel-2);
   border: 1px solid var(--border);
   color: var(--muted);
+  border-radius: 999px;
 }
 
-/* Status text colors legible on light. */
-[data-flavor='opennorthcastle'] .error { color: #b91c1c; }
-[data-flavor='opennorthcastle'] .success { color: #166534; }
+/* Status text colors legible on light — OpenDocket's failed/passed tokens. */
+[data-flavor='opennorthcastle'] .error { color: #c0201d; }
+[data-flavor='opennorthcastle'] .success { color: #1f7a4d; }
 
-/* Links pick up the azure accent (components use --primary-light for links). */
+/* Table headers already read as uppercase/tracked metadata — the mono
+   family reinforces the "docket" feel with no markup changes. */
+[data-flavor='opennorthcastle'] th {
+  font-family: var(--font-mono);
+}
+
+/* Links stay ink by default; components that want the link treatment use
+   --primary-light explicitly. */
 [data-flavor='opennorthcastle'] a { color: inherit; }
 
 /* Back-to-top button: OpenNorthCastle's civic-bottom-bar occupies the bottom
