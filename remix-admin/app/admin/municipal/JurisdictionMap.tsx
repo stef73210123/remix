@@ -85,9 +85,25 @@ async function overpassFetch(query: string): Promise<OverpassElement[]> {
   throw lastErr
 }
 
-/** Draws the jurisdiction boundary (fetched at runtime) and, unless a caller
- *  has requested a specific initial focus (`skipFitBounds`), fits the map to
- *  it. */
+/** Reads/writes a small JSON value under a `geo-cache:` prefixed localStorage
+ *  key — used for boundary/hamlet geometry that never changes, so a repeat
+ *  visit (or a second map on the same page) never re-fetches it from
+ *  Nominatim at all. Shared shape with `cachedGeocode` below, just generic. */
+function readGeoCache<T>(key: string): T | null {
+  try {
+    const v = localStorage.getItem(`geo-cache:${key}`)
+    return v ? (JSON.parse(v) as T) : null
+  } catch { return null }
+}
+function writeGeoCache<T>(key: string, value: T): void {
+  try { localStorage.setItem(`geo-cache:${key}`, JSON.stringify(value)) } catch { /* ignore */ }
+}
+
+/** Draws the jurisdiction boundary and, unless a caller has requested a
+ *  specific initial focus (`skipFitBounds`), fits the map to it. The
+ *  geometry is fetched from Nominatim once per browser and cached — town
+ *  boundaries don't change, so every map after the first mounts with zero
+ *  network round-trips for this instead of re-fetching it every time. */
 function Boundary({ muni, lightBasemap, skipFitBounds, zoomBoost }: { muni: string; lightBasemap?: boolean; skipFitBounds?: boolean; zoomBoost?: number }) {
   const map = useMap()
   const layerRef = useRef<LGeoJSON | null>(null)
@@ -95,27 +111,35 @@ function Boundary({ muni, lightBasemap, skipFitBounds, zoomBoost }: { muni: stri
     const cfg = MAP[muni]
     if (!cfg) return
     let cancelled = false
+    const draw = (geom: GeoJSON.Geometry) => {
+      if (cancelled || (geom.type !== 'Polygon' && geom.type !== 'MultiPolygon')) return
+      const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
+        // The bright gold reads well against dark satellite ground but
+        // washes out on the light gray canvas basemap — a dark amber holds
+        // contrast either way.
+        style: { color: lightBasemap ? '#92400e' : '#ffd24a', weight: 2.5, fill: false, dashArray: '4 3' },
+      })
+      layer.addTo(map)
+      layerRef.current = layer
+      if (!skipFitBounds) {
+        try {
+          map.fitBounds(layer.getBounds(), { padding: [16, 16] })
+          if (zoomBoost) map.setZoom(map.getZoom() + zoomBoost)
+        } catch { /* keep default view */ }
+      }
+    }
+    const cacheKey = `boundary:${muni}`
+    const cached = readGeoCache<GeoJSON.Geometry>(cacheKey)
+    if (cached) { draw(cached); return }
     const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&polygon_geojson=1&limit=1&q=${encodeURIComponent(cfg.query)}`
     fetch(url, { headers: { Accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('geo'))))
       .then((arr: Array<{ geojson?: GeoJSON.Geometry }>) => {
         if (cancelled) return
         const geom = arr?.[0]?.geojson
-        if (!geom || (geom.type !== 'Polygon' && geom.type !== 'MultiPolygon')) return
-        const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
-          // The bright gold reads well against dark satellite ground but
-          // washes out on the light gray canvas basemap — a dark amber holds
-          // contrast either way.
-          style: { color: lightBasemap ? '#92400e' : '#ffd24a', weight: 2.5, fill: false, dashArray: '4 3' },
-        })
-        layer.addTo(map)
-        layerRef.current = layer
-        if (!skipFitBounds) {
-          try {
-            map.fitBounds(layer.getBounds(), { padding: [16, 16] })
-            if (zoomBoost) map.setZoom(map.getZoom() + zoomBoost)
-          } catch { /* keep default view */ }
-        }
+        if (!geom) return
+        writeGeoCache(cacheKey, geom)
+        draw(geom)
       })
       .catch(() => { /* fall back to the town-centered default view */ })
     return () => {
@@ -320,9 +344,14 @@ const HAMLETS: Record<string, string[]> = {
   nc: ['Armonk, New York', 'Banksville, New York', 'North White Plains, New York'],
 }
 
-/** Draws the town's hamlet/CDP boundaries (fetched at runtime) with labels, so
- *  Armonk, Banksville and North White Plains read on the map alongside the town
- *  outline. Fetched sequentially to stay gentle on Nominatim. */
+interface HamletResult { geom?: GeoJSON.Geometry; lat?: number; lon?: number }
+
+/** Draws the town's hamlet/CDP boundaries with labels, so Armonk, Banksville
+ *  and North White Plains read on the map alongside the town outline. Each
+ *  hamlet's geometry is cached (like `Boundary`'s) — a repeat visit resolves
+ *  every hamlet instantly with zero network calls. Only genuine cache misses
+ *  hit Nominatim, staggered a little (not the old sequential 350ms-per-hamlet
+ *  wait even on a warm cache) to stay polite to it without blocking the map. */
 function Hamlets({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean }) {
   const map = useMap()
   const groupRef = useRef<LayerGroup | null>(null)
@@ -342,29 +371,43 @@ function Hamlets({ muni, lightBasemap }: { muni: string; lightBasemap?: boolean 
           : `<div style="font:600 11px system-ui,-apple-system,sans-serif;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 2px rgba(0,0,0,0.9);pointer-events:none;">${text}</div>`,
         iconSize: [0, 0],
       })
-    ;(async () => {
-      for (const q of names) {
+    const draw = (q: string, res: HamletResult) => {
+      if (cancelled) return
+      const name = q.split(',')[0]
+      if (res.geom && (res.geom.type === 'Polygon' || res.geom.type === 'MultiPolygon')) {
+        const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: res.geom } as GeoJSON.Feature, {
+          style: { color: lightBasemap ? '#3a3a3a' : '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
+        }).addTo(group)
+        L.marker(layer.getBounds().getCenter(), { icon: label(name), interactive: false }).addTo(group)
+      } else if (res.lat != null && res.lon != null) {
+        L.marker([res.lat, res.lon], { icon: label(name), interactive: false }).addTo(group)
+      }
+    }
+    names.forEach((q, i) => {
+      const cacheKey = `hamlet:${q}`
+      const cached = readGeoCache<HamletResult>(cacheKey)
+      if (cached) { draw(q, cached); return }
+      // Only cache misses touch the network, staggered lightly so a
+      // cold-cache page (all misses) doesn't fire 3 simultaneous requests.
+      setTimeout(async () => {
         if (cancelled) return
         try {
           const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&polygon_geojson=1&limit=1&q=${encodeURIComponent(q)}`
           const r = await fetch(url, { headers: { Accept: 'application/json' } })
-          if (!r.ok) continue
+          if (!r.ok || cancelled) return
           const arr = (await r.json()) as Array<{ geojson?: GeoJSON.Geometry; lat?: string; lon?: string }>
           const item = arr?.[0]
-          const name = q.split(',')[0]
-          const geom = item?.geojson
-          if (geom && (geom.type === 'Polygon' || geom.type === 'MultiPolygon')) {
-            const layer = L.geoJSON({ type: 'Feature', properties: {}, geometry: geom } as GeoJSON.Feature, {
-              style: { color: lightBasemap ? '#3a3a3a' : '#ffffff', weight: 1.5, fill: false, dashArray: '2 4', opacity: 0.9 },
-            }).addTo(group)
-            L.marker(layer.getBounds().getCenter(), { icon: label(name), interactive: false }).addTo(group)
-          } else if (item?.lat && item?.lon) {
-            L.marker([Number(item.lat), Number(item.lon)], { icon: label(name), interactive: false }).addTo(group)
+          if (!item) return
+          const res: HamletResult = {
+            geom: item.geojson,
+            lat: item.lat ? Number(item.lat) : undefined,
+            lon: item.lon ? Number(item.lon) : undefined,
           }
+          writeGeoCache(cacheKey, res)
+          draw(q, res)
         } catch { /* skip this hamlet on failure */ }
-        if (!cancelled) await new Promise((res) => setTimeout(res, 350))
-      }
-    })()
+      }, i * 150)
+    })
     return () => {
       cancelled = true
       if (groupRef.current) { groupRef.current.remove(); groupRef.current = null }
@@ -844,6 +887,20 @@ function ResizeFix() {
   return null
 }
 
+/** Leaflet doesn't detect the container growing to fill the screen on its
+ *  own — the fullscreen button flips `isFullscreen` (state that controls the
+ *  MapContainer's own `height` style, since that's set inline in pixels and
+ *  won't auto-grow with the Fullscreen API's CSS), and this just tells the
+ *  map to recompute its size once that resize has actually happened. */
+function FullscreenSync({ isFullscreen }: { isFullscreen: boolean }) {
+  const map = useMap()
+  useEffect(() => {
+    const t = setTimeout(() => map.invalidateSize(), 80)
+    return () => clearTimeout(t)
+  }, [map, isFullscreen])
+  return null
+}
+
 // ── Highway: roads by jurisdiction (private/local/county/state/federal) ─────
 // Category metadata (labels, colors, Overpass filters) lives in
 // lib/municipal/roadCats.ts, not here — that file has no Leaflet import, so
@@ -1011,7 +1068,8 @@ function ZoningLegend({ items }: { items: { label: string; color: string }[] }) 
   return (
     <div
       style={{
-        position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
+        // Stacked above the basemap toggle, which always occupies bottom:10.
+        position: 'absolute', bottom: 54, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
         padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
         backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)', maxWidth: 220,
       }}
@@ -1105,8 +1163,57 @@ const rowStyle: React.CSSProperties = {
   color: '#fff', fontSize: 12.5, cursor: 'pointer',
 }
 
+// Shared glass-pill look for the corner controls below, matching the
+// existing Layers/RoadsLegend chrome.
+const pillStyle: React.CSSProperties = {
+  display: 'inline-flex', alignItems: 'center', gap: 7, padding: '7px 12px', borderRadius: 999,
+  fontSize: 12.5, fontWeight: 600, cursor: 'pointer', color: '#fff',
+  background: 'rgba(20,24,28,0.82)', border: '1px solid rgba(255,255,255,0.28)',
+  backdropFilter: 'blur(6px)', boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+}
+
+/** Bottom-left basemap switcher — light canvas by default (legible against
+ *  our own data overlays; also the much lighter tile payload of the two),
+ *  with a one-tap way to see real aerial imagery instead. Button always
+ *  names the mode you'll switch TO, matching the convention most map apps
+ *  use for this exact control. */
+function BasemapToggle({ mode, onToggle }: { mode: 'light' | 'hybrid'; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      title={mode === 'light' ? 'Switch to satellite imagery' : 'Switch to light map'}
+      style={{ ...pillStyle, position: 'absolute', bottom: 10, left: 10, zIndex: 1000 }}
+    >
+      {mode === 'light' ? <>🛰 Satellite</> : <>🗺 Map</>}
+    </button>
+  )
+}
+
+/** Bottom-right fullscreen launcher — a plain browser Fullscreen API call on
+ *  the map's own card wrapper (not a bespoke lightbox), so the corner
+ *  controls and any legends stay usable at full size too. Controlled: the
+ *  parent owns `isFullscreen` (it also needs it to stretch the map's own
+ *  height), this just renders the button and requests/exits fullscreen. */
+function FullscreenButton({ isFullscreen, onToggle }: { isFullscreen: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
+      title={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
+      style={{
+        ...pillStyle, position: 'absolute', bottom: 10, right: 10, zIndex: 1000,
+        width: 34, height: 34, padding: 0, justifyContent: 'center', fontSize: 16,
+      }}
+    >
+      {isFullscreen ? '✕' : '⛶'}
+    </button>
+  )
+}
+
 export default function JurisdictionMap({
-  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, lightBasemapLayers, forceLightBasemap = false, zoomBoost, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles, flyToSbl, onPermitClick, flyToPermit,
+  muni, permits, permitsLabel = 'Recent permits', permitsGroup = 'Building', defaultActive = null, showIssues = true, onlyPermits = false, onlyRoads = false, showZoning = false, zoomBoost, height = 440, onParcelClick, focus, onlyLayers, simultaneousLayers, onRoadMiles, flyToSbl, onPermitClick, flyToPermit,
 }: {
   muni: string
   /** When provided, adds an opt-in address-marker layer (geocoded on demand). */
@@ -1132,18 +1239,6 @@ export default function JurisdictionMap({
    *  the Planning Board page, whose case map is locked to onlyPermits (so the
    *  general County GIS menu, which also lists 'zoning', isn't reachable there). */
   showZoning?: boolean
-  /** Light gray canvas basemap (instead of the default hybrid imagery+roads)
-   *  while one of these GIS layer keys is active — used on the Assessor
-   *  page, where a neutral light background reads the Assessment
-   *  choropleth's fill colors more clearly than dark satellite ground does,
-   *  while the centroid layer's dots read fine (and look better) over
-   *  imagery. Layers not listed here always use the hybrid basemap. */
-  lightBasemapLayers?: string[]
-  /** Forces the light gray canvas basemap regardless of the active layer —
-   *  for locked modes like `onlyRoads` that have no single "active" layer
-   *  concept for `lightBasemapLayers` to key off of, but where road lines
-   *  still read more clearly on a light background than on dark imagery. */
-  forceLightBasemap?: boolean
   /** Nudges the zoom level in by this many steps right after `Boundary`'s
    *  auto-fitBounds — e.g. `1` to land one level closer than a bare
    *  fit-to-town-outline would. Ignored when `focus` is set (fitBounds is
@@ -1219,10 +1314,28 @@ export default function JurisdictionMap({
   useEffect(() => { onRoadMiles?.(roadMiles) }, [roadMiles, onRoadMiles])
   const [viewTick, setViewTick] = useState(0)
   const bumpViewTick = useCallback(() => setViewTick((t) => t + 1), [])
+  // Light canvas by default everywhere — legible against our own overlays and
+  // a much lighter tile payload than the hybrid imagery+roads+labels stack;
+  // the corner toggle below switches to real aerial imagery on demand.
+  const [basemap, setBasemap] = useState<'light' | 'hybrid'>('light')
+  const cardRef = useRef<HTMLDivElement | null>(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(document.fullscreenElement === cardRef.current)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => { /* ignore */ })
+    } else {
+      cardRef.current?.requestFullscreen?.().catch(() => { /* unsupported browser — button just no-ops */ })
+    }
+  }, [])
 
   if (!cfg) return null
 
-  const useLightBasemap = forceLightBasemap || (active != null && !!lightBasemapLayers?.includes(active))
+  const useLightBasemap = basemap === 'light'
 
   const activeGisCfg = GIS.find((g) => g.key === active)
 
@@ -1247,14 +1360,17 @@ export default function JurisdictionMap({
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <div className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
+      <div ref={cardRef} className="card" style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
         {!onlyPermits && !onlyRoads && !simultaneousLayers && (
           <LayerMenu groups={groups} active={active} onPick={(k) => { setActive(k); setLayerState(null) }} statusNote={note} />
         )}
+        <BasemapToggle mode={basemap} onToggle={() => setBasemap((m) => (m === 'light' ? 'hybrid' : 'light'))} />
+        <FullscreenButton isFullscreen={isFullscreen} onToggle={toggleFullscreen} />
         {simultaneousLayers && (
           <div
             style={{
-              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
+              // Stacked above the basemap toggle, which always occupies bottom:10.
+              position: 'absolute', bottom: 54, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
               padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
               backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
             }}
@@ -1278,7 +1394,8 @@ export default function JurisdictionMap({
         {!onlyPermits && !onlyRoads && !simultaneousLayers && menuLegend?.kind === 'choropleth' && (
           <div
             style={{
-              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
+              // Stacked above the basemap toggle, which always occupies bottom:10.
+              position: 'absolute', bottom: 54, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 6,
               padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
               backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
             }}
@@ -1303,7 +1420,8 @@ export default function JurisdictionMap({
         {showZoning && (
           <div
             style={{
-              position: 'absolute', bottom: 10, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
+              // Stacked above the basemap toggle, which always occupies bottom:10.
+              position: 'absolute', bottom: 54, left: 10, zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 7,
               padding: 10, borderRadius: 12, background: 'rgba(16,19,22,0.9)', border: '1px solid rgba(255,255,255,0.16)',
               backdropFilter: 'blur(10px)', boxShadow: '0 12px 40px rgba(0,0,0,0.5)', maxWidth: 220,
             }}
@@ -1348,7 +1466,7 @@ export default function JurisdictionMap({
           center={focus?.center ?? cfg.center}
           zoom={focus?.zoom ?? cfg.zoom}
           scrollWheelZoom={false}
-          style={{ height, width: '100%', background: useLightBasemap ? '#f2efe9' : '#0a0a0a' }}
+          style={{ height: isFullscreen ? '100vh' : height, width: '100%', background: useLightBasemap ? '#f2efe9' : '#0a0a0a' }}
         >
           {useLightBasemap ? (
             <>
@@ -1421,12 +1539,13 @@ export default function JurisdictionMap({
               key={cat.key}
               cat={cat}
               active={roadsEnabled.has(cat.key)}
-              delayMs={i * 500}
+              delayMs={i * 250}
               onState={handleRoadState}
               onMiles={handleRoadMiles}
             />
           ))}
           <ResizeFix />
+          <FullscreenSync isFullscreen={isFullscreen} />
         </MapContainer>
       </div>
     </div>
