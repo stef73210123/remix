@@ -1176,14 +1176,19 @@ const pillStyle: React.CSSProperties = {
  *  our own data overlays; also the much lighter tile payload of the two),
  *  with a one-tap way to see real aerial imagery instead. Button always
  *  names the mode you'll switch TO, matching the convention most map apps
- *  use for this exact control. */
+ *  use for this exact control. zIndex 1200 (not 1000, matching pillStyle's
+ *  other users): Leaflet's own attribution control also sits at z-index
+ *  1000 and renders later in the DOM (MapContainer mounts after this
+ *  button), so on mobile — where the attribution text wraps to two lines
+ *  and grows tall enough to reach this corner — a tied z-index would let
+ *  it paint on top and swallow clicks. */
 function BasemapToggle({ mode, onToggle }: { mode: 'light' | 'hybrid'; onToggle: () => void }) {
   return (
     <button
       type="button"
       onClick={onToggle}
       title={mode === 'light' ? 'Switch to satellite imagery' : 'Switch to light map'}
-      style={{ ...pillStyle, position: 'absolute', bottom: 10, left: 10, zIndex: 1000 }}
+      style={{ ...pillStyle, position: 'absolute', bottom: 10, left: 10, zIndex: 1200 }}
     >
       {mode === 'light' ? <>🛰 Satellite</> : <>🗺 Map</>}
     </button>
@@ -1203,7 +1208,7 @@ function FullscreenButton({ isFullscreen, onToggle }: { isFullscreen: boolean; o
       aria-label={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
       title={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
       style={{
-        ...pillStyle, position: 'absolute', bottom: 10, right: 10, zIndex: 1000,
+        ...pillStyle, position: 'absolute', bottom: 10, right: 10, zIndex: 1200,
         width: 34, height: 34, padding: 0, justifyContent: 'center', fontSize: 16,
       }}
     >
