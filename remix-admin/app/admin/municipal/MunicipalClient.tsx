@@ -549,8 +549,10 @@ export default function MunicipalClient({
             <TownBackground muniKey={town} townName={data.municipalities.find((m) => m.key === town)?.name || ''} />
           )}
 
-          {/* Jurisdiction map — Dashboard tab only, for the selected town. */}
-          {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} />}
+          {/* Jurisdiction map — Dashboard tab only, for the selected town. Uses the
+              light canvas basemap, matching the Highway/Water & Sewer/Assessor
+              maps' switch away from dark satellite ground. */}
+          {board === 'ALL' && town !== 'ALL' && <JurisdictionMap muni={town} forceLightBasemap />}
 
           {/* Meetings — sits just above the board-sentiment roll-up on the "All"
               dashboard tab. (On a specific board tab, this same block already
