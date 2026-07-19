@@ -158,8 +158,9 @@ export default function HighwayClient({ userName }: { userName: string }) {
       <p className="muted" style={{ fontSize: 11.5, marginTop: 8, marginBottom: 26 }}>
         Categorized automatically from public road data — a best-effort read, not the Town's official jurisdiction
         map. Federal and county classes will read empty in areas with none of that road type nearby. Public parking
-        pins are the Town's downtown Armonk municipal lots per its Nelson\Nygaard parking study and the parking
-        district work that followed — not every lot's exact space count is published by the Town.
+        pins cover downtown Armonk's Town-owned lots, Main Street's on-street spaces, and the Armonk Square
+        shopping-center lot, per the Town's Nelson\Nygaard parking study and the parking district work that
+        followed — not every lot's exact space count is published by the Town.
       </p>
 
       <RoadMilesChart miles={roadMiles} />
