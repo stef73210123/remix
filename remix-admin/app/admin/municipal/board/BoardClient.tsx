@@ -8,6 +8,7 @@ import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
 import BoardCaseMap from './BoardCaseMap'
+import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardKeyDocs from './BoardKeyDocs'
 import MeetingAnalysisList from './MeetingAnalysisList'
@@ -262,36 +263,45 @@ export default function BoardClient({ userName }: { userName: string }) {
             </>
           )}
 
-          {/* Case/agenda-item map, at the top — Meetings sits directly below it. */}
-          <BoardCaseMap dataset={analysis} muni={muni} />
+          {/* Parks & Rec runs facilities, not public deliberative meetings the way
+              the boards do — its page gets a map of parks instead of the
+              case/agenda-item map + Meetings section every other board shows. */}
+          {body === 'parks_rec' ? (
+            <ParksMap muni={muni} />
+          ) : (
+            <>
+              {/* Case/agenda-item map, at the top — Meetings sits directly below it. */}
+              <BoardCaseMap dataset={analysis} muni={muni} />
 
-          {/* Meetings — one horizontal timeline: history on the left, upcoming on
-              the right, matching the municipal dashboard. Where an analysis
-              dataset exists, the meeting-by-meeting rows attach here in place of
-              the plain list. */}
-          <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Meetings</h2>
-          <MeetingTimeline
-            items={timelineItems}
-            selectedKey={selectedMeetingKey}
-            onSelect={setSelectedMeetingKey}
-            emptyText="No meetings ingested for this board yet."
-          />
-          {analysis && analysis.meetings.length > 0 ? (
-            <div style={{ margin: '10px 0 26px' }}>
-              <MeetingAnalysisList
-                meetings={analysis.meetings}
-                muni={muni}
-                body={body}
+              {/* Meetings — one horizontal timeline: history on the left, upcoming on
+                  the right, matching the municipal dashboard. Where an analysis
+                  dataset exists, the meeting-by-meeting rows attach here in place of
+                  the plain list. */}
+              <h2 style={{ fontSize: 16, margin: '0 0 12px' }}>Meetings</h2>
+              <MeetingTimeline
+                items={timelineItems}
                 selectedKey={selectedMeetingKey}
                 onSelect={setSelectedMeetingKey}
+                emptyText="No meetings ingested for this board yet."
               />
-            </div>
-          ) : (
-            timelineItems.length > 0 && (
-              <div style={{ margin: '10px 0 26px' }}>
-                <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
-              </div>
-            )
+              {analysis && analysis.meetings.length > 0 ? (
+                <div style={{ margin: '10px 0 26px' }}>
+                  <MeetingAnalysisList
+                    meetings={analysis.meetings}
+                    muni={muni}
+                    body={body}
+                    selectedKey={selectedMeetingKey}
+                    onSelect={setSelectedMeetingKey}
+                  />
+                </div>
+              ) : (
+                timelineItems.length > 0 && (
+                  <div style={{ margin: '10px 0 26px' }}>
+                    <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+                  </div>
+                )
+              )}
+            </>
           )}
           {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
           <TranscriptAnalysis muni={muni} body={body} onData={setAnalysis} />
