@@ -84,7 +84,6 @@ export default function DeptClient({ userName }: { userName: string }) {
                 muni={muni}
                 defaultActive="assessment"
                 showIssues={false}
-                lightBasemapLayers={['parcel_boundaries']}
                 height={380}
                 onParcelClick={setSelectedParcel}
                 focus={{ center: [41.1294, -73.7131], zoom: 16 }}
@@ -106,7 +105,7 @@ export default function DeptClient({ userName }: { userName: string }) {
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                 Water &amp; sewer districts
               </div>
-              <JurisdictionMap muni={muni} showIssues={false} height={380} simultaneousLayers={['water_dist', 'sewer_dist']} forceLightBasemap />
+              <JurisdictionMap muni={muni} showIssues={false} height={380} simultaneousLayers={['water_dist', 'sewer_dist']} />
               <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5, maxWidth: 760 }}>
                 Sewer districts are drawn from the county&rsquo;s own dataset, which doesn&rsquo;t record which
                 town each district sits in — that layer is clipped to the map&rsquo;s view instead of an exact

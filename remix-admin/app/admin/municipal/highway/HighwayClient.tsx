@@ -149,7 +149,6 @@ export default function HighwayClient({ userName }: { userName: string }) {
           onlyRoads
           height={520}
           onRoadMiles={setRoadMiles}
-          forceLightBasemap
           zoomBoost={1}
           permits={NC_PUBLIC_PARKING}
           permitsLabel="Public parking"

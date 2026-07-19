@@ -28,7 +28,6 @@ export default function ParksMap({ muni }: { muni: string }) {
         permitsGroup="Parks"
         onlyPermits
         showIssues={false}
-        forceLightBasemap
         height={420}
       />
       <p className="muted" style={{ fontSize: 11.5, marginTop: 8 }}>
