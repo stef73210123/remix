@@ -93,7 +93,7 @@ export default function DeptClient({ userName }: { userName: string }) {
               />
 
               <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                All Tax Parcels
+                Tax Parcels
               </div>
               <div className="card" style={{ padding: 16 }}>
                 <AllTaxParcelsList selectedParcel={selectedParcel} onSelectParcel={setFlyToSbl} />

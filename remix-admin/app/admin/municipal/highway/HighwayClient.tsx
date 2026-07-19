@@ -100,7 +100,7 @@ export default function HighwayClient({ userName }: { userName: string }) {
           responsibility, not the Town's.
         </span>
       </div>
-      {muni && <JurisdictionMap muni={muni} onlyRoads height={520} onRoadMiles={setRoadMiles} />}
+      {muni && <JurisdictionMap muni={muni} onlyRoads height={520} onRoadMiles={setRoadMiles} forceLightBasemap zoomBoost={1} />}
       <p className="muted" style={{ fontSize: 11.5, marginTop: 8, marginBottom: 26 }}>
         Categorized automatically from public road data — a best-effort read, not the Town's official jurisdiction
         map. Federal and county classes will read empty in areas with none of that road type nearby.
