@@ -16,7 +16,6 @@ import InTheNews from './InTheNews'
 import OpenPetitions from './OpenPetitions'
 import SchoolDistrict from './SchoolDistrict'
 import BoardSentiment, { type BoardScore } from './BoardProgress'
-import CivicActions from './CivicActions'
 import { isOpen } from '@/lib/flavor'
 import { nextMeetingDate, remainingYearMeetingDates, dayKey } from '@/lib/municipal/meetingPattern'
 
@@ -487,11 +486,10 @@ export default function MunicipalClient({
       {/* On the public OpenNorthCastle build the wordmark + civic buttons live
           in the sticky header (MuniHeader) instead, and the page title is
           redundant with it — so this whole row is Remix-only. */}
+      {/* CivicActions (FOIL/Report/Ask) now live in the shared bottom bar via
+          MuniHeader on both flavors, so no inline copy here. */}
       {!isOpen && (
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-          <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
-          <CivicActions style={{ marginTop: 4 }} />
-        </div>
+        <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
       )}
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading municipal pipeline…</div>}
