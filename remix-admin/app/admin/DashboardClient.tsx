@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { Mail } from 'lucide-react'
 import {
   STATE_CODES,
@@ -52,6 +52,8 @@ export default function DashboardClient({
   const [tab, setTab] = useState<TabKey>('rfps')
   const [query, setQuery] = useState('')
   const [visible, setVisible] = useState(100)
+  // Which table row is expanded (collapsible detail). Keyed "<tab>-<id>".
+  const [openRow, setOpenRow] = useState<string | null>(null)
 
   const [rfps, setRfps] = useState<Opportunity[] | null>(null)
   const [rfpsLoading, setRfpsLoading] = useState(false)
@@ -65,6 +67,7 @@ export default function DashboardClient({
   useEffect(() => {
     setQuery('')
     setVisible(100)
+    setOpenRow(null)
   }, [tab])
 
   useEffect(() => {
@@ -271,13 +274,9 @@ export default function DashboardClient({
             <table>
               <thead>
                 <tr>
-                  <th style={{ width: 54 }}>Tier</th>
-                  <th style={{ width: 46 }}>State</th>
+                  <th style={{ width: 28 }}></th>
                   <th>Opportunity</th>
-                  <th>Agency</th>
-                  <th>Due</th>
-                  <th className="hidden-narrow">Why it fits</th>
-                  <th style={{ width: 60 }}>Link</th>
+                  <th style={{ width: 90 }}>Due</th>
                 </tr>
               </thead>
               <tbody>
@@ -287,39 +286,57 @@ export default function DashboardClient({
                   const past = d !== null && d < 0
                   const linkLabel =
                     o.linkStatus === 'search-fallback' ? `${o.sourceName}*` : o.sourceName
+                  const id = `rfp-${o.id}`
+                  const isOpen = openRow === id
+                  const stop = (e: React.MouseEvent) => e.stopPropagation()
                   return (
-                    <tr key={o.id}>
-                      <td><TierBadge tier={o.tier} /></td>
-                      <td><StateBadge state={o.state} /></td>
-                      <td style={{ fontWeight: 600 }}>
-                        {o.title}
-                        <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>
-                          {o.cr && `#${o.cr}`}
-                          {o.cr && o.city ? ' · ' : ''}
-                          {o.city}
-                        </div>
-                      </td>
-                      <td style={{ fontSize: 13 }}>{o.agency}</td>
-                      <td
-                        style={{
-                          whiteSpace: 'nowrap',
-                          fontSize: 13,
-                          color: past ? 'var(--muted)' : urgent ? 'var(--warn)' : 'inherit',
-                          fontWeight: urgent ? 700 : 400,
-                        }}
-                      >
-                        {o.dueLabel || '—'}
-                      </td>
-                      <td className="muted hidden-narrow" style={{ fontSize: 12, maxWidth: 340 }}>
-                        {o.rationale || (o.curated ? '' : 'Auto-ingested — not yet triaged.')}
-                      </td>
-                      <td>{link(o.sourceUrl, linkLabel)}</td>
-                    </tr>
+                    <Fragment key={o.id}>
+                      <tr onClick={() => setOpenRow(isOpen ? null : id)} style={{ cursor: 'pointer' }}>
+                        <td style={{ color: 'var(--muted)', textAlign: 'center' }}>{isOpen ? '▾' : '▸'}</td>
+                        <td style={{ fontWeight: 600 }}>
+                          {o.title}
+                          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                            <TierBadge tier={o.tier} />
+                            <StateBadge state={o.state} />
+                            <span className="muted" style={{ fontSize: 12 }}>
+                              {o.cr && `#${o.cr}`}
+                              {o.cr && o.city ? ' · ' : ''}
+                              {o.city}
+                            </span>
+                          </div>
+                        </td>
+                        <td
+                          style={{
+                            whiteSpace: 'nowrap',
+                            fontSize: 13,
+                            color: past ? 'var(--muted)' : urgent ? 'var(--warn)' : 'inherit',
+                            fontWeight: urgent ? 700 : 400,
+                          }}
+                        >
+                          {o.dueLabel || '—'}
+                        </td>
+                      </tr>
+                      {isOpen && (
+                        <tr>
+                          <td colSpan={3} style={{ background: 'var(--panel-2)', padding: '14px 18px', borderTop: '1px solid var(--border)' }}>
+                            <div style={{ fontSize: 13, marginBottom: 8 }}>
+                              <span className="label" style={{ display: 'inline' }}>Agency — </span>
+                              {o.agency || '—'}
+                            </div>
+                            <div style={{ fontSize: 13, lineHeight: 1.5, marginBottom: 8 }}>
+                              <span className="label" style={{ display: 'inline' }}>Why it fits — </span>
+                              {o.rationale || (o.curated ? '—' : 'Auto-ingested — not yet triaged.')}
+                            </div>
+                            <div onClick={stop}>{link(o.sourceUrl, linkLabel)}</div>
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
                   )
                 })}
                 {filteredRfps.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="muted" style={{ padding: 20 }}>
+                    <td colSpan={3} className="muted" style={{ padding: 20 }}>
                       No RFPs match this filter yet.
                     </td>
                   </tr>
@@ -336,32 +353,47 @@ export default function DashboardClient({
           <table>
             <thead>
               <tr>
-                <th style={{ width: 54 }}>Tier</th>
+                <th style={{ width: 28 }}></th>
                 <th>Firm</th>
-                <th>Contact</th>
-                <th>Status</th>
-                <th className="hidden-narrow">City</th>
-                <th style={{ width: 60 }}>Web</th>
+                <th style={{ width: 120 }}>Status</th>
               </tr>
             </thead>
             <tbody>
-              {crmRows.map((e, i) => (
-                <tr key={`${e.firm}-${i}`}>
-                  <td><TierBadge tier={e.tier} /></td>
-                  <td style={{ fontWeight: 600 }}>
-                    {e.firm || '—'}
-                    {e.email && (
-                      <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>{e.email}</div>
+              {crmRows.map((e, i) => {
+                const id = `crm-${e.firm}-${i}`
+                const isOpen = openRow === id
+                const stop = (ev: React.MouseEvent) => ev.stopPropagation()
+                const webHref = e.web ? (e.web.startsWith('http') ? e.web : `https://${e.web}`) : ''
+                return (
+                  <Fragment key={id}>
+                    <tr onClick={() => setOpenRow(isOpen ? null : id)} style={{ cursor: 'pointer' }}>
+                      <td style={{ color: 'var(--muted)', textAlign: 'center' }}>{isOpen ? '▾' : '▸'}</td>
+                      <td style={{ fontWeight: 600 }}>
+                        {e.firm || '—'}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                          <TierBadge tier={e.tier} />
+                          {e.contact && <span className="muted" style={{ fontSize: 12 }}>{e.contact}</span>}
+                        </div>
+                      </td>
+                      <td style={{ fontSize: 13 }}>{e.status || '—'}</td>
+                    </tr>
+                    {isOpen && (
+                      <tr>
+                        <td colSpan={3} style={{ background: 'var(--panel-2)', padding: '14px 18px', borderTop: '1px solid var(--border)' }}>
+                          <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+                            <div><div className="label">Contact</div><div style={{ fontSize: 13 }}>{e.contact || '—'}</div></div>
+                            <div><div className="label">Email</div><div style={{ fontSize: 13 }}>{e.email ? <a href={`mailto:${e.email}`} className="muted">{e.email}</a> : '—'}</div></div>
+                            <div><div className="label">City</div><div style={{ fontSize: 13 }}>{e.city || '—'}</div></div>
+                            <div><div className="label">Web</div><div style={{ fontSize: 13 }} onClick={stop}>{webHref ? link(webHref, 'Site') : <span className="muted">—</span>}</div></div>
+                          </div>
+                        </td>
+                      </tr>
                     )}
-                  </td>
-                  <td style={{ fontSize: 13 }}>{e.contact || '—'}</td>
-                  <td style={{ fontSize: 13 }}>{e.status || '—'}</td>
-                  <td className="muted hidden-narrow" style={{ fontSize: 13 }}>{e.city || '—'}</td>
-                  <td>{e.web ? link(e.web.startsWith('http') ? e.web : `https://${e.web}`, 'Site') : <span className="muted">—</span>}</td>
-                </tr>
-              ))}
+                  </Fragment>
+                )
+              })}
               {crmRows.length === 0 && (
-                <tr><td colSpan={6} className="muted" style={{ padding: 20 }}>No entries. Run <code>npm run seed-crm</code> to import from your Stefan_CRM file.</td></tr>
+                <tr><td colSpan={3} className="muted" style={{ padding: 20 }}>No entries. Run <code>npm run seed-crm</code> to import from your Stefan_CRM file.</td></tr>
               )}
             </tbody>
           </table>
