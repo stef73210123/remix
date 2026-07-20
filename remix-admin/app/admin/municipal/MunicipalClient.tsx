@@ -522,7 +522,7 @@ export default function MunicipalClient({
                   <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
                 ))}
               </div>
-              {town === 'nc' && <TabDropdownGroups muni={town} active="" />}
+              {town === 'nc' && <TabDropdownGroups muni={town} active="" showBoards={false} />}
             </div>
           )}
 

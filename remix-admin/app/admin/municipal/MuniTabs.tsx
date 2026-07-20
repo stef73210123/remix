@@ -119,11 +119,14 @@ function TabGroupDropdown({
  *  board-analysis chip row, without duplicating the dropdown logic.
  *  Committees stays hidden from the menu (see COMMITTEE_TABS above) until
  *  there's at least one real committee page to link to. */
-export function TabDropdownGroups({ muni, active }: { muni: string; active: string }) {
+export function TabDropdownGroups({ muni, active, showBoards = true }: { muni: string; active: string; showBoards?: boolean }) {
   return (
     <>
-      <TabGroupDropdown label="Boards" tabs={BOARD_TABS} muni={muni} active={active} />
-      {COMMITTEE_TABS.length > 0 && (
+      {/* The Remix dashboard keeps its own Town Board/Planning Board analysis
+          chips, so it opts out of the Boards (and Committees) dropdown to avoid
+          listing those boards twice; Departments is always shown. */}
+      {showBoards && <TabGroupDropdown label="Boards" tabs={BOARD_TABS} muni={muni} active={active} />}
+      {showBoards && COMMITTEE_TABS.length > 0 && (
         <TabGroupDropdown label="Committees" tabs={COMMITTEE_TABS} muni={muni} active={active} placeholder="Committee pages are coming soon." />
       )}
       <TabGroupDropdown label="Departments" tabs={DEPARTMENT_TABS} muni={muni} active={active} />
