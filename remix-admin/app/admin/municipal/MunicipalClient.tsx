@@ -505,22 +505,16 @@ export default function MunicipalClient({
               ))}
             </div>
           )}
-          {/* ONC: the same Dashboard / Boards▾ / Committees▾ / Departments▾ strip
-              every other page uses — no separate per-board chips, since the
-              Boards dropdown already covers Town Board/Planning Board. Remix
-              (internal, multi-town) keeps its own board-analysis chip row,
-              which drives the inline board-profile view below. */}
+          {/* Dashboard / Boards▾ / Departments▾ strip — the Boards dropdown covers
+              Town Board/Planning Board, so no separate per-board chips (they were
+              redundant with the dropdown). Remix keeps its own town selector above;
+              boards are reached via the dropdown, same as ONC. */}
           {isOpen ? (
             <MuniTabs muni={town} active="dashboard" />
           ) : (
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 22 }}>
-              <div ref={tabScrollRef} className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap', minWidth: 0 }}>
-                <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
-                {boardTabs.map((b) => (
-                  <Chip key={b} active={board === b} onClick={() => setBoard(b)}>{b}</Chip>
-                ))}
-              </div>
-              {town === 'nc' && <TabDropdownGroups muni={town} active="" showBoards={false} />}
+            <div ref={tabScrollRef} style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 22 }}>
+              <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
+              {town === 'nc' && <TabDropdownGroups muni={town} active="" />}
             </div>
           )}
 
