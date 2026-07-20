@@ -1,10 +1,12 @@
 'use client'
 
+/**
+ * OpenDocket — municipal decision-maker directory, rendered as a tab inside
+ * the CRM dashboard (alongside RFPs / CRE / AI / …). Self-contained: fetches
+ * from /admin/api/opendocket and owns its own state filter + search.
+ */
 import { Fragment, useEffect, useMemo, useState } from 'react'
-import AdminNav from '@/app/admin/AdminNav'
 import type { OpenDocketContact } from '@/lib/opendocket'
-
-const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
 
 type StateFilter = 'ALL' | string
 
@@ -14,8 +16,6 @@ function fmtNum(n: number | null): string {
 function fmtUsd(n: number | null): string {
   return n == null ? '—' : `$${n.toLocaleString('en-US')}`
 }
-
-// Emails in the source are sometimes placeholders ("N/A", "not published").
 function isRealEmail(v: string): boolean {
   return /.+@.+\..+/.test(v) && !/^n\/?a$/i.test(v)
 }
@@ -30,15 +30,7 @@ function Email({ value }: { value: string }) {
   )
 }
 
-function Person({
-  name,
-  title,
-  email,
-}: {
-  name: string
-  title?: string
-  email: string
-}) {
+function Person({ name, title, email }: { name: string; title?: string; email: string }) {
   const n = (name || '').trim()
   if (!n || /^n\/?a$/i.test(n)) return <span className="muted">—</span>
   return (
@@ -52,7 +44,7 @@ function Person({
   )
 }
 
-export default function OpenDocketClient({ userName }: { userName: string }) {
+export default function OpenDocketPanel() {
   const [contacts, setContacts] = useState<OpenDocketContact[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -68,11 +60,10 @@ export default function OpenDocketClient({ userName }: { userName: string }) {
       .finally(() => setLoading(false))
   }, [])
 
-  const states = useMemo(() => {
-    if (!contacts) return []
-    return Array.from(new Set(contacts.map((c) => c.state))).filter(Boolean).sort()
-  }, [contacts])
-
+  const states = useMemo(
+    () => Array.from(new Set((contacts ?? []).map((c) => c.state))).filter(Boolean).sort(),
+    [contacts],
+  )
   const countsByState = useMemo(() => {
     const c: Record<string, number> = { ALL: contacts?.length ?? 0 }
     for (const row of contacts ?? []) c[row.state] = (c[row.state] || 0) + 1
@@ -99,35 +90,9 @@ export default function OpenDocketClient({ userName }: { userName: string }) {
   }, [contacts, stateFilter, q])
 
   return (
-    <div className="container">
-      <header
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 16,
-          marginBottom: 20,
-        }}
-      >
-        <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={WORDMARK} alt="Remix Properties" style={{ height: 34, display: 'block' }} />
-          <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>
-            OpenDocket · Signed in as {userName}
-          </div>
-        </div>
-        <AdminNav />
-      </header>
-
-      <h1 className="page-title">
-        OpenDocket
-        {contacts && (
-          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {contacts.length} municipalities</span>
-        )}
-      </h1>
-      <p className="muted" style={{ fontSize: 13, margin: '0 0 16px', maxWidth: 720 }}>
-        Municipal decision-makers — clerks, supervisors / mayors, and administrators — across the NY, NJ, CT & MA footprint.
+    <>
+      <p className="muted" style={{ fontSize: 13, margin: '0 0 12px', maxWidth: 720 }}>
+        Municipal decision-makers — clerks, supervisors / mayors, and administrators — across the NY, NJ, CT &amp; MA footprint.
       </p>
 
       {/* State filter — horizontal-scroll strip on mobile */}
@@ -251,6 +216,6 @@ export default function OpenDocketClient({ userName }: { userName: string }) {
           </table>
         )}
       </div>
-    </div>
+    </>
   )
 }
