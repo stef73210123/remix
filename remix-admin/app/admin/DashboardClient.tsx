@@ -17,8 +17,9 @@ import {
 import type { FundraisingContact } from '@/lib/fundraising'
 import AdminNav from '@/app/admin/AdminNav'
 import ClearableInput from '@/app/ClearableInput'
+import OpenDocketPanel from '@/app/admin/OpenDocketPanel'
 
-type TabKey = 'rfps' | CrmCategory | 'fundraising'
+type TabKey = 'rfps' | CrmCategory | 'fundraising' | 'opendocket'
 type StateFilter = 'ALL' | StateCode
 
 const WORDMARK = 'https://remix-admin-omega.vercel.app/remix-wordmark.png'
@@ -118,7 +119,7 @@ export default function DashboardClient({
   }, [rfps])
 
   const crmRows = useMemo(() => {
-    if (tab === 'rfps' || tab === 'fundraising') return []
+    if (tab === 'rfps' || tab === 'fundraising' || tab === 'opendocket') return []
     const rows = crm[tab] || []
     const filtered = rows.filter((e) => {
       if (!q) return true
@@ -156,6 +157,7 @@ export default function DashboardClient({
       count: (crm[c] || []).length,
     })),
     { key: 'fundraising', label: 'Fundraising', count: fund ? fund.length : null },
+    { key: 'opendocket', label: 'OpenDocket', count: null },
   ]
 
   const link = (href: string, label: string) =>
@@ -208,25 +210,30 @@ export default function DashboardClient({
         ))}
       </div>
 
-      {/* Search */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 14, alignItems: 'center' }}>
-        <ClearableInput
-          className="input"
-          placeholder="Search…"
-          value={query}
-          onChange={setQuery}
-          wrapperStyle={{ maxWidth: 320 }}
-        />
-        <span className="muted" style={{ fontSize: 13 }}>
-          {tab === 'rfps'
-            ? `${filteredRfps.length} shown`
-            : tab === 'fundraising'
-              ? fund
-                ? `${fundRows.length} of ${fund.length}`
-                : ''
-              : `${crmRows.length} shown`}
-        </span>
-      </div>
+      {/* Search — OpenDocket brings its own filter/search UI. */}
+      {tab !== 'opendocket' && (
+        <div style={{ display: 'flex', gap: 12, marginBottom: 14, alignItems: 'center' }}>
+          <ClearableInput
+            className="input"
+            placeholder="Search…"
+            value={query}
+            onChange={setQuery}
+            wrapperStyle={{ maxWidth: 320 }}
+          />
+          <span className="muted" style={{ fontSize: 13 }}>
+            {tab === 'rfps'
+              ? `${filteredRfps.length} shown`
+              : tab === 'fundraising'
+                ? fund
+                  ? `${fundRows.length} of ${fund.length}`
+                  : ''
+                : `${crmRows.length} shown`}
+          </span>
+        </div>
+      )}
+
+      {/* OpenDocket — municipal decision-maker directory */}
+      {tab === 'opendocket' && <OpenDocketPanel />}
 
       {/* RFPs — state filter chip row (horizontal-scroll strip on mobile).
           Records are refreshed automatically by the weekly ingest cron
@@ -324,7 +331,7 @@ export default function DashboardClient({
       )}
 
       {/* CRM categories */}
-      {tab !== 'rfps' && tab !== 'fundraising' && (
+      {tab !== 'rfps' && tab !== 'fundraising' && tab !== 'opendocket' && (
         <div className="card table-card">
           <table>
             <thead>
