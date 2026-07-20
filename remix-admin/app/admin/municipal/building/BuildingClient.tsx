@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
-import CivicActions from '@/app/admin/municipal/CivicActions'
 import { type TimelineItem } from '@/app/admin/municipal/MeetingTimeline'
 import MeetingList from '@/app/admin/municipal/MeetingList'
 import ClearableInput from '@/app/ClearableInput'
@@ -694,10 +693,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       <MuniHeader userName={userName} />
       <MuniTabs muni={muni} active="building" />
       {!isOpen && <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-        <h1 className="page-title" style={{ marginBottom: 6 }}>Building Department</h1>
-        {!isOpen && <CivicActions style={{ marginTop: 6 }} />}
-      </div>
+      <h1 className="page-title" style={{ marginBottom: 6 }}>Building Department</h1>
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading permit data…</div>}
       {!loading && !dataset && <div className="muted" style={{ padding: 20 }}>No permit data available.</div>}

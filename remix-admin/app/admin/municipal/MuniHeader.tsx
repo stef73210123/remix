@@ -30,17 +30,24 @@ export default function MuniHeader({ userName }: { userName?: string }) {
   }
 
   return (
-    <header
-      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}
-    >
-      <div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={BRAND.wordmark} alt={BRAND.name} style={{ height: BRAND.wordmarkHeight, width: 'auto', display: 'block' }} />
-        <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>
-          {`Municipal · Signed in as ${userName || ''}`}
+    <>
+      <header
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 20 }}
+      >
+        <div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={BRAND.wordmark} alt={BRAND.name} style={{ height: BRAND.wordmarkHeight, width: 'auto', display: 'block' }} />
+          <div className="muted" style={{ fontSize: 13, marginTop: 6 }}>
+            {`Municipal · Signed in as ${userName || ''}`}
+          </div>
         </div>
+        <AdminNav />
+      </header>
+      {/* Same floating civic-action bar as OpenNorthCastle, so FOIL / Report /
+          Ask stay pinned to the bottom instead of wedged into the top menu. */}
+      <div className="civic-bottom-bar">
+        <CivicActions />
       </div>
-      <AdminNav />
-    </header>
+    </>
   )
 }

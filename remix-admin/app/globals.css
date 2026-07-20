@@ -369,3 +369,35 @@ code {
   transform: translateY(-2px);
   background: var(--panel-2);
 }
+
+/* Floating civic-action bar (FOIL / Report / Ask) pinned to the bottom of the
+   viewport on the Remix flavor too — matching OpenNorthCastle, so these actions
+   stop being wedged into the top menu strip. (OpenNorthCastle keeps its own
+   light-themed rule in opennorthcastle.css.) The Remix app has no SiteFooter,
+   so .container reserves matching bottom clearance and the back-to-top button
+   lifts clear of the bar. */
+[data-flavor='remix'] .civic-bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1200;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+  background: rgba(12, 12, 12, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
+[data-flavor='remix'] .container {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+[data-flavor='remix'] .scroll-to-top-btn {
+  bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+}

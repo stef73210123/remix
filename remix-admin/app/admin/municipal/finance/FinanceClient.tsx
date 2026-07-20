@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
-import CivicActions from '@/app/admin/municipal/CivicActions'
 import BoardStaffCards from '@/app/admin/municipal/board/BoardStaffCards'
 import BoardKeyDocs from '@/app/admin/municipal/board/BoardKeyDocs'
 import BudgetPanel from '@/app/admin/municipal/budget/BudgetPanel'
@@ -55,10 +54,7 @@ export default function FinanceClient({ userName, muni, budgets }: {
       <MuniHeader userName={userName} />
       <MuniTabs muni={muni} active="finance" />
       {!isOpen && <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-        <h1 className="page-title" style={{ marginBottom: 6 }}>Finance</h1>
-        {!isOpen && <CivicActions style={{ marginTop: 6 }} />}
-      </div>
+      <h1 className="page-title" style={{ marginBottom: 6 }}>Finance</h1>
 
       <BoardStaffCards muni={activeTown || muni} bodyKey="finance" />
       <BoardKeyDocs muni={activeTown || muni} bodyKey="finance" />
