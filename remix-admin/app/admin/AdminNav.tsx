@@ -3,8 +3,8 @@
 /**
  * Global admin navigation — a hamburger button in the top-right that opens a
  * compact dropdown with the section links (Dashboard · OpenDocket · Atlas ·
- * Circular) and Sign out. Keeps the header clean on mobile instead of a wide
- * button strip.
+ * Circular · PlayGM) and Sign out. Keeps the header clean on mobile instead of
+ * a wide button strip.
  */
 import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
@@ -14,6 +14,7 @@ const LINKS: { label: string; href: string; external?: boolean }[] = [
   { label: 'OpenDocket', href: '/admin/municipal' },
   { label: 'Atlas', href: 'https://atlas.remixcre.com', external: true },
   { label: 'Circular', href: 'https://investors.circular.enterprises/admin/feed', external: true },
+  { label: 'PlayGM', href: 'https://playgm-server.vercel.app/admin/dashboard', external: true },
 ]
 
 export default function AdminNav() {
