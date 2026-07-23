@@ -22,6 +22,9 @@ export async function GET(req: Request) {
   const session = await verifySession(store.get(SESSION_COOKIE)?.value)
   if (!session) return NextResponse.redirect(new URL('/admin/login', req.url))
 
+  // SSO_PLAYGM_SECRET must be set on THIS (remix-admin) Vercel project — it's
+  // read at request time, so a redeploy is required after adding it. The same
+  // value must also be set on the PlayGM server, which verifies the token.
   const secret = process.env.SSO_PLAYGM_SECRET
   if (!secret) {
     return NextResponse.json({ error: 'SSO_PLAYGM_SECRET not configured' }, { status: 500 })
