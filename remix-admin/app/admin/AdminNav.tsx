@@ -14,8 +14,10 @@ const LINKS: { label: string; href: string; external?: boolean }[] = [
   { label: 'CRM', href: '/admin' },
   { label: 'OpenDocket', href: '/admin/municipal' },
   { label: 'Atlas', href: 'https://atlas.remixcre.com', external: true },
-  { label: 'Circular', href: 'https://investors.circular.enterprises/admin/feed', external: true },
-  { label: 'PlayGM', href: 'https://playgm-server.vercel.app/admin/dashboard', external: true },
+  // Circular / PlayGM go through same-origin SSO hand-off endpoints so an admin
+  // already signed into Remix isn't prompted to log in again.
+  { label: 'Circular', href: '/admin/sso/circular', external: true },
+  { label: 'PlayGM', href: '/admin/sso/playgm', external: true },
 ]
 
 export default function AdminNav() {
