@@ -2,6 +2,13 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { verifySession, SESSION_COOKIE } from '@/lib/auth'
 import AdminNav from '@/app/admin/AdminNav'
+import TodayPanel from './TodayPanel'
+import {
+  getLatestBriefing,
+  getFitnessState,
+  etDate,
+  DEFAULT_FITNESS_ITEMS,
+} from '@/lib/briefing'
 
 export const dynamic = 'force-dynamic'
 
@@ -146,6 +153,14 @@ export default async function AnalyticsDashboardPage() {
   const session = await verifySession(store.get(SESSION_COOKIE)?.value)
   if (!session) redirect('/admin/login')
 
+  const today = etDate()
+  const [briefing, fitnessState] = await Promise.all([
+    getLatestBriefing().catch(() => null),
+    getFitnessState(today).catch(() => ({})),
+  ])
+  const fitnessItems =
+    briefing?.fitness && briefing.fitness.length > 0 ? briefing.fitness : DEFAULT_FITNESS_ITEMS
+
   return (
     <div className="container">
       <header
@@ -167,6 +182,14 @@ export default async function AnalyticsDashboardPage() {
         </div>
         <AdminNav />
       </header>
+
+      <TodayPanel
+        date={today}
+        updatedAt={briefing?.updatedAt ?? null}
+        markdown={briefing?.markdown ?? null}
+        fitness={fitnessItems}
+        initialState={fitnessState}
+      />
 
       <h1 className="page-title">Analytics</h1>
       <p className="muted" style={{ fontSize: 13, margin: '0 0 20px', maxWidth: 720 }}>
