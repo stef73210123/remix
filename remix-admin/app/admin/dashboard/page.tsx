@@ -3,12 +3,14 @@ import { redirect } from 'next/navigation'
 import { verifySession, SESSION_COOKIE } from '@/lib/auth'
 import AdminNav from '@/app/admin/AdminNav'
 import TodayPanel from './TodayPanel'
+import ConsultingSection from './ConsultingSection'
 import {
   getLatestBriefing,
   getFitnessState,
   etDate,
   DEFAULT_FITNESS_ITEMS,
 } from '@/lib/briefing'
+import { getConsultingHours, CONSULTING_CLIENTS } from '@/lib/consulting'
 
 export const dynamic = 'force-dynamic'
 
@@ -154,12 +156,16 @@ export default async function AnalyticsDashboardPage() {
   if (!session) redirect('/admin/login')
 
   const today = etDate()
-  const [briefing, fitnessState] = await Promise.all([
+  const [briefing, fitnessState, consulting] = await Promise.all([
     getLatestBriefing().catch(() => null),
     getFitnessState(today).catch(() => ({})),
+    getConsultingHours().catch(() => null),
   ])
   const fitnessItems =
     briefing?.fitness && briefing.fitness.length > 0 ? briefing.fitness : DEFAULT_FITNESS_ITEMS
+  const consultingClients = Array.from(
+    new Set([...CONSULTING_CLIENTS, ...Object.keys(consulting ?? {})]),
+  )
 
   return (
     <div className="container">
@@ -210,6 +216,12 @@ export default async function AnalyticsDashboardPage() {
           <Kpi key={k} label={k} />
         ))}
       </div>
+
+      <ConsultingSection
+        data={consulting}
+        clients={consultingClients}
+        connected={Boolean(process.env.CONSULTING_HOURS_URL)}
+      />
 
       {SECTIONS.map((s) => (
         <Section key={s.title} title={s.title}>
