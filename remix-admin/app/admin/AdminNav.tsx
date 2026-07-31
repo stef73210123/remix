@@ -18,6 +18,8 @@ const LINKS: { label: string; href: string; external?: boolean }[] = [
   // already signed into Remix isn't prompted to log in again.
   { label: 'Circular', href: '/admin/sso/circular', external: true },
   { label: 'PlayGM', href: '/admin/sso/playgm', external: true },
+  // Deep-link straight to the PlayGM Build Tracker via the same SSO hand-off.
+  { label: 'PlayGM Tracker', href: '/admin/sso/playgm?next=/admin/tracker', external: true },
 ]
 
 export default function AdminNav() {

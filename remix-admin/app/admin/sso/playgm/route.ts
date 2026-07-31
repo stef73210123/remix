@@ -17,10 +17,25 @@ export const dynamic = 'force-dynamic'
 
 const PLAYGM_ACCEPT_URL = 'https://playgm-server.vercel.app/admin/sso'
 
+/**
+ * Post-SSO landing path forwarded to PlayGM. Only same-origin /admin paths are
+ * passed through — this value comes from the query string and PlayGM redirects
+ * to it, so anything else is dropped to avoid an open redirect. PlayGM
+ * re-validates the same way as defense in depth.
+ */
+function safeNext(raw: string | null): string | null {
+  if (!raw) return null
+  if (!/^\/admin\/[A-Za-z0-9._~/-]*$/.test(raw)) return null
+  if (raw.includes('//') || raw.includes('..')) return null
+  return raw
+}
+
 export async function GET(req: Request) {
   const store = await cookies()
   const session = await verifySession(store.get(SESSION_COOKIE)?.value)
   if (!session) return NextResponse.redirect(new URL('/admin/login', req.url))
+
+  const next = safeNext(new URL(req.url).searchParams.get('next'))
 
   // SSO_PLAYGM_SECRET must be set on THIS (remix-admin) Vercel project — it's
   // read at request time, so a redeploy is required after adding it. The same
@@ -38,5 +53,6 @@ export async function GET(req: Request) {
 
   const target = new URL(PLAYGM_ACCEPT_URL)
   target.searchParams.set('token', token)
+  if (next) target.searchParams.set('next', next)
   return NextResponse.redirect(target)
 }
