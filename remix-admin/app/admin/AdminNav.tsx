@@ -14,12 +14,12 @@ const LINKS: { label: string; href: string; external?: boolean }[] = [
   { label: 'CRM', href: '/admin' },
   { label: 'OpenDocket', href: '/admin/municipal' },
   { label: 'Atlas', href: 'https://atlas.remixcre.com', external: true },
-  // Circular / PlayGM go through same-origin SSO hand-off endpoints so an admin
+  // Circular goes through a same-origin SSO hand-off endpoint so an admin
   // already signed into Remix isn't prompted to log in again.
   { label: 'Circular', href: '/admin/sso/circular', external: true },
-  { label: 'PlayGM', href: '/admin/sso/playgm', external: true },
-  // Deep-link straight to the PlayGM Build Tracker via the same SSO hand-off.
-  { label: 'PlayGM Tracker', href: '/admin/sso/playgm?next=/admin/tracker', external: true },
+  // PlayGM opens embedded inline within the admin (its page iframes the SSO
+  // hand-off), so it stays on the same page instead of a new browser tab.
+  { label: 'PlayGM', href: '/admin/playgm' },
 ]
 
 export default function AdminNav() {
