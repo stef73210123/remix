@@ -104,7 +104,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   )
 }
 
-const KPIS = ['Open RFPs', 'CRM firms', 'Municipalities tracked', 'Fundraising pipeline', 'PlayGM DAU']
+const KPIS = ['Open RFPs', 'CRM firms', 'Municipalities tracked', 'Fundraising pipeline']
 
 const SECTIONS: { title: string; cards: { title: string; kind: ChartKind }[] }[] = [
   {
@@ -138,14 +138,6 @@ const SECTIONS: { title: string; cards: { title: string; kind: ChartKind }[] }[]
     cards: [
       { title: 'Investor pipeline by stage', kind: 'bars' },
       { title: 'Deal-room engagement', kind: 'line' },
-    ],
-  },
-  {
-    title: 'PlayGM',
-    cards: [
-      { title: 'DAU / MAU', kind: 'line' },
-      { title: 'Revenue by source', kind: 'bars' },
-      { title: 'Card packs opened', kind: 'bars' },
     ],
   },
 ]
@@ -200,7 +192,7 @@ export default async function AnalyticsDashboardPage() {
       <h1 className="page-title">Analytics</h1>
       <p className="muted" style={{ fontSize: 13, margin: '0 0 20px', maxWidth: 720 }}>
         Cross-section overview. These charts are placeholders — the layout is ready to wire up to
-        live metrics from each subsection (CRM, OpenDocket, Circular, PlayGM).
+        live metrics from each subsection (CRM, OpenDocket, Circular).
       </p>
 
       {/* KPI row */}
