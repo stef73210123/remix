@@ -5,6 +5,7 @@ import type { AnalysisDataset, MemberProfile } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, sentimentLabel } from '../sentiment'
 import { fmtDateShort as fmtDateCompact } from '@/lib/municipal/date'
 import ClearableInput from '@/app/ClearableInput'
+import MemberPositionsDonut from './MemberPositionsDonut'
 
 function fmtDateShort(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
@@ -114,6 +115,10 @@ export default function MemberSentiment({
           })()}
         </div>
       </div>
+
+      {/* Positions by disposition — donut (favor/neutral/oppose) with a
+          click-to-filter case list alongside it. */}
+      <MemberPositionsDonut profile={profile} />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 16 }}>
         {/* By theme */}
