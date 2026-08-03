@@ -19,15 +19,27 @@ ANALYSIS_DIR = sys.argv[1] if len(sys.argv) > 1 else \
 OUT = sys.argv[2] if len(sys.argv) > 2 else \
     "/home/user/remix/remix-admin/lib/municipal/data/nc-townboard/analysis.json"
 
-# North Castle Town Board roster (Supervisor + 4 Council Members). One seat
-# turnover across 2024-2026: Matt Milim (2024-25) left; Sonny Vataj joined 2026.
-# Jose Berra served all three years. ALIAS normalizes ASR manglings.
+# North Castle Town Board roster, now spanning 2022-2026 with the full backfill.
+# Two Supervisor eras: Michael Schiliro (through Dec 2023, did not seek a 6th
+# term) then Joseph Rende (Jan 2024-). Council seats: DiGiacinto, Hussain and
+# Berra served continuously 2022-2026; Matt Milim served Jan 2022-Dec 2025 (won
+# election Nov 2021, did not seek re-election in 2025) — NOT just 2024-25 as
+# previously assumed before the pre-2024 backfill; Sonny Vataj joined 2026,
+# replacing Milim. ALIAS normalizes ASR manglings. Deliberately no generic
+# "supervisor"→name fallback here since the seat itself changed hands across
+# the archive — the per-meeting analysis is expected to resolve the presiding
+# officer to the specific person for that meeting's era, not a title.
 # INACTIVE = members no longer serving (kept in the record, flagged in the UI).
-MEMBERS = ["Joseph Rende", "Barbara DiGiacinto", "Saleem Hussain", "Jose Berra", "Matt Milim", "Sonny Vataj"]
-INACTIVE = ["Matt Milim"]
+MEMBERS = ["Joseph Rende", "Michael Schiliro", "Barbara DiGiacinto", "Saleem Hussain", "Jose Berra", "Matt Milim", "Sonny Vataj"]
+INACTIVE = ["Michael Schiliro", "Matt Milim"]
 MEMBER_ALIAS = {
     "joseph rende": "Joseph Rende", "joe rende": "Joseph Rende", "supervisor rende": "Joseph Rende",
-    "rende": "Joseph Rende", "supervisor": "Joseph Rende",
+    "rende": "Joseph Rende",
+    # Schiliro (multi-syllable surname, prone to ASR mangling).
+    "michael schiliro": "Michael Schiliro", "mike schiliro": "Michael Schiliro",
+    "supervisor schiliro": "Michael Schiliro", "schiliro": "Michael Schiliro",
+    "skiliro": "Michael Schiliro", "chileno": "Michael Schiliro", "chilero": "Michael Schiliro",
+    "shalero": "Michael Schiliro", "skirillo": "Michael Schiliro", "silero": "Michael Schiliro",
     "barbara digiacinto": "Barbara DiGiacinto", "barbara": "Barbara DiGiacinto",
     "digiacinto": "Barbara DiGiacinto", "digacinto": "Barbara DiGiacinto", "digacento": "Barbara DiGiacinto",
     "saleem hussain": "Saleem Hussain", "saleem": "Saleem Hussain", "hussain": "Saleem Hussain",
