@@ -158,6 +158,13 @@ export default function MuniTabs({ muni, active }: { muni: string; active: 'dash
       <a href="/" className={active === 'dashboard' ? 'btn' : 'btn secondary'} style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>
         Dashboard
       </a>
+      <a
+        href={`/admin/municipal/towncode?muni=${muni}`}
+        className={active === 'towncode' ? 'btn' : 'btn secondary'}
+        style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}
+      >
+        Town Code
+      </a>
       <TabDropdownGroups muni={muni} active={active} />
     </div>
   )
