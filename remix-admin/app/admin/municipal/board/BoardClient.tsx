@@ -11,6 +11,7 @@ import BoardCaseMap from './BoardCaseMap'
 import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardKeyDocs from './BoardKeyDocs'
+import BoardMemberCards from './BoardMemberCards'
 import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
@@ -214,16 +215,12 @@ export default function BoardClient({ userName }: { userName: string }) {
         <>
           <h1 className="page-title" style={{ marginBottom: 6 }}>{data.board.displayName}</h1>
 
-          {/* Departmental staff cards — at the very top of the page. */}
-          <BoardStaffCards muni={muni} bodyKey={body} />
-
-          {/* Key reference documents (Town Code, Zoning Code, etc.) for this board. */}
-          <BoardKeyDocs muni={muni} bodyKey={body} />
-
-          {/* Members roster — only for boards WITHOUT a transcript dataset. Where a
-              dataset exists, the analysis section below shows members with sentiment,
-              so we don't duplicate (or show an empty roster above it). */}
-          {transcriptDates.size === 0 && data.members.length > 0 && (
+          {/* Board members — at the very top of the page. Where a transcript-analysis
+              dataset exists, this renders the sentiment-scored cards (same data
+              TranscriptAnalysis surfaces further down); otherwise a plain DB roster. */}
+          {analysis && analysis.members.some((mem) => mem.totalPositions > 0) ? (
+            <BoardMemberCards data={analysis} muni={muni} body={body} />
+          ) : transcriptDates.size === 0 && data.members.length > 0 && (
             <>
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
                 <h2 style={{ fontSize: 16, margin: 0 }}>
@@ -308,6 +305,10 @@ export default function BoardClient({ userName }: { userName: string }) {
 
           {/* Recurring/all applications (or agenda items) table — after Meetings. */}
           {analysis && <CasesList data={analysis} muni={muni} />}
+
+          {/* Departmental staff cards and key reference documents — at the bottom. */}
+          <BoardStaffCards muni={muni} bodyKey={body} />
+          <BoardKeyDocs muni={muni} bodyKey={body} />
 
           {/* Climb-back trail at the end of the board page */}
           {!isOpen && (
