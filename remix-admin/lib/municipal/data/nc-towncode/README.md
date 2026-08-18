@@ -7,11 +7,31 @@ Code page (`/admin/municipal/towncode?muni=nc`), reachable from a standalone
 top-level "Town Code" nav item.
 
 ## Contents
-- `analysis.json` — `{ meta, chapters }`. `meta` carries dataset-level stats
-  (rating/category counts, average score); `chapters` is one entry per
-  substantive code chapter (52 of the code's 54 chapters — 2 are `(Reserved)`
-  placeholders with no content and were excluded). Shape defined by
-  `lib/municipal/townCode.ts`.
+- `analysis.json` — `{ meta, chapters, recordCorpus, crossCuttingFindings }`.
+  `meta` carries dataset-level stats (rating/category counts, average score);
+  `chapters` is one entry per substantive code chapter (52 of the code's 54
+  chapters — 2 are `(Reserved)` placeholders with no content and were
+  excluded). Shape defined by `lib/municipal/townCode.ts`.
+
+## Meeting-record evidence layer (`recordEvidence`, `recordCorpus`, `crossCuttingFindings`)
+21 of the 52 chapters additionally carry a `recordEvidence` block — attributed,
+on-the-record statements from actual North Castle meeting transcripts (board
+members, staff, counsel, consultants, applicants) calling that chapter
+deficient, silent, obsolete, ambiguous, unenforceable, or internally
+inconsistent, each with a quote, attribution, meeting/date, and — where the
+codified text was checked — a `corroboration` note on whether it confirms or
+sharpens the claim. Sourced from a 263-transcript archive (Planning Board
+105, Town Board 113, Zoning Board of Appeals 44, Architectural Review Board
+1; 2018 and 2021-2026) via a three-pass extraction (deficiency-vocabulary
+pass, provision-specific gap pass, citation pass — see `recordCorpus` for
+pass-by-pass counts). Chapters with zero retained findings still carry a
+`note` distinguishing genuine adequacy (e.g. Ch. 340 Wetlands — heavily
+cited, never disputed) from simple absence of testing (rarely-triggered
+provisions that never came up for debate). `crossCuttingFindings` holds
+findings that span multiple chapters or lie between provisions (e.g. sign
+code interacting with a permitted use in a different chapter), which no
+single chapter's evidence list can surface alone. Speaker labels in this
+layer are best-effort automated diarization, not an attendance record.
 
 ## Per-chapter fields
 - `rating` — `Good shape` / `Standard` / `Needs work`, plus a 0-100

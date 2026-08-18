@@ -9,6 +9,8 @@ import { sentimentColor } from '../sentiment'
 import ClearableInput from '@/app/ClearableInput'
 import type { CodeChapter, TownCodeDataset } from '@/lib/municipal/townCode'
 
+const FLAW_COLOR = sentimentColor(-0.5)
+
 const RATINGS = ['Good shape', 'Standard', 'Needs work'] as const
 type Sort = 'attention' | 'chapter' | 'title'
 
@@ -47,6 +49,17 @@ function ChapterRow({ ch, open, onToggle }: { ch: CodeChapter; open: boolean; on
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
             <span style={{ fontWeight: 600, fontSize: 14 }}>{ch.title}</span>
             <RatingBadge rating={ch.rating} score={ch.progressScore} />
+            {!!ch.recordEvidence?.findings.length && (
+              <span
+                style={{
+                  fontSize: 10.5, fontWeight: 700, padding: '2px 8px', borderRadius: 999,
+                  background: 'var(--panel-2)', border: `1px solid ${FLAW_COLOR}`, color: FLAW_COLOR, whiteSpace: 'nowrap',
+                }}
+                title="On-the-record criticism of this chapter found in North Castle meeting transcripts"
+              >
+                🎙 {ch.recordEvidence.findings.length} from the record
+              </span>
+            )}
           </div>
           <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.5 }}>
             {ch.category}{ch.lastAmendment ? ` · Last amended ${ch.lastAmendment}` : ''}
@@ -115,7 +128,61 @@ function ChapterRow({ ch, open, onToggle }: { ch: CodeChapter; open: boolean; on
           <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
             How this compares
           </div>
-          <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.6 }}>{ch.peerComparison}</div>
+          <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.6, marginBottom: ch.recordEvidence ? 16 : 0 }}>{ch.peerComparison}</div>
+
+          {ch.recordEvidence && (
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+                <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  What the meeting record says
+                </div>
+                <span className="muted" style={{ fontSize: 11.5 }}>
+                  {ch.recordEvidence.citingUtterances} citing utterances · {ch.recordEvidence.meetingsCiting} meetings
+                </span>
+              </div>
+              <div style={{ fontSize: 13, lineHeight: 1.6, marginBottom: ch.recordEvidence.findings.length ? 12 : 0, fontWeight: 600 }}>
+                {ch.recordEvidence.verdict}
+              </div>
+
+              {ch.recordEvidence.findings.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 12 }}>
+                  {ch.recordEvidence.findings.map((f, i) => (
+                    <div key={i} style={{ padding: '10px 12px', background: 'var(--panel-2)', borderRadius: 8, borderLeft: `3px solid ${FLAW_COLOR}` }}>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: 6 }}>
+                        {f.section && (
+                          <span className="muted" style={{ fontSize: 11, fontVariantNumeric: 'tabular-nums', fontWeight: 700 }}>{f.section}</span>
+                        )}
+                        <span
+                          style={{
+                            fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em',
+                            padding: '2px 7px', borderRadius: 999, background: 'var(--panel)', border: '1px solid var(--border)',
+                          }}
+                        >
+                          {f.flawType}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 13, lineHeight: 1.6, marginBottom: 6, fontStyle: 'italic' }}>“{f.quote}”</div>
+                      <div className="muted" style={{ fontSize: 12 }}>— {f.attribution}, {f.meeting}</div>
+                      {f.corroboration && (
+                        <div className="muted" style={{ fontSize: 12, lineHeight: 1.55, marginTop: 6 }}>{f.corroboration}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : ch.recordEvidence.note ? (
+                <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.6, marginBottom: 12 }}>{ch.recordEvidence.note}</div>
+              ) : null}
+
+              {ch.recordEvidence.amendmentTraffic && (
+                <>
+                  <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+                    Amendment traffic
+                  </div>
+                  <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.6 }}>{ch.recordEvidence.amendmentTraffic}</div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -197,9 +264,31 @@ export default function TownCodeClient({ userName }: { userName: string }) {
             whichever priority (business friendliness, government efficiency, fiscal impact, environmental
             protection, etc.) actually fits that chapter's substance.
           </div>
-          <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.6, maxWidth: 760, marginBottom: 22, fontStyle: 'italic' }}>
+          <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.6, maxWidth: 760, marginBottom: data.recordCorpus ? 10 : 22, fontStyle: 'italic' }}>
             {data.meta.methodologyNote}
           </div>
+
+          {data.recordCorpus && (
+            <div className="card" style={{ padding: 14, maxWidth: 760, marginBottom: 22 }}>
+              <div style={{ fontSize: 12.5, lineHeight: 1.6, marginBottom: data.crossCuttingFindings?.length ? 10 : 0 }}>
+                Each chapter above is also checked against what North Castle's own boards, staff, counsel, and applicants
+                said about it on the record — <strong>{data.recordCorpus.totalTranscripts} meeting transcripts</strong>
+                {' '}({Object.entries(data.recordCorpus.byBoard).map(([b, n]) => `${b} ${n}`).join(', ')}), spanning{' '}
+                {data.recordCorpus.dateRange}. Chapters with findings show a 🎙 badge; open a chapter for quotes,
+                attribution, and — where checked — how the codified text corroborates the claim.
+              </div>
+              {!!data.crossCuttingFindings?.length && (
+                <details>
+                  <summary className="muted" style={{ fontSize: 11.5, cursor: 'pointer', fontWeight: 600 }}>
+                    Cross-cutting findings (span multiple chapters)
+                  </summary>
+                  <ul style={{ margin: '8px 0 0', paddingLeft: 18, fontSize: 12, lineHeight: 1.6 }}>
+                    {data.crossCuttingFindings.map((f, i) => <li key={i} style={{ marginBottom: 6 }}>{f}</li>)}
+                  </ul>
+                </details>
+              )}
+            </div>
+          )}
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 22 }}>
             <div className="card" style={{ padding: 14 }}>
