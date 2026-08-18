@@ -125,6 +125,8 @@ export interface AnalysisDataset {
 const DATA_DIRS: Record<string, string> = {
   'nc:planning': 'nc-planning',
   'nc:town_board': 'nc-townboard',
+  'nc:zba': 'nc-zba',
+  'nc:arb': 'nc-arb',
 }
 function dataDir(muniKey: string, bodyKey: string): string | null {
   const d = DATA_DIRS[`${muniKey}:${bodyKey}`]
