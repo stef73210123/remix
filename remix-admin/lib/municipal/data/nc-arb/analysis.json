@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "board": "Architectural Review Board",
+    "muniKey": "nc",
+    "bodyKey": "arb",
+    "town": "Town of North Castle",
+    "meetings": 1,
+    "cases": 1,
+    "themes": 2,
+    "memberPositions": 0,
+    "roster": [],
+    "inactiveMembers": [],
+    "source": "Meeting video transcripts (ASR, un-diarized); member attribution is name-based with per-position confidence.",
+    "errors": []
+  },
+  "meetingTimeline": [
+    {
+      "date": "2022-02-02",
+      "cases": 1,
+      "avgSentiment": 0.85,
+      "attributionCoverage": "low"
+    }
+  ],
+  "themes": [
+    {
+      "theme": "Architectural design & exteriors",
+      "meetings": 1,
+      "avgSentiment": 0.85,
+      "avgSalience": 0.75,
+      "timeline": [
+        {
+          "date": "2022-02-02",
+          "sentiment": 0.85,
+          "salience": 0.75
+        }
+      ]
+    },
+    {
+      "theme": "Open government & procedure",
+      "meetings": 1,
+      "avgSentiment": 0.0,
+      "avgSalience": 0.1,
+      "timeline": [
+        {
+          "date": "2022-02-02",
+          "sentiment": 0.0,
+          "salience": 0.1
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "115-round-hill-road",
+      "name": "115 Round Hill Road \u2014 Garage Second-Story Addition",
+      "address": "115 Round Hill Road",
+      "applicationType": "architectural review",
+      "applicant": "Mr. Gilbert (project representative)",
+      "themes": [
+        "Architectural design & exteriors",
+        "Land use, zoning & special permits",
+        "Other"
+      ],
+      "appearances": 1,
+      "firstSeen": "2022-02-02",
+      "lastSeen": "2022-02-02",
+      "lastStatus": "approved",
+      "avgSentiment": 0.85,
+      "trajectory": [
+        {
+          "date": "2022-02-02",
+          "sentiment": 0.85,
+          "status": "approved"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2022-02-02",
+          "status": "approved",
+          "sentiment": 0.85,
+          "summary": "Mr. Gilbert presented a proposal to add a second story atop an existing detached garage at 115 Round Hill Road, designed to exactly match the main house's roofline, siding, color, and finishes, consistent with a prior second-story addition already completed on another part of the property. Board members confirmed the garage is detached (so zoning has no issue with the added height) and that all exterior finishes will match the existing house exactly. After brief confusion over some members not having received the plan materials electronically, the Board voiced unanimous support and a motion was made, seconded, and approved."
+        }
+      ]
+    }
+  ],
+  "members": [],
+  "meetings": [
+    {
+      "date": "2022-02-02",
+      "meetingSummary": "This was a very brief North Castle Architectural Review Board meeting conducted over Zoom, consisting of a single agenda item: review of a proposed second-story addition atop a detached garage at 115 Round Hill Road, presented by the project's representative, Mr. Gilbert. The Board found the design consistent with the existing house and approved it within a few minutes of discussion. After the applicant left, members briefly discussed an unrelated administrative matter \u2014 artificial red poinsettia decorations still displayed on a town building, now more visible against the snow \u2014 and asked staff to check whether the town code addresses such decorations, closing with a note that the next meeting is scheduled for March 16.",
+      "durationNote": "The recording begins mid-conversation (pre-meeting phone chatter caught on the live stream) and the ASR transcription was cut short after repeated silent audio chunks in the source recording, so total meeting length and a full attendance/quorum list could not be determined. Multiple members can be heard responding during deliberation (e.g., several distinct 'I'm fine' remarks before a motion was seconded), indicating quorum was met, but no individual board member is named in the audio for this case.",
+      "cases": [
+        {
+          "id": "115-round-hill-road-garage-second-story-addition",
+          "name": "115 Round Hill Road \u2014 Garage Second-Story Addition",
+          "address": "115 Round Hill Road",
+          "applicationType": "architectural review",
+          "applicant": "Mr. Gilbert (project representative)",
+          "status": "approved",
+          "summary": "Mr. Gilbert presented a proposal to add a second story atop an existing detached garage at 115 Round Hill Road, designed to exactly match the main house's roofline, siding, color, and finishes, consistent with a prior second-story addition already completed on another part of the property. Board members confirmed the garage is detached (so zoning has no issue with the added height) and that all exterior finishes will match the existing house exactly. After brief confusion over some members not having received the plan materials electronically, the Board voiced unanimous support and a motion was made, seconded, and approved.",
+          "themes": [
+            "Architectural design & exteriors",
+            "Land use, zoning & special permits",
+            "Other"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.85,
+          "memberPositions": []
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Architectural design & exteriors",
+          "salience": 0.75,
+          "sentiment": 0.85,
+          "note": "Only substantive case on the agenda; approved quickly with no objections or conditions raised."
+        },
+        {
+          "theme": "Open government & procedure",
+          "salience": 0.1,
+          "sentiment": 0.0,
+          "note": "Very short meeting held over Zoom; members joked about its brevity and confirmed the session was being recorded; next meeting set for March 16."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "John (full name/title not stated)",
+          "role": "Town staff \u2014 exact role unclear from transcript (context, e.g. reference to 'the office' and following up on code questions, suggests Building Department/code enforcement staff rather than a Board member)",
+          "summary": "Addressed by a Board member about artificial red poinsettia decorations still displayed on a town building; said he had not been in the office that day and would follow up and get back to the Board, tentatively by Friday.",
+          "cases": []
+        }
+      ],
+      "attributionCoverage": "low",
+      "attributionNote": "No Architectural Review Board member is identified by name anywhere in this transcript. The only names heard are the applicant's representative for the 115 Round Hill Road case ('Mr. Gilbert', apparently addressed once as 'John' \u2014 i.e. likely John Gilbert) and two names in the closing administrative chatter ('Lori', mentioned in passing as someone a member had already spoken to, and a 'John' addressed about building decorations, who reads as Town staff rather than a Board member given his reference to following up from 'the office'). Deliberation on the sole case ('I actually saw...', 'I'm okay with what I saw...', multiple 'I'm fine' responses, 'I second it... in favor') could not be tied to specific individuals, so no memberPositions were recorded for this meeting \u2014 the outcome is reflected only in the case-level status and summary, per the attribution methodology's rule against inventing named positions without at least low-confidence evidence."
+    }
+  ]
+}

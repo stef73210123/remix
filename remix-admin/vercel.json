@@ -2,6 +2,7 @@
   "crons": [
     { "path": "/admin/api/cron/job-scan", "schedule": "0 11 * * *" },
     { "path": "/admin/api/cron/rfp-ingest", "schedule": "0 10 * * 1" },
-    { "path": "/admin/api/municipal/officials-refresh", "schedule": "0 7 1 * *" }
+    { "path": "/admin/api/municipal/officials-refresh", "schedule": "0 7 1 * *" },
+    { "path": "/admin/api/municipal/ingest-one?muni=nc&limit=15", "schedule": "0 13 * * *" }
   ]
 }
