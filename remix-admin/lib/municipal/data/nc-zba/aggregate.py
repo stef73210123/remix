@@ -19,52 +19,57 @@ ANALYSIS_DIR = sys.argv[1] if len(sys.argv) > 1 else \
 OUT = sys.argv[2] if len(sys.argv) > 2 else \
     "/home/user/remix/remix-admin/lib/municipal/data/nc-zba/analysis.json"
 
-# North Castle Zoning Board of Appeals roster, 2022-2026, compiled during the
-# 2026 backfill (the 2022-present five confirmed against the town's official
-# ZBA webpage). Two board turnovers happened across the archive: Joe
-# Monticelli chaired the board through 2023, with Lester Berkelhammer as the
-# fifth member — Berkelhammer resigned July 1, 2023 (a 26-year board veteran)
-# and passed away shortly after; Ray Rodriguez joined as a new member at the
-# October 5, 2023 meeting and had become chairman by 2024. Monticelli was
-# last heard in the record on 2023-12-07 and does not appear in any 2024+
-# meeting, consistent with him also having left the board by then. Ed
-# Lashins is never heard before 2024 — he appears to have joined alongside
-# or shortly after Rodriguez. Deliberately NO generic "chairman"/"chair"->name
-# fallback, since the chair changed hands mid-archive (Monticelli through
-# 2023, Rodriguez from late 2023/2024) — the per-meeting analyses are
-# expected to resolve a bare "chairman" mention to the specific person for
-# that meeting's era, not a title. ALIAS also normalizes ASR manglings,
-# especially for "Stipo" (rendered many different
-# ways) and the two historical names (badly garbled: "Monticello,"
-# "Montsellick," "Bonsell" for Monticelli; "Bergenheimer," "Purple Hammer,"
-# "Circle Howard," "Birkel Hammer" for Berkelhammer — real spelling
-# uncertain from ASR alone, "Berkelhammer" chosen as the more plausible
-# surname). Lori Zawacki is Board Secretary/Clerk (staff, not a voting
-# member) and is deliberately NOT on this roster — she's expected to appear
-# only in staffInput. INACTIVE = members no longer serving.
-MEMBERS = ["Ray Rodriguez", "Ed Lashins", "Bob Greer", "Scott Stopnik", "John Stipo",
-           "Joe Monticelli", "Lester Berkelhammer"]
-INACTIVE = ["Joe Monticelli", "Lester Berkelhammer"]
+# North Castle Zoning Board of Appeals roster, 2022-2026. All spellings
+# verified against the Town's own published ZBA agendas (2023-02-02 agenda:
+# "Joseph Monticelli, Chairman / Lester Berkelhamer / John Stipo / Robert
+# Greer / Scott Stopnik"; 2025-01-09 agenda: "Ray Rodriguez, Chairman / John
+# Stipo / Robert Greer / Scott Stopnik / Ed Lashins"). Two board turnovers
+# happened across the archive: Joseph Monticelli chaired the board through
+# 2023, with Lester Berkelhamer as the fifth member — Berkelhamer resigned
+# July 1, 2023 (a 26-year board veteran) and passed away shortly after; Ray
+# Rodriguez joined as a new member at the October 5, 2023 meeting and had
+# become chairman by 2024. Monticelli was last heard in the record on
+# 2023-12-07 and does not appear in any 2024+ meeting, consistent with him
+# also having left the board by then. Ed Lashins is never heard before 2024
+# — he appears to have joined alongside or shortly after Rodriguez.
+# Deliberately NO generic "chairman"/"chair"->name fallback, since the chair
+# changed hands mid-archive (Monticelli through 2023, Rodriguez from late
+# 2023/2024) — the per-meeting analyses are expected to resolve a bare
+# "chairman" mention to the specific person for that meeting's era, not a
+# title. ALIAS also normalizes ASR manglings, especially for "Stipo"
+# (rendered many different ways) and the two historical names (badly
+# garbled: "Monticello," "Montsellick," "Bonsell" for Monticelli;
+# "Bergenheimer," "Purple Hammer," "Circle Howard," "Birkel Hammer" for
+# Berkelhamer). Staff on the agendas — Lori J. Zawacki (Secretary), Gerald
+# Reilly then Mary Desmond (Town Counsel), Rob Melillo (Building Inspector)
+# — are deliberately NOT on this roster; they're expected to appear only in
+# staffInput. INACTIVE = members no longer serving.
+MEMBERS = ["Ray Rodriguez", "Ed Lashins", "Robert Greer", "Scott Stopnik", "John Stipo",
+           "Joseph Monticelli", "Lester Berkelhamer"]
+INACTIVE = ["Joseph Monticelli", "Lester Berkelhamer"]
 MEMBER_ALIAS = {
     "ray rodriguez": "Ray Rodriguez", "raymond rodriguez": "Ray Rodriguez",
     "chairman rodriguez": "Ray Rodriguez",
     "ray": "Ray Rodriguez", "rodriguez": "Ray Rodriguez",
     "ed lashins": "Ed Lashins", "edward lashins": "Ed Lashins", "ed": "Ed Lashins", "lashins": "Ed Lashins",
-    "bob greer": "Bob Greer", "robert greer": "Bob Greer", "bob": "Bob Greer", "greer": "Bob Greer",
+    "robert greer": "Robert Greer", "bob greer": "Robert Greer", "bob": "Robert Greer", "greer": "Robert Greer",
     "scott stopnik": "Scott Stopnik", "scott": "Scott Stopnik", "stopnik": "Scott Stopnik",
     # Stipo — heavily ASR-mangled surname.
     "john stipo": "John Stipo", "stipo": "John Stipo", "steepo": "John Stipo", "stiefo": "John Stipo",
     "cepo": "John Stipo", "steve both": "John Stipo", "steve out": "John Stipo",
     # Monticelli — chairman through 2023, gone by 2024.
-    "joe monticelli": "Joe Monticelli", "joseph monticelli": "Joe Monticelli",
-    "chairman monticelli": "Joe Monticelli", "monticelli": "Joe Monticelli",
-    "joe monticello": "Joe Monticelli", "monticello": "Joe Monticelli",
-    "montsellick": "Joe Monticelli", "bonsell": "Joe Monticelli",
-    # Berkelhammer — fifth 2022-2023 member, resigned July 2023.
-    "lester berkelhammer": "Lester Berkelhammer", "les berkelhammer": "Lester Berkelhammer",
-    "berkelhammer": "Lester Berkelhammer", "lester bergenheimer": "Lester Berkelhammer",
-    "bergenheimer": "Lester Berkelhammer", "purple hammer": "Lester Berkelhammer",
-    "circle howard": "Lester Berkelhammer", "birkel hammer": "Lester Berkelhammer",
+    "joseph monticelli": "Joseph Monticelli", "joe monticelli": "Joseph Monticelli",
+    "chairman monticelli": "Joseph Monticelli", "monticelli": "Joseph Monticelli",
+    "joe monticello": "Joseph Monticelli", "monticello": "Joseph Monticelli",
+    "montsellick": "Joseph Monticelli", "bonsell": "Joseph Monticelli",
+    # Berkelhamer (one "m" — per the Town's own agenda) — fifth 2022-2023
+    # member, resigned July 2023.
+    "lester berkelhamer": "Lester Berkelhamer", "les berkelhamer": "Lester Berkelhamer",
+    "berkelhamer": "Lester Berkelhamer",
+    "lester berkelhammer": "Lester Berkelhamer", "les berkelhammer": "Lester Berkelhamer",
+    "berkelhammer": "Lester Berkelhamer", "lester bergenheimer": "Lester Berkelhamer",
+    "bergenheimer": "Lester Berkelhamer", "purple hammer": "Lester Berkelhamer",
+    "circle howard": "Lester Berkelhamer", "birkel hammer": "Lester Berkelhamer",
 }
 
 def canon_member(name):
