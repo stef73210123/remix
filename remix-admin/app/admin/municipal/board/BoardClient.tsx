@@ -279,7 +279,7 @@ export default function BoardClient({ userName }: { userName: string }) {
                 items={timelineItems}
                 selectedKey={selectedMeetingKey}
                 onSelect={setSelectedMeetingKey}
-                emptyText="No meetings ingested for this board yet."
+                emptyText="We don't have any meetings on file for this board yet."
               />
               {analysis && analysis.meetings.length > 0 ? (
                 <div style={{ margin: '10px 0 26px' }}>

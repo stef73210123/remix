@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import type { AnalysisDataset, MemberProfile } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
+import TranscriptCaveat from '../TranscriptCaveat'
 
 /** Diverging bar: center = 0, fill extends left (neg) or right (pos). */
 function SentBar({ score, height = 8 }: { score: number; height?: number }) {
@@ -22,7 +23,11 @@ function SentBar({ score, height = 8 }: { score: number; height?: number }) {
 }
 
 function Chip({ score }: { score: number }) {
-  return <span style={sentimentChipStyle(score)} title={dispositionLabel(score)}>{fmtSent(score)}</span>
+  return (
+    <span style={sentimentChipStyle(score)} title={`${dispositionLabel(score)} — how this member's recorded remarks read overall, not a vote count`}>
+      {fmtSent(score)}
+    </span>
+  )
 }
 
 function MemberCard({ mem, muni, body, role, inactive = false }: { mem: MemberProfile; muni: string; body: string; role?: string; inactive?: boolean }) {
@@ -38,7 +43,7 @@ function MemberCard({ mem, muni, body, role, inactive = false }: { mem: MemberPr
         padding: 14, textDecoration: 'none', display: 'block', opacity: inactive ? 0.55 : 1,
         flex: '0 0 230px', minWidth: 0, scrollSnapAlign: 'start',
       }}
-      title={inactive ? `${mem.member} — former member` : undefined}
+      title={inactive ? `${mem.member} — no longer serving on this board` : undefined}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
         <div style={{ fontWeight: 700, display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
@@ -56,7 +61,7 @@ function MemberCard({ mem, muni, body, role, inactive = false }: { mem: MemberPr
       )}
       <div style={{ margin: '10px 0 4px' }}><SentBar score={mem.avgSentiment} /></div>
       <div className="muted" style={{ fontSize: 11, marginBottom: 10 }}>
-        {mem.totalPositions} positions · {Math.round(((conf.high || 0) / total) * 100)}% high-confidence
+        {mem.totalPositions} remarks · {Math.round(((conf.high || 0) / total) * 100)}% a confident match
       </div>
       {topThemes.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -74,9 +79,10 @@ function MemberCard({ mem, muni, body, role, inactive = false }: { mem: MemberPr
   )
 }
 
-/** "Board members — progress score" carousel, sourced from the transcript-analysis
- *  dataset (sentiment-scored cards) — sits at the top of the board page, above
- *  the rest of the analysis (progress score summary, timeline, themes). */
+/** "Board members" carousel, sourced from the transcript-analysis dataset — one
+ *  card per member showing how their recorded remarks read. Sits at the top of the
+ *  board page, above the rest of the analysis (overall tone, timeline, topics).
+ *  Wording here describes remarks, never people — see ../sentiment.ts. */
 export default function BoardMemberCards({ data, muni, body }: { data: AnalysisDataset; muni: string; body: string }) {
   const memberScrollRef = useRef<HTMLDivElement>(null)
   const m = data.meta
@@ -104,6 +110,9 @@ export default function BoardMemberCards({ data, muni, body }: { data: AnalysisD
           <button onClick={() => scrollMembersByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
         </div>
       </div>
+      {/* These cards are the first thing on a board page, so the caveat has to
+          travel with them rather than waiting for the analysis section below. */}
+      <TranscriptCaveat />
       <div
         ref={memberScrollRef}
         style={{
@@ -121,7 +130,8 @@ export default function BoardMemberCards({ data, muni, body }: { data: AnalysisD
       </div>
       {data.members.filter((mem) => mem.totalPositions === 0).length > 0 && (
         <div className="muted" style={{ fontSize: 12 }}>
-          No statements confidently attributed yet:{' '}
+          We haven&apos;t been able to match any remarks to these members yet — that usually means the
+          recordings we have don&apos;t name them clearly, not that they didn&apos;t speak:{' '}
           {data.members.filter((mem) => mem.totalPositions === 0).map((mem) => mem.member).join(', ')}
         </div>
       )}

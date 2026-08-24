@@ -6,6 +6,7 @@ import { sentimentColor, sentimentChipStyle, fmtSent, sentimentLabel } from '../
 import MeetingTimelineChart from './MeetingTimelineChart'
 import ProgressSpectrum, { weightedProgressScore } from '../ProgressSpectrum'
 import Sparkline from '../Sparkline'
+import TranscriptCaveat from '../TranscriptCaveat'
 import { fmtDateShort } from '@/lib/municipal/date'
 
 /** Trailing months of history shown in each theme row's sparkline. */
@@ -86,15 +87,16 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>Meeting transcript analysis</h2>
+      <h2 style={{ fontSize: 18, margin: '0 0 4px' }}>What this board discussed</h2>
       <div className="muted" style={{ fontSize: 13, marginBottom: 6 }}>
-        {m.meetings} meetings · {m.cases} {itemNounPlural} · {m.themes} themes · {m.memberPositions} attributed member positions
+        Read from the recordings of {m.meetings} meetings: {m.cases} {itemNounPlural}, {m.themes} recurring topics, and {m.memberPositions} remarks matched to a member.
       </div>
       {latestMeetingDate && (
-        <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
-          Data current as of {fmtCaptionDate(latestMeetingDate)} — reflects meetings through that date.
+        <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
+          Covers meetings through {fmtCaptionDate(latestMeetingDate)}. Anything more recent isn&apos;t here yet.
         </div>
       )}
+      <TranscriptCaveat />
       {/* ---- Consolidated board progress score ---- */}
       {(() => {
         const board = weightedProgressScore(data.members)
@@ -102,10 +104,10 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
         return (
           <div className="card" style={{ padding: 16, marginBottom: 28 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
-              <span style={{ fontSize: 13, fontWeight: 600 }}>{m.board} progress score</span>
+              <span style={{ fontSize: 13, fontWeight: 600 }}>{m.board} — overall discussion tone</span>
               <span style={sentimentChipStyle(board.score)}>{fmtSent(board.score)}</span>
               <span className="muted" style={{ fontSize: 13 }}>{sentimentLabel(board.score)}</span>
-              <span className="muted" style={{ fontSize: 12 }}>· {board.positions} positions across {board.members} members</span>
+              <span className="muted" style={{ fontSize: 12 }}>· {board.positions} remarks across {board.members} members</span>
             </div>
             <ProgressSpectrum score={board.score} height={16} showScale />
           </div>
@@ -118,10 +120,10 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
       {/* ---- Themes ---- */}
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
         <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-          Themes across the year
+          What comes up most often
         </h3>
         <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
-          {([['volume', 'Most volume'], ['positive', 'Most positive'], ['negative', 'Most negative']] as const).map(([k, label]) => (
+          {([['volume', 'Most discussed'], ['positive', 'Most supportive'], ['negative', 'Most critical']] as const).map(([k, label]) => (
             <button
               key={k}
               onClick={() => setThemeSort(k)}
@@ -146,8 +148,9 @@ export default function TranscriptAnalysis({ muni, body, onData }: {
         </div>
         <div className="muted" style={{ fontSize: 11, marginTop: 14, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ width: 10, height: 10, borderRadius: 2, background: sentimentColor(-0.6), display: 'inline-block' }} /> concern
-            <span style={{ width: 10, height: 10, borderRadius: 2, background: sentimentColor(0.6), display: 'inline-block', marginLeft: 8 }} /> favorable
+            Bar length shows how many meetings raised the topic; color shows how the discussion read —
+            <span style={{ width: 10, height: 10, borderRadius: 2, background: sentimentColor(-0.6), display: 'inline-block', marginLeft: 6 }} /> more critical
+            <span style={{ width: 10, height: 10, borderRadius: 2, background: sentimentColor(0.6), display: 'inline-block', marginLeft: 8 }} /> more supportive
           </span>
         </div>
       </div>

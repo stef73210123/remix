@@ -53,7 +53,7 @@ function SortControls({
             className={sortBy === s ? 'btn' : 'btn secondary'}
             style={{ padding: '4px 10px', fontSize: 11, borderRadius: 0, border: 'none' }}
           >
-            {s === 'volume' ? 'Volume' : 'Sentiment'}
+            {s === 'volume' ? 'Most discussed' : 'Tone'}
           </button>
         ))}
       </div>
@@ -127,7 +127,7 @@ export default function IssuesOverview({ muni }: { muni: string }) {
   return (
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>Local issues</h2>
+        <h2 style={{ fontSize: 16, margin: 0 }}>What the town talked about</h2>
         <select
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
@@ -140,13 +140,20 @@ export default function IssuesOverview({ muni }: { muni: string }) {
         </select>
       </div>
 
+      <div className="muted" style={{ fontSize: 12, lineHeight: 1.5, maxWidth: 660, margin: '-4px 0 12px' }}>
+        Topics raised across the meetings we have recordings for, in the year you pick. The number is how
+        many meetings touched on it; the colored value is how the discussion read, from critical to
+        supportive. It&apos;s an automated read of the recordings, so treat it as a rough guide to where
+        attention went — not a measure of what was decided.
+      </div>
+
       {themes.length === 0 ? (
-        <div className="card"><div className="muted" style={{ padding: 20, fontSize: 13 }}>No themes recorded for {year}.</div></div>
+        <div className="card"><div className="muted" style={{ padding: 20, fontSize: 13 }}>We don&apos;t have any meeting recordings analyzed for {year} yet.</div></div>
       ) : (
         <div className="card" style={{ padding: '16px 12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
             <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Themes · {sorted.length}
+              Topics · {sorted.length}
             </div>
             <SortControls sortBy={sortBy} onSortBy={setSortBy} desc={desc} onToggleDesc={() => setDesc((d) => !d)} />
           </div>
@@ -165,7 +172,7 @@ export default function IssuesOverview({ muni }: { muni: string }) {
                   ) : (
                     <DivergingBar score={t.avgSentiment} />
                   )}
-                  <span className="muted" style={{ width: 20, textAlign: 'right', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }} title={`${t.mentions} meetings`}>{t.mentions}</span>
+                  <span className="muted" style={{ width: 20, textAlign: 'right', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }} title={`Raised in ${t.mentions} meeting${t.mentions === 1 ? '' : 's'}`}>{t.mentions}</span>
                   <span style={{ ...sentimentChipStyle(t.avgSentiment), width: 36, flexShrink: 0, textAlign: 'center', padding: '2px 0' }}>{fmtSent(t.avgSentiment)}</span>
                   <Sparkline points={spark} />
                 </div>

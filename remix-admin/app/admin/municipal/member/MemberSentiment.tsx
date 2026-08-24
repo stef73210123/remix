@@ -6,6 +6,7 @@ import { sentimentColor, sentimentChipStyle, fmtSent, sentimentLabel } from '../
 import { fmtDateShort as fmtDateCompact } from '@/lib/municipal/date'
 import ClearableInput from '@/app/ClearableInput'
 import MemberPositionsDonut from './MemberPositionsDonut'
+import TranscriptCaveat from '../TranscriptCaveat'
 
 function fmtDateShort(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
@@ -89,15 +90,16 @@ export default function MemberSentiment({
 
   return (
     <div style={{ marginBottom: 28 }}>
-      <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>{data.meta.board} sentiment</h2>
-      <div className="muted" style={{ fontSize: 11, marginBottom: 16, lineHeight: 1.5, maxWidth: 640 }}>
-        {profile.totalPositions} attributed positions · {Math.round(((conf.high || 0) / total) * 100)}% high-confidence · directional (name-based)
+      <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>Discussion tone · {data.meta.board}</h2>
+      <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 640 }}>
+        Based on {profile.totalPositions} remarks matched to this member, {Math.round(((conf.high || 0) / total) * 100)}% of them a confident match.
       </div>
+      <TranscriptCaveat variant="member" />
 
       {/* Overall */}
       <div className="card" style={{ padding: 16, marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>Progress score</span>
+          <span style={{ fontSize: 13, fontWeight: 600 }}>Overall tone</span>
           <span style={sentimentChipStyle(profile.avgSentiment)}>{fmtSent(profile.avgSentiment)}</span>
           <span className="muted" style={{ fontSize: 13 }}>{sentimentLabel(profile.avgSentiment)}</span>
         </div>
@@ -124,7 +126,7 @@ export default function MemberSentiment({
         {/* By theme */}
         {profile.byTheme.length > 0 && (
           <div className="card" style={{ padding: 16 }}>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>Sentiment by theme</div>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>Tone by topic</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {themesBySentiment.map((t) => (
                 <div key={t.theme} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
@@ -201,7 +203,7 @@ export default function MemberSentiment({
                 <span style={{ ...sentimentChipStyle(e.score), flexShrink: 0, marginTop: 2 }}>{fmtSent(e.score)}</span>
                 <div style={{ fontSize: 13, lineHeight: 1.5 }}>
                   <span style={{ fontWeight: 600 }}>{e.case}</span>
-                  <span className="muted" style={{ fontSize: 11 }}> · {fmtDateShort(e.date)} · {e.stance}{e.confidence === 'low' ? ' · low confidence' : ''}</span>
+                  <span className="muted" style={{ fontSize: 11 }}> · {fmtDateShort(e.date)} · {e.stance}{e.confidence === 'low' ? ' · we\u2019re not certain this was them' : ''}</span>
                   <div className="muted" style={{ marginTop: 2 }}>{e.evidence}</div>
                 </div>
               </div>

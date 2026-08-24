@@ -84,7 +84,7 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 6 }}>
         <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
-          Sentiment timeline
+          Meeting by meeting
         </h3>
         <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
           {([['issue', 'By issue'], ['member', 'By member']] as const).map(([k, label]) => (
@@ -100,6 +100,11 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
         </div>
       </div>
 
+      <div className="muted" style={{ fontSize: 12, marginBottom: 8, maxWidth: 640, lineHeight: 1.5 }}>
+        One column per meeting, newest on the right. Taller columns had more discussion; hover or tap a
+        block to see what it was about.
+      </div>
+
       {/* Hover readout (updates as you move across the columns) */}
       <div style={{ fontSize: 12, minHeight: 20, marginBottom: 6 }}>
         {hover ? (
@@ -107,7 +112,7 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
             <span className="muted">{fmtDate(hover.col.date)} · </span>
             <span style={{ fontWeight: 600 }}>{hover.seg.label}</span>
             <span style={{ marginLeft: 8, ...chipInline(hover.seg.sentiment) }}>{fmtSent(hover.seg.sentiment)}</span>
-            <span className="muted"> · {hover.seg.count} position{hover.seg.count === 1 ? '' : 's'}</span>
+            <span className="muted"> · {hover.seg.count} remark{hover.seg.count === 1 ? '' : 's'}</span>
           </span>
         ) : null}
       </div>
@@ -149,7 +154,7 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
                           const r = e.currentTarget.getBoundingClientRect()
                           setHover((h) => (h?.seg === seg ? null : { col, seg, x: r.left + r.width / 2, y: r.top }))
                         }}
-                        title={`${fmtDate(col.date)} · ${seg.label} · ${fmtSent(seg.sentiment)} · ${seg.count} position${seg.count === 1 ? '' : 's'}`}
+                        title={`${fmtDate(col.date)} · ${seg.label} · ${fmtSent(seg.sentiment)} · ${seg.count} remark${seg.count === 1 ? '' : 's'}`}
                         style={{
                           height: `${(seg.count / maxTotal) * PLOT_H}px`,
                           background: sentimentColor(seg.sentiment),
@@ -176,9 +181,9 @@ export default function MeetingTimelineChart({ data }: { data: AnalysisDataset }
         {/* legend */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginTop: 8, fontSize: 11 }}>
           <span className="muted" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            opposed
+            more critical
             <span style={{ display: 'inline-block', width: 90, height: 10, borderRadius: 5, background: `linear-gradient(90deg, ${sentimentColor(-1)}, ${sentimentColor(0)}, ${sentimentColor(1)})` }} />
-            favorable
+            more supportive
           </span>
         </div>
       </div>

@@ -82,7 +82,7 @@ export default function CaseDetail({ prop, muni }: { prop: Property; muni: strin
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {currentStatus && <span className="badge state" style={{ fontSize: 12 }}>{currentStatus}</span>}
             {prop.applicationTypes.slice(0, 2).map((t) => <span key={t} className="badge">{t}</span>)}
-            <span style={sentimentChipStyle(prop.avgSentiment)} title="Progress score">{fmtSent(prop.avgSentiment)}</span>
+            <span style={sentimentChipStyle(prop.avgSentiment)} title="How the board's recorded discussion of this application read overall — not a decision or a vote">{fmtSent(prop.avgSentiment)}</span>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>

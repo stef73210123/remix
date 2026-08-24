@@ -18,12 +18,14 @@ type BucketKey = DispositionBucket | VoteBucket
 
 interface BucketDef { key: BucketKey; label: string; color: string }
 
-// Directional sentiment attribution (favor/neutral/oppose), on the same
+// How each remark read (supportive/mixed/critical), on the same
 // green/slate/coral diverging scale used everywhere else on the profile.
+// These describe the remark, not the person, and not a vote — see the
+// language note in ../sentiment.ts before relabelling.
 const DISPOSITION_BUCKETS: BucketDef[] = [
   { key: 'favor', label: 'Supportive', color: sentimentColor(0.6) },
-  { key: 'neutral', label: 'Neutral / mixed', color: sentimentColor(0) },
-  { key: 'oppose', label: 'Opposed', color: sentimentColor(-0.6) },
+  { key: 'neutral', label: 'Mixed or neutral', color: sentimentColor(0) },
+  { key: 'oppose', label: 'Critical', color: sentimentColor(-0.6) },
 ]
 function dispositionOf(score: number): DispositionBucket {
   if (score >= 0.15) return 'favor'
@@ -34,8 +36,8 @@ function dispositionOf(score: number): DispositionBucket {
 // An actual recorded vote (approved/denied/abstained/recused) is only
 // extractable where the transcript explicitly states one — most items here
 // were decided by voice vote/consensus with no individual roll call read
-// into the record, so most positions land in "Not recorded" rather than
-// being guessed from sentiment. Abstained/Recused reuse the app's existing
+// into the record, so most remarks land in "Not recorded" rather than
+// being guessed from how the remark sounded. Abstained/Recused reuse the app's existing
 // tier-accent colors (gold/slate-blue) so they read as procedural status,
 // not a 3rd/4th sentiment pole.
 const VOTE_BUCKETS: BucketDef[] = [
@@ -54,10 +56,9 @@ function voteOf(e: MemberEvidence): VoteBucket {
   return 'unrecorded'
 }
 
-/** Donut of a member's attributed positions, toggling between directional
- *  sentiment ("disposition") and an actual recorded vote extracted from the
- *  transcript text where one exists — with a case list to the right that
- *  filters to the clicked slice. */
+/** Donut of the remarks matched to a member, toggling between how each remark
+ *  read and an actual recorded vote pulled from the transcript text where one
+ *  exists — with a list to the right that filters to the clicked slice. */
 export default function MemberPositionsDonut({ profile }: { profile: MemberProfile }) {
   const [mode, setMode] = useState<Mode>('disposition')
   const [selected, setSelected] = useState<BucketKey | null>(null)
@@ -101,10 +102,10 @@ export default function MemberPositionsDonut({ profile }: { profile: MemberProfi
     <div className="card" style={{ padding: 16, marginBottom: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          {mode === 'disposition' ? 'Positions by disposition' : 'Positions by recorded vote'}
+          {mode === 'disposition' ? 'How their remarks read' : 'Where a vote was actually recorded'}
         </div>
         <div className="pill-strip" style={{ display: 'flex', gap: 4 }}>
-          {([['disposition', 'Disposition'], ['vote', 'Recorded vote']] as const).map(([k, label]) => (
+          {([['disposition', 'How it read'], ['vote', 'Recorded votes']] as const).map(([k, label]) => (
             <button
               key={k}
               onClick={() => switchMode(k)}
@@ -119,15 +120,16 @@ export default function MemberPositionsDonut({ profile }: { profile: MemberProfi
 
       {mode === 'vote' && (
         <div className="muted" style={{ fontSize: 11, marginBottom: 12, lineHeight: 1.5, maxWidth: 560 }}>
-          {recordedVotes} of {total} positions include an explicit recorded vote (aye/no/abstain/recusal) in the
-          transcript — most items here were decided by voice vote or consensus with no individual roll call read
-          into the record, so "Not recorded" isn't a guess, it's the honest majority.
+          {recordedVotes} of {total} remarks have an actual vote (aye, no, abstain or recusal) spoken aloud in the
+          recording. Most items are decided by voice vote or by consensus, with no name-by-name roll call read into
+          the record, so &ldquo;Not recorded&rdquo; is the usual outcome here — it does not mean the member was absent
+          or silent. The Town&apos;s minutes are the place to look up how a vote was formally recorded.
         </div>
       )}
 
       <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
-          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={mode === 'disposition' ? 'Positions by disposition' : 'Positions by recorded vote'}>
+          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={mode === 'disposition' ? 'How their remarks read' : 'Where a vote was actually recorded'}>
             <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--panel-2)" strokeWidth={thickness} />
             <g transform={`rotate(-90 ${cx} ${cy})`}>
               {counts.map((b) => {
@@ -162,7 +164,7 @@ export default function MemberPositionsDonut({ profile }: { profile: MemberProfi
               {total}
             </text>
             <text x={cx} y={cy + 14} textAnchor="middle" style={{ fontSize: 9.5, fill: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              positions
+              remarks
             </text>
           </svg>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -193,11 +195,11 @@ export default function MemberPositionsDonut({ profile }: { profile: MemberProfi
 
         <div style={{ flex: '1 1 260px', minWidth: 240 }}>
           <div className="muted" style={{ fontSize: 11, marginBottom: 10 }}>
-            {selected ? bucketDefs.find((b) => b.key === selected)!.label : 'All positions'} · {visible.length}
+            {selected ? bucketDefs.find((b) => b.key === selected)!.label : 'All remarks'} · {visible.length}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: 360, overflowY: 'auto' }}>
             {visible.length === 0 ? (
-              <div className="muted" style={{ fontSize: 13 }}>No positions in this category.</div>
+              <div className="muted" style={{ fontSize: 13 }}>No remarks in this category.</div>
             ) : (
               visible.map((e, i) => (
                 <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>

@@ -4,7 +4,16 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useLockBodyScroll } from './useLockBodyScroll'
 
-const RECIPIENTS = ['OpenNorthCastle team', 'Town Board', 'Planning Board', 'Building Department']
+// What the message is *about* — not who it is sent to. Everything routes to the
+// OpenNorthCastle inbox; the note under the field says so plainly, because a
+// resident picking "Town Board" would otherwise reasonably assume they had just
+// written to the Town.
+const RECIPIENTS = [
+  'This site (a correction, a bug, a suggestion)',
+  'Something about the Town Board',
+  'Something about the Planning Board',
+  'Something about the Building Department',
+]
 
 /**
  * Contact form lightbox — same visual/interaction shell as Lightbox.tsx and
@@ -80,19 +89,29 @@ export default function ContactLightbox({ onClose }: { onClose: () => void }) {
       >
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '16px 18px 4px', flexShrink: 0 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3 }}>Contact</div>
+            <div style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3 }}>Contact the OpenNorthCastle team</div>
           </div>
           <button onClick={onClose} aria-label="Close" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✕</button>
         </div>
         <div data-scroll-lock-allow style={{ padding: '10px 18px 18px', overflowY: 'auto', minHeight: 0 }}>
           {status === 'sent' ? (
             <div className="muted" style={{ fontSize: 13.5, lineHeight: 1.55, padding: '8px 0' }}>
-              Thanks — your message has been sent. We&apos;ll get back to you as soon as we can.
+              Thanks — your message reached the OpenNorthCastle team. We&apos;ll get back to you as soon as we
+              can. Remember this doesn&apos;t go to the Town, so anything official still needs to go through the
+              Town directly.
             </div>
           ) : (
             <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div className="muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
+                This form reaches the volunteers who run this site — <strong>not the Town of North Castle</strong>.
+                We can fix mistakes on these pages, but we can&apos;t act on anything official. For that, contact the
+                Town at{' '}
+                <a href="https://www.northcastleny.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary-light)' }}>
+                  northcastleny.com
+                </a>.
+              </div>
               <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 12.5 }}>
-                <span className="muted">Which department or board?</span>
+                <span className="muted">What&apos;s this about?</span>
                 <select value={recipient} onChange={(e) => setRecipient(e.target.value)} style={fieldStyle}>
                   {RECIPIENTS.map((r) => <option key={r} value={r}>{r}</option>)}
                 </select>

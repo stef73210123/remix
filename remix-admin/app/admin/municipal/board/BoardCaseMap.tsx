@@ -54,7 +54,8 @@ export default function BoardCaseMap({ dataset, muni }: { dataset: AnalysisDatas
         <h3 style={{ fontSize: 14, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)' }}>
           Map
           <span className="muted" style={{ fontSize: 12, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>
-            {' '}· {caseMarkers.length} {itemNounTitle} with a street address · pin color = sentiment
+            {' '}· {caseMarkers.length} {itemNounTitle} we could place at a street address · pin color shows
+            whether the board&apos;s discussion of it read critical or supportive
           </span>
         </h3>
         <select
