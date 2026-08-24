@@ -134,8 +134,8 @@ export default function AskLightbox({ muni, onClose }: { muni: string; onClose: 
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3 }}>Ask</div>
             <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.4, marginTop: 2 }}>
-              Answers are generated from OpenNorthCastle&rsquo;s public data and may be incomplete — always confirm
-              anything important directly with the Town.
+              An AI assistant answering from the public records collected on this site. It can be incomplete or
+              wrong, and it doesn&rsquo;t speak for the Town — confirm anything that matters with the Town directly.
             </div>
           </div>
           <button onClick={onClose} aria-label="Close" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✕</button>

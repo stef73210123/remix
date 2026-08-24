@@ -42,6 +42,11 @@ export default function KeyIssues({ muniKey }: { muniKey: string }) {
           <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
         </div>
       </div>
+      <div className="muted" style={{ fontSize: 12, lineHeight: 1.5, maxWidth: 660, margin: '-4px 0 12px' }}>
+        Themes that keep coming up across the public record, with the meetings or documents they came
+        from. These are summaries written by software, not the Town&apos;s positions — read the underlying
+        records before relying on any of them.
+      </div>
       <div
         ref={scrollRef}
         style={{
@@ -68,11 +73,11 @@ export default function KeyIssues({ muniKey }: { muniKey: string }) {
               </div>
             </div>
             <div>
-              <div className="muted" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Insight</div>
+              <div className="muted" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>What comes up</div>
               <div style={{ fontSize: 13, lineHeight: 1.5 }}>{c.insight}</div>
             </div>
             <div>
-              <div className="muted" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Evidence</div>
+              <div className="muted" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Where we saw it</div>
               <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.5 }}>{c.evidence}</div>
             </div>
           </div>

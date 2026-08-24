@@ -76,9 +76,18 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
         <div className="muted" style={{ fontSize: 12, marginBottom: 14, lineHeight: 1.5, maxWidth: 760 }}>{sel.note}</div>
       )}
 
-      {budget.placeholder && (
+      {budget.placeholder ? (
         <div className="card" style={{ padding: '12px 16px', marginBottom: 18, borderColor: 'var(--warn)', color: 'var(--text)', fontSize: 13, lineHeight: 1.5 }}>
-          <strong style={{ color: 'var(--warn)' }}>Illustrative figures.</strong> {budget.sourceNote}
+          <strong style={{ color: 'var(--warn)' }}>Illustrative figures — not the Town&apos;s real numbers.</strong>{' '}
+          {budget.sourceNote}
+        </div>
+      ) : (
+        // Attribution, always visible. Numbers about someone's taxes need to say
+        // where they came from without the reader having to ask.
+        <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.55, marginBottom: 18, maxWidth: 760 }}>
+          {budget.sourceNote} Figures are re-keyed from the Town&apos;s published reports and rounded for the
+          diagram, so small differences from the source document are expected — use the Town&apos;s own filings
+          for anything official.
         </div>
       )}
 

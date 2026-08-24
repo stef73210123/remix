@@ -17,6 +17,7 @@ import OpenPetitions from './OpenPetitions'
 import SchoolDistrict from './SchoolDistrict'
 import BoardSentiment, { type BoardScore } from './BoardProgress'
 import { isOpen } from '@/lib/flavor'
+import SiteIntro from './SiteIntro'
 import { nextMeetingDate, remainingYearMeetingDates, dayKey } from '@/lib/municipal/meetingPattern'
 
 // Leaflet touches `window`, so the map is client-only (no SSR).
@@ -451,8 +452,12 @@ export default function MunicipalClient({
         onSelect={setSelectedMeetingKey}
         emptyText={
           data.dbOk
-            ? 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.'
-            : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.'
+            ? (isOpen
+                ? 'No meetings match the filters above. Try clearing them, or check the Town\u2019s own calendar for anything we haven\u2019t picked up yet.'
+                : 'No meetings match this filter. Run the ingest pipeline (/admin/api/municipal/ingest-one?muni=nc) to populate history.')
+            : (isOpen
+                ? 'Meeting history isn\u2019t loading right now. This is a problem on our end, not with the Town \u2014 please try again later.'
+                : 'Pipeline database not connected in this environment. Ingested meetings will appear once NEON_DATABASE_URL is set and the ingest has run.')
         }
       />
       {/* Compact scrolling list of the same meetings beneath the timeline —
@@ -492,7 +497,7 @@ export default function MunicipalClient({
         <h1 className="page-title" style={{ marginBottom: 16 }}>Municipal Dashboard</h1>
       )}
 
-      {loading && <div className="muted" style={{ padding: 20 }}>Loading municipal pipeline…</div>}
+      {loading && <div className="muted" style={{ padding: 20 }}>{isOpen ? 'Loading…' : 'Loading municipal pipeline…'}</div>}
       {error && <div className="error" style={{ padding: 20 }}>{error}</div>}
 
       {data && !loading && (
@@ -510,7 +515,10 @@ export default function MunicipalClient({
               redundant with the dropdown). Remix keeps its own town selector above;
               boards are reached via the dropdown, same as ONC. */}
           {isOpen ? (
-            <MuniTabs muni={town} active="dashboard" />
+            <>
+              <MuniTabs muni={town} active="dashboard" />
+              {board === 'ALL' && <SiteIntro />}
+            </>
           ) : (
             <div ref={tabScrollRef} style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 22 }}>
               <Chip active={board === 'ALL'} onClick={() => setBoard('ALL')}>Dashboard</Chip>
@@ -577,7 +585,7 @@ export default function MunicipalClient({
           {board === 'ALL' && town !== 'ALL' && <InTheNews muniKey={town} />}
           {board === 'ALL' && town !== 'ALL' && <OpenPetitions muniKey={town} />}
 
-          {!data.dbOk && data.dbError && (
+          {!data.dbOk && data.dbError && !isOpen && (
             <p className="muted" style={{ fontSize: 11, marginTop: 12 }}>DB: {data.dbError}</p>
           )}
         </>

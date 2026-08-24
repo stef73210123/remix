@@ -27,18 +27,31 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
 
   return (
     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', ...style }}>
-      <a href={FOIL_URL} target="_blank" rel="noopener noreferrer" className="btn secondary" style={btnStyle}>
-        <FileText size={13} aria-hidden /> FOIL Request
+      <a
+        href={FOIL_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn secondary"
+        style={btnStyle}
+        title="Ask the Town for copies of public records. Opens the Town's own records-request portal (a FOIL request, under New York's Freedom of Information Law)."
+      >
+        <FileText size={13} aria-hidden /> Request Records
       </a>
       <button
         className="btn secondary"
         style={btnStyle}
+        title="Report a pothole, downed limb, streetlight or similar to the Town. Opens the Town's own reporting portal."
         onClick={() => setOpen({ url: ISSUE_URL, title: 'Report an issue — North Castle (SeeClickFix)' })}
       >
         <MapPin size={13} aria-hidden /> Report Issue
       </button>
       {isOpen && (
-        <button className="btn secondary" style={btnStyle} onClick={() => setContactOpen(true)}>
+        <button
+          className="btn secondary"
+          style={btnStyle}
+          title="Message the volunteers who run this site — not the Town"
+          onClick={() => setContactOpen(true)}
+        >
           <Mail size={13} aria-hidden /> Contact
         </button>
       )}

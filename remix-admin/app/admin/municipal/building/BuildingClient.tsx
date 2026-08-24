@@ -325,7 +325,8 @@ function ScatterChart({ points }: { points: ScatterPoint[] }) {
   const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b
 
   if (valid.length === 0) {
-    return <div className="muted" style={{ fontSize: 13, padding: 16 }}>No permits with both a declared value and a full application-to-CO date range in this selection.</div>
+    return <div className="muted" style={{ fontSize: 13, padding: 16 }}>None of the permits in this selection have both a declared construction value and a complete set of dates
+      (application through certificate of occupancy), so there&apos;s nothing to plot here.</div>
   }
 
   const minX = Math.min(...valid.map((p) => p.cost))
@@ -432,7 +433,7 @@ function PipelineRow({ label, sub, stat, max, color }: { label: string; sub?: st
     return (
       <div style={{ padding: '10px 0', borderTop: '1px solid var(--border)' }}>
         <div style={{ fontWeight: 600, fontSize: 13.5 }}>{label}</div>
-        <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>No permits with both dates recorded in this range.</div>
+        <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>No permits in this range have both dates recorded.</div>
       </div>
     )
   }
@@ -447,7 +448,8 @@ function PipelineRow({ label, sub, stat, max, color }: { label: string; sub?: st
           {sub && <span className="muted" style={{ fontSize: 12, marginLeft: 8 }}>{sub}</span>}
         </div>
         <span style={{ fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>
-          <strong>{stat.median}d</strong> <span className="muted">median · P25–P75 {stat.p25}–{stat.p75}d · n={fmtInt(stat.n)}</span>
+          <strong>{stat.median} days</strong>{' '}
+          <span className="muted">typical · middle half took {stat.p25}–{stat.p75} days · {fmtInt(stat.n)} permits</span>
         </span>
       </div>
       <div style={{ position: 'relative', height: 20, background: 'var(--panel-2)', borderRadius: 6 }}>
@@ -696,7 +698,7 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
       <h1 className="page-title" style={{ marginBottom: 6 }}>Building Department</h1>
 
       {loading && <div className="muted" style={{ padding: 20 }}>Loading permit data…</div>}
-      {!loading && !dataset && <div className="muted" style={{ padding: 20 }}>No permit data available.</div>}
+      {!loading && !dataset && <div className="muted" style={{ padding: 20 }}>We don&apos;t have permit records loaded yet.</div>}
 
       {dataset && (
         <>

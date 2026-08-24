@@ -182,8 +182,8 @@ export default function MemberClient({ userName }: { userName: string }) {
 
       {member && !loading && (
         <>
-          {/* Identity header — headshot, name + progress score, then chips aligned
-              with the name text to the right of the image. */}
+          {/* Identity header — headshot, name + discussion-tone chip, then chips
+              aligned with the name text to the right of the image. */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap', margin: '0 0 24px' }}>
             {dossier?.photo && !photoBroken ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -214,10 +214,10 @@ export default function MemberClient({ userName }: { userName: string }) {
                 <h1 className="page-title" style={{ margin: 0 }}>{member.full_name}</h1>
                 {score !== null && (
                   <span
-                    title={`Progress score · ${sentimentLabel(score)}`}
+                    title={`Discussion tone · ${sentimentLabel(score)} — an automated summary of recorded remarks, not a vote count or a rating`}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
                   >
-                    <span className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Progress score</span>
+                    <span className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Discussion tone</span>
                     <span style={sentimentChipStyle(score)}>{fmtSent(score)}</span>
                   </span>
                 )}
@@ -227,7 +227,9 @@ export default function MemberClient({ userName }: { userName: string }) {
                 {data?.town ? ` · ${data.town.name}, ${data.town.state}` : ''}
               </div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
-                <span className="badge state">{member.active ? 'Active' : 'Inactive'}</span>
+                <span className="badge state" title={member.active ? 'Currently serving on this board' : 'No longer serving on this board'}>
+                  {member.active ? 'Currently serving' : 'No longer serving'}
+                </span>
               </div>
             </div>
           </div>
@@ -307,7 +309,7 @@ export default function MemberClient({ userName }: { userName: string }) {
             <MemberElections muniKey={data.town.key} name={member.full_name} />
           )}
 
-          {/* Transcript-derived sentiment for this member (where a dataset exists) */}
+          {/* Transcript-derived discussion tone for this member (where we have one) */}
           {data && fromBody && member.full_name && (
             <MemberSentiment muni={data.town.key} body={fromBody} memberName={member.full_name} onScore={setScore} />
           )}

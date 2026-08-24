@@ -13,7 +13,11 @@ function fmtDate(iso: string): string {
 }
 
 function Chip({ score }: { score: number }) {
-  return <span style={sentimentChipStyle(score)} title={dispositionLabel(score)}>{fmtSent(score)}</span>
+  return (
+    <span style={sentimentChipStyle(score)} title={`${dispositionLabel(score)} — how the board's recorded discussion read, not a decision`}>
+      {fmtSent(score)}
+    </span>
+  )
 }
 
 function ThemeTag({ t }: { t: string }) {
@@ -129,7 +133,7 @@ export default function CasesList({ data, muni }: { data: AnalysisDataset; muni:
 
 function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; members: MemberProfile[]; muni: string; first: boolean; open: boolean; onToggle: () => void }) {
   const propId = c.address ? propertyId(c.address) : ''
-  // Where each board member stood on this case: their avg sentiment on it + their quotes.
+  // How each member's remarks on this item read, plus the quotes behind them.
   const stances = useMemo(() => {
     return members
       .map((mem) => {
@@ -182,7 +186,7 @@ function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; m
               {stances.length > 0 && (
                 <div style={{ marginBottom: 16 }}>
                   <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
-                    Where the board stood
+                    How members talked about it
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {stances.map((s) => (
@@ -193,7 +197,7 @@ function CaseRow({ c, members, muni, first, open, onToggle }: { c: CaseRollup; m
                           {s.quotes.length > 0 ? (
                             <span className="muted">{s.quotes.map((q) => q.evidence).join(' ')}</span>
                           ) : (
-                            <span className="muted" style={{ fontStyle: 'italic' }}>{s.count} position{s.count === 1 ? '' : 's'} recorded</span>
+                            <span className="muted" style={{ fontStyle: 'italic' }}>{s.count} remark{s.count === 1 ? '' : 's'}, no quote captured</span>
                           )}
                         </span>
                       </div>

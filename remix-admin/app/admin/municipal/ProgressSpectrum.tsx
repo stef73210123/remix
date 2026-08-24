@@ -3,10 +3,13 @@
 import { sentimentColor, fmtSent } from './sentiment'
 
 /**
- * A full negative→neutral→positive spectrum with a marker pinned at `score`
- * (the "progress score", −1…+1). Unlike the per-person meter (a fill from the
- * center), this shows the whole scale so a single board/committee's standing
- * reads at a glance and many of them line up comparably in a stack.
+ * A full critical→mixed→supportive spectrum with a marker pinned at `score`
+ * (the discussion-tone measure, −1…+1). Unlike the per-person meter (a fill from
+ * the center), this shows the whole scale so a single board/committee reads at a
+ * glance and many of them line up comparably in a stack.
+ *
+ * Neither end of this scale is the "good" end — see the language note in
+ * ./sentiment.ts before relabelling anything here.
  */
 export default function ProgressSpectrum({
   score,
@@ -53,9 +56,9 @@ export default function ProgressSpectrum({
       </div>
       {showScale && (
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
-          <span className="muted" style={{ fontSize: 10 }}>Opposed</span>
-          <span className="muted" style={{ fontSize: 10 }}>Neutral</span>
-          <span className="muted" style={{ fontSize: 10 }}>Favorable</span>
+          <span className="muted" style={{ fontSize: 10 }}>More critical</span>
+          <span className="muted" style={{ fontSize: 10 }}>Mixed</span>
+          <span className="muted" style={{ fontSize: 10 }}>More supportive</span>
         </div>
       )}
     </div>

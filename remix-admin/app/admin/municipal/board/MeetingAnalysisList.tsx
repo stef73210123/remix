@@ -13,7 +13,11 @@ function fmtDate(iso: string): string {
 }
 
 function Chip({ score }: { score: number }) {
-  return <span style={sentimentChipStyle(score)} title={dispositionLabel(score)}>{fmtSent(score)}</span>
+  return (
+    <span style={sentimentChipStyle(score)} title={`${dispositionLabel(score)} — how the recorded discussion read, not a decision`}>
+      {fmtSent(score)}
+    </span>
+  )
 }
 
 function ThemeTag({ t }: { t: string }) {
@@ -156,7 +160,7 @@ export function MeetingRow({
                       </div>
                       <span className="muted" style={{ display: 'block', marginTop: 2 }}>
                         {p.stance}{p.evidence ? ` — ${p.evidence}` : ''}
-                        {p.confidence === 'low' ? ' (low confidence)' : ''}
+                        {p.confidence === 'low' ? ' (we\u2019re not certain this was them)' : ''}
                       </span>
                     </div>
                   ))}
