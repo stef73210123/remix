@@ -11,15 +11,15 @@
     "roster": [
       "Ray Rodriguez",
       "Ed Lashins",
-      "Bob Greer",
+      "Robert Greer",
       "Scott Stopnik",
       "John Stipo",
-      "Joe Monticelli",
-      "Lester Berkelhammer"
+      "Joseph Monticelli",
+      "Lester Berkelhamer"
     ],
     "inactiveMembers": [
-      "Joe Monticelli",
-      "Lester Berkelhammer"
+      "Joseph Monticelli",
+      "Lester Berkelhamer"
     ],
     "source": "Meeting video transcripts (ASR, un-diarized); member attribution is name-based with per-position confidence.",
     "errors": []
@@ -4906,7 +4906,7 @@
   ],
   "members": [
     {
-      "member": "Bob Greer",
+      "member": "Robert Greer",
       "totalPositions": 82,
       "avgSentiment": 0.507,
       "confidenceMix": {
@@ -7445,7 +7445,7 @@
       ]
     },
     {
-      "member": "Joe Monticelli",
+      "member": "Joseph Monticelli",
       "totalPositions": 53,
       "avgSentiment": 0.53,
       "confidenceMix": {
@@ -10576,7 +10576,7 @@
       ]
     },
     {
-      "member": "Lester Berkelhammer",
+      "member": "Lester Berkelhamer",
       "totalPositions": 29,
       "avgSentiment": 0.434,
       "confidenceMix": {
@@ -11136,7 +11136,7 @@
           "publicComment": "None received prior to or during the meeting.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.8,
               "themes": [
@@ -11156,7 +11156,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11176,7 +11176,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11206,7 +11206,7 @@
           "publicComment": "None; applicant confirmed no notices were received and none were raised at the meeting.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.8,
               "themes": [
@@ -11226,7 +11226,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11246,7 +11246,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11287,7 +11287,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "skeptical",
               "score": -0.4,
               "themes": [
@@ -11309,7 +11309,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -11319,7 +11319,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "mixed",
               "score": 0.0,
               "themes": [
@@ -11360,7 +11360,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Ran roll calls, confirmed no neighbor notices/objections were received on the pool variance cases, and managed public comment logistics.",
           "cases": [
@@ -11370,7 +11370,7 @@
           ]
         },
         {
-          "person": "Jerry (Town Attorney)",
+          "person": "Gerald Reilly",
           "role": "Town Attorney",
           "summary": "Advised the board that traffic-study responsibility properly belongs to the Planning Board, not the ZBA, and that the ZBA cannot commission its own independent traffic study; sparred at length with a skeptical board member over this point.",
           "cases": [
@@ -11412,7 +11412,7 @@
           "publicComment": "The two previously-objecting neighbors (Dennis and his father) rejoined by Zoom; one asked about the traffic statistics and raised continued concern about the driveway's left-turn access through their easement and enforcement of the no-bar-service limitation, but did not repeat the full opposition from the prior meeting since that record already stood.",
           "memberPositions": [
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -11445,7 +11445,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -11455,7 +11455,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -11505,7 +11505,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Conducted roll call, announced the Nethermont Avenue adjournment, and managed the Zoom-based neighbor participation.",
           "cases": [
@@ -11514,7 +11514,7 @@
           ]
         },
         {
-          "person": "Jerry (Town Attorney)",
+          "person": "Gerald Reilly",
           "role": "Town Attorney",
           "summary": "Guided the board through drafting the condition list, clarified that the tandem/valet parking question was a Planning Board mitigation measure rather than a zoning code violation, and helped frame the five-factor variance findings for the motion.",
           "cases": [
@@ -11591,7 +11591,7 @@
           "publicComment": "Extensive opposition: an attorney (Michael Serignano) representing a neighboring property owner argued the site-distance variance was larger than in a recently-approved comparable case and that a town traffic consultant's 2018 letter had found safe sight distance could not be assured without banning all on-street parking; a neighbor at 31 Grove Road and another resident (\"Mr. Junker\") separately argued the structure was unnecessary given the applicant's existing garage, that it would be a neighborhood eyesore, and that a five-foot retaining wall built by the town itself obstructs the very sight line the applicant relies on.",
           "memberPositions": [
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "skeptical",
               "score": -0.3,
               "themes": [
@@ -11602,7 +11602,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -11632,7 +11632,7 @@
           "publicComment": "Supportive letters from neighboring businesses were submitted into the record; no opposition was raised.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -11653,7 +11653,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11673,7 +11673,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11702,7 +11702,7 @@
           "publicComment": "Supportive letters from neighboring businesses were submitted into the record; no opposition was raised.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -11722,7 +11722,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11742,7 +11742,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11771,7 +11771,7 @@
           "publicComment": "Supportive letters from neighboring businesses were submitted into the record; no opposition was raised.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -11791,7 +11791,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11811,7 +11811,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -11845,7 +11845,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Managed roll calls, evidence submission logistics (including instructing parties to route photographic exhibits through her), and public comment order across all five applications.",
           "cases": [
@@ -11857,7 +11857,7 @@
           ]
         },
         {
-          "person": "Jerry (Town Attorney)",
+          "person": "Gerald Reilly",
           "role": "Town Attorney",
           "summary": "Clarified the applicable five-factor variance standard for the Grove Road application, distinguished the board's task (weighing site-specific safety evidence) from strict code-distance analysis, and helped frame the motion to close the hearing while reserving determination for the next meeting.",
           "cases": [
@@ -11891,7 +11891,7 @@
           "sentimentScore": 0.1,
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -11913,7 +11913,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -11924,7 +11924,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "opposed",
               "score": -0.5,
               "themes": [
@@ -11963,7 +11963,7 @@
           "publicComment": "A supportive letter/testimony from a neighbor who wanted the newly-required off-street parking to end a chronic street-parking nuisance; one objecting neighbor warned that legalizing the substandard apartment size would set a precedent for future illegal apartments in the area.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -11983,7 +11983,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12003,7 +12003,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12068,7 +12068,7 @@
           "publicComment": "A neighbor at 1 Middle Patent Road (a longtime resident) gave extended testimony describing historical use of the property, expressing support for its preservation, and raising practical concerns about construction truck traffic and drainage from related ongoing construction work, without opposing the variance itself.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12089,7 +12089,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12109,7 +12109,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12143,7 +12143,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Managed roll calls and correspondence (letters of support) across all five applications.",
           "cases": [
@@ -12181,7 +12181,7 @@
           "publicComment": "No members of the public spoke; the discussion was entirely between the board, the applicant's team, and the property owner.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -12192,7 +12192,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "opposed",
               "score": -0.5,
               "themes": [
@@ -12212,7 +12212,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -12248,7 +12248,7 @@
           ]
         },
         {
-          "person": "Jerry (Town Attorney)",
+          "person": "Gerald Reilly",
           "role": "Town Attorney",
           "summary": "Clarified that the variance would run with the property and be conditioned on and tied to the specific approved use and site plan, meaning any future change in use or expansion would require the Planning Board and potentially a new variance.",
           "cases": [
@@ -12281,7 +12281,7 @@
           "publicComment": "None; no members of the public spoke.",
           "memberPositions": [
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12301,7 +12301,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -12321,7 +12321,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -12351,7 +12351,7 @@
           "publicComment": "A neighboring resident on the same cul-de-sac asked clarifying questions about house placement, the nature of the access driveway (confirmed to be a private driveway, not a new road), and construction-period truck traffic and noise; he did not oppose the application once satisfied only one house was being built.",
           "memberPositions": [
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12372,7 +12372,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 1.0,
               "themes": [
@@ -12410,7 +12410,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Conducted roll calls and managed public comment for both applications.",
           "cases": [
@@ -12419,7 +12419,7 @@
           ]
         },
         {
-          "person": "Jerry (Town Attorney)",
+          "person": "Gerald Reilly",
           "role": "Town Attorney",
           "summary": "Explained the narrow NY Town Law 280-a(3) frontage-waiver mechanism being used for the Lindman subdivision and proposed the five-factor findings that the board adopted for its motion.",
           "cases": [
@@ -12452,7 +12452,7 @@
           "publicComment": "A supportive letter from an abutting neighbor (unable to attend) praised the applicant's stewardship of the property's open, agricultural character. A separate resident of the same private road raised concerns during the hearing about noise (specifically roosters, which the applicant confirmed they do not and would not have) and about animals or horses being walked/left unattended on the shared private roads, though the applicant clarified the animals stay confined to the property and are not moved on the roads.",
           "memberPositions": [
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -12463,7 +12463,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12474,7 +12474,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12512,7 +12512,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Read the absent neighbor's supportive letter into the record and managed roll calls.",
           "cases": [
@@ -12520,7 +12520,7 @@
           ]
         },
         {
-          "person": "Rob (Building Inspector, likely Rob Melillo)",
+          "person": "Rob Melillo",
           "role": "Building Inspector",
           "summary": "Proposed, via the board, the three-year compliance re-inspection condition modeled on the town's practice for horse-barn special permits; issued the underlying notice of violation that brought the matter to the board.",
           "cases": [
@@ -12555,7 +12555,7 @@
           "publicComment": "Five supportive letters from neighbors directly adjacent to the applicant; three objecting letters (from Len Schindell, Paul Fakler, and Bonnie Valenti) raised concerns about the house's size/appearance and prospective noise, which the board found did not bear on the lot-coverage variance at issue.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12565,7 +12565,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12585,7 +12585,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12613,7 +12613,7 @@
           "publicComment": "A directly-abutting neighbor present at the meeting confirmed support for the shed's proposed location; no objections were raised.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12624,7 +12624,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12644,7 +12644,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12672,7 +12672,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Read the public notice details and neighbor correspondence into the record for both applications and conducted roll calls.",
           "cases": [
@@ -12706,7 +12706,7 @@
           "publicComment": "None; no letters or objections received.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12716,7 +12716,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12754,7 +12754,7 @@
           "publicComment": "No members of the public spoke or submitted correspondence in opposition; a written submission from applicant's counsel addressing the five statutory factors was entered into the record.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12765,7 +12765,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12803,7 +12803,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Read public notices and noted the absence of correspondence from Les Berkelhammer's usual review role; conducted roll calls.",
           "cases": [
@@ -12812,7 +12812,7 @@
           ]
         },
         {
-          "person": "Jerry (Town Attorney)",
+          "person": "Gerald Reilly",
           "role": "Town Attorney",
           "summary": "Walked the Chair through the required five-factor findings before each motion, and flagged the applicant's right to request an adjournment given only three of five members were present for the hotel variance.",
           "cases": [
@@ -12855,7 +12855,7 @@
           "publicComment": "None; no objections received.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12875,7 +12875,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -12895,7 +12895,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12925,7 +12925,7 @@
           "publicComment": "No neighbors were present or submitted objections; the applicant noted the only potentially affected neighbor's house faces away from the pool location and is separated by required conservation-approved evergreen screening.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -12936,7 +12936,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "opposed",
               "score": -0.5,
               "themes": [
@@ -12967,7 +12967,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -12996,7 +12996,7 @@
           "publicComment": "None; no members of the public spoke.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -13006,7 +13006,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "skeptical",
               "score": -0.1,
               "themes": [
@@ -13027,7 +13027,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13068,7 +13068,7 @@
           "publicComment": "Extensive organized opposition from multiple Business Park Drive property owners and their attorney, arguing self-storage is not a permitted PLI use, objecting to the scale of the FAR and parking variances, citing tree removal and site-plan crowding, warning of precedent for other park buildings, and citing existing unpermitted outdoor storage on the site as grounds to reject the application outright.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "undecided",
               "score": 0.0,
               "themes": [
@@ -13108,7 +13108,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Clerk/Secretary",
           "summary": "Read public notices, tracked correspondence deadlines, and managed the extensive exhibit and letter submissions in the self-storage case.",
           "cases": [
@@ -13119,7 +13119,7 @@
           ]
         },
         {
-          "person": "Jerry (Town Attorney)",
+          "person": "Gerald Reilly",
           "role": "Town Attorney",
           "summary": "Advised converting the Main Street interpretation dispute into a straightforward variance request, walked the board through five-factor findings on multiple cases, and structured the adjournment and submission-deadline process for the contested self-storage matter, including flagging potential executive session legal issues.",
           "cases": [
@@ -13152,7 +13152,7 @@
           "sentimentScore": 0.5,
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13172,7 +13172,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -13200,7 +13200,7 @@
           "publicComment": "No members of the public spoke in opposition; congregation representatives described their limited weekly usage pattern and expressed appreciation for the town's welcome.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13211,7 +13211,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -13285,7 +13285,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -13295,7 +13295,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -13305,7 +13305,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -13332,7 +13332,7 @@
           "sentimentScore": 0.5,
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13343,7 +13343,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -13363,7 +13363,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -13463,7 +13463,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13483,7 +13483,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13493,7 +13493,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13523,7 +13523,7 @@
           "publicComment": "The adjacent Geis family's letter, read into the record, was supportive of the applicant's plans but asked for assurance of a 150-foot buffer and additional screening if ever needed; the applicant's team agreed to accommodate this as a condition. A neighbor from across the road spoke in strong support, calling the plan 'unequivocally the highest and best use' of the property. Another attendee asked pointed questions to ensure the horse operation could never expand into a commercial use.",
           "memberPositions": [
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13545,7 +13545,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13565,7 +13565,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13606,7 +13606,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Walked the Board through the statutory area-variance balancing test for each case, characterizing the requested relief as not substantial or as mitigated by circumstances, and recommending conditions tied to neighbor commitments.",
           "cases": [
@@ -13615,7 +13615,7 @@
           ]
         },
         {
-          "person": "Lori (Zawacki)",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read the public-hearing notices and variance particulars into the record and conducted roll calls.",
           "cases": [
@@ -13624,7 +13624,7 @@
           ]
         },
         {
-          "person": "Adam (Kaufman)",
+          "person": "Adam Kaufman",
           "role": "Town Planner",
           "summary": "Referenced by the applicant's team as having been consulted on the horse farm's Town Board special permit and Planning Board site plan history.",
           "cases": [
@@ -13656,7 +13656,7 @@
           "sentimentScore": 0.6,
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13676,7 +13676,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13686,7 +13686,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13713,7 +13713,7 @@
           "sentimentScore": 0.5,
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13734,7 +13734,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -13745,7 +13745,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -13774,7 +13774,7 @@
           "publicComment": "A neighbor raised concern (via a letter read into the record) about encroachment and debris near a conservation easement on an adjoining, unrelated parcel; the applicant's counsel clarified this was a separate building-department matter and agreed to a condition requiring compliance with Conservation Board direction.",
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13794,7 +13794,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -13805,7 +13805,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -13832,7 +13832,7 @@
           "sentimentScore": 0.5,
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -13852,7 +13852,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -13863,7 +13863,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -13901,7 +13901,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive of applicant",
               "score": 0.3,
               "themes": [
@@ -13912,7 +13912,7 @@
               "confidence": "high"
             },
             {
-              "member": "Lester Berkelhammer",
+              "member": "Lester Berkelhamer",
               "stance": "skeptical of applicant's interpretation argument, supportive of variance relief",
               "score": 0.1,
               "themes": [
@@ -13923,7 +13923,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "skeptical",
               "score": -0.1,
               "themes": [
@@ -13957,7 +13957,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Presented the balancing-test analysis in each case and, in the Dempsey matter, framed the interpretation question as owed deference to the Building Inspector while treating the area-variance question separately.",
           "cases": [
@@ -13969,7 +13969,7 @@
           ]
         },
         {
-          "person": "Mr. Malillo (Rob)",
+          "person": "Rob Melillo",
           "role": "Building Inspector",
           "summary": "His determination that the Dempsey barn was demolished and rebuilt as a new structure (not pre-existing non-conforming) was the central dispute in that case; his opinion was ultimately upheld by the Board.",
           "cases": [
@@ -13977,7 +13977,7 @@
           ]
         },
         {
-          "person": "Lori (Zawacki)",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read public-hearing notices and variance particulars and conducted roll calls throughout.",
           "cases": [
@@ -14026,7 +14026,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14036,7 +14036,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14058,7 +14058,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Characterized the now-reduced request as de minimis given the concessions made and recommended a grant.",
           "cases": [
@@ -14100,7 +14100,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14120,7 +14120,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14157,7 +14157,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14177,7 +14177,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14199,7 +14199,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Presented the balancing-test findings for both applications, characterizing each as de minimis with no negative impact.",
           "cases": [
@@ -14208,7 +14208,7 @@
           ]
         },
         {
-          "person": "Lori (Zawacki)",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read the public-hearing notices and conducted roll calls.",
           "cases": [
@@ -14262,7 +14262,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14272,7 +14272,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14310,7 +14310,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14330,7 +14330,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14372,7 +14372,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "neutral to mildly supportive",
               "score": 0.2,
               "themes": [
@@ -14392,7 +14392,7 @@
               "confidence": "low"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "neutral",
               "score": 0.0,
               "themes": [
@@ -14426,7 +14426,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Presented balancing-test findings for the two granted cases and raised the procedural point that the Board should not decide the restaurant parking variance before reviewing the Planning Board's traffic consultant's response, prompting the adjournment.",
           "cases": [
@@ -14436,7 +14436,7 @@
           ]
         },
         {
-          "person": "Lori (Zawacki)",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read public-hearing notices and conducted roll calls.",
           "cases": [
@@ -14517,7 +14517,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14537,7 +14537,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14585,7 +14585,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14605,7 +14605,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14633,7 +14633,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Presented the balancing-test findings for both granted variance cases, emphasizing that the variances were prompted by other boards' own review directives.",
           "cases": [
@@ -14642,7 +14642,7 @@
           ]
         },
         {
-          "person": "Lori (Zawacki)",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read public-hearing notices and variance particulars and conducted roll calls.",
           "cases": [
@@ -14651,7 +14651,7 @@
           ]
         },
         {
-          "person": "Tony (Beniziano)",
+          "person": "Tony Veneziano",
           "role": "Applicant's attorney (appeared for both 45 Bedford Road LLC and Greenwich Realty Group)",
           "summary": "Presented both applications, tying each variance to specific Planning Board/Town Board review history.",
           "cases": [
@@ -14721,7 +14721,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -14768,7 +14768,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -14816,7 +14816,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -14867,7 +14867,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -14901,7 +14901,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Presented balancing-test findings in each granted case and articulated the accessory-apartment and construction-use conditions for the Meda and Silvestry resolutions.",
           "cases": [
@@ -14912,7 +14912,7 @@
           ]
         },
         {
-          "person": "Lori (Zawacki)",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read public-hearing notices and conducted roll calls; asked to ensure conditions were memorialized in resolutions.",
           "cases": [
@@ -14923,7 +14923,7 @@
           ]
         },
         {
-          "person": "Rob",
+          "person": "Rob Melillo",
           "role": "Building Inspector (participating by phone/Zoom)",
           "summary": "Explained by phone that the town engineer would review the Meda stormwater mitigation plan against the 250-square-foot code threshold before any permit issues, and confirmed a future accessory apartment would require separate notice/approval.",
           "cases": [
@@ -14975,7 +14975,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -14985,7 +14985,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -15036,7 +15036,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -15046,7 +15046,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -15093,7 +15093,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -15103,7 +15103,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -15151,7 +15151,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -15161,7 +15161,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -15189,7 +15189,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Zoning Board Attorney",
           "summary": "Presented balancing-test findings across all four cases; in the Marquis Associates matter, firmly disputed the applicant's counsel's characterization of the variance size, insisting the cumulative 25-space figure (not the incremental 13) was the correct measure, a position the applicant's counsel ultimately accepted.",
           "cases": [
@@ -15200,7 +15200,7 @@
           ]
         },
         {
-          "person": "Lori (Zawacki)",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read public-hearing notices and conducted roll calls; asked to incorporate conditions into resolutions.",
           "cases": [
@@ -15211,7 +15211,7 @@
           ]
         },
         {
-          "person": "Adam (Kaufman)",
+          "person": "Adam Kaufman",
           "role": "Town Planner",
           "summary": "Opined that the Summit Club Partners golf-course/condominium property functioned as a mixed-use rather than purely residential site, supporting the sign variance, and was referenced regarding the studio-use parking classification at Marquis Associates.",
           "cases": [
@@ -15266,7 +15266,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -15315,7 +15315,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -15364,7 +15364,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -15426,7 +15426,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -15436,7 +15436,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -15477,7 +15477,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -15487,7 +15487,7 @@
               "confidence": "low"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -15517,7 +15517,7 @@
           "publicComment": "No opposing neighbors; the applicant himself described extensive, contentious prior review by the Conservation Board and Planning Board.",
           "memberPositions": [
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -15529,7 +15529,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -15580,7 +15580,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "skeptical",
               "score": -0.1,
               "themes": [
@@ -15620,7 +15620,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -15630,7 +15630,7 @@
               "confidence": "high"
             },
             {
-              "member": "Joe Monticelli",
+              "member": "Joseph Monticelli",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -15658,7 +15658,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Town Attorney / ZBA Counsel",
           "summary": "Advised the board that variances must be granted in their smallest feasible form, guided the Harris and Lally coverage discussions accordingly, and confirmed the appropriateness of a Planning Board site-plan condition on the Verizon and Harris approvals.",
           "cases": [
@@ -15704,7 +15704,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -15769,7 +15769,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -15821,7 +15821,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -15878,7 +15878,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Town Attorney / ZBA Counsel",
           "summary": "Advised the board on the legal standard for calculating setback variances (that the zoning code standard governs, not the existing nonconforming condition), prompting the re-notice of the Mullane/Baldisaro deck application, and helped draft the conditions attached to the Gabby's Restaurant variance approval.",
           "cases": [
@@ -15928,7 +15928,7 @@
           "publicComment": "No neighbors present; no correspondence received.",
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -15987,7 +15987,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -16036,7 +16036,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -16100,7 +16100,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -16209,7 +16209,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.7,
               "themes": [
@@ -16295,7 +16295,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Town Attorney / ZBA Counsel",
           "summary": "Advised the board that any rental-restriction condition on the Holburn accessory apartment must relate to the variance itself, and confirmed a runoff-review condition on the Trip Lane driveway variance would be an appropriate way to address the chairman's stormwater concern.",
           "cases": [
@@ -16350,7 +16350,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -16400,7 +16400,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -16468,7 +16468,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -16531,7 +16531,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "skeptical",
               "score": -0.2,
               "themes": [
@@ -16566,7 +16566,7 @@
       ],
       "staffInput": [
         {
-          "person": "Jerry",
+          "person": "Gerald Reilly",
           "role": "Town Attorney / ZBA Counsel",
           "summary": "Clarified that the ZBA may only grant variances from town code, not state building/fire code (which falls to the building inspector), advised the board it had up to 62 days to decide and did not need to rush, and recommended letting all speakers be heard before adjourning.",
           "cases": [
@@ -16574,7 +16574,7 @@
           ]
         },
         {
-          "person": "Rob Malfeo",
+          "person": "Rob Melillo",
           "role": "Building Inspector",
           "summary": "Stated the state building/fire code height and driveway-width provisions the objecting neighbor cited generally apply to new construction, not existing historic buildings, and advised the board to focus solely on the town-code driveway and parking variances before it.",
           "cases": [
@@ -16641,7 +16641,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -16700,7 +16700,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive, wanted neighbor outreach",
               "score": 0.3,
               "themes": [
@@ -16738,7 +16738,7 @@
           "sentimentScore": 0.5,
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -16817,7 +16817,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.6,
               "themes": [
@@ -16867,7 +16867,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read the legal notices and variance calculations for each case into the record and coordinated roll calls.",
           "cases": [
@@ -17004,7 +17004,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -17052,7 +17052,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -17112,7 +17112,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read legal notices and variance figures into the record for each case.",
           "cases": [
@@ -17181,7 +17181,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -17220,7 +17220,7 @@
               "confidence": "low"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.4,
               "themes": [
@@ -17269,7 +17269,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -17308,7 +17308,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read legal notices and variance figures into the record; advised the board mid-meeting to be clearer in the minutes about when public hearings are formally closed before votes are taken.",
           "cases": [
@@ -17354,7 +17354,7 @@
           "publicComment": "The adjoining neighbor (Vinnie Massey) said the drainage redesign addressed his main concern and asked for additional deer-resistant screening trees, which the applicant's engineer agreed to work out informally; the same neighbor also raised concern about the visual height of the new roof projection as seen from his property.",
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "opposed to height variance as designed",
               "score": -0.5,
               "themes": [
@@ -17425,7 +17425,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.5,
               "themes": [
@@ -17465,7 +17465,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Read legal notices and variance figures into the record for both cases.",
           "cases": [
@@ -17531,7 +17531,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -17554,7 +17554,7 @@
       ],
       "staffInput": [
         {
-          "person": "Cory Salmon",
+          "person": "Kory Salomone",
           "role": "Applicant's attorney (Zarin & Steinmetz)",
           "summary": "Argued for removing the no-residential-use condition and explained the square footage figures as pertaining to different metrics (coverage vs. floor area) across the two applications.",
           "cases": [
@@ -17650,7 +17650,7 @@
           "sentimentScore": 0.1,
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -17689,7 +17689,7 @@
       ],
       "staffInput": [
         {
-          "person": "Cory Salmon",
+          "person": "Kory Salomone",
           "role": "Applicant's attorney (Zarin & Steinmetz)",
           "summary": "Represented both the Meda and Shapiro applications, presenting septic documentation for Meda and five-factor arguments for the Roseanne Drive variances.",
           "cases": [
@@ -17771,7 +17771,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -17806,7 +17806,7 @@
       ],
       "staffInput": [
         {
-          "person": "Cory Salmon",
+          "person": "Kory Salomone",
           "role": "Applicant's attorney (Zarin & Steinmetz)",
           "summary": "Presented the Carolyn Place coverage-reduction plan and coordinated on reconciling the town planner's and applicant's differing coverage-reduction figures.",
           "cases": [
@@ -17891,7 +17891,7 @@
           "publicComment": "Neighbors from the Miller Hill area (not individually named in this transcript) raised concerns about blasting/chipping safety and property damage; applicant's counsel described a prior neighbor meeting and planning board's retention of an outside geotechnical firm.",
           "memberPositions": [
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "concerned",
               "score": -0.5,
               "themes": [
@@ -18003,7 +18003,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "concerned",
               "score": -0.2,
               "themes": [
@@ -18057,7 +18057,7 @@
       ],
       "staffInput": [
         {
-          "person": "Tony Viniziano",
+          "person": "Tony Veneziano",
           "role": "Applicant's representative",
           "summary": "Reported the planning board's retention of an outside geotechnical firm and outlined insurance/permit conditions for the Virginia Road excavation.",
           "cases": [
@@ -18115,7 +18115,7 @@
               "confidence": "high"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "supportive",
               "score": 0.3,
               "themes": [
@@ -18282,7 +18282,7 @@
               "confidence": "medium"
             },
             {
-              "member": "Bob Greer",
+              "member": "Robert Greer",
               "stance": "skeptical",
               "score": -0.2,
               "themes": [
@@ -18738,7 +18738,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Conducted roll call, tracked motions/seconds, and managed correspondence/notice records across all three cases.",
           "cases": [
@@ -18825,7 +18825,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Conducted roll call and tracked motions/seconds across both cases.",
           "cases": [
@@ -18939,7 +18939,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Conducted roll call, tracked motions/seconds, and handled correspondence/exhibits across all three cases; helped locate and read town-engineer correspondence into the record for the Hollow Ridge Road case.",
           "cases": [
@@ -18949,7 +18949,7 @@
           ]
         },
         {
-          "person": "Adam Kaufman (KSCJ, town consulting engineer)",
+          "person": "Adam Kaufman",
           "role": "Town Consulting Engineer",
           "summary": "Authored review letters (dated April 7, updated June 3) flagging stormwater/drainage and site-plan-clarity comments on the Hollow Ridge Road application; two of three comments were resolved, with the drainage-mitigation-system comment remaining outstanding at the time of the hearing.",
           "cases": [
@@ -18957,7 +18957,7 @@
           ]
         },
         {
-          "person": "Rob [Building Inspector]",
+          "person": "Rob Melillo",
           "role": "Building Inspector",
           "summary": "Consulted by phone during the hearing; confirmed that any board-imposed drainage-mitigation conditions would be enforced through the building-permit/RPRC review process, which resolved the board's impasse over whether to table the application.",
           "cases": [
@@ -19001,7 +19001,7 @@
       ],
       "staffInput": [
         {
-          "person": "Lori Zawacki",
+          "person": "Lori J. Zawacki",
           "role": "Board Secretary/Clerk",
           "summary": "Conducted roll call and tracked the motion/vote for the sole case on the agenda.",
           "cases": [

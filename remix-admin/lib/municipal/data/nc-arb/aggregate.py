@@ -19,12 +19,29 @@ ANALYSIS_DIR = sys.argv[1] if len(sys.argv) > 1 else \
 OUT = sys.argv[2] if len(sys.argv) > 2 else \
     "/home/user/remix/remix-admin/lib/municipal/data/nc-arb/analysis.json"
 
-# No board-member roster yet — the sole meeting in this archive never named an
-# individual member with even low confidence. Add names here once a future
-# meeting confirms them.
-MEMBERS = []
-INACTIVE = []
-MEMBER_ALIAS = {}
+# Roster researched from the Town's own records (a January 2019 ARB letter to
+# the Town Board signs "Beata Buhl Tatka, Chair / Susan Geffen / Angelo
+# Monaco / Chris Tuzzo / John Scarlato"; the Town's 2025 ARB agenda lists
+# "Beata Buhl-Tatka (Chairman), Susan Geffen, Christopher Tuzzo, John
+# Scarlato, Mel Orellana" — same board with one seat turned over, Monaco ->
+# Orellana, transition date not pinned down). Buhl-Tatka has chaired
+# continuously 2019-2025, so she presided over this archive's one meeting
+# (2022-02-02). The fifth seat's occupant at that exact date is uncertain, so
+# both fifth-seat holders are listed with Monaco marked inactive (he is
+# definitely off the board today). Lori J. Zawacki is Board Secretary
+# (staff, not a member).
+MEMBERS = ["Beata Buhl-Tatka", "Susan Geffen", "Christopher Tuzzo", "John Scarlato",
+           "Mel Orellana", "Angelo Monaco"]
+INACTIVE = ["Angelo Monaco"]
+MEMBER_ALIAS = {
+    "beata buhl-tatka": "Beata Buhl-Tatka", "beata buhl tatka": "Beata Buhl-Tatka",
+    "buhl-tatka": "Beata Buhl-Tatka", "buhl tatka": "Beata Buhl-Tatka", "beata": "Beata Buhl-Tatka",
+    "susan geffen": "Susan Geffen", "geffen": "Susan Geffen",
+    "christopher tuzzo": "Christopher Tuzzo", "chris tuzzo": "Christopher Tuzzo", "tuzzo": "Christopher Tuzzo",
+    "john scarlato": "John Scarlato", "scarlato": "John Scarlato",
+    "mel orellana": "Mel Orellana", "orellana": "Mel Orellana",
+    "angelo monaco": "Angelo Monaco", "monaco": "Angelo Monaco",
+}
 
 def canon_member(name):
     n = re.sub(r"\s+", " ", str(name or "").strip()).lower()
