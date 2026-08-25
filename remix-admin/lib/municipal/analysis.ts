@@ -126,7 +126,9 @@ const DATA_DIRS: Record<string, string> = {
   'nc:planning': 'nc-planning',
   'nc:town_board': 'nc-townboard',
   'nc:zba': 'nc-zba',
-  'nc:arb': 'nc-arb',
+  // 'nc:arb' is deliberately absent — see HIDDEN_BODIES in ./registry. The
+  // dataset (a single 2022 meeting) still lives at data/nc-arb; re-adding this
+  // line and dropping the registry entry brings the board back everywhere.
 }
 function dataDir(muniKey: string, bodyKey: string): string | null {
   const d = DATA_DIRS[`${muniKey}:${bodyKey}`]

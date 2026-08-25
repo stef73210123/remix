@@ -4,17 +4,26 @@ import { useEffect, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { isOpen } from '@/lib/flavor'
 import { DEPT_PAGES } from '@/lib/municipal/deptPages'
+import { isHiddenBody } from '@/lib/municipal/registry'
 
 export interface TabDef { label: string; kind: 'board' | 'building' | 'finance' | 'highway' | 'dept'; key: string }
 
 // Fixed order (not alphabetized) — Town Board and Planning Board are the two
-// the site centers on, then the two land-use-adjacent boards.
+// the site centers on, then the land-use-adjacent boards. Entries the registry
+// marks hidden for the town are filtered out at render time (see boardTabsFor),
+// so a board can be pulled from the nav without losing its definition here.
 const BOARD_TABS: TabDef[] = [
   { label: 'Town Board', kind: 'board', key: 'town_board' },
   { label: 'Planning Board', kind: 'board', key: 'planning' },
   { label: 'Architectural Review Board', kind: 'board', key: 'arb' },
   { label: 'Zoning Board of Appeals', kind: 'board', key: 'zba' },
 ]
+
+/** Board tabs for a town, minus any the registry hides (too little behind them
+ *  to be worth a page). Exported so other nav surfaces stay in step. */
+export function boardTabsFor(muni: string): TabDef[] {
+  return BOARD_TABS.filter((t) => !isHiddenBody(muni, t.key))
+}
 
 // No committee pages exist yet — the dropdown still renders (with a
 // placeholder message) so the nav slot is reserved for when they do.
@@ -125,7 +134,7 @@ export function TabDropdownGroups({ muni, active, showBoards = true }: { muni: s
       {/* The Remix dashboard keeps its own Town Board/Planning Board analysis
           chips, so it opts out of the Boards (and Committees) dropdown to avoid
           listing those boards twice; Departments is always shown. */}
-      {showBoards && <TabGroupDropdown label="Boards" tabs={BOARD_TABS} muni={muni} active={active} />}
+      {showBoards && <TabGroupDropdown label="Boards" tabs={boardTabsFor(muni)} muni={muni} active={active} />}
       {showBoards && COMMITTEE_TABS.length > 0 && (
         <TabGroupDropdown label="Committees" tabs={COMMITTEE_TABS} muni={muni} active={active} placeholder="Committee pages are coming soon." />
       )}
