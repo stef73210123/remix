@@ -1,7 +1,8 @@
 # North Castle Zoning Board of Appeals — transcript analysis dataset
 
 Same pipeline as `../nc-townboard` and `../nc-planning`, applied to the
-**Zoning Board of Appeals** over 2022–2026. Served by the board page
+**Zoning Board of Appeals** over 2022–2026 (45 meeting dates, the most recent
+being 2026-08-06). Served by the board page
 (`/admin/municipal/board?muni=nc&body=zba`) and member profiles.
 
 ## Contents
@@ -13,7 +14,7 @@ Same pipeline as `../nc-townboard` and `../nc-planning`, applied to the
 
 ## Roster (one board turnover across the archive)
 This board had no prior dataset — the roster below was compiled during the
-2026 backfill from what board members were actually heard across all 44
+2026 backfill from what board members were actually heard across all 45
 meetings, then **spelling-verified against the Town's own published ZBA
 agendas** (the 2023-02-02 agenda lists "Joseph Monticelli, Chairman / Lester
 Berkelhamer / John Stipo / Robert Greer / Scott Stopnik"; the 2025-01-09

@@ -4,8 +4,8 @@
     "muniKey": "nc",
     "bodyKey": "zba",
     "town": "Town of North Castle",
-    "meetings": 44,
-    "cases": 121,
+    "meetings": 45,
+    "cases": 124,
     "themes": 7,
     "memberPositions": 349,
     "roster": [
@@ -288,14 +288,20 @@
       "cases": 1,
       "avgSentiment": 0.6,
       "attributionCoverage": "partial"
+    },
+    {
+      "date": "2026-08-06",
+      "cases": 3,
+      "avgSentiment": 0.55,
+      "attributionCoverage": "none"
     }
   ],
   "themes": [
     {
       "theme": "Land use, zoning & special permits",
-      "meetings": 38,
-      "avgSentiment": 0.467,
-      "avgSalience": 0.695,
+      "meetings": 39,
+      "avgSentiment": 0.469,
+      "avgSalience": 0.703,
       "timeline": [
         {
           "date": "2022-01-06",
@@ -486,6 +492,11 @@
           "date": "2026-06-04",
           "sentiment": 0.5,
           "salience": 0.4
+        },
+        {
+          "date": "2026-08-06",
+          "sentiment": 0.55,
+          "salience": 1.0
         }
       ]
     },
@@ -674,9 +685,9 @@
     },
     {
       "theme": "Resident concerns & quality of life",
-      "meetings": 13,
-      "avgSentiment": -0.1,
-      "avgSalience": 0.462,
+      "meetings": 14,
+      "avgSentiment": -0.043,
+      "avgSalience": 0.454,
       "timeline": [
         {
           "date": "2022-01-06",
@@ -742,14 +753,19 @@
           "date": "2025-07-10",
           "sentiment": -0.3,
           "salience": 0.6
+        },
+        {
+          "date": "2026-08-06",
+          "sentiment": 0.7,
+          "salience": 0.35
         }
       ]
     },
     {
       "theme": "Environment & conservation",
-      "meetings": 10,
-      "avgSentiment": 0.15,
-      "avgSalience": 0.41,
+      "meetings": 11,
+      "avgSentiment": 0.173,
+      "avgSalience": 0.409,
       "timeline": [
         {
           "date": "2022-08-04",
@@ -800,6 +816,11 @@
           "date": "2026-06-04",
           "sentiment": -0.1,
           "salience": 0.5
+        },
+        {
+          "date": "2026-08-06",
+          "sentiment": 0.4,
+          "salience": 0.4
         }
       ]
     },
@@ -847,6 +868,39 @@
       ]
     },
     {
+      "theme": "Permits & licensing",
+      "meetings": 5,
+      "avgSentiment": -0.16,
+      "avgSalience": 0.52,
+      "timeline": [
+        {
+          "date": "2023-01-05",
+          "sentiment": -0.5,
+          "salience": 0.4
+        },
+        {
+          "date": "2024-07-11",
+          "sentiment": -0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2024-08-01",
+          "sentiment": -0.3,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-03-06",
+          "sentiment": -0.1,
+          "salience": 0.8
+        },
+        {
+          "date": "2026-08-06",
+          "sentiment": 0.2,
+          "salience": 0.6
+        }
+      ]
+    },
+    {
       "theme": "Roads, highway & sidewalks",
       "meetings": 4,
       "avgSentiment": -0.075,
@@ -871,34 +925,6 @@
           "date": "2025-06-05",
           "sentiment": 0.0,
           "salience": 0.6
-        }
-      ]
-    },
-    {
-      "theme": "Permits & licensing",
-      "meetings": 4,
-      "avgSentiment": -0.25,
-      "avgSalience": 0.5,
-      "timeline": [
-        {
-          "date": "2023-01-05",
-          "sentiment": -0.5,
-          "salience": 0.4
-        },
-        {
-          "date": "2024-07-11",
-          "sentiment": -0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2024-08-01",
-          "sentiment": -0.3,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-03-06",
-          "sentiment": -0.1,
-          "salience": 0.8
         }
       ]
     }
@@ -4900,6 +4926,105 @@
           "status": "granted",
           "sentiment": 0.6,
           "summary": "The applicants previously received variance and building-permit approval for a home addition, but found excavating a basement infeasible and costly due to bedrock on the site. In lieu of the basement, they proposed extending a bedroom approximately 2.5 feet further toward the street (not toward any neighbor or sight line), for additional storage/living space for their teenage son, without altering any of the previously-approved variance dimensions. A neighbor across the street (Joelle) submitted an updated letter reiterating support, consistent with a letter she wrote for the original approval. The board found the change self-created but non-substantial, with no environmental or neighborhood-character impact and no feasible alternative other than building upward (which the applicants noted would raise other height/setback issues on their corner, 1929-era lot), and approved unanimously."
+        }
+      ]
+    },
+    {
+      "id": "30-main-street",
+      "name": "30 Main Street \u2014 Sign Variance (door lettering)",
+      "address": "30 Main Street",
+      "applicationType": "sign variance",
+      "applicant": "Storefront tenant (name garbled in the ASR as \"the else wards\"; not confidently reconstructable)",
+      "themes": [
+        "Land use, zoning & special permits",
+        "Other",
+        "Permits & licensing"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-06",
+      "lastSeen": "2026-08-06",
+      "lastStatus": "granted, conditioned on Architectural Review Board approval of the sign design",
+      "avgSentiment": 0.6,
+      "trajectory": [
+        {
+          "date": "2026-08-06",
+          "sentiment": 0.6,
+          "status": "granted, conditioned on Architectural Review Board approval of the sign design"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-06",
+          "status": "granted, conditioned on Architectural Review Board approval of the sign design",
+          "sentiment": 0.6,
+          "summary": "The applicant, a Main Street tenant, asked to add a phone number, logo and description of the business to the storefront door, roughly 15 by 19.5 inches. A neighboring tenant had moved out and scraped off the prior signage, leaving the door effectively blank and the business hard to find, and the door is the only surface available for signage. Board members observed that lettering on windows and doors is common along Main Street, found the request non-substantial with no environmental impact and no effect on neighborhood character or other tenants, and noted that the only alternative was for the applicant not to advertise at all. One member asked that the approval carry an explicit condition that the applicant obtain Architectural Review Board sign-off on the colors and design; that condition was added before the vote. Granted unanimously by the four members polled."
+        }
+      ]
+    },
+    {
+      "id": "53-windmill-road",
+      "name": "53 Windmill Road (Michael Smith) \u2014 Development Coverage Area Variance",
+      "address": "53 Windmill Road",
+      "applicationType": "area variance",
+      "applicant": "Michael Smith (owner); represented by Mike Testa",
+      "themes": [
+        "Environment & conservation",
+        "Land use, zoning & special permits",
+        "Resident concerns & quality of life",
+        "Roads, highway & sidewalks"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-06",
+      "lastSeen": "2026-08-06",
+      "lastStatus": "granted",
+      "avgSentiment": 0.55,
+      "trajectory": [
+        {
+          "date": "2026-08-06",
+          "sentiment": 0.55,
+          "status": "granted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-06",
+          "status": "granted",
+          "sentiment": 0.55,
+          "summary": "The owner is selling the property with a closing set for August 15th. A title search run during the sale turned up patios that had never been permitted, and the building department's review then found the site roughly 850.58 square feet over the allowable development coverage. The representative told the board the owner bought the property in 2015, that the great majority of the coverage is pre-existing nonconforming, and that the only addition he made was a rear patio \u2014 for which the town engineer required and has already approved a substantial drainage improvement plan, since built. The RPRC approved subject to this variance. Removing 850 square feet of improvements was priced at over $10,000 and the buyer does not want work torn up. Six surrounding neighbors submitted letters of support and none were reported opposed. Board questioning focused on what exactly the title search turned up, what the current owner had changed versus inherited, and whether the driveways had been altered (they had only been resurfaced). Granted unanimously by the four members polled."
+        }
+      ]
+    },
+    {
+      "id": "1-windmill-court",
+      "name": "1 Windmill Court \u2014 Side-Yard Setback Variance to Legalize a Sport Court",
+      "address": "1 Windmill Court",
+      "applicationType": "area variance",
+      "applicant": "Keith [surname unclear in the ASR] (owner)",
+      "themes": [
+        "Environment & conservation",
+        "Land use, zoning & special permits",
+        "Parks, recreation & trails",
+        "Permits & licensing",
+        "Resident concerns & quality of life"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-06",
+      "lastSeen": "2026-08-06",
+      "lastStatus": "granted",
+      "avgSentiment": 0.5,
+      "trajectory": [
+        {
+          "date": "2026-08-06",
+          "sentiment": 0.5,
+          "status": "granted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-06",
+          "status": "granted",
+          "sentiment": 0.5,
+          "summary": "The homeowner, who moved to Windmill in 2017, installed a sport court during COVID on the advice of a contractor who told him no permit was required; that company has since gone out of business. He is now legalizing the court and seeking a 17-foot-10-inch side-yard variance against a 30-foot requirement. He has had the court roughly five years with no reported issues, is installing drainage the building inspector required (quoted at a six-figure sum on the recording, though the ASR renders the number unreliably), has planted trees to screen the neighbors, and is mid-renovation on the house. Members confirmed that no neighbor had voiced any concern, including the one abutting neighbor whose side yard the court faces, and that the neighbor was aware of the application and did not object. One member said he had visited the site and described it as a nice court. Members used the case to make a general point to a relatively new homeowner about always confirming permit requirements before building rather than relying on a contractor's assurance, framing it as a warning rather than a penalty. Granted unanimously by the four members polled."
         }
       ]
     }
@@ -19011,6 +19136,127 @@
       ],
       "attributionCoverage": "partial",
       "attributionNote": "This is a very short (~5-minute), single-case meeting with no dissent or extended debate; individual board-member speakers could not be reliably distinguished beyond the roll-call/vote naming of Ed Lashins and Robert Greer, so no member-specific stances are recorded. The applicant's name (\"Diana Kanjria\") is likely an ASR mis-transcription and should be verified against town records."
+    },
+    {
+      "date": "2026-08-06",
+      "meetingSummary": "A short (~16-minute) meeting clearing three uncontested variance applications, all granted unanimously by the four members recorded voting. A Main Street tenant sought a sign variance for lettering on a storefront door after a departing neighbor tenant stripped the existing signage; the board granted it on the condition that the sign also go to the Architectural Review Board for color approval. A 53 Windmill Road homeowner, selling with a closing set for August 15th, sought an area variance for roughly 850 square feet of development coverage over the limit discovered during a title search, most of it pre-existing and the rest a patio for which a town-engineer-approved drainage plan had already been built; six neighbors wrote in support. A 1 Windmill Court homeowner sought a 17-foot-10-inch side-yard variance to legalize a sport court installed during COVID on the advice of a contractor, since out of business, who told him no permit was needed. The board used that last case to press a broader point about always confirming permit requirements before building.",
+      "durationNote": "Roll call named Ray Rodriguez, John Stipo, Robert Greer, Scott Stopnik and Ed Lashins, but the ASR did not capture individual \"here\" responses. Both recorded roll-call votes polled only four members \u2014 Ed Lashins, Robert Greer, John Stipo and Ray Rodriguez \u2014 so Scott Stopnik appears not to have voted; whether he was absent or recused is not stated on the recording.",
+      "cases": [
+        {
+          "id": "30-main-street-sign-variance",
+          "name": "30 Main Street \u2014 Sign Variance (door lettering)",
+          "address": "30 Main Street",
+          "applicationType": "sign variance",
+          "applicant": "Storefront tenant (name garbled in the ASR as \"the else wards\"; not confidently reconstructable)",
+          "status": "granted, conditioned on Architectural Review Board approval of the sign design",
+          "summary": "The applicant, a Main Street tenant, asked to add a phone number, logo and description of the business to the storefront door, roughly 15 by 19.5 inches. A neighboring tenant had moved out and scraped off the prior signage, leaving the door effectively blank and the business hard to find, and the door is the only surface available for signage. Board members observed that lettering on windows and doors is common along Main Street, found the request non-substantial with no environmental impact and no effect on neighborhood character or other tenants, and noted that the only alternative was for the applicant not to advertise at all. One member asked that the approval carry an explicit condition that the applicant obtain Architectural Review Board sign-off on the colors and design; that condition was added before the vote. Granted unanimously by the four members polled.",
+          "themes": [
+            "Land use, zoning & special permits",
+            "Other",
+            "Permits & licensing"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.6,
+          "publicComment": "No members of the public spoke for or against.",
+          "memberPositions": []
+        },
+        {
+          "id": "53-windmill-road-development-coverage",
+          "name": "53 Windmill Road (Michael Smith) \u2014 Development Coverage Area Variance",
+          "address": "53 Windmill Road",
+          "applicationType": "area variance",
+          "applicant": "Michael Smith (owner); represented by Mike Testa",
+          "status": "granted",
+          "summary": "The owner is selling the property with a closing set for August 15th. A title search run during the sale turned up patios that had never been permitted, and the building department's review then found the site roughly 850.58 square feet over the allowable development coverage. The representative told the board the owner bought the property in 2015, that the great majority of the coverage is pre-existing nonconforming, and that the only addition he made was a rear patio \u2014 for which the town engineer required and has already approved a substantial drainage improvement plan, since built. The RPRC approved subject to this variance. Removing 850 square feet of improvements was priced at over $10,000 and the buyer does not want work torn up. Six surrounding neighbors submitted letters of support and none were reported opposed. Board questioning focused on what exactly the title search turned up, what the current owner had changed versus inherited, and whether the driveways had been altered (they had only been resurfaced). Granted unanimously by the four members polled.",
+          "themes": [
+            "Environment & conservation",
+            "Land use, zoning & special permits",
+            "Resident concerns & quality of life",
+            "Roads, highway & sidewalks"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.55,
+          "publicComment": "Six neighbors submitted written letters of support, included in the board's packet. A neighbor from across the street was reported to be present in the audience; no one spoke in opposition.",
+          "memberPositions": []
+        },
+        {
+          "id": "1-windmill-court-sport-court-setback",
+          "name": "1 Windmill Court \u2014 Side-Yard Setback Variance to Legalize a Sport Court",
+          "address": "1 Windmill Court",
+          "applicationType": "area variance",
+          "applicant": "Keith [surname unclear in the ASR] (owner)",
+          "status": "granted",
+          "summary": "The homeowner, who moved to Windmill in 2017, installed a sport court during COVID on the advice of a contractor who told him no permit was required; that company has since gone out of business. He is now legalizing the court and seeking a 17-foot-10-inch side-yard variance against a 30-foot requirement. He has had the court roughly five years with no reported issues, is installing drainage the building inspector required (quoted at a six-figure sum on the recording, though the ASR renders the number unreliably), has planted trees to screen the neighbors, and is mid-renovation on the house. Members confirmed that no neighbor had voiced any concern, including the one abutting neighbor whose side yard the court faces, and that the neighbor was aware of the application and did not object. One member said he had visited the site and described it as a nice court. Members used the case to make a general point to a relatively new homeowner about always confirming permit requirements before building rather than relying on a contractor's assurance, framing it as a warning rather than a penalty. Granted unanimously by the four members polled.",
+          "themes": [
+            "Environment & conservation",
+            "Land use, zoning & special permits",
+            "Parks, recreation & trails",
+            "Permits & licensing",
+            "Resident concerns & quality of life"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.5,
+          "publicComment": "No members of the public spoke in opposition; the applicant reported that the most-affected abutting neighbor was aware of the application and had no objection.",
+          "memberPositions": []
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Land use, zoning & special permits",
+          "salience": 1.0,
+          "sentiment": 0.55,
+          "note": "All three items were variance applications \u2014 one sign, two area/setback \u2014 and all three were granted."
+        },
+        {
+          "theme": "Permits & licensing",
+          "salience": 0.6,
+          "sentiment": 0.2,
+          "note": "Two of the three cases were after-the-fact legalizations of work built without a permit. The board spent noticeable time on the general lesson that homeowners should confirm permit requirements before building, and conditioned the sign approval on a further ARB sign-off."
+        },
+        {
+          "theme": "Environment & conservation",
+          "salience": 0.4,
+          "sentiment": 0.4,
+          "note": "Drainage mitigation was the town engineer's condition in both coverage/setback cases; the board treated the already-built or committed drainage work as satisfying its concerns."
+        },
+        {
+          "theme": "Resident concerns & quality of life",
+          "salience": 0.35,
+          "sentiment": 0.7,
+          "note": "Neighbor position was the board's main test in both residential cases; six written letters of support in one, an abutting neighbor's stated non-objection in the other."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Lori J. Zawacki",
+          "role": "Board Secretary/Clerk",
+          "summary": "Read the roll call at the opening and polled the two recorded roll-call votes.",
+          "cases": [
+            "30-main-street-sign-variance",
+            "53-windmill-road-development-coverage",
+            "1-windmill-court-sport-court-setback"
+          ]
+        },
+        {
+          "person": "Rob Melillo",
+          "role": "Building Inspector",
+          "summary": "Referenced throughout as \"Rob\" \u2014 denied the after-the-fact building permit at 53 Windmill Road, which is what put the matter before this board, and required the drainage work at 1 Windmill Court. Did not himself speak on the recording.",
+          "cases": [
+            "53-windmill-road-development-coverage",
+            "1-windmill-court-sport-court-setback"
+          ]
+        },
+        {
+          "person": "Town Engineer (referred to on the recording as \"Mr. Kellogg\")",
+          "role": "Consulting Town Engineer",
+          "summary": "Required and approved the drainage improvement plan at 53 Windmill Road that the board relied on in granting the coverage variance. The surname as rendered by the ASR does not match the engineer named in earlier meetings (Joe Cermele of KSCJ) and should be verified against town records before being relied on.",
+          "cases": [
+            "53-windmill-road-development-coverage"
+          ]
+        }
+      ],
+      "attributionCoverage": "none",
+      "attributionNote": "The recording has no speaker labels and the board members are not named except at roll call and during the two roll-call votes, so individual remarks cannot be separated with any confidence \u2014 several members clearly speak across each case but the ASR gives no reliable way to say which. No member-specific positions are recorded for this meeting. Names as heard by the ASR: \"John Steepo\"/\"John's depot\" (John Stipo), \"Ed Lassians\"/\"Ed lashes\"/\"Ed Lascents\" (Ed Lashins), \"Scott Topnik\" (Scott Stopnik). The applicant surname on the 30 Main Street sign variance and the town engineer's surname are both garbled beyond confident reconstruction."
     }
   ]
 }

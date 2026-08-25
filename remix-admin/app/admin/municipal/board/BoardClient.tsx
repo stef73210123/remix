@@ -16,6 +16,7 @@ import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
 import { isOpen } from '@/lib/flavor'
+import { isHiddenBody } from '@/lib/municipal/registry'
 import { nextMeetingDate, remainingYearMeetingDates, dayKey } from '@/lib/municipal/meetingPattern'
 
 
@@ -100,6 +101,13 @@ export default function BoardClient({ userName }: { userName: string }) {
     const b = p.get('body') || ''
     setMuni(m)
     setBody(b)
+    // A board the registry hides has too little behind it to be worth a page;
+    // an old link or a hand-typed URL still lands here, so send it to the
+    // dashboard rather than rendering a near-empty board.
+    if (m && b && isHiddenBody(m, b)) {
+      window.location.replace(isOpen ? '/' : '/admin/municipal')
+      return
+    }
     if (m && b) {
       fetch(`/admin/api/municipal/transcript?muni=${encodeURIComponent(m)}&body=${encodeURIComponent(b)}`)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))

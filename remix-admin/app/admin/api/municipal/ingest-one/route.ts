@@ -6,6 +6,13 @@
  *   GET /admin/api/municipal/ingest-one?muni=nc
  *   GET /admin/api/municipal/ingest-one?muni=rockland
  *   GET /admin/api/municipal/ingest-one?muni=nc&body=town_board&limit=1
+ *   GET /admin/api/municipal/ingest-one?muni=nc&limit=15&minutes=40
+ *
+ * `limit`   — meetings fully ingested (agenda + minutes + text extraction).
+ * `minutes` — cap on the minutes-only backfill of meetings ingested earlier,
+ *             whose minutes the portal has published since. Default 25; 0 to
+ *             skip. Minutes appear weeks after a meeting, so without this pass
+ *             they are almost never picked up (see lib/municipal/ingest.ts).
  *
  * Auth: session cookie OR Bearer CRON_SECRET OR Bearer MUNICIPAL_INGEST_TOKEN
  */
@@ -27,6 +34,8 @@ export async function GET(req: Request) {
   const muni = url.searchParams.get('muni') ?? 'nc'
   const body = url.searchParams.get('body') ?? undefined
   const limit = Number(url.searchParams.get('limit') ?? '1')
+  const minutesParam = url.searchParams.get('minutes')
+  const minutesBackfillLimit = minutesParam == null ? undefined : Number(minutesParam)
   const sinceParam = url.searchParams.get('since')
   const since = sinceParam ? new Date(sinceParam) : undefined
 
@@ -43,6 +52,7 @@ export async function GET(req: Request) {
       muniKey: muni,
       since,
       limit,
+      minutesBackfillLimit,
       bodyKeys: body ? [body] : undefined,
     })
     return NextResponse.json({ ok: true, muni, dbHealth, report })

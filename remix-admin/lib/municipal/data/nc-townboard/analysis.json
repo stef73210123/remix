@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "town_board",
     "town": "Town of North Castle",
-    "meetings": 110,
-    "cases": 727,
+    "meetings": 111,
+    "cases": 737,
     "themes": 18,
-    "memberPositions": 1523,
+    "memberPositions": 1548,
     "roster": [
       "Joseph Rende",
       "Michael Schiliro",
@@ -684,6 +684,12 @@
       "cases": 8,
       "avgSentiment": 0.375,
       "attributionCoverage": "partial"
+    },
+    {
+      "date": "2026-08-12",
+      "cases": 13,
+      "avgSentiment": 0.308,
+      "attributionCoverage": "good"
     }
   ],
   "themes": [
@@ -1122,9 +1128,9 @@
     },
     {
       "theme": "Land use, zoning & special permits",
-      "meetings": 82,
-      "avgSentiment": 0.22,
-      "avgSalience": 0.32,
+      "meetings": 83,
+      "avgSentiment": 0.219,
+      "avgSalience": 0.321,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -1535,6 +1541,11 @@
           "date": "2026-06-16",
           "sentiment": 0.1,
           "salience": 0.25
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.2,
+          "salience": 0.4
         }
       ]
     },
@@ -1853,9 +1864,9 @@
     },
     {
       "theme": "Public safety & police",
-      "meetings": 52,
-      "avgSentiment": 0.462,
-      "avgSalience": 0.168,
+      "meetings": 53,
+      "avgSentiment": 0.461,
+      "avgSalience": 0.181,
       "timeline": [
         {
           "date": "2022-02-16",
@@ -2116,14 +2127,19 @@
           "date": "2026-06-24",
           "sentiment": 0.85,
           "salience": 0.12
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.45,
+          "salience": 0.85
         }
       ]
     },
     {
       "theme": "Open government & procedure",
-      "meetings": 51,
-      "avgSentiment": 0.08,
-      "avgSalience": 0.194,
+      "meetings": 52,
+      "avgSentiment": 0.075,
+      "avgSalience": 0.203,
       "timeline": [
         {
           "date": "2022-05-04",
@@ -2379,6 +2395,11 @@
           "date": "2026-06-24",
           "sentiment": -0.1,
           "salience": 0.06
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": -0.2,
+          "salience": 0.7
         }
       ]
     },
@@ -2637,9 +2658,9 @@
     },
     {
       "theme": "Water & sewer districts",
-      "meetings": 48,
-      "avgSentiment": 0.467,
-      "avgSalience": 0.184,
+      "meetings": 49,
+      "avgSentiment": 0.465,
+      "avgSalience": 0.19,
       "timeline": [
         {
           "date": "2022-05-24",
@@ -2880,6 +2901,254 @@
           "date": "2026-07-15",
           "sentiment": 0.6,
           "salience": 0.5
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.4,
+          "salience": 0.45
+        }
+      ]
+    },
+    {
+      "theme": "Legal, litigation & contracts",
+      "meetings": 47,
+      "avgSentiment": 0.232,
+      "avgSalience": 0.174,
+      "timeline": [
+        {
+          "date": "2022-04-06",
+          "sentiment": -0.1,
+          "salience": 0.6
+        },
+        {
+          "date": "2022-04-27",
+          "sentiment": 0.4,
+          "salience": 0.4
+        },
+        {
+          "date": "2023-01-25",
+          "sentiment": 0.0,
+          "salience": 0.4
+        },
+        {
+          "date": "2023-03-22",
+          "sentiment": 0.1,
+          "salience": 0.2
+        },
+        {
+          "date": "2023-04-26",
+          "sentiment": 0.2,
+          "salience": 0.15
+        },
+        {
+          "date": "2023-05-10",
+          "sentiment": 0.2,
+          "salience": 0.2
+        },
+        {
+          "date": "2023-06-28",
+          "sentiment": 0.4,
+          "salience": 0.6
+        },
+        {
+          "date": "2024-01-10",
+          "sentiment": 0.3,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-01-25",
+          "sentiment": 0.3,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-02-14",
+          "sentiment": 0.1,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-03-13",
+          "sentiment": 0.2,
+          "salience": 0.15
+        },
+        {
+          "date": "2024-05-08",
+          "sentiment": 0.1,
+          "salience": 0.06
+        },
+        {
+          "date": "2024-05-22",
+          "sentiment": -0.4,
+          "salience": 0.2
+        },
+        {
+          "date": "2024-06-12",
+          "sentiment": 0.2,
+          "salience": 0.15
+        },
+        {
+          "date": "2024-06-26",
+          "sentiment": 0.6,
+          "salience": 0.07
+        },
+        {
+          "date": "2024-07-10",
+          "sentiment": 0.2,
+          "salience": 0.25
+        },
+        {
+          "date": "2024-08-14",
+          "sentiment": 0.4,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-09-25",
+          "sentiment": 0.6,
+          "salience": 0.08
+        },
+        {
+          "date": "2024-11-20",
+          "sentiment": 0.4,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-12-11",
+          "sentiment": 0.35,
+          "salience": 0.1
+        },
+        {
+          "date": "2025-01-08",
+          "sentiment": 0.3,
+          "salience": 0.14
+        },
+        {
+          "date": "2025-01-22",
+          "sentiment": 0.4,
+          "salience": 0.12
+        },
+        {
+          "date": "2025-02-12",
+          "sentiment": -0.1,
+          "salience": 0.08
+        },
+        {
+          "date": "2025-02-26",
+          "sentiment": 0.4,
+          "salience": 0.05
+        },
+        {
+          "date": "2025-03-12",
+          "sentiment": 0.0,
+          "salience": 0.07
+        },
+        {
+          "date": "2025-04-09",
+          "sentiment": -0.1,
+          "salience": 0.25
+        },
+        {
+          "date": "2025-04-23",
+          "sentiment": 0.5,
+          "salience": 0.2
+        },
+        {
+          "date": "2025-05-14",
+          "sentiment": 0.4,
+          "salience": 0.14
+        },
+        {
+          "date": "2025-05-28",
+          "sentiment": 0.4,
+          "salience": 0.05
+        },
+        {
+          "date": "2025-06-11",
+          "sentiment": 0.6,
+          "salience": 0.12
+        },
+        {
+          "date": "2025-08-13",
+          "sentiment": -0.1,
+          "salience": 0.1
+        },
+        {
+          "date": "2025-09-10",
+          "sentiment": -0.3,
+          "salience": 0.04
+        },
+        {
+          "date": "2025-09-30",
+          "sentiment": 0.4,
+          "salience": 0.12
+        },
+        {
+          "date": "2025-10-22",
+          "sentiment": 0.4,
+          "salience": 0.08
+        },
+        {
+          "date": "2025-11-12",
+          "sentiment": 0.4,
+          "salience": 0.15
+        },
+        {
+          "date": "2025-11-19",
+          "sentiment": 0.0,
+          "salience": 0.06
+        },
+        {
+          "date": "2025-12-10",
+          "sentiment": 0.3,
+          "salience": 0.1
+        },
+        {
+          "date": "2026-01-14",
+          "sentiment": 0.6,
+          "salience": 0.6
+        },
+        {
+          "date": "2026-01-28",
+          "sentiment": 0.2,
+          "salience": 0.1
+        },
+        {
+          "date": "2026-02-11",
+          "sentiment": 0.5,
+          "salience": 0.22
+        },
+        {
+          "date": "2026-02-25",
+          "sentiment": 0.4,
+          "salience": 0.08
+        },
+        {
+          "date": "2026-03-11",
+          "sentiment": 0.1,
+          "salience": 0.03
+        },
+        {
+          "date": "2026-03-25",
+          "sentiment": 0.0,
+          "salience": 0.05
+        },
+        {
+          "date": "2026-04-22",
+          "sentiment": 0.5,
+          "salience": 0.05
+        },
+        {
+          "date": "2026-05-27",
+          "sentiment": -0.1,
+          "salience": 0.05
+        },
+        {
+          "date": "2026-06-24",
+          "sentiment": 0.6,
+          "salience": 0.15
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": -0.35,
+          "salience": 0.75
         }
       ]
     },
@@ -3127,248 +3396,10 @@
       ]
     },
     {
-      "theme": "Legal, litigation & contracts",
-      "meetings": 46,
-      "avgSentiment": 0.245,
-      "avgSalience": 0.161,
-      "timeline": [
-        {
-          "date": "2022-04-06",
-          "sentiment": -0.1,
-          "salience": 0.6
-        },
-        {
-          "date": "2022-04-27",
-          "sentiment": 0.4,
-          "salience": 0.4
-        },
-        {
-          "date": "2023-01-25",
-          "sentiment": 0.0,
-          "salience": 0.4
-        },
-        {
-          "date": "2023-03-22",
-          "sentiment": 0.1,
-          "salience": 0.2
-        },
-        {
-          "date": "2023-04-26",
-          "sentiment": 0.2,
-          "salience": 0.15
-        },
-        {
-          "date": "2023-05-10",
-          "sentiment": 0.2,
-          "salience": 0.2
-        },
-        {
-          "date": "2023-06-28",
-          "sentiment": 0.4,
-          "salience": 0.6
-        },
-        {
-          "date": "2024-01-10",
-          "sentiment": 0.3,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-01-25",
-          "sentiment": 0.3,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-02-14",
-          "sentiment": 0.1,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-03-13",
-          "sentiment": 0.2,
-          "salience": 0.15
-        },
-        {
-          "date": "2024-05-08",
-          "sentiment": 0.1,
-          "salience": 0.06
-        },
-        {
-          "date": "2024-05-22",
-          "sentiment": -0.4,
-          "salience": 0.2
-        },
-        {
-          "date": "2024-06-12",
-          "sentiment": 0.2,
-          "salience": 0.15
-        },
-        {
-          "date": "2024-06-26",
-          "sentiment": 0.6,
-          "salience": 0.07
-        },
-        {
-          "date": "2024-07-10",
-          "sentiment": 0.2,
-          "salience": 0.25
-        },
-        {
-          "date": "2024-08-14",
-          "sentiment": 0.4,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-09-25",
-          "sentiment": 0.6,
-          "salience": 0.08
-        },
-        {
-          "date": "2024-11-20",
-          "sentiment": 0.4,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-12-11",
-          "sentiment": 0.35,
-          "salience": 0.1
-        },
-        {
-          "date": "2025-01-08",
-          "sentiment": 0.3,
-          "salience": 0.14
-        },
-        {
-          "date": "2025-01-22",
-          "sentiment": 0.4,
-          "salience": 0.12
-        },
-        {
-          "date": "2025-02-12",
-          "sentiment": -0.1,
-          "salience": 0.08
-        },
-        {
-          "date": "2025-02-26",
-          "sentiment": 0.4,
-          "salience": 0.05
-        },
-        {
-          "date": "2025-03-12",
-          "sentiment": 0.0,
-          "salience": 0.07
-        },
-        {
-          "date": "2025-04-09",
-          "sentiment": -0.1,
-          "salience": 0.25
-        },
-        {
-          "date": "2025-04-23",
-          "sentiment": 0.5,
-          "salience": 0.2
-        },
-        {
-          "date": "2025-05-14",
-          "sentiment": 0.4,
-          "salience": 0.14
-        },
-        {
-          "date": "2025-05-28",
-          "sentiment": 0.4,
-          "salience": 0.05
-        },
-        {
-          "date": "2025-06-11",
-          "sentiment": 0.6,
-          "salience": 0.12
-        },
-        {
-          "date": "2025-08-13",
-          "sentiment": -0.1,
-          "salience": 0.1
-        },
-        {
-          "date": "2025-09-10",
-          "sentiment": -0.3,
-          "salience": 0.04
-        },
-        {
-          "date": "2025-09-30",
-          "sentiment": 0.4,
-          "salience": 0.12
-        },
-        {
-          "date": "2025-10-22",
-          "sentiment": 0.4,
-          "salience": 0.08
-        },
-        {
-          "date": "2025-11-12",
-          "sentiment": 0.4,
-          "salience": 0.15
-        },
-        {
-          "date": "2025-11-19",
-          "sentiment": 0.0,
-          "salience": 0.06
-        },
-        {
-          "date": "2025-12-10",
-          "sentiment": 0.3,
-          "salience": 0.1
-        },
-        {
-          "date": "2026-01-14",
-          "sentiment": 0.6,
-          "salience": 0.6
-        },
-        {
-          "date": "2026-01-28",
-          "sentiment": 0.2,
-          "salience": 0.1
-        },
-        {
-          "date": "2026-02-11",
-          "sentiment": 0.5,
-          "salience": 0.22
-        },
-        {
-          "date": "2026-02-25",
-          "sentiment": 0.4,
-          "salience": 0.08
-        },
-        {
-          "date": "2026-03-11",
-          "sentiment": 0.1,
-          "salience": 0.03
-        },
-        {
-          "date": "2026-03-25",
-          "sentiment": 0.0,
-          "salience": 0.05
-        },
-        {
-          "date": "2026-04-22",
-          "sentiment": 0.5,
-          "salience": 0.05
-        },
-        {
-          "date": "2026-05-27",
-          "sentiment": -0.1,
-          "salience": 0.05
-        },
-        {
-          "date": "2026-06-24",
-          "sentiment": 0.6,
-          "salience": 0.15
-        }
-      ]
-    },
-    {
       "theme": "Parks, recreation & trails",
-      "meetings": 45,
-      "avgSentiment": 0.469,
-      "avgSalience": 0.214,
+      "meetings": 46,
+      "avgSentiment": 0.462,
+      "avgSalience": 0.222,
       "timeline": [
         {
           "date": "2022-01-26",
@@ -3594,14 +3625,19 @@
           "date": "2026-06-24",
           "sentiment": 0.05,
           "salience": 0.2
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.15,
+          "salience": 0.55
         }
       ]
     },
     {
       "theme": "Environment & conservation",
-      "meetings": 43,
-      "avgSentiment": 0.405,
-      "avgSalience": 0.213,
+      "meetings": 44,
+      "avgSentiment": 0.406,
+      "avgSalience": 0.218,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -3817,6 +3853,11 @@
           "date": "2026-06-16",
           "sentiment": 0.1,
           "salience": 0.2
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.45,
+          "salience": 0.45
         }
       ]
     },
@@ -3960,9 +4001,9 @@
     },
     {
       "theme": "Roads, highway & sidewalks",
-      "meetings": 23,
-      "avgSentiment": 0.359,
-      "avgSalience": 0.171,
+      "meetings": 24,
+      "avgSentiment": 0.352,
+      "avgSalience": 0.185,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -4078,14 +4119,19 @@
           "date": "2026-06-16",
           "sentiment": 0.3,
           "salience": 0.35
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.2,
+          "salience": 0.5
         }
       ]
     },
     {
       "theme": "Intermunicipal & county/state",
-      "meetings": 23,
-      "avgSentiment": 0.246,
-      "avgSalience": 0.127,
+      "meetings": 24,
+      "avgSentiment": 0.242,
+      "avgSalience": 0.135,
       "timeline": [
         {
           "date": "2022-05-19",
@@ -4201,6 +4247,11 @@
           "date": "2026-04-22",
           "sentiment": 0.35,
           "salience": 0.04
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.15,
+          "salience": 0.3
         }
       ]
     },
@@ -4372,9 +4423,9 @@
     },
     {
       "theme": "Technology & communications",
-      "meetings": 6,
-      "avgSentiment": 0.567,
-      "avgSalience": 0.155,
+      "meetings": 7,
+      "avgSentiment": 0.507,
+      "avgSalience": 0.176,
       "timeline": [
         {
           "date": "2022-02-09",
@@ -4405,6 +4456,11 @@
           "date": "2025-11-12",
           "sentiment": 0.5,
           "salience": 0.07
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.15,
+          "salience": 0.3
         }
       ]
     },
@@ -5689,6 +5745,75 @@
       ]
     },
     {
+      "id": "lombardi-park",
+      "name": "Dedicated Pickleball Courts & Recreation Facility Priorities",
+      "address": "Lombardi Park (proposed location, not settled)",
+      "applicationType": "capital project / public comment",
+      "applicant": "Town of North Castle",
+      "themes": [
+        "Budget, taxes & finance",
+        "Grants & capital projects",
+        "Other",
+        "Parks, recreation & trails",
+        "Public safety & police",
+        "Resident concerns & quality of life",
+        "Water & sewer districts"
+      ],
+      "appearances": 4,
+      "firstSeen": "2023-10-25",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "no decision \u2014 pool bids came in under budget, freeing potential funding; location still unsettled; awaiting Recreation Advisory Board prioritisation",
+      "avgSentiment": 0.275,
+      "trajectory": [
+        {
+          "date": "2023-10-25",
+          "sentiment": 0.1,
+          "status": "in progress; bid documents issued"
+        },
+        {
+          "date": "2023-11-29",
+          "sentiment": 0.1,
+          "status": "administrative resolutions adopted; hearing opened, pending 45-day permissive referendum period"
+        },
+        {
+          "date": "2024-01-24",
+          "sentiment": 0.8,
+          "status": "in progress; engineering proposal to advance at next meeting"
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.1,
+          "status": "no decision \u2014 pool bids came in under budget, freeing potential funding; location still unsettled; awaiting Recreation Advisory Board prioritisation"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2023-10-25",
+          "status": "in progress; bid documents issued",
+          "sentiment": 0.1,
+          "summary": "The Board continued debating whether to extend Water District #4 piping to Lombardi Park (roughly $461,000 per an initial Keller & Sessions estimate) or rehabilitate the park's existing well (potentially over $300,000 once duplicate treatment infrastructure like chlorination and UV disinfection is included), given ongoing PFAS concerns and the park's heavy use by children. The town confirmed bid documents for the water-district extension had already gone out, with cost comparisons expected at the next meeting; one board member questioned whether the eventual scope (effectively a water fountain and three bathrooms) justified the six-figure cost."
+        },
+        {
+          "date": "2023-11-29",
+          "status": "administrative resolutions adopted; hearing opened, pending 45-day permissive referendum period",
+          "sentiment": 0.1,
+          "summary": "The Board opened a hearing and adopted the required administrative resolutions to formally propose extending Water District #4 into Lombardi Park (piped option, competitively bid after a non-competitive emergency estimate of about $461,000), triggering a mandatory 45-day permissive-referendum waiting period before a final vote in January; the Board can still choose the alternative of rehabilitating the park's existing well (about $373,000, roughly a third of which is for expanding the parks garage to house treatment equipment) or abandon the process if a cheaper option is found. Board members debated the true cost driver of the well option and future operating-cost implications of a self-run treatment system, with general agreement to keep exploring the well cost further before deciding."
+        },
+        {
+          "date": "2024-01-24",
+          "status": "in progress; engineering proposal to advance at next meeting",
+          "sentiment": 0.8,
+          "summary": "The Board held a work session and coalesced around a substantially upgraded plan: instead of a narrow, single-purpose water service line into the park, run a full 8-inch public water main up School Street to the park, roughly 1,000 feet shorter than the originally proposed route through school-easement land, extending Water District #4's boundary along the way. The upgrade is expected to be substantially funded by the town's approximately $1.2 million in remaining, use-it-or-lose-it ARPA (federal COVID relief) funds, and would add three new fire hydrants and design provisions (valves/tees) for future, resident-initiated extensions to neighboring streets (Cox Avenue, Anthony Court, Byron Ridge Road) at no cost to the town unless residents opt to connect. The Board directed staff to bring back a formal engineering proposal and district-extension paperwork (map/plan/report, EAF, notice to affected property owners, and a subsequent public hearing) for approval at the next meeting, with construction not expected to be delayed by the parallel legal process."
+        },
+        {
+          "date": "2026-08-12",
+          "status": "no decision \u2014 pool bids came in under budget, freeing potential funding; location still unsettled; awaiting Recreation Advisory Board prioritisation",
+          "sentiment": 0.1,
+          "summary": "Steve Rossi of Overlook Road, North White Plains, opened public comment with the myth of Sisyphus: the dedicated-courts idea started in October of last year, seemed to advance at a good May meeting where Lombardi Park was suggested and the project referred to the recreation department, and then rolled back down \u2014 the Recreation Advisory Board has not met in July or August for lack of a quorum and is now pushed to September. He asked plainly where the project stands, whether it is still viable, and how residents are supposed to find out, noting a $600,000 recreation fund had been mentioned. Supervisor Rende answered that the board had been waiting on the pool renovation bids, which have now come in substantially under the $5 million bond resolution; bond counsel advises that shifting some of that authorisation to another recreation project would require a further town board resolution, and that is where his attention goes next \u2014 while keeping a cushion in case the pool demolition turns up something unforeseen. The successful low bidder has completed insurance and funding due diligence and signed contracts, with a pre-construction meeting scheduled. Rende said the location has not been agreed and a work session is likely in the coming months, and that he has not forgotten the pickleball players. Another member said they could not state a position on dedicated courts until the Recreation Advisory Board prioritises existing needs \u2014 specifically the tennis courts at Winkler Park in Banksville, described as in deplorable shape with drainage and retaining wall issues. Councilman Hussain, as liaison to Parks and Recreation, reported the pool work is intended to start immediately after the season so the pool is ready for next year, and described the pool floor as currently needing complete redoing and unsafe underfoot."
+        }
+      ]
+    },
+    {
       "id": "486-bedford-road-armonk",
       "name": "Extension of Special Use Permit \u2014 St. Nersess Armenian Seminary, 486 Bedford Road",
       "address": "486 Bedford Road, Armonk",
@@ -6439,62 +6564,6 @@
           "status": "tabled",
           "sentiment": -0.1,
           "summary": "The board considered a request to purchase two new green storage container units for equipment near the IBM Park turf fields, to be paid from fund balance, replacing rotted existing containers. Vataj strongly objected that metal containers cheapen a multimillion-dollar turf investment (his \"Ferrari with used tires\" analogy) and pushed for a prefab garage-style structure, while DiGiacinto defended the containers as utilitarian, secure, and cost-conscious but asked for full all-in cost comparisons of any alternative. With no motion made, the item was tabled to the next meeting for staff to bring back options."
-        }
-      ]
-    },
-    {
-      "id": "lombardi-park",
-      "name": "Lombardi Park \u2014 Public Water Supply Extension vs. Well Rehabilitation",
-      "address": "Lombardi Park",
-      "applicationType": "capital improvement / resolution (water district extension)",
-      "applicant": "Town of North Castle",
-      "themes": [
-        "Budget, taxes & finance",
-        "Grants & capital projects",
-        "Other",
-        "Public safety & police",
-        "Water & sewer districts"
-      ],
-      "appearances": 3,
-      "firstSeen": "2023-10-25",
-      "lastSeen": "2024-01-24",
-      "lastStatus": "in progress; engineering proposal to advance at next meeting",
-      "avgSentiment": 0.333,
-      "trajectory": [
-        {
-          "date": "2023-10-25",
-          "sentiment": 0.1,
-          "status": "in progress; bid documents issued"
-        },
-        {
-          "date": "2023-11-29",
-          "sentiment": 0.1,
-          "status": "administrative resolutions adopted; hearing opened, pending 45-day permissive referendum period"
-        },
-        {
-          "date": "2024-01-24",
-          "sentiment": 0.8,
-          "status": "in progress; engineering proposal to advance at next meeting"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2023-10-25",
-          "status": "in progress; bid documents issued",
-          "sentiment": 0.1,
-          "summary": "The Board continued debating whether to extend Water District #4 piping to Lombardi Park (roughly $461,000 per an initial Keller & Sessions estimate) or rehabilitate the park's existing well (potentially over $300,000 once duplicate treatment infrastructure like chlorination and UV disinfection is included), given ongoing PFAS concerns and the park's heavy use by children. The town confirmed bid documents for the water-district extension had already gone out, with cost comparisons expected at the next meeting; one board member questioned whether the eventual scope (effectively a water fountain and three bathrooms) justified the six-figure cost."
-        },
-        {
-          "date": "2023-11-29",
-          "status": "administrative resolutions adopted; hearing opened, pending 45-day permissive referendum period",
-          "sentiment": 0.1,
-          "summary": "The Board opened a hearing and adopted the required administrative resolutions to formally propose extending Water District #4 into Lombardi Park (piped option, competitively bid after a non-competitive emergency estimate of about $461,000), triggering a mandatory 45-day permissive-referendum waiting period before a final vote in January; the Board can still choose the alternative of rehabilitating the park's existing well (about $373,000, roughly a third of which is for expanding the parks garage to house treatment equipment) or abandon the process if a cheaper option is found. Board members debated the true cost driver of the well option and future operating-cost implications of a self-run treatment system, with general agreement to keep exploring the well cost further before deciding."
-        },
-        {
-          "date": "2024-01-24",
-          "status": "in progress; engineering proposal to advance at next meeting",
-          "sentiment": 0.8,
-          "summary": "The Board held a work session and coalesced around a substantially upgraded plan: instead of a narrow, single-purpose water service line into the park, run a full 8-inch public water main up School Street to the park, roughly 1,000 feet shorter than the originally proposed route through school-easement land, extending Water District #4's boundary along the way. The upgrade is expected to be substantially funded by the town's approximately $1.2 million in remaining, use-it-or-lose-it ARPA (federal COVID relief) funds, and would add three new fire hydrants and design provisions (valves/tees) for future, resident-initiated extensions to neighboring streets (Cox Avenue, Anthony Court, Byron Ridge Road) at no cost to the town unless residents opt to connect. The Board directed staff to bring back a formal engineering proposal and district-extension paperwork (map/plan/report, EAF, notice to affected property owners, and a subsequent public hearing) for approval at the next meeting, with construction not expected to be delayed by the parallel legal process."
         }
       ]
     },
@@ -10820,6 +10889,49 @@
           "status": "tabled",
           "sentiment": 0.1,
           "summary": "The board considered a roughly $9,500 two-phase proposal (about $3,000 for a traffic study, $6,500 for design) to evaluate and design a pedestrian crosswalk across old Route 22 near a leased DEC parking lot and a restaurant, citing a handful of past traffic incidents in the vicinity. Several board members argued the expense was unnecessary for a straightforward crosswalk on a demapped town road and that town staff (highway foreman, police lieutenant, town planner) could assess and implement it directly. The board tabled the proposal so staff could evaluate it in-house first, with the understanding that an outside engineering study would still be pursued if staff determined it necessary."
+        }
+      ]
+    },
+    {
+      "id": "9-rose-hill-drive",
+      "name": "9 Rose Hill Drive \u2014 Extension of Sewer District No. 2",
+      "address": "9 Rose Hill Drive",
+      "applicationType": "public hearing / district extension",
+      "applicant": "Len Craft",
+      "themes": [
+        "Land use, zoning & special permits",
+        "Open government & procedure",
+        "Water & sewer districts"
+      ],
+      "appearances": 2,
+      "firstSeen": "2026-07-15",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "public hearing held and closed; resolution adopted unanimously on a roll call",
+      "avgSentiment": 0.6,
+      "trajectory": [
+        {
+          "date": "2026-07-15",
+          "sentiment": 0.6,
+          "status": "received; public hearing scheduled August 12, 2026"
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.6,
+          "status": "public hearing held and closed; resolution adopted unanimously on a roll call"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-07-15",
+          "status": "received; public hearing scheduled August 12, 2026",
+          "sentiment": 0.6,
+          "summary": "The board received the petition, engineering letter, map/plan/report and environmental assessment for extending Sewer District 2 to 9 Rose Hill Drive and scheduled an August 12, 2026 public hearing. A board member disclosed living on the same block and having worked years earlier with a neighbor to help bring sewers to the area, but did not see a conflict."
+        },
+        {
+          "date": "2026-08-12",
+          "status": "public hearing held and closed; resolution adopted unanimously on a roll call",
+          "sentiment": 0.6,
+          "summary": "A petition under Article 12 of the Town Law to extend Sewer District No. 2 to 9 Rose Hill Drive. The clerk received the letter calling for the hearing, affidavits of posting and of publication in the Journal News, and the JMC map, plan and report received July 15, 2026. No member of the public spoke. Board questions established that this is a sewer connection only \u2014 Rose Hill is on well water throughout, no water main is being run in parallel, and the sewer is already in the road. The hearing was closed and the resolution adopted by roll call: DiGiacinto, Berra, Hussain and Vataj all aye, Supervisor Rende yes."
         }
       ]
     },
@@ -29967,32 +30079,333 @@
       ]
     },
     {
-      "id": "9-rose-hill-drive",
-      "name": "9 Rose Hill Drive \u2014 Petition to Join Sewer District Number Two",
-      "address": "9 Rose Hill Drive",
-      "applicationType": "petition / sewer district extension",
-      "applicant": "Len Craft",
+      "id": "police-promotions",
+      "name": "Police Promotions \u2014 Lieutenant Sabatella and Detective Sergeant Conlan",
+      "address": "",
+      "applicationType": "personnel / appointment",
+      "applicant": "Police Chief Reagan Huffnagle (recommendation)",
       "themes": [
-        "Water & sewer districts"
+        "Other",
+        "Personnel & appointments",
+        "Public safety & police"
       ],
       "appearances": 1,
-      "firstSeen": "2026-07-15",
-      "lastSeen": "2026-07-15",
-      "lastStatus": "received; public hearing scheduled August 12, 2026",
-      "avgSentiment": 0.6,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "both promotions approved and sworn in",
+      "avgSentiment": 0.9,
       "trajectory": [
         {
-          "date": "2026-07-15",
-          "sentiment": 0.6,
-          "status": "received; public hearing scheduled August 12, 2026"
+          "date": "2026-08-12",
+          "sentiment": 0.9,
+          "status": "both promotions approved and sworn in"
         }
       ],
       "timeline": [
         {
-          "date": "2026-07-15",
-          "status": "received; public hearing scheduled August 12, 2026",
-          "sentiment": 0.6,
-          "summary": "The board received the petition, engineering letter, map/plan/report and environmental assessment for extending Sewer District 2 to 9 Rose Hill Drive and scheduled an August 12, 2026 public hearing. A board member disclosed living on the same block and having worked years earlier with a neighbor to help bring sewers to the area, but did not see a conflict."
+          "date": "2026-08-12",
+          "status": "both promotions approved and sworn in",
+          "sentiment": 0.9,
+          "summary": "Chief Huffnagle recommended promoting Detective Sergeant Anthony Sabatella \u2014 a member since December 2013, school resource officer 2016\u20132019, detective, patrol sergeant and detective sergeant commanding the Detective Division, lately serving as a de facto lieutenant \u2014 to fill the lieutenant vacancy and patrol division commander position left by Lieutenant McCormick's retirement, effective August 13, 2026. He then recommended Detective Sheamus Conlan, a member since July 2014 who coordinates the department's EMS program and runs background investigations on police candidates, to the resulting detective sergeant vacancy. Both passed unanimously and both were sworn in on the spot before a full house of family and residents. The supervisor called swearing in officers the part of the job he enjoys most and thanked residents for the turnout."
+        }
+      ]
+    },
+    {
+      "id": "whippoorwill-road-king-street",
+      "name": "Whippoorwill Road at King Street \u2014 Hairpin Turn Safety",
+      "address": "Whippoorwill Road / King Street (NY Route 120A)",
+      "applicationType": "resident request / intermunicipal advocacy",
+      "applicant": "Resident (Zach)",
+      "themes": [
+        "Intermunicipal & county/state",
+        "Public safety & police",
+        "Resident concerns & quality of life",
+        "Roads, highway & sidewalks",
+        "Water & sewer districts"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "referred to the town administrator to follow up with New York State DOT; to be reported back as part of administrator updates at a future meeting",
+      "avgSentiment": 0.45,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.45,
+          "status": "referred to the town administrator to follow up with New York State DOT; to be reported back as part of administrator updates at a future meeting"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "referred to the town administrator to follow up with New York State DOT; to be reported back as part of administrator updates at a future meeting",
+          "sentiment": 0.45,
+          "summary": "A resident of roughly two years laid out a detailed safety case for the hairpin where Whippoorwill Road meets King Street. Heavy construction and congestion from the multi-year Kensico\u2013Eastview water connection project have made King Street a primary bypass for commuters and commercial traffic; the corner is a blind turn because of topography and dense vegetation; Whippoorwill is a single access point for many households with only a ten-minute detour as an alternative; and there is no southbound left-turn lane, so a car waiting to turn becomes a roadblock for high-speed traffic behind it, with rear-end and T-bone collisions already on the record. He asked the town to partner with NYSDOT on three measures \u2014 a dedicated southbound left-turn lane on King Street, a widened acceleration and merge lane out of Whippoorwill, and immediate clearing of the blind-spot vegetation \u2014 plus a no-standing zone in the interim so cars stop impeding the merge, and noted the surrounding regional projects run to 2032. Adam Kaufman clarified that the project's staging yard is on Old Post Road with construction between Route 120A and Hanging Road, that a new curb cut by the reservoir will need a NYSDOT permit and meet state safety standards, and that truck traffic will run between those two sites rather than through the Route 120 area. The supervisor committed the town administrator to follow up with the state, floated pressing for a temporary traffic signal, and used the moment to recount a long-running effort \u2014 with State Senator Shelley Mayer, Assemblymember Chris Burdick and Majority Leader Andrea Stewart-Cousins \u2014 that established NYSDOT Region 8 had been underfunded by roughly 30 percent with no rational basis, and has now produced a state commitment to mill, repave and improve drainage on Route 22 from Virginia Road in North White Plains up to the Route 120 intersection, plus Route 120 from the Harrison line to the Mount Pleasant line, expected in the state's 2027 fiscal year. Councilman Hussain asked how such follow-ups get reported back to the board and to the public; the answer was to fold them into administrator updates."
+        }
+      ]
+    },
+    {
+      "id": "chapter-340-wetlands-amendment",
+      "name": "Chapter 340 Wetlands Amendment \u2014 Five-Year Mitigation Monitoring Follow-Through",
+      "address": "",
+      "applicationType": "local law / public hearing",
+      "applicant": "Conservation Board with Town Planner Adam Kaufman and town wetland consultant Eric Dorsch of Kellard Sessions",
+      "themes": [
+        "Environment & conservation",
+        "Legal, litigation & contracts",
+        "Local laws & legislation",
+        "Open government & procedure"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "public hearing opened and adjourned \u2014 not closed \u2014 so town counsel can review a draft he had never been sent",
+      "avgSentiment": 0.45,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.45,
+          "status": "public hearing opened and adjourned \u2014 not closed \u2014 so town counsel can review a draft he had never been sent"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "public hearing opened and adjourned \u2014 not closed \u2014 so town counsel can review a draft he had never been sent",
+          "sentiment": 0.45,
+          "summary": "The amendment closes a gap the Conservation Board has worked on for over a year. The town code has long required a five-year monitoring and maintenance plan with every wetland permit, but provided no mechanism to follow up during those five years. The change requires annual reports from applicants verifying the mitigation is still working, with the town's consulting engineers verifying annually, and attaches a fee. Conservation Board member Jane Black explained the loophole and the drafting history; a second Conservation Board member described watching mitigation plans on his own lake be completely destroyed years after permitting, homeowners genuinely unaware they were subject to a plan, and developers not telling new owners \u2014 arguing that a funded annual review protects homeowners from major fines as much as it protects the wetlands. Supervisor Rende thanked the Conservation Board, Kaufman and KSCJ, noting one or two mitigation plans come before the board nearly every month and that ambiguity in the existing code had already produced a resident stuck between a mitigation plan and a building permit. Then Town Attorney Baroni said he had never seen the draft. The public hearing had been set at the July meeting and nobody had forwarded it to legal counsel. Rende adjourned rather than closed the hearing to preserve the clock, asked Baroni to share any comments with Kaufman, the Conservation Board, Eric Dorsch and the board members, and said he did not want the delay to push adoption into October. A member added that this is a recurring failure \u2014 \"it seems that some legal documents, laws, agreements sometimes fall through the cracks\" \u2014 and asked the board to think about the process, a theme that resurfaced sharply later in the meeting."
+        }
+      ]
+    },
+    {
+      "id": "chapter-233-peddling-soliciting",
+      "name": "Chapter 233 Peddling & Soliciting \u2014 Restricted Hours and a No-Knock Registry",
+      "address": "",
+      "applicationType": "local law (direction to draft)",
+      "applicant": "Police Chief Reagan Huffnagle (recommendation)",
+      "themes": [
+        "Local laws & legislation",
+        "Permits & licensing",
+        "Public safety & police",
+        "Resident concerns & quality of life"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "no vote \u2014 counsel and the chief directed to prepare a draft law for the next meeting, then set a public hearing",
+      "avgSentiment": 0.5,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.5,
+          "status": "no vote \u2014 counsel and the chief directed to prepare a draft law for the next meeting, then set a public hearing"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "no vote \u2014 counsel and the chief directed to prepare a draft law for the next meeting, then set a public hearing",
+          "sentiment": 0.5,
+          "summary": "The chief recommended amending Chapter 233 to limit peddling, soliciting and canvassing to 10 a.m.\u20136 p.m. and to establish a no-knock registry. The trigger was a summer of complaints about a pest-control operation whose young workers went door to door on hoverboards; the company vehicle carried a permit but the individuals canvassing did not, and one told the supervisor at his own door that his permit was in a car he had been dropped off from. The supervisor also liked provisions used elsewhere in Westchester tying the cutoff to daylight, on the view that a resident who cannot see who is at the door after dark in winter is entitled to that protection \u2014 though counsel recalled being advised previously that a daylight test could not be used, so the chief will supply the comparison municipalities for review. Councilman Hussain asked that the draft be explicit about what is exempt, particularly political and religious canvassing protected by the First Amendment, so residents understand where the rule does and does not apply and do not assume it covers speech it cannot. The board also wants solicitors required to carry their permit and produce it on request, and looked at whether identification requirements used elsewhere raise constitutional issues. Existing permits run to the end of the year and cannot be changed retroactively, so there is no urgency beyond having the new law in place before 2027 applications."
+        }
+      ]
+    },
+    {
+      "id": "miller-hill-park-north-white-plains",
+      "name": "Chapter 325 Vehicle & Traffic \u2014 Parking Changes at Miller Hill Park (McDougal / Dunlap Way / Smallwood Place)",
+      "address": "Miller Hill Park, North White Plains",
+      "applicationType": "local law / public hearing scheduling",
+      "applicant": "Highway General Foreman Jamie Norris (memo)",
+      "themes": [
+        "Intermunicipal & county/state",
+        "Local laws & legislation",
+        "Open government & procedure",
+        "Parks, recreation & trails",
+        "Roads, highway & sidewalks"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "memo and correspondence received; public hearing scheduled for September 9, 2026, with a map to be attached",
+      "avgSentiment": 0.15,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.15,
+          "status": "memo and correspondence received; public hearing scheduled for September 9, 2026, with a map to be attached"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "memo and correspondence received; public hearing scheduled for September 9, 2026, with a map to be attached",
+          "sentiment": 0.15,
+          "summary": "Two changes: one-hour time-limited parking, 7 a.m. to 6 p.m., along roughly 120 to 150 linear feet in front of Miller Hill Park where parking is currently prohibited, so visitors can stop and use the county park the town maintains; and a no-parking designation for a roughly 30-foot section at the corner where the road meets Smallwood Place, on county property, at Westchester County's request following a joint site meeting about park improvements. Both residents and board members found the agenda description confusing. Craig Hall of Smallwood Place came specifically to understand it and warned that Miller Hill residents would object to any ban on Smallwood Place itself; members established that the section in question is at the Dunlap Way intersection, not Smallwood, and Councilman Hussain \u2014 a former McDougal resident \u2014 pointed out that McDougal actually becomes Dunlap Way at the curve where the park sits, so the whole description is attached to the wrong street name, possibly compounded by an error in Google Maps. The board agreed a map will be prepared and attached so the public can see exactly what is changing, and that the accuracy of street names must be fixed before the hearing. Correspondence from a resident objecting to the amendments arrived by email the afternoon of the meeting and was received for the record, to be added again at the September hearing."
+        }
+      ]
+    },
+    {
+      "id": "911-north-broadway-sir-john-s-plaza-north-white-plains",
+      "name": "911 North Broadway (MDM Fit) \u2014 Zoning Text Amendment Defining Fitness Studios",
+      "address": "911 North Broadway, Sir John's Plaza, North White Plains (CB district)",
+      "applicationType": "zoning text amendment petition",
+      "applicant": "CANS Consulting LLC d/b/a MDM Fit, represented by Cory Salomo of Zarin & Steinmetz",
+      "themes": [
+        "Environment & conservation",
+        "Land use, zoning & special permits",
+        "Local laws & legislation",
+        "Permits & licensing"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "petition received; town board declared intent to act as lead agency, authorised circulation and referral to the county and town planning boards, and scheduled a public hearing for September 23, 2026",
+      "avgSentiment": 0.55,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.55,
+          "status": "petition received; town board declared intent to act as lead agency, authorised circulation and referral to the county and town planning boards, and scheduled a public hearing for September 23, 2026"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "petition received; town board declared intent to act as lead agency, authorised circulation and referral to the county and town planning boards, and scheduled a public hearing for September 23, 2026",
+          "sentiment": 0.55,
+          "summary": "MDM Fit opened in a roughly 1,600-square-foot space in Sir John's Plaza at the end of the pandemic in 2021, its owner unaware that approvals were needed. The gap only surfaced when the neighbouring cigar bar came before the board months ago and mentioned the membership club next door; the building inspector then notified the owner, who moved immediately to legalise. The petition would add fitness studios to the definition of personal service establishments and define a fitness studio as one not exceeding 2,000 square feet devoted to individual exercise. The operation has 272 members, peaks at 13 to 16 people between 5\u20137 a.m. and 4\u20136 p.m. on weekdays and 11\u20132 on weekends, is unstaffed and key-fob accessed 24/7, and proposes no alterations or expansion; the building inspector reports no complaints in five years. The only board question was why there are no showers in a facility of that kind, answered by the unstaffed model. The board's three procedural actions passed and the hearing was set for September 23 to allow the 30-day referral period."
+        }
+      ]
+    },
+    {
+      "id": "schultz-way-water-district-no-9-cory-heights",
+      "name": "Sewer Main Repair (Schultz Way) and Water Service Connections (Water District No. 9, Cory Heights) \u2014 Authorisation to Bid",
+      "address": "Schultz Way; Water District No. 9, Cory Heights",
+      "applicationType": "authorisation to go to bid",
+      "applicant": "Director of Sewer & Water",
+      "themes": [
+        "Budget, taxes & finance",
+        "Grants & capital projects",
+        "Intermunicipal & county/state",
+        "Water & sewer districts"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "both authorisations approved; the board will not wait on a state reimbursement agreement before bidding",
+      "avgSentiment": 0.35,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.35,
+          "status": "both authorisations approved; the board will not wait on a state reimbursement agreement before bidding"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "both authorisations approved; the board will not wait on a state reimbursement agreement before bidding",
+          "sentiment": 0.35,
+          "summary": "Two bid authorisations passed. The substantive discussion was on the Cory Heights water service connection project: the town has been waiting on a reimbursement memorandum of agreement, and the responsible state agency has still not identified a source of funds and will not prepare the agreement until it does. Supervisor Rende declined to hold up the bid, saying the process has gone on too long, and said he would assemble the names from the earlier conference call and approach State Senator Shelley Mayer's office, arguing that actual bid numbers will strengthen the town's hand where estimates did not \u2014 and that reimbursement may lose priority once residents are already connected. Councilman Berra asked whether the bid acceptance window should be extended beyond the usual 30 to 45 days to preserve flexibility given the uncertainty and possible winter weather; the director agreed to write 60 or 75 days into the documents. The director also described tailoring each connection to the property \u2014 a meter pit at the curb stop instead of running service into the house, letting homeowners use less expensive high-pressure poly pipe rather than type-K copper and leaving the interior connection to their own contractor \u2014 with two of the affected residents left to meet."
+        }
+      ]
+    },
+    {
+      "id": "909-north-broadway-north-white-plains",
+      "name": "Socialite Members Club (909 North Broadway) \u2014 Liquor Licence Notice",
+      "address": "909 North Broadway, North White Plains",
+      "applicationType": "liquor licence notice / 30-day waiver",
+      "applicant": "Socialite Members Club Corporation",
+      "themes": [
+        "Land use, zoning & special permits",
+        "Legal, litigation & contracts",
+        "Permits & licensing"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "tabled for research",
+      "avgSentiment": -0.35,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": -0.35,
+          "status": "tabled for research"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "tabled for research",
+          "sentiment": -0.35,
+          "summary": "The board tabled the notice on two grounds. First, the application lists the building owner as 901 Properties LLC, which the supervisor said does not match the property \u2014 Sir John's Plaza is owned by a differently named entity and the address is not 901 \u2014 so a clarification was requested in case it is only a typographical error. Second, and more substantively, the supervisor recalled that when the club's special use permit was before the board, the applicant was asked about a liquor licence and indicated one would not be sought, because members bring and store their own alcohol. His concern is that once a liquor licence issues, nothing prevents walk-in service, which is not what the special use permit contemplated \u2014 the permit was for a members club where entry required membership or accompaniment by a member. Counsel confirmed no licence is needed where a member supplies liquor to other members with no money changing hands. The board will check the record of the special-permit hearing before acting."
+        }
+      ]
+    },
+    {
+      "id": "north-castle-pba",
+      "name": "North Castle PBA \u2014 Experimental Steady-Tours Stipulation of Agreement",
+      "address": "",
+      "applicationType": "labor agreement / authorisation to sign",
+      "applicant": "Town of North Castle and the North Castle PBA, drafted by outside labor counsel",
+      "themes": [
+        "Ethics & governance",
+        "Legal, litigation & contracts",
+        "Open government & procedure",
+        "Personnel & appointments",
+        "Public safety & police"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "approved on a roll call, one member voting no",
+      "avgSentiment": -0.15,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": -0.15,
+          "status": "approved on a roll call, one member voting no"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "approved on a roll call, one member voting no",
+          "sentiment": -0.15,
+          "summary": "An experimental stipulation letting police officers work steady tours rather than rotating shifts, effective September 1, 2026 and running through December 31, 2027. Every member said they supported the substance \u2014 Councilman Berra opened by saying he totally supports it and knows how detrimental rotating and overnight shifts are \u2014 but the item became a proxy for a dispute about process. Berra wanted an executive session with labor counsel before voting, saying he had marked up the document and had questions, and that legal documents repeatedly reach the board without counsel review. Supervisor Rende refused to delay: labor counsel are the experts, the draft follows agreements used in other municipalities, and Berra had from Friday afternoon to Wednesday to request counsel attend by Zoom. The exchange escalated \u2014 Rende told Berra \"you take the role that you are the expert attorney in all legal matters... you've been more wrong than right\" and had cost the town legal fees; Berra called that an unfounded statement. Councilwoman DiGiacinto defended relying on retained counsel: \"if we're constantly going to be challenging every single attorney... maybe we'll make a motion that we bring up multiple [attorneys] and we change them,\" and \"I would never sign an agreement that somebody could cancel five minutes later.\" In the middle of the argument a genuine substantive disagreement surfaced: members read the termination clause differently \u2014 Rende understood the town or the chief could stop the experiment at any time if it was not working, Hussain and Berra read it as terminable only at the end of 2027. Counsel had not reviewed the document and could not resolve it. Hussain moved to table; the motion on the floor stood and the roll was called. Vataj yes, Rende yes, Hussain no, and the two remaining members yes, one saying he would vote in favour \"because it can be terminated\" while restating his objection to the process. Hussain then explained his no for the record: he had been fine with the drafting coming in, but learned during the discussion that the board did not agree on what the words meant, and \"I think it's dangerous when we make decisions [without clarity] of what the words are.\" After the vote Rende and DiGiacinto both said an executive session on every agreement is unnecessary but that any member who wants one should put the request in by the Monday before the meeting \u2014 a process the board effectively settled in the course of the argument."
+        }
+      ]
+    },
+    {
+      "id": "supervisor-s-update",
+      "name": "Supervisor's Update \u2014 Phishing Incident, Paving Schedule, and Licence Plate Readers",
+      "address": "",
+      "applicationType": "report / update",
+      "applicant": "Town of North Castle",
+      "themes": [
+        "Ethics & governance",
+        "Public safety & police",
+        "Roads, highway & sidewalks",
+        "Technology & communications"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-08-12",
+      "lastSeen": "2026-08-12",
+      "lastStatus": "reported; no vote",
+      "avgSentiment": 0.2,
+      "trajectory": [
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.2,
+          "status": "reported; no vote"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-08-12",
+          "status": "reported; no vote",
+          "sentiment": 0.2,
+          "summary": "Closing the meeting, the supervisor reported that a phishing email had been opened and clicked, compromising a town system; the town's IT provider found no information was taken and no personal or private information ascertained, and a notice went out to everyone. He called for restarting the technology committee and for ongoing employee training. He flagged that milling and paving of Maple Avenue begins the following Monday and that residents should sign up for the highway Nixle alerts separately from the police alerts, and noted paving work planned for a North White Plains parking lot. He closed by addressing residents directly on the town's automated licence plate readers, stating that North Castle does not use the vendor system that has drawn national concern, that the readers are not connected to any federal immigration enforcement and are used purely for crime prevention, that no resident has been watched or had rights violated, and that recently installed readers have helped apprehend criminals."
         }
       ]
     }
@@ -30000,11 +30413,11 @@
   "members": [
     {
       "member": "Joseph Rende",
-      "totalPositions": 370,
-      "avgSentiment": 0.516,
+      "totalPositions": 381,
+      "avgSentiment": 0.512,
       "confidenceMix": {
-        "high": 307,
-        "medium": 63
+        "high": 317,
+        "medium": 64
       },
       "byTheme": [
         {
@@ -30018,29 +30431,29 @@
           "avgSentiment": 0.273
         },
         {
+          "theme": "Public safety & police",
+          "count": 52,
+          "avgSentiment": 0.647
+        },
+        {
           "theme": "Legal, litigation & contracts",
-          "count": 50,
-          "avgSentiment": 0.327
+          "count": 51,
+          "avgSentiment": 0.328
         },
         {
           "theme": "Budget, taxes & finance",
-          "count": 49,
-          "avgSentiment": 0.508
-        },
-        {
-          "theme": "Public safety & police",
-          "count": 48,
-          "avgSentiment": 0.655
+          "count": 50,
+          "avgSentiment": 0.506
         },
         {
           "theme": "Land use, zoning & special permits",
-          "count": 41,
-          "avgSentiment": 0.382
+          "count": 43,
+          "avgSentiment": 0.364
         },
         {
           "theme": "Water & sewer districts",
-          "count": 40,
-          "avgSentiment": 0.596
+          "count": 41,
+          "avgSentiment": 0.591
         },
         {
           "theme": "Ceremonial & community",
@@ -30049,18 +30462,18 @@
         },
         {
           "theme": "Parks, recreation & trails",
-          "count": 34,
-          "avgSentiment": 0.621
+          "count": 35,
+          "avgSentiment": 0.614
         },
         {
           "theme": "Personnel & appointments",
-          "count": 34,
-          "avgSentiment": 0.597
+          "count": 35,
+          "avgSentiment": 0.606
         },
         {
           "theme": "Environment & conservation",
-          "count": 24,
-          "avgSentiment": 0.49
+          "count": 25,
+          "avgSentiment": 0.494
         },
         {
           "theme": "Resident concerns & quality of life",
@@ -30069,23 +30482,28 @@
         },
         {
           "theme": "Intermunicipal & county/state",
-          "count": 19,
-          "avgSentiment": 0.626
+          "count": 21,
+          "avgSentiment": 0.61
         },
         {
           "theme": "Roads, highway & sidewalks",
-          "count": 15,
-          "avgSentiment": 0.583
+          "count": 17,
+          "avgSentiment": 0.562
         },
         {
           "theme": "Permits & licensing",
-          "count": 13,
-          "avgSentiment": 0.438
+          "count": 14,
+          "avgSentiment": 0.379
         },
         {
           "theme": "Local laws & legislation",
-          "count": 11,
-          "avgSentiment": 0.314
+          "count": 13,
+          "avgSentiment": 0.358
+        },
+        {
+          "theme": "Technology & communications",
+          "count": 10,
+          "avgSentiment": 0.6
         },
         {
           "theme": "Other",
@@ -30093,14 +30511,9 @@
           "avgSentiment": 0.511
         },
         {
-          "theme": "Technology & communications",
-          "count": 9,
-          "avgSentiment": 0.633
-        },
-        {
           "theme": "Ethics & governance",
-          "count": 4,
-          "avgSentiment": 0.475
+          "count": 5,
+          "avgSentiment": 0.44
         }
       ],
       "byCase": [
@@ -31743,6 +32156,61 @@
           "caseId": "town-hall-campus",
           "count": 1,
           "avgSentiment": 0.6
+        },
+        {
+          "caseId": "police-promotions",
+          "count": 1,
+          "avgSentiment": 0.9
+        },
+        {
+          "caseId": "lombardi-park",
+          "count": 1,
+          "avgSentiment": 0.4
+        },
+        {
+          "caseId": "whippoorwill-road-king-street",
+          "count": 1,
+          "avgSentiment": 0.5
+        },
+        {
+          "caseId": "chapter-340-wetlands-amendment",
+          "count": 1,
+          "avgSentiment": 0.6
+        },
+        {
+          "caseId": "chapter-233-peddling-soliciting",
+          "count": 1,
+          "avgSentiment": 0.6
+        },
+        {
+          "caseId": "miller-hill-park-north-white-plains",
+          "count": 1,
+          "avgSentiment": 0.3
+        },
+        {
+          "caseId": "911-north-broadway-sir-john-s-plaza-north-white-plains",
+          "count": 1,
+          "avgSentiment": 0.4
+        },
+        {
+          "caseId": "schultz-way-water-district-no-9-cory-heights",
+          "count": 1,
+          "avgSentiment": 0.4
+        },
+        {
+          "caseId": "909-north-broadway-north-white-plains",
+          "count": 1,
+          "avgSentiment": -0.4
+        },
+        {
+          "caseId": "north-castle-pba",
+          "count": 1,
+          "avgSentiment": 0.4
+        },
+        {
+          "caseId": "supervisor-s-update",
+          "count": 1,
+          "avgSentiment": 0.3
         }
       ],
       "evidence": [
@@ -36418,17 +36886,159 @@
           ],
           "evidence": "Publicly disclosed that certain 45 Bedford Road principals had contributed to his reelection campaign, stated this did not preclude his vote since the underlying approval predated his time on the board, and voted to approve the extension while pressing for the fence/hole to be addressed.",
           "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Police Promotions \u2014 Lieutenant Sabatella and Detective Sergeant Conlan",
+          "caseId": "police-promotions",
+          "stance": "supportive",
+          "score": 0.9,
+          "themes": [
+            "Personnel & appointments",
+            "Public safety & police"
+          ],
+          "evidence": "\"This is probably one of the things as supervisor that I enjoy the most... As residents, we are blessed in the community to have such fine men and women in our police department. And it's indicative by the turnout that we always get every time we have a promotion.\" Administered both oaths.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Dedicated Pickleball Courts & Recreation Facility Priorities",
+          "caseId": "lombardi-park",
+          "stance": "supportive",
+          "score": 0.4,
+          "themes": [
+            "Budget, taxes & finance",
+            "Parks, recreation & trails"
+          ],
+          "evidence": "\"I haven't forgotten about the pickleball folks. I run into pickleball players just about every time in town, either on Main Street or getting a cup of coffee... I could assure you that our next concentration is going to be on figuring out what we're going to do and where we're going to spend that money in terms of the pickleball.\" Reported the pool bids came in substantially under the $5 million authorisation and that shifting funds would require another board resolution, while wanting to keep a cushion for unforeseen pool conditions.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Whippoorwill Road at King Street \u2014 Hairpin Turn Safety",
+          "caseId": "whippoorwill-road-king-street",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Intermunicipal & county/state",
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "Committed the town administrator to follow up and to approach the state directly \u2014 \"we may want to try to encourage the state to put up some temporary traffic signal there as well to control the traffic\" \u2014 while being candid that \"the DOT has not been an easy agency to deal with, and it's not for a lack of trying.\" Recounted the Region 8 underfunding finding and the resulting state commitment to repave Route 22 and Route 120.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 340 Wetlands Amendment \u2014 Five-Year Mitigation Monitoring Follow-Through",
+          "caseId": "chapter-340-wetlands-amendment",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Environment & conservation",
+            "Local laws & legislation"
+          ],
+          "evidence": "\"I personally want to thank the Conservation Board, the staff from KSCJ and Adam for taking this task and coming up with something that's much clearer and tighter... eliminating those levels of ambiguity that were currently there.\" Noted mitigation plans come to the board nearly every month and said \"I don't want to have to delay it where we're not getting this accomplished into October.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 233 Peddling & Soliciting \u2014 Restricted Hours and a No-Knock Registry",
+          "caseId": "chapter-233-peddling-soliciting",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Local laws & legislation",
+            "Public safety & police"
+          ],
+          "evidence": "Drove the item, favouring the 6 p.m. cutoff and a possible darkness test \u2014 \"someone sees someone at five o'clock in winter months, it's already dark and somebody now can't see who's at the door, who's ringing their bell\" \u2014 and describing his own encounter with an unpermitted solicitor. \"The more stringent we make it, I think it puts the residents at ease.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 325 Vehicle & Traffic \u2014 Parking Changes at Miller Hill Park (McDougal / Dunlap Way / Smallwood Place)",
+          "caseId": "miller-hill-park-north-white-plains",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "Explained the genesis \u2014 a site meeting called by Westchester County about park improvements including kiosks, flag and brush trimming \u2014 and committed to attaching a map: \"the map is going to clearly [show] where the restriction in terms of time parking [is], and where the no parking is.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "911 North Broadway (MDM Fit) \u2014 Zoning Text Amendment Defining Fitness Studios",
+          "caseId": "911-north-broadway-sir-john-s-plaza-north-white-plains",
+          "stance": "supportive",
+          "score": 0.4,
+          "themes": [
+            "Land use, zoning & special permits"
+          ],
+          "evidence": "Said he had raised his questions with Adam Kaufman beforehand and was satisfied; his one remaining question \u2014 the absence of showers \u2014 was answered by the unstaffed, key-fob operating model. \"Not a major operation... I'm OK with that.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Sewer Main Repair (Schultz Way) and Water Service Connections (Water District No. 9, Cory Heights) \u2014 Authorisation to Bid",
+          "caseId": "schultz-way-water-district-no-9-cory-heights",
+          "stance": "supportive",
+          "score": 0.4,
+          "themes": [
+            "Intermunicipal & county/state",
+            "Water & sewer districts"
+          ],
+          "evidence": "\"I don't want to stop the process of sending this out to bid... this is going on for too long.\" Committed to raising the missing reimbursement agreement with Senator Mayer's office and noted that having actual bid numbers rather than estimates should help.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Socialite Members Club (909 North Broadway) \u2014 Liquor Licence Notice",
+          "caseId": "909-north-broadway-north-white-plains",
+          "stance": "concerned",
+          "score": -0.4,
+          "themes": [
+            "Land use, zoning & special permits",
+            "Permits & licensing"
+          ],
+          "evidence": "\"I'm almost positive that the question was asked and he was not going to [seek] an outside liquor license... once a liquor license [issues] there's no prevention then from him allowing somebody as a walk-in to come in, and that's not what the intention was. This is a special use permit [that] was for members.\" Moved to table pending research on what was represented at the special-permit stage.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "North Castle PBA \u2014 Experimental Steady-Tours Stipulation of Agreement",
+          "caseId": "north-castle-pba",
+          "stance": "supportive",
+          "score": 0.4,
+          "themes": [
+            "Legal, litigation & contracts",
+            "Public safety & police"
+          ],
+          "evidence": "Refused to delay: \"this came directly from labor counsel, labor counsel's the expert. I feel very comfortable with it... I don't believe that there's anything that's going to come out of any question Councilman Berra makes with labor counsel that's going to change anything.\" Said the agreement is expressly experimental and can be stopped if the department reports it is not working, and afterwards proposed asking the chief to report back on how it is working after two or three months.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Supervisor's Update \u2014 Phishing Incident, Paving Schedule, and Licence Plate Readers",
+          "caseId": "supervisor-s-update",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Ethics & governance",
+            "Public safety & police",
+            "Technology & communications"
+          ],
+          "evidence": "On the phishing incident: \"someone opened it and may have clicked on it, and that's why our system was compromised... we have heard from [IT] that there was no information that was ascertained\" \u2014 and called for restarting the technology committee and ongoing employee training. On the plate readers: \"I just want to reassure the folks at home that our police department is not using [them for immigration enforcement]. They're purely being used for crime prevention... we haven't had any residents that have been watched or [had rights] violated.\"",
+          "confidence": "high"
         }
       ]
     },
     {
       "member": "Barbara DiGiacinto",
-      "totalPositions": 324,
-      "avgSentiment": 0.226,
+      "totalPositions": 327,
+      "avgSentiment": 0.225,
       "confidenceMix": {
         "low": 2,
         "high": 227,
-        "medium": 95
+        "medium": 98
       },
       "byTheme": [
         {
@@ -36458,13 +37068,13 @@
         },
         {
           "theme": "Public safety & police",
-          "count": 28,
+          "count": 29,
           "avgSentiment": 0.35
         },
         {
           "theme": "Legal, litigation & contracts",
-          "count": 27,
-          "avgSentiment": 0.019
+          "count": 28,
+          "avgSentiment": 0.03
         },
         {
           "theme": "Ceremonial & community",
@@ -36483,8 +37093,8 @@
         },
         {
           "theme": "Parks, recreation & trails",
-          "count": 23,
-          "avgSentiment": 0.417
+          "count": 24,
+          "avgSentiment": 0.396
         },
         {
           "theme": "Water & sewer districts",
@@ -36498,8 +37108,8 @@
         },
         {
           "theme": "Roads, highway & sidewalks",
-          "count": 18,
-          "avgSentiment": 0.419
+          "count": 19,
+          "avgSentiment": 0.408
         },
         {
           "theme": "Local laws & legislation",
@@ -36554,6 +37164,11 @@
           "avgSentiment": -0.1
         },
         {
+          "caseId": "lombardi-park",
+          "count": 3,
+          "avgSentiment": 0.267
+        },
+        {
           "caseId": "west-side-of-main-street-armonk",
           "count": 3,
           "avgSentiment": 0.05
@@ -36602,11 +37217,6 @@
           "caseId": "proposed-local-law",
           "count": 2,
           "avgSentiment": 0.1
-        },
-        {
-          "caseId": "lombardi-park",
-          "count": 2,
-          "avgSentiment": 0.45
         },
         {
           "caseId": "156-162-bedford-road-armonk",
@@ -37952,6 +38562,16 @@
           "caseId": "north-castle-pool-and-tennis-club",
           "count": 1,
           "avgSentiment": 0.2
+        },
+        {
+          "caseId": "whippoorwill-road-king-street",
+          "count": 1,
+          "avgSentiment": 0.2
+        },
+        {
+          "caseId": "north-castle-pba",
+          "count": 1,
+          "avgSentiment": 0.35
         }
       ],
       "evidence": [
@@ -42024,16 +42644,53 @@
           ],
           "evidence": "Suggested not borrowing the full original bond amount and instead considering using savings for bathroom/locker-room improvements while staying under the original budget envelope.",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Dedicated Pickleball Courts & Recreation Facility Priorities",
+          "caseId": "lombardi-park",
+          "stance": "concerned",
+          "score": -0.1,
+          "themes": [
+            "Parks, recreation & trails"
+          ],
+          "evidence": "\"Before I could say definitively what my position is on dedicated pickleball courts, I need to see what our rec board has to share with us in terms of prioritizing what needs to be done that exists now\" \u2014 pointing to the Winkler Park tennis courts in Banksville, \"in deplorable shape, almost to the point that people don't want to play on them,\" with drainage and retaining wall problems.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Whippoorwill Road at King Street \u2014 Hairpin Turn Safety",
+          "caseId": "whippoorwill-road-king-street",
+          "stance": "supportive",
+          "score": 0.2,
+          "themes": [
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "Asked whether the brush and vegetation had worsened over recent months, noting that clearing \"seems like something that could be done pretty quickly,\" and suggested getting the highway department up there.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "North Castle PBA \u2014 Experimental Steady-Tours Stipulation of Agreement",
+          "caseId": "north-castle-pba",
+          "stance": "supportive",
+          "score": 0.35,
+          "themes": [
+            "Legal, litigation & contracts",
+            "Public safety & police"
+          ],
+          "evidence": "Defended relying on retained counsel \u2014 \"if we're constantly going to be challenging every single attorney or individual we hire in this town, we just maybe will make a motion that we bring up multiple [attorneys] and we change them\" \u2014 while agreeing the termination terms matter: \"I would never sign an agreement that somebody could cancel five minutes later... that's an important decision.\" Afterwards endorsed the compromise that a member wanting executive-session review should request it by the Monday before the meeting.",
+          "confidence": "medium"
         }
       ]
     },
     {
       "member": "Jose Berra",
-      "totalPositions": 294,
-      "avgSentiment": 0.232,
+      "totalPositions": 298,
+      "avgSentiment": 0.228,
       "confidenceMix": {
-        "high": 189,
-        "medium": 92,
+        "high": 190,
+        "medium": 95,
         "low": 13
       },
       "byTheme": [
@@ -42043,14 +42700,14 @@
           "avgSentiment": 0.054
         },
         {
+          "theme": "Legal, litigation & contracts",
+          "count": 61,
+          "avgSentiment": 0.084
+        },
+        {
           "theme": "Budget, taxes & finance",
           "count": 60,
           "avgSentiment": 0.124
-        },
-        {
-          "theme": "Legal, litigation & contracts",
-          "count": 58,
-          "avgSentiment": 0.089
         },
         {
           "theme": "Other",
@@ -42059,8 +42716,8 @@
         },
         {
           "theme": "Open government & procedure",
-          "count": 44,
-          "avgSentiment": 0.232
+          "count": 47,
+          "avgSentiment": 0.214
         },
         {
           "theme": "Environment & conservation",
@@ -42084,18 +42741,18 @@
         },
         {
           "theme": "Public safety & police",
-          "count": 15,
-          "avgSentiment": 0.457
+          "count": 16,
+          "avgSentiment": 0.416
+        },
+        {
+          "theme": "Water & sewer districts",
+          "count": 16,
+          "avgSentiment": 0.475
         },
         {
           "theme": "Roads, highway & sidewalks",
           "count": 15,
           "avgSentiment": 0.19
-        },
-        {
-          "theme": "Water & sewer districts",
-          "count": 15,
-          "avgSentiment": 0.5
         },
         {
           "theme": "Local laws & legislation",
@@ -43408,6 +44065,26 @@
           "caseId": "old-orchard-road-quarry-heights-north-castle",
           "count": 1,
           "avgSentiment": 0.0
+        },
+        {
+          "caseId": "chapter-340-wetlands-amendment",
+          "count": 1,
+          "avgSentiment": 0.05
+        },
+        {
+          "caseId": "miller-hill-park-north-white-plains",
+          "count": 1,
+          "avgSentiment": 0.0
+        },
+        {
+          "caseId": "schultz-way-water-district-no-9-cory-heights",
+          "count": 1,
+          "avgSentiment": 0.1
+        },
+        {
+          "caseId": "north-castle-pba",
+          "count": 1,
+          "avgSentiment": -0.2
         }
       ],
       "evidence": [
@@ -47116,6 +47793,58 @@
           ],
           "evidence": "Attempted to raise concerns about a previously proposed 200-unit 'Vue' development and a 5,000-seat soccer stadium on the adjacent property that could drive future water demand, but was told by the supervisor he was out of order and should raise it during public comment instead.",
           "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 340 Wetlands Amendment \u2014 Five-Year Mitigation Monitoring Follow-Through",
+          "caseId": "chapter-340-wetlands-amendment",
+          "stance": "concerned",
+          "score": 0.05,
+          "themes": [
+            "Legal, litigation & contracts",
+            "Open government & procedure"
+          ],
+          "evidence": "Asked for the adjournment so counsel could review \u2014 \"I'd like to have one of our environmental lawyers just make sure that everybody's protected\" \u2014 and pressed the point that the hearing had been set in July and \"no one forwarded this to legal counsel to take a look at.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 325 Vehicle & Traffic \u2014 Parking Changes at Miller Hill Park (McDougal / Dunlap Way / Smallwood Place)",
+          "caseId": "miller-hill-park-north-white-plains",
+          "stance": "concerned",
+          "score": 0.0,
+          "themes": [
+            "Open government & procedure"
+          ],
+          "evidence": "\"I think this is a little confusing for the public hearing\" and \"the way it's described here is different than what the intent was\"; asked counsel whether the hearing should be scheduled at all given the provisions might change, and was told the naming can be clarified at the hearing.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Sewer Main Repair (Schultz Way) and Water Service Connections (Water District No. 9, Cory Heights) \u2014 Authorisation to Bid",
+          "caseId": "schultz-way-water-district-no-9-cory-heights",
+          "stance": "questioning",
+          "score": 0.1,
+          "themes": [
+            "Legal, litigation & contracts",
+            "Water & sewer districts"
+          ],
+          "evidence": "Asked whether the town could \"give ourselves more flexibility by providing that we have more than 45 days to accept the bid,\" given the reimbursement uncertainty \u2014 producing agreement to write 60 to 75 days into the bid documents.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "North Castle PBA \u2014 Experimental Steady-Tours Stipulation of Agreement",
+          "caseId": "north-castle-pba",
+          "stance": "mixed",
+          "score": -0.2,
+          "themes": [
+            "Legal, litigation & contracts",
+            "Open government & procedure",
+            "Public safety & police"
+          ],
+          "evidence": "Opened supportive of the substance \u2014 \"I totally support this, and I fully know how important it is... to have rotating tours or late overnight graveyard shift schedules that they don't want\" \u2014 but asked for an executive session with labor counsel first, saying \"the big point is I want to have a way to discuss things with counsel when issues come up,\" that \"Roland didn't get the other agreement to look at,\" and that \"I don't think ambiguity helps.\" Voted in favour while restating the process objection.",
+          "confidence": "high"
         }
       ]
     },
@@ -50769,18 +51498,18 @@
     },
     {
       "member": "Saleem Hussain",
-      "totalPositions": 194,
-      "avgSentiment": 0.365,
+      "totalPositions": 200,
+      "avgSentiment": 0.357,
       "confidenceMix": {
-        "medium": 76,
-        "high": 109,
+        "medium": 77,
+        "high": 114,
         "low": 9
       },
       "byTheme": [
         {
           "theme": "Open government & procedure",
-          "count": 41,
-          "avgSentiment": 0.29
+          "count": 45,
+          "avgSentiment": 0.264
         },
         {
           "theme": "Other",
@@ -50799,8 +51528,8 @@
         },
         {
           "theme": "Parks, recreation & trails",
-          "count": 20,
-          "avgSentiment": 0.525
+          "count": 21,
+          "avgSentiment": 0.514
         },
         {
           "theme": "Budget, taxes & finance",
@@ -50814,13 +51543,23 @@
         },
         {
           "theme": "Legal, litigation & contracts",
-          "count": 12,
-          "avgSentiment": 0.233
+          "count": 13,
+          "avgSentiment": 0.181
         },
         {
           "theme": "Personnel & appointments",
           "count": 12,
           "avgSentiment": 0.475
+        },
+        {
+          "theme": "Ethics & governance",
+          "count": 11,
+          "avgSentiment": 0.395
+        },
+        {
+          "theme": "Local laws & legislation",
+          "count": 11,
+          "avgSentiment": -0.095
         },
         {
           "theme": "Resident concerns & quality of life",
@@ -50831,16 +51570,6 @@
           "theme": "Ceremonial & community",
           "count": 10,
           "avgSentiment": 0.755
-        },
-        {
-          "theme": "Ethics & governance",
-          "count": 10,
-          "avgSentiment": 0.4
-        },
-        {
-          "theme": "Local laws & legislation",
-          "count": 10,
-          "avgSentiment": -0.14
         },
         {
           "theme": "Public safety & police",
@@ -50859,8 +51588,8 @@
         },
         {
           "theme": "Roads, highway & sidewalks",
-          "count": 5,
-          "avgSentiment": 0.26
+          "count": 7,
+          "avgSentiment": 0.236
         },
         {
           "theme": "Permits & licensing",
@@ -51748,6 +52477,36 @@
           "caseId": "911-north-broadway-north-white-plains",
           "count": 1,
           "avgSentiment": 0.2
+        },
+        {
+          "caseId": "lombardi-park",
+          "count": 1,
+          "avgSentiment": 0.3
+        },
+        {
+          "caseId": "whippoorwill-road-king-street",
+          "count": 1,
+          "avgSentiment": 0.3
+        },
+        {
+          "caseId": "chapter-340-wetlands-amendment",
+          "count": 1,
+          "avgSentiment": 0.1
+        },
+        {
+          "caseId": "chapter-233-peddling-soliciting",
+          "count": 1,
+          "avgSentiment": 0.35
+        },
+        {
+          "caseId": "miller-hill-park-north-white-plains",
+          "count": 1,
+          "avgSentiment": 0.05
+        },
+        {
+          "caseId": "north-castle-pba",
+          "count": 1,
+          "avgSentiment": -0.45
         }
       ],
       "evidence": [
@@ -54163,6 +54922,82 @@
           ],
           "evidence": "Voted aye on the roll call for the one-year extension.",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Dedicated Pickleball Courts & Recreation Facility Priorities",
+          "caseId": "lombardi-park",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Parks, recreation & trails"
+          ],
+          "evidence": "As Parks and Recreation liaison, reported the renovation is intended to start immediately after this season closes so the pool is ready for next year, and described the current pool floor as needing complete redoing and genuinely hazardous \u2014 \"if anyone goes in the pool it's really dangerous,\" requiring foot coverings.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Whippoorwill Road at King Street \u2014 Hairpin Turn Safety",
+          "caseId": "whippoorwill-road-king-street",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Open government & procedure",
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "Asked the process question rather than the substance one: \"what is the way that the town board would then hear about the next [step]... is there some way to also bring it up as part of some kind of update in this forum,\" so that findings are \"also projected back to the community.\" Agreed the administrator update slot is the right place.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 340 Wetlands Amendment \u2014 Five-Year Mitigation Monitoring Follow-Through",
+          "caseId": "chapter-340-wetlands-amendment",
+          "stance": "concerned",
+          "score": 0.1,
+          "themes": [
+            "Open government & procedure"
+          ],
+          "evidence": "\"There's no but to everybody doing such a great job \u2014 what I am concerned about is it seems that some legal documents, laws, agreements sometimes fall through the cracks... I think we should think about the process so that we are getting this done and not letting things slip through the cracks.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 233 Peddling & Soliciting \u2014 Restricted Hours and a No-Knock Registry",
+          "caseId": "chapter-233-peddling-soliciting",
+          "stance": "supportive",
+          "score": 0.35,
+          "themes": [
+            "Ethics & governance",
+            "Local laws & legislation"
+          ],
+          "evidence": "\"One thing I'd love to see when that draft comes to us is there needs to be clarity on what is exempt... how political related things are exempt, that's an important piece.\" Added that First Amendment rights, including religious canvassing, are also protected, \"so it's just important that we're able to have the residents understand where it's applicable and what's not, so they don't accidentally think it has to be applied when it actually can't.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "Chapter 325 Vehicle & Traffic \u2014 Parking Changes at Miller Hill Park (McDougal / Dunlap Way / Smallwood Place)",
+          "caseId": "miller-hill-park-north-white-plains",
+          "stance": "concerned",
+          "score": 0.05,
+          "themes": [
+            "Open government & procedure",
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "Identified the underlying error: \"when McDougal comes around that curve where the park is, then it turns into Dunlap... so in the future representation of this, it's actually just going to be about Dunlap Way and Smallwood in that specific space.\" Noted Google Maps appears to mislabel it, and pushed for accuracy \u2014 \"that accuracy would be useful.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "North Castle PBA \u2014 Experimental Steady-Tours Stipulation of Agreement",
+          "caseId": "north-castle-pba",
+          "stance": "opposed",
+          "score": -0.45,
+          "themes": [
+            "Legal, litigation & contracts",
+            "Open government & procedure"
+          ],
+          "evidence": "Voted no and explained why on the record: \"I was actually fine coming into this [with] the drafting. What I learned in the process of the town board discussion was that there was confusion on what the interpretations were... the specific point where there was confusion was there were different points of view on the ability to terminate... I think it's dangerous when we make decisions [without clarity] of what the words are.\" Earlier: \"I think we have realized that the decision itself is a question mark. So I think we need to table.\"",
+          "confidence": "high"
         }
       ]
     },
@@ -55978,12 +56813,12 @@
     },
     {
       "member": "Sonny Vataj",
-      "totalPositions": 27,
-      "avgSentiment": 0.38,
+      "totalPositions": 28,
+      "avgSentiment": 0.377,
       "confidenceMix": {
         "high": 14,
         "low": 2,
-        "medium": 11
+        "medium": 12
       },
       "byTheme": [
         {
@@ -56017,6 +56852,11 @@
           "avgSentiment": 0.467
         },
         {
+          "theme": "Public safety & police",
+          "count": 3,
+          "avgSentiment": 0.2
+        },
+        {
           "theme": "Water & sewer districts",
           "count": 3,
           "avgSentiment": 0.667
@@ -56025,11 +56865,6 @@
           "theme": "Open government & procedure",
           "count": 2,
           "avgSentiment": 0.2
-        },
-        {
-          "theme": "Public safety & police",
-          "count": 2,
-          "avgSentiment": 0.15
         },
         {
           "theme": "Roads, highway & sidewalks",
@@ -56192,6 +57027,11 @@
           "caseId": "45-bedford-road-armonk",
           "count": 1,
           "avgSentiment": -0.2
+        },
+        {
+          "caseId": "north-castle-pba",
+          "count": 1,
+          "avgSentiment": 0.3
         }
       ],
       "evidence": [
@@ -56527,6 +57367,18 @@
             "Public safety & police"
           ],
           "evidence": "Proposed limiting the extension to 120 days tied to immediately securing the site (leveling the hole, fencing), arguing the town has legal authority to require site safety regardless of special-use-permit renewal timing; ultimately voted aye on the resolution after being advised the shorter term was not legally supportable.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-08-12",
+          "case": "North Castle PBA \u2014 Experimental Steady-Tours Stipulation of Agreement",
+          "caseId": "north-castle-pba",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Public safety & police"
+          ],
+          "evidence": "Voted aye and argued the operational point that the department should run its own shifts: \"I don't think it's up to me to tell the chief how to run the [department]... I don't think it's up to the board to tell them what hours he's going to put [officers on].\"",
           "confidence": "medium"
         }
       ]
@@ -59448,7 +60300,6 @@
           "status": "adopted",
           "summary": "Following litigation over a neighbor's unauthorized removal of nine mature regulated trees in the HOA's buffer zone, the Planning Board's November 2021 resolution required the HOA to post a bond/security and submit a two-year tree maintenance and monitoring plan. The HOA asked the Town Board to reject the Town Engineer's (Kellard Sessions) recommendation for a second, separate ~$1,628 maintenance bond on top of the ~$11,945 planting bond, arguing it was superfluous since the full planting-bond amount would already be held for the entire two-year maintenance period. The board agreed, and approved the legal agreement as revised to explicitly state the existing bond also covers maintenance/monitoring, waiving the second bond.",
           "themes": [
-            "Development agreements & land deals",
             "Environment & conservation",
             "Land use, zoning & special permits",
             "Legal, litigation & contracts"
@@ -59552,7 +60403,7 @@
           "note": ""
         },
         {
-          "theme": "Development agreements & land deals",
+          "theme": "Legal, litigation & contracts",
           "salience": 0.4,
           "sentiment": 0.4,
           "note": ""
@@ -59795,8 +60646,8 @@
           "status": "deferred; vote postponed to next meeting",
           "summary": "After a nearly two-hour work session, the board considered authorizing the Supervisor to sign an amended and restated water district contribution agreement splitting the existing Water District #2 (Windmill) into subsidiary districts 2A and 2B, following the developer's inability to develop a satisfactory new well supply at the original well field as contemplated years earlier (per state comptroller guidance, since dissolving/reforming the district risked triggering bond acceleration). Jose Berra raised detailed legal questions \u2014 disputing the recital language that the developer made \"best efforts\" to find water, probing bond-acceleration risk from reallocating debt service among the ~365 remaining district users, and questioning the town's liability exposure under a contractual \"authority and enforceability\" representation (Section 10B) \u2014 all of which the Town Attorney addressed without identifying material risk. The board ultimately declined to vote, with Matt Milim and Barbara DiGiacinto arguing residents needed more time to review and comment (citing a still-unresolved indemnification question raised by a resident, Ed [surname unclear], at the work session) and noting a companion bifurcation resolution still needed to be finalized with the Town Engineer.",
           "themes": [
-            "Development agreements & land deals",
             "Grants & capital projects",
+            "Legal, litigation & contracts",
             "Other"
           ],
           "overallSentiment": "mixed",
@@ -66169,7 +67020,6 @@
           "status": "referred",
           "summary": "The Board revisited a years-old, previously stalled idea to name the Wampus Park gazebo in memory of former Councilwoman and longtime Deputy Supervisor Becky Kitridge (served 1979-2011), favoring a tasteful plaque rather than prominent signage; because the Lions Club originally built and funded the gazebo and the Landmarks Preservation Committee has jurisdiction, the Board referred the matter to the LPC and the Parks & Recreation Advisory Board and asked Councilman Milim to raise it with the Lions Club before returning with a recommendation.",
           "themes": [
-            "Ceremonial & community",
             "Other",
             "Parks, recreation & trails"
           ],
@@ -66236,7 +67086,7 @@
           "note": "Mittman subdivision open-space donation was well-received and uncontested."
         },
         {
-          "theme": "Ceremonial & community",
+          "theme": "Other",
           "salience": 0.15,
           "sentiment": 0.7,
           "note": ""
@@ -71197,7 +72047,6 @@
           "summary": "Following a work-session update from the 250th Anniversary Steering Committee co-chairs (including plans for a July 4, 2026 time capsule and restoration of historic markers at Miller Hill and Mount Misery, aided by a $50,000 county grant), the board formally established the North Castle Revolutionary War 250 Steering Committee, adopted its mission statement (amended to say 'understanding and appreciation'), appointed Councilmembers Milim and DiGiacinto as board liaisons, and allocated $40,000 for a commemorative video and historic marker restoration.",
           "themes": [
             "Budget, taxes & finance",
-            "Ceremonial & community",
             "Other"
           ],
           "overallSentiment": "supportive",
@@ -71306,7 +72155,7 @@
           "note": "Extended work session on a content-neutral sign law rewrite."
         },
         {
-          "theme": "Ceremonial & community",
+          "theme": "Other",
           "salience": 0.5,
           "sentiment": 0.9,
           "note": "Formal launch of the Revolutionary War 250 steering committee with funding."
@@ -78812,7 +79661,7 @@
           "note": "Eagle Ridge (former IBM) North Castle Drive agreements."
         },
         {
-          "theme": "Ceremonial & community",
+          "theme": "Other",
           "salience": 0.4,
           "sentiment": 0.8,
           "note": "Work session update on 2026 semiquincentennial planning."
@@ -101704,6 +102553,666 @@
       ],
       "attributionCoverage": "partial",
       "attributionNote": "This was an exceptionally long (~2h48m) meeting; analysis focused on the most substantive agenda items (roughly 8-9 cases) and did not exhaustively cover every routine NYS Association of Towns resolution, minor personnel action, or consensus-agenda item. ASR transcript is un-diarized and garbled the new councilman Sonny Vataj's name multiple different ways ('the Taj,' 'Bataj,' 'Tony DiCaros'); attributions to him carry medium confidence based on contextual self-identification ('Sunny') and topical continuity. Roll-call votes provided high-confidence attribution for DiGiacinto, Hussain, and Rende; a fourth councilman's roll-call name was not clearly transcribed."
+    },
+    {
+      "date": "2026-08-12",
+      "meetingSummary": "A long (roughly three-hour) August meeting that opened with two police promotions and closed with an unusually sharp dispute over how the board reviews legal documents. Lieutenant Anthony Sabatella and Detective Sergeant Sheamus Conlan were sworn in after Chief Huffnagle's recommendations. Residents pressed two issues in public comment: the pickleball community, who described themselves as Sisyphus for the third time on dedicated courts, and a North White Plains resident who laid out a detailed safety case about the blind hairpin where Whippoorwill Road meets King Street, made worse by traffic diverting around the Kensico\u2013Eastview water project. The supervisor reported good news \u2014 the pool renovation bids came in well under the $5 million bond authorization, freeing capacity that could be shifted to pickleball courts by a further resolution. A sewer-district extension for 9 Rose Hill Drive passed unanimously. The Chapter 340 wetlands amendment, more than a year in the making by the Conservation Board and the town's wetland consultant to close a follow-through gap in five-year mitigation monitoring, was adjourned rather than closed after it emerged that the draft had never been sent to town counsel \u2014 prompting board comment that legal documents keep slipping through the cracks. The board directed a draft peddling-and-soliciting law limiting hours to 6 p.m. and creating a no-knock registry, after a summer of complaints about young door-to-door solicitors on hoverboards without permits in hand. A parking change near Miller Hill Park was scheduled for hearing after residents and members established the agenda description named the wrong street. A liquor license for the Socialite members club was tabled over a mismatch in the building owner's name and a question about whether the applicant had told the board at special-permit stage that no liquor license would be sought. The night's flashpoint was the PBA steady-tours stipulation: Councilman Berra wanted an executive session with labor counsel first, the supervisor refused to delay, and in the course of the argument it became clear that members held genuinely different readings of when the agreement can be terminated. It passed on a roll call with Councilman Hussain voting no, explaining that deciding while the board disagreed about what the words meant was the wrong way to decide. The meeting ended with the supervisor confirming a phishing email had compromised a town system with no data taken, and stating plainly that the police department's licence plate readers are not connected to any federal immigration system and are used only for crime prevention.",
+      "durationNote": "Supervisor Joseph Rende presided; all four council members \u2014 Barbara DiGiacinto, Jose Berra, Saleem Hussain and Sonny Vataj \u2014 were present. The board opened at 5:30 and went immediately into executive session on real estate and personnel before reconvening publicly. Councilwoman DiGiacinto recused herself from the La Mer Oyster Bar liquor licence, noting the restaurant is a tenant of an LLC owned by her family though she does not benefit from it. Town Attorney Roland Baroni, Town Administrator Kevin Hay, Town Clerk Allison Simon, Police Chief Reagan Huffnagle, Town Planner Adam Kaufman and the town's engineering and sewer/water director all participated.",
+      "cases": [
+        {
+          "id": "police-promotions-aug-2026",
+          "name": "Police Promotions \u2014 Lieutenant Sabatella and Detective Sergeant Conlan",
+          "address": "",
+          "applicationType": "personnel / appointment",
+          "applicant": "Police Chief Reagan Huffnagle (recommendation)",
+          "status": "both promotions approved and sworn in",
+          "summary": "Chief Huffnagle recommended promoting Detective Sergeant Anthony Sabatella \u2014 a member since December 2013, school resource officer 2016\u20132019, detective, patrol sergeant and detective sergeant commanding the Detective Division, lately serving as a de facto lieutenant \u2014 to fill the lieutenant vacancy and patrol division commander position left by Lieutenant McCormick's retirement, effective August 13, 2026. He then recommended Detective Sheamus Conlan, a member since July 2014 who coordinates the department's EMS program and runs background investigations on police candidates, to the resulting detective sergeant vacancy. Both passed unanimously and both were sworn in on the spot before a full house of family and residents. The supervisor called swearing in officers the part of the job he enjoys most and thanked residents for the turnout.",
+          "themes": [
+            "Other",
+            "Personnel & appointments",
+            "Public safety & police"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.9,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.9,
+              "themes": [
+                "public safety & police",
+                "personnel & appointments"
+              ],
+              "evidence": "\"This is probably one of the things as supervisor that I enjoy the most... As residents, we are blessed in the community to have such fine men and women in our police department. And it's indicative by the turnout that we always get every time we have a promotion.\" Administered both oaths.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "dedicated-pickleball-courts-2026",
+          "name": "Dedicated Pickleball Courts & Recreation Facility Priorities",
+          "address": "Lombardi Park (proposed location, not settled)",
+          "applicationType": "capital project / public comment",
+          "applicant": "Residents of the pickleball community",
+          "status": "no decision \u2014 pool bids came in under budget, freeing potential funding; location still unsettled; awaiting Recreation Advisory Board prioritisation",
+          "summary": "Steve Rossi of Overlook Road, North White Plains, opened public comment with the myth of Sisyphus: the dedicated-courts idea started in October of last year, seemed to advance at a good May meeting where Lombardi Park was suggested and the project referred to the recreation department, and then rolled back down \u2014 the Recreation Advisory Board has not met in July or August for lack of a quorum and is now pushed to September. He asked plainly where the project stands, whether it is still viable, and how residents are supposed to find out, noting a $600,000 recreation fund had been mentioned. Supervisor Rende answered that the board had been waiting on the pool renovation bids, which have now come in substantially under the $5 million bond resolution; bond counsel advises that shifting some of that authorisation to another recreation project would require a further town board resolution, and that is where his attention goes next \u2014 while keeping a cushion in case the pool demolition turns up something unforeseen. The successful low bidder has completed insurance and funding due diligence and signed contracts, with a pre-construction meeting scheduled. Rende said the location has not been agreed and a work session is likely in the coming months, and that he has not forgotten the pickleball players. Another member said they could not state a position on dedicated courts until the Recreation Advisory Board prioritises existing needs \u2014 specifically the tennis courts at Winkler Park in Banksville, described as in deplorable shape with drainage and retaining wall issues. Councilman Hussain, as liaison to Parks and Recreation, reported the pool work is intended to start immediately after the season so the pool is ready for next year, and described the pool floor as currently needing complete redoing and unsafe underfoot.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects",
+            "Parks, recreation & trails",
+            "Resident concerns & quality of life"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.1,
+          "publicComment": "Steve Rossi of Overlook Road, North White Plains, spoke for the pickleball community, comparing their year-long effort to Sisyphus rolling a boulder uphill and asking where the project stands, whether it remains viable, and how residents can get communication about it.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.4,
+              "themes": [
+                "parks, recreation & trails",
+                "budget, taxes & finance"
+              ],
+              "evidence": "\"I haven't forgotten about the pickleball folks. I run into pickleball players just about every time in town, either on Main Street or getting a cup of coffee... I could assure you that our next concentration is going to be on figuring out what we're going to do and where we're going to spend that money in terms of the pickleball.\" Reported the pool bids came in substantially under the $5 million authorisation and that shifting funds would require another board resolution, while wanting to keep a cushion for unforeseen pool conditions.",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "concerned",
+              "score": -0.1,
+              "themes": [
+                "parks, recreation & trails"
+              ],
+              "evidence": "\"Before I could say definitively what my position is on dedicated pickleball courts, I need to see what our rec board has to share with us in terms of prioritizing what needs to be done that exists now\" \u2014 pointing to the Winkler Park tennis courts in Banksville, \"in deplorable shape, almost to the point that people don't want to play on them,\" with drainage and retaining wall problems.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "parks, recreation & trails"
+              ],
+              "evidence": "As Parks and Recreation liaison, reported the renovation is intended to start immediately after this season closes so the pool is ready for next year, and described the current pool floor as needing complete redoing and genuinely hazardous \u2014 \"if anyone goes in the pool it's really dangerous,\" requiring foot coverings.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "whippoorwill-king-street-hairpin-safety-2026",
+          "name": "Whippoorwill Road at King Street \u2014 Hairpin Turn Safety",
+          "address": "Whippoorwill Road / King Street (NY Route 120A)",
+          "applicationType": "resident request / intermunicipal advocacy",
+          "applicant": "Resident (Zach)",
+          "status": "referred to the town administrator to follow up with New York State DOT; to be reported back as part of administrator updates at a future meeting",
+          "summary": "A resident of roughly two years laid out a detailed safety case for the hairpin where Whippoorwill Road meets King Street. Heavy construction and congestion from the multi-year Kensico\u2013Eastview water connection project have made King Street a primary bypass for commuters and commercial traffic; the corner is a blind turn because of topography and dense vegetation; Whippoorwill is a single access point for many households with only a ten-minute detour as an alternative; and there is no southbound left-turn lane, so a car waiting to turn becomes a roadblock for high-speed traffic behind it, with rear-end and T-bone collisions already on the record. He asked the town to partner with NYSDOT on three measures \u2014 a dedicated southbound left-turn lane on King Street, a widened acceleration and merge lane out of Whippoorwill, and immediate clearing of the blind-spot vegetation \u2014 plus a no-standing zone in the interim so cars stop impeding the merge, and noted the surrounding regional projects run to 2032. Adam Kaufman clarified that the project's staging yard is on Old Post Road with construction between Route 120A and Hanging Road, that a new curb cut by the reservoir will need a NYSDOT permit and meet state safety standards, and that truck traffic will run between those two sites rather than through the Route 120 area. The supervisor committed the town administrator to follow up with the state, floated pressing for a temporary traffic signal, and used the moment to recount a long-running effort \u2014 with State Senator Shelley Mayer, Assemblymember Chris Burdick and Majority Leader Andrea Stewart-Cousins \u2014 that established NYSDOT Region 8 had been underfunded by roughly 30 percent with no rational basis, and has now produced a state commitment to mill, repave and improve drainage on Route 22 from Virginia Road in North White Plains up to the Route 120 intersection, plus Route 120 from the Harrison line to the Mount Pleasant line, expected in the state's 2027 fiscal year. Councilman Hussain asked how such follow-ups get reported back to the board and to the public; the answer was to fold them into administrator updates.",
+          "themes": [
+            "Intermunicipal & county/state",
+            "Public safety & police",
+            "Resident concerns & quality of life",
+            "Roads, highway & sidewalks",
+            "Water & sewer districts"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.45,
+          "publicComment": "A resident of Whippoorwill Road urged the town to act with NYSDOT before a fatal collision \u2014 \"our neighborhood needs proactive protection, not reactive sympathy after a crash\" \u2014 describing near-misses with his children and wife in the car and asking at minimum for a no-standing zone and vegetation clearing in the interim.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.5,
+              "themes": [
+                "roads, highway & sidewalks",
+                "intermunicipal & county/state"
+              ],
+              "evidence": "Committed the town administrator to follow up and to approach the state directly \u2014 \"we may want to try to encourage the state to put up some temporary traffic signal there as well to control the traffic\" \u2014 while being candid that \"the DOT has not been an easy agency to deal with, and it's not for a lack of trying.\" Recounted the Region 8 underfunding finding and the resulting state commitment to repave Route 22 and Route 120.",
+              "confidence": "high"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "open government & procedure",
+                "roads, highway & sidewalks"
+              ],
+              "evidence": "Asked the process question rather than the substance one: \"what is the way that the town board would then hear about the next [step]... is there some way to also bring it up as part of some kind of update in this forum,\" so that findings are \"also projected back to the community.\" Agreed the administrator update slot is the right place.",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "supportive",
+              "score": 0.2,
+              "themes": [
+                "roads, highway & sidewalks"
+              ],
+              "evidence": "Asked whether the brush and vegetation had worsened over recent months, noting that clearing \"seems like something that could be done pretty quickly,\" and suggested getting the highway department up there.",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "rose-hill-sewer-district-extension-2026",
+          "name": "9 Rose Hill Drive \u2014 Extension of Sewer District No. 2",
+          "address": "9 Rose Hill Drive",
+          "applicationType": "public hearing / district extension",
+          "applicant": "Glencraft, represented by David Lombardi, PE, of JMC",
+          "status": "public hearing held and closed; resolution adopted unanimously on a roll call",
+          "summary": "A petition under Article 12 of the Town Law to extend Sewer District No. 2 to 9 Rose Hill Drive. The clerk received the letter calling for the hearing, affidavits of posting and of publication in the Journal News, and the JMC map, plan and report received July 15, 2026. No member of the public spoke. Board questions established that this is a sewer connection only \u2014 Rose Hill is on well water throughout, no water main is being run in parallel, and the sewer is already in the road. The hearing was closed and the resolution adopted by roll call: DiGiacinto, Berra, Hussain and Vataj all aye, Supervisor Rende yes.",
+          "themes": [
+            "Land use, zoning & special permits",
+            "Open government & procedure",
+            "Water & sewer districts"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.6,
+          "publicComment": "No members of the public spoke.",
+          "memberPositions": []
+        },
+        {
+          "id": "chapter340-wetland-monitoring-amendment-2026",
+          "name": "Chapter 340 Wetlands Amendment \u2014 Five-Year Mitigation Monitoring Follow-Through",
+          "address": "",
+          "applicationType": "local law / public hearing",
+          "applicant": "Conservation Board with Town Planner Adam Kaufman and town wetland consultant Eric Dorsch of Kellard Sessions",
+          "status": "public hearing opened and adjourned \u2014 not closed \u2014 so town counsel can review a draft he had never been sent",
+          "summary": "The amendment closes a gap the Conservation Board has worked on for over a year. The town code has long required a five-year monitoring and maintenance plan with every wetland permit, but provided no mechanism to follow up during those five years. The change requires annual reports from applicants verifying the mitigation is still working, with the town's consulting engineers verifying annually, and attaches a fee. Conservation Board member Jane Black explained the loophole and the drafting history; a second Conservation Board member described watching mitigation plans on his own lake be completely destroyed years after permitting, homeowners genuinely unaware they were subject to a plan, and developers not telling new owners \u2014 arguing that a funded annual review protects homeowners from major fines as much as it protects the wetlands. Supervisor Rende thanked the Conservation Board, Kaufman and KSCJ, noting one or two mitigation plans come before the board nearly every month and that ambiguity in the existing code had already produced a resident stuck between a mitigation plan and a building permit. Then Town Attorney Baroni said he had never seen the draft. The public hearing had been set at the July meeting and nobody had forwarded it to legal counsel. Rende adjourned rather than closed the hearing to preserve the clock, asked Baroni to share any comments with Kaufman, the Conservation Board, Eric Dorsch and the board members, and said he did not want the delay to push adoption into October. A member added that this is a recurring failure \u2014 \"it seems that some legal documents, laws, agreements sometimes fall through the cracks\" \u2014 and asked the board to think about the process, a theme that resurfaced sharply later in the meeting.",
+          "themes": [
+            "Environment & conservation",
+            "Legal, litigation & contracts",
+            "Local laws & legislation",
+            "Open government & procedure"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.45,
+          "publicComment": "Two Conservation Board members spoke in support. Jane Black set out the code loophole and the year-plus of work behind the fix. A second member described mitigation plans on his own lake destroyed years after permitting, and homeowners told nothing by their developers, arguing the annual review protects residents from fines as much as it protects wetlands.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "environment & conservation",
+                "local laws & legislation"
+              ],
+              "evidence": "\"I personally want to thank the Conservation Board, the staff from KSCJ and Adam for taking this task and coming up with something that's much clearer and tighter... eliminating those levels of ambiguity that were currently there.\" Noted mitigation plans come to the board nearly every month and said \"I don't want to have to delay it where we're not getting this accomplished into October.\"",
+              "confidence": "high"
+            },
+            {
+              "member": "Jose Berra",
+              "stance": "concerned",
+              "score": 0.05,
+              "themes": [
+                "legal, litigation & contracts",
+                "open government & procedure"
+              ],
+              "evidence": "Asked for the adjournment so counsel could review \u2014 \"I'd like to have one of our environmental lawyers just make sure that everybody's protected\" \u2014 and pressed the point that the hearing had been set in July and \"no one forwarded this to legal counsel to take a look at.\"",
+              "confidence": "medium"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "concerned",
+              "score": 0.1,
+              "themes": [
+                "open government & procedure"
+              ],
+              "evidence": "\"There's no but to everybody doing such a great job \u2014 what I am concerned about is it seems that some legal documents, laws, agreements sometimes fall through the cracks... I think we should think about the process so that we are getting this done and not letting things slip through the cracks.\"",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "peddling-soliciting-hours-no-knock-registry-2026",
+          "name": "Chapter 233 Peddling & Soliciting \u2014 Restricted Hours and a No-Knock Registry",
+          "address": "",
+          "applicationType": "local law (direction to draft)",
+          "applicant": "Police Chief Reagan Huffnagle (recommendation)",
+          "status": "no vote \u2014 counsel and the chief directed to prepare a draft law for the next meeting, then set a public hearing",
+          "summary": "The chief recommended amending Chapter 233 to limit peddling, soliciting and canvassing to 10 a.m.\u20136 p.m. and to establish a no-knock registry. The trigger was a summer of complaints about a pest-control operation whose young workers went door to door on hoverboards; the company vehicle carried a permit but the individuals canvassing did not, and one told the supervisor at his own door that his permit was in a car he had been dropped off from. The supervisor also liked provisions used elsewhere in Westchester tying the cutoff to daylight, on the view that a resident who cannot see who is at the door after dark in winter is entitled to that protection \u2014 though counsel recalled being advised previously that a daylight test could not be used, so the chief will supply the comparison municipalities for review. Councilman Hussain asked that the draft be explicit about what is exempt, particularly political and religious canvassing protected by the First Amendment, so residents understand where the rule does and does not apply and do not assume it covers speech it cannot. The board also wants solicitors required to carry their permit and produce it on request, and looked at whether identification requirements used elsewhere raise constitutional issues. Existing permits run to the end of the year and cannot be changed retroactively, so there is no urgency beyond having the new law in place before 2027 applications.",
+          "themes": [
+            "Local laws & legislation",
+            "Permits & licensing",
+            "Public safety & police",
+            "Resident concerns & quality of life"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.5,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "local laws & legislation",
+                "public safety & police"
+              ],
+              "evidence": "Drove the item, favouring the 6 p.m. cutoff and a possible darkness test \u2014 \"someone sees someone at five o'clock in winter months, it's already dark and somebody now can't see who's at the door, who's ringing their bell\" \u2014 and describing his own encounter with an unpermitted solicitor. \"The more stringent we make it, I think it puts the residents at ease.\"",
+              "confidence": "high"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "supportive",
+              "score": 0.35,
+              "themes": [
+                "local laws & legislation",
+                "ethics & governance"
+              ],
+              "evidence": "\"One thing I'd love to see when that draft comes to us is there needs to be clarity on what is exempt... how political related things are exempt, that's an important piece.\" Added that First Amendment rights, including religious canvassing, are also protected, \"so it's just important that we're able to have the residents understand where it's applicable and what's not, so they don't accidentally think it has to be applied when it actually can't.\"",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "mcdougal-dunlap-smallwood-parking-2026",
+          "name": "Chapter 325 Vehicle & Traffic \u2014 Parking Changes at Miller Hill Park (McDougal / Dunlap Way / Smallwood Place)",
+          "address": "Miller Hill Park, North White Plains",
+          "applicationType": "local law / public hearing scheduling",
+          "applicant": "Highway General Foreman Jamie Norris (memo)",
+          "status": "memo and correspondence received; public hearing scheduled for September 9, 2026, with a map to be attached",
+          "summary": "Two changes: one-hour time-limited parking, 7 a.m. to 6 p.m., along roughly 120 to 150 linear feet in front of Miller Hill Park where parking is currently prohibited, so visitors can stop and use the county park the town maintains; and a no-parking designation for a roughly 30-foot section at the corner where the road meets Smallwood Place, on county property, at Westchester County's request following a joint site meeting about park improvements. Both residents and board members found the agenda description confusing. Craig Hall of Smallwood Place came specifically to understand it and warned that Miller Hill residents would object to any ban on Smallwood Place itself; members established that the section in question is at the Dunlap Way intersection, not Smallwood, and Councilman Hussain \u2014 a former McDougal resident \u2014 pointed out that McDougal actually becomes Dunlap Way at the curve where the park sits, so the whole description is attached to the wrong street name, possibly compounded by an error in Google Maps. The board agreed a map will be prepared and attached so the public can see exactly what is changing, and that the accuracy of street names must be fixed before the hearing. Correspondence from a resident objecting to the amendments arrived by email the afternoon of the meeting and was received for the record, to be added again at the September hearing.",
+          "themes": [
+            "Intermunicipal & county/state",
+            "Local laws & legislation",
+            "Open government & procedure",
+            "Parks, recreation & trails",
+            "Roads, highway & sidewalks"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.15,
+          "publicComment": "Craig Hall of Smallwood Place said he came because the agenda item was \"a little baffling\" and that residents of Miller Hill would want parking banned on Smallwood Place itself, not permitted \u2014 a misunderstanding the board then corrected on the record.",
+          "memberPositions": [
+            {
+              "member": "Saleem Hussain",
+              "stance": "concerned",
+              "score": 0.05,
+              "themes": [
+                "open government & procedure",
+                "roads, highway & sidewalks"
+              ],
+              "evidence": "Identified the underlying error: \"when McDougal comes around that curve where the park is, then it turns into Dunlap... so in the future representation of this, it's actually just going to be about Dunlap Way and Smallwood in that specific space.\" Noted Google Maps appears to mislabel it, and pushed for accuracy \u2014 \"that accuracy would be useful.\"",
+              "confidence": "high"
+            },
+            {
+              "member": "Jose Berra",
+              "stance": "concerned",
+              "score": 0.0,
+              "themes": [
+                "open government & procedure"
+              ],
+              "evidence": "\"I think this is a little confusing for the public hearing\" and \"the way it's described here is different than what the intent was\"; asked counsel whether the hearing should be scheduled at all given the provisions might change, and was told the naming can be clarified at the hearing.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "roads, highway & sidewalks"
+              ],
+              "evidence": "Explained the genesis \u2014 a site meeting called by Westchester County about park improvements including kiosks, flag and brush trimming \u2014 and committed to attaching a map: \"the map is going to clearly [show] where the restriction in terms of time parking [is], and where the no parking is.\"",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "911-north-broadway-fitness-studio-text-amendment-2026",
+          "name": "911 North Broadway (MDM Fit) \u2014 Zoning Text Amendment Defining Fitness Studios",
+          "address": "911 North Broadway, Sir John's Plaza, North White Plains (CB district)",
+          "applicationType": "zoning text amendment petition",
+          "applicant": "CANS Consulting LLC d/b/a MDM Fit, represented by Cory Salomo of Zarin & Steinmetz",
+          "status": "petition received; town board declared intent to act as lead agency, authorised circulation and referral to the county and town planning boards, and scheduled a public hearing for September 23, 2026",
+          "summary": "MDM Fit opened in a roughly 1,600-square-foot space in Sir John's Plaza at the end of the pandemic in 2021, its owner unaware that approvals were needed. The gap only surfaced when the neighbouring cigar bar came before the board months ago and mentioned the membership club next door; the building inspector then notified the owner, who moved immediately to legalise. The petition would add fitness studios to the definition of personal service establishments and define a fitness studio as one not exceeding 2,000 square feet devoted to individual exercise. The operation has 272 members, peaks at 13 to 16 people between 5\u20137 a.m. and 4\u20136 p.m. on weekdays and 11\u20132 on weekends, is unstaffed and key-fob accessed 24/7, and proposes no alterations or expansion; the building inspector reports no complaints in five years. The only board question was why there are no showers in a facility of that kind, answered by the unstaffed model. The board's three procedural actions passed and the hearing was set for September 23 to allow the 30-day referral period.",
+          "themes": [
+            "Environment & conservation",
+            "Land use, zoning & special permits",
+            "Local laws & legislation",
+            "Permits & licensing"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.55,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.4,
+              "themes": [
+                "land use, zoning & special permits"
+              ],
+              "evidence": "Said he had raised his questions with Adam Kaufman beforehand and was satisfied; his one remaining question \u2014 the absence of showers \u2014 was answered by the unstaffed, key-fob operating model. \"Not a major operation... I'm OK with that.\"",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "sewer-water-bid-authorizations-2026",
+          "name": "Sewer Main Repair (Schultz Way) and Water Service Connections (Water District No. 9, Cory Heights) \u2014 Authorisation to Bid",
+          "address": "Schultz Way; Water District No. 9, Cory Heights",
+          "applicationType": "authorisation to go to bid",
+          "applicant": "Director of Sewer & Water",
+          "status": "both authorisations approved; the board will not wait on a state reimbursement agreement before bidding",
+          "summary": "Two bid authorisations passed. The substantive discussion was on the Cory Heights water service connection project: the town has been waiting on a reimbursement memorandum of agreement, and the responsible state agency has still not identified a source of funds and will not prepare the agreement until it does. Supervisor Rende declined to hold up the bid, saying the process has gone on too long, and said he would assemble the names from the earlier conference call and approach State Senator Shelley Mayer's office, arguing that actual bid numbers will strengthen the town's hand where estimates did not \u2014 and that reimbursement may lose priority once residents are already connected. Councilman Berra asked whether the bid acceptance window should be extended beyond the usual 30 to 45 days to preserve flexibility given the uncertainty and possible winter weather; the director agreed to write 60 or 75 days into the documents. The director also described tailoring each connection to the property \u2014 a meter pit at the curb stop instead of running service into the house, letting homeowners use less expensive high-pressure poly pipe rather than type-K copper and leaving the interior connection to their own contractor \u2014 with two of the affected residents left to meet.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects",
+            "Intermunicipal & county/state",
+            "Water & sewer districts"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.35,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.4,
+              "themes": [
+                "water & sewer districts",
+                "intermunicipal & county/state"
+              ],
+              "evidence": "\"I don't want to stop the process of sending this out to bid... this is going on for too long.\" Committed to raising the missing reimbursement agreement with Senator Mayer's office and noted that having actual bid numbers rather than estimates should help.",
+              "confidence": "high"
+            },
+            {
+              "member": "Jose Berra",
+              "stance": "questioning",
+              "score": 0.1,
+              "themes": [
+                "water & sewer districts",
+                "legal, litigation & contracts"
+              ],
+              "evidence": "Asked whether the town could \"give ourselves more flexibility by providing that we have more than 45 days to accept the bid,\" given the reimbursement uncertainty \u2014 producing agreement to write 60 to 75 days into the bid documents.",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "socialite-members-club-liquor-license-2026",
+          "name": "Socialite Members Club (909 North Broadway) \u2014 Liquor Licence Notice",
+          "address": "909 North Broadway, North White Plains",
+          "applicationType": "liquor licence notice / 30-day waiver",
+          "applicant": "Socialite Members Club Corporation",
+          "status": "tabled for research",
+          "summary": "The board tabled the notice on two grounds. First, the application lists the building owner as 901 Properties LLC, which the supervisor said does not match the property \u2014 Sir John's Plaza is owned by a differently named entity and the address is not 901 \u2014 so a clarification was requested in case it is only a typographical error. Second, and more substantively, the supervisor recalled that when the club's special use permit was before the board, the applicant was asked about a liquor licence and indicated one would not be sought, because members bring and store their own alcohol. His concern is that once a liquor licence issues, nothing prevents walk-in service, which is not what the special use permit contemplated \u2014 the permit was for a members club where entry required membership or accompaniment by a member. Counsel confirmed no licence is needed where a member supplies liquor to other members with no money changing hands. The board will check the record of the special-permit hearing before acting.",
+          "themes": [
+            "Land use, zoning & special permits",
+            "Legal, litigation & contracts",
+            "Permits & licensing"
+          ],
+          "overallSentiment": "concerned",
+          "sentimentScore": -0.35,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "concerned",
+              "score": -0.4,
+              "themes": [
+                "permits & licensing",
+                "land use, zoning & special permits"
+              ],
+              "evidence": "\"I'm almost positive that the question was asked and he was not going to [seek] an outside liquor license... once a liquor license [issues] there's no prevention then from him allowing somebody as a walk-in to come in, and that's not what the intention was. This is a special use permit [that] was for members.\" Moved to table pending research on what was represented at the special-permit stage.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "pba-steady-tours-stipulation-2026",
+          "name": "North Castle PBA \u2014 Experimental Steady-Tours Stipulation of Agreement",
+          "address": "",
+          "applicationType": "labor agreement / authorisation to sign",
+          "applicant": "Town of North Castle and the North Castle PBA, drafted by outside labor counsel",
+          "status": "approved on a roll call, one member voting no",
+          "summary": "An experimental stipulation letting police officers work steady tours rather than rotating shifts, effective September 1, 2026 and running through December 31, 2027. Every member said they supported the substance \u2014 Councilman Berra opened by saying he totally supports it and knows how detrimental rotating and overnight shifts are \u2014 but the item became a proxy for a dispute about process. Berra wanted an executive session with labor counsel before voting, saying he had marked up the document and had questions, and that legal documents repeatedly reach the board without counsel review. Supervisor Rende refused to delay: labor counsel are the experts, the draft follows agreements used in other municipalities, and Berra had from Friday afternoon to Wednesday to request counsel attend by Zoom. The exchange escalated \u2014 Rende told Berra \"you take the role that you are the expert attorney in all legal matters... you've been more wrong than right\" and had cost the town legal fees; Berra called that an unfounded statement. Councilwoman DiGiacinto defended relying on retained counsel: \"if we're constantly going to be challenging every single attorney... maybe we'll make a motion that we bring up multiple [attorneys] and we change them,\" and \"I would never sign an agreement that somebody could cancel five minutes later.\" In the middle of the argument a genuine substantive disagreement surfaced: members read the termination clause differently \u2014 Rende understood the town or the chief could stop the experiment at any time if it was not working, Hussain and Berra read it as terminable only at the end of 2027. Counsel had not reviewed the document and could not resolve it. Hussain moved to table; the motion on the floor stood and the roll was called. Vataj yes, Rende yes, Hussain no, and the two remaining members yes, one saying he would vote in favour \"because it can be terminated\" while restating his objection to the process. Hussain then explained his no for the record: he had been fine with the drafting coming in, but learned during the discussion that the board did not agree on what the words meant, and \"I think it's dangerous when we make decisions [without clarity] of what the words are.\" After the vote Rende and DiGiacinto both said an executive session on every agreement is unnecessary but that any member who wants one should put the request in by the Monday before the meeting \u2014 a process the board effectively settled in the course of the argument.",
+          "themes": [
+            "Ethics & governance",
+            "Legal, litigation & contracts",
+            "Open government & procedure",
+            "Personnel & appointments",
+            "Public safety & police"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.15,
+          "memberPositions": [
+            {
+              "member": "Jose Berra",
+              "stance": "mixed",
+              "score": -0.2,
+              "themes": [
+                "legal, litigation & contracts",
+                "open government & procedure",
+                "public safety & police"
+              ],
+              "evidence": "Opened supportive of the substance \u2014 \"I totally support this, and I fully know how important it is... to have rotating tours or late overnight graveyard shift schedules that they don't want\" \u2014 but asked for an executive session with labor counsel first, saying \"the big point is I want to have a way to discuss things with counsel when issues come up,\" that \"Roland didn't get the other agreement to look at,\" and that \"I don't think ambiguity helps.\" Voted in favour while restating the process objection.",
+              "confidence": "high"
+            },
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.4,
+              "themes": [
+                "public safety & police",
+                "legal, litigation & contracts"
+              ],
+              "evidence": "Refused to delay: \"this came directly from labor counsel, labor counsel's the expert. I feel very comfortable with it... I don't believe that there's anything that's going to come out of any question Councilman Berra makes with labor counsel that's going to change anything.\" Said the agreement is expressly experimental and can be stopped if the department reports it is not working, and afterwards proposed asking the chief to report back on how it is working after two or three months.",
+              "confidence": "high"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "opposed",
+              "score": -0.45,
+              "themes": [
+                "legal, litigation & contracts",
+                "open government & procedure"
+              ],
+              "evidence": "Voted no and explained why on the record: \"I was actually fine coming into this [with] the drafting. What I learned in the process of the town board discussion was that there was confusion on what the interpretations were... the specific point where there was confusion was there were different points of view on the ability to terminate... I think it's dangerous when we make decisions [without clarity] of what the words are.\" Earlier: \"I think we have realized that the decision itself is a question mark. So I think we need to table.\"",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "supportive",
+              "score": 0.35,
+              "themes": [
+                "legal, litigation & contracts",
+                "public safety & police"
+              ],
+              "evidence": "Defended relying on retained counsel \u2014 \"if we're constantly going to be challenging every single attorney or individual we hire in this town, we just maybe will make a motion that we bring up multiple [attorneys] and we change them\" \u2014 while agreeing the termination terms matter: \"I would never sign an agreement that somebody could cancel five minutes later... that's an important decision.\" Afterwards endorsed the compromise that a member wanting executive-session review should request it by the Monday before the meeting.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Sonny Vataj",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "public safety & police"
+              ],
+              "evidence": "Voted aye and argued the operational point that the department should run its own shifts: \"I don't think it's up to me to tell the chief how to run the [department]... I don't think it's up to the board to tell them what hours he's going to put [officers on].\"",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "correspondence-appointments-consent-aug-2026",
+          "name": "Correspondence, Appointments, Resignations & Routine Approvals",
+          "address": "",
+          "applicationType": "consent items",
+          "applicant": "Town of North Castle",
+          "status": "all approved",
+          "summary": "A block of routine business passed without debate: receipt of memos from Stefan Martinovic of Remax Properties and from a resident regarding amending the town code to permit modern car wash facilities; receipt of correspondence from the State Education Department on the North Castle Public Library's Board of Regents charter application; receipt of a KSCJ memo establishing a five-year wetland mitigation monitoring plan for the David Haber residential project at 23 North Lake Road, plus authorisation to sign the related licence agreement; permission for the Armonk Chamber of Commerce and the Byram Hills Preschool Association to hold the Armonk Sidewalk Sale featuring Jamie's 5K Run for Love and the Byram Hills parent association carnival on Sunday, October 4, 2026; liquor licence notices with 30-day waivers for La Mer Oyster Bar at 405 Main Street (Councilwoman DiGiacinto recusing) and Palm Palm Chinese at 575 Main Street; appointment of an assistant building inspector effective August 24; receipt of resignations from the Recreation and Parks and Highway departments; adoption of the 2026 standard work day and reporting resolution for the state and local retirement system; approval for court personnel to attend the state court clerks' annual conference in Albany in September; and approval of a terminal leave payment to retiring Lieutenant Thomas McCormick.",
+          "themes": [
+            "Environment & conservation",
+            "Legal, litigation & contracts",
+            "Other",
+            "Permits & licensing",
+            "Personnel & appointments"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.25,
+          "memberPositions": [
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "neutral",
+              "score": 0.0,
+              "themes": [
+                "ethics & governance"
+              ],
+              "evidence": "Recused herself from the La Mer Oyster Bar liquor licence, stating on the record that the restaurant is a tenant of an LLC owned by her family and that although she does not benefit from it, \"I think it's just best in terms of [avoiding an appearance] of conflict of interest.\"",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "town-systems-phishing-and-plate-readers-2026",
+          "name": "Supervisor's Update \u2014 Phishing Incident, Paving Schedule, and Licence Plate Readers",
+          "address": "",
+          "applicationType": "report / update",
+          "applicant": "Town of North Castle",
+          "status": "reported; no vote",
+          "summary": "Closing the meeting, the supervisor reported that a phishing email had been opened and clicked, compromising a town system; the town's IT provider found no information was taken and no personal or private information ascertained, and a notice went out to everyone. He called for restarting the technology committee and for ongoing employee training. He flagged that milling and paving of Maple Avenue begins the following Monday and that residents should sign up for the highway Nixle alerts separately from the police alerts, and noted paving work planned for a North White Plains parking lot. He closed by addressing residents directly on the town's automated licence plate readers, stating that North Castle does not use the vendor system that has drawn national concern, that the readers are not connected to any federal immigration enforcement and are used purely for crime prevention, that no resident has been watched or had rights violated, and that recently installed readers have helped apprehend criminals.",
+          "themes": [
+            "Ethics & governance",
+            "Public safety & police",
+            "Roads, highway & sidewalks",
+            "Technology & communications"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.2,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "technology & communications",
+                "public safety & police",
+                "ethics & governance"
+              ],
+              "evidence": "On the phishing incident: \"someone opened it and may have clicked on it, and that's why our system was compromised... we have heard from [IT] that there was no information that was ascertained\" \u2014 and called for restarting the technology committee and ongoing employee training. On the plate readers: \"I just want to reassure the folks at home that our police department is not using [them for immigration enforcement]. They're purely being used for crime prevention... we haven't had any residents that have been watched or [had rights] violated.\"",
+              "confidence": "high"
+            }
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Public safety & police",
+          "salience": 0.85,
+          "sentiment": 0.45,
+          "note": "Two promotions, the peddling law, the steady-tours stipulation and the plate-reader statement all ran through the police department. Substantive support was unanimous even where the process around the PBA agreement divided the board."
+        },
+        {
+          "theme": "Legal, litigation & contracts",
+          "salience": 0.75,
+          "sentiment": -0.35,
+          "note": "The recurring story of the night: two separate items \u2014 the wetlands amendment and the PBA stipulation \u2014 reached the board without town counsel having seen the document, and the second produced a genuine disagreement about what the agreement says that nobody present could resolve."
+        },
+        {
+          "theme": "Open government & procedure",
+          "salience": 0.7,
+          "sentiment": -0.2,
+          "note": "By the end of the meeting the board had effectively settled a rule \u2014 a member wanting counsel in executive session should request it by the Monday before the meeting \u2014 but arrived there through a bruising public argument."
+        },
+        {
+          "theme": "Parks, recreation & trails",
+          "salience": 0.55,
+          "sentiment": 0.15,
+          "note": "The pool bids coming in under the bond authorisation is the first concrete opening for dedicated pickleball courts after a year, though the location remains unsettled and the Recreation Advisory Board has not made quorum since June."
+        },
+        {
+          "theme": "Roads, highway & sidewalks",
+          "salience": 0.5,
+          "sentiment": 0.2,
+          "note": "A resident's blind-corner safety case drew a substantive response and a commitment to approach NYSDOT; a separate parking item showed how easily a local law can be drafted against the wrong street name."
+        },
+        {
+          "theme": "Water & sewer districts",
+          "salience": 0.45,
+          "sentiment": 0.4,
+          "note": "A district extension passed unanimously and two bid authorisations moved forward, with the board declining to let a missing state reimbursement agreement hold up construction."
+        },
+        {
+          "theme": "Environment & conservation",
+          "salience": 0.45,
+          "sentiment": 0.45,
+          "note": "The Conservation Board's year-long fix to wetland mitigation follow-through drew unusually warm cross-board praise \u2014 and then stalled on a procedural miss rather than on any objection to its substance."
+        },
+        {
+          "theme": "Land use, zoning & special permits",
+          "salience": 0.4,
+          "sentiment": 0.2,
+          "note": "Two after-the-fact legalisations: a fitness studio operating five years without approvals, and a members club whose liquor licence may not match what was represented when its special permit was granted."
+        },
+        {
+          "theme": "Technology & communications",
+          "salience": 0.3,
+          "sentiment": 0.15,
+          "note": "A phishing compromise with no data loss prompted a call to restart the technology committee, and the supervisor volunteered a direct public statement on how the town's plate readers are and are not used."
+        },
+        {
+          "theme": "Intermunicipal & county/state",
+          "salience": 0.3,
+          "sentiment": 0.15,
+          "note": "State and county dependencies shaped three items \u2014 DOT on the hairpin and the Route 22/120 repaving, the county on the Miller Hill Park parking, and an unnamed state agency sitting on a reimbursement agreement."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Reagan Huffnagle",
+          "role": "Chief of Police",
+          "summary": "Presented both promotion recommendations in detail, and was the source of the recommendation to amend Chapter 233 to limit soliciting hours and create a no-knock registry. Not present for the PBA steady-tours discussion, though repeatedly cited on both sides of it.",
+          "cases": [
+            "police-promotions-aug-2026",
+            "peddling-soliciting-hours-no-knock-registry-2026",
+            "pba-steady-tours-stipulation-2026"
+          ]
+        },
+        {
+          "person": "Roland Baroni",
+          "role": "Town Attorney",
+          "summary": "Told the board he had never been sent the Chapter 340 wetlands draft despite the hearing having been set in July, and had not seen the PBA stipulation either \u2014 the fact that turned both items into process disputes. Advised on adjourning versus closing hearings to preserve the statutory clock, on whether re-noticing would be required, and confirmed no liquor licence is needed where a club member supplies alcohol to other members with no money changing hands.",
+          "cases": [
+            "chapter340-wetland-monitoring-amendment-2026",
+            "pba-steady-tours-stipulation-2026",
+            "socialite-members-club-liquor-license-2026",
+            "mcdougal-dunlap-smallwood-parking-2026"
+          ]
+        },
+        {
+          "person": "Adam Kaufman",
+          "role": "Town Planner / Director of Planning",
+          "summary": "Clarified the geography and staging of the Kensico\u2013Eastview construction project for the resident raising the King Street hairpin, including that a new curb cut will require a NYSDOT permit and meet state safety standards. Worked with the Conservation Board and the town wetland consultant on the Chapter 340 amendment.",
+          "cases": [
+            "whippoorwill-king-street-hairpin-safety-2026",
+            "chapter340-wetland-monitoring-amendment-2026"
+          ]
+        },
+        {
+          "person": "Allison Simon",
+          "role": "Town Clerk",
+          "summary": "Received and read in the affidavits, publications and reports for both public hearings and tracked which correspondence still required a receiving motion; gave the community announcements on the Music in the Square and gazebo concert series and the Armonk outdoor art show hearts.",
+          "cases": [
+            "rose-hill-sewer-district-extension-2026",
+            "chapter340-wetland-monitoring-amendment-2026",
+            "mcdougal-dunlap-smallwood-parking-2026"
+          ]
+        },
+        {
+          "person": "Kevin Hay",
+          "role": "Town Administrator",
+          "summary": "Tasked with following up with New York State on the Whippoorwill/King Street hairpin and reporting back through administrator updates.",
+          "cases": [
+            "whippoorwill-king-street-hairpin-safety-2026"
+          ]
+        },
+        {
+          "person": "Eric Dorsch",
+          "role": "Town Wetland Consultant, Kellard Sessions (KSCJ)",
+          "summary": "Drafted the Chapter 340 monitoring language and the mechanism for annual verification reports, working from an analysis of past wetland permits and maintenance plans. Credited by name by both the Conservation Board and the supervisor.",
+          "cases": [
+            "chapter340-wetland-monitoring-amendment-2026"
+          ]
+        }
+      ],
+      "attributionCoverage": "good",
+      "attributionNote": "The recording has no speaker labels, but two roll-call votes name every member, the supervisor is identifiable throughout by role, and members are addressed by first name during the extended PBA debate (\"Jose,\" \"Joe,\" \"Barbara,\" \"Sonny\"), which anchors most attributions here. The roll-call ordering on the PBA vote is partly garbled by the ASR, so the two aye votes after Councilman Hussain's no are recorded at medium confidence. Names as heard by the ASR: \"Supervisor Rendi/Rindy\" (Joseph Rende), \"Councilman Vizzage\" (Sonny Vataj), \"Councilman Barra\" (Jose Berra), \"councilman did-you-send-out\" (Barbara DiGiacinto), \"Anthony Sabotella/Sevatell\" (Anthony Sabatella), \"Sheamus Conland\" (Sheamus Conlan), \"Whipper Wheel/whip-wheel road\" (Whippoorwill Road), \"Eric Dorshart/Dorch\" (Eric Dorsch), \"Kensuko ECU connection\" (Kensico\u2013Eastview connection), \"Byron Hills\" (Byram Hills). Several individual names \u2014 the resident who raised the hairpin turn (\"Zach\"), the assistant building inspector appointed, and the two departmental resignations \u2014 were not captured clearly enough to record."
     }
   ]
 }

@@ -87,26 +87,74 @@ function fileUrl(api: string, file: any): string | null {
   return raw && /^https?:\/\//.test(raw) ? raw : null
 }
 
+/**
+ * Read up to `top` events, newest first.
+ *
+ * The API ignores `$top` and always returns a fixed 15-row page, so a single
+ * request only ever saw the newest couple of weeks — which is why minutes
+ * (published weeks after the meeting they record, once the next meeting
+ * approves them) were almost never picked up: by the time a meeting's minutes
+ * appeared it had long since fallen out of that window. It does honour `$skip`,
+ * so page through until we have `top` rows or the archive runs out.
+ * `@odata.nextLink` is also offered but its skiptoken stops after two pages
+ * when combined with the hasAgenda filter, so `$skip` is the reliable cursor.
+ *
+ * Ordering newest-first alone returns only upcoming meetings, which have no
+ * agenda posted yet — so prefer meetings that actually HAVE an agenda,
+ * most-recent first. Fall back progressively if the OData surface rejects a
+ * filter/orderby. publishedFiles come inline on /v1/Events (no $expand).
+ */
+async function fetchPage(api: string, query: string): Promise<any[] | null> {
+  const res = await politeFetch(`${api}${query}`, { headers: { Accept: 'application/json' } })
+  if (!res.ok) return null
+  const json = (await res.json()) as any
+  const rows = Array.isArray(json) ? json : json.value
+  return Array.isArray(rows) ? rows : null
+}
+
+/** Hard cap on requests per shape, so a portal that silently ignores `$skip`
+ *  can never spin this into an unbounded crawl. */
+const MAX_PAGES = 40
+
 async function fetchEvents(api: string, top: number): Promise<any[]> {
-  // Ordering newest-first alone returns only upcoming meetings, which have no
-  // agenda posted yet — so prefer meetings that actually HAVE an agenda,
-  // most-recent first. Fall back progressively if the OData surface rejects a
-  // filter/orderby. publishedFiles come inline on /v1/Events (no $expand).
   const hasAgenda = encodeURIComponent('hasAgenda eq true')
   const byDate = encodeURIComponent('startDateTime desc')
-  for (const q of [
-    `/v1/Events?$filter=${hasAgenda}&$orderby=${byDate}&$top=${top}`,
-    `/v1/Events?$filter=${hasAgenda}&$top=${top}`,
-    `/v1/Events?$orderby=${byDate}&$top=${top}`,
-    `/v1/Events?$top=${top}`,
-    `/v1/Events`,
-  ]) {
-    const res = await politeFetch(`${api}${q}`, { headers: { Accept: 'application/json' } })
-    if (!res.ok) continue
-    const json = (await res.json()) as any
-    const rows = Array.isArray(json) ? json : json.value
-    if (Array.isArray(rows) && rows.length > 0) return rows
+  const shapes = [
+    `/v1/Events?$filter=${hasAgenda}&$orderby=${byDate}`,
+    `/v1/Events?$filter=${hasAgenda}`,
+    `/v1/Events?$orderby=${byDate}`,
+    `/v1/Events?`,
+  ]
+
+  for (const shape of shapes) {
+    const sep = shape.endsWith('?') ? '' : '&'
+    const out: any[] = []
+    const seenIds = new Set<unknown>()
+    let pages = 0
+
+    while (out.length < top && pages < MAX_PAGES) {
+      const rows = await fetchPage(api, `${shape}${sep}$top=100&$skip=${out.length}`)
+      pages++
+      if (rows == null) break          // this shape isn't supported — try the next
+      if (rows.length === 0) break     // end of the archive
+
+      // If `$skip` were ignored we'd get the same first row forever; stop
+      // rather than loop, and keep whatever we already have.
+      const firstId = pick(rows[0], ['id', 'eventId'])
+      if (firstId != null && seenIds.has(firstId)) break
+      for (const r of rows) {
+        const id = pick(r, ['id', 'eventId'])
+        if (id != null) seenIds.add(id)
+      }
+      out.push(...rows)
+    }
+
+    if (out.length > 0) return out.slice(0, top)
   }
+
+  // Last resort: whatever the bare collection endpoint gives us.
+  const bare = await fetchPage(api, '/v1/Events')
+  if (bare && bare.length > 0) return bare
   throw new Error('civicclerk: could not read /v1/Events')
 }
 
@@ -116,7 +164,10 @@ async function* discover(
   since?: Date,
 ): AsyncGenerator<DiscoveredMeeting> {
   const api = apiBase(slug)
-  const events = await fetchEvents(api, 200)
+  // Deep enough to reach the whole published archive (~400 events back to
+  // 2022) so the minutes backfill in lib/municipal/ingest.ts can see meetings
+  // whose minutes were posted long after the meeting itself.
+  const events = await fetchEvents(api, 400)
 
   for (const ev of events) {
     const eventId = pick(ev, ['id', 'eventId'])

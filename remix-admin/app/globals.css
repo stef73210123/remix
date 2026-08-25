@@ -74,6 +74,13 @@ a {
   border: 0;
   border-radius: 8px;
   padding: 10px 16px;
+  /* Buttons don't inherit the document font — the UA stylesheet gives them
+     Arial — while anchors do. Two elements styled `.btn` side by side (the
+     nav's "Dashboard" link next to its "Boards" button, say) therefore
+     rendered in different faces, and Arial at weight 600 reads noticeably
+     bolder than Public Sans at the same weight. Inherit explicitly so a
+     `.btn` looks identical whether it's an <a> or a <button>. */
+  font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -107,6 +114,7 @@ a {
   border: 0;
   border-radius: 8px;
   padding: 10px 16px;
+  font-family: inherit; /* see .btn — buttons don't inherit the document font */
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -168,6 +176,10 @@ a {
 .tabnav-item.active {
   background: var(--primary);
   color: #fff;
+  /* Matches the weight of the group's trigger tab, which is also filled and
+     600 when its group holds the current page — so the menu row and the tab
+     above it read as the same selected thing. */
+  font-weight: 600;
 }
 
 .input {

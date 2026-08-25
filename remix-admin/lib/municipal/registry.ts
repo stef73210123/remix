@@ -151,3 +151,27 @@ export const MUNICIPALITIES: MunicipalityConfig[] = [
 export function findMunicipality(key: string): MunicipalityConfig | undefined {
   return MUNICIPALITIES.find((m) => m.key === key)
 }
+
+/**
+ * Boards that exist in the registry but are deliberately not surfaced as their
+ * own page or nav entry, keyed by municipality.
+ *
+ * A board page is only worth linking to when there's enough behind it to be
+ * useful. North Castle's Architectural Review Board meets as-needed and only
+ * one usable public recording exists for it (2022-02-02), so its page would be
+ * a roster and a single meeting — thin enough to read as an oversight rather
+ * than a limit of the source material. The dataset stays on disk; if more ARB
+ * recordings are ingested later, removing the key here brings the page back.
+ *
+ * These boards still count toward the "N of M boards covered" denominator on
+ * the dashboard, because they are real boards the Town has — we just don't
+ * cover them yet, and hiding that would overstate the site's reach.
+ */
+export const HIDDEN_BODIES: Record<string, string[]> = {
+  nc: ['arb'],
+}
+
+/** True when a board exists but is intentionally not given a page/nav entry. */
+export function isHiddenBody(muniKey: string, bodyKey: string): boolean {
+  return (HIDDEN_BODIES[muniKey] || []).includes(bodyKey)
+}
