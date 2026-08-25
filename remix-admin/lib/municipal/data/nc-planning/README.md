@@ -6,8 +6,9 @@ and member profiles.
 ## Contents
 - `transcripts/<YYYY-MM-DD>.txt` — raw meeting-video transcripts (automatic speech
   recognition, **no speaker labels**), one per Planning Board meeting. Coverage
-  spans **Jan 2022 → present** (45 meetings with usable transcripts; the 2021–2023
-  Granicus captions were largely empty and are not included).
+  spans **Jul 2018 → Aug 2026** (102 meetings with usable transcripts, the most
+  recent being 2026-08-17; the 2021–2023 Granicus captions were largely empty
+  and are not included).
 - `analysis.json` — structured analysis aggregated from the transcripts: per-meeting
   cases/themes/sentiment, plus roll-ups (themes over time, per-case sentiment
   trajectory, per-member sentiment profiles). Shape defined by

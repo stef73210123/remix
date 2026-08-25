@@ -1,7 +1,7 @@
 # North Castle Town Board — transcript analysis dataset
 
 Same pipeline as `../nc-planning`, applied to the elected **Town Board** over
-2022–2026 (111 meeting dates). 2023-06-28 had both a regular meeting and a
+2022–2026 (111 meeting dates, the most recent being 2026-08-12). 2023-06-28 had both a regular meeting and a
 same-day work session transcribed separately — the two are merged into one
 `analysis.json` entry for that date (rather than two rows sharing a date,
 which the board page keys meeting rows and timeline points by). Served by the
