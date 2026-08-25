@@ -87,7 +87,10 @@ function TabGroupDropdown({
         className={isGroupActive ? 'btn' : 'btn secondary'}
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        style={{ padding: '6px 10px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}
+        // Same box as the plain Dashboard/Town Code tabs beside it (see
+        // MuniTabs below) so the row reads as one set of equal tabs; the gap
+        // is a touch tighter only because of the chevron that follows.
+        style={{ padding: '6px 12px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 5, whiteSpace: 'nowrap' }}
       >
         {label}
         <ChevronDown size={13} aria-hidden style={{ transform: open ? 'rotate(180deg)' : undefined, transition: 'transform 0.15s ease' }} />
