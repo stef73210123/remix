@@ -122,15 +122,16 @@ const CANONICAL_STAFF: CanonicalStaff[] = [
     surnames: ['traynor', 'trainer', 'trainor'],
     roleTest: /recreation|parks/i,
   },
-  // Norris is the Highway General Foreman — the transcripts call him "Foreman
-  // Jamie Norris" and both meeting summaries say "highway general foreman",
-  // against a single 2022 role string calling him Superintendent. Giaccio is
-  // kept as himself: he is a *retired* Superintendent reading Norris's memo
-  // aloud, so filing his words under Norris's name would misattribute them.
+  // Norris is the Highway Superintendent, confirmed by the department. The
+  // transcripts say "Foreman Jamie Norris" and two meeting summaries call him
+  // general foreman; that is the ASR and the summaries being loose, not the
+  // title. Giaccio is kept as himself: he is a *retired* Superintendent
+  // reading Norris's memo aloud, so filing his words under Norris's name
+  // would misattribute them.
   {
     dept: 'highway',
     person: 'Jamie Norris',
-    role: 'Highway General Foreman',
+    role: 'Highway Superintendent',
     surnames: ['norris'],
     roleTest: /highway/i,
   },
