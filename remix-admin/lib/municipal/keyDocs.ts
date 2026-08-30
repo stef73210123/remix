@@ -198,7 +198,7 @@ const NC_KEY_DOCS: Record<string, KeyDoc[]> = {
       note: 'What the Town expects new building in the hamlets to look like; referenced in Architectural Review Board and Planning Board discussion.',
     },
     {
-      label: 'Steep Slope Protection',
+      label: 'Stormwater Management',
       href: 'https://ecode360.com/29156827',
       sub: 'Chapter 267 · eCode360',
       note: 'Stormwater and erosion control standards — one of the recurring conditions on Planning Board approvals.',

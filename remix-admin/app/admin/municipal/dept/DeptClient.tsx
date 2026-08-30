@@ -7,6 +7,7 @@ import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import BoardStaffCards from '../board/BoardStaffCards'
 import BoardKeyDocs from '../board/BoardKeyDocs'
+import DeptTimeline from '../DeptTimeline'
 import { getDeptPage } from '@/lib/municipal/deptPages'
 import { isOpen } from '@/lib/flavor'
 import AllTaxParcelsList, { type SelectedParcelInfo } from './AllTaxParcelsList'
@@ -66,6 +67,7 @@ export default function DeptClient({ userName }: { userName: string }) {
           <h1 className="page-title" style={{ marginBottom: 20 }}>{def.label}</h1>
 
           <BoardStaffCards muni={muni} bodyKey={def.key} />
+          <DeptTimeline muni={muni} deptKey={def.key} label={def.label} />
           <BoardKeyDocs muni={muni} bodyKey={def.key} />
 
           {def.key === 'assessor' && (
