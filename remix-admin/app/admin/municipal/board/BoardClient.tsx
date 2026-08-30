@@ -11,6 +11,7 @@ import BoardCaseMap from './BoardCaseMap'
 import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardKeyDocs from './BoardKeyDocs'
+import DeptTimeline from '../DeptTimeline'
 import BoardMemberCards from './BoardMemberCards'
 import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
@@ -108,6 +109,12 @@ export default function BoardClient({ userName }: { userName: string }) {
       window.location.replace(isOpen ? '/' : '/admin/municipal')
       return
     }
+    // ?date=YYYY-MM-DD arrives on links that point at one specific meeting —
+    // the department timelines link back this way. Preselecting it makes both
+    // the Meetings timeline and the list beneath open on that meeting; the key
+    // format matches timelineItems below.
+    const d = p.get('date') || ''
+    if (m && b && /^\d{4}-\d{2}-\d{2}$/.test(d)) setSelectedMeetingKey(`${m}_${b}_${d}`)
     if (m && b) {
       fetch(`/admin/api/municipal/transcript?muni=${encodeURIComponent(m)}&body=${encodeURIComponent(b)}`)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
@@ -316,6 +323,9 @@ export default function BoardClient({ userName }: { userName: string }) {
 
           {/* Departmental staff cards and key reference documents — at the bottom. */}
           <BoardStaffCards muni={muni} bodyKey={body} />
+          {/* Renders only for department-style bodies (e.g. Parks & Rec);
+              a no-op wherever no department staff timeline exists. */}
+          <DeptTimeline muni={muni} deptKey={body} label={data.board.displayName} />
           <BoardKeyDocs muni={muni} bodyKey={body} />
 
           {/* Climb-back trail at the end of the board page */}

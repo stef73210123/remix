@@ -6,6 +6,7 @@ import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '@/app/admin/municipal/Breadcrumbs'
 import BoardStaffCards from '@/app/admin/municipal/board/BoardStaffCards'
 import BoardKeyDocs from '@/app/admin/municipal/board/BoardKeyDocs'
+import DeptTimeline from '@/app/admin/municipal/DeptTimeline'
 import BudgetPanel from '@/app/admin/municipal/budget/BudgetPanel'
 import type { TownBudget } from '@/lib/municipal/budget'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
@@ -57,6 +58,7 @@ export default function FinanceClient({ userName, muni, budgets }: {
       <h1 className="page-title" style={{ marginBottom: 6 }}>Finance</h1>
 
       <BoardStaffCards muni={activeTown || muni} bodyKey="finance" />
+      <DeptTimeline muni={activeTown || muni} deptKey="finance" label="Finance" />
       <BoardKeyDocs muni={activeTown || muni} bodyKey="finance" />
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
