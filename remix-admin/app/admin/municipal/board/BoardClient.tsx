@@ -12,6 +12,7 @@ import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardKeyDocs from './BoardKeyDocs'
 import DeptTimeline from '../DeptTimeline'
+import RecreationStats from '../RecreationStats'
 import BoardMemberCards from './BoardMemberCards'
 import MeetingAnalysisList from './MeetingAnalysisList'
 import CasesList from './CasesList'
@@ -325,6 +326,8 @@ export default function BoardClient({ userName }: { userName: string }) {
           <BoardStaffCards muni={muni} bodyKey={body} />
           {/* Renders only for department-style bodies (e.g. Parks & Rec);
               a no-op wherever no department staff timeline exists. */}
+          {/* Parks & Rec is the one board page backed by operational data. */}
+          {body === 'parks_rec' && <RecreationStats muni={muni} />}
           <DeptTimeline muni={muni} deptKey={body} label={data.board.displayName} />
           <BoardKeyDocs muni={muni} bodyKey={body} />
 

@@ -7,6 +7,7 @@ import { useTabScrollRestore } from './useTabScroll'
 import dynamic from 'next/dynamic'
 import Demographics from './Demographics'
 import IssuesOverview from './IssuesOverview'
+import ServiceRequests from './ServiceRequests'
 import KeyIssues from './KeyIssues'
 import BoardFilterDropdown from './BoardFilterDropdown'
 import ElectionResults from './ElectionResults'
@@ -568,6 +569,11 @@ export default function MunicipalClient({
 
           {/* Town-wide local issues across all boards — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <IssuesOverview muni={town} />}
+
+          {/* How quickly the Town closes what residents report — the one
+              measure here of delivery rather than deliberation. Compact on the
+              dashboard; the Highway page carries the full breakdown. */}
+          {board === 'ALL' && town !== 'ALL' && <ServiceRequests muni={town} compact />}
 
           {/* Town election results (Supervisor & Town Board) — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <ElectionResults muniKey={town} />}

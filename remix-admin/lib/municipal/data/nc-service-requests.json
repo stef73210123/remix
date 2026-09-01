@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "town": "Town of North Castle",
+    "muniKey": "nc",
+    "system": "SeeClickFix",
+    "periodStart": "2024-01-01",
+    "periodEnd": "2026-07-01",
+    "totalRequests": 136,
+    "source": "Released by the Town of North Castle under FOIL request 26-559 (scheduled report: requests created 01/01/2024 – 07/01/2026, all categories, all geographies). Figures are the Town's own, unedited.",
+    "note": "The 'Pothole Test' category is excluded: it is an internal test bucket with no requests. 'Street Sign' has no service-level target configured, so its requests are counted but it has no hit rate to report."
+  },
+  "categories": [
+    { "category": "Pothole", "created": 43, "acknowledged": 32, "closed": 42, "avgDaysToAcknowledge": 6, "avgDaysToClose": 25.6, "slaDays": 3, "slaLabel": "3 days", "pctClosedWithinSla": 29, "overdue": 30, "open": 1 },
+    { "category": "Trees", "created": 18, "acknowledged": 11, "closed": 11, "avgDaysToAcknowledge": 7.7, "avgDaysToClose": 53.8, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 0, "overdue": 11, "open": 7 },
+    { "category": "Street Light", "created": 16, "acknowledged": 11, "closed": 16, "avgDaysToAcknowledge": 10.1, "avgDaysToClose": 91.2, "slaDays": 3, "slaLabel": "3 days", "pctClosedWithinSla": 13, "overdue": 14, "open": 0 },
+    { "category": "Street Sign", "created": 12, "acknowledged": 8, "closed": 9, "avgDaysToAcknowledge": 35.4, "avgDaysToClose": 84.5, "slaDays": null, "slaLabel": null, "pctClosedWithinSla": null, "overdue": 0, "open": 3 },
+    { "category": "Illegal Dumping", "created": 9, "acknowledged": 2, "closed": 8, "avgDaysToAcknowledge": 1.4, "avgDaysToClose": 50.3, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 25, "overdue": 6, "open": 1 },
+    { "category": "Snow/Ice", "created": 9, "acknowledged": 2, "closed": 9, "avgDaysToAcknowledge": 7.9, "avgDaysToClose": 32.3, "slaDays": 3, "slaLabel": "3 days", "pctClosedWithinSla": 0, "overdue": 9, "open": 0 },
+    { "category": "Other", "created": 8, "acknowledged": 4, "closed": 6, "avgDaysToAcknowledge": 2.9, "avgDaysToClose": 155.8, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 17, "overdue": 5, "open": 2 },
+    { "category": "Traffic Signal", "created": 5, "acknowledged": 1, "closed": 4, "avgDaysToAcknowledge": 42.6, "avgDaysToClose": 52.4, "slaDays": 56, "slaLabel": "8 weeks", "pctClosedWithinSla": 25, "overdue": 2, "open": 1 },
+    { "category": "Utility Wires/Poles", "created": 5, "acknowledged": 3, "closed": 4, "avgDaysToAcknowledge": 93.6, "avgDaysToClose": 244.1, "slaDays": 21, "slaLabel": "3 weeks", "pctClosedWithinSla": 25, "overdue": 3, "open": 1 },
+    { "category": "Disabled Vehicle", "created": 3, "acknowledged": 1, "closed": 3, "avgDaysToAcknowledge": 0.1, "avgDaysToClose": 8.4, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 67, "overdue": 1, "open": 0 },
+    { "category": "Drainage", "created": 3, "acknowledged": 3, "closed": 1, "avgDaysToAcknowledge": 29.2, "avgDaysToClose": 123.2, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 0, "overdue": 1, "open": 2 },
+    { "category": "Trash and Recycling", "created": 2, "acknowledged": 0, "closed": 2, "avgDaysToAcknowledge": null, "avgDaysToClose": 27.8, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 0, "overdue": 2, "open": 0 },
+    { "category": "Graffiti", "created": 1, "acknowledged": 1, "closed": 1, "avgDaysToAcknowledge": 0, "avgDaysToClose": 0, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 100, "overdue": 0, "open": 0 },
+    { "category": "Sidewalk Damage", "created": 1, "acknowledged": 1, "closed": 1, "avgDaysToAcknowledge": 11.4, "avgDaysToClose": 11.6, "slaDays": 3, "slaLabel": "3 days", "pctClosedWithinSla": 0, "overdue": 1, "open": 0 },
+    { "category": "Parks and Playgrounds", "created": 1, "acknowledged": 0, "closed": 0, "avgDaysToAcknowledge": null, "avgDaysToClose": null, "slaDays": 14, "slaLabel": "2 weeks", "pctClosedWithinSla": 0, "overdue": 0, "open": 1 },
+    { "category": "Water Main Break", "created": 0, "acknowledged": 0, "closed": 0, "avgDaysToAcknowledge": null, "avgDaysToClose": null, "slaDays": 5, "slaLabel": "5 days", "pctClosedWithinSla": null, "overdue": 0, "open": 0 }
+  ]
+}

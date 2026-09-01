@@ -8,6 +8,7 @@ import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import BoardStaffCards from '../board/BoardStaffCards'
 import BoardKeyDocs from '../board/BoardKeyDocs'
 import DeptTimeline from '../DeptTimeline'
+import ServiceRequests from '../ServiceRequests'
 import { ROAD_CATS } from '@/lib/municipal/roadCats'
 import { NC_PUBLIC_PARKING } from '@/lib/municipal/parking'
 import { isOpen } from '@/lib/flavor'
@@ -135,6 +136,7 @@ export default function HighwayClient({ userName }: { userName: string }) {
       <h1 className="page-title" style={{ marginBottom: 20 }}>Highway</h1>
 
       <BoardStaffCards muni={muni} bodyKey="highway" />
+      <ServiceRequests muni={muni} />
       <DeptTimeline muni={muni} deptKey="highway" label="Highway" />
       <BoardKeyDocs muni={muni} bodyKey="highway" />
 
