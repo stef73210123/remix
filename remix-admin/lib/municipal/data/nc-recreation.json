@@ -1,0 +1,140 @@
+{
+ "meta": {
+  "town": "Town of North Castle",
+  "muniKey": "nc",
+  "firstYear": "2022",
+  "lastYear": "2026",
+  "partialYear": "2026",
+  "programSections": 2155,
+  "facilityReservations": 8900,
+  "source": "Released by the Town of North Castle under FOIL request 26-580 \u2014 the Recreation Department's participation and facility-reservation reports. Aggregated by year here; the released records contain no registrant names or contact details.",
+  "note": "A section is 'below' when it ran under its minimum enrolment and 'waitlist' when demand exceeded its cap. 2026 is a partial year."
+ },
+ "years": [
+  {
+   "year": "2022",
+   "partial": false,
+   "sections": 463,
+   "enrolment": 3161,
+   "below": 303,
+   "full": 50,
+   "waitlist": 104,
+   "over": 6,
+   "reservations": 1722,
+   "reservationHeadcount": 19627,
+   "reservationFees": 6007.5
+  },
+  {
+   "year": "2023",
+   "partial": false,
+   "sections": 475,
+   "enrolment": 3628,
+   "below": 333,
+   "full": 54,
+   "waitlist": 79,
+   "over": 9,
+   "reservations": 1973,
+   "reservationHeadcount": 17190,
+   "reservationFees": 8388.0
+  },
+  {
+   "year": "2024",
+   "partial": false,
+   "sections": 500,
+   "enrolment": 3878,
+   "below": 371,
+   "full": 44,
+   "waitlist": 81,
+   "over": 4,
+   "reservations": 1990,
+   "reservationHeadcount": 17259,
+   "reservationFees": 21996.0
+  },
+  {
+   "year": "2025",
+   "partial": false,
+   "sections": 462,
+   "enrolment": 4278,
+   "below": 319,
+   "full": 71,
+   "waitlist": 65,
+   "over": 7,
+   "reservations": 2040,
+   "reservationHeadcount": 15749,
+   "reservationFees": 22916.0
+  },
+  {
+   "year": "2026",
+   "partial": true,
+   "sections": 255,
+   "enrolment": 2423,
+   "below": 202,
+   "full": 17,
+   "waitlist": 36,
+   "over": 0,
+   "reservations": 1175,
+   "reservationHeadcount": 7936,
+   "reservationFees": 14575.0
+  }
+ ],
+ "mostWaitlisted": [
+  {
+   "program": "Chess",
+   "sections": 28
+  },
+  {
+   "program": "Creative Clay",
+   "sections": 25
+  },
+  {
+   "program": "Open Pickleball",
+   "sections": 16
+  },
+  {
+   "program": "Piano",
+   "sections": 15
+  },
+  {
+   "program": "Tennis",
+   "sections": 14
+  },
+  {
+   "program": "Parent and Me Little Kicks",
+   "sections": 11
+  },
+  {
+   "program": "Tot Tennis",
+   "sections": 9
+  },
+  {
+   "program": "Gourmet Cooking for Kids Junior",
+   "sections": 9
+  }
+ ],
+ "topFacilities": [
+  {
+   "facility": "MAPLE \u2014 DANCE",
+   "reservations": 1624
+  },
+  {
+   "facility": "MAPLE \u2014 ADULT",
+   "reservations": 1609
+  },
+  {
+   "facility": "MAPLE \u2014 CLAY2",
+   "reservations": 862
+  },
+  {
+   "facility": "MAPLE \u2014 CRAFT",
+   "reservations": 708
+  },
+  {
+   "facility": "NCCC \u2014 GYM",
+   "reservations": 532
+  },
+  {
+   "facility": "LOMPK \u2014 CRTS",
+   "reservations": 522
+  }
+ ]
+}
