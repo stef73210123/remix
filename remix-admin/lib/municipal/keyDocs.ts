@@ -118,6 +118,41 @@ const NC_KEY_DOCS: Record<string, KeyDoc[]> = {
       date: '1966–2026',
       note: 'The committee weighing what to do with the Bedford Road town hall site, including the 1966 building history behind the decision.',
     },
+    {
+      label: 'Abrams Fensterman — Town Attorney retainer',
+      href: '/foil/26-547-attorney-retainers/abrams-fensterman-town-attorney-2026.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '2026',
+      note: 'The current general Town Attorney engagement. The Town publishes the January resolution appointing counsel but not the agreement, so the terms were not otherwise public.',
+    },
+    {
+      label: 'Baroni to Abrams Fensterman — assignment of the retainer',
+      href: '/foil/26-547-attorney-retainers/baroni-to-abrams-fensterman-assignment-2024-07-10.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '10 July 2024',
+      note: 'How the Town Attorney work moved from Roland Baroni to Abrams Fensterman mid-term, without a new procurement.',
+    },
+    {
+      label: 'Bond, Schoeneck & King — labour counsel retainer',
+      href: '/foil/26-547-attorney-retainers/bond-schoeneck-king-labor-counsel-2026.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '2026',
+      note: 'Separate counsel for employment and union matters — the PBA negotiations run through this engagement.',
+    },
+    {
+      label: 'Patrick J. Bliss — Town Prosecutor retainer',
+      href: '/foil/26-547-attorney-retainers/bliss-town-prosecutor-2026.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '1 January 2026',
+      note: 'Prosecution of Town ordinances and traffic matters at $475 per court appearance, plus $250 an hour for Red Flag Law work.',
+    },
+    {
+      label: 'Stephens, Baroni, Reilly & Lewis — legal services',
+      href: '/foil/26-547-attorney-retainers/stephens-baroni-reilly-lewis-2024.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '2024',
+      note: 'The prior arrangement, for comparing what the Town paid before and after the change of firm.',
+    },
   ],
 
   planning: [
@@ -273,6 +308,13 @@ const NC_KEY_DOCS: Record<string, KeyDoc[]> = {
       date: '2020',
       note: 'Zoning, tax and street maps as published by the Town.',
     },
+    {
+      label: 'Planning Board draft minutes — 12 February 2024',
+      href: '/foil/24-49-planning-minutes/planning-board-2024-02-12-draft-minutes.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '12 Feb 2024',
+      note: "The Planning Board publishes no minutes to the Town's meeting portal at all. Marked DRAFT by the Town.",
+    },
   ],
 
   zba: [
@@ -313,6 +355,37 @@ const NC_KEY_DOCS: Record<string, KeyDoc[]> = {
       href: 'https://northcastleny.portal.civicclerk.com/',
       sub: 'CivicClerk portal',
       note: "The Board's official record — agenda packets with the application materials, and the approved minutes recording how each vote was cast.",
+    },
+    {
+      label: 'ZBA minutes — 7 September 2023',
+      href: '/foil/24-48-zba-minutes/zba-2023-09-07-minutes.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '7 Sep 2023',
+      note: "The Town's meeting portal lists this meeting with no files at all, so this is the only record of it.",
+    },
+    {
+      label: 'ZBA minutes — 5 October 2023',
+      href: '/foil/24-48-zba-minutes/zba-2023-10-05-minutes.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '5 Oct 2023',
+    },
+    {
+      label: 'ZBA minutes — 2 November 2023',
+      href: '/foil/24-48-zba-minutes/zba-2023-11-02-minutes.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '2 Nov 2023',
+    },
+    {
+      label: 'ZBA minutes — 7 December 2023',
+      href: '/foil/24-48-zba-minutes/zba-2023-12-07-minutes.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '7 Dec 2023',
+    },
+    {
+      label: 'ZBA minutes — 4 January 2024',
+      href: '/foil/24-48-zba-minutes/zba-2024-01-04-minutes.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: '4 Jan 2024',
     },
   ],
 
@@ -650,6 +723,13 @@ const NC_KEY_DOCS: Record<string, KeyDoc[]> = {
       sub: 'Town page · 3 documents',
       date: '2026',
       note: 'The committee that reviews larger houses before the Building Department issues a permit, and what triggers its review.',
+    },
+    {
+      label: 'M5 permit report — May 2025 to July 2026',
+      href: '/foil/26-558-permit-report/m5-permit-report-2025-05-to-2026-07.pdf',
+      sub: 'PDF · obtained by FOIL',
+      date: 'May 2025 – Jul 2026',
+      note: 'Every permit applied for and issued in the period, with type, parcel, cost of construction and fee. The Town does not publish these reports.',
     },
   ],
 

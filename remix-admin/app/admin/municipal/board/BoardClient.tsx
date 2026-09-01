@@ -11,7 +11,6 @@ import BoardCaseMap from './BoardCaseMap'
 import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardKeyDocs from './BoardKeyDocs'
-import FoilDocs from './FoilDocs'
 import DeptTimeline from '../DeptTimeline'
 import RecreationStats from '../RecreationStats'
 import BoardMemberCards from './BoardMemberCards'
@@ -331,7 +330,6 @@ export default function BoardClient({ userName }: { userName: string }) {
           {body === 'parks_rec' && <RecreationStats muni={muni} />}
           <DeptTimeline muni={muni} deptKey={body} label={data.board.displayName} />
           <BoardKeyDocs muni={muni} bodyKey={body} />
-          <FoilDocs muni={muni} bodyKey={body} />
 
           {/* Climb-back trail at the end of the board page */}
           {!isOpen && (

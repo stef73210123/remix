@@ -37,8 +37,9 @@ export default function BoardKeyDocs({ muni, bodyKey }: { muni: string; bodyKey:
         </div>
       </div>
       <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.5, marginBottom: 12, maxWidth: 680 }}>
-        Published by the Town. Each link opens the Town&apos;s own copy — nothing here is
-        rehosted or edited.
+        Published by the Town, except where a row is marked <em>obtained by FOIL</em> — those
+        are records the Town does not publish anywhere, released on request and hosted here
+        exactly as received. Nothing on this list has been edited.
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

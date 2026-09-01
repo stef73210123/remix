@@ -13,7 +13,6 @@ import { getContractorWebsite } from '@/lib/municipal/contractorLinks'
 import type { PermitMarker } from '@/app/admin/municipal/JurisdictionMap'
 import BoardStaffCards from '@/app/admin/municipal/board/BoardStaffCards'
 import BoardKeyDocs from '@/app/admin/municipal/board/BoardKeyDocs'
-import FoilDocs from '@/app/admin/municipal/board/FoilDocs'
 import DeptTimeline from '@/app/admin/municipal/DeptTimeline'
 import { isOpen } from '@/lib/flavor'
 import { fmtDateShort } from '@/lib/municipal/date'
@@ -735,7 +734,6 @@ export default function BuildingClient({ userName, muni }: { userName: string; m
           {/* Key reference documents (Building Code, Zoning Code). */}
           <DeptTimeline muni={muni} deptKey="building" label="Building" />
           <BoardKeyDocs muni={muni} bodyKey="building" />
-          <FoilDocs muni={muni} bodyKey="building" />
 
           {/* KPI tiles */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 12, marginBottom: 26 }}>
