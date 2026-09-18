@@ -27,11 +27,10 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
   loading: () => <div className="card" style={{ height: 420, marginBottom: 30 }} />,
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
-import BoardCaseMap from './board/BoardCaseMap'
+import CaseExplorer, { type MeetingDoc } from './board/CaseExplorer'
 import BoardStaffCards from './board/BoardStaffCards'
 import BoardKeyDocs from './board/BoardKeyDocs'
 import MeetingAnalysisList from './board/MeetingAnalysisList'
-import CasesList from './board/CasesList'
 import type { AnalysisDataset, MeetingAnalysis } from '@/lib/municipal/analysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import MeetingList from './MeetingList'
@@ -289,6 +288,17 @@ export default function MunicipalClient({
     )
   }, [data, town, board])
 
+  // Published documents for the meetings currently in view, keyed by date, so
+  // CaseExplorer can hang each case appearance off that night's packet.
+  const caseMeetingDocs = useMemo<MeetingDoc[]>(
+    () =>
+      meetingsFiltered.map((m) => ({
+        date: (m.scheduled_at || '').slice(0, 10),
+        assets: m.assets || [],
+      })),
+    [meetingsFiltered],
+  )
+
   const history = useMemo(
     () => meetingsFiltered.filter((m) => new Date(m.scheduled_at).getTime() < startOfToday()),
     [meetingsFiltered]
@@ -538,7 +548,7 @@ export default function MunicipalClient({
                 <h2 style={{ fontSize: 22, fontWeight: 700, margin: '0 0 20px' }}>{board}</h2>
                 <BoardStaffCards muni={town} bodyKey={bodyKey} />
                 <BoardKeyDocs muni={town} bodyKey={bodyKey} />
-                <BoardCaseMap dataset={boardAnalysis} muni={town} />
+                {boardAnalysis && <CaseExplorer data={boardAnalysis} muni={town} meetings={caseMeetingDocs} />}
                 {meetingsBlock}
                 <TranscriptAnalysis muni={town} body={bodyKey} onData={setBoardAnalysis} />
               </>
@@ -557,9 +567,6 @@ export default function MunicipalClient({
               dashboard tab. (On a specific board tab, this same block already
               rendered above, right under that board's case map.) */}
           {board === 'ALL' && meetingsBlock}
-
-          {/* Recurring/all applications (or agenda items) table — after Meetings. */}
-          {board !== 'ALL' && town !== 'ALL' && boardAnalysis && <CasesList data={boardAnalysis} muni={town} />}
 
           {/* Consolidated per-board sentiment spectrums — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <BoardSentiment muniKey={town} boards={boardScores} loading={scoresLoading} />}

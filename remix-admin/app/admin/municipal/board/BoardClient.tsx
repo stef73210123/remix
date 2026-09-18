@@ -7,7 +7,7 @@ import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MeetingTimeline, { type TimelineItem } from '../MeetingTimeline'
 import MeetingList from '../MeetingList'
 import TranscriptAnalysis from './TranscriptAnalysis'
-import BoardCaseMap from './BoardCaseMap'
+import CaseExplorer, { type MeetingDoc } from './CaseExplorer'
 import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardKeyDocs from './BoardKeyDocs'
@@ -15,7 +15,6 @@ import DeptTimeline from '../DeptTimeline'
 import RecreationStats from '../RecreationStats'
 import BoardMemberCards from './BoardMemberCards'
 import MeetingAnalysisList from './MeetingAnalysisList'
-import CasesList from './CasesList'
 import type { AnalysisDataset } from '@/lib/municipal/analysis'
 import { isOpen } from '@/lib/flavor'
 import { isHiddenBody } from '@/lib/municipal/registry'
@@ -134,6 +133,17 @@ export default function BoardClient({ userName }: { userName: string }) {
       .catch(() => setError('Could not load this board.'))
       .finally(() => setLoading(false))
   }, [])
+
+  // The published documents for each meeting, by date — CaseExplorer attaches
+  // them to the appearances of every case heard that night.
+  const caseMeetingDocs = useMemo<MeetingDoc[]>(
+    () =>
+      (data?.meetings || []).map((mtg) => ({
+        date: (mtg.scheduled_at || '').slice(0, 10),
+        assets: mtg.assets || [],
+      })),
+    [data],
+  )
 
   // One horizontal timeline of this board's meetings: past on the left, upcoming
   // on the right. Each card carries its document + transcript links.
@@ -283,8 +293,9 @@ export default function BoardClient({ userName }: { userName: string }) {
             <ParksMap muni={muni} />
           ) : (
             <>
-              {/* Case/agenda-item map, at the top — Meetings sits directly below it. */}
-              <BoardCaseMap dataset={analysis} muni={muni} />
+              {/* Map + searchable list of everything in front of this board, as
+                  one filtered set. Sits above Meetings, where the map used to. */}
+              {analysis && <CaseExplorer data={analysis} muni={muni} meetings={caseMeetingDocs} />}
 
               {/* Meetings — one horizontal timeline: history on the left, upcoming on
                   the right, matching the municipal dashboard. Where an analysis
@@ -318,9 +329,6 @@ export default function BoardClient({ userName }: { userName: string }) {
           )}
           {/* Transcript analysis (only where a dataset exists, e.g. NC Planning) */}
           <TranscriptAnalysis muni={muni} body={body} onData={setAnalysis} />
-
-          {/* Recurring/all applications (or agenda items) table — after Meetings. */}
-          {analysis && <CasesList data={analysis} muni={muni} />}
 
           {/* Departmental staff cards and key reference documents — at the bottom. */}
           <BoardStaffCards muni={muni} bodyKey={body} />
