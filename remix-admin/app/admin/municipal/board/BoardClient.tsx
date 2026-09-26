@@ -64,7 +64,7 @@ function DocLinks({ assets }: { assets: Asset[] }) {
     <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6 }}>
       {assets.map((a, i) => {
         const href = a.blobUrl || a.sourceUrl || ''
-        const label = a.kind.charAt(0).toUpperCase() + a.kind.slice(1)
+        const label = a.kind === 'agenda_packet' ? 'Full packet' : a.kind.charAt(0).toUpperCase() + a.kind.slice(1).replaceAll('_', ' ')
         return href ? (
           <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="badge state" style={{ textDecoration: 'none' }}>{label} ↗</a>
         ) : (

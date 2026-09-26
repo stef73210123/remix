@@ -10,6 +10,7 @@
 import { NextResponse } from 'next/server'
 import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { findMunicipality } from '@/lib/municipal/registry'
+import { meetingDocuments } from '@/lib/municipal/documents'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -42,7 +43,7 @@ export async function GET(req: Request) {
     const { sql } = await import('@/lib/municipal/db')
 
     meetings = (await sql`
-      SELECT m.id, m.scheduled_at, m.status, m.title, m.source_url,
+      SELECT m.id, m.scheduled_at, m.status, m.title, m.source_url, m.meta,
              COALESCE((
                SELECT json_agg(json_build_object(
                         'kind', a.kind, 'sourceUrl', a.source_url,
@@ -83,5 +84,6 @@ export async function GET(req: Request) {
     dbError = e instanceof Error ? e.message : String(e)
   }
 
+  meetings = meetings.map(m => ({ ...m, assets: meetingDocuments(muniKey, m.source_url, m.assets, m.meta) }))
   return NextResponse.json({ town, board, meetings, members, openFiles, dbOk, dbError })
 }

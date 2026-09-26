@@ -211,7 +211,7 @@ async function* discover(
       sourceRef: `civicclerk:${eventId}`,
       sourceUrl: `${portalBase(slug)}/event/${eventId}/overview`,
       externalUrls,
-      meta: { eventId, category, agendaId: pick(ev, ['agendaId']) },
+      meta: { eventId, category, agendaId: pick(ev, ['agendaId']), documentLinks: { agenda: agendaPlainUrl, packet: agendaPacketUrl } },
     }
   }
 }

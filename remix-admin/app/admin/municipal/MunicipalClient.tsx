@@ -120,7 +120,7 @@ function DocLinks({ assets }: { assets: Asset[] }) {
     <span style={{ display: 'inline-flex', flexWrap: 'wrap', gap: 6 }}>
       {docs.map((a, i) => {
         const href = a.blobUrl || a.sourceUrl || ''
-        const label = a.kind.charAt(0).toUpperCase() + a.kind.slice(1)
+        const label = a.kind === 'agenda_packet' ? 'Full packet' : a.kind.charAt(0).toUpperCase() + a.kind.slice(1).replaceAll('_', ' ')
         const title = a.pageCount ? `${label} · ${a.pageCount}pp` : label
         return href ? (
           <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="badge state" style={{ textDecoration: 'none' }} title={title}>
@@ -135,15 +135,7 @@ function DocLinks({ assets }: { assets: Asset[] }) {
 }
 
 function AgendaLink({ assets }: { assets: Asset[] }) {
-  const agenda = assets.find((a) => a.kind === 'agenda')
-  const href = agenda ? agenda.blobUrl || agenda.sourceUrl || '' : ''
-  return href ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="badge state" style={{ textDecoration: 'none' }}>
-      Agenda ↗
-    </a>
-  ) : (
-    <span className="muted">—</span>
-  )
+  return <DocLinks assets={assets.filter(a => ['agenda', 'agenda_packet', 'supporting_documents'].includes(a.kind))} />
 }
 
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
@@ -449,6 +441,8 @@ export default function MunicipalClient({
     <>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
         <h2 style={{ fontSize: 16, margin: 0 }}>Meetings</h2>
+        <a href="/admin/municipal/packets">Full packet archive ↗</a>
+        <a href="/admin/municipal/transcripts">Transcript archive ↗</a>
         {board === 'ALL' && meetingBoardOptions.length > 1 && (
           <BoardFilterDropdown
             options={meetingBoardOptions}

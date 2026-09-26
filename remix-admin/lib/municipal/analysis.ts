@@ -256,7 +256,7 @@ export function boardProgressScore(
 
 /** List transcript dates available for a board. */
 export function listTranscriptDates(muniKey: string, bodyKey: string): string[] {
-  const dir = dataDir(muniKey, bodyKey)
+  const dir = muniKey === 'nc' && bodyKey === 'ethics' ? path.join(process.cwd(), 'lib', 'municipal', 'data', 'nc-ethics') : dataDir(muniKey, bodyKey)
   if (!dir) return []
   try {
     return fs
@@ -271,7 +271,7 @@ export function listTranscriptDates(muniKey: string, bodyKey: string): string[] 
 
 /** Raw transcript text for one meeting date, or null. Date must be YYYY-MM-DD. */
 export function loadTranscript(muniKey: string, bodyKey: string, date: string): string | null {
-  const dir = dataDir(muniKey, bodyKey)
+  const dir = muniKey === 'nc' && bodyKey === 'ethics' ? path.join(process.cwd(), 'lib', 'municipal', 'data', 'nc-ethics') : dataDir(muniKey, bodyKey)
   if (!dir) return null
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null // guard path traversal
   try {

@@ -18,6 +18,7 @@ import { NextResponse } from 'next/server'
 import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
 import { isOpen } from '@/lib/flavor'
+import { meetingDocuments } from '@/lib/municipal/documents'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -41,6 +42,7 @@ interface MeetingRow {
   title: string | null
   source_url: string | null
   assets: Asset[]
+  meta?: { documentLinks?: { agenda?: string; packet?: string } }
   text_count: number
 }
 
@@ -86,7 +88,7 @@ export async function GET() {
              m.scheduled_at AS scheduled_at,
              m.status       AS status,
              m.title        AS title,
-             m.source_url   AS source_url,
+             m.source_url   AS source_url, m.meta,
              COALESCE((
                SELECT json_agg(json_build_object(
                         'kind', a.kind,
@@ -116,5 +118,6 @@ export async function GET() {
     dbError = e instanceof Error ? e.message : String(e)
   }
 
+  meetings = meetings.map(m => ({ ...m, assets: meetingDocuments(m.muni_key, m.source_url, m.assets, m.meta) }))
   return NextResponse.json({ municipalities, meetings, counts, dbOk, dbError })
 }
