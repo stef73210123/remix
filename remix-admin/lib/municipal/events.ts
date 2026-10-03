@@ -217,8 +217,9 @@ const EVENTS: Record<string, CommunityEvent[]> = {
       // "Saturday, December 4, 2026" in its first line. Dec 4 is a Friday, so
       // that last one cannot be right and the release is evidently last year's
       // text reused. The banner is the element they refresh, it is repeated on
-      // all eight pages, and its weekday and date agree — so Sunday the 6th.
-      // The parade time is unsettled the same way and is left to the prose.
+      // all eight pages, and its weekday and date agree — so Sunday the 6th,
+      // since confirmed. The release's 4pm parade is stale for the same reason;
+      // 3:30pm, as the Chamber's calendar has it, is the confirmed time.
       key: 'frosty-day-2026',
       title: 'Frosty Day & Parade',
       date: '2026-12-06',
@@ -229,9 +230,8 @@ const EVENTS: Record<string, CommunityEvent[]> = {
         'The annual homecoming of Frosty the Snowman, whose lyricist Steve Nelson lived in Armonk — organized by ' +
         'Friends of Frosty, a volunteer nonprofit, with over 40 local and county groups in the parade. Free. ' +
         'Activities around downtown from noon: miniature trains, a horse-drawn wagon, the bubble truck, face ' +
-        'decorating and cookie frosting at the shops. The parade runs north on Main Street to Maple Avenue and into ' +
-        'Wampus Brook Park, followed by the tree-lighting and sing-along at the gazebo. Sources differ on the parade ' +
-        'time — Friends of Frosty say 4pm, the Chamber calendar 3:30pm — so arrive by 3:30 to be safe.',
+        'decorating and cookie frosting at the shops. The parade steps off at 3:30pm, running north on Main Street ' +
+        'to Maple Avenue and into Wampus Brook Park, followed by the tree-lighting and sing-along at the gazebo.',
       url: 'https://www.armonkfrosty.com/',
       category: 'holiday',
     },
