@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { MapPin } from 'lucide-react'
-import { getCommunityEvents, type CommunityEvent } from '@/lib/municipal/events'
+import { getCommunityEvents, eventDates, nextOccurrence, recurrenceLabel, type CommunityEvent } from '@/lib/municipal/events'
 import EventLightbox from './EventLightbox'
 import { fmtDateShort } from '@/lib/municipal/date'
 
@@ -12,6 +12,7 @@ const CATEGORY_COLOR: Record<CommunityEvent['category'], string> = {
   concert: '#7a5fc9',
   holiday: '#d0473f',
   civic: '#2563d6',
+  social: '#0e7c86',
 }
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -23,19 +24,6 @@ function startOfDayIso(d: Date): string {
 function fmtEventDate(iso: string): string {
   const d = new Date(iso + 'T12:00:00Z')
   return fmtDateShort(d)
-}
-
-/** All calendar dates a (possibly multi-day) event should render a marker on. */
-function eventDates(ev: CommunityEvent): string[] {
-  if (!ev.endDate || ev.endDate === ev.date) return [ev.date]
-  const out: string[] = []
-  const cur = new Date(ev.date + 'T00:00:00Z')
-  const end = new Date(ev.endDate + 'T00:00:00Z')
-  while (cur.getTime() <= end.getTime()) {
-    out.push(cur.toISOString().slice(0, 10))
-    cur.setUTCDate(cur.getUTCDate() + 1)
-  }
-  return out
 }
 
 /**
@@ -55,15 +43,20 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
   const [openEvent, setOpenEvent] = useState<CommunityEvent | null>(null)
   const [view, setView] = useState<ViewMode>('list')
 
-  // Ongoing + upcoming only, by start date. A fully-past event (its own end
-  // date is before today) is hidden even when it falls inside the date range of
-  // another event that started earlier and is still ongoing — the event's own
-  // end date decides, not an overlapping one's.
+  // Ongoing + upcoming only, ordered by when each next happens. A fully-past
+  // event (its own end date is before today) is hidden even when it falls
+  // inside the date range of another event that started earlier and is still
+  // ongoing — the event's own end date decides, not an overlapping one's.
+  //
+  // A standing weekly event appears once, at its next occurrence, rather than
+  // once per night: fifty-two Friday bar nights would bury the twenty things
+  // that only happen once.
   const sortedEvents = useMemo(
     () =>
-      [...events]
-        .filter((ev) => (ev.endDate ?? ev.date) >= todayIso)
-        .sort((a, b) => a.date.localeCompare(b.date)),
+      events
+        .map((ev) => ({ ev, next: nextOccurrence(ev, todayIso) }))
+        .filter((x): x is { ev: CommunityEvent; next: string } => x.next !== null)
+        .sort((a, b) => a.next.localeCompare(b.next)),
     [events, todayIso]
   )
 
@@ -132,10 +125,13 @@ export default function CommunityCalendar({ muniKey }: { muniKey: string }) {
           {sortedEvents.length === 0 && (
             <div className="muted" style={{ padding: 16, fontSize: 13 }}>No upcoming events.</div>
           )}
-          {sortedEvents.map((ev, i) => {
-            const dateLabel = ev.endDate && ev.endDate !== ev.date
-              ? `${fmtEventDate(ev.date)} – ${fmtEventDate(ev.endDate)}`
-              : fmtEventDate(ev.date)
+          {sortedEvents.map(({ ev, next }, i) => {
+            const repeats = recurrenceLabel(ev)
+            const dateLabel = repeats
+              ? `${repeats} · next ${fmtEventDate(next)}`
+              : ev.endDate && ev.endDate !== ev.date
+                ? `${fmtEventDate(ev.date)} – ${fmtEventDate(ev.endDate)}`
+                : fmtEventDate(ev.date)
             return (
               <div key={ev.key}>
                 <button

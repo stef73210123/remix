@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { MapPin } from 'lucide-react'
-import { type CommunityEvent, googleCalendarUrl } from '@/lib/municipal/events'
+import { type CommunityEvent, googleCalendarUrl, nextOccurrence, recurrenceLabel } from '@/lib/municipal/events'
 import { useLockBodyScroll } from './useLockBodyScroll'
 import { fmtDateShort } from '@/lib/municipal/date'
 
@@ -34,9 +34,17 @@ export default function EventLightbox({ event, onClose }: { event: CommunityEven
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  const when = event.endDate && event.endDate !== event.date
-    ? `${fmtDate(event.date)} – ${fmtDate(event.endDate)}`
-    : fmtDate(event.date)
+  // A standing event is described by its rhythm, with the next night alongside
+  // it; a one-off by its own date. The calendar entry a reader adds should also
+  // start from that next night rather than from the series' first.
+  const todayIso = new Date().toISOString().slice(0, 10)
+  const repeats = recurrenceLabel(event)
+  const next = nextOccurrence(event, todayIso)
+  const when = repeats
+    ? `${repeats}${next ? ` · next ${fmtDate(next)}` : ''}`
+    : event.endDate && event.endDate !== event.date
+      ? `${fmtDate(event.date)} – ${fmtDate(event.endDate)}`
+      : fmtDate(event.date)
   const timeRange = event.startTime
     ? `${fmtTime(event.startTime)}${event.endTime ? ` – ${fmtTime(event.endTime)}` : ''}`
     : null
@@ -70,10 +78,12 @@ export default function EventLightbox({ event, onClose }: { event: CommunityEven
           <div className="muted" style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 4 }}><MapPin size={13} aria-hidden /> {event.location}</div>
           <div style={{ fontSize: 13.5, lineHeight: 1.55, marginTop: 12 }}>{event.description}</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 18 }}>
-            <a href={event.url} target="_blank" rel="noopener noreferrer" className="btn secondary" style={{ padding: '8px 14px', fontSize: 13, textDecoration: 'none' }}>
-              See event page ↗
-            </a>
-            <a href={googleCalendarUrl(event)} target="_blank" rel="noopener noreferrer" className="btn" style={{ padding: '8px 14px', fontSize: 13, textDecoration: 'none' }}>
+            {event.url && (
+              <a href={event.url} target="_blank" rel="noopener noreferrer" className="btn secondary" style={{ padding: '8px 14px', fontSize: 13, textDecoration: 'none' }}>
+                See event page ↗
+              </a>
+            )}
+            <a href={googleCalendarUrl(event, next ?? undefined)} target="_blank" rel="noopener noreferrer" className="btn" style={{ padding: '8px 14px', fontSize: 13, textDecoration: 'none' }}>
               Add to Google Calendar ↗
             </a>
           </div>

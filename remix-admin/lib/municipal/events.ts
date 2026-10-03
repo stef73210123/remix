@@ -10,21 +10,40 @@
  * Society, Byram Hills CSD); see each event's `url`.
  */
 
+/**
+ * A standing weekly event — one entry that stands for every occurrence, rather
+ * than fifty-two near-identical entries in the list below.
+ */
+export interface EventRecurrence {
+  /** Day of the week, 0 = Sunday, matching `Date.getDay()`. */
+  weekday: number
+  /**
+   * Last date the series is known to run. Standing events rarely announce an
+   * end, so this is a horizon rather than a fact: it stops the calendar
+   * promising nights nobody has confirmed, and wants extending as the series
+   * continues. The event drops off the calendar once it passes.
+   */
+  until: string
+}
+
 export interface CommunityEvent {
   key: string
   title: string
-  /** Start date, YYYY-MM-DD. */
+  /** Start date, YYYY-MM-DD. For a series, its first occurrence. */
   date: string
   /** Inclusive end date for multi-day events, YYYY-MM-DD. */
   endDate?: string
   /** 24h local time, e.g. '18:00'. Omit for an all-day/unspecified-time listing. */
   startTime?: string
+  /** Earlier than `startTime` for a night running past midnight — 19:00–01:00. */
   endTime?: string
   location: string
   description: string
-  /** The organizer's own event page. */
-  url: string
-  category: 'festival' | 'market' | 'concert' | 'holiday' | 'civic'
+  /** The organizer's own event page. Absent when the organizer publishes none. */
+  url?: string
+  category: 'festival' | 'market' | 'concert' | 'holiday' | 'civic' | 'social'
+  /** Set for a standing event that repeats weekly. */
+  recurrence?: EventRecurrence
 }
 
 const EVENTS: Record<string, CommunityEvent[]> = {
@@ -254,6 +273,21 @@ const EVENTS: Record<string, CommunityEvent[]> = {
       url: 'https://www.byramhills.org/district/calendar',
       category: 'holiday',
     },
+    {
+      key: 'legion-bar-friday',
+      title: 'Friday Bar Night at the American Legion',
+      date: '2026-10-02',
+      startTime: '19:00',
+      endTime: '01:00',
+      recurrence: { weekday: 5, until: '2027-10-01' },
+      location: 'American Legion Post 1097, 35 Bedford Road, Armonk',
+      description:
+        'The bar at North Castle Post 1097 is open to the public on Friday nights — drinks, pool, darts and music. ' +
+        'Cash only; beer $4–5, wine and house drinks $6, premium drinks $8. ' +
+        'The post does not publish a fixed closing time and says it stays open as long as people are there, ' +
+        'so the 1am end shown here is a listing convention rather than last call.',
+      category: 'social',
+    },
   ],
 }
 
@@ -268,11 +302,60 @@ function addDaysIso(iso: string, days: number): string {
   return d.toISOString().slice(0, 10)
 }
 
+const WEEKDAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+/** RFC 5545 day abbreviations, indexed the same way as `Date.getDay()`. */
+const RRULE_DAYS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
+
+/**
+ * Every date this event should put a marker on: each day of a multi-day event,
+ * or each occurrence of a weekly series up to its horizon. One-off, single-day
+ * events return just their own date.
+ */
+export function eventDates(ev: CommunityEvent): string[] {
+  if (ev.recurrence) {
+    const out: string[] = []
+    for (let cur = ev.date; cur <= ev.recurrence.until; cur = addDaysIso(cur, 7)) out.push(cur)
+    return out
+  }
+  if (!ev.endDate || ev.endDate === ev.date) return [ev.date]
+  const out: string[] = []
+  for (let cur = ev.date; cur <= ev.endDate; cur = addDaysIso(cur, 1)) out.push(cur)
+  return out
+}
+
+/**
+ * When this event next happens on or after `todayIso`, or null once it is over.
+ *
+ * A one-off counts as upcoming until its own last day has passed, so a festival
+ * running right now still reports today rather than disappearing mid-run.
+ */
+export function nextOccurrence(ev: CommunityEvent, todayIso: string): string | null {
+  if (ev.recurrence) {
+    if (ev.recurrence.until < todayIso) return null
+    for (let cur = ev.date; cur <= ev.recurrence.until; cur = addDaysIso(cur, 7)) {
+      if (cur >= todayIso) return cur
+    }
+    return null
+  }
+  if ((ev.endDate ?? ev.date) < todayIso) return null
+  return ev.date
+}
+
+/** "Every Friday" for a standing event, or null for a one-off. */
+export function recurrenceLabel(ev: CommunityEvent): string | null {
+  return ev.recurrence ? `Every ${WEEKDAY_NAMES[ev.recurrence.weekday]}` : null
+}
+
 /** "Add to Google Calendar" prefill link — a timed event when startTime is set,
  *  otherwise an all-day (or multi-day) event. Assumes America/New_York, the
- *  only timezone any tracked town is in. */
-export function googleCalendarUrl(ev: CommunityEvent): string {
+ *  only timezone any tracked town is in.
+ *
+ *  `from` overrides the start date, so a standing event can be added beginning
+ *  at its next occurrence rather than dragging in every night since the series
+ *  began. */
+export function googleCalendarUrl(ev: CommunityEvent, from?: string): string {
   const compact = (iso: string) => iso.replace(/-/g, '')
+  const startDate = from ?? ev.date
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: ev.title,
@@ -280,13 +363,25 @@ export function googleCalendarUrl(ev: CommunityEvent): string {
     location: ev.location,
   })
   if (ev.startTime) {
-    const start = `${compact(ev.date)}T${ev.startTime.replace(':', '')}00`
-    const end = `${compact(ev.endDate ?? ev.date)}T${(ev.endTime ?? ev.startTime).replace(':', '')}00`
-    params.set('dates', `${start}/${end}`)
+    const endTime = ev.endTime ?? ev.startTime
+    // A bar night listed 19:00–01:00 ends the following morning. Without this
+    // the end lands before the start and Google rejects the range.
+    const pastMidnight = endTime <= ev.startTime
+    const lastDay = ev.recurrence
+      ? (pastMidnight ? addDaysIso(startDate, 1) : startDate)
+      : (pastMidnight ? addDaysIso(ev.endDate ?? startDate, 1) : (ev.endDate ?? startDate))
+    params.set(
+      'dates',
+      `${compact(startDate)}T${ev.startTime.replace(':', '')}00/${compact(lastDay)}T${endTime.replace(':', '')}00`,
+    )
     params.set('ctz', 'America/New_York')
   } else {
     // Google's all-day end date is exclusive, so extend one day past the last day.
-    params.set('dates', `${compact(ev.date)}/${compact(addDaysIso(ev.endDate ?? ev.date, 1))}`)
+    params.set('dates', `${compact(startDate)}/${compact(addDaysIso(ev.endDate ?? startDate, 1))}`)
+  }
+  if (ev.recurrence) {
+    const until = `${compact(ev.recurrence.until)}T235959Z`
+    params.set('recur', `RRULE:FREQ=WEEKLY;BYDAY=${RRULE_DAYS[ev.recurrence.weekday]};UNTIL=${until}`)
   }
   return `https://calendar.google.com/calendar/render?${params.toString()}`
 }
