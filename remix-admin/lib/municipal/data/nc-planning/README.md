@@ -6,8 +6,8 @@ and member profiles.
 ## Contents
 - `transcripts/<YYYY-MM-DD>.txt` — raw meeting-video transcripts (automatic speech
   recognition, **no speaker labels**), one per Planning Board meeting. Coverage
-  spans **Jul 2018 → Aug 2026** (102 meetings with usable transcripts, the most
-  recent being 2026-08-17; the 2021–2023 Granicus captions were largely empty
+  spans **Jul 2018 → Sep 2026** (103 meetings with usable transcripts, the most
+  recent being 2026-09-14; the 2021–2023 Granicus captions were largely empty
   and are not included).
 - `analysis.json` — structured analysis aggregated from the transcripts: per-meeting
   cases/themes/sentiment, plus roll-ups (themes over time, per-case sentiment
@@ -24,6 +24,10 @@ and member profiles.
    theme-level sentiment is robust; member-level is directional, not a vote record.
 3. `aggregate.py` canonicalizes themes to a controlled vocabulary, merges the same
    application across meetings, and computes the roll-ups.
+   Per-meeting analyses are not committed separately — `analysis.json`'s
+   `meetings[]` *is* that input, so the set round-trips: write each entry back
+   out as `<date>.json`, add the new meeting, and re-run `aggregate.py` to get a
+   byte-identical result for everything that already existed.
 4. Case names are cross-referenced against the agenda items as read into each
    meeting record and collapsed to canonical applications via `case_canon.json`
    (e.g. "92 & 94 Round Hill Road" appeared under 4 name variants; "Whipple" is
