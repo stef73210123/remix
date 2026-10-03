@@ -211,15 +211,27 @@ const EVENTS: Record<string, CommunityEvent[]> = {
       category: 'festival',
     },
     {
+      // Friends of Frosty's own site disagrees with itself on the date. Every
+      // page carries a banner reading "SUNDAY DEC. 6, 2026"; the press release
+      // on /about-frosty is headed "SATURDAY, DECEMBER 5, 2026" and then says
+      // "Saturday, December 4, 2026" in its first line. Dec 4 is a Friday, so
+      // that last one cannot be right and the release is evidently last year's
+      // text reused. The banner is the element they refresh, it is repeated on
+      // all eight pages, and its weekday and date agree — so Sunday the 6th.
+      // The parade time is unsettled the same way and is left to the prose.
       key: 'frosty-day-2026',
       title: 'Frosty Day & Parade',
-      date: '2026-12-05',
+      date: '2026-12-06',
       startTime: '12:00',
       endTime: '17:00',
       location: 'Downtown Armonk',
       description:
-        'Holiday festivities in downtown Armonk, noon–5pm, with the parade and tree-lighting ceremony at 3:30pm — ' +
-        'organized by Friends of Frosty, a volunteer nonprofit, with over 40 local groups marching in the parade.',
+        'The annual homecoming of Frosty the Snowman, whose lyricist Steve Nelson lived in Armonk — organized by ' +
+        'Friends of Frosty, a volunteer nonprofit, with over 40 local and county groups in the parade. Free. ' +
+        'Activities around downtown from noon: miniature trains, a horse-drawn wagon, the bubble truck, face ' +
+        'decorating and cookie frosting at the shops. The parade runs north on Main Street to Maple Avenue and into ' +
+        'Wampus Brook Park, followed by the tree-lighting and sing-along at the gazebo. Sources differ on the parade ' +
+        'time — Friends of Frosty say 4pm, the Chamber calendar 3:30pm — so arrive by 3:30 to be safe.',
       url: 'https://www.armonkfrosty.com/',
       category: 'holiday',
     },
@@ -272,6 +284,23 @@ const EVENTS: Record<string, CommunityEvent[]> = {
       description: 'No school for Byram Hills CSD students — spring recess, per the 2026–27 district calendar.',
       url: 'https://www.byramhills.org/district/calendar',
       category: 'holiday',
+    },
+    {
+      key: 'cider-donut-2026',
+      title: "Cider & Donut Festival and Jamie's 5K Run for Love",
+      date: '2026-10-04',
+      startTime: '09:00',
+      endTime: '14:00',
+      location: 'Wampus Brook Park, Maple Avenue & Bedford Road, Armonk',
+      description:
+        "The 14th annual Cider & Donut Festival, run with Jamie's 5K Run for Love partnering with Stayin' Alive and " +
+        'the Byram Hills Pre-School Association. Races first — mile at 9am, the 5K run/walk at 9:15, the Beascakes ' +
+        'Donut Dash for the youngest runners at 10 — then the carnival from 10:30 to 2: hot donuts, fresh-pressed ' +
+        'cider, food trucks, live music, rides, bouncy houses, face painting, and the pie-eating and donut-fishing ' +
+        'contests. Same-day race registration opens at 8am by the gazebo. Net proceeds go to children’s programs at ' +
+        'the North Castle Public Library, the Byram Hills Pre-School Association and the Armonk Chamber of Commerce.',
+      url: 'https://www.armonkchamberofcommerce.com/cider-and-donut-festival-jamies-5k-run-for-love/',
+      category: 'festival',
     },
     {
       key: 'legion-bar-friday',
