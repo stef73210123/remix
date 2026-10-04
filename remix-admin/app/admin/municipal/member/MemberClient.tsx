@@ -243,9 +243,16 @@ export default function MemberClient({ userName }: { userName: string }) {
               {(() => {
                 const email = member.email || dossier?.email
                 return email ? (
-                  <a href={`mailto:${email}`} style={{ color: 'var(--primary-light)', wordBreak: 'break-all', fontSize: 14 }}>
-                    {email}
-                  </a>
+                  <>
+                    <a href={`mailto:${email}`} style={{ color: 'var(--primary-light)', wordBreak: 'break-all', fontSize: 14 }}>
+                      {email}
+                    </a>
+                    {dossier?.emailNote && (
+                      <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5 }}>
+                        {dossier.emailNote}
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="muted" style={{ fontSize: 13 }}>Not published.</div>
                 )
