@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "planning",
     "town": "Town of North Castle",
-    "meetings": 102,
-    "cases": 399,
+    "meetings": 103,
+    "cases": 404,
     "themes": 17,
-    "memberPositions": 1042,
+    "memberPositions": 1054,
     "roster": [
       "Christopher Carthy",
       "Steven Sauro",
@@ -634,6 +634,12 @@
       "cases": 7,
       "avgSentiment": 0.129,
       "attributionCoverage": "good"
+    },
+    {
+      "date": "2026-09-14",
+      "cases": 8,
+      "avgSentiment": 0.287,
+      "attributionCoverage": "fair"
     }
   ],
   "themes": [
@@ -1420,9 +1426,9 @@
     },
     {
       "theme": "Zoning & land use",
-      "meetings": 69,
-      "avgSentiment": 0.127,
-      "avgSalience": 0.449,
+      "meetings": 70,
+      "avgSentiment": 0.129,
+      "avgSalience": 0.452,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -1768,14 +1774,19 @@
           "date": "2026-08-17",
           "sentiment": 0.15,
           "salience": 0.4
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.3,
+          "salience": 0.7
         }
       ]
     },
     {
       "theme": "Parking, traffic & access",
-      "meetings": 63,
-      "avgSentiment": 0.043,
-      "avgSalience": 0.449,
+      "meetings": 64,
+      "avgSentiment": 0.038,
+      "avgSalience": 0.456,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2091,14 +2102,19 @@
           "date": "2026-07-27",
           "sentiment": -0.15,
           "salience": 0.6
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.3,
+          "salience": 0.9
         }
       ]
     },
     {
       "theme": "Stormwater & drainage",
-      "meetings": 51,
-      "avgSentiment": 0.049,
-      "avgSalience": 0.429,
+      "meetings": 52,
+      "avgSentiment": 0.048,
+      "avgSalience": 0.428,
       "timeline": [
         {
           "date": "2021-08-09",
@@ -2354,14 +2370,19 @@
           "date": "2026-08-17",
           "sentiment": 0.1,
           "salience": 0.3
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.0,
+          "salience": 0.4
         }
       ]
     },
     {
       "theme": "Tree removal & screening",
-      "meetings": 48,
+      "meetings": 49,
       "avgSentiment": 0.092,
-      "avgSalience": 0.416,
+      "avgSalience": 0.418,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2602,14 +2623,19 @@
           "date": "2026-08-17",
           "sentiment": 0.0,
           "salience": 0.7
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.1,
+          "salience": 0.5
         }
       ]
     },
     {
       "theme": "Steep slopes & rock removal",
-      "meetings": 36,
-      "avgSentiment": -0.133,
-      "avgSalience": 0.512,
+      "meetings": 37,
+      "avgSentiment": -0.127,
+      "avgSalience": 0.509,
       "timeline": [
         {
           "date": "2021-03-08",
@@ -2790,14 +2816,19 @@
           "date": "2026-07-27",
           "sentiment": -0.5,
           "salience": 0.35
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.1,
+          "salience": 0.4
         }
       ]
     },
     {
       "theme": "Neighbor concerns & safety",
-      "meetings": 36,
-      "avgSentiment": -0.151,
-      "avgSalience": 0.438,
+      "meetings": 37,
+      "avgSentiment": -0.155,
+      "avgSalience": 0.445,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -2978,6 +3009,11 @@
           "date": "2026-08-17",
           "sentiment": -0.3,
           "salience": 0.5
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.3,
+          "salience": 0.7
         }
       ]
     },
@@ -3116,9 +3152,9 @@
     },
     {
       "theme": "Process & procedure",
-      "meetings": 22,
-      "avgSentiment": 0.002,
-      "avgSalience": 0.43,
+      "meetings": 23,
+      "avgSentiment": -0.002,
+      "avgSalience": 0.438,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -3229,6 +3265,119 @@
           "date": "2026-08-17",
           "sentiment": 0.15,
           "salience": 0.65
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.1,
+          "salience": 0.6
+        }
+      ]
+    },
+    {
+      "theme": "Historic & scenic character",
+      "meetings": 20,
+      "avgSentiment": 0.135,
+      "avgSalience": 0.288,
+      "timeline": [
+        {
+          "date": "2018-07-30",
+          "sentiment": 0.1,
+          "salience": 0.2
+        },
+        {
+          "date": "2022-04-25",
+          "sentiment": -0.05,
+          "salience": 0.25
+        },
+        {
+          "date": "2023-05-22",
+          "sentiment": 0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2023-06-26",
+          "sentiment": 0.4,
+          "salience": 0.3
+        },
+        {
+          "date": "2024-02-26",
+          "sentiment": 0.1,
+          "salience": 0.2
+        },
+        {
+          "date": "2024-05-13",
+          "sentiment": 0.2,
+          "salience": 0.35
+        },
+        {
+          "date": "2024-09-23",
+          "sentiment": 0.2,
+          "salience": 0.4
+        },
+        {
+          "date": "2024-12-09",
+          "sentiment": 0.2,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-04-14",
+          "sentiment": 0.2,
+          "salience": 0.3
+        },
+        {
+          "date": "2025-04-28",
+          "sentiment": 0.2,
+          "salience": 0.45
+        },
+        {
+          "date": "2025-07-28",
+          "sentiment": 0.3,
+          "salience": 0.35
+        },
+        {
+          "date": "2025-11-10",
+          "sentiment": 0.3,
+          "salience": 0.3
+        },
+        {
+          "date": "2025-12-08",
+          "sentiment": -0.5,
+          "salience": 0.2
+        },
+        {
+          "date": "2026-01-12",
+          "sentiment": 0.0,
+          "salience": 0.15
+        },
+        {
+          "date": "2026-03-23",
+          "sentiment": 0.5,
+          "salience": 0.12
+        },
+        {
+          "date": "2026-04-13",
+          "sentiment": 0.0,
+          "salience": 0.15
+        },
+        {
+          "date": "2026-06-08",
+          "sentiment": 0.4,
+          "salience": 0.05
+        },
+        {
+          "date": "2026-07-27",
+          "sentiment": -0.1,
+          "salience": 0.3
+        },
+        {
+          "date": "2026-08-17",
+          "sentiment": -0.55,
+          "salience": 0.6
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.7,
+          "salience": 0.3
         }
       ]
     },
@@ -3332,109 +3481,6 @@
           "date": "2026-07-13",
           "sentiment": 0.0,
           "salience": 0.2
-        }
-      ]
-    },
-    {
-      "theme": "Historic & scenic character",
-      "meetings": 19,
-      "avgSentiment": 0.105,
-      "avgSalience": 0.288,
-      "timeline": [
-        {
-          "date": "2018-07-30",
-          "sentiment": 0.1,
-          "salience": 0.2
-        },
-        {
-          "date": "2022-04-25",
-          "sentiment": -0.05,
-          "salience": 0.25
-        },
-        {
-          "date": "2023-05-22",
-          "sentiment": 0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2023-06-26",
-          "sentiment": 0.4,
-          "salience": 0.3
-        },
-        {
-          "date": "2024-02-26",
-          "sentiment": 0.1,
-          "salience": 0.2
-        },
-        {
-          "date": "2024-05-13",
-          "sentiment": 0.2,
-          "salience": 0.35
-        },
-        {
-          "date": "2024-09-23",
-          "sentiment": 0.2,
-          "salience": 0.4
-        },
-        {
-          "date": "2024-12-09",
-          "sentiment": 0.2,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-04-14",
-          "sentiment": 0.2,
-          "salience": 0.3
-        },
-        {
-          "date": "2025-04-28",
-          "sentiment": 0.2,
-          "salience": 0.45
-        },
-        {
-          "date": "2025-07-28",
-          "sentiment": 0.3,
-          "salience": 0.35
-        },
-        {
-          "date": "2025-11-10",
-          "sentiment": 0.3,
-          "salience": 0.3
-        },
-        {
-          "date": "2025-12-08",
-          "sentiment": -0.5,
-          "salience": 0.2
-        },
-        {
-          "date": "2026-01-12",
-          "sentiment": 0.0,
-          "salience": 0.15
-        },
-        {
-          "date": "2026-03-23",
-          "sentiment": 0.5,
-          "salience": 0.12
-        },
-        {
-          "date": "2026-04-13",
-          "sentiment": 0.0,
-          "salience": 0.15
-        },
-        {
-          "date": "2026-06-08",
-          "sentiment": 0.4,
-          "salience": 0.05
-        },
-        {
-          "date": "2026-07-27",
-          "sentiment": -0.1,
-          "salience": 0.3
-        },
-        {
-          "date": "2026-08-17",
-          "sentiment": -0.55,
-          "salience": 0.6
         }
       ]
     },
@@ -5102,6 +5148,119 @@
       ]
     },
     {
+      "id": "12-maple-avenue",
+      "name": "12 Maple Avenue (restaurant)",
+      "address": "12 Maple Avenue, North Castle, NY",
+      "applicationType": "other",
+      "applicant": "Tony Veneziano; Stefan (developer, Remix Properties); Roxanne (chef); John Canning (Kimley-Horn, traffic engineer)",
+      "themes": [
+        "Bonding & maintenance",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Time extensions & conditions",
+        "Zoning & land use"
+      ],
+      "appearances": 8,
+      "firstSeen": "2023-08-07",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "recommendation referred to the Town Board \u2014 positive on the parking text amendment (Ruisi voting no), and that the community benefits agreement should stand, conveyed without a vote",
+      "avgSentiment": -0.05,
+      "trajectory": [
+        {
+          "date": "2023-08-07",
+          "sentiment": 0.4,
+          "status": "referred \u2014 traffic study to Town's consultant, then ZBA variance hearing (targeting September 7)"
+        },
+        {
+          "date": "2023-10-12",
+          "sentiment": -0.1,
+          "status": "discussion only; applicant to return to ZBA (adjourned to November 2) and Planning Board scheduling own public hearing for November 13, 2023"
+        },
+        {
+          "date": "2024-01-08",
+          "sentiment": -0.2,
+          "status": "discussion only; applicant directed to return and defend valet/parking plan and explore a parking district"
+        },
+        {
+          "date": "2024-04-08",
+          "sentiment": 0.1,
+          "status": "conditional approval"
+        },
+        {
+          "date": "2025-03-10",
+          "sentiment": 0.2,
+          "status": "approved"
+        },
+        {
+          "date": "2026-05-28",
+          "sentiment": -0.3,
+          "status": "extension of time granted, then flagged; variance validity referred to town attorney and ZBA"
+        },
+        {
+          "date": "2026-06-08",
+          "sentiment": -0.2,
+          "status": "denied"
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.3,
+          "status": "recommendation referred to the Town Board \u2014 positive on the parking text amendment (Ruisi voting no), and that the community benefits agreement should stand, conveyed without a vote"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2023-08-07",
+          "status": "referred \u2014 traffic study to Town's consultant, then ZBA variance hearing (targeting September 7)",
+          "sentiment": 0.4,
+          "summary": "New farm-to-table restaurant proposed for a long-vacant 1820s building adjacent to CVS in Armonk Square, expanding from roughly 900 to 3,400 sf (144 seats) with a rooftop terrace, greenhouse dining addition, and facade preservation. The code requires 48 parking spaces against only 15 on-site, so the applicant proposed valet parking plus a secured 20 Maple Avenue lot arrangement (up to 22 self-park or 32 valet-stacked spaces) and stalled informal talks for overflow use of the adjacent CVS lot, backed by the town's 2020 parking study and a cell-phone mobility study showing complementary (lunch-vs-dinner) peak demand patterns among nearby businesses. The applicant cited substantial community support (400+ responses in a local Facebook thread), 20 new jobs, increased tax assessment, and commitments to unified downtown wayfinding signage and reviving the Armonk community lunch/events tradition as community benefits. The board directed the applicant to submit to the town's traffic consultant (H2M) for a report, then proceed to the ZBA for the parking variance (targeting a September 7 ZBA hearing off an August 15 submission), holding off on ARB submission for now, and to consult the town engineer on water/sewer capacity given the use change."
+        },
+        {
+          "date": "2023-10-12",
+          "status": "discussion only; applicant to return to ZBA (adjourned to November 2) and Planning Board scheduling own public hearing for November 13, 2023",
+          "sentiment": -0.1,
+          "summary": "Extensive discussion of parking for the proposed 141-144 seat restaurant. The site has 15 on-site spaces against a 48-space code requirement; the applicant's plan combines valet service (providing 56 spaces total), a proposed long-term lease for 22 spaces at neighboring 20 Maple Avenue (evenings/weekends), and efforts to secure additional off-site employee parking (American Legion, other Main Street lots). The town's traffic consultant found the valet-based plan sufficient, especially given restaurant-industry data showing only ~20% of business occurs at lunch. Board members pushed back hard: skepticism that valet parking is a strong planning argument post-COVID, concern that the 20 Maple lease could unravel if that property sells (the applicant countered the lease would be structured to survive a sale/financing default), doubt about employee-parking enforcement (docking pay was raised and questioned as possibly illegal), and explicit statements that the board should not consider informal overflow parking at CVS as part of the calculus even though everyone acknowledged it would happen in practice. The applicant leaned on the project's economic/community case ($4 million investment, tax revenue, job creation, ~950 petition signatures of community support, filling a decade-vacant building) as justification for the scale of the parking ask. The board ultimately deferred to the applicant's procedural right to pursue the ZBA variance and did not send an additional recommendation, while scheduling its own site plan public hearing for November 13."
+        },
+        {
+          "date": "2024-01-08",
+          "status": "discussion only; applicant directed to return and defend valet/parking plan and explore a parking district",
+          "sentiment": -0.2,
+          "summary": "Discussion-only review of a proposed 141-seat fine-dining restaurant with a kitchen addition. The site can only provide about 15 on-site spaces against a roughly 43-45 space need, which the ZBA already granted a large parking variance to cover; the plan relies on valet service, evening off-site spaces leased across the driveway at 20 Maple Avenue (assumed 100% cleared out at night), and 9 staff spaces leased at the American Legion (subject to the town's right of first refusal and not a guaranteed long-term solution). A board member voiced strong reservations: the daytime/lunch parking model (assuming only ~20% lunch occupancy) seemed unrealistic, the single shared in/out driveway allows queuing for only about 3 vehicles, and the practical reality is overflow parking into the nearby CVS lot - which the board explicitly said it has no authority to rely on or facilitate. The discussion pivoted to reviving a long-dormant idea (previously explored around when Mark Miller was practicing) of forming a formal parking district for that stretch of Maple Avenue, which under the town code would durably satisfy off-street parking requirements without relying on terminable private agreements; a prior attempt by the 12 Maple Avenue owner to organize neighboring property owners (including a resistant adjacent owner, \"Trulis\"/spelling uncertain) had failed for lack of participation, though a district could be imposed on non-participants representing less than 51% of assessed value. The board asked the applicant team to return prepared to defend the valet operations plan in detail and to explore parking-district feasibility with the town before scheduling a public hearing."
+        },
+        {
+          "date": "2024-04-08",
+          "status": "conditional approval",
+          "sentiment": 0.1,
+          "summary": "Continued public hearing on a restaurant with an off-street parking variance relying on valet and shared/leased parking at 12 and 20 Maple plus the American Legion; the board closed the hearing and approved the site plan 4-1, adding conditions requiring a town-board community benefits agreement and incorporating the H&H traffic-consultant letter."
+        },
+        {
+          "date": "2025-03-10",
+          "status": "approved",
+          "sentiment": 0.2,
+          "summary": "The board granted an extension of time together with a field-change notification for a facade modification (fewer windows, metal roof extended to the building edge, and photochromatic skylights) that had already been reviewed by the ARB."
+        },
+        {
+          "date": "2026-05-28",
+          "status": "extension of time granted, then flagged; variance validity referred to town attorney and ZBA",
+          "sentiment": -0.3,
+          "summary": "The applicant sought an extension of time on a previously approved restaurant site plan, reporting secured funding, an ARB-approved revised exterior, and a request tied to the new town employee parking lot. The board granted the extension, but Michael Pollack then raised Town Code Section 355-77, arguing that the ZBA parking variance (issued Dec 7, 2023) had expired after two years because no building permit or CO had been issued, and that without a valid variance there is no site plan to extend. Town attorney 'Mary' agreed there is a two-year limit and would investigate, and planner Adam Kaufman noted variances can be extended by the ZBA. The board concluded the applicant likely must return to the ZBA for a variance extension and then get re-approved by the Planning Board."
+        },
+        {
+          "date": "2026-06-08",
+          "status": "denied",
+          "sentiment": -0.2,
+          "summary": "At the prior meeting the board had approved an extension of time for 12 April Avenue, but it emerged that the applicant's ZBA variance had already expired and no extension was sought before it lapsed, rendering the variance and therefore the site plan null and void. The board voted to rescind its prior approval of the extension of time."
+        },
+        {
+          "date": "2026-09-14",
+          "status": "recommendation referred to the Town Board \u2014 positive on the parking text amendment (Ruisi voting no), and that the community benefits agreement should stand, conveyed without a vote",
+          "sentiment": -0.3,
+          "summary": "A referral from the Town Board on two linked questions, and the longest item of the night. The first was a zoning text amendment writing into the code what everyone agreed had always been intended: that a property participating in a parking district has its off-street parking requirement deemed met. The second was the applicant's request that his community benefits agreement \u2014 a $100,000 payment negotiated as a condition of site plan approval, before any parking district existed \u2014 be amended to zero while the district is in place and he participates in it. His argument was duplication: the CBA was described by the Town Board as mitigation for off-street parking, the district now provides that mitigation through annual assessments he must pay anyway, and he is also contributing roughly 21 private spaces to the public inventory; an applicant arriving tomorrow with the same plans under the district would not be asked to sign a CBA, which he framed as unequal treatment, citing Coal & Realty v. North Hempstead for the proposition that parking relief must be judged against actually available public parking. He noted supply has already risen 40% with the Verizon lot and will reach 187 spaces, a 53% increase, at build-out, and quoted Kaufman's own written view that the current parking code \"inadvertently imposes an additional tax on small businesses.\" Carthy did not accept the framing: he recalled the applicant telling the board in February 2024 that he wanted to pay an in-lieu-of fee, said the CBA payment had been predicated on being a catalyst for the district, and recommended it stand. Ruisi's objection was different and consistent with his long-held position \u2014 not the money but the proximity, arguing people will park at 12 Maple, then CVS, then Chico's rather than walk from West Main, and that the Town Board should weigh proximity when admitting properties to a district. Kaufman answered that proximity had already been considered when the district was formed, and Carthy dropped a proximity caveat he had tried to attach to the motion. The text amendment carried with Ruisi voting no. On the CBA, Desmond advised that no vote was needed and that individual opinions could simply be conveyed; Crispi abstained for lack of background, having joined after the original discussions, and Sauro declined to take a position. A long exchange about whether a future tenant at the corner could join the district and overwhelm it ended with the observation that district members would be assessed for any expansion, as in a sewer district, and that adding members lowers everyone's dues if capacity allows."
+        }
+      ]
+    },
+    {
       "id": "94-business-park-drive",
       "name": "94 Business Park Drive \u2014 Loading Ramp Widening (Field Change)",
       "address": "94 Business Park Drive",
@@ -5202,107 +5361,6 @@
           "status": "approved \u2014 public hearing closed and resolution adopted as amended",
           "sentiment": 0.5,
           "summary": "The applicant returned with a significantly revised approach: PODS containers would be driven through the building on a ramp rather than loaded outdoors, with a small designated area on the building's south side (acting as a sound barrier toward sensitive receptors) reserved only for multi-container trailer trucks. A PODS representative walked the board through how internal staging would work even with the warehouse full, without ever needing to store or stage containers outdoors. After extensive line-by-line resolution editing \u2014 clarifying that all staging must occur indoors while only loading/unloading of multi-pod trucks may occur in the designated exterior area, prohibiting container storage anywhere outside the building, limiting overnight truck parking to a depicted rear area, restricting use to a single (southern) dumpster to protect neighbors from early-morning noise, and requiring additional street-facing landscaping/evergreen screening \u2014 the board closed the hearing and adopted the resolution as amended."
-        }
-      ]
-    },
-    {
-      "id": "12-maple-avenue",
-      "name": "12 Maple Avenue (restaurant)",
-      "address": "12 Maple Avenue, North Castle, NY",
-      "applicationType": "other",
-      "applicant": "Tony Veneziano; Stefan (developer, Remix Properties); Roxanne (chef); John Canning (Kimley-Horn, traffic engineer)",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Time extensions & conditions",
-        "Zoning & land use"
-      ],
-      "appearances": 7,
-      "firstSeen": "2023-08-07",
-      "lastSeen": "2026-06-08",
-      "lastStatus": "denied",
-      "avgSentiment": -0.014,
-      "trajectory": [
-        {
-          "date": "2023-08-07",
-          "sentiment": 0.4,
-          "status": "referred \u2014 traffic study to Town's consultant, then ZBA variance hearing (targeting September 7)"
-        },
-        {
-          "date": "2023-10-12",
-          "sentiment": -0.1,
-          "status": "discussion only; applicant to return to ZBA (adjourned to November 2) and Planning Board scheduling own public hearing for November 13, 2023"
-        },
-        {
-          "date": "2024-01-08",
-          "sentiment": -0.2,
-          "status": "discussion only; applicant directed to return and defend valet/parking plan and explore a parking district"
-        },
-        {
-          "date": "2024-04-08",
-          "sentiment": 0.1,
-          "status": "conditional approval"
-        },
-        {
-          "date": "2025-03-10",
-          "sentiment": 0.2,
-          "status": "approved"
-        },
-        {
-          "date": "2026-05-28",
-          "sentiment": -0.3,
-          "status": "extension of time granted, then flagged; variance validity referred to town attorney and ZBA"
-        },
-        {
-          "date": "2026-06-08",
-          "sentiment": -0.2,
-          "status": "denied"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2023-08-07",
-          "status": "referred \u2014 traffic study to Town's consultant, then ZBA variance hearing (targeting September 7)",
-          "sentiment": 0.4,
-          "summary": "New farm-to-table restaurant proposed for a long-vacant 1820s building adjacent to CVS in Armonk Square, expanding from roughly 900 to 3,400 sf (144 seats) with a rooftop terrace, greenhouse dining addition, and facade preservation. The code requires 48 parking spaces against only 15 on-site, so the applicant proposed valet parking plus a secured 20 Maple Avenue lot arrangement (up to 22 self-park or 32 valet-stacked spaces) and stalled informal talks for overflow use of the adjacent CVS lot, backed by the town's 2020 parking study and a cell-phone mobility study showing complementary (lunch-vs-dinner) peak demand patterns among nearby businesses. The applicant cited substantial community support (400+ responses in a local Facebook thread), 20 new jobs, increased tax assessment, and commitments to unified downtown wayfinding signage and reviving the Armonk community lunch/events tradition as community benefits. The board directed the applicant to submit to the town's traffic consultant (H2M) for a report, then proceed to the ZBA for the parking variance (targeting a September 7 ZBA hearing off an August 15 submission), holding off on ARB submission for now, and to consult the town engineer on water/sewer capacity given the use change."
-        },
-        {
-          "date": "2023-10-12",
-          "status": "discussion only; applicant to return to ZBA (adjourned to November 2) and Planning Board scheduling own public hearing for November 13, 2023",
-          "sentiment": -0.1,
-          "summary": "Extensive discussion of parking for the proposed 141-144 seat restaurant. The site has 15 on-site spaces against a 48-space code requirement; the applicant's plan combines valet service (providing 56 spaces total), a proposed long-term lease for 22 spaces at neighboring 20 Maple Avenue (evenings/weekends), and efforts to secure additional off-site employee parking (American Legion, other Main Street lots). The town's traffic consultant found the valet-based plan sufficient, especially given restaurant-industry data showing only ~20% of business occurs at lunch. Board members pushed back hard: skepticism that valet parking is a strong planning argument post-COVID, concern that the 20 Maple lease could unravel if that property sells (the applicant countered the lease would be structured to survive a sale/financing default), doubt about employee-parking enforcement (docking pay was raised and questioned as possibly illegal), and explicit statements that the board should not consider informal overflow parking at CVS as part of the calculus even though everyone acknowledged it would happen in practice. The applicant leaned on the project's economic/community case ($4 million investment, tax revenue, job creation, ~950 petition signatures of community support, filling a decade-vacant building) as justification for the scale of the parking ask. The board ultimately deferred to the applicant's procedural right to pursue the ZBA variance and did not send an additional recommendation, while scheduling its own site plan public hearing for November 13."
-        },
-        {
-          "date": "2024-01-08",
-          "status": "discussion only; applicant directed to return and defend valet/parking plan and explore a parking district",
-          "sentiment": -0.2,
-          "summary": "Discussion-only review of a proposed 141-seat fine-dining restaurant with a kitchen addition. The site can only provide about 15 on-site spaces against a roughly 43-45 space need, which the ZBA already granted a large parking variance to cover; the plan relies on valet service, evening off-site spaces leased across the driveway at 20 Maple Avenue (assumed 100% cleared out at night), and 9 staff spaces leased at the American Legion (subject to the town's right of first refusal and not a guaranteed long-term solution). A board member voiced strong reservations: the daytime/lunch parking model (assuming only ~20% lunch occupancy) seemed unrealistic, the single shared in/out driveway allows queuing for only about 3 vehicles, and the practical reality is overflow parking into the nearby CVS lot - which the board explicitly said it has no authority to rely on or facilitate. The discussion pivoted to reviving a long-dormant idea (previously explored around when Mark Miller was practicing) of forming a formal parking district for that stretch of Maple Avenue, which under the town code would durably satisfy off-street parking requirements without relying on terminable private agreements; a prior attempt by the 12 Maple Avenue owner to organize neighboring property owners (including a resistant adjacent owner, \"Trulis\"/spelling uncertain) had failed for lack of participation, though a district could be imposed on non-participants representing less than 51% of assessed value. The board asked the applicant team to return prepared to defend the valet operations plan in detail and to explore parking-district feasibility with the town before scheduling a public hearing."
-        },
-        {
-          "date": "2024-04-08",
-          "status": "conditional approval",
-          "sentiment": 0.1,
-          "summary": "Continued public hearing on a restaurant with an off-street parking variance relying on valet and shared/leased parking at 12 and 20 Maple plus the American Legion; the board closed the hearing and approved the site plan 4-1, adding conditions requiring a town-board community benefits agreement and incorporating the H&H traffic-consultant letter."
-        },
-        {
-          "date": "2025-03-10",
-          "status": "approved",
-          "sentiment": 0.2,
-          "summary": "The board granted an extension of time together with a field-change notification for a facade modification (fewer windows, metal roof extended to the building edge, and photochromatic skylights) that had already been reviewed by the ARB."
-        },
-        {
-          "date": "2026-05-28",
-          "status": "extension of time granted, then flagged; variance validity referred to town attorney and ZBA",
-          "sentiment": -0.3,
-          "summary": "The applicant sought an extension of time on a previously approved restaurant site plan, reporting secured funding, an ARB-approved revised exterior, and a request tied to the new town employee parking lot. The board granted the extension, but Michael Pollack then raised Town Code Section 355-77, arguing that the ZBA parking variance (issued Dec 7, 2023) had expired after two years because no building permit or CO had been issued, and that without a valid variance there is no site plan to extend. Town attorney 'Mary' agreed there is a two-year limit and would investigate, and planner Adam Kaufman noted variances can be extended by the ZBA. The board concluded the applicant likely must return to the ZBA for a variance extension and then get re-approved by the Planning Board."
-        },
-        {
-          "date": "2026-06-08",
-          "status": "denied",
-          "sentiment": -0.2,
-          "summary": "At the prior meeting the board had approved an extension of time for 12 April Avenue, but it emerged that the applicant's ZBA variance had already expired and no extension was sought before it lapsed, rendering the variance and therefore the site plan null and void. The board voted to rescind its prior approval of the extension of time."
         }
       ]
     },
@@ -7604,6 +7662,75 @@
       ]
     },
     {
+      "id": "111-lafayette-avenue",
+      "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (\"dark store\")",
+      "address": "111 Lafayette Avenue",
+      "applicationType": "site plan",
+      "applicant": "Property owner operating a postal mail-hauling business",
+      "themes": [
+        "Lighting",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Tree removal & screening",
+        "Zoning & land use"
+      ],
+      "appearances": 4,
+      "firstSeen": "2025-01-13",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
+      "avgSentiment": 0.05,
+      "trajectory": [
+        {
+          "date": "2025-01-13",
+          "sentiment": 0.0,
+          "status": "discussed"
+        },
+        {
+          "date": "2025-06-09",
+          "sentiment": 0.5,
+          "status": "conditional approval"
+        },
+        {
+          "date": "2026-07-27",
+          "sentiment": -0.2,
+          "status": "sent back for a complete site plan showing all uses"
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.1,
+          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2025-01-13",
+          "status": "discussed",
+          "sentiment": 0.0,
+          "summary": "Preliminary discussion of converting the property into the main office/operations base for a bulk-mail hauling business; the board needed floor plans, truck-parking layout, storage and access details and directed the applicant to meet with the town planner and engineer before proceeding."
+        },
+        {
+          "date": "2025-06-09",
+          "status": "conditional approval",
+          "sentiment": 0.5,
+          "summary": "Public hearing on a site plan to allow overnight commercial truck parking accessory to a warehouse/office building; the board worked through the parking table (9 office spaces required, 15 truck spaces, 24 provided), closed the hearing, and approved the resolution as amended to add conditions for a replacement fence and code-compliant lighting, plus floor plans to support the parking count."
+        },
+        {
+          "date": "2026-07-27",
+          "status": "sent back for a complete site plan showing all uses",
+          "sentiment": -0.2,
+          "summary": "The applicant described an Amazon quick-commerce delivery operation: customers order online, on-site staff package the orders, and a separate driver collects and delivers, typically within about three minutes and to addresses within roughly a fifteen-minute drive. Operations would run 24/7, with two to six drivers on site depending on demand and four to five nightly resupply deliveries by 26-foot box trucks rather than tractor-trailers. Adam Kaufman confirmed warehouse and distribution is a permitted use in the industrial district, but pressed on whether the new use occupies the whole site \u2014 it does not, and the previously approved uses remain. Since those earlier approvals included a significant number of trucks occupying much of the building, he told the applicant the plan as submitted does not show how everything fits together and that a full plan depicting all uses is required before the board can evaluate it. Carthy summed it up: \"I think we're looking at half a plan here... let's get a full plan together, we'll reevaluate.\" No vote."
+        },
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
+          "sentiment": -0.1,
+          "summary": "A second round of planning review comments, focused on parking, where delivery trucks will be stored, and improving the Lafayette Avenue street frontage. The sticking point is that the site also hosts mail truck parking, and the plan still does not show how the two uses coexist or demonstrate enough off-street parking for both. Carthy noted this had been discussed at the previous meeting and asked why it had not been reconciled; told \"it just hasn't been,\" he replied that it seemed like it should have been. On noise he asked for a bird's eye view given the overnight loading, and was satisfied: the site is on the railroad side, the nearest houses are roughly 300 feet away and above it in elevation, and the operation is small-truck delivery with no foot traffic. No substantive objection to the use itself, only to the missing reconciliation."
+        }
+      ]
+    },
+    {
       "id": "700-bedford-road",
       "name": "700 Bedford Road (new house)",
       "address": "700 Bedford Road, North Castle, NY",
@@ -8718,64 +8845,6 @@
       ]
     },
     {
-      "id": "111-lafayette-avenue",
-      "name": "111 Lafayette Avenue \u2014 Amazon Quick-Commerce Delivery Facility",
-      "address": "111 Lafayette Avenue",
-      "applicationType": "site plan (change/addition of use)",
-      "applicant": "Property owner operating a postal mail-hauling business",
-      "themes": [
-        "Lighting",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Tree removal & screening",
-        "Zoning & land use"
-      ],
-      "appearances": 3,
-      "firstSeen": "2025-01-13",
-      "lastSeen": "2026-07-27",
-      "lastStatus": "sent back for a complete site plan showing all uses",
-      "avgSentiment": 0.1,
-      "trajectory": [
-        {
-          "date": "2025-01-13",
-          "sentiment": 0.0,
-          "status": "discussed"
-        },
-        {
-          "date": "2025-06-09",
-          "sentiment": 0.5,
-          "status": "conditional approval"
-        },
-        {
-          "date": "2026-07-27",
-          "sentiment": -0.2,
-          "status": "sent back for a complete site plan showing all uses"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2025-01-13",
-          "status": "discussed",
-          "sentiment": 0.0,
-          "summary": "Preliminary discussion of converting the property into the main office/operations base for a bulk-mail hauling business; the board needed floor plans, truck-parking layout, storage and access details and directed the applicant to meet with the town planner and engineer before proceeding."
-        },
-        {
-          "date": "2025-06-09",
-          "status": "conditional approval",
-          "sentiment": 0.5,
-          "summary": "Public hearing on a site plan to allow overnight commercial truck parking accessory to a warehouse/office building; the board worked through the parking table (9 office spaces required, 15 truck spaces, 24 provided), closed the hearing, and approved the resolution as amended to add conditions for a replacement fence and code-compliant lighting, plus floor plans to support the parking count."
-        },
-        {
-          "date": "2026-07-27",
-          "status": "sent back for a complete site plan showing all uses",
-          "sentiment": -0.2,
-          "summary": "The applicant described an Amazon quick-commerce delivery operation: customers order online, on-site staff package the orders, and a separate driver collects and delivers, typically within about three minutes and to addresses within roughly a fifteen-minute drive. Operations would run 24/7, with two to six drivers on site depending on demand and four to five nightly resupply deliveries by 26-foot box trucks rather than tractor-trailers. Adam Kaufman confirmed warehouse and distribution is a permitted use in the industrial district, but pressed on whether the new use occupies the whole site \u2014 it does not, and the previously approved uses remain. Since those earlier approvals included a significant number of trucks occupying much of the building, he told the applicant the plan as submitted does not show how everything fits together and that a full plan depicting all uses is required before the board can evaluate it. Carthy summed it up: \"I think we're looking at half a plan here... let's get a full plan together, we'll reevaluate.\" No vote."
-        }
-      ]
-    },
-    {
       "id": "18-long-pond-road",
       "name": "18 Long Pond Road",
       "address": "18 Long Pond Road, North Castle, NY",
@@ -9288,6 +9357,64 @@
           "status": "approved",
           "sentiment": 0.6,
           "summary": "The board took up the change-of-use site plan for the Social Life members club and cigar lounge. The planner explained the applicant already obtained its special use permit and, because the prior use was a bakery, the off-street parking calculation for the shopping center showed no parking variance was needed (17 spaces under the one-space-per-three-seats standard). With no physical changes to the site, this was a simple change of use. Members joked about the concept, asked about liquor licensing and membership tiers, then closed the hearing and approved the change-of-use site development plan."
+        }
+      ]
+    },
+    {
+      "id": "31-sorrell-street",
+      "name": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+      "address": "31 Sorrell Street (formerly lot 16 of the Hammond Ridge subdivision)",
+      "applicationType": "residential site plan",
+      "applicant": "Owner (surname rendered by the ASR as \"Duguardly\"/\"DiGuardi\" and not confidently reconstructable); engineer Ralph Alfonsetti",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Process & procedure",
+        "Septic & water supply",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Tree removal & screening",
+        "Zoning & land use"
+      ],
+      "appearances": 3,
+      "firstSeen": "2026-07-27",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement",
+      "avgSentiment": 0.033,
+      "trajectory": [
+        {
+          "date": "2026-07-27",
+          "sentiment": 0.05,
+          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow"
+        },
+        {
+          "date": "2026-08-17",
+          "sentiment": 0.15,
+          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open"
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.1,
+          "status": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-07-27",
+          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow",
+          "sentiment": 0.05,
+          "summary": "A vacant lot with a front conservation easement and clearing-and-grading limit lines, on which the applicant proposes a house essentially identical in siting to the approved subdivision plan, with the septic in the same location and county health department approval for five bedrooms. The application reached the board only because Lawrence Ruisi, sitting as the Planning Board's representative on the Residential Project Review Committee, referred it here rather than letting it go straight to the building department \u2014 a decision Carthy praised on the record as giving neighbors a chance to see the plan rather than discovering construction from a window. No landscape plan has been submitted; the board said one is required and should be robust. An abutting neighbor's detailed objection letter was walked through point by point, with Carthy telling her candidly which concerns the board could act on and which it could not: erosion and stormwater is a fair concern the town engineer will hold the applicant to; the side-yard setback objection fails because the applicant is meeting the R-2A 30-foot setback and it is not the board's job to demand more; the house's position follows the original approved subdivision layout; there are no variances requested and the plan is compliant with FAR, coverage and setbacks, so there is little basis to demand a different house; and the suggestion that the applicant is misrepresenting bedroom count would not carry weight, since the health department sizes the septic to the plans and the building inspector checks the built house against them. Privacy and screening, he said, is the concern the board can actually address, through an ambitious landscape plan. The neighbor pressed that there is no buffer at all along the south edge, that the pool, drainage and a 3,000-gallon septic tank sit on the property line where nothing can be planted, and that substantial clearing has already occurred. Chipping versus blasting was clarified \u2014 blasting is unlikely, chipping likely and permitted separately, not subject to a public hearing, with limited hours and no weekend work. The board asked for the landscape plan, then ARB, then a public hearing."
+        },
+        {
+          "date": "2026-08-17",
+          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open",
+          "sentiment": 0.15,
+          "summary": "The applicant returned with the landscape plan the board asked for at the previous meeting: ornamental planting near the house, screening around the generator, pool equipment and AC units, and a long line of evergreens down the property line facing the neighbor at 33 Sorrell Street who objected last time. Kaufman confirmed the house, driveway and septic sit within the tight clearing-and-grading limit line established when the Hammond Ridge subdivision was approved, and that the plan is entirely consistent with it. Carthy, who had walked the property, argued the new screening is largely redundant and possibly harmful: the neighbor at 33 already has a healthy, mature evergreen line, the 31-side of those trees already looks starved of light and less healthy than the 33-side, and planting twenty-odd more evergreens back-to-back against them would crowd and damage what is already there. He characterised part of the plan as done \"because it's protocol\" rather than because it produces the best result, and said the money would be better spent where screening is actually thin \u2014 the corner. His larger proposal was procedural: the planning board has authority to move a clearing-and-grading limit line, a limit line drawn at subdivision stage is \"an approximation\" drawn with a wide brush, and moving this one back toward the 50-foot rear-yard setback would let the pool shift further from the neighbor and give the plan real breathing room. Kaufman cautioned against pushing so far back as to intrude on the rear neighbor at number eight; Carthy agreed and said he was looking for a middle ground. Counsel Mary Desmond was asked what is required to modify a limit line recorded on a filed subdivision map rather than on a site plan; the board recalled doing exactly this for 12 Dellwood Farm Way and will look at that precedent, with Desmond noting the conservation easement carries metes and bounds while the clearing limit line does not. Told the applicant is about to spend a large sum on the project anyway, Carthy said perfecting the plan is \"the least of it.\" The board agreed to schedule the public hearing and keep it open, so the interested neighbors get notice and can be heard on whatever revised plan comes back."
+        },
+        {
+          "date": "2026-09-14",
+          "status": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement",
+          "sentiment": -0.1,
+          "summary": "The applicant returned having pulled the clearing-and-grading limit line back roughly 50 feet on average and up to 90 at its widest, moved the house back about 10 feet and the pool about 25, and shifted spruce plantings from the lower driveway curve to the upper slope. The neighbours at the adjoining lot \u2014 Jennifer Kimball McGreevy and David McGreevy, who identified their address as 33 Sorrell Street and referred to 29 Sorrell Street on the other side, settling a street name the automatic transcription had been rendering as \"Sorrow\" \u2014 delivered a long and specific objection: that the revised plans went online only five days before the hearing rather than seven; that the plans carry no dimensions for how far the cut line, house or pool actually moved; that tree removal has risen from 87 to 117 trees replaced by only 27 saplings, ten of them on the higher south side where they do nothing for runoff; that the 31.9-foot side yard setback, though compliant, is out of character with neighbouring setbacks of 50 to 60 feet and that \u00a7355-14K lets the board require more; that the gross land coverage sheet was never updated and the front-yard-setback bonus was miscalculated; that six drains are too few given the grade; that Norway spruce are drawn on top of a 3,000-gallon septic tank; that basement floor plans have never been produced; and that driveway columns, lighting and trenching would violate the recorded Hammond Ridge conservation easement to which the Town is a party. Alfonsetti answered that the sight-line note is a standard catch-all and no neighbour's trees or walls would be touched, that coverage rose but will stay within the allowable, that the septic constrains how many drains he can place and a third infiltration system is under discussion with the Town Engineer's office, and that nothing would in fact be planted over the tank. Carthy pressed the applicant on the bonus calculation \u2014 telling him to recheck whether the mandated 50-foot front setback had wrongly been counted \u2014 and agreed the dimensioning should be better, but otherwise said he was \"having a hard time trying to find ways to improve this plan that isn't, I think, overstepping,\" noting the house position was largely dictated by the subdivision's own limit lines and that a driveway crossing the easement is inherent to a lot the subdivision always contemplated building on. He proposed closing the hearing; when the neighbours objected, he reversed on the spot and kept it open. Desmond advised that plans and backup need not be posted with the notice, so the notice itself was adequate, and agreed to read the conservation easement."
         }
       ]
     },
@@ -12433,53 +12560,6 @@
           "status": "referred to the Zoning Board of Appeals with a NEGATIVE recommendation (carried, one member dissenting)",
           "sentiment": -0.55,
           "summary": "The applicant proposed splitting an existing 100-by-150-foot lot in an R-10 district into two 50-by-150-foot lots, matching the dimensions of several substandard neighbors, and came to the board expressly to \"take the board's temperature\" before going to the ZBA for the frontage, lot-width and side-yard variances the split would need. He argued the existing 1,000-square-foot cottage is substandard, the economics of building a single house there do not work, the site is on sewer, water and gas, and the town has real demand for smaller entry-level homes within walking distance of the school. The lots directly on either side are 50-foot, one nearby lot carries four rentals, another is a two-family, and the entire opposite side of School Street is R-5. Carthy was firmly against. He accepted the housing-demand argument on its merits but held that the neighboring nonconformities predate zoning and never came through variances, so the planning board endorsing multiple compound variances would amount to negating the town board's zoning: \"for the planning board to say to an applicant, go to the zoning board with the blessings of the planning board and seek multiple variances in order to negate the zoning is simply unimaginable.\" He distinguished a subdivision the board had approved on Creamer as a single, modest frontage variance, told the applicant that a rezoning petition to the Town Board was the legitimate route and that he would welcome it \u2014 \"God bless you, come here, let's get it done\" \u2014 and moved a negative recommendation. Ruisi dissented, saying he was \"a little more sympathetic,\" that some of us grew up on 50-foot lots and it is \"certainly not the end of the world,\" and that he would have preferred a positive recommendation or none at all; told the vote before him was the negative recommendation, he voted no. Crispi initially said he did not think the board needed to give any recommendation and was told a subdivision requires one, then supported the motion. Pollack put on the record that while the lots immediately flanking the property are narrow, five of the nine lots running from Cox Avenue down the block front 100 feet or more, so the majority of that side of the street conforms. The motion carried."
-        }
-      ]
-    },
-    {
-      "id": "31-sorrow-street",
-      "name": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-      "address": "31 Sorrow Street (ASR rendering; formerly lot 16 of the Hammond Ridge subdivision)",
-      "applicationType": "residential site plan",
-      "applicant": "Owner (surname rendered by the ASR as \"Duguardly\"/\"DiGuardi\" and not confidently reconstructable); engineer Ralph Alfonsetti",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Process & procedure",
-        "Septic & water supply",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Tree removal & screening",
-        "Zoning & land use"
-      ],
-      "appearances": 2,
-      "firstSeen": "2026-07-27",
-      "lastSeen": "2026-08-17",
-      "lastStatus": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open",
-      "avgSentiment": 0.1,
-      "trajectory": [
-        {
-          "date": "2026-07-27",
-          "sentiment": 0.05,
-          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow"
-        },
-        {
-          "date": "2026-08-17",
-          "sentiment": 0.15,
-          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-07-27",
-          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow",
-          "sentiment": 0.05,
-          "summary": "A vacant lot with a front conservation easement and clearing-and-grading limit lines, on which the applicant proposes a house essentially identical in siting to the approved subdivision plan, with the septic in the same location and county health department approval for five bedrooms. The application reached the board only because Lawrence Ruisi, sitting as the Planning Board's representative on the Residential Project Review Committee, referred it here rather than letting it go straight to the building department \u2014 a decision Carthy praised on the record as giving neighbors a chance to see the plan rather than discovering construction from a window. No landscape plan has been submitted; the board said one is required and should be robust. An abutting neighbor's detailed objection letter was walked through point by point, with Carthy telling her candidly which concerns the board could act on and which it could not: erosion and stormwater is a fair concern the town engineer will hold the applicant to; the side-yard setback objection fails because the applicant is meeting the R-2A 30-foot setback and it is not the board's job to demand more; the house's position follows the original approved subdivision layout; there are no variances requested and the plan is compliant with FAR, coverage and setbacks, so there is little basis to demand a different house; and the suggestion that the applicant is misrepresenting bedroom count would not carry weight, since the health department sizes the septic to the plans and the building inspector checks the built house against them. Privacy and screening, he said, is the concern the board can actually address, through an ambitious landscape plan. The neighbor pressed that there is no buffer at all along the south edge, that the pool, drainage and a 3,000-gallon septic tank sit on the property line where nothing can be planted, and that substantial clearing has already occurred. Chipping versus blasting was clarified \u2014 blasting is unlikely, chipping likely and permitted separately, not subject to a public hearing, with limited hours and no weekend work. The board asked for the landscape plan, then ARB, then a public hearing."
-        },
-        {
-          "date": "2026-08-17",
-          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open",
-          "sentiment": 0.15,
-          "summary": "The applicant returned with the landscape plan the board asked for at the previous meeting: ornamental planting near the house, screening around the generator, pool equipment and AC units, and a long line of evergreens down the property line facing the neighbor at 33 Sorrow Street who objected last time. Kaufman confirmed the house, driveway and septic sit within the tight clearing-and-grading limit line established when the Hammond Ridge subdivision was approved, and that the plan is entirely consistent with it. Carthy, who had walked the property, argued the new screening is largely redundant and possibly harmful: the neighbor at 33 already has a healthy, mature evergreen line, the 31-side of those trees already looks starved of light and less healthy than the 33-side, and planting twenty-odd more evergreens back-to-back against them would crowd and damage what is already there. He characterised part of the plan as done \"because it's protocol\" rather than because it produces the best result, and said the money would be better spent where screening is actually thin \u2014 the corner. His larger proposal was procedural: the planning board has authority to move a clearing-and-grading limit line, a limit line drawn at subdivision stage is \"an approximation\" drawn with a wide brush, and moving this one back toward the 50-foot rear-yard setback would let the pool shift further from the neighbor and give the plan real breathing room. Kaufman cautioned against pushing so far back as to intrude on the rear neighbor at number eight; Carthy agreed and said he was looking for a middle ground. Counsel Mary Desmond was asked what is required to modify a limit line recorded on a filed subdivision map rather than on a site plan; the board recalled doing exactly this for 12 Dellwood Farm Way and will look at that precedent, with Desmond noting the conservation easement carries metes and bounds while the clearing limit line does not. Told the applicant is about to spend a large sum on the project anyway, Carthy said perfecting the plan is \"the least of it.\" The board agreed to schedule the public hearing and keep it open, so the interested neighbors get notice and can be heard on whatever revised plan comes back."
         }
       ]
     },
@@ -20753,15 +20833,174 @@
           "summary": "The building, formerly a short-lived restaurant and distillery, would house a martial arts studio upstairs and a private personal-training studio downstairs, with a new staircase from the rear parking lot along the side of the building to the front to improve pedestrian circulation and safety. The board supported the staircase readily. Two clean-ups were required: the application referenced parking in front of the building, which the board went through extensively with the prior restaurant tenant and does not want facilitated, so the architect must update the plans to remove it; and the plans needed to distinguish the private personal-training studio from a general gym, which the applicant confirmed is private, by appointment only. The board's only substantive comment was on the new concrete stairs \u2014 appropriate lighting and railings for winter and night use. A prior no-left-turn sign at the parking lot exit, set up when the site was more commercial, was noted as already removed. With the plans updated the board expects to notice and hold the hearing, potentially within two to four weeks depending on newspaper notice timing."
         }
       ]
+    },
+    {
+      "id": "8-rines-road",
+      "name": "8 Rines Road \u2014 Field Change",
+      "address": "8 Rines Road",
+      "applicationType": "field change",
+      "applicant": "Owner (not present; presented by the Town Planner)",
+      "themes": [
+        "Process & procedure"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "field change approved",
+      "avgSentiment": 0.5,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.5,
+          "status": "field change approved"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "field change approved",
+          "sentiment": 0.5,
+          "summary": "Kaufman explained the applicant, already holding site plan approval and a special use permit, wanted minor interior revisions around the kitchen and mudroom for better flow, with no meaningful change to elevations, footprint or floor area. He recommended approving it as a field change so the revised plans could go straight to the building department. Carthy said it made sense, asked for board comments, got none, and moved approval. Approved unanimously in about a minute."
+        }
+      ]
+    },
+    {
+      "id": "911-north-broadway",
+      "name": "MDM Fit, 909\u2013911 North Broadway \u2014 Fitness Studio Zoning Text Amendment",
+      "address": "911 North Broadway (Sir John\u2019s Plaza)",
+      "applicationType": "zoning text amendment referral",
+      "applicant": "MDM Fit, represented by an attorney from Zarin & Steinmetz (first name heard as Brian; surname not reliably rendered)",
+      "themes": [
+        "Zoning & land use"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "positive recommendation referred to the Town Board",
+      "avgSentiment": 0.7,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.7,
+          "status": "positive recommendation referred to the Town Board"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "positive recommendation referred to the Town Board",
+          "sentiment": 0.7,
+          "summary": "A referral from the Town Board under \u00a7355-ADB. MDM Fit has run a 1,600 square foot studio in Sir John's Plaza since 2021, having opened during the pandemic unaware that land use approval was needed; the building inspector recently notified the operator the use is not permitted in the underlying zone. Rather than seek relief for one tenant, the petition proposes two code changes: widening the definition of \"personal service establishment\" to include fitness studios, and adding a definition of fitness studio capped at 2,000 square feet so the category stays small-scale. Kaufman's professional opinion was that the use is similar to other permitted personal service uses and that the cap keeps it from becoming \"a warehouse gym.\" No board member raised a concern; a positive recommendation carried unanimously."
+        }
+      ]
+    },
+    {
+      "id": "22-nethermont-avenue",
+      "name": "22 Nethermont Avenue \u2014 Revival of an Expired Approval",
+      "address": "22 Nethermont Avenue",
+      "applicationType": "site plan (expired approval)",
+      "applicant": "Doug Winston, successor owner (also owns 24 Nethermont Avenue)",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Process & procedure",
+        "Steep slopes & rock removal",
+        "Time extensions & conditions"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented",
+      "avgSentiment": 0.3,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.3,
+          "status": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented",
+          "sentiment": 0.3,
+          "summary": "Winston bought the property after the original approval lapsed and wants the resolution brought back to life, with one change: retaining walls and some cut and fill to level a backyard that had been sloping toward his adjoining lot at 24 Nethermont. The board was content with the substance but firm on process. Carthy recalled that the chipping permit had taken a great deal of the board's time first time round \u2014 this was the application where pattern drilling rather than hammering was worked out, with a geotechnical report, a chipping plan, and vibration sensors reporting to the building department \u2014 and asked for all of it to be re-presented at the hearing, both because Crispi is new to the board and because \"collectively the memory of the planning board is pretty good, but not perfect.\" Winston noted an earlier conversation suggesting this was simply an expiration of a fully approved project; Carthy agreed that was true but said a fresh public hearing is still required, pointing out that neighbours on the street may have changed and are entitled to a full explanation. The applicant was told to assemble the previous material and the public notice."
+        }
+      ]
+    },
+    {
+      "id": "1-troy-lane",
+      "name": "1 Troy Lane \u2014 New Residence on the Last Vacant Lot",
+      "address": "1 Troy Lane",
+      "applicationType": "residential site plan",
+      "applicant": "Owner represented by Josh Russo (representative and developer)",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Stormwater & drainage",
+        "Tree removal & screening"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing",
+      "avgSentiment": 0.7,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.7,
+          "status": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing",
+          "sentiment": 0.7,
+          "summary": "A new house on the only empty lot in a cul-de-sac subdivision created in the mid-1960s. Russo described siting the house to save as many trees as possible, especially along the side lot lines facing the main neighbour at 3 Troy, replacing the trees that do come down one for one, adding more screening on that side, and moving the driveway to the higher left side on Kaufman's RPRC advice so drainage stays on the property. Carthy called it \"a good plan\" and \"very reasonable,\" and spent most of his questions on the interior courtyard and the three-and-a-half-foot step down to the pool rather than on impacts. The Town Engineer's only ask was more detail on the stormwater design plus soil testing to confirm it; Russo said the soil testing had been completed that week. Sent to the ARB with notice to follow."
+        }
+      ]
+    },
+    {
+      "id": "4-cedar-hill-road",
+      "name": "4 Cedar Hill Road \u2014 Renovation and Driveway Realignment on a Scenic Road",
+      "address": "4 Cedar Hill Road",
+      "applicationType": "site plan",
+      "applicant": "Owner represented by Alan Filch (ALP Engineering) and architect Darren Mercer",
+      "themes": [
+        "Historic & scenic character",
+        "Stormwater & drainage",
+        "Tree removal & screening",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-09-14",
+      "lastStatus": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard",
+      "avgSentiment": 0.6,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.6,
+          "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard",
+          "sentiment": 0.6,
+          "summary": "A four-acre corner lot at Cedar Hill and East Middle Patent Road, before the board because of the scenic road requirement. The proposal renovates the house, removes a dilapidated garage at the awkward east end and builds a new one at the southwest corner, and realigns the driveway along the front so cars no longer have to back out. Seven trees come down, all interior to the lot, none within the 25-foot regulated setback, and the wetland in the northern portion and its buffer are untouched. Impervious coverage rises and will be handled with cultec chambers, calculations to follow. The substantive question was whether the backup area in front of the new garage counts as a \"courtyard,\" which Kaufman explained must be three times the minimum principal-structure setback when in a front yard, and so would need a variance. Filch argued it is a backup space rather than a courtyard. Rather than push the applicant to shrink it, the board advised the opposite: Carthy told him to spend five minutes with the building inspector and, if it is called a courtyard, to go to the ZBA rather than compromise \u2014 \"why compromise hundreds of thousands of dollars of what you've had value added to the home for the sake of not going to the ZBA if we need it\" \u2014 with Kaufman agreeing the grade separation and existing vegetation make it a strong variance case. The architect explained time pressure: a demolition permit is imminent and the clients, currently renting, want to start before winter, so they would take the single backup area now and revisit later. Kaufman's note about sparse planting along East Middle Patent turned out to align with what the owners wanted anyway, and was added to the plan."
+        }
+      ]
     }
   ],
   "members": [
     {
       "member": "Christopher Carthy",
-      "totalPositions": 407,
-      "avgSentiment": 0.21,
+      "totalPositions": 415,
+      "avgSentiment": 0.211,
       "confidenceMix": {
-        "high": 269,
+        "high": 277,
         "medium": 125,
         "low": 13
       },
@@ -20773,13 +21012,13 @@
         },
         {
           "theme": "Zoning & land use",
-          "count": 95,
-          "avgSentiment": 0.242
+          "count": 99,
+          "avgSentiment": 0.255
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 92,
-          "avgSentiment": 0.246
+          "count": 94,
+          "avgSentiment": 0.233
         },
         {
           "theme": "Wetlands & buffers",
@@ -20788,13 +21027,13 @@
         },
         {
           "theme": "Tree removal & screening",
-          "count": 57,
-          "avgSentiment": 0.222
+          "count": 58,
+          "avgSentiment": 0.23
         },
         {
           "theme": "Neighbor concerns & safety",
-          "count": 47,
-          "avgSentiment": 0.131
+          "count": 48,
+          "avgSentiment": 0.132
         },
         {
           "theme": "Stormwater & drainage",
@@ -20803,8 +21042,8 @@
         },
         {
           "theme": "Steep slopes & rock removal",
-          "count": 39,
-          "avgSentiment": 0.077
+          "count": 40,
+          "avgSentiment": 0.083
         },
         {
           "theme": "Time extensions & conditions",
@@ -20813,8 +21052,8 @@
         },
         {
           "theme": "Process & procedure",
-          "count": 32,
-          "avgSentiment": -0.072
+          "count": 36,
+          "avgSentiment": -0.042
         },
         {
           "theme": "Retaining walls",
@@ -20823,8 +21062,8 @@
         },
         {
           "theme": "Historic & scenic character",
-          "count": 21,
-          "avgSentiment": 0.364
+          "count": 22,
+          "avgSentiment": 0.38
         },
         {
           "theme": "Septic & water supply",
@@ -20838,8 +21077,8 @@
         },
         {
           "theme": "Bonding & maintenance",
-          "count": 8,
-          "avgSentiment": -0.025
+          "count": 9,
+          "avgSentiment": -0.078
         },
         {
           "theme": "Signage",
@@ -20879,6 +21118,11 @@
           "avgSentiment": 0.0
         },
         {
+          "caseId": "12-maple-avenue",
+          "count": 6,
+          "avgSentiment": -0.167
+        },
+        {
           "caseId": "113-king-street",
           "count": 6,
           "avgSentiment": 0.383
@@ -20887,11 +21131,6 @@
           "caseId": "45-bedford-road",
           "count": 5,
           "avgSentiment": 0.24
-        },
-        {
-          "caseId": "12-maple-avenue",
-          "count": 5,
-          "avgSentiment": -0.1
         },
         {
           "caseId": "1613-old-orchard-street",
@@ -20952,6 +21191,11 @@
           "caseId": "130-old-mount-kisco-road",
           "count": 4,
           "avgSentiment": 0.525
+        },
+        {
+          "caseId": "111-lafayette-avenue",
+          "count": 4,
+          "avgSentiment": 0.037
         },
         {
           "caseId": "700-bedford-road",
@@ -21019,11 +21263,6 @@
           "avgSentiment": 0.133
         },
         {
-          "caseId": "111-lafayette-avenue",
-          "count": 3,
-          "avgSentiment": 0.117
-        },
-        {
           "caseId": "148-whippoorwill-road",
           "count": 3,
           "avgSentiment": 0.2
@@ -21047,6 +21286,11 @@
           "caseId": "909-north-broadway-cigar-club",
           "count": 3,
           "avgSentiment": 0.467
+        },
+        {
+          "caseId": "31-sorrell-street",
+          "count": 3,
+          "avgSentiment": 0.15
         },
         {
           "caseId": "428-436-main-street",
@@ -21242,11 +21486,6 @@
           "caseId": "1-east-middle-patent-road",
           "count": 2,
           "avgSentiment": 0.525
-        },
-        {
-          "caseId": "31-sorrow-street",
-          "count": 2,
-          "avgSentiment": 0.125
         },
         {
           "caseId": "brynwood-summit-club-bedford-road-armonk-ny",
@@ -22027,6 +22266,31 @@
           "caseId": "873-north-broadway-north-white-plains",
           "count": 1,
           "avgSentiment": 0.55
+        },
+        {
+          "caseId": "8-rines-road",
+          "count": 1,
+          "avgSentiment": 0.5
+        },
+        {
+          "caseId": "911-north-broadway",
+          "count": 1,
+          "avgSentiment": 0.6
+        },
+        {
+          "caseId": "22-nethermont-avenue",
+          "count": 1,
+          "avgSentiment": 0.3
+        },
+        {
+          "caseId": "1-troy-lane",
+          "count": 1,
+          "avgSentiment": 0.7
+        },
+        {
+          "caseId": "4-cedar-hill-road",
+          "count": 1,
+          "avgSentiment": 0.7
         }
       ],
       "evidence": [
@@ -27196,8 +27460,8 @@
         },
         {
           "date": "2026-07-27",
-          "case": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-          "caseId": "31-sorrow-street",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
           "stance": "mixed",
           "score": 0.1,
           "themes": [
@@ -27276,8 +27540,8 @@
         },
         {
           "date": "2026-08-17",
-          "case": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-          "caseId": "31-sorrow-street",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
           "stance": "mixed",
           "score": 0.15,
           "themes": [
@@ -27287,17 +27551,120 @@
           ],
           "evidence": "Challenged the applicant's own screening plan as counterproductive: \"when I look at this I see a dense line of screening already, and I'm concerned that if we plant these evergreens adjacent to the other evergreens they're going to harm them \u2014 and they're beautiful evergreens already.\" Said the applicant is \"spending money, investing in the property, and perhaps because it's protocol not giving us the actual best result.\" Proposed moving the clearing-and-grading limit line back toward the rear-yard setback \u2014 \"a clearing grading limit line is done with a very wide brush... it's an approximation\" \u2014 so the pool moves away from the neighbor and the screening goes where it is needed, while agreeing with Kaufman not to encroach on the rear neighbor. Pushed the applicant on cost: \"you're looking at a multi-million dollar home on a multi-million dollar street \u2014 to perfect the plan is the least of it.\"",
           "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "8 Rines Road \u2014 Field Change",
+          "caseId": "8-rines-road",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Process & procedure"
+          ],
+          "evidence": "Asked Kaufman to explain the change, said \"Makes sense to me,\" invited board comment and then moved approval of the field change.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
+          "stance": "leaning-supportive",
+          "score": 0.2,
+          "themes": [
+            "Neighbor concerns & safety",
+            "Process & procedure",
+            "Zoning & land use"
+          ],
+          "evidence": "Said \"I think this is a reasonable plan\" and that he was \"having a hard time trying to find ways to improve this plan that isn't, I think, overstepping,\" while telling the applicant to recheck the setback bonus calculation and dimension the plans better. Pressed the neighbours on why a driveway and utility runs across an easement on a lot the subdivision always intended to be built on would be a violation. Moved to close the public hearing, then kept it open as soon as the neighbours objected: \"Fine, no problem. I'll keep the public hearing open.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "MDM Fit, 909\u2013911 North Broadway \u2014 Fitness Studio Zoning Text Amendment",
+          "caseId": "911-north-broadway",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Zoning & land use"
+          ],
+          "evidence": "Confirmed with Kaufman that the board's only role was to receive the referral and recommend, then moved \"that we make a positive recommendation on this text change to the town board.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "22 Nethermont Avenue \u2014 Revival of an Expired Approval",
+          "caseId": "22-nethermont-avenue",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Process & procedure",
+            "Steep slopes & rock removal"
+          ],
+          "evidence": "Insisted the chipping plan and geotechnical report be re-presented at a public hearing \u2014 \"We put a lot of time and effort into that, as I recall\" \u2014 and rejected the shortcut of treating the lapse as a formality: \"it's also true that you have to go through a public hearing again... let's say there's a new neighbor... They're entitled to a full explanation of what's going on.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "1 Troy Lane \u2014 New Residence on the Last Vacant Lot",
+          "caseId": "1-troy-lane",
+          "stance": "supportive",
+          "score": 0.7,
+          "themes": [
+            "Tree removal & screening",
+            "Zoning & land use"
+          ],
+          "evidence": "\"I think generally this is a good plan... the applicant came in with a compact redevelopment and re-screening those side lot lines. It's very reasonable. I just don't have any comments.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (\"dark store\")",
+          "caseId": "111-lafayette-avenue",
+          "stance": "concerned",
+          "score": -0.2,
+          "themes": [
+            "Parking, traffic & access",
+            "Process & procedure"
+          ],
+          "evidence": "\"We talked about that at the last meeting, though... So how come it hasn't been reconciled to date?... Seems to me like that would have been reconciled.\" Separately asked for an aerial view to judge overnight noise against neighbouring houses, and accepted the answer.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "4 Cedar Hill Road \u2014 Renovation and Driveway Realignment on a Scenic Road",
+          "caseId": "4-cedar-hill-road",
+          "stance": "supportive",
+          "score": 0.7,
+          "themes": [
+            "Historic & scenic character",
+            "Zoning & land use"
+          ],
+          "evidence": "Steered the applicant toward a variance rather than a redesign \u2014 \"I wouldn't compromise on what your design vision is because I think you'd get the variance\" and \"My money's on your plan right now\" \u2014 and praised the result for keeping the character of East Middle Patent Road.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "12 Maple Avenue (restaurant)",
+          "caseId": "12-maple-avenue",
+          "stance": "opposed",
+          "score": -0.5,
+          "themes": [
+            "Bonding & maintenance",
+            "Parking, traffic & access"
+          ],
+          "evidence": "Supported the text amendment but rejected releasing the payment: \"we predicated the Community Benefits Agreement and that payment as a catalyst to the parking district,\" and \"My preferred solution would be if you're coming back that the contribution that you offer to make to the town of North Castle to construct that parking lot remain intact.\" Said he had rewatched the 2023\u201324 meeting recordings in preparation and was \"having a hard time letting go of that right now.\" Moved the recommendation that the CBA be maintained.",
+          "confidence": "high"
         }
       ]
     },
     {
       "member": "Lawrence Ruisi",
-      "totalPositions": 190,
-      "avgSentiment": 0.062,
+      "totalPositions": 192,
+      "avgSentiment": 0.059,
       "confidenceMix": {
         "medium": 80,
-        "high": 91,
-        "low": 19
+        "high": 92,
+        "low": 20
       },
       "byTheme": [
         {
@@ -27307,8 +27674,8 @@
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 46,
-          "avgSentiment": 0.06
+          "count": 47,
+          "avgSentiment": 0.048
         },
         {
           "theme": "Zoning & land use",
@@ -27327,8 +27694,8 @@
         },
         {
           "theme": "Process & procedure",
-          "count": 19,
-          "avgSentiment": -0.047
+          "count": 20,
+          "avgSentiment": -0.045
         },
         {
           "theme": "Wetlands & buffers",
@@ -27408,6 +27775,11 @@
           "avgSentiment": -0.53
         },
         {
+          "caseId": "12-maple-avenue",
+          "count": 5,
+          "avgSentiment": -0.26
+        },
+        {
           "caseId": "92-94-round-hill-road",
           "count": 5,
           "avgSentiment": -0.46
@@ -27416,11 +27788,6 @@
           "caseId": "45-bedford-road",
           "count": 4,
           "avgSentiment": -0.025
-        },
-        {
-          "caseId": "12-maple-avenue",
-          "count": 4,
-          "avgSentiment": -0.2
         },
         {
           "caseId": "154-lafayette-avenue",
@@ -27461,6 +27828,11 @@
           "caseId": "six-ledgewood-place-benson",
           "count": 3,
           "avgSentiment": -0.333
+        },
+        {
+          "caseId": "31-sorrell-street",
+          "count": 3,
+          "avgSentiment": 0.2
         },
         {
           "caseId": "50-east-middle-patent-road-armonk-ny",
@@ -27531,11 +27903,6 @@
           "caseId": "70-lafayette-avenue",
           "count": 2,
           "avgSentiment": 0.1
-        },
-        {
-          "caseId": "31-sorrow-street",
-          "count": 2,
-          "avgSentiment": 0.3
         },
         {
           "caseId": "375-main-street-armonk-ny",
@@ -30398,8 +30765,8 @@
         },
         {
           "date": "2026-07-27",
-          "case": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-          "caseId": "31-sorrow-street",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
           "stance": "supportive",
           "score": 0.4,
           "themes": [
@@ -30424,8 +30791,8 @@
         },
         {
           "date": "2026-08-17",
-          "case": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-          "caseId": "31-sorrow-street",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
           "stance": "supportive",
           "score": 0.2,
           "themes": [
@@ -30433,6 +30800,30 @@
           ],
           "evidence": "Asked how the limit-line question bears on the side-yard screening discussion, and agreed to scheduling the public hearing on the understanding that it would be kept open if more work remains.",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
+          "stance": "neutral",
+          "score": 0.0,
+          "themes": [
+            "Process & procedure"
+          ],
+          "evidence": "Read the notice of public hearing into the record. A later remark \u2014 \"I think I agree with the Larry\" \u2014 indicates he took a position in the discussion, but the un-diarized recording does not establish which words were his.",
+          "confidence": "low"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "12 Maple Avenue (restaurant)",
+          "caseId": "12-maple-avenue",
+          "stance": "opposed",
+          "score": -0.5,
+          "themes": [
+            "Parking, traffic & access"
+          ],
+          "evidence": "Voted no on the text amendment. His objection was proximity rather than the payment: \"I think people are a lot of people are lazy. They're going to park at 12 Maple if it's available. If it's not available, a lot of them are going to go into CVS... I think that's a fact.\" Also pressed on whether the 2020 parking study still holds given changes in tenancy since, and on 400 new rooftops coming to town.",
+          "confidence": "high"
         }
       ]
     },
@@ -31079,7 +31470,7 @@
           "avgSentiment": 0.2
         },
         {
-          "caseId": "31-sorrow-street",
+          "caseId": "31-sorrell-street",
           "count": 1,
           "avgSentiment": 0.2
         }
@@ -32908,8 +33299,8 @@
         },
         {
           "date": "2026-08-17",
-          "case": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-          "caseId": "31-sorrow-street",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
           "stance": "supportive",
           "score": 0.2,
           "themes": [
@@ -35333,12 +35724,12 @@
     },
     {
       "member": "Steven Sauro",
-      "totalPositions": 126,
-      "avgSentiment": 0.226,
+      "totalPositions": 127,
+      "avgSentiment": 0.224,
       "confidenceMix": {
         "medium": 59,
         "high": 57,
-        "low": 10
+        "low": 11
       },
       "byTheme": [
         {
@@ -35412,6 +35803,11 @@
           "avgSentiment": -0.033
         },
         {
+          "theme": "Bonding & maintenance",
+          "count": 1,
+          "avgSentiment": 0.0
+        },
+        {
           "theme": "Environmental review (SEQRA)",
           "count": 1,
           "avgSentiment": 0.4
@@ -35427,6 +35823,11 @@
           "caseId": "3-north-castle-drive-eagle-ridge",
           "count": 4,
           "avgSentiment": 0.1
+        },
+        {
+          "caseId": "12-maple-avenue",
+          "count": 3,
+          "avgSentiment": 0.133
         },
         {
           "caseId": "76-virginia-road",
@@ -35457,11 +35858,6 @@
           "caseId": "45-bedford-road",
           "count": 2,
           "avgSentiment": 0.5
-        },
-        {
-          "caseId": "12-maple-avenue",
-          "count": 2,
-          "avgSentiment": 0.2
         },
         {
           "caseId": "23-bedford-banksville-road",
@@ -37513,16 +37909,28 @@
           ],
           "evidence": "Went back to the town code himself and surfaced the operative provision: \"retaining walls shall be constructed with materials and design which reflect the character of the immediate neighborhood. I'm not sure that this wall reflects the character of the immediate neighborhood.\" Said he sympathised with the goal \"100%\" but urged \"a tiered, slow, meandering, stepped, curved, nature-like approach to the lower level of the field\" that could \"achieve exactly what you want\" without being so invasive.",
           "confidence": "high"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "12 Maple Avenue (restaurant)",
+          "caseId": "12-maple-avenue",
+          "stance": "neutral",
+          "score": 0.0,
+          "themes": [
+            "Bonding & maintenance"
+          ],
+          "evidence": "Invited by the chair to weigh in \u2014 \"You've been quiet as a church mouse\" \u2014 and declined to take a position: \"I have no opinion. I'm saying neutral.\" The intervening argument that the payment was seed money the applicant volunteered rather than a duplicate charge (\"You agreed to throw seed money in knowing that you could then participate later\") most likely came from him, but the recording has no speaker labels and the voice says \"I wasn't there,\" which fits Crispi equally.",
+          "confidence": "low"
         }
       ]
     },
     {
       "member": "Thomas Crispi",
-      "totalPositions": 31,
-      "avgSentiment": 0.084,
+      "totalPositions": 32,
+      "avgSentiment": 0.081,
       "confidenceMix": {
         "low": 6,
-        "medium": 15,
+        "medium": 16,
         "high": 10
       },
       "byTheme": [
@@ -37552,6 +37960,11 @@
           "avgSentiment": 0.15
         },
         {
+          "theme": "Process & procedure",
+          "count": 3,
+          "avgSentiment": -0.133
+        },
+        {
           "theme": "Steep slopes & rock removal",
           "count": 3,
           "avgSentiment": -0.133
@@ -37560,11 +37973,6 @@
           "theme": "Zoning & land use",
           "count": 3,
           "avgSentiment": 0.233
-        },
-        {
-          "theme": "Process & procedure",
-          "count": 2,
-          "avgSentiment": -0.2
         },
         {
           "theme": "Tree removal & screening",
@@ -37727,6 +38135,11 @@
           "caseId": "873-north-broadway-north-white-plains",
           "count": 1,
           "avgSentiment": 0.3
+        },
+        {
+          "caseId": "12-maple-avenue",
+          "count": 1,
+          "avgSentiment": 0.0
         }
       ],
       "evidence": [
@@ -38111,6 +38524,18 @@
             "Neighbor concerns & safety"
           ],
           "evidence": "Raised the only substantive board concern \u2014 the new concrete stairs in winter and at night \u2014 asking that they be lit appropriately and railed.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-14",
+          "case": "12 Maple Avenue (restaurant)",
+          "caseId": "12-maple-avenue",
+          "stance": "neutral",
+          "score": 0.0,
+          "themes": [
+            "Process & procedure"
+          ],
+          "evidence": "Seconded the text amendment motion. On the community benefits agreement: \"I'm going to have to abstain. I wasn't here at the... I don't understand the background.\" Separately offered New Canaan as an example of a town that expands centralized lots as they fill.",
           "confidence": "medium"
         }
       ]
@@ -69160,7 +69585,7 @@
     },
     {
       "date": "2026-07-27",
-      "meetingSummary": "A long, unusually substantive meeting \u2014 ten items, most of them advisory rather than final. Two routine matters passed quickly (an extension of time for 1613 Old Orchard Street, and approval of a scaled-down amendment at 8 Lines Road). The rest were the board telling applicants where they stood before formal votes. Chairman Carthy led sustained opposition on two: the Bezel Residence retaining walls at Six Ledge Place, where he argued a 20-foot wall built purely to level a backyard is beyond anything the board has permitted and would set a precedent for the whole town, and a two-lot subdivision at 22 School Street in an R-10 district, which the board sent to the Zoning Board of Appeals with a negative recommendation over Lawrence Ruisi's dissent. Ruisi, more sympathetic to the subdivision, argued the neighborhood is already a mix of 50-foot lots and that entry-level housing is in short supply; Michael Pollack countered for the record that five of the nine lots on that block front 100 feet or more. The board sent the revived Gateway/NCD Acquisitions project at 45 Bedford Road back to the ZBA to renew expired variances (Carthy recused himself), told Amazon its quick-commerce plan at 111 Lafayette Avenue was only half a site plan, pressed 176 Virginia Road to invest real effort in street-frontage screening under the comprehensive plan, recommended a zoning text amendment favorably to the Town Board so a tutoring center could open at 355 Main Street, and referred a Bobo's Cafe change-of-use at 379 Main Street to the ZBA for a large off-street parking variance \u2014 a referral several members noted would be unnecessary once the long-pending Main Street parking district actually forms. The meeting closed with an extended, candid walk-through of a neighbor's objection letter on a new house at 31 Sorrow Street, in which Carthy told the neighbor plainly which of her concerns the board could act on and which it could not.",
+      "meetingSummary": "A long, unusually substantive meeting \u2014 ten items, most of them advisory rather than final. Two routine matters passed quickly (an extension of time for 1613 Old Orchard Street, and approval of a scaled-down amendment at 8 Lines Road). The rest were the board telling applicants where they stood before formal votes. Chairman Carthy led sustained opposition on two: the Bezel Residence retaining walls at Six Ledge Place, where he argued a 20-foot wall built purely to level a backyard is beyond anything the board has permitted and would set a precedent for the whole town, and a two-lot subdivision at 22 School Street in an R-10 district, which the board sent to the Zoning Board of Appeals with a negative recommendation over Lawrence Ruisi's dissent. Ruisi, more sympathetic to the subdivision, argued the neighborhood is already a mix of 50-foot lots and that entry-level housing is in short supply; Michael Pollack countered for the record that five of the nine lots on that block front 100 feet or more. The board sent the revived Gateway/NCD Acquisitions project at 45 Bedford Road back to the ZBA to renew expired variances (Carthy recused himself), told Amazon its quick-commerce plan at 111 Lafayette Avenue was only half a site plan, pressed 176 Virginia Road to invest real effort in street-frontage screening under the comprehensive plan, recommended a zoning text amendment favorably to the Town Board so a tutoring center could open at 355 Main Street, and referred a Bobo's Cafe change-of-use at 379 Main Street to the ZBA for a large off-street parking variance \u2014 a referral several members noted would be unnecessary once the long-pending Main Street parking district actually forms. The meeting closed with an extended, candid walk-through of a neighbor's objection letter on a new house at 31 Sorrell Street, in which Carthy told the neighbor plainly which of her concerns the board could act on and which it could not.",
       "durationNote": "Christopher Carthy chaired. Lawrence Ruisi, Thomas Crispi, Michael Pollack and Steven Sauro all participated; Sauro had not attended the Six Ledge Place site walk and said so. Carthy recused himself and left the room for the 45 Bedford Road (NCD Acquisitions/Gateway) item. Town Planner Adam Kaufman and Conservation Board representative John Cooper were present and active throughout. The 22 School Street subdivision was the only contested vote of the night.",
       "cases": [
         {
@@ -69573,9 +69998,9 @@
           ]
         },
         {
-          "id": "31-sorrow-street-residence",
-          "name": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-          "address": "31 Sorrow Street (ASR rendering; a 3.6-acre vacant lot, formerly lot 16 of the 2003 Hammond Ridge subdivision)",
+          "id": "31-sorrell-street-residence",
+          "name": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "address": "31 Sorrell Street (ASR rendering; a 3.6-acre vacant lot, formerly lot 16 of the 2003 Hammond Ridge subdivision)",
           "applicationType": "residential site plan",
           "applicant": "Owner (surname rendered by the ASR as \"Duguardly\"/\"DiGuardi\" and not confidently reconstructable); engineer Ralph Alfonsetti",
           "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow",
@@ -69648,19 +70073,19 @@
           "theme": "Tree removal & screening",
           "salience": 0.5,
           "sentiment": -0.1,
-          "note": "Screening was the board's practical lever on three separate items \u2014 the Virginia Road frontage, the Six Ledge Place wall, and the 31 Sorrow Street neighbor's privacy."
+          "note": "Screening was the board's practical lever on three separate items \u2014 the Virginia Road frontage, the Six Ledge Place wall, and the 31 Sorrell Street neighbor's privacy."
         },
         {
           "theme": "Neighbor concerns & safety",
           "salience": 0.45,
           "sentiment": 0.0,
-          "note": "The 31 Sorrow Street exchange was an unusually direct account, on the record, of which neighbor objections a planning board can and cannot act on."
+          "note": "The 31 Sorrell Street exchange was an unusually direct account, on the record, of which neighbor objections a planning board can and cannot act on."
         },
         {
           "theme": "Steep slopes & rock removal",
           "salience": 0.35,
           "sentiment": -0.5,
-          "note": "Topography drove the Six Ledge Place opposition, and chipping-versus-blasting was clarified for the 31 Sorrow Street neighbor."
+          "note": "Topography drove the Six Ledge Place opposition, and chipping-versus-blasting was clarified for the 31 Sorrell Street neighbor."
         },
         {
           "theme": "Historic & scenic character",
@@ -69698,11 +70123,11 @@
         }
       ],
       "attributionCoverage": "good",
-      "attributionNote": "The recording has no speaker labels, but this meeting is unusually attributable: the chairman repeatedly calls members by name before they speak (\"Larry, do you want to start?\", \"Michael, do you want to speak first?\", \"I'm going to turn it to Tom\", \"forgive me, Steve, you weren't able to make it\"), and the contested 22 School Street vote is polled aloud. Positions here are matched on that basis. Names as heard by the ASR: \"Mr. Ruiz you\" (Lawrence Ruisi), \"chairman Karthi\" (Christopher Carthy), \"Mr. Pollock\" (Michael Pollack). Several applicant and property names are garbled beyond confident reconstruction \u2014 the Six Ledge Place owner (\"Bezel\"), the 31 Sorrow Street owner (\"Duguardly\"), the 22 School Street engineer (\"Greg Catcher pulley\"), and the 8 Lines Road street name (\"eight lines road\") \u2014 and are flagged rather than guessed."
+      "attributionNote": "The recording has no speaker labels, but this meeting is unusually attributable: the chairman repeatedly calls members by name before they speak (\"Larry, do you want to start?\", \"Michael, do you want to speak first?\", \"I'm going to turn it to Tom\", \"forgive me, Steve, you weren't able to make it\"), and the contested 22 School Street vote is polled aloud. Positions here are matched on that basis. Names as heard by the ASR: \"Mr. Ruiz you\" (Lawrence Ruisi), \"chairman Karthi\" (Christopher Carthy), \"Mr. Pollock\" (Michael Pollack). Several applicant and property names are garbled beyond confident reconstruction \u2014 the Six Ledge Place owner (\"Bezel\"), the 31 Sorrell Street owner (\"Duguardly\"), the 22 School Street engineer (\"Greg Catcher pulley\"), and the 8 Lines Road street name (\"eight lines road\") \u2014 and are flagged rather than guessed."
     },
     {
       "date": "2026-08-17",
-      "meetingSummary": "Seven items, dominated by the return of the Benson Residence retaining walls at Six Ledgewood Place. The applicant came back having tiered the northeast corner and dropped the northern section four feet, so the tallest run is now about 11 feet 8 inches with a driveway wall varying up to roughly 14 and a half, and cited an approved comparable at 850 North Broadway. It did not move the board. Three neighbors spoke against; Michael Pollack laid out a point-by-point case against the walls from the town's own comprehensive plan \u2014 neighborhood context, environmental setting, protection of natural features, topography defining development, and the plan's specific identification of the Whippoorwill Road area as a steep-slope neighborhood; Thomas Crispi argued from the elevations that the lower flat area is already reachable without a wall; Steven Sauro found a town code provision requiring retaining walls to reflect the character of the immediate neighborhood and said he did not think this one does; Chairman Carthy added that the owner knew the topography when he bought the house and that a 20-foot wall replaces one hazard with another. Carthy said plainly he was \"not hearing consensus amongst the board to move this forward\" and raised preparing a denial resolution; the applicant asked for and was granted an adjournment to take the board's concerns back to the client, with the public hearing left open. The other items were mostly routine or constructive: two Summit Club extensions and Citibank directional signage passed; a Stroling Road South mudroom and garage was adjourned pending a ZBA coverage variance; 873 North Broadway's staircase and martial arts studio drew only a lighting and railing comment plus a direction to drop front-of-building parking from the plans; the Eagle Ridge clubhouse was pressed to treat its landscaping as a focal point rather than an afterthought; and at 31 Sorrow Street the chairman argued the applicant's new screening is redundant against an existing healthy evergreen line and proposed moving the clearing-and-grading limit line back toward the 50-foot rear-yard setback so the pool could shift away from the neighbor and the plantings go where they would actually help.",
+      "meetingSummary": "Seven items, dominated by the return of the Benson Residence retaining walls at Six Ledgewood Place. The applicant came back having tiered the northeast corner and dropped the northern section four feet, so the tallest run is now about 11 feet 8 inches with a driveway wall varying up to roughly 14 and a half, and cited an approved comparable at 850 North Broadway. It did not move the board. Three neighbors spoke against; Michael Pollack laid out a point-by-point case against the walls from the town's own comprehensive plan \u2014 neighborhood context, environmental setting, protection of natural features, topography defining development, and the plan's specific identification of the Whippoorwill Road area as a steep-slope neighborhood; Thomas Crispi argued from the elevations that the lower flat area is already reachable without a wall; Steven Sauro found a town code provision requiring retaining walls to reflect the character of the immediate neighborhood and said he did not think this one does; Chairman Carthy added that the owner knew the topography when he bought the house and that a 20-foot wall replaces one hazard with another. Carthy said plainly he was \"not hearing consensus amongst the board to move this forward\" and raised preparing a denial resolution; the applicant asked for and was granted an adjournment to take the board's concerns back to the client, with the public hearing left open. The other items were mostly routine or constructive: two Summit Club extensions and Citibank directional signage passed; a Stroling Road South mudroom and garage was adjourned pending a ZBA coverage variance; 873 North Broadway's staircase and martial arts studio drew only a lighting and railing comment plus a direction to drop front-of-building parking from the plans; the Eagle Ridge clubhouse was pressed to treat its landscaping as a focal point rather than an afterthought; and at 31 Sorrell Street the chairman argued the applicant's new screening is redundant against an existing healthy evergreen line and proposed moving the clearing-and-grading limit line back toward the 50-foot rear-yard setback so the pool could shift away from the neighbor and the plantings go where they would actually help.",
       "durationNote": "Christopher Carthy chaired. Lawrence Ruisi, Thomas Crispi, Michael Pollack and Steven Sauro all spoke; Pollack, Sauro and Ruisi each read a public hearing notice into the record. Town Planner Adam Kaufman and Town Counsel Mary Desmond both participated substantively. Three members of the public spoke against the Benson retaining walls.",
       "cases": [
         {
@@ -69949,13 +70374,13 @@
           ]
         },
         {
-          "id": "31-sorrow-street-residence",
-          "name": "31 Sorrow Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-          "address": "31 Sorrow Street (ASR rendering; formerly lot 16 of the Hammond Ridge subdivision)",
+          "id": "31-sorrell-street-residence",
+          "name": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "address": "31 Sorrell Street (formerly lot 16 of the Hammond Ridge subdivision)",
           "applicationType": "residential site plan",
           "applicant": "Owner represented by engineer Ralph Alfonsetti; landscape architect not present",
           "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open",
-          "summary": "The applicant returned with the landscape plan the board asked for at the previous meeting: ornamental planting near the house, screening around the generator, pool equipment and AC units, and a long line of evergreens down the property line facing the neighbor at 33 Sorrow Street who objected last time. Kaufman confirmed the house, driveway and septic sit within the tight clearing-and-grading limit line established when the Hammond Ridge subdivision was approved, and that the plan is entirely consistent with it. Carthy, who had walked the property, argued the new screening is largely redundant and possibly harmful: the neighbor at 33 already has a healthy, mature evergreen line, the 31-side of those trees already looks starved of light and less healthy than the 33-side, and planting twenty-odd more evergreens back-to-back against them would crowd and damage what is already there. He characterised part of the plan as done \"because it's protocol\" rather than because it produces the best result, and said the money would be better spent where screening is actually thin \u2014 the corner. His larger proposal was procedural: the planning board has authority to move a clearing-and-grading limit line, a limit line drawn at subdivision stage is \"an approximation\" drawn with a wide brush, and moving this one back toward the 50-foot rear-yard setback would let the pool shift further from the neighbor and give the plan real breathing room. Kaufman cautioned against pushing so far back as to intrude on the rear neighbor at number eight; Carthy agreed and said he was looking for a middle ground. Counsel Mary Desmond was asked what is required to modify a limit line recorded on a filed subdivision map rather than on a site plan; the board recalled doing exactly this for 12 Dellwood Farm Way and will look at that precedent, with Desmond noting the conservation easement carries metes and bounds while the clearing limit line does not. Told the applicant is about to spend a large sum on the project anyway, Carthy said perfecting the plan is \"the least of it.\" The board agreed to schedule the public hearing and keep it open, so the interested neighbors get notice and can be heard on whatever revised plan comes back.",
+          "summary": "The applicant returned with the landscape plan the board asked for at the previous meeting: ornamental planting near the house, screening around the generator, pool equipment and AC units, and a long line of evergreens down the property line facing the neighbor at 33 Sorrell Street who objected last time. Kaufman confirmed the house, driveway and septic sit within the tight clearing-and-grading limit line established when the Hammond Ridge subdivision was approved, and that the plan is entirely consistent with it. Carthy, who had walked the property, argued the new screening is largely redundant and possibly harmful: the neighbor at 33 already has a healthy, mature evergreen line, the 31-side of those trees already looks starved of light and less healthy than the 33-side, and planting twenty-odd more evergreens back-to-back against them would crowd and damage what is already there. He characterised part of the plan as done \"because it's protocol\" rather than because it produces the best result, and said the money would be better spent where screening is actually thin \u2014 the corner. His larger proposal was procedural: the planning board has authority to move a clearing-and-grading limit line, a limit line drawn at subdivision stage is \"an approximation\" drawn with a wide brush, and moving this one back toward the 50-foot rear-yard setback would let the pool shift further from the neighbor and give the plan real breathing room. Kaufman cautioned against pushing so far back as to intrude on the rear neighbor at number eight; Carthy agreed and said he was looking for a middle ground. Counsel Mary Desmond was asked what is required to modify a limit line recorded on a filed subdivision map rather than on a site plan; the board recalled doing exactly this for 12 Dellwood Farm Way and will look at that precedent, with Desmond noting the conservation easement carries metes and bounds while the clearing limit line does not. Told the applicant is about to spend a large sum on the project anyway, Carthy said perfecting the plan is \"the least of it.\" The board agreed to schedule the public hearing and keep it open, so the interested neighbors get notice and can be heard on whatever revised plan comes back.",
           "themes": [
             "Neighbor concerns & safety",
             "Process & procedure",
@@ -70013,13 +70438,13 @@
           "theme": "Tree removal & screening",
           "salience": 0.7,
           "sentiment": 0.0,
-          "note": "Screening cut both ways: offered as mitigation for the Benson walls and found insufficient, and challenged at 31 Sorrow Street as redundant and potentially harmful to healthy existing trees."
+          "note": "Screening cut both ways: offered as mitigation for the Benson walls and found insufficient, and challenged at 31 Sorrell Street as redundant and potentially harmful to healthy existing trees."
         },
         {
           "theme": "Process & procedure",
           "salience": 0.65,
           "sentiment": 0.15,
-          "note": "The board chose an adjournment over a denial on the Benson walls, and scheduled a hearing it intends to keep open at 31 Sorrow Street \u2014 both to keep applicants and neighbors in the room rather than resetting the clock."
+          "note": "The board chose an adjournment over a denial on the Benson walls, and scheduled a hearing it intends to keep open at 31 Sorrell Street \u2014 both to keep applicants and neighbors in the room rather than resetting the clock."
         },
         {
           "theme": "Historic & scenic character",
@@ -70056,12 +70481,12 @@
         {
           "person": "Adam Kaufman",
           "role": "Town Planner",
-          "summary": "Reported on the Summit Club's outstanding health department conditions; pulled up the mapping to show a speaking neighbor the position of his house relative to the proposed walls; framed the board's retaining-wall standard as weighing the reason for the wall \u2014 a driveway or getting a house on a site \u2014 against a purely recreational amenity; pressed the Eagle Ridge applicant to show the patio and lawn as a place people would actually use; and confirmed that the 31 Sorrow Street plan sits entirely within the subdivision's clearing-and-grading limit line while cautioning against moving that line so far back as to affect the rear neighbor.",
+          "summary": "Reported on the Summit Club's outstanding health department conditions; pulled up the mapping to show a speaking neighbor the position of his house relative to the proposed walls; framed the board's retaining-wall standard as weighing the reason for the wall \u2014 a driveway or getting a house on a site \u2014 against a purely recreational amenity; pressed the Eagle Ridge applicant to show the patio and lawn as a place people would actually use; and confirmed that the 31 Sorrell Street plan sits entirely within the subdivision's clearing-and-grading limit line while cautioning against moving that line so far back as to affect the rear neighbor.",
           "cases": [
             "business-park-drive-bedford-road-area",
             "six-ledgewood-place-benson",
             "eagle-ridge-clubhouse",
-            "31-sorrow-street-residence"
+            "31-sorrell-street-residence"
           ]
         },
         {
@@ -70070,12 +70495,377 @@
           "summary": "Explained that putting the Benson application \"to rest\" would mean a denial, which she would draft at the board's direction for the board's consideration, and confirmed the 62-day clock that runs from the close of a public hearing \u2014 the reason the hearing was adjourned rather than closed. Asked what is required to modify a clearing-and-grading limit line recorded on a filed subdivision map, she noted the conservation easement carries metes and bounds while the limit line does not, questioned whether the county should have accepted the plat that way, and agreed to look at the 12 Dellwood Farm Way precedent.",
           "cases": [
             "six-ledgewood-place-benson",
-            "31-sorrow-street-residence"
+            "31-sorrell-street-residence"
           ]
         }
       ],
       "attributionCoverage": "good",
       "attributionNote": "No speaker labels in the recording, but the chairman names members before inviting them to speak (\"So Tom, do you want to add something?\", \"Michael, do you have any questions or comments?\", \"I'm hearing, Steve\", \"Larry, Michael, do you have a problem?\"), and three members are thanked by name after reading hearing notices, which anchors the attributions here. Names and places as garbled by the ASR: the property is rendered variously \"six-led wood place,\" \"six Lightwood\" and \"lengthwood place\" (6 Ledgewood Place); the owner \"Mr. Benson\"; \"Whipper Wheel Road\" (Whippoorwill Road); \"six strolling Road South\" (Stroling Road South); the neighbor \"Andrew Roushaft\"/\"Varshay\"; and \"12 Delwood\" (12 Dellwood Farm Way). Earlier meetings transcribed this same Ledgewood Place application as the \"Bezel Residence\"; this meeting's hearing notice and the repeated use of \"Mr. Benson\" establish the correct name, and the case is merged accordingly."
+    },
+    {
+      "date": "2026-09-14",
+      "meetingSummary": "Eight items in just under two hours, with the last \u2014 a Town Board referral on 12 Maple Avenue \u2014 taking roughly half of it. Five of the eight were routine and moved briskly: a field change at 8 Rines Road approved in a minute, a positive recommendation on a zoning text amendment that would let a small gym operate as a personal service use, a well-received new house at 1 Troy Lane, a renovation at 4 Cedar Hill Road the board actively coached toward a variance rather than a compromise, and a revived expired approval at 22 Nethermont Avenue sent back through a full public hearing. The two contested items were 31 Sorrell Street, where the adjoining neighbours mounted a long and specific objection and the chair agreed to keep the public hearing open at their request, and 12 Maple Avenue, where the applicant asked the board to recommend that his $100,000 community benefits payment be released now that the parking district he was required to join actually exists. The board split that referral: it recommended the parking text amendment (Ruisi dissenting) but the chair recommended the community benefits agreement stand, with Crispi abstaining for lack of background and Sauro declining to take a position.",
+      "durationNote": "Christopher Carthy chaired. Lawrence Ruisi, Thomas Crispi and Steven Sauro attended. Michael Pollack was absent \u2014 Carthy opened the meeting explaining Pollack had called to say a legal assignment kept him away. Adam Kaufman (Town Planner) presented or commented on nearly every item; Mary Desmond (Town Attorney) advised on hearing notice and the conservation easement. Conservation Board member John Krupp was acknowledged in the audience.",
+      "cases": [
+        {
+          "id": "8-rines-road",
+          "name": "8 Rines Road \u2014 Field Change",
+          "address": "8 Rines Road",
+          "applicationType": "field change",
+          "applicant": "Owner (not present; presented by the Town Planner)",
+          "status": "field change approved",
+          "summary": "Kaufman explained the applicant, already holding site plan approval and a special use permit, wanted minor interior revisions around the kitchen and mudroom for better flow, with no meaningful change to elevations, footprint or floor area. He recommended approving it as a field change so the revised plans could go straight to the building department. Carthy said it made sense, asked for board comments, got none, and moved approval. Approved unanimously in about a minute.",
+          "themes": [
+            "Process & procedure"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.5,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.5,
+              "themes": [
+                "process & procedure"
+              ],
+              "evidence": "Asked Kaufman to explain the change, said \"Makes sense to me,\" invited board comment and then moved approval of the field change.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "31-sorrell-street-residence",
+          "name": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "address": "31 Sorrell Street (formerly lot 16 of the Hammond Ridge subdivision)",
+          "applicationType": "residential site plan",
+          "applicant": "Owner represented by engineer Ralph Alfonsetti, with the project's landscape architect (name heard as Angela, surname not reliably rendered)",
+          "status": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement",
+          "summary": "The applicant returned having pulled the clearing-and-grading limit line back roughly 50 feet on average and up to 90 at its widest, moved the house back about 10 feet and the pool about 25, and shifted spruce plantings from the lower driveway curve to the upper slope. The neighbours at the adjoining lot \u2014 Jennifer Kimball McGreevy and David McGreevy, who identified their address as 33 Sorrell Street and referred to 29 Sorrell Street on the other side, settling a street name the automatic transcription had been rendering as \"Sorrow\" \u2014 delivered a long and specific objection: that the revised plans went online only five days before the hearing rather than seven; that the plans carry no dimensions for how far the cut line, house or pool actually moved; that tree removal has risen from 87 to 117 trees replaced by only 27 saplings, ten of them on the higher south side where they do nothing for runoff; that the 31.9-foot side yard setback, though compliant, is out of character with neighbouring setbacks of 50 to 60 feet and that \u00a7355-14K lets the board require more; that the gross land coverage sheet was never updated and the front-yard-setback bonus was miscalculated; that six drains are too few given the grade; that Norway spruce are drawn on top of a 3,000-gallon septic tank; that basement floor plans have never been produced; and that driveway columns, lighting and trenching would violate the recorded Hammond Ridge conservation easement to which the Town is a party. Alfonsetti answered that the sight-line note is a standard catch-all and no neighbour's trees or walls would be touched, that coverage rose but will stay within the allowable, that the septic constrains how many drains he can place and a third infiltration system is under discussion with the Town Engineer's office, and that nothing would in fact be planted over the tank. Carthy pressed the applicant on the bonus calculation \u2014 telling him to recheck whether the mandated 50-foot front setback had wrongly been counted \u2014 and agreed the dimensioning should be better, but otherwise said he was \"having a hard time trying to find ways to improve this plan that isn't, I think, overstepping,\" noting the house position was largely dictated by the subdivision's own limit lines and that a driveway crossing the easement is inherent to a lot the subdivision always contemplated building on. He proposed closing the hearing; when the neighbours objected, he reversed on the spot and kept it open. Desmond advised that plans and backup need not be posted with the notice, so the notice itself was adequate, and agreed to read the conservation easement.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Process & procedure",
+            "Septic & water supply",
+            "Stormwater & drainage",
+            "Tree removal & screening",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.1,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "leaning-supportive",
+              "score": 0.2,
+              "themes": [
+                "zoning & land use",
+                "neighbor concerns & safety",
+                "process & procedure"
+              ],
+              "evidence": "Said \"I think this is a reasonable plan\" and that he was \"having a hard time trying to find ways to improve this plan that isn't, I think, overstepping,\" while telling the applicant to recheck the setback bonus calculation and dimension the plans better. Pressed the neighbours on why a driveway and utility runs across an easement on a lot the subdivision always intended to be built on would be a violation. Moved to close the public hearing, then kept it open as soon as the neighbours objected: \"Fine, no problem. I'll keep the public hearing open.\"",
+              "confidence": "high"
+            },
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "neutral",
+              "score": 0.0,
+              "themes": [
+                "process & procedure"
+              ],
+              "evidence": "Read the notice of public hearing into the record. A later remark \u2014 \"I think I agree with the Larry\" \u2014 indicates he took a position in the discussion, but the un-diarized recording does not establish which words were his.",
+              "confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "mdm-fit-909-911-north-broadway",
+          "name": "MDM Fit, 909\u2013911 North Broadway \u2014 Fitness Studio Zoning Text Amendment",
+          "address": "911 North Broadway (Sir John\u2019s Plaza)",
+          "applicationType": "zoning text amendment referral",
+          "applicant": "MDM Fit, represented by an attorney from Zarin & Steinmetz (first name heard as Brian; surname not reliably rendered)",
+          "status": "positive recommendation referred to the Town Board",
+          "summary": "A referral from the Town Board under \u00a7355-ADB. MDM Fit has run a 1,600 square foot studio in Sir John's Plaza since 2021, having opened during the pandemic unaware that land use approval was needed; the building inspector recently notified the operator the use is not permitted in the underlying zone. Rather than seek relief for one tenant, the petition proposes two code changes: widening the definition of \"personal service establishment\" to include fitness studios, and adding a definition of fitness studio capped at 2,000 square feet so the category stays small-scale. Kaufman's professional opinion was that the use is similar to other permitted personal service uses and that the cap keeps it from becoming \"a warehouse gym.\" No board member raised a concern; a positive recommendation carried unanimously.",
+          "themes": [
+            "Zoning & land use"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.7,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "zoning & land use"
+              ],
+              "evidence": "Confirmed with Kaufman that the board's only role was to receive the referral and recommend, then moved \"that we make a positive recommendation on this text change to the town board.\"",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "22-nethermont-avenue",
+          "name": "22 Nethermont Avenue \u2014 Revival of an Expired Approval",
+          "address": "22 Nethermont Avenue",
+          "applicationType": "site plan (expired approval)",
+          "applicant": "Doug Winston, successor owner (also owns 24 Nethermont Avenue)",
+          "status": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented",
+          "summary": "Winston bought the property after the original approval lapsed and wants the resolution brought back to life, with one change: retaining walls and some cut and fill to level a backyard that had been sloping toward his adjoining lot at 24 Nethermont. The board was content with the substance but firm on process. Carthy recalled that the chipping permit had taken a great deal of the board's time first time round \u2014 this was the application where pattern drilling rather than hammering was worked out, with a geotechnical report, a chipping plan, and vibration sensors reporting to the building department \u2014 and asked for all of it to be re-presented at the hearing, both because Crispi is new to the board and because \"collectively the memory of the planning board is pretty good, but not perfect.\" Winston noted an earlier conversation suggesting this was simply an expiration of a fully approved project; Carthy agreed that was true but said a fresh public hearing is still required, pointing out that neighbours on the street may have changed and are entitled to a full explanation. The applicant was told to assemble the previous material and the public notice.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Process & procedure",
+            "Steep slopes & rock removal",
+            "Time extensions & conditions"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.3,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "process & procedure",
+                "steep slopes & rock removal"
+              ],
+              "evidence": "Insisted the chipping plan and geotechnical report be re-presented at a public hearing \u2014 \"We put a lot of time and effort into that, as I recall\" \u2014 and rejected the shortcut of treating the lapse as a formality: \"it's also true that you have to go through a public hearing again... let's say there's a new neighbor... They're entitled to a full explanation of what's going on.\"",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "1-troy-lane",
+          "name": "1 Troy Lane \u2014 New Residence on the Last Vacant Lot",
+          "address": "1 Troy Lane",
+          "applicationType": "residential site plan",
+          "applicant": "Owner represented by Josh Russo (representative and developer)",
+          "status": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing",
+          "summary": "A new house on the only empty lot in a cul-de-sac subdivision created in the mid-1960s. Russo described siting the house to save as many trees as possible, especially along the side lot lines facing the main neighbour at 3 Troy, replacing the trees that do come down one for one, adding more screening on that side, and moving the driveway to the higher left side on Kaufman's RPRC advice so drainage stays on the property. Carthy called it \"a good plan\" and \"very reasonable,\" and spent most of his questions on the interior courtyard and the three-and-a-half-foot step down to the pool rather than on impacts. The Town Engineer's only ask was more detail on the stormwater design plus soil testing to confirm it; Russo said the soil testing had been completed that week. Sent to the ARB with notice to follow.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Stormwater & drainage",
+            "Tree removal & screening"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.7,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.7,
+              "themes": [
+                "tree removal & screening",
+                "zoning & land use"
+              ],
+              "evidence": "\"I think generally this is a good plan... the applicant came in with a compact redevelopment and re-screening those side lot lines. It's very reasonable. I just don't have any comments.\"",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "111-lafayette-avenue-amazon",
+          "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (\"dark store\")",
+          "address": "111 Lafayette Avenue",
+          "applicationType": "site plan",
+          "applicant": "Amazon, represented by Robert Hickey of Seven Multi-Site",
+          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
+          "summary": "A second round of planning review comments, focused on parking, where delivery trucks will be stored, and improving the Lafayette Avenue street frontage. The sticking point is that the site also hosts mail truck parking, and the plan still does not show how the two uses coexist or demonstrate enough off-street parking for both. Carthy noted this had been discussed at the previous meeting and asked why it had not been reconciled; told \"it just hasn't been,\" he replied that it seemed like it should have been. On noise he asked for a bird's eye view given the overnight loading, and was satisfied: the site is on the railroad side, the nearest houses are roughly 300 feet away and above it in elevation, and the operation is small-truck delivery with no foot traffic. No substantive objection to the use itself, only to the missing reconciliation.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Parking, traffic & access",
+            "Process & procedure"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.1,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "concerned",
+              "score": -0.2,
+              "themes": [
+                "parking, traffic & access",
+                "process & procedure"
+              ],
+              "evidence": "\"We talked about that at the last meeting, though... So how come it hasn't been reconciled to date?... Seems to me like that would have been reconciled.\" Separately asked for an aerial view to judge overnight noise against neighbouring houses, and accepted the answer.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "4-cedar-hill-road",
+          "name": "4 Cedar Hill Road \u2014 Renovation and Driveway Realignment on a Scenic Road",
+          "address": "4 Cedar Hill Road",
+          "applicationType": "site plan",
+          "applicant": "Owner represented by Alan Filch (ALP Engineering) and architect Darren Mercer",
+          "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard",
+          "summary": "A four-acre corner lot at Cedar Hill and East Middle Patent Road, before the board because of the scenic road requirement. The proposal renovates the house, removes a dilapidated garage at the awkward east end and builds a new one at the southwest corner, and realigns the driveway along the front so cars no longer have to back out. Seven trees come down, all interior to the lot, none within the 25-foot regulated setback, and the wetland in the northern portion and its buffer are untouched. Impervious coverage rises and will be handled with cultec chambers, calculations to follow. The substantive question was whether the backup area in front of the new garage counts as a \"courtyard,\" which Kaufman explained must be three times the minimum principal-structure setback when in a front yard, and so would need a variance. Filch argued it is a backup space rather than a courtyard. Rather than push the applicant to shrink it, the board advised the opposite: Carthy told him to spend five minutes with the building inspector and, if it is called a courtyard, to go to the ZBA rather than compromise \u2014 \"why compromise hundreds of thousands of dollars of what you've had value added to the home for the sake of not going to the ZBA if we need it\" \u2014 with Kaufman agreeing the grade separation and existing vegetation make it a strong variance case. The architect explained time pressure: a demolition permit is imminent and the clients, currently renting, want to start before winter, so they would take the single backup area now and revisit later. Kaufman's note about sparse planting along East Middle Patent turned out to align with what the owners wanted anyway, and was added to the plan.",
+          "themes": [
+            "Historic & scenic character",
+            "Stormwater & drainage",
+            "Tree removal & screening",
+            "Wetlands & buffers",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.6,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.7,
+              "themes": [
+                "zoning & land use",
+                "historic & scenic character"
+              ],
+              "evidence": "Steered the applicant toward a variance rather than a redesign \u2014 \"I wouldn't compromise on what your design vision is because I think you'd get the variance\" and \"My money's on your plan right now\" \u2014 and praised the result for keeping the character of East Middle Patent Road.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "12-maple-avenue",
+          "name": "12 Maple Avenue \u2014 Town Board Referral on the Parking Text Amendment and the Community Benefits Agreement",
+          "address": "12 Maple Avenue",
+          "applicationType": "referral from the Town Board",
+          "applicant": "The owner/applicant, addressed as Stefan, appearing on his own behalf (surname not stated on the recording)",
+          "status": "recommendation referred to the Town Board \u2014 positive on the parking text amendment (Ruisi voting no), and that the community benefits agreement should stand, conveyed without a vote",
+          "summary": "A referral from the Town Board on two linked questions, and the longest item of the night. The first was a zoning text amendment writing into the code what everyone agreed had always been intended: that a property participating in a parking district has its off-street parking requirement deemed met. The second was the applicant's request that his community benefits agreement \u2014 a $100,000 payment negotiated as a condition of site plan approval, before any parking district existed \u2014 be amended to zero while the district is in place and he participates in it. His argument was duplication: the CBA was described by the Town Board as mitigation for off-street parking, the district now provides that mitigation through annual assessments he must pay anyway, and he is also contributing roughly 21 private spaces to the public inventory; an applicant arriving tomorrow with the same plans under the district would not be asked to sign a CBA, which he framed as unequal treatment, citing Coal & Realty v. North Hempstead for the proposition that parking relief must be judged against actually available public parking. He noted supply has already risen 40% with the Verizon lot and will reach 187 spaces, a 53% increase, at build-out, and quoted Kaufman's own written view that the current parking code \"inadvertently imposes an additional tax on small businesses.\" Carthy did not accept the framing: he recalled the applicant telling the board in February 2024 that he wanted to pay an in-lieu-of fee, said the CBA payment had been predicated on being a catalyst for the district, and recommended it stand. Ruisi's objection was different and consistent with his long-held position \u2014 not the money but the proximity, arguing people will park at 12 Maple, then CVS, then Chico's rather than walk from West Main, and that the Town Board should weigh proximity when admitting properties to a district. Kaufman answered that proximity had already been considered when the district was formed, and Carthy dropped a proximity caveat he had tried to attach to the motion. The text amendment carried with Ruisi voting no. On the CBA, Desmond advised that no vote was needed and that individual opinions could simply be conveyed; Crispi abstained for lack of background, having joined after the original discussions, and Sauro declined to take a position. A long exchange about whether a future tenant at the corner could join the district and overwhelm it ended with the observation that district members would be assessed for any expansion, as in a sewer district, and that adding members lowers everyone's dues if capacity allows.",
+          "themes": [
+            "Bonding & maintenance",
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.3,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "opposed",
+              "score": -0.5,
+              "themes": [
+                "parking, traffic & access",
+                "bonding & maintenance"
+              ],
+              "evidence": "Supported the text amendment but rejected releasing the payment: \"we predicated the Community Benefits Agreement and that payment as a catalyst to the parking district,\" and \"My preferred solution would be if you're coming back that the contribution that you offer to make to the town of North Castle to construct that parking lot remain intact.\" Said he had rewatched the 2023\u201324 meeting recordings in preparation and was \"having a hard time letting go of that right now.\" Moved the recommendation that the CBA be maintained.",
+              "confidence": "high"
+            },
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "opposed",
+              "score": -0.5,
+              "themes": [
+                "parking, traffic & access"
+              ],
+              "evidence": "Voted no on the text amendment. His objection was proximity rather than the payment: \"I think people are a lot of people are lazy. They're going to park at 12 Maple if it's available. If it's not available, a lot of them are going to go into CVS... I think that's a fact.\" Also pressed on whether the 2020 parking study still holds given changes in tenancy since, and on 400 new rooftops coming to town.",
+              "confidence": "high"
+            },
+            {
+              "member": "Thomas Crispi",
+              "stance": "neutral",
+              "score": 0.0,
+              "themes": [
+                "process & procedure"
+              ],
+              "evidence": "Seconded the text amendment motion. On the community benefits agreement: \"I'm going to have to abstain. I wasn't here at the... I don't understand the background.\" Separately offered New Canaan as an example of a town that expands centralized lots as they fill.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Steven Sauro",
+              "stance": "neutral",
+              "score": 0.0,
+              "themes": [
+                "bonding & maintenance"
+              ],
+              "evidence": "Invited by the chair to weigh in \u2014 \"You've been quiet as a church mouse\" \u2014 and declined to take a position: \"I have no opinion. I'm saying neutral.\" The intervening argument that the payment was seed money the applicant volunteered rather than a duplicate charge (\"You agreed to throw seed money in knowing that you could then participate later\") most likely came from him, but the recording has no speaker labels and the voice says \"I wasn't there,\" which fits Crispi equally.",
+              "confidence": "low"
+            }
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Parking, traffic & access",
+          "salience": 0.9,
+          "sentiment": -0.3,
+          "note": "Half the meeting. 12 Maple turned on whether participation in the new parking district makes a pre-district $100,000 community benefits payment redundant; the board recommended the enabling text amendment while declining to release the payment. Ruisi's dissent was about walking distance, not money. Parking was also the one unresolved item on the Amazon site."
+        },
+        {
+          "theme": "Zoning & land use",
+          "salience": 0.7,
+          "sentiment": 0.3,
+          "note": "Three items turned on code definitions rather than design: whether a fitness studio is a personal service establishment, whether a backup area is a courtyard, and whether a compliant 31.9-foot side setback can be enlarged by the board under \u00a7355-14K. The board read the code permissively in the first two and declined to stretch it in the third."
+        },
+        {
+          "theme": "Neighbor concerns & safety",
+          "salience": 0.7,
+          "sentiment": -0.3,
+          "note": "Concentrated almost entirely in one item. The objection at 31 Sorrell Street was unusually well-prepared \u2014 code citations, the recorded conservation easement, tree counts, drain counts \u2014 and it worked to the extent that the chair reversed his own motion to close the public hearing within a minute of making it."
+        },
+        {
+          "theme": "Process & procedure",
+          "salience": 0.6,
+          "sentiment": -0.1,
+          "note": "A recurring insistence that doing it again properly matters: a lapsed approval at 22 Nethermont must go back through a full hearing because neighbours may have changed and a new member has not heard the chipping plan; and at 31 Sorrell Street the Town Attorney had to rule on whether plans must be posted with the notice (they need not)."
+        },
+        {
+          "theme": "Tree removal & screening",
+          "salience": 0.5,
+          "sentiment": 0.1,
+          "note": "Cut both ways. At 31 Sorrell Street removal rose from 87 trees to 117 against 27 replacements, which the neighbours called inadequate; at 1 Troy Lane and 4 Cedar Hill Road added planting was received as a straightforward benefit."
+        },
+        {
+          "theme": "Stormwater & drainage",
+          "salience": 0.4,
+          "sentiment": 0.0,
+          "note": "Routine on three items \u2014 cultec chambers at Cedar Hill, more design detail and soil testing at Troy Lane \u2014 but contested at 31 Sorrell Street, where the neighbours counted six drains on a steep lot draining toward them and the engineer said the septic limits where he can put more."
+        },
+        {
+          "theme": "Steep slopes & rock removal",
+          "salience": 0.4,
+          "sentiment": 0.1,
+          "note": "Only at 22 Nethermont, where the board treated its own earlier work on pattern drilling, the geotechnical report and vibration sensors as something to be put back on the record rather than assumed."
+        },
+        {
+          "theme": "Historic & scenic character",
+          "salience": 0.3,
+          "sentiment": 0.7,
+          "note": "The scenic road requirement is what brought 4 Cedar Hill Road to the board at all, and the board's reaction was approval of a renovation that keeps the feel of East Middle Patent Road."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Adam Kaufman",
+          "role": "Town Planner",
+          "summary": "Presented or commented on nearly every item. Recommended the 8 Rines Road field change as a minor interior reconfiguration; confirmed the 31 Sorrell Street paperwork was in order and displayed the plans; gave the professional opinion that a capped fitness studio is similar to other permitted personal service uses; explained that a courtyard in a front yard must be three times the minimum principal-structure setback and that the building inspector makes the call, while agreeing a variance would likely succeed; flagged sparse planting along East Middle Patent Road; and carried most of the parking district explanation \u2014 that the rules and regulations will come with a map showing parking and developable areas, that the 2020 parking study assessed the whole hamlet including shared parking, and that proximity was already considered when the Town Board set the district boundary.",
+          "cases": [
+            "8-rines-road",
+            "31-sorrell-street-residence",
+            "mdm-fit-909-911-north-broadway",
+            "4-cedar-hill-road",
+            "12-maple-avenue"
+          ]
+        },
+        {
+          "person": "Mary Desmond",
+          "role": "Town Attorney",
+          "summary": "Advised that the plans and backup documentation need not be posted at the same time as the notice and agenda \u2014 only as soon as possible before the meeting \u2014 so the hearing notice for 31 Sorrell Street was adequate, and undertook to read the Hammond Ridge conservation easement the neighbours supplied. On the 12 Maple referral, advised that the community benefits agreement question did not require a vote and that members' individual opinions could simply be communicated to the Town Board, which is what allowed Crispi to abstain and Sauro to stay neutral.",
+          "cases": [
+            "31-sorrell-street-residence",
+            "12-maple-avenue"
+          ]
+        },
+        {
+          "person": "John Kellard",
+          "role": "Town Engineer",
+          "summary": "Asked for additional detail on the stormwater design at 1 Troy Lane plus soil testing to confirm it. His office was also in discussion with the 31 Sorrell Street engineer about adding a third infiltration system, which would require pulling the clearing and grading limit line back further on the north side.",
+          "cases": [
+            "1-troy-lane",
+            "31-sorrell-street-residence"
+          ]
+        }
+      ],
+      "attributionCoverage": "fair",
+      "attributionNote": "No speaker labels in the recording. Christopher Carthy presided and is identifiable throughout, and he names members before inviting them to speak, which fixes Lawrence Ruisi reading the hearing notice and voting no on the text amendment, Thomas Crispi seconding and abstaining, and Steven Sauro declining to take a position. Michael Pollack was absent and carries no positions. The weak point is the 12 Maple discussion, where two non-chair voices alternate for several minutes and the ASR gives no reliable way to separate Sauro from Crispi \u2014 both say they were not present for the original negotiations. The seed-money argument is attributed to Sauro at low confidence for that reason. Several substantive remarks in the 31 Sorrell Street discussion are left unattributed rather than guessed at."
     }
   ]
 }
