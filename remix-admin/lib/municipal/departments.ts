@@ -45,6 +45,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       person: 'Adam R. Kaufman, AICP',
       title: 'Director of Planning',
       phone: '(914) 273-3542',
+      email: 'planning@northcastleny.gov',
       address: '17 Bedford Road, Armonk, NY 10504',
       blurb:
         'Advises the Town on its physical development — oversees the municipal planning operation, ' +
@@ -62,7 +63,7 @@ const NC_BOARD_DEPARTMENTS: Record<string, DeptContact[]> = {
       person: 'Alison Simon',
       title: 'Town Clerk',
       phone: '(914) 273-3000 ext. 42',
-      email: 'asimon@northcastleny.com',
+      email: 'asimon@northcastleny.gov',
       address: '15 Bedford Road, Armonk, NY 10504',
       blurb:
         'Keeper of the Town record — minutes, adopted laws, budgets, contracts and deeds — and the ' +
@@ -224,4 +225,52 @@ const BOARD_DEPARTMENTS: Record<string, Record<string, DeptContact[]>> = {
 /** Departmental contacts for a board page, or [] when none configured. */
 export function getBoardDepartments(muniKey: string, bodyKey: string): DeptContact[] {
   return BOARD_DEPARTMENTS[muniKey]?.[bodyKey] ?? []
+}
+
+// ---- Writing to a board ----
+
+/**
+ * The municipal office that keeps a board's correspondence file — the official,
+ * always-published channel a resident can write to, as distinct from the board
+ * members themselves. Every address here is published on the Town's own site.
+ */
+export interface BoardOffice {
+  /** Button label, e.g. 'Contact the Planning Department'. */
+  label: string
+  email: string
+  /** Why writing here works — shown as a tooltip on the button. */
+  blurb: string
+}
+
+const NC_BOARD_OFFICES: Record<string, BoardOffice> = {
+  planning: {
+    label: 'Planning Department',
+    email: 'planning@northcastleny.gov',
+    blurb:
+      'The Planning Department staffs the Planning Board and circulates correspondence to its ' +
+      'members. Mail sent here goes into the application file.',
+  },
+  town_board: {
+    label: 'Town Clerk',
+    email: 'townclerk@northcastleny.gov',
+    blurb:
+      'The Town Clerk is the keeper of the Town record and the Records Access Officer. Mail sent ' +
+      'here becomes part of the official record of the Town Board.',
+  },
+  zba: {
+    label: 'Planning Department',
+    email: 'planning@northcastleny.gov',
+    blurb:
+      'The Planning Department staffs the Zoning Board of Appeals. Mail sent here goes into the ' +
+      'application file.',
+  },
+}
+
+const BOARD_OFFICES: Record<string, Record<string, BoardOffice>> = {
+  nc: NC_BOARD_OFFICES,
+}
+
+/** The office to write to for a board, or null where none is configured. */
+export function getBoardOffice(muniKey: string, bodyKey: string): BoardOffice | null {
+  return BOARD_OFFICES[muniKey]?.[bodyKey] ?? null
 }
