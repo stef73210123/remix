@@ -301,7 +301,10 @@ export interface MemberDossier {
   /** Elected/appointed term details, surfaced on the profile page. */
   term?: MemberTerm
   email?: string
+  /** Where the address came from and how reliable it is. Research-side only. */
   emailSource?: string
+  /** Short caveat rendered under the address on the profile page. */
+  emailNote?: string
   /** Headshot image URL (committed under /public/municipal/headshots or remote). */
   photo?: string
   bio?: string
