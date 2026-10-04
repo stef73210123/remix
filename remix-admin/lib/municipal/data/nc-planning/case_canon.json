@@ -778,5 +778,15 @@
       "six-ledge-place-bezel",
       "six-ledgewood-place-benson"
     ]
+  },
+  {
+    "canonicalId": "31-sorrell-street",
+    "canonicalName": "31 Sorrell Street — New Residence on a Hammond Ridge Subdivision Lot",
+    "canonicalAddress": "31 Sorrell Street (formerly lot 16 of the Hammond Ridge subdivision)",
+    "canonicalType": "residential site plan",
+    "memberIds": [
+      "31-sorrell-street",
+      "31-sorrow-street"
+    ]
   }
 ]
