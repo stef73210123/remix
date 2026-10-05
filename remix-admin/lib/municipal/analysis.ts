@@ -335,6 +335,11 @@ function loadDossiers(muniKey: string, bodyKey: string): Record<string, MemberDo
   return val
 }
 
+/** Every researched dossier for a board, keyed by name, or null where none exist. */
+export function loadBoardDossiers(muniKey: string, bodyKey: string): Record<string, MemberDossier> | null {
+  return loadDossiers(muniKey, bodyKey)
+}
+
 /** Researched dossier for one member (name-matched, tolerant of minor variants). */
 export function loadDossier(muniKey: string, bodyKey: string, name: string): MemberDossier | null {
   const all = loadDossiers(muniKey, bodyKey)

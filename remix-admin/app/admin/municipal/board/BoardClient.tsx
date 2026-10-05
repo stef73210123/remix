@@ -10,6 +10,7 @@ import TranscriptAnalysis from './TranscriptAnalysis'
 import CaseExplorer, { type MeetingDoc } from './CaseExplorer'
 import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
+import BoardContactActions from './BoardContactActions'
 import BoardKeyDocs from './BoardKeyDocs'
 import DeptTimeline from '../DeptTimeline'
 import RecreationStats from '../RecreationStats'
@@ -239,7 +240,10 @@ export default function BoardClient({ userName }: { userName: string }) {
 
       {data && !loading && (
         <>
-          <h1 className="page-title" style={{ marginBottom: 6 }}>{data.board.displayName}</h1>
+          <h1 className="page-title" style={{ marginBottom: 10 }}>{data.board.displayName}</h1>
+
+          {/* Write to the board, or to the office that keeps its file. */}
+          <BoardContactActions muni={muni} body={body} />
 
           {/* Board members — at the very top of the page. Where a transcript-analysis
               dataset exists, this renders the sentiment-scored cards (same data
