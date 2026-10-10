@@ -5,6 +5,7 @@ import { ChevronDown } from 'lucide-react'
 import { isOpen } from '@/lib/flavor'
 import { DEPT_PAGES } from '@/lib/municipal/deptPages'
 import { isHiddenBody } from '@/lib/municipal/registry'
+import { track } from '@/lib/analytics'
 
 export interface TabDef { label: string; kind: 'board' | 'building' | 'finance' | 'highway' | 'dept'; key: string }
 
@@ -113,7 +114,7 @@ function TabGroupDropdown({
               <a
                 key={t.key}
                 href={hrefFor(muni, t)}
-                onClick={() => setOpen(false)}
+                onClick={() => { track('tab_change', { muni, to: t.key, kind: t.kind, from: active }); setOpen(false) }}
                 className={`tabnav-item${active === t.key ? ' active' : ''}`}
               >
                 {t.label}

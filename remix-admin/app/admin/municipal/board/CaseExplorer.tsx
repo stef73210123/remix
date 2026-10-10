@@ -7,6 +7,7 @@ import type { PermitMarker } from '../JurisdictionMap'
 import { sentimentColor, sentimentChipStyle, fmtSent, dispositionLabel } from '../sentiment'
 import { parseAddress, compareAddress, sortableName, hasStreetSuffix, type ParsedAddress } from '@/lib/municipal/address'
 import { fmtDate } from './caseFormat'
+import { track, bucket } from '@/lib/analytics'
 import CaseProfile from './CaseProfile'
 import {
   buildFacets,
@@ -86,6 +87,17 @@ const NO_ADDRESS = 'No address in the record'
  * gets the room it needs and the list keeps its place — and the profile's
  * ‹ › walk the same filtered order, so a street reads straight through.
  */
+/** Stable fingerprint of the filter set, used both to seed and to compare —
+ *  one expression, so the "no filters" seed cannot drift from the real value. */
+function filterSig(
+  status: Set<string>, types: Set<string>, themes: Set<string>, years: Set<string>, recurringOnly: boolean,
+): string {
+  return [status, types, themes, years]
+    .map((x) => [...x].sort().join(','))
+    .concat(String(recurringOnly))
+    .join('|')
+}
+
 export default function CaseExplorer({
   data,
   muni,
@@ -209,20 +221,74 @@ export default function CaseExplorer({
     [filtered, limit],
   )
 
+  const board = data.meta.bodyKey
   const openCaseById = useCallback(
-    (id: string) => { setOpenId(id); reveal(id) },
-    [reveal],
+    (id: string, source: 'list' | 'map' | 'neighbour' = 'list') => {
+      track('case_view', { muni, board, case: id, source })
+      setOpenId(id)
+      reveal(id)
+    },
+    [reveal, muni, board],
   )
+
+  // Search is recorded as "a search happened, roughly this many results" and
+  // never as the string typed. On this site a query is usually a neighbour's
+  // name or street address, which is exactly what we must not collect.
+  // Debounced so one search is one event rather than one per keystroke.
+  useEffect(() => {
+    const q = query.trim()
+    if (!q) return
+    const t = setTimeout(
+      () => track('search', { muni, board, length: bucket(q.length), results: bucket(filtered.length) }),
+      800,
+    )
+    return () => clearTimeout(t)
+    // `filtered` is read at fire time only; re-running on it would reset the timer
+    // on every list recompute and never settle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, muni, board])
+
+  // Which facets people actually reach for. Counts only — the chosen values are
+  // public record categories, so they are safe to name.
+  // Keyed on the filter set itself, not on "is this the first run" — a run-once
+  // ref is defeated by React double-invoking effects, which fired a phantom
+  // `active: 0` event on every page load. Comparing against the last recorded
+  // signature (seeded with the empty set) reports real changes only, however
+  // many times the effect runs.
+  const lastFilterSig = useRef(filterSig(new Set(), new Set(), new Set(), new Set(), false))
+  useEffect(() => {
+    const sig = filterSig(status, types, themes, years, recurringOnly)
+    if (sig === lastFilterSig.current) return
+    lastFilterSig.current = sig
+    const active = status.size + types.size + themes.size + years.size + (recurringOnly ? 1 : 0)
+    track('filter_apply', {
+      muni, board, active,
+      status: [...status].sort().join('|') || undefined,
+      type: [...types].sort().join('|') || undefined,
+      theme: [...themes].sort().join('|') || undefined,
+      year: [...years].sort().join('|') || undefined,
+      recurringOnly: recurringOnly || undefined,
+      results: bucket(filtered.length),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, types, themes, years, recurringOnly])
 
   // The open case lives in the URL, so a profile can be linked to and a reload
   // or a back button lands on the same case rather than the top of the list.
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get('case')
+    if (id && !linkReported.current) {
+      linkReported.current = true
+      track('case_view', { muni, board, case: id, source: 'link' })
+    }
     if (id) setOpenId(id)
+    // Deliberately first-run only; `muni`/`board` are stable for the mounted page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Skipped on the first pass, which still has `openId` at its initial null:
   // writing then would strip the very `?case=` the effect above is reading.
+  const linkReported = useRef(false)
   const urlSynced = useRef(false)
   useEffect(() => {
     if (!urlSynced.current) { urlSynced.current = true; return }
@@ -258,6 +324,7 @@ export default function CaseExplorer({
   )
 
   function changeGroup(g: GroupKey) {
+    track('group_change', { muni, board, group: g })
     setGroup(g)
     setLimit(PAGE)
     const s = GROUP_SORT[g]
@@ -299,7 +366,12 @@ export default function CaseExplorer({
           <select value={group} onChange={(e) => changeGroup(e.target.value as GroupKey)} aria-label="Group" style={inputStyle}>
             {GROUPS.map((g) => <option key={g.key} value={g.key}>{g.label}</option>)}
           </select>
-          <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} aria-label="Sort" style={inputStyle}>
+          <select
+            value={sort}
+            onChange={(e) => { track('sort_change', { muni, board, sort: e.target.value }); setSort(e.target.value as SortKey) }}
+            aria-label="Sort"
+            style={inputStyle}
+          >
             {SORTS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
           </select>
           <button
@@ -368,7 +440,7 @@ export default function CaseExplorer({
         onlyPermits
         showZoning={data.meta.bodyKey === 'planning'}
         height={380}
-        onPermitClick={(p) => openCaseById(p.id)}
+        onPermitClick={(p) => { track('chart_interact', { muni, board, chart: 'case_map', action: 'pin_click' }); openCaseById(p.id, 'map') }}
         flyToPermit={selectedMarker}
       />
 

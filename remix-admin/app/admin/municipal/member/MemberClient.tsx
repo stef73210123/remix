@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
+import { track } from '@/lib/analytics'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
 import MemberSentiment from './MemberSentiment'
@@ -92,6 +93,10 @@ export default function MemberClient({ userName }: { userName: string }) {
     const byName = p.get('byName') || ''
     setMuni(m)
     setFromBody(b)
+    // Same reason as board_view: /admin/municipal/member tells us nothing about
+    // WHICH official is being read. Officials are public figures acting in
+    // office, so naming them here carries no visitor information.
+    if (m && (id || byName)) track('member_view', { muni: m, board: b, member: byName || id })
     if (!m || (!id && !byName)) {
       setError('Missing town or member.')
       setLoading(false)
