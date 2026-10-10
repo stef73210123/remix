@@ -10,6 +10,7 @@ import { parseAddress } from '@/lib/municipal/address'
 import { typeTags, statusBucket, isConditional, STATUS_LABELS, type StatusBucket } from '@/lib/municipal/caseFacets'
 import type { MeetingDoc } from './CaseExplorer'
 import { fmtDate } from './caseFormat'
+import { track } from '@/lib/analytics'
 
 /**
  * One case, in full — the profile behind a row in the explorer.
@@ -241,6 +242,7 @@ export default function CaseProfile({
                                 rel="noopener noreferrer"
                                 className="badge state"
                                 style={{ textDecoration: 'none', fontSize: 10.5 }}
+                                onClick={() => track('document_open', { muni, case: c.id, kind: a.kind, date: ap.date, from: 'case_profile' })}
                                 title={`That meeting's ${a.kind}${a.pageCount ? ` — ${a.pageCount} pages` : ''}`}
                               >
                                 {a.kind.charAt(0).toUpperCase() + a.kind.slice(1)} ↗

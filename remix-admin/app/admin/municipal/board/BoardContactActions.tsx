@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Mail, Building2 } from 'lucide-react'
+import { track } from '@/lib/analytics'
 
 /**
  * "Write to this board" actions, directly under the board page title.
@@ -59,6 +60,7 @@ export default function BoardContactActions({ muni, body }: { muni: string; body
             href={`mailto:${members.map((m) => m.email).join(',')}`}
             className="btn"
             style={BTN}
+            onClick={() => track('email_click', { target: 'board', board: board.label, recipients: members.length })}
             title={`Opens a new message addressed to all ${members.length} sitting members: ${roster}`}
           >
             <Mail size={14} aria-hidden />
@@ -67,7 +69,13 @@ export default function BoardContactActions({ muni, body }: { muni: string; body
           </a>
         )}
         {office && (
-          <a href={`mailto:${office.email}`} className="btn secondary" style={BTN} title={office.blurb}>
+          <a
+            href={`mailto:${office.email}`}
+            className="btn secondary"
+            style={BTN}
+            title={office.blurb}
+            onClick={() => track('email_click', { target: 'office', board: board.label, office: office.label })}
+          >
             <Building2 size={14} aria-hidden />
             Contact the {office.label}
           </a>

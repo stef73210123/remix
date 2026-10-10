@@ -2,6 +2,7 @@
 
 import { Phone, Mail, MapPin } from 'lucide-react'
 import { getBoardDepartments } from '@/lib/municipal/departments'
+import { track } from '@/lib/analytics'
 
 /**
  * Departmental contact cards (the staff behind a board's business) — pulled
@@ -47,7 +48,11 @@ export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyK
             <div style={{ fontSize: 12.5, marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
               {d.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Phone size={12} aria-hidden /> {d.phone}</span>}
               {d.email && (
-                <a href={`mailto:${d.email}`} style={{ color: 'var(--primary-light)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <a
+                  href={`mailto:${d.email}`}
+                  onClick={() => track('email_click', { target: 'department', board: bodyKey, office: d.department })}
+                  style={{ color: 'var(--primary-light)', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                >
                   <Mail size={12} aria-hidden /> {d.email}
                 </a>
               )}
@@ -56,7 +61,14 @@ export default function BoardStaffCards({ muni, bodyKey }: { muni: string; bodyK
             {d.links.length > 0 && (
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 10 }}>
                 {d.links.map((l) => (
-                  <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, color: 'var(--primary-light)' }}>{l.label} ↗</a>
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track('external_link', { muni, board: bodyKey, label: l.label, from: 'staff_card' })}
+                    style={{ fontSize: 12.5, color: 'var(--primary-light)' }}
+                  >{l.label} ↗</a>
                 ))}
               </div>
             )}

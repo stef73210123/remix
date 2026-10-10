@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { getKeyDocs } from '@/lib/municipal/keyDocs'
+import { track } from '@/lib/analytics'
 
 /** Shown before the list expands. Enough to see what's there without a wall of
  *  text on a page whose main content is below. */
@@ -50,6 +51,7 @@ export default function BoardKeyDocs({ muni, bodyKey }: { muni: string; bodyKey:
                 href={d.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => track('document_open', { muni, board: bodyKey, label: d.label, from: 'key_docs' })}
                 style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--primary-light)' }}
               >
                 {d.label} ↗

@@ -5,6 +5,7 @@ import { FileText, MapPin, Mail } from 'lucide-react'
 import Lightbox from './Lightbox'
 import ContactLightbox from './ContactLightbox'
 import { isOpen } from '@/lib/flavor'
+import { track } from '@/lib/analytics'
 
 /**
  * Resident quick-actions: file a FOIL (records) request, report a local
@@ -33,6 +34,7 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
         rel="noopener noreferrer"
         className="btn secondary"
         style={btnStyle}
+        onClick={() => track('civic_action', { action: 'foil_request', destination: 'nextrequest' })}
         title="Ask the Town for copies of public records. Opens the Town's own records-request portal (a FOIL request, under New York's Freedom of Information Law)."
       >
         <FileText size={13} aria-hidden /> Request Records
@@ -41,7 +43,13 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
         className="btn secondary"
         style={btnStyle}
         title="Report a pothole, downed limb, streetlight or similar to the Town. Opens the Town's own reporting portal."
-        onClick={() => setOpen({ url: ISSUE_URL, title: 'Report an issue — North Castle (SeeClickFix)' })}
+        onClick={() => {
+          // Opening only. The portal itself is a cross-origin iframe, so a
+          // completed submission is invisible to us — see the note in
+          // docs/analytics.md before reading this as "issues reported".
+          track('civic_action', { action: 'report_issue', destination: 'seeclickfix' })
+          setOpen({ url: ISSUE_URL, title: 'Report an issue — North Castle (SeeClickFix)' })
+        }}
       >
         <MapPin size={13} aria-hidden /> Report Issue
       </button>
@@ -50,7 +58,10 @@ export default function CivicActions({ style }: { style?: React.CSSProperties })
           className="btn secondary"
           style={btnStyle}
           title="Message the volunteers who run this site — not the Town"
-          onClick={() => setContactOpen(true)}
+          onClick={() => {
+            track('civic_action', { action: 'contact_site' })
+            setContactOpen(true)
+          }}
         >
           <Mail size={13} aria-hidden /> Contact
         </button>

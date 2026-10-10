@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import MuniHeader from '@/app/admin/municipal/MuniHeader'
 import MuniTabs from '@/app/admin/municipal/MuniTabs'
 import Breadcrumbs, { type Crumb } from '../Breadcrumbs'
@@ -11,6 +11,7 @@ import CaseExplorer, { type MeetingDoc } from './CaseExplorer'
 import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardContactActions from './BoardContactActions'
+import { track } from '@/lib/analytics'
 import BoardKeyDocs from './BoardKeyDocs'
 import DeptTimeline from '../DeptTimeline'
 import RecreationStats from '../RecreationStats'
@@ -97,6 +98,17 @@ export default function BoardClient({ userName }: { userName: string }) {
   // clicking an entry in either highlights and scrolls to the match in the other.
   const [selectedMeetingKey, setSelectedMeetingKey] = useState<string | null>(null)
 
+  // One handler for both the timeline and the list beneath it, so selecting a
+  // meeting is recorded the same way wherever it was clicked.
+  const selectMeeting = useCallback(
+    (key: string, from: 'timeline' | 'list') => {
+      track('meeting_view', { muni, board: body, date: key.split('_').pop() || '', from })
+      if (from === 'timeline') track('chart_interact', { muni, board: body, chart: 'meeting_timeline', action: 'select' })
+      setSelectedMeetingKey(key)
+    },
+    [muni, body],
+  )
+
   useEffect(() => {
     const p = new URLSearchParams(window.location.search)
     const m = p.get('muni') || ''
@@ -116,6 +128,10 @@ export default function BoardClient({ userName }: { userName: string }) {
     // format matches timelineItems below.
     const d = p.get('date') || ''
     if (m && b && /^\d{4}-\d{2}-\d{2}$/.test(d)) setSelectedMeetingKey(`${m}_${b}_${d}`)
+    // Bare pageviews collapse every board into one `/admin/municipal/board`
+    // row, because the identity lives in the query string. This is the event
+    // that tells them apart.
+    if (m && b) track('board_view', { muni: m, board: b })
     if (m && b) {
       fetch(`/admin/api/municipal/transcript?muni=${encodeURIComponent(m)}&body=${encodeURIComponent(b)}`)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error('load'))))
@@ -170,6 +186,7 @@ export default function BoardClient({ userName }: { userName: string }) {
               target="_blank"
               rel="noopener noreferrer"
               className="badge state"
+              onClick={() => track('transcript_open', { muni, board: body, date: dateKey })}
               style={{ textDecoration: 'none' }}
             >
               Transcript ↗
@@ -309,7 +326,7 @@ export default function BoardClient({ userName }: { userName: string }) {
               <MeetingTimeline
                 items={timelineItems}
                 selectedKey={selectedMeetingKey}
-                onSelect={setSelectedMeetingKey}
+                onSelect={(k) => selectMeeting(k, 'timeline')}
                 emptyText="We don't have any meetings on file for this board yet."
               />
               {analysis && analysis.meetings.length > 0 ? (
@@ -319,13 +336,13 @@ export default function BoardClient({ userName }: { userName: string }) {
                     muni={muni}
                     body={body}
                     selectedKey={selectedMeetingKey}
-                    onSelect={setSelectedMeetingKey}
+                    onSelect={(k) => selectMeeting(k, 'list')}
                   />
                 </div>
               ) : (
                 timelineItems.length > 0 && (
                   <div style={{ margin: '10px 0 26px' }}>
-                    <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={setSelectedMeetingKey} />
+                    <MeetingList items={timelineItems} selectedKey={selectedMeetingKey} onSelect={(k) => selectMeeting(k, 'list')} />
                   </div>
                 )
               )}
