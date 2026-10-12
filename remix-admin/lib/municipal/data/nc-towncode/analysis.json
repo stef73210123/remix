@@ -1434,7 +1434,32 @@
           "suggestion": "Streamline the fingerprinting requirement in §233-4C for low-risk categories (e.g., seasonal farm-produce sellers already exempted under §233-16A(7), or registered charitable organizations under §233-16A(6)) rather than applying it uniformly to every assistant and employee."
         }
       ],
-      "peerComparison": "Based on general familiarity with New York municipal peddling/soliciting codes rather than any direct document comparison: many towns still carry forward permit-plus-police-background-check structures adopted before Watchtower Bible & Tract Society v. Village of Stratton (2002) reshaped the constitutional landscape for door-to-door canvassing, and this chapter — last substantively restructured in 2009 with piecemeal amendments through 2020 — shows some but not complete modernization. Its exemptions for political candidates, minors in scouting organizations, and registered charities (§233-16) are a positive step that many older ordinances lack entirely. However, requiring canvassers to register with the Town Clerk (name, SSN, DOB, 10-day advance notice, denial for a prior conviction) rather than treating registration as purely voluntary or eliminating it for noncommercial speech is more restrictive than what many towns have since adopted post-Watchtower. On permit fee mechanics, tying fees to a Master Fee Schedule (§233-6) rather than hard-coding dollar amounts is standard modern practice; the fixed $15,000 bond in §233-20 is an exception to that otherwise-updated approach."
+      "peerComparison": "Based on general familiarity with New York municipal peddling/soliciting codes rather than any direct document comparison: many towns still carry forward permit-plus-police-background-check structures adopted before Watchtower Bible & Tract Society v. Village of Stratton (2002) reshaped the constitutional landscape for door-to-door canvassing, and this chapter — last substantively restructured in 2009 with piecemeal amendments through 2020 — shows some but not complete modernization. Its exemptions for political candidates, minors in scouting organizations, and registered charities (§233-16) are a positive step that many older ordinances lack entirely. However, requiring canvassers to register with the Town Clerk (name, SSN, DOB, 10-day advance notice, denial for a prior conviction) rather than treating registration as purely voluntary or eliminating it for noncommercial speech is more restrictive than what many towns have since adopted post-Watchtower. On permit fee mechanics, tying fees to a Master Fee Schedule (§233-6) rather than hard-coding dollar amounts is standard modern practice; the fixed $15,000 bond in §233-20 is an exception to that otherwise-updated approach.",
+      "recordEvidence": {
+        "verdict": "Definition and notice gaps raised as the 2026 hours limit was adopted",
+        "criticismEpisodes": 1,
+        "citingUtterances": 3,
+        "meetingsCiting": 2,
+        "findings": [
+          {
+            "sectionBasis": "inferred",
+            "flawType": "ambiguous/undefined",
+            "quote": "canvassing, the way the law reads is to go from house to house or from business to business … to seek contributions, fundraise, petition, seek membership, or disseminate information. … it's not 100% clear what types of organizations are allowed to canvas. Perhaps we need to clarify that definition within our town code",
+            "attribution": "Unattributed, apparently Town Clerk's office staff",
+            "meeting": "Town Board, September 23, 2026, 01:10:25",
+            "corroboration": "The nc-towncode chapter summary describes a separate canvasser registration process at §233-12, yet on this record both the speaker ('we do not issue a permit for people to canvas') and the presiding voice ('we don't have a law that way that you have to register with the town') treated canvassers as unregistered. The working understanding at the meeting appears to diverge from the codified text, which supports the ambiguity complaint. The definitions section number was not spoken."
+          },
+          {
+            "section": "§233-13",
+            "sectionBasis": "inferred",
+            "flawType": "unenforceable",
+            "quote": "They don't know. No one will know this information. This is like very deep in our stuff. So like how is the resident supposed to realize this and how is someone who's [canvassing] supposed to?",
+            "attribution": "Unattributed Town Board member",
+            "meeting": "Town Board, September 23, 2026, 01:15:26",
+            "corroboration": "Said moments after counsel confirmed the new 10 a.m.–6 p.m. limit in §233-13 applies to canvassing as well as peddling and soliciting. Because canvassers need no town permit, they have no point of contact through which they would learn of the limit. The board's remedy was outreach (letters to party committees, a website notice), not a change to the text."
+          }
+        ]
+      }
     },
     {
       "chapter": "241",
@@ -2237,8 +2262,8 @@
       "recordEvidence": {
         "verdict": "Criticism concentrated in schedules and sight distance",
         "criticismEpisodes": 3,
-        "citingUtterances": 11,
-        "meetingsCiting": 5,
+        "citingUtterances": 13,
+        "meetingsCiting": 6,
         "amendmentTraffic": "Maintained almost entirely through its numbered schedules rather than its substantive 1987 text: §325-12 amended June 22 and July 27, 2022; a 2026 package amended §325-44 Schedule IIA (one-way streets), §325-55, and §325-33 (parking lots) together (May 13 and 27, 2026). The sole uncodified item in the eCode360 New Laws queue as of the code's current date — Local Law 3 of 2026, “Quarry Hts One Way and No Parking” — amends this chapter.",
         "findings": [
           {
@@ -2356,10 +2381,10 @@
       "recordEvidence": {
         "verdict": "Applied routinely, never criticised",
         "criticismEpisodes": 0,
-        "citingUtterances": 6,
-        "meetingsCiting": 3,
+        "citingUtterances": 8,
+        "meetingsCiting": 4,
         "findings": [],
-        "note": "The strongest-performing chapter in the record. Recent (adopted 2012) and cited operationally by section — §340-5/§340-5D as the governing wetland-permit procedure, §340-9's mitigation policy read into the record and applied — and repeatedly used to REFUSE development rather than accommodate it: e.g. Planning Board, June 13 and 21, 2022, on a motor court and curb cut — “… it's located in a wetland buffer and the town code does not permit that.” Never criticised by staff, board, or counsel across 263 meetings, making it the clearest internal benchmark this corpus provides for what a well-functioning chapter looks like — in direct contrast to Chapter 355."
+        "note": "The strongest-performing chapter in the record. Recent (adopted 2012) and cited operationally by section — §340-5/§340-5D as the governing wetland-permit procedure, §340-9's mitigation policy read into the record and applied — and repeatedly used to REFUSE development rather than accommodate it: e.g. Planning Board, June 13 and 21, 2022, on a motor court and curb cut — “… it's located in a wetland buffer and the town code does not permit that.” Never criticised by staff, board, or counsel across 267 meetings, making it the clearest internal benchmark this corpus provides for what a well-functioning chapter looks like — in direct contrast to Chapter 355."
       }
     },
     {
@@ -2415,10 +2440,10 @@
       "peerComparison": "Based on general professional familiarity with Westchester County and broader New York State zoning practice rather than a document-to-document comparison, North Castle's chapter sits above the median in sophistication and currency but is not clearly at the leading edge on housing flexibility. Its district structure (a long ladder of one-family districts from 4 acres down to 5,000 square feet, separate multifamily and hamlet-mixed-use districts, and a distinct floating overlay for an age-restricted golf course community) is more granular than many peer towns, and its mandatory AFFH inclusionary set-asides -- rooted in the Westchester County Fair and Affordable Housing settlement that many county municipalities share -- are a genuinely common regional feature rather than unique, though North Castle's version is unusually detailed (resale price formulas, affirmative marketing, fixed-improvement credit schedules). Conservation subdivision authority under Town Law §278 is now standard practice across NY towns, and North Castle's version is comparably thorough. Where North Castle likely lags many actively-reforming peer towns is accessory dwelling units: a growing number of NY municipalities have moved toward as-of-right or lightly-conditioned ADU approval to help address regional housing shortages, whereas North Castle still requires a discretionary special permit, owner-occupancy, and automatic termination on sale -- among the more restrictive ADU regimes still on the books regionally. Its short-term-rental ordinance and wireless-facilities framework (cross-referenced to a separate, FCC-shot-clock-compliant telecommunications law) are relatively current compared to many towns that still lack any STR regulation at all. Parking minimums, by contrast, remain conventional 1960s/1970s-style suburban ratios that many progressive Hudson Valley and Westchester municipalities have begun to relax near walkable centers, an area where North Castle has not modernized despite its own hamlet design guidelines calling for pedestrian-oriented development.",
       "recordEvidence": {
         "verdict": "Heaviest criticism and heaviest amendment traffic",
-        "criticismEpisodes": 21,
-        "citingUtterances": 44,
-        "meetingsCiting": 33,
-        "amendmentTraffic": "33 meetings cite this chapter — the heaviest traffic of any chapter — concentrated in §355-27 (airport-campus density, 5 meetings in 2023), §355-32B (Golf Course Community Floating Overlay District, 3 meetings), §355-28 (R-MF district additions, 3 meetings), §355-21 (8 meetings), and §355-40's special-permit-use table, grown to 28 lettered subsections, several written for a single site or use (“PBO-2A Zone,” “DOB-20A Zone,” “IND-AA Zoning District”).",
+        "criticismEpisodes": 26,
+        "citingUtterances": 47,
+        "meetingsCiting": 35,
+        "amendmentTraffic": "35 meetings cite this chapter — the heaviest traffic of any chapter — concentrated in §355-27 (airport-campus density, 5 meetings in 2023), §355-32B (Golf Course Community Floating Overlay District, 3 meetings), §355-28 (R-MF district additions, 3 meetings), §355-21 (8 meetings), and §355-40's special-permit-use table, grown to 28 lettered subsections, several written for a single site or use (“PBO-2A Zone,” “DOB-20A Zone,” “IND-AA Zoning District”).",
         "findings": [
           {
             "flawType": "internally inconsistent / too rigid",
@@ -2529,17 +2554,82 @@
             "attribution": "Unattributed speaker",
             "meeting": "Zoning Board of Appeals, January 9, 2025, 00:17:51",
             "corroboration": "Confirmed — no chapter or section on short-term rentals, transient rentals, or rental property exists anywhere in the Code, and none appears in the New Laws queue. Accessory apartments (§355-40.K) govern a permanent dwelling unit, not transient occupancy."
+          },
+          {
+            "sectionBasis": "inferred",
+            "flawType": "silent/gap",
+            "quote": "There's been change of uses since that building was originally built. There were more restaurants in there than there was anticipated … If he changed the use, we didn't have to come before this board or any board for an approval even though the parking requirement went up. And that's happened, so the deficiency is even increased by the change of use.",
+            "attribution": "Unattributed member of the public (adjoining property owner; name not reliably captured by the ASR)",
+            "meeting": "Planning Board, September 28, 2026, 00:12:37",
+            "corroboration": "Consistent with the nc-towncode Chapter 355 summary that §355-56.L allows parking relief only where a parking district already exists; no section number was spoken."
+          },
+          {
+            "sectionBasis": "inferred",
+            "flawType": "silent/gap",
+            "quote": "Let's pretend [Bobo's] does so wonderfully that you decide to knock out the wall behind you … And you expand your cafe, you expand your use there, intensity. … You would be allowed to do that, I think. … There's an expanded use, and there is really no governance for the parking.",
+            "attribution": "Christopher Carthy (presiding)",
+            "meeting": "Planning Board, September 28, 2026, 00:55:15"
+          },
+          {
+            "sectionBasis": "inferred",
+            "flawType": "too rigid / mismatched to context",
+            "quote": "I just want to make the distinction between what the code requires. Because the code says you need 40 spaces, [that] doesn't really translate to what is really required. That's under certain specific standalone, I-T-E based calculation.",
+            "attribution": "Unattributed (board member or staff; not identifiable in the un-diarized recording)",
+            "meeting": "Planning Board, September 28, 2026, 00:41:24",
+            "corroboration": "Echoes the nc-towncode recommendation to revisit the conventional minimum parking standard applied in the CB-A Armonk hamlet district (§355-57). The speaker said \"40 spaces\" although the code figure under discussion was 47 (40 is the variance granted); quoted as spoken."
+          },
+          {
+            "sectionBasis": "inferred",
+            "flawType": "silent/gap",
+            "quote": "And so right now, at least in North [Castle], there's no permitted use for a veterinary use … anywhere in these zones. So there's no way for the public to have any sort of small or large veterinarian … in these particular areas. … in another zone, gas stations are allowed by right without any special permit, but veterinarians are not.",
+            "attribution": "Dr. Philip Potter (as he introduced himself), applicant, Spot On Veterinary Hospital & Hotel",
+            "meeting": "Town Board, September 9, 2026, 01:01:02",
+            "corroboration": "Applicant testimony, discounted accordingly; earlier the same night (00:45:13) he said \"there doesn't seem to be any particular allowance or code associated with the allowance of any veterinary facility in general\" and hedged (00:48:01) that he \"might be misspeaking that was just what was explained to me.\" Consistent with the Town Board record in analysis.json: a separate text-amendment petition was needed for a small-animal veterinary clinic in the RB district at 150 Bedford Road (May 8, 2024), and another for the Happy Cat Hotel & Spa at 7 McDonald Avenue (May 24, 2022)."
+          },
+          {
+            "sectionBasis": "inferred",
+            "flawType": "silent/gap",
+            "quote": "So currently, your code does not contemplate this sort of use, and so … [t]his isn't enumerat[ed in] your code. … So we have to provide our own zoning for you. … [W]hile it's not expressly addressed in the current zoning code, it is supported by our comprehensive plan.",
+            "attribution": "Counsel for the STAC petitioner, Zarin & Steinmetz (name not reliably captured by the ASR)",
+            "meeting": "Town Board, September 9, 2026, 01:24:15",
+            "corroboration": "Applicant testimony, discounted accordingly — it argues for a petitioner-drafted district. It fits the Chapter 355 pattern in nc-towncode/analysis.json of single-site or single-use districts added to the code (e.g. 'PBO-2A Zone', 'DOB-20A Zone', 'IND-AA Zoning District')."
+          },
+          {
+            "section": "§355-57",
+            "sectionBasis": "inferred",
+            "flawType": "obsolete / unsupported standard",
+            "quote": "There's no rationale in the code for those square footage requirements and why you would do 1 per 75 square feet. … It doesn't make sense. We're parking walk-in freezers, walk-in refrigerators, bathrooms.",
+            "attribution": "Applicant's counsel, Zarin & Steinmetz (name not reliably captured by the ASR)",
+            "meeting": "Zoning Board of Appeals, September 3, 2026, 00:15:05",
+            "corroboration": "Echoes the nc-towncode Ch. 355 concern and recommendation that conventional suburban parking minimums (cited at §355-57) have not been revisited despite the CB-A hamlet district's walkable, 'village-like' goals. The same counsel made the point earlier at 00:05:58 ('there's no rationale really provided for this'). The presiding member agreed at 00:16:35 ('parking goes with how many seats you have, not with a square footage'), as did a public speaker at 00:37:35. Applicant's counsel also relayed that the Town Planner had told the Planning Board most hamlet food uses could not meet the parking requirements (00:07:06). The §355-57 section number was not spoken; it is taken from the chapter summary."
+          },
+          {
+            "section": "§355-57",
+            "sectionBasis": "inferred",
+            "flawType": "obsolete / too rigid",
+            "quote": "I kind of agree with your argument, [counsel]. … I think parking goes with how many seats you have, not with a square footage. That's just my opinion.",
+            "attribution": "Ray Rodriguez, Chairman (presiding)",
+            "meeting": "Zoning Board of Appeals, September 3, 2026, 00:16:35",
+            "corroboration": "A board member, not only the applicant, questioning the square-footage basis of the cafe parking standard. Counsel noted that under the greater-of rule even removing all seats would not avoid the variance (00:37:15–00:37:26)."
+          },
+          {
+            "sectionBasis": "inferred",
+            "flawType": "silent/gap / internally inconsistent",
+            "quote": "What [is a] little odd … is I believe a error in your zoning code. … In a commercial building you don't count the garage [as] part of the FAR … However for multi-family or multi-unit residential there's a gap in the code and the interpretation was applied that multi-family … [are] treated as single-family homes and hence the garage is counted in the FAR, which makes no sense … you're being penalized for [enclosing it].",
+            "attribution": "Ralph Rossi, RMA Development Associates (applicant's development partner)",
+            "meeting": "Zoning Board of Appeals, September 3, 2026, 01:50:26",
+            "corroboration": "Matches an existing Ch. 355 recordEvidence finding from the Planning Board on May 22, 2023, cited at §355-21 / §355-28: 'amend [the] code so multi-family developments [are] treated [the] same as commercial developments, rather than single family houses'. The defect is now on the record at the ZBA as the stated cause of the 45 Bedford Road FAR variance (0.077 over a 0.4 FAR), which was re-granted at this meeting. Section not spoken; likely the floor-area definition in §355-4, but not verified."
           }
         ]
       }
     }
   ],
   "recordCorpus": {
-    "totalTranscripts": 263,
+    "totalTranscripts": 267,
     "byBoard": {
-      "Planning Board": 105,
-      "Town Board": 113,
-      "Zoning Board of Appeals": 44,
+      "Planning Board": 106,
+      "Town Board": 115,
+      "Zoning Board of Appeals": 45,
       "Architectural Review Board": 1
     },
     "dateRange": "2018 and 2021–2026",
