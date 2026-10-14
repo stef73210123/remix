@@ -6,6 +6,7 @@ import { isOpen } from '@/lib/flavor'
 import { DEPT_PAGES } from '@/lib/municipal/deptPages'
 import { isHiddenBody } from '@/lib/municipal/registry'
 import { track } from '@/lib/analytics'
+import SiteSearch from './SiteSearch'
 
 export interface TabDef { label: string; kind: 'board' | 'building' | 'finance' | 'highway' | 'dept'; key: string }
 
@@ -182,6 +183,7 @@ export default function MuniTabs({ muni, active }: { muni: string; active: 'dash
         Town Code
       </a>
       <TabDropdownGroups muni={muni} active={active} />
+      <SiteSearch muni={muni} />
     </div>
   )
 }

@@ -44,11 +44,28 @@ export async function GET(req: Request) {
     meetings = (await sql`
       SELECT m.id, m.scheduled_at, m.status, m.title, m.source_url,
              COALESCE((
+               -- One document per kind. CivicClerk republishes a meeting's agenda
+               -- under a new fileId when it is revised or when the fuller agenda
+               -- packet lands, and the ingest upsert is keyed on source_url, so
+               -- each republish adds a row rather than replacing one — which is
+               -- why some meetings grew two or three identical "Agenda" links.
+               -- Most pages first, then most recently fetched: the packet (agenda
+               -- plus the backup materials) always outweighs the bare agenda, and
+               -- between same-size revisions the newest is the current one.
                SELECT json_agg(json_build_object(
-                        'kind', a.kind, 'sourceUrl', a.source_url,
-                        'blobUrl', a.blob_url, 'pageCount', a.page_count
-                      ) ORDER BY a.kind)
-               FROM meeting_asset a WHERE a.meeting_id = m.id
+                        'kind', x.kind, 'sourceUrl', x.source_url,
+                        'blobUrl', x.blob_url, 'pageCount', x.page_count
+                      ) ORDER BY x.kind)
+               FROM (
+                 SELECT DISTINCT ON (a.kind)
+                        a.kind, a.source_url, a.blob_url, a.page_count
+                 FROM meeting_asset a
+                 WHERE a.meeting_id = m.id
+                 ORDER BY a.kind,
+                          a.page_count DESC NULLS LAST,
+                          a.fetched_at DESC NULLS LAST,
+                          a.id DESC
+               ) x
              ), '[]'::json) AS assets,
              (SELECT count(*)::int FROM meeting_text t WHERE t.meeting_id = m.id) AS text_count
       FROM meeting m

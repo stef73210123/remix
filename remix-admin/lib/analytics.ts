@@ -33,6 +33,7 @@ export type EventName =
   | 'external_link'       // off-site link (Town portal, news story)
   // --- exploration: how people work the data ---
   | 'search'              // count only, never the query string
+  | 'search_result_click' // which kind of site-search result got picked
   | 'filter_apply'
   | 'group_change'
   | 'sort_change'
