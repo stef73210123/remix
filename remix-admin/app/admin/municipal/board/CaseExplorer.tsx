@@ -276,7 +276,12 @@ export default function CaseExplorer({
   // The open case lives in the URL, so a profile can be linked to and a reload
   // or a back button lands on the same case rather than the top of the list.
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get('case')
+    const sp = new URLSearchParams(window.location.search)
+    // ?q= pre-fills the list filter — site-wide search sends address results
+    // here so every application at that address is on screen at once.
+    const q0 = sp.get('q')
+    if (q0) setQuery(q0)
+    const id = sp.get('case')
     if (id && !linkReported.current) {
       linkReported.current = true
       track('case_view', { muni, board, case: id, source: 'link' })

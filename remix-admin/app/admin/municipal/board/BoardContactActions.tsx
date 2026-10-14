@@ -43,8 +43,13 @@ export default function BoardContactActions({ muni, body }: { muni: string; body
   }, [muni, body])
 
   if (!data) return null
-  const { board, office } = data
-  const members = board.members
+  // Defensive: a malformed or unexpected payload must not take the whole board
+  // page down with it. This component renders above everything else on the
+  // page, so an unguarded read here white-screens the case list, the members
+  // and the meetings too — a contact button is never worth that.
+  const board = data.board ?? { label: '', members: [] }
+  const office = data.office ?? null
+  const members = Array.isArray(board.members) ? board.members : []
   if (members.length === 0 && !office) return null
 
   // The per-member note is written for a single profile card ("...to this
