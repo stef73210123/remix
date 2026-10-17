@@ -1,16 +1,18 @@
 {
-  "last_consumed_sweep_id": "2026-10-10",
-  "last_consumed_completed_at": "2026-10-11T14:02:20-04:00",
+  "last_consumed_sweep_id": "2026-10-17",
+  "last_consumed_completed_at": "2026-10-17T09:22:45-04:00",
   "processed_files": {
     "13YlajNSzh1gCZd2sEJpjrpTto4Vu44BD": "2026-10-11T18:01:35.363Z",
     "12Wq27JKB9dx8DlIIFDGAma6m1TagOodk": "2026-10-11T18:01:37.873Z",
     "1jwGXhp5UbyPEJYxJSJM2DRYW3jRyIsKR": "2026-10-11T18:01:40.404Z",
     "17TLJeqSS1F4kYajxxkbX3TewB9lfeV4d": "2026-10-11T18:01:42.578Z",
-    "1p8_2uUxc9QLbxTI-pZaJM_expsSDTfPp": "2026-09-26T21:48:12.277Z"
+    "1p8_2uUxc9QLbxTI-pZaJM_expsSDTfPp": "2026-09-26T21:48:12.277Z",
+    "1vyIEMnKWXdBys5MNbmbkQUW0PyYY2uUO": "2026-10-17T13:22:25.666Z",
+    "12Fof8LkP2mx8hg6MsXalz-nM2IHnjyY4": "2026-10-17T13:22:28.022Z"
   },
   "pre_checkpoint_baseline": {
     "covered_through_modified_time": "2026-08-18T12:00:00Z",
     "note": "First run (sweep 2026-10-10). Every Drive full-meeting transcript modified at or before this time was ingested before the checkpoint existed (PRs #200/#204) and is already in remix-admin/lib/municipal/data/<board>/transcripts/. Treat those as processed unless their modifiedTime is later than this value. 1p8_2uUx (PB 2026-09-14) was ingested in #209 and is byte-identical to the Drive copy. Skipped and not recorded: 18MAvMl1 (Board of Ethics 2026-08-13; no manifest row and not a pipeline board)."
   },
-  "last_pr": "https://github.com/stef73210123/remix/pull/213"
+  "last_pr": "https://github.com/stef73210123/remix/pull/215"
 }
