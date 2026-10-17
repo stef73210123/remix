@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "zba",
     "town": "Town of North Castle",
-    "meetings": 45,
-    "cases": 124,
-    "themes": 7,
-    "memberPositions": 349,
+    "meetings": 46,
+    "cases": 126,
+    "themes": 8,
+    "memberPositions": 361,
     "roster": [
       "Ray Rodriguez",
       "Ed Lashins",
@@ -294,14 +294,20 @@
       "cases": 3,
       "avgSentiment": 0.55,
       "attributionCoverage": "none"
+    },
+    {
+      "date": "2026-09-03",
+      "cases": 3,
+      "avgSentiment": 0.4,
+      "attributionCoverage": "partial"
     }
   ],
   "themes": [
     {
       "theme": "Land use, zoning & special permits",
-      "meetings": 39,
-      "avgSentiment": 0.469,
-      "avgSalience": 0.703,
+      "meetings": 40,
+      "avgSentiment": 0.467,
+      "avgSalience": 0.71,
       "timeline": [
         {
           "date": "2022-01-06",
@@ -497,14 +503,19 @@
           "date": "2026-08-06",
           "sentiment": 0.55,
           "salience": 1.0
+        },
+        {
+          "date": "2026-09-03",
+          "sentiment": 0.4,
+          "salience": 1.0
         }
       ]
     },
     {
       "theme": "Other",
-      "meetings": 35,
-      "avgSentiment": 0.286,
-      "avgSalience": 0.517,
+      "meetings": 36,
+      "avgSentiment": 0.275,
+      "avgSalience": 0.51,
       "timeline": [
         {
           "date": "2022-02-03",
@@ -680,14 +691,19 @@
           "date": "2026-07-02",
           "sentiment": 0.6,
           "salience": 0.7
+        },
+        {
+          "date": "2026-09-03",
+          "sentiment": -0.1,
+          "salience": 0.25
         }
       ]
     },
     {
       "theme": "Resident concerns & quality of life",
-      "meetings": 14,
-      "avgSentiment": -0.043,
-      "avgSalience": 0.454,
+      "meetings": 15,
+      "avgSentiment": -0.047,
+      "avgSalience": 0.447,
       "timeline": [
         {
           "date": "2022-01-06",
@@ -757,6 +773,11 @@
         {
           "date": "2026-08-06",
           "sentiment": 0.7,
+          "salience": 0.35
+        },
+        {
+          "date": "2026-09-03",
+          "sentiment": -0.1,
           "salience": 0.35
         }
       ]
@@ -868,6 +889,39 @@
       ]
     },
     {
+      "theme": "Roads, highway & sidewalks",
+      "meetings": 5,
+      "avgSentiment": -0.06,
+      "avgSalience": 0.56,
+      "timeline": [
+        {
+          "date": "2022-01-06",
+          "sentiment": -0.3,
+          "salience": 0.7
+        },
+        {
+          "date": "2022-02-03",
+          "sentiment": 0.1,
+          "salience": 0.6
+        },
+        {
+          "date": "2022-06-02",
+          "sentiment": -0.1,
+          "salience": 0.3
+        },
+        {
+          "date": "2025-06-05",
+          "sentiment": 0.0,
+          "salience": 0.6
+        },
+        {
+          "date": "2026-09-03",
+          "sentiment": 0.0,
+          "salience": 0.6
+        }
+      ]
+    },
+    {
       "theme": "Permits & licensing",
       "meetings": 5,
       "avgSentiment": -0.16,
@@ -901,30 +955,15 @@
       ]
     },
     {
-      "theme": "Roads, highway & sidewalks",
-      "meetings": 4,
-      "avgSentiment": -0.075,
-      "avgSalience": 0.55,
+      "theme": "Budget, taxes & finance",
+      "meetings": 1,
+      "avgSentiment": 0.2,
+      "avgSalience": 0.35,
       "timeline": [
         {
-          "date": "2022-01-06",
-          "sentiment": -0.3,
-          "salience": 0.7
-        },
-        {
-          "date": "2022-02-03",
-          "sentiment": 0.1,
-          "salience": 0.6
-        },
-        {
-          "date": "2022-06-02",
-          "sentiment": -0.1,
-          "salience": 0.3
-        },
-        {
-          "date": "2025-06-05",
-          "sentiment": 0.0,
-          "salience": 0.6
+          "date": "2026-09-03",
+          "sentiment": 0.2,
+          "salience": 0.35
         }
       ]
     }
@@ -1297,6 +1336,49 @@
           "status": "granted",
           "sentiment": 0.5,
           "summary": "In an R2A district, applicant sought a front-yard setback variance of 53'10\" (150 ft required for generators, roughly triple the standard 50-ft front setback, 96'2\" provided) under Town Code 355-15(Q)(2) to install a generator near existing pool-house mechanical equipment, represented by attorney Corey Salum. The board questioned the propane fuel source and clustering rationale; counsel explained the generator was sited near the existing heat pump/pool equipment to minimize utility runs, with substantial screening and the nearest house about 320 feet away. No neighbor objections were received. Approved 3-0."
+        }
+      ]
+    },
+    {
+      "id": "45-bedford-road-armonk-ny",
+      "name": "45 Bedford Road LLC \u2014 Townhouse Development Coverage & FAR Variances",
+      "address": "45 Bedford Road, Armonk, NY",
+      "applicationType": "variance",
+      "applicant": "45 Bedford Road LLC",
+      "themes": [
+        "Budget, taxes & finance",
+        "Land use, zoning & special permits",
+        "Other"
+      ],
+      "appearances": 2,
+      "firstSeen": "2023-10-05",
+      "lastSeen": "2026-09-03",
+      "lastStatus": "granted, conditioned on strict adherence to the 2023-approved plans (any plan change requires a return to the ZBA)",
+      "avgSentiment": 0.5,
+      "trajectory": [
+        {
+          "date": "2023-10-05",
+          "sentiment": 0.7,
+          "status": "granted"
+        },
+        {
+          "date": "2026-09-03",
+          "sentiment": 0.3,
+          "status": "granted, conditioned on strict adherence to the 2023-approved plans (any plan change requires a return to the ZBA)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2023-10-05",
+          "status": "granted",
+          "sentiment": 0.7,
+          "summary": "For a 34-townhouse project on 4.3 acres (already granted a Town Board special permit), the applicant sought a 3.7% building-coverage variance and a 0.077 FAR variance, both stemming from Town Board and Planning Board requests during the special-permit process: buildings along Bedford Road were lowered and spread out to respond to concerns from the adjacent 1848 historic district, and previously-open underground parking was enclosed at the Planning Board's request, which pushed FAR over the limit. Both the Planning Board and Town Board had already endorsed these exact changes in the special-permit findings. The Board found the variances not substantial in context, self-created only in the sense of complying with the other boards' own requests, and granted them unanimously; the project still requires Planning Board site-plan approval."
+        },
+        {
+          "date": "2026-09-03",
+          "status": "granted, conditioned on strict adherence to the 2023-approved plans (any plan change requires a return to the ZBA)",
+          "sentiment": 0.3,
+          "summary": "The owner returned for the building-coverage and FAR variances the board granted unanimously in October 2023 for the 34-townhouse project next to Town Hall. Those variances had lapsed under the code's two-year expiration, and the Planning Board referred the matter back while it considers extending site-plan and wetlands approvals to 2027. The Town Board special use permit has already been extended to July 2027. Counsel argued the owner has vested rights and that, under the no-change-in-circumstances rule, the board must re-adopt its 2023 findings. He read those findings into the record and said the FAR overage stems from the Town's own request to enclose the underground parking. Kristen Wilson, for adjoining owner \"Mike Ferrari\" (ASR-uncertain), submitted a late objection letter. She argued this is a new application and that no vested rights exist, since only demolition and rock-crushing permits were issued and no building permit. She called the variances self-created and substantial on a vacant lot (about 18.5% over the coverage limit and 19.25% over FAR, by her percent-of-limit math), said alternatives were never explored, and noted the Town Board's tone toward the project had changed. Board counsel advised that it is a new application, but with no change in plans or circumstances the board would need a solid, on-the-record reason to depart from its prior findings. Members expressed frustration that nothing had been built in three years despite a housing shortage. They asked about property-tax arrears, financing and whether construction could start within two years. Rossi described self-funded, self-performed construction and a target groundbreaking around May of next year, and explained the FAR overage as a gap in the code that counts enclosed garages in multifamily buildings as floor area. A member said a nearby resident had asked whether a plan was attached and whether a redesign would need new variances. Members said a substantially changed plan would be a new matter. A letter from Sharon Tomback was noted. The board granted both variances on the condition that the applicant adhere completely to the 2023 plans, with any change requiring a return to the board, and that the resolution cover both coverage and FAR. The four members polled voted unanimously."
         }
       ]
     },
@@ -2562,37 +2644,6 @@
           "status": "granted",
           "sentiment": 0.6,
           "summary": "A growing local blow-dry salon sought a 13-space parking variance (160 provided vs. 173 required) to relocate into a larger space in the CVS-anchored shopping center, since salon uses require more parking per code than the prior retail use. A parking study over several weekdays showed the lot never exceeded half its capacity. No neighbors or tenants raised concerns. The Board found the shortfall diminimus relative to the 173-space total and driven by the statute's classification rather than any real parking problem, granting it unanimously."
-        }
-      ]
-    },
-    {
-      "id": "45-bedford-road-armonk-ny",
-      "name": "45 Bedford Road LLC \u2014 Townhouse Development Coverage & FAR Variances",
-      "address": "45 Bedford Road, Armonk, NY",
-      "applicationType": "variance",
-      "applicant": "45 Bedford Road LLC",
-      "themes": [
-        "Land use, zoning & special permits",
-        "Other"
-      ],
-      "appearances": 1,
-      "firstSeen": "2023-10-05",
-      "lastSeen": "2023-10-05",
-      "lastStatus": "granted",
-      "avgSentiment": 0.7,
-      "trajectory": [
-        {
-          "date": "2023-10-05",
-          "sentiment": 0.7,
-          "status": "granted"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2023-10-05",
-          "status": "granted",
-          "sentiment": 0.7,
-          "summary": "For a 34-townhouse project on 4.3 acres (already granted a Town Board special permit), the applicant sought a 3.7% building-coverage variance and a 0.077 FAR variance, both stemming from Town Board and Planning Board requests during the special-permit process: buildings along Bedford Road were lowered and spread out to respond to concerns from the adjacent 1848 historic district, and previously-open underground parking was enclosed at the Planning Board's request, which pushed FAR over the limit. Both the Planning Board and Town Board had already endorsed these exact changes in the special-permit findings. The Board found the variances not substantial in context, self-created only in the sense of complying with the other boards' own requests, and granted them unanimously; the project still requires Planning Board site-plan approval."
         }
       ]
     },
@@ -5027,28 +5078,91 @@
           "summary": "The homeowner, who moved to Windmill in 2017, installed a sport court during COVID on the advice of a contractor who told him no permit was required; that company has since gone out of business. He is now legalizing the court and seeking a 17-foot-10-inch side-yard variance against a 30-foot requirement. He has had the court roughly five years with no reported issues, is installing drainage the building inspector required (quoted at a six-figure sum on the recording, though the ASR renders the number unreliably), has planted trees to screen the neighbors, and is mid-renovation on the house. Members confirmed that no neighbor had voiced any concern, including the one abutting neighbor whose side yard the court faces, and that the neighbor was aware of the application and did not object. One member said he had visited the site and described it as a nice court. Members used the case to make a general point to a relatively new homeowner about always confirming permit requirements before building rather than relying on a contractor's assurance, framing it as a warning rather than a penalty. Granted unanimously by the four members polled."
         }
       ]
+    },
+    {
+      "id": "31-woodcrest-drive",
+      "name": "31 Woodcrest Drive \u2014 Front-Yard Setback Variance (New Front Porch)",
+      "address": "31 Woodcrest Drive",
+      "applicationType": "area variance",
+      "applicant": "Keith and Melinda Haynes (owners); presented by their builder, Norm Yance [ASR spelling; firm name garbled as \"Westchester Majula Construction\"]",
+      "themes": [
+        "Land use, zoning & special permits"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-09-03",
+      "lastSeen": "2026-09-03",
+      "lastStatus": "granted",
+      "avgSentiment": 0.6,
+      "trajectory": [
+        {
+          "date": "2026-09-03",
+          "sentiment": 0.6,
+          "status": "granted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-03",
+          "status": "granted",
+          "sentiment": 0.6,
+          "summary": "As part of a larger addition (a modular section on the side of the house, which does not itself need relief), the owners want to add a new covered front porch about 8 feet deep and 40 feet long, with a standing-seam metal roof and large columns, where there is now only a small overhang. Against a 50-foot front-yard setback the porch would sit at roughly 38 feet, requiring an 11-foot-3-inch front setback variance. The builder clarified that the packet's reference to an \"existing\" porch was wrong; the porch is new. No neighbors appeared, the hearing was closed after a few questions, and the variance was granted unanimously by the four members polled."
+        }
+      ]
+    },
+    {
+      "id": "379-main-street",
+      "name": "379 Main Street \u2014 Bobo's Cafe Off-Street Parking Variance (Change of Use from Retail)",
+      "address": "379 Main Street",
+      "applicationType": "parking variance",
+      "applicant": "Bobo's cafe (owner Glenn Bernardi [ASR spelling]), represented by Zarin & Steinmetz counsel (surname unclear in the recording) with project architect Joe Thompson",
+      "themes": [
+        "Budget, taxes & finance",
+        "Land use, zoning & special permits",
+        "Resident concerns & quality of life",
+        "Roads, highway & sidewalks"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-09-03",
+      "lastSeen": "2026-09-03",
+      "lastStatus": "granted",
+      "avgSentiment": 0.3,
+      "trajectory": [
+        {
+          "date": "2026-09-03",
+          "sentiment": 0.3,
+          "status": "granted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-03",
+          "status": "granted",
+          "sentiment": 0.3,
+          "summary": "The roughly 3,500-square-foot building on a 0.2-acre CB-A-2 corner lot at Main and Kent, formerly Cherry Blossom market, has seven on-site spaces. Converting retail to a 66-seat daytime cafe (open about 6 a.m. to 4 p.m., heavy takeout and DoorDash, no alcohol) requires a change-of-use site plan from the Planning Board, which cannot act until parking relief is granted. Under the greater-of rule the cafe needs 47 spaces (1 per 75 sq ft of gross floor area) versus 22 by seat count, so the applicant sought a 40-space variance. Counsel argued: (1) the 1-per-75 standard has no rationale because it counts freezers, bathrooms and back-of-house space; (2) the Town Board in June approved a Main Street parking district (about 15 west-side properties) now awaiting State Comptroller approval, expected in three to four months, and once it is in effect members are deemed to meet their parking requirements, making this a temporary \"bridge\" variance; (3) the district adds roughly 15\u201316 spaces through restriping and will impose 1\u20132-hour limits up front, with owners and employees pushed to the Verizon lot; (4) the town's parking study showed 70\u201385% peak occupancy behind the west side of Main Street. The owner of Make Believe Books, which is moving next door to 381 Main Street, spoke in support, saying two months of time-stamped photos never showed the rear lots near 75% full. Alex Bacon, a former ARB chairman, said the use felt \"too much\". He argued that 10 a.m.\u20134 p.m. is the hamlet's peak, not an off-peak, and asked for numbers showing how 66 seats fit the parking district's map, plan and report. He also raised spillover onto neighbors' front spaces and DoorDash double-parking. Kristen Wilson, attorney for a neighboring property owner who submitted a letter that afternoon, called the request substantial and self-created. She asked about the prior tenant's approvals and called summer photo surveys unrepresentative. She urged the board to pause until the district's rules are known and to consider fewer seats. Board members questioned the hours, seating, delivery traffic and the timing of the district. The chairman agreed parking should track seats rather than square footage and asked about reducing seats, though counsel noted the square-footage figure would still govern. Other members stressed supporting established businesses and the tax base, and one complained about receiving the objection letter at the last minute. Offered the option of waiting for a full board, the applicant chose to proceed. The variance was granted by the three members voting. A member asked the operator to pull seats if parking becomes a problem, and the operator agreed to work with the town."
+        }
+      ]
     }
   ],
   "members": [
     {
       "member": "Robert Greer",
-      "totalPositions": 82,
-      "avgSentiment": 0.507,
+      "totalPositions": 85,
+      "avgSentiment": 0.506,
       "confidenceMix": {
-        "high": 60,
-        "medium": 15,
+        "high": 61,
+        "medium": 17,
         "low": 7
       },
       "byTheme": [
         {
           "theme": "Other",
-          "count": 40,
+          "count": 42,
           "avgSentiment": 0.407
         },
         {
           "theme": "Land use, zoning & special permits",
-          "count": 34,
-          "avgSentiment": 0.582
+          "count": 36,
+          "avgSentiment": 0.586
         },
         {
           "theme": "Parks, recreation & trails",
@@ -5059,6 +5173,11 @@
           "theme": "Resident concerns & quality of life",
           "count": 3,
           "avgSentiment": -0.133
+        },
+        {
+          "theme": "Budget, taxes & finance",
+          "count": 2,
+          "avgSentiment": 0.4
         },
         {
           "theme": "Environment & conservation",
@@ -5089,6 +5208,11 @@
         },
         {
           "caseId": "12-maple-avenue-armonk-ny",
+          "count": 2,
+          "avgSentiment": 0.35
+        },
+        {
+          "caseId": "45-bedford-road-armonk-ny",
           "count": 2,
           "avgSentiment": 0.35
         },
@@ -5259,11 +5383,6 @@
         },
         {
           "caseId": "450-main-street-armonk-ny",
-          "count": 1,
-          "avgSentiment": 0.6
-        },
-        {
-          "caseId": "45-bedford-road-armonk-ny",
           "count": 1,
           "avgSentiment": 0.6
         },
@@ -5456,6 +5575,16 @@
           "caseId": "10-north-lane",
           "count": 1,
           "avgSentiment": -0.2
+        },
+        {
+          "caseId": "31-woodcrest-drive",
+          "count": 1,
+          "avgSentiment": 0.6
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 1,
+          "avgSentiment": 0.7
         }
       ],
       "evidence": [
@@ -6448,33 +6577,72 @@
           ],
           "evidence": "Suggested postponing the vote until the neighbors could walk the site together and reach a mutually acceptable plan, rather than approving a design the immediate downhill neighbor actively opposed.",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "31 Woodcrest Drive \u2014 Front-Yard Setback Variance (New Front Porch)",
+          "caseId": "31-woodcrest-drive",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Land use, zoning & special permits"
+          ],
+          "evidence": "Voted yes on roll call to grant the variance.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "379 Main Street \u2014 Bobo's Cafe Off-Street Parking Variance (Change of Use from Retail)",
+          "caseId": "379-main-street",
+          "stance": "supportive",
+          "score": 0.7,
+          "themes": [
+            "Budget, taxes & finance",
+            "Land use, zoning & special permits",
+            "Other"
+          ],
+          "evidence": "Argued that an established mini-chain knows how many seats it needs to make money and that it is in everyone's interest for the business to succeed. Applicant's counsel then referred to \"the same point that Bob made\". Voted yes on roll call.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "45 Bedford Road LLC \u2014 Townhouse Development Coverage & FAR Variances",
+          "caseId": "45-bedford-road-armonk-ny",
+          "stance": "skeptical but voted yes",
+          "score": 0.1,
+          "themes": [
+            "Budget, taxes & finance",
+            "Other"
+          ],
+          "evidence": "Questioned why nothing had been built in three years despite a housing shortage (\"I just don't get it\") and asked about the gap in property-tax payments. Another member then said \"as Bob had mentioned, nothing has happened in the last couple of years\". Voted yes on roll call.",
+          "confidence": "medium"
         }
       ]
     },
     {
       "member": "John Stipo",
-      "totalPositions": 64,
-      "avgSentiment": 0.417,
+      "totalPositions": 67,
+      "avgSentiment": 0.419,
       "confidenceMix": {
-        "high": 52,
+        "high": 54,
         "low": 1,
-        "medium": 11
+        "medium": 12
       },
       "byTheme": [
         {
           "theme": "Other",
-          "count": 38,
-          "avgSentiment": 0.295
+          "count": 40,
+          "avgSentiment": 0.3
         },
         {
           "theme": "Land use, zoning & special permits",
-          "count": 22,
-          "avgSentiment": 0.605
+          "count": 24,
+          "avgSentiment": 0.6
         },
         {
           "theme": "Parks, recreation & trails",
-          "count": 5,
-          "avgSentiment": 0.32
+          "count": 6,
+          "avgSentiment": 0.317
         },
         {
           "theme": "Roads, highway & sidewalks",
@@ -6512,6 +6680,11 @@
           "caseId": "12-maple-avenue-armonk-ny",
           "count": 2,
           "avgSentiment": 0.25
+        },
+        {
+          "caseId": "45-bedford-road-armonk-ny",
+          "count": 2,
+          "avgSentiment": 0.6
         },
         {
           "caseId": "76-virginia-road",
@@ -6669,11 +6842,6 @@
           "avgSentiment": 0.6
         },
         {
-          "caseId": "45-bedford-road-armonk-ny",
-          "count": 1,
-          "avgSentiment": 0.7
-        },
-        {
           "caseId": "23-bedford-banksville-road-bedford-ny",
           "count": 1,
           "avgSentiment": 0.6
@@ -6787,6 +6955,16 @@
           "caseId": "eagle-ridge-development",
           "count": 1,
           "avgSentiment": 0.0
+        },
+        {
+          "caseId": "31-woodcrest-drive",
+          "count": 1,
+          "avgSentiment": 0.6
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 1,
+          "avgSentiment": 0.3
         }
       ],
       "evidence": [
@@ -7565,6 +7743,44 @@
             "Other"
           ],
           "evidence": "Recused himself and left the room at the start of the hearing for this matter; the applicant's counsel noted he represented the \"contract vendee\" in a matter connected to Stipo.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "31 Woodcrest Drive \u2014 Front-Yard Setback Variance (New Front Porch)",
+          "caseId": "31-woodcrest-drive",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Land use, zoning & special permits"
+          ],
+          "evidence": "Voted yes on roll call to grant the variance.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "379 Main Street \u2014 Bobo's Cafe Off-Street Parking Variance (Change of Use from Retail)",
+          "caseId": "379-main-street",
+          "stance": "supportive with reservations",
+          "score": 0.3,
+          "themes": [
+            "Other",
+            "Parks, recreation & trails"
+          ],
+          "evidence": "Another member remarked, \"John, I know you feel strongly about parking.\" Stipo voted yes on roll call. Immediately afterward the operator was asked whether seats could be removed \"if it does look like it's getting very full\" and was later thanked with \"Thank you, John\". The follow-up question is attributed to Stipo by adjacency only.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "45 Bedford Road LLC \u2014 Townhouse Development Coverage & FAR Variances",
+          "caseId": "45-bedford-road-armonk-ny",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Land use, zoning & special permits",
+            "Other"
+          ],
+          "evidence": "When asked directly (\"Hey, John ... You have any questions?\") he said he had none. Voted yes on roll call.",
           "confidence": "high"
         }
       ]
@@ -8505,23 +8721,23 @@
     },
     {
       "member": "Ray Rodriguez",
-      "totalPositions": 47,
-      "avgSentiment": 0.451,
+      "totalPositions": 50,
+      "avgSentiment": 0.452,
       "confidenceMix": {
-        "high": 21,
-        "medium": 23,
+        "high": 22,
+        "medium": 25,
         "low": 3
       },
       "byTheme": [
         {
           "theme": "Other",
-          "count": 36,
-          "avgSentiment": 0.428
+          "count": 38,
+          "avgSentiment": 0.426
         },
         {
           "theme": "Land use, zoning & special permits",
-          "count": 18,
-          "avgSentiment": 0.506
+          "count": 20,
+          "avgSentiment": 0.505
         },
         {
           "theme": "Environment & conservation",
@@ -8530,7 +8746,7 @@
         },
         {
           "theme": "Parks, recreation & trails",
-          "count": 3,
+          "count": 4,
           "avgSentiment": 0.4
         },
         {
@@ -8546,6 +8762,11 @@
       ],
       "byCase": [
         {
+          "caseId": "45-bedford-road-armonk-ny",
+          "count": 2,
+          "avgSentiment": 0.55
+        },
+        {
           "caseId": "15-wampus-lake-drive-armonk-ny",
           "count": 2,
           "avgSentiment": 0.2
@@ -8559,11 +8780,6 @@
           "caseId": "meda-property",
           "count": 2,
           "avgSentiment": 0.45
-        },
-        {
-          "caseId": "45-bedford-road-armonk-ny",
-          "count": 1,
-          "avgSentiment": 0.7
         },
         {
           "caseId": "23-bedford-banksville-road-bedford-ny",
@@ -8764,6 +8980,16 @@
           "caseId": "12-seymour-place",
           "count": 1,
           "avgSentiment": 0.3
+        },
+        {
+          "caseId": "31-woodcrest-drive",
+          "count": 1,
+          "avgSentiment": 0.6
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 1,
+          "avgSentiment": 0.4
         }
       ],
       "evidence": [
@@ -9347,6 +9573,44 @@
             "Other"
           ],
           "evidence": "Proposed making the variance approval contingent on the town engineer/planning board's sign-off on a satisfactory drainage plan protecting neighboring properties, and asked the applicant's team to share their plans directly with the concerned neighbor.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "31 Woodcrest Drive \u2014 Front-Yard Setback Variance (New Front Porch)",
+          "caseId": "31-woodcrest-drive",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Land use, zoning & special permits"
+          ],
+          "evidence": "Presided (asked the clerk to call the item and closed the hearing after asking whether any neighbors were present) and voted yes on roll call.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "379 Main Street \u2014 Bobo's Cafe Off-Street Parking Variance (Change of Use from Retail)",
+          "caseId": "379-main-street",
+          "stance": "supportive",
+          "score": 0.4,
+          "themes": [
+            "Land use, zoning & special permits",
+            "Other",
+            "Parks, recreation & trails"
+          ],
+          "evidence": "Said he agreed with counsel that parking should go with the number of seats rather than square footage and asked whether the applicant had considered reducing seats. Opposing counsel later credited this suggestion to \"you, Chairman\". As presiding officer he offered the applicant the choice between proceeding before three members or waiting for a full board, then voted yes on roll call.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "45 Bedford Road LLC \u2014 Townhouse Development Coverage & FAR Variances",
+          "caseId": "45-bedford-road-armonk-ny",
+          "stance": "supportive",
+          "score": 0.4,
+          "themes": [
+            "Other"
+          ],
+          "evidence": "Presided. Asked counsel to opine on whether this was a new application, ran the public hearing, and asked counsel to walk through the variance criteria for the resolution. Voted yes on roll call.",
           "confidence": "medium"
         }
       ]
@@ -10161,23 +10425,23 @@
     },
     {
       "member": "Ed Lashins",
-      "totalPositions": 29,
-      "avgSentiment": 0.19,
+      "totalPositions": 32,
+      "avgSentiment": 0.203,
       "confidenceMix": {
-        "high": 19,
-        "medium": 7,
+        "high": 20,
+        "medium": 9,
         "low": 3
       },
       "byTheme": [
         {
           "theme": "Land use, zoning & special permits",
-          "count": 17,
-          "avgSentiment": 0.4
+          "count": 19,
+          "avgSentiment": 0.411
         },
         {
           "theme": "Other",
-          "count": 12,
-          "avgSentiment": -0.05
+          "count": 14,
+          "avgSentiment": -0.014
         },
         {
           "theme": "Environment & conservation",
@@ -10340,6 +10604,21 @@
           "caseId": "8-hollow-ridge-road-armonk",
           "count": 1,
           "avgSentiment": -0.2
+        },
+        {
+          "caseId": "31-woodcrest-drive",
+          "count": 1,
+          "avgSentiment": 0.6
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 1,
+          "avgSentiment": 0.0
+        },
+        {
+          "caseId": "45-bedford-road-armonk-ny",
+          "count": 1,
+          "avgSentiment": 0.4
         }
       ],
       "evidence": [
@@ -10696,6 +10975,43 @@
             "Other"
           ],
           "evidence": "Repeatedly pressed the applicant's team on the legality and drainage implications of the large pre-existing coverage overage, stated he was \"uncomfortable\" and \"cannot approve of it tonight,\" and pushed to table the matter pending a direct letter from the town engineer; ultimately voted yes once the Building Inspector confirmed by phone that mitigation conditions would be enforced administratively.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "31 Woodcrest Drive \u2014 Front-Yard Setback Variance (New Front Porch)",
+          "caseId": "31-woodcrest-drive",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Land use, zoning & special permits"
+          ],
+          "evidence": "Voted yes on roll call to grant the variance.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "379 Main Street \u2014 Bobo's Cafe Off-Street Parking Variance (Change of Use from Retail)",
+          "caseId": "379-main-street",
+          "stance": "recused",
+          "score": 0.0,
+          "themes": [
+            "Other"
+          ],
+          "evidence": "A member recused at the opening of the hearing, saying he had known the applicant and her family for a long time. The recusing member was not named on the recording. He is identified as Lashins by elimination: Lashins answered the opening roll call and voted on both other items, but was not polled on this one, and the chair said one member was recused and one absent.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-03",
+          "case": "45 Bedford Road LLC \u2014 Townhouse Development Coverage & FAR Variances",
+          "caseId": "45-bedford-road-armonk-ny",
+          "stance": "supportive with conditions",
+          "score": 0.4,
+          "themes": [
+            "Land use, zoning & special permits",
+            "Other"
+          ],
+          "evidence": "Pressed for any grant to be tied specifically to the 2023-approved plan, so a changed site plan could not be grandfathered under the variances. A resident later said \"Ed's brought them up\" in reference to the plan issue. Voted yes on roll call.",
           "confidence": "medium"
         }
       ]
@@ -19257,6 +19573,287 @@
       ],
       "attributionCoverage": "none",
       "attributionNote": "The recording has no speaker labels and the board members are not named except at roll call and during the two roll-call votes, so individual remarks cannot be separated with any confidence \u2014 several members clearly speak across each case but the ASR gives no reliable way to say which. No member-specific positions are recorded for this meeting. Names as heard by the ASR: \"John Steepo\"/\"John's depot\" (John Stipo), \"Ed Lassians\"/\"Ed lashes\"/\"Ed Lascents\" (Ed Lashins), \"Scott Topnik\" (Scott Stopnik). The applicant surname on the 30 Main Street sign variance and the town engineer's surname are both garbled beyond confident reconstruction."
+    },
+    {
+      "date": "2026-09-03",
+      "meetingSummary": "A nearly two-hour meeting with three variance applications, all granted. A routine 11-foot-3-inch front-yard setback variance for a new front porch at 31 Woodcrest Drive passed quickly with no neighbors present. The bulk of the evening went to a 40-space off-street parking variance for 379 Main Street (the former Cherry Blossom market at Main and Kent), where Bobo's, a daytime cafe chain, plans to open. Applicant's counsel framed it as a temporary \"bridge\" variance until the Town Board-approved Main Street parking district, still awaiting State Comptroller sign-off, takes effect and deems member properties compliant. A bookstore owner moving in next door spoke in support. A former ARB chairman and an attorney for a neighboring property owner urged the board to wait for a closer look at the parking district's underlying numbers, seat count and DoorDash double-parking. With one member recused and one absent, the applicant chose to proceed before three members, who granted it. The board also re-granted the expired 2023 building-coverage and FAR variances for the 45 Bedford Road townhouse project. The same objector's attorney argued it was a new application with no vested rights and should be judged afresh. Board counsel advised that it is a new application but that the board's prior findings stand absent changed circumstances. The variances were granted on the condition that the project adhere exactly to the 2023-approved plans, with any change requiring a return to the board.",
+      "durationNote": "Recording runs about 1 hour 55 minutes, with a brief off-record recess around 00:54:40\u201300:56:34. Roll call captured \"here\" for Ed Lashins, Bob Greer and Ray Rodriguez. Scott Stopnik's name was read with no response captured, and John Stipo voted on every item. Stopnik was never polled on any vote and the chair said during 379 Main Street that \"we only have three of us here\" with one member recused and one absent, so Stopnik appears to have been absent all evening. Ed Lashins was present for the first and third items but missing from the 379 Main Street roll call, consistent with him being the member who recused at the start of that hearing.",
+      "cases": [
+        {
+          "id": "31-woodcrest-drive-front-porch-setback",
+          "name": "31 Woodcrest Drive \u2014 Front-Yard Setback Variance (New Front Porch)",
+          "address": "31 Woodcrest Drive",
+          "applicationType": "area variance",
+          "applicant": "Keith and Melinda Haynes (owners); presented by their builder, Norm Yance [ASR spelling; firm name garbled as \"Westchester Majula Construction\"]",
+          "status": "granted",
+          "summary": "As part of a larger addition (a modular section on the side of the house, which does not itself need relief), the owners want to add a new covered front porch about 8 feet deep and 40 feet long, with a standing-seam metal roof and large columns, where there is now only a small overhang. Against a 50-foot front-yard setback the porch would sit at roughly 38 feet, requiring an 11-foot-3-inch front setback variance. The builder clarified that the packet's reference to an \"existing\" porch was wrong; the porch is new. No neighbors appeared, the hearing was closed after a few questions, and the variance was granted unanimously by the four members polled.",
+          "themes": [
+            "Land use, zoning & special permits"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.6,
+          "publicComment": "No members of the public appeared for or against.",
+          "memberPositions": [
+            {
+              "member": "Ed Lashins",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "front-yard setback"
+              ],
+              "evidence": "Voted yes on roll call to grant the variance.",
+              "confidence": "high"
+            },
+            {
+              "member": "Robert Greer",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "front-yard setback"
+              ],
+              "evidence": "Voted yes on roll call to grant the variance.",
+              "confidence": "high"
+            },
+            {
+              "member": "John Stipo",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "front-yard setback"
+              ],
+              "evidence": "Voted yes on roll call to grant the variance.",
+              "confidence": "high"
+            },
+            {
+              "member": "Ray Rodriguez",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "front-yard setback"
+              ],
+              "evidence": "Presided (asked the clerk to call the item and closed the hearing after asking whether any neighbors were present) and voted yes on roll call.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "379-main-street-bobos-cafe-parking-variance",
+          "name": "379 Main Street \u2014 Bobo's Cafe Off-Street Parking Variance (Change of Use from Retail)",
+          "address": "379 Main Street",
+          "applicationType": "parking variance",
+          "applicant": "Bobo's cafe (owner Glenn Bernardi [ASR spelling]), represented by Zarin & Steinmetz counsel (surname unclear in the recording) with project architect Joe Thompson",
+          "status": "granted",
+          "summary": "The roughly 3,500-square-foot building on a 0.2-acre CB-A-2 corner lot at Main and Kent, formerly Cherry Blossom market, has seven on-site spaces. Converting retail to a 66-seat daytime cafe (open about 6 a.m. to 4 p.m., heavy takeout and DoorDash, no alcohol) requires a change-of-use site plan from the Planning Board, which cannot act until parking relief is granted. Under the greater-of rule the cafe needs 47 spaces (1 per 75 sq ft of gross floor area) versus 22 by seat count, so the applicant sought a 40-space variance. Counsel argued: (1) the 1-per-75 standard has no rationale because it counts freezers, bathrooms and back-of-house space; (2) the Town Board in June approved a Main Street parking district (about 15 west-side properties) now awaiting State Comptroller approval, expected in three to four months, and once it is in effect members are deemed to meet their parking requirements, making this a temporary \"bridge\" variance; (3) the district adds roughly 15\u201316 spaces through restriping and will impose 1\u20132-hour limits up front, with owners and employees pushed to the Verizon lot; (4) the town's parking study showed 70\u201385% peak occupancy behind the west side of Main Street. The owner of Make Believe Books, which is moving next door to 381 Main Street, spoke in support, saying two months of time-stamped photos never showed the rear lots near 75% full. Alex Bacon, a former ARB chairman, said the use felt \"too much\". He argued that 10 a.m.\u20134 p.m. is the hamlet's peak, not an off-peak, and asked for numbers showing how 66 seats fit the parking district's map, plan and report. He also raised spillover onto neighbors' front spaces and DoorDash double-parking. Kristen Wilson, attorney for a neighboring property owner who submitted a letter that afternoon, called the request substantial and self-created. She asked about the prior tenant's approvals and called summer photo surveys unrepresentative. She urged the board to pause until the district's rules are known and to consider fewer seats. Board members questioned the hours, seating, delivery traffic and the timing of the district. The chairman agreed parking should track seats rather than square footage and asked about reducing seats, though counsel noted the square-footage figure would still govern. Other members stressed supporting established businesses and the tax base, and one complained about receiving the objection letter at the last minute. Offered the option of waiting for a full board, the applicant chose to proceed. The variance was granted by the three members voting. A member asked the operator to pull seats if parking becomes a problem, and the operator agreed to work with the town.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Land use, zoning & special permits",
+            "Resident concerns & quality of life",
+            "Roads, highway & sidewalks"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.3,
+          "publicComment": "Three members of the public spoke. Laura [surname ASR-garbled as \"Tippolsky\"], owner of Make Believe Books (moving to 381 Main Street), supported the application and offered time-stamped photos of the rear lots. Alex Bacon, a former ARB chairman, urged a closer look at seat count against the parking district's map, plan and report, and raised DoorDash and spillover parking. Attorney Kristen Wilson, for a neighboring owner of several properties within the notice area (name heard as \"Mike Ferrari\"; ASR-uncertain), submitted a late letter in opposition and asked the board to pause for further due diligence.",
+          "memberPositions": [
+            {
+              "member": "Ed Lashins",
+              "stance": "recused",
+              "score": 0.0,
+              "themes": [
+                "recusal"
+              ],
+              "evidence": "A member recused at the opening of the hearing, saying he had known the applicant and her family for a long time. The recusing member was not named on the recording. He is identified as Lashins by elimination: Lashins answered the opening roll call and voted on both other items, but was not polled on this one, and the chair said one member was recused and one absent.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Ray Rodriguez",
+              "stance": "supportive",
+              "score": 0.4,
+              "themes": [
+                "parking variance",
+                "seat count",
+                "parking district"
+              ],
+              "evidence": "Said he agreed with counsel that parking should go with the number of seats rather than square footage and asked whether the applicant had considered reducing seats. Opposing counsel later credited this suggestion to \"you, Chairman\". As presiding officer he offered the applicant the choice between proceeding before three members or waiting for a full board, then voted yes on roll call.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Robert Greer",
+              "stance": "supportive",
+              "score": 0.7,
+              "themes": [
+                "business vitality",
+                "tax base",
+                "parking variance"
+              ],
+              "evidence": "Argued that an established mini-chain knows how many seats it needs to make money and that it is in everyone's interest for the business to succeed. Applicant's counsel then referred to \"the same point that Bob made\". Voted yes on roll call.",
+              "confidence": "medium"
+            },
+            {
+              "member": "John Stipo",
+              "stance": "supportive with reservations",
+              "score": 0.3,
+              "themes": [
+                "parking",
+                "seat count"
+              ],
+              "evidence": "Another member remarked, \"John, I know you feel strongly about parking.\" Stipo voted yes on roll call. Immediately afterward the operator was asked whether seats could be removed \"if it does look like it's getting very full\" and was later thanked with \"Thank you, John\". The follow-up question is attributed to Stipo by adjacency only.",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "45-bedford-road-llc-townhouses",
+          "name": "45 Bedford Road LLC \u2014 Townhouse Development Coverage & FAR Variances",
+          "address": "45 Bedford Road, Armonk, NY",
+          "applicationType": "variance",
+          "applicant": "NCD Acquisitions (owner), represented by attorney Jeff Buss (Smith, Buss & Jacobs), with new development partner Ralph Rossi (RMA Development Associates)",
+          "status": "granted, conditioned on strict adherence to the 2023-approved plans (any plan change requires a return to the ZBA)",
+          "summary": "The owner returned for the building-coverage and FAR variances the board granted unanimously in October 2023 for the 34-townhouse project next to Town Hall. Those variances had lapsed under the code's two-year expiration, and the Planning Board referred the matter back while it considers extending site-plan and wetlands approvals to 2027. The Town Board special use permit has already been extended to July 2027. Counsel argued the owner has vested rights and that, under the no-change-in-circumstances rule, the board must re-adopt its 2023 findings. He read those findings into the record and said the FAR overage stems from the Town's own request to enclose the underground parking. Kristen Wilson, for adjoining owner \"Mike Ferrari\" (ASR-uncertain), submitted a late objection letter. She argued this is a new application and that no vested rights exist, since only demolition and rock-crushing permits were issued and no building permit. She called the variances self-created and substantial on a vacant lot (about 18.5% over the coverage limit and 19.25% over FAR, by her percent-of-limit math), said alternatives were never explored, and noted the Town Board's tone toward the project had changed. Board counsel advised that it is a new application, but with no change in plans or circumstances the board would need a solid, on-the-record reason to depart from its prior findings. Members expressed frustration that nothing had been built in three years despite a housing shortage. They asked about property-tax arrears, financing and whether construction could start within two years. Rossi described self-funded, self-performed construction and a target groundbreaking around May of next year, and explained the FAR overage as a gap in the code that counts enclosed garages in multifamily buildings as floor area. A member said a nearby resident had asked whether a plan was attached and whether a redesign would need new variances. Members said a substantially changed plan would be a new matter. A letter from Sharon Tomback was noted. The board granted both variances on the condition that the applicant adhere completely to the 2023 plans, with any change requiring a return to the board, and that the resolution cover both coverage and FAR. The four members polled voted unanimously.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Land use, zoning & special permits",
+            "Other"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.3,
+          "publicComment": "Attorney Kristen Wilson, for adjoining property owner \"Mike Ferrari\" (ASR-uncertain), objected in a letter delivered after close of business and in person. A resident addressed as \"Mr. Wood\" asked about process and whether the grant would be tied to the 2023 plan, and noted a letter from Sharon Tomback.",
+          "memberPositions": [
+            {
+              "member": "Ed Lashins",
+              "stance": "supportive with conditions",
+              "score": 0.4,
+              "themes": [
+                "plan-specific condition",
+                "FAR",
+                "building coverage"
+              ],
+              "evidence": "Pressed for any grant to be tied specifically to the 2023-approved plan, so a changed site plan could not be grandfathered under the variances. A resident later said \"Ed's brought them up\" in reference to the plan issue. Voted yes on roll call.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Robert Greer",
+              "stance": "skeptical but voted yes",
+              "score": 0.1,
+              "themes": [
+                "delay",
+                "housing shortage",
+                "property taxes"
+              ],
+              "evidence": "Questioned why nothing had been built in three years despite a housing shortage (\"I just don't get it\") and asked about the gap in property-tax payments. Another member then said \"as Bob had mentioned, nothing has happened in the last couple of years\". Voted yes on roll call.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Ray Rodriguez",
+              "stance": "supportive",
+              "score": 0.4,
+              "themes": [
+                "new application vs. extension"
+              ],
+              "evidence": "Presided. Asked counsel to opine on whether this was a new application, ran the public hearing, and asked counsel to walk through the variance criteria for the resolution. Voted yes on roll call.",
+              "confidence": "medium"
+            },
+            {
+              "member": "John Stipo",
+              "stance": "supportive",
+              "score": 0.5,
+              "themes": [
+                "building coverage",
+                "FAR"
+              ],
+              "evidence": "When asked directly (\"Hey, John ... You have any questions?\") he said he had none. Voted yes on roll call.",
+              "confidence": "high"
+            }
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Land use, zoning & special permits",
+          "salience": 1.0,
+          "sentiment": 0.4,
+          "note": "All three items were variances, all granted: a front setback, a 40-space parking variance pending a parking district, and a re-grant of expired coverage/FAR variances with a plan-specific condition."
+        },
+        {
+          "theme": "Roads, highway & sidewalks",
+          "salience": 0.6,
+          "sentiment": 0.0,
+          "note": "Downtown parking supply, peak-hour occupancy, DoorDash double-parking on Main Street and Kent, and pedestrian access from the schools dominated the 379 Main Street hearing."
+        },
+        {
+          "theme": "Budget, taxes & finance",
+          "salience": 0.35,
+          "sentiment": 0.2,
+          "note": "The parking district's roughly $40,000/year assessment on participating owners, members' interest in the commercial tax base, past property-tax arrears at 45 Bedford Road, and construction-financing conditions."
+        },
+        {
+          "theme": "Resident concerns & quality of life",
+          "salience": 0.35,
+          "sentiment": -0.1,
+          "note": "Two members of the public and a neighboring owner's attorney questioned downtown parking capacity and congestion; a neighboring shop owner spoke strongly in favor."
+        },
+        {
+          "theme": "Other",
+          "salience": 0.25,
+          "sentiment": -0.1,
+          "note": "Frustration that the long-approved 45 Bedford Road housing project has stalled for three years, set against a stated regional housing shortage."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Lori J. Zawacki",
+          "role": "Board Secretary/Clerk",
+          "summary": "Called the opening roll call, opened and closed the public hearings at the chair's request, and polled the roll-call votes on all three items.",
+          "cases": [
+            "31-woodcrest-drive-front-porch-setback",
+            "379-main-street-bobos-cafe-parking-variance",
+            "45-bedford-road-llc-townhouses"
+          ]
+        },
+        {
+          "person": "Mary Desmond",
+          "role": "Town Counsel / ZBA Counsel",
+          "summary": "Addressed as \"Mary\" throughout. Confirmed that the Town Board-approved parking district goes next to the State Comptroller with no other approvals known to be needed. On 45 Bedford Road she advised that the expired variances are being treated as a new, newly noticed application, but that with no change in plans or circumstances the board's prior findings would need to be re-incorporated unless it states solid reasons on the record to depart from them. She confirmed the grant could be conditioned on the 2023 plans and that variances carry a two-year life.",
+          "cases": [
+            "379-main-street-bobos-cafe-parking-variance",
+            "45-bedford-road-llc-townhouses"
+          ]
+        },
+        {
+          "person": "Adam Kaufman",
+          "role": "Town Planner",
+          "summary": "Did not speak; referenced by applicant's counsel. He reportedly noted at the July Planning Board meeting that most food uses in the hamlet could not meet the parking requirements, and was cited as the source of the proposed 1\u20132-hour limits for spaces in the parking district.",
+          "cases": [
+            "379-main-street-bobos-cafe-parking-variance"
+          ]
+        },
+        {
+          "person": "Zarin & Steinmetz counsel (surname unclear in the recording)",
+          "role": "Applicant's attorney (Zarin & Steinmetz)",
+          "summary": "Presented the 379 Main Street parking variance as a temporary bridge until the Main Street parking district takes effect. Criticized the code's 1-per-75-square-foot cafe parking standard as having no rationale, and summarized the parking district's terms and occupancy data.",
+          "cases": [
+            "379-main-street-bobos-cafe-parking-variance"
+          ]
+        },
+        {
+          "person": "Jeff Buss",
+          "role": "Applicant's attorney (Smith, Buss & Jacobs)",
+          "summary": "Sought renewal of the 2023 coverage and FAR variances for 45 Bedford Road on vested-rights and no-change-in-circumstances grounds, read the 2023 findings into the record, and accepted a condition tying the grant to the 2023 plans.",
+          "cases": [
+            "45-bedford-road-llc-townhouses"
+          ]
+        },
+        {
+          "person": "Kristen Wilson",
+          "role": "Attorney for neighboring property owner (objector)",
+          "summary": "Opposed both the 379 Main Street parking variance and the 45 Bedford Road re-grant in letters delivered the afternoon of the meeting. Argued that both requests were substantial and self-created, that the 45 Bedford Road request is a new application without vested rights, and that the board should pause for further due diligence.",
+          "cases": [
+            "379-main-street-bobos-cafe-parking-variance",
+            "45-bedford-road-llc-townhouses"
+          ]
+        }
+      ],
+      "attributionCoverage": "partial",
+      "attributionNote": "The recording has no speaker labels. Member positions rest mainly on the roll-call votes. They are supplemented where a member was addressed or referred to by name: \"Bob\" (Greer) on 379 Main Street and 45 Bedford Road, \"Ed\" (Lashins) on 45 Bedford Road, \"John\" (Stipo) on both contested items, and \"you, Chairman\" (Rodriguez) for the seat-reduction suggestion. Those remark-level attributions are medium confidence. The motions and seconds on 379 Main Street and 45 Bedford Road were not made by identifiable members and are left unattributed. The 379 Main Street recusal is assigned to Ed Lashins by elimination (the chair said one member was recused and one absent, and Lashins is the only member present at roll call but not polled), not by name. Scott Stopnik has no positions; he appears to have been absent all evening. ASR manglings resolved: \"Ed Lations\"/\"Ed Lassians\"/\"Ed Laskins\" = Ed Lashins; \"Scott Stopnick\" = Scott Stopnik; \"John Steepo\"/\"John Seeple\" = John Stipo; \"Bonkrier\" = Bob Greer; \"Corey Salomer\"/\"Mr. Solomon\" from \"Zarinen Stuymans\" = Zarin & Steinmetz counsel (surname unclear in the recording) of Zarin & Steinmetz (spelling per earlier entries); \"Jeff Bus\"/\"Smith Bus and Jacobs\" = Jeff Buss of Smith, Buss & Jacobs; \"Armancun\"/\"Armunk\"/\"Armock\" = Armonk; \"CBA-2\" = CB-A-2 district; \"Mary\" = board counsel, taken to be Town Counsel Mary Desmond per the README (surname not spoken). Left as heard because they could not be confidently reconstructed: the porch builder's name and firm (\"Norm Yance,\" \"Westchester Majula Construction\"); the bookstore owner's surname (\"Tippolsky\"); the Bobo's owner (\"Glenn Bernardi\"); the objector (\"Mike Ferrari\"); and the resident \"Mr. Wood\". These are unverified machine transcripts, not official minutes."
     }
   ]
 }

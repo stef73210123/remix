@@ -156,6 +156,11 @@ function ChapterRow({ ch, open, onToggle }: { ch: CodeChapter; open: boolean; on
                         {f.section && (
                           <span className="muted" style={{ fontSize: 11, fontVariantNumeric: 'tabular-nums', fontWeight: 700 }}>{f.section}</span>
                         )}
+                        {f.sectionBasis && (
+                          <span className="muted" style={{ fontSize: 11 }}>
+                            {f.sectionBasis === 'spoken' ? 'cited in the meeting' : 'section inferred, not cited aloud'}
+                          </span>
+                        )}
                         <span
                           style={{
                             fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em',

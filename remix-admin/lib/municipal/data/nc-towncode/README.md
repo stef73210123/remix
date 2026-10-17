@@ -30,7 +30,13 @@ cited, never disputed) from simple absence of testing (rarely-triggered
 provisions that never came up for debate). `crossCuttingFindings` holds
 findings that span multiple chapters or lie between provisions (e.g. sign
 code interacting with a permitted use in a different chapter), which no
-single chapter's evidence list can surface alone. Speaker labels in this
+single chapter's evidence list can surface alone. Since then the weekly transcript ingest folds new meetings in with
+`merge_record_evidence.py` (corpus now 267 transcripts; merged meetings are
+listed in `record_ingest_log.json`). Only citations actually *spoken* in a
+meeting count toward `citingUtterances`/`meetingsCiting`, and every finding
+added this way carries `sectionBasis` — `spoken` when the chapter/section
+number was said aloud, `inferred` when it was identified from the subject
+matter — which the Town Code page shows next to the section. Speaker labels in this
 layer are best-effort automated diarization, not an attendance record.
 
 ## Per-chapter fields

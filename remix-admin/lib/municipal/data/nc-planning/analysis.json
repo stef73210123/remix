@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "planning",
     "town": "Town of North Castle",
-    "meetings": 103,
+    "meetings": 104,
     "cases": 404,
     "themes": 17,
-    "memberPositions": 1054,
+    "memberPositions": 1066,
     "roster": [
       "Christopher Carthy",
       "Steven Sauro",
@@ -639,6 +639,12 @@
       "date": "2026-09-14",
       "cases": 8,
       "avgSentiment": 0.287,
+      "attributionCoverage": "fair"
+    },
+    {
+      "date": "2026-09-28",
+      "cases": 5,
+      "avgSentiment": 0.4,
       "attributionCoverage": "fair"
     }
   ],
@@ -1426,9 +1432,9 @@
     },
     {
       "theme": "Zoning & land use",
-      "meetings": 70,
-      "avgSentiment": 0.129,
-      "avgSalience": 0.452,
+      "meetings": 71,
+      "avgSentiment": 0.13,
+      "avgSalience": 0.453,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -1779,14 +1785,19 @@
           "date": "2026-09-14",
           "sentiment": 0.3,
           "salience": 0.7
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.2,
+          "salience": 0.5
         }
       ]
     },
     {
       "theme": "Parking, traffic & access",
-      "meetings": 64,
-      "avgSentiment": 0.038,
-      "avgSalience": 0.456,
+      "meetings": 65,
+      "avgSentiment": 0.034,
+      "avgSalience": 0.463,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2107,6 +2118,11 @@
           "date": "2026-09-14",
           "sentiment": -0.3,
           "salience": 0.9
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": -0.2,
+          "salience": 0.95
         }
       ]
     },
@@ -2380,9 +2396,9 @@
     },
     {
       "theme": "Tree removal & screening",
-      "meetings": 49,
-      "avgSentiment": 0.092,
-      "avgSalience": 0.418,
+      "meetings": 50,
+      "avgSentiment": 0.1,
+      "avgSalience": 0.415,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2628,6 +2644,209 @@
           "date": "2026-09-14",
           "sentiment": 0.1,
           "salience": 0.5
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.5,
+          "salience": 0.3
+        }
+      ]
+    },
+    {
+      "theme": "Neighbor concerns & safety",
+      "meetings": 38,
+      "avgSentiment": -0.159,
+      "avgSalience": 0.449,
+      "timeline": [
+        {
+          "date": "2021-02-08",
+          "sentiment": 0.4,
+          "salience": 0.15
+        },
+        {
+          "date": "2022-01-10",
+          "sentiment": -0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2022-01-24",
+          "sentiment": -0.1,
+          "salience": 0.45
+        },
+        {
+          "date": "2022-03-14",
+          "sentiment": 0.1,
+          "salience": 0.5
+        },
+        {
+          "date": "2022-10-24",
+          "sentiment": -0.3,
+          "salience": 0.6
+        },
+        {
+          "date": "2022-11-07",
+          "sentiment": 0.3,
+          "salience": 0.5
+        },
+        {
+          "date": "2023-01-17",
+          "sentiment": 0.4,
+          "salience": 0.3
+        },
+        {
+          "date": "2023-01-30",
+          "sentiment": 0.2,
+          "salience": 0.6
+        },
+        {
+          "date": "2023-03-27",
+          "sentiment": -0.6,
+          "salience": 0.5
+        },
+        {
+          "date": "2023-10-12",
+          "sentiment": -0.6,
+          "salience": 0.2
+        },
+        {
+          "date": "2023-11-13",
+          "sentiment": -0.1,
+          "salience": 0.2
+        },
+        {
+          "date": "2024-01-08",
+          "sentiment": -0.15,
+          "salience": 0.3
+        },
+        {
+          "date": "2024-02-26",
+          "sentiment": -0.2,
+          "salience": 0.6
+        },
+        {
+          "date": "2024-03-11",
+          "sentiment": 0.0,
+          "salience": 0.45
+        },
+        {
+          "date": "2024-04-08",
+          "sentiment": -0.2,
+          "salience": 0.5
+        },
+        {
+          "date": "2024-07-22",
+          "sentiment": -0.4,
+          "salience": 0.6
+        },
+        {
+          "date": "2024-09-09",
+          "sentiment": -0.1,
+          "salience": 0.5
+        },
+        {
+          "date": "2024-09-23",
+          "sentiment": -0.2,
+          "salience": 0.5
+        },
+        {
+          "date": "2024-10-07",
+          "sentiment": -0.2,
+          "salience": 0.5
+        },
+        {
+          "date": "2024-12-09",
+          "sentiment": 0.0,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-02-24",
+          "sentiment": -0.4,
+          "salience": 0.7
+        },
+        {
+          "date": "2025-03-24",
+          "sentiment": -0.7,
+          "salience": 0.8
+        },
+        {
+          "date": "2025-04-14",
+          "sentiment": -0.5,
+          "salience": 0.7
+        },
+        {
+          "date": "2025-04-28",
+          "sentiment": -0.2,
+          "salience": 0.55
+        },
+        {
+          "date": "2025-05-29",
+          "sentiment": 0.0,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-06-09",
+          "sentiment": -0.4,
+          "salience": 0.7
+        },
+        {
+          "date": "2025-07-14",
+          "sentiment": -0.2,
+          "salience": 0.55
+        },
+        {
+          "date": "2025-09-08",
+          "sentiment": 0.4,
+          "salience": 0.2
+        },
+        {
+          "date": "2025-09-25",
+          "sentiment": -0.2,
+          "salience": 0.2
+        },
+        {
+          "date": "2025-10-16",
+          "sentiment": -0.3,
+          "salience": 0.3
+        },
+        {
+          "date": "2025-10-27",
+          "sentiment": -0.3,
+          "salience": 0.35
+        },
+        {
+          "date": "2025-11-24",
+          "sentiment": -0.2,
+          "salience": 0.1
+        },
+        {
+          "date": "2026-01-26",
+          "sentiment": -0.3,
+          "salience": 0.15
+        },
+        {
+          "date": "2026-03-23",
+          "sentiment": 0.0,
+          "salience": 0.35
+        },
+        {
+          "date": "2026-07-27",
+          "sentiment": 0.0,
+          "salience": 0.45
+        },
+        {
+          "date": "2026-08-17",
+          "sentiment": -0.3,
+          "salience": 0.5
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.3,
+          "salience": 0.7
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": -0.3,
+          "salience": 0.6
         }
       ]
     },
@@ -2825,203 +3044,10 @@
       ]
     },
     {
-      "theme": "Neighbor concerns & safety",
-      "meetings": 37,
-      "avgSentiment": -0.155,
-      "avgSalience": 0.445,
-      "timeline": [
-        {
-          "date": "2021-02-08",
-          "sentiment": 0.4,
-          "salience": 0.15
-        },
-        {
-          "date": "2022-01-10",
-          "sentiment": -0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2022-01-24",
-          "sentiment": -0.1,
-          "salience": 0.45
-        },
-        {
-          "date": "2022-03-14",
-          "sentiment": 0.1,
-          "salience": 0.5
-        },
-        {
-          "date": "2022-10-24",
-          "sentiment": -0.3,
-          "salience": 0.6
-        },
-        {
-          "date": "2022-11-07",
-          "sentiment": 0.3,
-          "salience": 0.5
-        },
-        {
-          "date": "2023-01-17",
-          "sentiment": 0.4,
-          "salience": 0.3
-        },
-        {
-          "date": "2023-01-30",
-          "sentiment": 0.2,
-          "salience": 0.6
-        },
-        {
-          "date": "2023-03-27",
-          "sentiment": -0.6,
-          "salience": 0.5
-        },
-        {
-          "date": "2023-10-12",
-          "sentiment": -0.6,
-          "salience": 0.2
-        },
-        {
-          "date": "2023-11-13",
-          "sentiment": -0.1,
-          "salience": 0.2
-        },
-        {
-          "date": "2024-01-08",
-          "sentiment": -0.15,
-          "salience": 0.3
-        },
-        {
-          "date": "2024-02-26",
-          "sentiment": -0.2,
-          "salience": 0.6
-        },
-        {
-          "date": "2024-03-11",
-          "sentiment": 0.0,
-          "salience": 0.45
-        },
-        {
-          "date": "2024-04-08",
-          "sentiment": -0.2,
-          "salience": 0.5
-        },
-        {
-          "date": "2024-07-22",
-          "sentiment": -0.4,
-          "salience": 0.6
-        },
-        {
-          "date": "2024-09-09",
-          "sentiment": -0.1,
-          "salience": 0.5
-        },
-        {
-          "date": "2024-09-23",
-          "sentiment": -0.2,
-          "salience": 0.5
-        },
-        {
-          "date": "2024-10-07",
-          "sentiment": -0.2,
-          "salience": 0.5
-        },
-        {
-          "date": "2024-12-09",
-          "sentiment": 0.0,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-02-24",
-          "sentiment": -0.4,
-          "salience": 0.7
-        },
-        {
-          "date": "2025-03-24",
-          "sentiment": -0.7,
-          "salience": 0.8
-        },
-        {
-          "date": "2025-04-14",
-          "sentiment": -0.5,
-          "salience": 0.7
-        },
-        {
-          "date": "2025-04-28",
-          "sentiment": -0.2,
-          "salience": 0.55
-        },
-        {
-          "date": "2025-05-29",
-          "sentiment": 0.0,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-06-09",
-          "sentiment": -0.4,
-          "salience": 0.7
-        },
-        {
-          "date": "2025-07-14",
-          "sentiment": -0.2,
-          "salience": 0.55
-        },
-        {
-          "date": "2025-09-08",
-          "sentiment": 0.4,
-          "salience": 0.2
-        },
-        {
-          "date": "2025-09-25",
-          "sentiment": -0.2,
-          "salience": 0.2
-        },
-        {
-          "date": "2025-10-16",
-          "sentiment": -0.3,
-          "salience": 0.3
-        },
-        {
-          "date": "2025-10-27",
-          "sentiment": -0.3,
-          "salience": 0.35
-        },
-        {
-          "date": "2025-11-24",
-          "sentiment": -0.2,
-          "salience": 0.1
-        },
-        {
-          "date": "2026-01-26",
-          "sentiment": -0.3,
-          "salience": 0.15
-        },
-        {
-          "date": "2026-03-23",
-          "sentiment": 0.0,
-          "salience": 0.35
-        },
-        {
-          "date": "2026-07-27",
-          "sentiment": 0.0,
-          "salience": 0.45
-        },
-        {
-          "date": "2026-08-17",
-          "sentiment": -0.3,
-          "salience": 0.5
-        },
-        {
-          "date": "2026-09-14",
-          "sentiment": -0.3,
-          "salience": 0.7
-        }
-      ]
-    },
-    {
       "theme": "Time extensions & conditions",
-      "meetings": 25,
-      "avgSentiment": 0.182,
-      "avgSalience": 0.279,
+      "meetings": 26,
+      "avgSentiment": 0.187,
+      "avgSalience": 0.283,
       "timeline": [
         {
           "date": "2021-03-08",
@@ -3147,6 +3173,11 @@
           "date": "2026-07-13",
           "sentiment": 0.1,
           "salience": 0.25
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.3,
+          "salience": 0.4
         }
       ]
     },
@@ -3274,6 +3305,114 @@
       ]
     },
     {
+      "theme": "Septic & water supply",
+      "meetings": 20,
+      "avgSentiment": 0.022,
+      "avgSalience": 0.369,
+      "timeline": [
+        {
+          "date": "2022-01-24",
+          "sentiment": 0.0,
+          "salience": 0.3
+        },
+        {
+          "date": "2022-11-07",
+          "sentiment": -0.25,
+          "salience": 0.6
+        },
+        {
+          "date": "2023-12-11",
+          "sentiment": 0.5,
+          "salience": 0.2
+        },
+        {
+          "date": "2024-02-26",
+          "sentiment": -0.1,
+          "salience": 0.7
+        },
+        {
+          "date": "2024-04-25",
+          "sentiment": 0.0,
+          "salience": 0.4
+        },
+        {
+          "date": "2024-06-24",
+          "sentiment": -0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2024-07-22",
+          "sentiment": 0.4,
+          "salience": 0.55
+        },
+        {
+          "date": "2024-08-05",
+          "sentiment": 0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2024-12-09",
+          "sentiment": 0.2,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-01-13",
+          "sentiment": 0.0,
+          "salience": 0.3
+        },
+        {
+          "date": "2025-01-27",
+          "sentiment": 0.0,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-02-24",
+          "sentiment": -0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-03-24",
+          "sentiment": -0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2025-06-23",
+          "sentiment": -0.2,
+          "salience": 0.35
+        },
+        {
+          "date": "2025-07-28",
+          "sentiment": 0.0,
+          "salience": 0.5
+        },
+        {
+          "date": "2025-12-08",
+          "sentiment": -0.3,
+          "salience": 0.1
+        },
+        {
+          "date": "2026-01-26",
+          "sentiment": 0.2,
+          "salience": 0.08
+        },
+        {
+          "date": "2026-04-27",
+          "sentiment": -0.1,
+          "salience": 0.5
+        },
+        {
+          "date": "2026-07-13",
+          "sentiment": 0.0,
+          "salience": 0.2
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.3,
+          "salience": 0.2
+        }
+      ]
+    },
+    {
       "theme": "Historic & scenic character",
       "meetings": 20,
       "avgSentiment": 0.135,
@@ -3382,113 +3521,10 @@
       ]
     },
     {
-      "theme": "Septic & water supply",
-      "meetings": 19,
-      "avgSentiment": 0.008,
-      "avgSalience": 0.378,
-      "timeline": [
-        {
-          "date": "2022-01-24",
-          "sentiment": 0.0,
-          "salience": 0.3
-        },
-        {
-          "date": "2022-11-07",
-          "sentiment": -0.25,
-          "salience": 0.6
-        },
-        {
-          "date": "2023-12-11",
-          "sentiment": 0.5,
-          "salience": 0.2
-        },
-        {
-          "date": "2024-02-26",
-          "sentiment": -0.1,
-          "salience": 0.7
-        },
-        {
-          "date": "2024-04-25",
-          "sentiment": 0.0,
-          "salience": 0.4
-        },
-        {
-          "date": "2024-06-24",
-          "sentiment": -0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2024-07-22",
-          "sentiment": 0.4,
-          "salience": 0.55
-        },
-        {
-          "date": "2024-08-05",
-          "sentiment": 0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2024-12-09",
-          "sentiment": 0.2,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-01-13",
-          "sentiment": 0.0,
-          "salience": 0.3
-        },
-        {
-          "date": "2025-01-27",
-          "sentiment": 0.0,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-02-24",
-          "sentiment": -0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-03-24",
-          "sentiment": -0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2025-06-23",
-          "sentiment": -0.2,
-          "salience": 0.35
-        },
-        {
-          "date": "2025-07-28",
-          "sentiment": 0.0,
-          "salience": 0.5
-        },
-        {
-          "date": "2025-12-08",
-          "sentiment": -0.3,
-          "salience": 0.1
-        },
-        {
-          "date": "2026-01-26",
-          "sentiment": 0.2,
-          "salience": 0.08
-        },
-        {
-          "date": "2026-04-27",
-          "sentiment": -0.1,
-          "salience": 0.5
-        },
-        {
-          "date": "2026-07-13",
-          "sentiment": 0.0,
-          "salience": 0.2
-        }
-      ]
-    },
-    {
       "theme": "Retaining walls",
-      "meetings": 13,
-      "avgSentiment": -0.269,
-      "avgSalience": 0.573,
+      "meetings": 14,
+      "avgSentiment": -0.221,
+      "avgSalience": 0.55,
       "timeline": [
         {
           "date": "2023-12-11",
@@ -3554,6 +3590,11 @@
           "date": "2026-08-17",
           "sentiment": -0.7,
           "salience": 0.9
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.4,
+          "salience": 0.25
         }
       ]
     },
@@ -3728,11 +3769,11 @@
         "Tree removal & screening",
         "Zoning & land use"
       ],
-      "appearances": 22,
+      "appearances": 23,
       "firstSeen": "2022-05-23",
-      "lastSeen": "2026-08-17",
-      "lastStatus": "no vote \u2014 revised landscape/amenity plan requested before scheduling a public hearing",
-      "avgSentiment": 0.241,
+      "lastSeen": "2026-09-28",
+      "lastStatus": "no vote on the clubhouse plan \u2014 public hearing scheduled for October 15, 2026; a separate extension of time (plat signature and master-site-plan conditions) was also moved and carried",
+      "avgSentiment": 0.252,
       "trajectory": [
         {
           "date": "2022-05-23",
@@ -3843,6 +3884,11 @@
           "date": "2026-08-17",
           "sentiment": 0.15,
           "status": "no vote \u2014 revised landscape/amenity plan requested before scheduling a public hearing"
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.5,
+          "status": "no vote on the clubhouse plan \u2014 public hearing scheduled for October 15, 2026; a separate extension of time (plat signature and master-site-plan conditions) was also moved and carried"
         }
       ],
       "timeline": [
@@ -3977,6 +4023,12 @@
           "status": "no vote \u2014 revised landscape/amenity plan requested before scheduling a public hearing",
           "sentiment": 0.15,
           "summary": "The applicant substantially narrowed the application, pulling the bocce court, pickleball court, retaining walls and stairs off the table and proceeding only with the clubhouse, pool and grass area \u2014 which moots much of the consulting engineer's comment memo. The ZBA variance has been received and the plan was previously presented to the ARB. The board's focus was the landscape treatment. Carthy pressed that a clubhouse is the central focal point of a development and should carry a higher level of landscape design than other parts of it, and noted the stormwater detention basin sitting in that area should be dressed up rather than left as a bare hole, citing a subdivision off Guion that landscaped its detention basin beautifully. Kaufman added that the patio and lawn should be shown with actual intent \u2014 furniture, benches, a water fountain \u2014 so the board can see it as somewhere people in the neighborhood would want to go, rather than \"a clubhouse with some pavement, patio and a pool.\" The applicant said an interiors and exterior designer has been retained and agreed to bring something back. The board will look at the revised plan before scheduling a hearing."
+        },
+        {
+          "date": "2026-09-28",
+          "status": "no vote on the clubhouse plan \u2014 public hearing scheduled for October 15, 2026; a separate extension of time (plat signature and master-site-plan conditions) was also moved and carried",
+          "sentiment": 0.5,
+          "summary": "Kaufman reported that the applicant had done what it promised at the last meeting. The pickleball and bocce courts are gone, the layout is much more compact and close to the original site plan, and the walls are still high but no longer cascade down the hillside. He called the screening plan good, with planting between the walls, and said he had no major concerns. The walls are two tiers of about 10 feet each, with an aggressive native climbing hydrangea on the upper tier and existing trees screening the lower wall. The applicant's counsel asked for the public hearing to be scheduled now that the more robust landscaping plan the board asked for is in. The board agreed and set the hearing for Thursday, October 15, moved because of Columbus Day. The same counsel then raised an extension of time, heard as \"three-gourage\" in the ASR and most likely Eagle Ridge itself. All resolution conditions had been signed off that day and the plat was awaiting signatures before filing with the county clerk, with master-site-plan conditions and RPRC review of townhouse blocks to follow. He added that the ARB had approved the revised plan earlier in the month. The extension was granted."
         }
       ]
     },
@@ -4128,6 +4180,153 @@
       ]
     },
     {
+      "id": "40-high-street",
+      "name": "40 High Street",
+      "address": "40 High Street, North Castle, NY",
+      "applicationType": "other",
+      "applicant": "Represented by David Cooper (Zarin & Steinmetz) for prior owners retaining subdivision rights",
+      "themes": [
+        "Other",
+        "Process & procedure",
+        "Septic & water supply",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 11,
+      "firstSeen": "2022-11-14",
+      "lastSeen": "2026-09-28",
+      "lastStatus": "extension of time granted",
+      "avgSentiment": 0.191,
+      "trajectory": [
+        {
+          "date": "2022-11-14",
+          "sentiment": 0.0,
+          "status": "initial review \u2014 referred for wetlands flagging before Conservation Board referral"
+        },
+        {
+          "date": "2023-10-23",
+          "sentiment": 0.4,
+          "status": "discussion only; site walk to be scheduled, public hearing to follow"
+        },
+        {
+          "date": "2024-02-26",
+          "sentiment": 0.5,
+          "status": "approved"
+        },
+        {
+          "date": "2024-07-22",
+          "sentiment": 0.1,
+          "status": "approved"
+        },
+        {
+          "date": "2024-11-25",
+          "sentiment": 0.0,
+          "status": "approved"
+        },
+        {
+          "date": "2025-02-24",
+          "sentiment": 0.3,
+          "status": "approved"
+        },
+        {
+          "date": "2025-05-29",
+          "sentiment": 0.3,
+          "status": "approved"
+        },
+        {
+          "date": "2025-08-11",
+          "sentiment": 0.1,
+          "status": "approved"
+        },
+        {
+          "date": "2025-11-10",
+          "sentiment": 0.2,
+          "status": "approved with conditions"
+        },
+        {
+          "date": "2026-06-08",
+          "sentiment": 0.0,
+          "status": "approved with conditions"
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.2,
+          "status": "extension of time granted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2022-11-14",
+          "status": "initial review \u2014 referred for wetlands flagging before Conservation Board referral",
+          "sentiment": 0.0,
+          "summary": "The prior owners of a 5.8-acre parcel, who retained subdivision rights when they sold the existing house and lot to the current owner, proposed splitting off a 3.4-acre undeveloped lot. The board found the submitted plans inadequate (missing wetland boundary and buffer delineation) and directed the applicant to have a wetland scientist flag and survey the wetlands and confirm septic area location before the application could meaningfully proceed to the Conservation Board, cautioning that the buffer alone might leave little room for development."
+        },
+        {
+          "date": "2023-10-23",
+          "status": "discussion only; site walk to be scheduled, public hearing to follow",
+          "sentiment": 0.4,
+          "summary": "Follow-up on a two-lot subdivision simplified by the town's determination that a stream along the High Street frontage is an unregulated drainage channel rather than a wetland. The board asked the applicant to show a more realistic future house footprint/disturbance area (rather than an undersized placeholder) so future buyers aren't constrained, to resolve stormwater discharge routing near the drainage ditch/wetland boundary to avoid triggering a wetland permit, and confirmed the New York City aqueduct easement crossing the property would not be disturbed. The board agreed to schedule a site walk ahead of a public hearing."
+        },
+        {
+          "date": "2024-02-26",
+          "status": "approved",
+          "sentiment": 0.5,
+          "summary": "Public hearing on a two-lot subdivision of a ~5.8-acre R-1A parcel (lots of 1.25 and 4.59 acres); after confirming the frontage area is a drainage ditch rather than regulated wetland and reviewing stormwater and septic, the board closed the hearing, adopted a negative declaration, and approved the preliminary and final subdivision plats as amended, with a note added that future homes return to the Planning Board."
+        },
+        {
+          "date": "2024-07-22",
+          "status": "approved",
+          "sentiment": 0.1,
+          "summary": "The board granted an extension of time for 40 High Street; a member asked why the extension was requested but no specific reason was provided beyond an attached letter."
+        },
+        {
+          "date": "2024-11-25",
+          "status": "approved",
+          "sentiment": 0.0,
+          "summary": "The board granted an extension of time because the approval could not be signed before it was set to expire."
+        },
+        {
+          "date": "2025-02-24",
+          "status": "approved",
+          "sentiment": 0.3,
+          "summary": "The board granted an extension of time for this application, which is awaiting review at the county Health Department."
+        },
+        {
+          "date": "2025-05-29",
+          "status": "approved",
+          "sentiment": 0.3,
+          "summary": "The board granted a routine extension of time; the applicant is still working through the Department of Health."
+        },
+        {
+          "date": "2025-08-11",
+          "status": "approved",
+          "sentiment": 0.1,
+          "summary": "Extension of time request. Corey explained they were close to finishing the milk hour/health department submission when their DOH reviewer left and a new reviewer issued additional comments on August 1, which they are now addressing. The board granted the extension of time."
+        },
+        {
+          "date": "2025-11-10",
+          "status": "approved with conditions",
+          "sentiment": 0.2,
+          "summary": "The board granted a requested extension of time, attributed to ongoing health department (septic) issues. Handled quickly by motion and unanimous voice vote."
+        },
+        {
+          "date": "2026-06-08",
+          "status": "approved with conditions",
+          "sentiment": 0.0,
+          "summary": "The board considered another extension of time for 40 High Street, which has been pending since 2024. Staff reported the applicant had previously been waiting on the health department. The chair expressed impatience that it has dragged on and asked staff to find out the status before the next return. The board granted the extension."
+        },
+        {
+          "date": "2026-09-28",
+          "status": "extension of time granted",
+          "sentiment": 0.2,
+          "summary": "Another extension. Corey reported that the Department of Health returned grading comments about three weeks earlier, that the engineer Pete Gregory had revised the plans, and that the resubmission went to the Health Department late the previous week, with answers hoped for that week. Asked whether that was the only holdup, he said yes. The chairman moved the extension and it carried with no discussion."
+        }
+      ]
+    },
+    {
       "id": "124-old-mount-kisco-road",
       "name": "124 Old Mount Kisco Road",
       "address": "124 Old Mount Kisco Road, North Castle, NY",
@@ -4257,141 +4456,6 @@
           "status": "extension of time granted",
           "sentiment": 0.3,
           "summary": "Brief update on a subdivision still awaiting the county Health Department, which was reported to have signed off with the town engineer now finalizing review. The board granted an extension of time."
-        }
-      ]
-    },
-    {
-      "id": "40-high-street",
-      "name": "40 High Street",
-      "address": "40 High Street, North Castle, NY",
-      "applicationType": "other",
-      "applicant": "Represented by David Cooper (Zarin & Steinmetz) for prior owners retaining subdivision rights",
-      "themes": [
-        "Other",
-        "Septic & water supply",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Time extensions & conditions",
-        "Wetlands & buffers",
-        "Zoning & land use"
-      ],
-      "appearances": 10,
-      "firstSeen": "2022-11-14",
-      "lastSeen": "2026-06-08",
-      "lastStatus": "approved with conditions",
-      "avgSentiment": 0.19,
-      "trajectory": [
-        {
-          "date": "2022-11-14",
-          "sentiment": 0.0,
-          "status": "initial review \u2014 referred for wetlands flagging before Conservation Board referral"
-        },
-        {
-          "date": "2023-10-23",
-          "sentiment": 0.4,
-          "status": "discussion only; site walk to be scheduled, public hearing to follow"
-        },
-        {
-          "date": "2024-02-26",
-          "sentiment": 0.5,
-          "status": "approved"
-        },
-        {
-          "date": "2024-07-22",
-          "sentiment": 0.1,
-          "status": "approved"
-        },
-        {
-          "date": "2024-11-25",
-          "sentiment": 0.0,
-          "status": "approved"
-        },
-        {
-          "date": "2025-02-24",
-          "sentiment": 0.3,
-          "status": "approved"
-        },
-        {
-          "date": "2025-05-29",
-          "sentiment": 0.3,
-          "status": "approved"
-        },
-        {
-          "date": "2025-08-11",
-          "sentiment": 0.1,
-          "status": "approved"
-        },
-        {
-          "date": "2025-11-10",
-          "sentiment": 0.2,
-          "status": "approved with conditions"
-        },
-        {
-          "date": "2026-06-08",
-          "sentiment": 0.0,
-          "status": "approved with conditions"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2022-11-14",
-          "status": "initial review \u2014 referred for wetlands flagging before Conservation Board referral",
-          "sentiment": 0.0,
-          "summary": "The prior owners of a 5.8-acre parcel, who retained subdivision rights when they sold the existing house and lot to the current owner, proposed splitting off a 3.4-acre undeveloped lot. The board found the submitted plans inadequate (missing wetland boundary and buffer delineation) and directed the applicant to have a wetland scientist flag and survey the wetlands and confirm septic area location before the application could meaningfully proceed to the Conservation Board, cautioning that the buffer alone might leave little room for development."
-        },
-        {
-          "date": "2023-10-23",
-          "status": "discussion only; site walk to be scheduled, public hearing to follow",
-          "sentiment": 0.4,
-          "summary": "Follow-up on a two-lot subdivision simplified by the town's determination that a stream along the High Street frontage is an unregulated drainage channel rather than a wetland. The board asked the applicant to show a more realistic future house footprint/disturbance area (rather than an undersized placeholder) so future buyers aren't constrained, to resolve stormwater discharge routing near the drainage ditch/wetland boundary to avoid triggering a wetland permit, and confirmed the New York City aqueduct easement crossing the property would not be disturbed. The board agreed to schedule a site walk ahead of a public hearing."
-        },
-        {
-          "date": "2024-02-26",
-          "status": "approved",
-          "sentiment": 0.5,
-          "summary": "Public hearing on a two-lot subdivision of a ~5.8-acre R-1A parcel (lots of 1.25 and 4.59 acres); after confirming the frontage area is a drainage ditch rather than regulated wetland and reviewing stormwater and septic, the board closed the hearing, adopted a negative declaration, and approved the preliminary and final subdivision plats as amended, with a note added that future homes return to the Planning Board."
-        },
-        {
-          "date": "2024-07-22",
-          "status": "approved",
-          "sentiment": 0.1,
-          "summary": "The board granted an extension of time for 40 High Street; a member asked why the extension was requested but no specific reason was provided beyond an attached letter."
-        },
-        {
-          "date": "2024-11-25",
-          "status": "approved",
-          "sentiment": 0.0,
-          "summary": "The board granted an extension of time because the approval could not be signed before it was set to expire."
-        },
-        {
-          "date": "2025-02-24",
-          "status": "approved",
-          "sentiment": 0.3,
-          "summary": "The board granted an extension of time for this application, which is awaiting review at the county Health Department."
-        },
-        {
-          "date": "2025-05-29",
-          "status": "approved",
-          "sentiment": 0.3,
-          "summary": "The board granted a routine extension of time; the applicant is still working through the Department of Health."
-        },
-        {
-          "date": "2025-08-11",
-          "status": "approved",
-          "sentiment": 0.1,
-          "summary": "Extension of time request. Corey explained they were close to finishing the milk hour/health department submission when their DOH reviewer left and a new reviewer issued additional comments on August 1, which they are now addressing. The board granted the extension of time."
-        },
-        {
-          "date": "2025-11-10",
-          "status": "approved with conditions",
-          "sentiment": 0.2,
-          "summary": "The board granted a requested extension of time, attributed to ongoing health department (septic) issues. Handled quickly by motion and unanimous voice vote."
-        },
-        {
-          "date": "2026-06-08",
-          "status": "approved with conditions",
-          "sentiment": 0.0,
-          "summary": "The board considered another extension of time for 40 High Street, which has been pending since 2024. Staff reported the applicant had previously been waiting on the health department. The chair expressed impatience that it has dragged on and asked staff to find out the status before the next return. The board granted the extension."
         }
       ]
     },
@@ -12564,6 +12628,139 @@
       ]
     },
     {
+      "id": "355-main-street",
+      "name": "355 Main Street \u2014 Alpha / Anywhere Center Tutoring Use (site plan, change of use)",
+      "address": "355 Main Street",
+      "applicationType": "site plan (change of use)",
+      "applicant": "Building owner (Kimberly Home) with tenant applicant Alpha/Anywhere Center; principal J.C. Fisher",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Zoning & land use"
+      ],
+      "appearances": 2,
+      "firstSeen": "2026-07-27",
+      "lastSeen": "2026-09-28",
+      "lastStatus": "public hearing opened and closed; site plan approval for the change of use granted, with the board finding 21 off-street spaces appropriate",
+      "avgSentiment": 0.6,
+      "trajectory": [
+        {
+          "date": "2026-07-27",
+          "sentiment": 0.6,
+          "status": "positive recommendation to the Town Board on the proposed text amendment"
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.6,
+          "status": "public hearing opened and closed; site plan approval for the change of use granted, with the board finding 21 off-street spaces appropriate"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-07-27",
+          "status": "positive recommendation to the Town Board on the proposed text amendment",
+          "sentiment": 0.6,
+          "summary": "The applicant proposes a tutoring and homeschool-support center for about 44 students and roughly 10 staff on the 7,500-square-foot second floor of a 14,000-square-foot building, with no exterior changes and no interior remodeling. Because the current permitted uses in the district do not allow it, and because the code as written would require a school to occupy the whole site rather than share a building, the Town Board is considering a text amendment \u2014 drafted with help from Adam Kaufman and town staff \u2014 permitting a private school or learning support center including tutoring, enrichment, test prep and homeschool support, together with ancillary office use. The board's task was to recommend on that text. Carthy called it a reasonable augmentation of the building's uses and moved a positive recommendation. Ruisi asked whether any limit on student numbers or traffic attaches; he and Carthy agreed those belong to the later site-plan application. Crispi raised the mixing of young students with businesses in a shared building; the applicant described on-site security, escorted pick-up and drop-off, and a separate second-floor vestibule, and said it has never had a security issue. Members also probed parking demand, the operator's national growth (12 sites last August, about 18 now), and whether the ultimate intent is a full private school \u2014 the applicant said it is before the state education authorities and would like to be one day. Pollack and the applicant confirmed an initial traffic analysis exists and will be provided. The positive recommendation carried."
+        },
+        {
+          "date": "2026-09-28",
+          "status": "public hearing opened and closed; site plan approval for the change of use granted, with the board finding 21 off-street spaces appropriate",
+          "sentiment": 0.6,
+          "summary": "The follow-on to the zoning text amendment the board recommended in July, which the applicant said the Town Board adopted earlier this month for the PB-O-2A district. The proposal moves office space into a tutoring and learning-support centre for about 44 students and at most 12 staff, with no exterior construction. The applicant cited roughly 1,600 square feet, while Kaufman's figures cited about 6,867, and the difference was not resolved on the record. Kaufman explained that the code's off-street parking schedule does not list a tutoring-centre use, which leaves it to the Planning Board to set the requirement. He recommended keeping the 21 spaces the prior office use required, since a school with 12 staff should need significantly fewer, and said adopting the resolution would make that finding. The applicant asked that the resolution reference the revised parking sheets submitted September 14, which Kaufman undertook to check. After a brief false start (a motion to approve before the hearing was closed), the hearing was closed and the site plan approved."
+        }
+      ]
+    },
+    {
+      "id": "379-main-street",
+      "name": "379 Main Street \u2014 Bobo's Cafe Change of Use (site plan public hearing)",
+      "address": "379 Main Street (formerly the Cherry Blossom Farm site)",
+      "applicationType": "site plan (change of use)",
+      "applicant": "DRF Number One LLC (owner) and Bobo's Cafe (Glen Bernardi and Lisa DaRosa); attorney Jacob [surname unclear] of Zarin & Steinmetz; architect Joseph Thompson",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Time extensions & conditions",
+        "Zoning & land use"
+      ],
+      "appearances": 2,
+      "firstSeen": "2026-07-27",
+      "lastSeen": "2026-09-28",
+      "lastStatus": "public hearing closed; site plan for the change of use approved with a condition reserving three spaces behind the building for pickup/delivery drivers until the parking district's rules and regulations are established, condition to be conveyed to the Town Board",
+      "avgSentiment": 0.1,
+      "trajectory": [
+        {
+          "date": "2026-07-27",
+          "sentiment": 0.1,
+          "status": "referred to the Zoning Board of Appeals for an off-street parking variance; GML 239-m county notification to follow"
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.1,
+          "status": "public hearing closed; site plan for the change of use approved with a condition reserving three spaces behind the building for pickup/delivery drivers until the parking district's rules and regulations are established, condition to be conveyed to the Town Board"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-07-27",
+          "status": "referred to the Zoning Board of Appeals for an off-street parking variance; GML 239-m county notification to follow",
+          "sentiment": 0.1,
+          "summary": "A change of use from retail to a family-operated caf\u00e9 \u2014 a small chain with locations in Chappaqua, Somers, Mahopac and Ridgefield, Connecticut \u2014 with roughly 40 seats, work kiosks and small private offices, a commercial kitchen and front and rear access. The site cannot meet the off-street parking requirement: the code takes the greater of a seat-based or a floor-area calculation, and the floor-area figure drives a requirement of 47 spaces against roughly 11 on site, so about 29 additional spaces are needed on top of an existing deficiency, for a total variance in the neighborhood of 40. The seat-based figure would have been 22. The applicant's team argued the requirement is very conservative for a hamlet and that no restaurant on Main Street can meet it; Kaufman confirmed most other restaurants went through the same process. Much of the discussion was about the long-pending Main Street parking district: the Town Board has passed a resolution creating it but it is not implemented, and the remaining steps \u2014 a possible petition forcing a referendum, then state approval \u2014 are outside the town's control. Members observed that once the district exists, this referral and this kind of site-plan review would not be needed at all. Ruisi flagged the traffic increase as one more among several in town, framing it as awareness rather than objection. Carthy floated using the referral as leverage to advance the parking district and was talked out of it as speculative. Pollack pressed Kaufman on why the square-footage and seat-count calculations diverge so sharply; the answer offered was that the dual test prevents an applicant from manipulating the requirement, and that a large kitchen relative to seating genuinely drives more turnover and traffic. The referral passed."
+        },
+        {
+          "date": "2026-09-28",
+          "status": "public hearing closed; site plan for the change of use approved with a condition reserving three spaces behind the building for pickup/delivery drivers until the parking district's rules and regulations are established, condition to be conveyed to the Town Board",
+          "sentiment": 0.1,
+          "summary": "Site plan approval to turn 3,530 square feet of former retail space (the Cherry Blossom store) into a cafe with 66 seats and about ten employees. The property is tax lot 108.03-1-5 in the Main Street business district. The chairman summarised the background. Under the code the use needs 47 spaces against 7 on site, and the ZBA had granted a variance for 40 spaces a couple of weeks earlier on the argument that the new parking district makes this a \"bridge variance.\" Counsel explained that a change of use comes to the board only when the parking requirement rises, and that the requirement is the greater of one space per three seats (22) or one per 75 square feet including back-of-house (47). Once the State Comptroller approves the district, he said, a case like this would not come before the board at all. Michael Ferrari, an adjoining owner, said he was in favour of filling the vacancy but not of the parking. He argued that the district is not yet approved and has no published rules, and that nobody has enforced Main Street parking since the parking officer post was cut. He also said the district adds only about 65 spaces, which 12 Maple Avenue and this cafe would largely consume, and that changes of use inside the existing Armonk Square district escape review even when demand rises. His attorney Kristen Wilson cited the site plan standard requiring adequate, convenient and safe vehicle and pedestrian circulation. She raised DoorDash/Uber Eats double-parking at a busy corner and asked the board to require the applicant to mitigate short-term parking. Counsel replied with the Town's own parking study: the west-side lot is 70\u201385% full at peak, and 481 of 1,126 hamlet spaces were occupied. He also pointed to the ZBA's finding, said rules will follow approval, and offered two or three spaces for delivery drivers. Ruisi pressed the operator for peak-hour order volume. The operator said it was speculative and offered point-of-sale data, and the architect added a list of nearby residences and the foot traffic they generate. Sauro said from experience that pickup trade comes in short bursts and that nearby parking will be sufficient. Ruisi countered that real demand is closer to 47 than 22 and that some 400 new rooftops are coming to town. Kaufman confirmed that the district's rules will be set by its commissioners, the Town Board, with no requirement to send them to the Planning Board. Desmond suggested a condition requiring an interim parking/delivery plan if the cafe opens before the district's regulations take effect. One member, not identifiable in the recording, objected that this would set a precedent and put an unfair burden on the applicant. The chairman focused instead on sending delivery drivers to the rear entrance using spaces the applicant controls. The operator described three signed 15-minute pickup spaces at its Chappaqua store and offered A-frame signs. The hearing was closed and the site plan approved with the three-space condition. No dissent can be heard in the recording, but the ASR does not record individual votes."
+        }
+      ]
+    },
+    {
+      "id": "1-troy-lane",
+      "name": "1 Troy Lane \u2014 New Residence (public hearing)",
+      "address": "1 Troy Lane",
+      "applicationType": "residential site plan",
+      "applicant": "Owner represented by Josh Russo (representative and developer)",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Septic & water supply",
+        "Stormwater & drainage",
+        "Tree removal & screening"
+      ],
+      "appearances": 2,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-09-28",
+      "lastStatus": "public hearing opened and closed; resolution adopted (approved)",
+      "avgSentiment": 0.65,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.7,
+          "status": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing"
+        },
+        {
+          "date": "2026-09-28",
+          "sentiment": 0.6,
+          "status": "public hearing opened and closed; resolution adopted (approved)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing",
+          "sentiment": 0.7,
+          "summary": "A new house on the only empty lot in a cul-de-sac subdivision created in the mid-1960s. Russo described siting the house to save as many trees as possible, especially along the side lot lines facing the main neighbour at 3 Troy, replacing the trees that do come down one for one, adding more screening on that side, and moving the driveway to the higher left side on Kaufman's RPRC advice so drainage stays on the property. Carthy called it \"a good plan\" and \"very reasonable,\" and spent most of his questions on the interior courtyard and the three-and-a-half-foot step down to the pool rather than on impacts. The Town Engineer's only ask was more detail on the stormwater design plus soil testing to confirm it; Russo said the soil testing had been completed that week. Sent to the ARB with notice to follow."
+        },
+        {
+          "date": "2026-09-28",
+          "status": "public hearing opened and closed; resolution adopted (approved)",
+          "sentiment": 0.6,
+          "summary": "A new single-family house on tax lot 102.01-2-77 in the R-2A district, returning for its hearing after a well-received first appearance on September 14. Kaufman reported that he had spoken with a neighbour worried about well impacts. He had explained that this is an approved lot in a mid-1960s subdivision, that the new well and septic need Health Department approval, and that one new well is not expected to harm surrounding wells significantly. A board member, not identified in the recording, confirmed that the lot must meet current Health Department separation standards. The applicant offered to run a drawdown test and check the neighbour's well when drilling. Kaufman restated that the plan preserves most of the site's trees and adds screening along the side lot lines, and the engineering consultant said its remaining comments were minor clean-up. No members of the public spoke. The hearing was closed and the resolution adopted."
+        }
+      ]
+    },
+    {
       "id": "34-creamer-road-armonk-ny",
       "name": "34 Creamer Road \u2014 Single-Family Residence",
       "address": "34 Creamer Road, Armonk, NY",
@@ -20671,72 +20868,6 @@
       ]
     },
     {
-      "id": "355-main-street",
-      "name": "355 Main Street \u2014 Learning Support Center Zoning Text Amendment (referral to Town Board)",
-      "address": "355 Main Street",
-      "applicationType": "zoning text amendment referral",
-      "applicant": "Building owner (Kimberly Home) with tenant applicant Alpha/Anywhere Center; principal J.C. Fisher",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Zoning & land use"
-      ],
-      "appearances": 1,
-      "firstSeen": "2026-07-27",
-      "lastSeen": "2026-07-27",
-      "lastStatus": "positive recommendation to the Town Board on the proposed text amendment",
-      "avgSentiment": 0.6,
-      "trajectory": [
-        {
-          "date": "2026-07-27",
-          "sentiment": 0.6,
-          "status": "positive recommendation to the Town Board on the proposed text amendment"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-07-27",
-          "status": "positive recommendation to the Town Board on the proposed text amendment",
-          "sentiment": 0.6,
-          "summary": "The applicant proposes a tutoring and homeschool-support center for about 44 students and roughly 10 staff on the 7,500-square-foot second floor of a 14,000-square-foot building, with no exterior changes and no interior remodeling. Because the current permitted uses in the district do not allow it, and because the code as written would require a school to occupy the whole site rather than share a building, the Town Board is considering a text amendment \u2014 drafted with help from Adam Kaufman and town staff \u2014 permitting a private school or learning support center including tutoring, enrichment, test prep and homeschool support, together with ancillary office use. The board's task was to recommend on that text. Carthy called it a reasonable augmentation of the building's uses and moved a positive recommendation. Ruisi asked whether any limit on student numbers or traffic attaches; he and Carthy agreed those belong to the later site-plan application. Crispi raised the mixing of young students with businesses in a shared building; the applicant described on-site security, escorted pick-up and drop-off, and a separate second-floor vestibule, and said it has never had a security issue. Members also probed parking demand, the operator's national growth (12 sites last August, about 18 now), and whether the ultimate intent is a full private school \u2014 the applicant said it is before the state education authorities and would like to be one day. Pollack and the applicant confirmed an initial traffic analysis exists and will be provided. The positive recommendation carried."
-        }
-      ]
-    },
-    {
-      "id": "379-main-street",
-      "name": "379 Main Street \u2014 Bobo's Cafe Change of Use (referral to ZBA for parking variance)",
-      "address": "379 Main Street (formerly the Cherry Blossom Farm site)",
-      "applicationType": "change of use / site plan, referral to ZBA",
-      "applicant": "DRF Number One LLC (owner) and Bobo's Cafe (Glen Bernardi and Lisa DaRosa); attorney Jacob [surname unclear] of Zarin & Steinmetz; architect Joseph Thompson",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Zoning & land use"
-      ],
-      "appearances": 1,
-      "firstSeen": "2026-07-27",
-      "lastSeen": "2026-07-27",
-      "lastStatus": "referred to the Zoning Board of Appeals for an off-street parking variance; GML 239-m county notification to follow",
-      "avgSentiment": 0.1,
-      "trajectory": [
-        {
-          "date": "2026-07-27",
-          "sentiment": 0.1,
-          "status": "referred to the Zoning Board of Appeals for an off-street parking variance; GML 239-m county notification to follow"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-07-27",
-          "status": "referred to the Zoning Board of Appeals for an off-street parking variance; GML 239-m county notification to follow",
-          "sentiment": 0.1,
-          "summary": "A change of use from retail to a family-operated caf\u00e9 \u2014 a small chain with locations in Chappaqua, Somers, Mahopac and Ridgefield, Connecticut \u2014 with roughly 40 seats, work kiosks and small private offices, a commercial kitchen and front and rear access. The site cannot meet the off-street parking requirement: the code takes the greater of a seat-based or a floor-area calculation, and the floor-area figure drives a requirement of 47 spaces against roughly 11 on site, so about 29 additional spaces are needed on top of an existing deficiency, for a total variance in the neighborhood of 40. The seat-based figure would have been 22. The applicant's team argued the requirement is very conservative for a hamlet and that no restaurant on Main Street can meet it; Kaufman confirmed most other restaurants went through the same process. Much of the discussion was about the long-pending Main Street parking district: the Town Board has passed a resolution creating it but it is not implemented, and the remaining steps \u2014 a possible petition forcing a referendum, then state approval \u2014 are outside the town's control. Members observed that once the district exists, this referral and this kind of site-plan review would not be needed at all. Ruisi flagged the traffic increase as one more among several in town, framing it as awareness rather than objection. Carthy floated using the referral as leverage to advance the parking district and was talked out of it as speculative. Pollack pressed Kaufman on why the square-footage and seat-count calculations diverge so sharply; the answer offered was that the dual test prevents an applicant from manipulating the requirement, and that a large kitchen relative to seating genuinely drives more turnover and traffic. The referral passed."
-        }
-      ]
-    },
-    {
       "id": "435-main-street",
       "name": "435 Main Street \u2014 Citibank Directional Signage",
       "address": "435 Main Street (tax map 108.01-6-56, CB zoning district)",
@@ -20928,38 +21059,6 @@
       ]
     },
     {
-      "id": "1-troy-lane",
-      "name": "1 Troy Lane \u2014 New Residence on the Last Vacant Lot",
-      "address": "1 Troy Lane",
-      "applicationType": "residential site plan",
-      "applicant": "Owner represented by Josh Russo (representative and developer)",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Stormwater & drainage",
-        "Tree removal & screening"
-      ],
-      "appearances": 1,
-      "firstSeen": "2026-09-14",
-      "lastSeen": "2026-09-14",
-      "lastStatus": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing",
-      "avgSentiment": 0.7,
-      "trajectory": [
-        {
-          "date": "2026-09-14",
-          "sentiment": 0.7,
-          "status": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-09-14",
-          "status": "no vote \u2014 sent to the ARB, public notice to be arranged for a hearing",
-          "sentiment": 0.7,
-          "summary": "A new house on the only empty lot in a cul-de-sac subdivision created in the mid-1960s. Russo described siting the house to save as many trees as possible, especially along the side lot lines facing the main neighbour at 3 Troy, replacing the trees that do come down one for one, adding more screening on that side, and moving the driveway to the higher left side on Kaufman's RPRC advice so drainage stays on the property. Carthy called it \"a good plan\" and \"very reasonable,\" and spent most of his questions on the interior courtyard and the three-and-a-half-foot step down to the pool rather than on impacts. The Town Engineer's only ask was more detail on the stormwater design plus soil testing to confirm it; Russo said the soil testing had been completed that week. Sent to the ARB with notice to follow."
-        }
-      ]
-    },
-    {
       "id": "4-cedar-hill-road",
       "name": "4 Cedar Hill Road \u2014 Renovation and Driveway Realignment on a Scenic Road",
       "address": "4 Cedar Hill Road",
@@ -20997,10 +21096,10 @@
   "members": [
     {
       "member": "Christopher Carthy",
-      "totalPositions": 415,
-      "avgSentiment": 0.211,
+      "totalPositions": 420,
+      "avgSentiment": 0.214,
       "confidenceMix": {
-        "high": 277,
+        "high": 282,
         "medium": 125,
         "low": 13
       },
@@ -21017,8 +21116,8 @@
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 94,
-          "avgSentiment": 0.233
+          "count": 96,
+          "avgSentiment": 0.237
         },
         {
           "theme": "Wetlands & buffers",
@@ -21027,13 +21126,13 @@
         },
         {
           "theme": "Tree removal & screening",
-          "count": 58,
-          "avgSentiment": 0.23
+          "count": 59,
+          "avgSentiment": 0.235
         },
         {
           "theme": "Neighbor concerns & safety",
-          "count": 48,
-          "avgSentiment": 0.132
+          "count": 49,
+          "avgSentiment": 0.136
         },
         {
           "theme": "Stormwater & drainage",
@@ -21047,13 +21146,13 @@
         },
         {
           "theme": "Time extensions & conditions",
-          "count": 37,
-          "avgSentiment": 0.27
+          "count": 39,
+          "avgSentiment": 0.269
         },
         {
           "theme": "Process & procedure",
-          "count": 36,
-          "avgSentiment": -0.042
+          "count": 38,
+          "avgSentiment": -0.011
         },
         {
           "theme": "Retaining walls",
@@ -21067,8 +21166,8 @@
         },
         {
           "theme": "Septic & water supply",
-          "count": 21,
-          "avgSentiment": 0.064
+          "count": 22,
+          "avgSentiment": 0.089
         },
         {
           "theme": "Lighting",
@@ -21094,8 +21193,8 @@
       "byCase": [
         {
           "caseId": "3-north-castle-drive-eagle-ridge",
-          "count": 14,
-          "avgSentiment": 0.193
+          "count": 15,
+          "avgSentiment": 0.213
         },
         {
           "caseId": "92-94-round-hill-road",
@@ -21128,6 +21227,11 @@
           "avgSentiment": 0.383
         },
         {
+          "caseId": "40-high-street",
+          "count": 5,
+          "avgSentiment": 0.1
+        },
+        {
           "caseId": "45-bedford-road",
           "count": 5,
           "avgSentiment": 0.24
@@ -21156,11 +21260,6 @@
           "caseId": "263-bedford-banksville-road",
           "count": 4,
           "avgSentiment": 0.55
-        },
-        {
-          "caseId": "40-high-street",
-          "count": 4,
-          "avgSentiment": 0.075
         },
         {
           "caseId": "4-tripp-lane",
@@ -21486,6 +21585,21 @@
           "caseId": "1-east-middle-patent-road",
           "count": 2,
           "avgSentiment": 0.525
+        },
+        {
+          "caseId": "355-main-street",
+          "count": 2,
+          "avgSentiment": 0.65
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 2,
+          "avgSentiment": 0.2
+        },
+        {
+          "caseId": "1-troy-lane",
+          "count": 2,
+          "avgSentiment": 0.65
         },
         {
           "caseId": "brynwood-summit-club-bedford-road-armonk-ny",
@@ -22248,16 +22362,6 @@
           "avgSentiment": -0.75
         },
         {
-          "caseId": "355-main-street",
-          "count": 1,
-          "avgSentiment": 0.7
-        },
-        {
-          "caseId": "379-main-street",
-          "count": 1,
-          "avgSentiment": 0.1
-        },
-        {
           "caseId": "6-stroling-road-south",
           "count": 1,
           "avgSentiment": 0.3
@@ -22281,11 +22385,6 @@
           "caseId": "22-nethermont-avenue",
           "count": 1,
           "avgSentiment": 0.3
-        },
-        {
-          "caseId": "1-troy-lane",
-          "count": 1,
-          "avgSentiment": 0.7
         },
         {
           "caseId": "4-cedar-hill-road",
@@ -27654,16 +27753,80 @@
           ],
           "evidence": "Supported the text amendment but rejected releasing the payment: \"we predicated the Community Benefits Agreement and that payment as a catalyst to the parking district,\" and \"My preferred solution would be if you're coming back that the contribution that you offer to make to the town of North Castle to construct that parking lot remain intact.\" Said he had rewatched the 2023\u201324 meeting recordings in preparation and was \"having a hard time letting go of that right now.\" Moved the recommendation that the CBA be maintained.",
           "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "40 High Street",
+          "caseId": "40-high-street",
+          "stance": "supportive",
+          "score": 0.2,
+          "themes": [
+            "Time extensions & conditions"
+          ],
+          "evidence": "Asked \"is that the only holdup?\" and on hearing yes moved \"to grant the extension of time for 40 High Street.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "379 Main Street \u2014 Bobo's Cafe Change of Use (site plan public hearing)",
+          "caseId": "379-main-street",
+          "stance": "leaning-supportive",
+          "score": 0.3,
+          "themes": [
+            "Neighbor concerns & safety",
+            "Parking, traffic & access",
+            "Time extensions & conditions"
+          ],
+          "evidence": "Said the neighbours \"aren't raising points that are totally egregious... they have some legitimate concern\" but that the parking district \"will go a long way towards ameliorating the parking concerns.\" He called the open-ended intensification problem \"the town of North Castle's problem\" rather than the applicant's. He pressed the operator to route delivery drivers to the rear (\"I'm trying to get the site plan regulations as opposed to good intentions\") and moved approval with three reserved rear spaces as a condition.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "355 Main Street \u2014 Alpha / Anywhere Center Tutoring Use (site plan, change of use)",
+          "caseId": "355-main-street",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Parking, traffic & access",
+            "Process & procedure"
+          ],
+          "evidence": "Moved to open and close the hearing and \"to approve the site plan approval for change of use for 355 Main Street\"; told the applicant to check with the building department about permits (\"I don't think there'll be any problem\").",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "1 Troy Lane \u2014 New Residence (public hearing)",
+          "caseId": "1-troy-lane",
+          "stance": "supportive",
+          "score": 0.6,
+          "themes": [
+            "Septic & water supply"
+          ],
+          "evidence": "Moved to open and close the hearing and \"to approve the resolution for one Troy Lane\"; commented \"Always good to talk to the neighbors.\"",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "Eagle Ridge (3 North Castle Drive / clubhouse)",
+          "caseId": "3-north-castle-drive-eagle-ridge",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Process & procedure",
+            "Tree removal & screening"
+          ],
+          "evidence": "Presiding: \"let's schedule the public hearing for October 15th. I look forward to moving along,\" and moved \"to grant the extension of time.\"",
+          "confidence": "high"
         }
       ]
     },
     {
       "member": "Lawrence Ruisi",
-      "totalPositions": 192,
-      "avgSentiment": 0.059,
+      "totalPositions": 194,
+      "avgSentiment": 0.057,
       "confidenceMix": {
-        "medium": 80,
-        "high": 92,
+        "medium": 81,
+        "high": 93,
         "low": 20
       },
       "byTheme": [
@@ -27674,8 +27837,8 @@
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 47,
-          "avgSentiment": 0.048
+          "count": 48,
+          "avgSentiment": 0.039
         },
         {
           "theme": "Zoning & land use",
@@ -27694,8 +27857,8 @@
         },
         {
           "theme": "Process & procedure",
-          "count": 20,
-          "avgSentiment": -0.045
+          "count": 21,
+          "avgSentiment": -0.029
         },
         {
           "theme": "Wetlands & buffers",
@@ -27903,6 +28066,16 @@
           "caseId": "70-lafayette-avenue",
           "count": 2,
           "avgSentiment": 0.1
+        },
+        {
+          "caseId": "355-main-street",
+          "count": 2,
+          "avgSentiment": 0.225
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 2,
+          "avgSentiment": -0.3
         },
         {
           "caseId": "375-main-street-armonk-ny",
@@ -28378,16 +28551,6 @@
           "caseId": "22-school-street",
           "count": 1,
           "avgSentiment": 0.35
-        },
-        {
-          "caseId": "355-main-street",
-          "count": 1,
-          "avgSentiment": 0.15
-        },
-        {
-          "caseId": "379-main-street",
-          "count": 1,
-          "avgSentiment": -0.2
         }
       ],
       "evidence": [
@@ -30824,15 +30987,39 @@
           ],
           "evidence": "Voted no on the text amendment. His objection was proximity rather than the payment: \"I think people are a lot of people are lazy. They're going to park at 12 Maple if it's available. If it's not available, a lot of them are going to go into CVS... I think that's a fact.\" Also pressed on whether the 2020 parking study still holds given changes in tenancy since, and on 400 new rooftops coming to town.",
           "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "379 Main Street \u2014 Bobo's Cafe Change of Use (site plan public hearing)",
+          "caseId": "379-main-street",
+          "stance": "concerned",
+          "score": -0.4,
+          "themes": [
+            "Parking, traffic & access"
+          ],
+          "evidence": "Invited to open the board's discussion (\"Larry, why don't I open it up with you?\"), he questioned the operator repeatedly about peak-hour orders: \"I don't think it's unfair to ask the question as to what is your peak volume going to be when we're having a discussion about the traffic flow in the parking.\" Said the back-of-house figure \"has some validity... I think it's closer to the 47 than it is the 22\", and cited roughly 400 new rooftops coming to town. A later remark that \"it really is a town board issue... my concern's longer term\", made right after the chairman says \"Larry's giving me the devil's eye\", is very likely his but cannot be confirmed from the recording.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "355 Main Street \u2014 Alpha / Anywhere Center Tutoring Use (site plan, change of use)",
+          "caseId": "355-main-street",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Process & procedure"
+          ],
+          "evidence": "Read the notice of public hearing at the chairman's request (\"Larry do you mind?\" ... \"Thank you, Larry.\").",
+          "confidence": "medium"
         }
       ]
     },
     {
       "member": "Michael Pollack",
-      "totalPositions": 146,
-      "avgSentiment": 0.083,
+      "totalPositions": 147,
+      "avgSentiment": 0.082,
       "confidenceMix": {
-        "medium": 62,
+        "medium": 63,
         "high": 71,
         "low": 13
       },
@@ -30844,8 +31031,8 @@
         },
         {
           "theme": "Zoning & land use",
-          "count": 30,
-          "avgSentiment": 0.032
+          "count": 31,
+          "avgSentiment": 0.031
         },
         {
           "theme": "Parking, traffic & access",
@@ -30859,8 +31046,8 @@
         },
         {
           "theme": "Process & procedure",
-          "count": 18,
-          "avgSentiment": 0.05
+          "count": 19,
+          "avgSentiment": 0.047
         },
         {
           "theme": "Steep slopes & rock removal",
@@ -31013,6 +31200,11 @@
           "caseId": "six-ledgewood-place-benson",
           "count": 2,
           "avgSentiment": -0.425
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 2,
+          "avgSentiment": 0.0
         },
         {
           "caseId": "34-creamer-road-armonk-ny",
@@ -31458,11 +31650,6 @@
           "caseId": "22-school-street",
           "count": 1,
           "avgSentiment": -0.4
-        },
-        {
-          "caseId": "379-main-street",
-          "count": 1,
-          "avgSentiment": 0.0
         },
         {
           "caseId": "435-main-street",
@@ -33307,6 +33494,19 @@
             "Process & procedure"
           ],
           "evidence": "Asked, with Ruisi, whether to schedule the hearing or wait, and agreed to schedule it on the understanding it stays open \u2014 \"just under the understanding that if there's more to be done, we just keep it open.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "379 Main Street \u2014 Bobo's Cafe Change of Use (site plan public hearing)",
+          "caseId": "379-main-street",
+          "stance": "neutral",
+          "score": 0.0,
+          "themes": [
+            "Process & procedure",
+            "Zoning & land use"
+          ],
+          "evidence": "Read the notice of public hearing. When the chairman turned to him (\"Michael, I've been looking at you... Do you want to add anything?\"), he said: \"the preliminary question is the binary question. Do you approve the change of use or not?... they have their ZBA approval... So our ability to deny the change of use strikes me is limited,\" adding that he was trying to find other tools and was \"coming up empty.\" A member of the public, Michael Ferrari, was also addressed as \"Michael\". This reply is credited to Pollack because the speaker talks of the board's own powers (\"tools that are available to us\").",
           "confidence": "medium"
         }
       ]
@@ -35724,10 +35924,10 @@
     },
     {
       "member": "Steven Sauro",
-      "totalPositions": 127,
-      "avgSentiment": 0.224,
+      "totalPositions": 131,
+      "avgSentiment": 0.231,
       "confidenceMix": {
-        "medium": 59,
+        "medium": 63,
         "high": 57,
         "low": 11
       },
@@ -35738,14 +35938,14 @@
           "avgSentiment": 0.243
         },
         {
-          "theme": "Tree removal & screening",
-          "count": 20,
-          "avgSentiment": 0.2
+          "theme": "Parking, traffic & access",
+          "count": 21,
+          "avgSentiment": 0.333
         },
         {
-          "theme": "Parking, traffic & access",
-          "count": 19,
-          "avgSentiment": 0.321
+          "theme": "Tree removal & screening",
+          "count": 21,
+          "avgSentiment": 0.214
         },
         {
           "theme": "Stormwater & drainage",
@@ -35774,8 +35974,8 @@
         },
         {
           "theme": "Retaining walls",
-          "count": 9,
-          "avgSentiment": -0.044
+          "count": 10,
+          "avgSentiment": 0.01
         },
         {
           "theme": "Septic & water supply",
@@ -35793,14 +35993,14 @@
           "avgSentiment": -0.075
         },
         {
+          "theme": "Process & procedure",
+          "count": 4,
+          "avgSentiment": 0.05
+        },
+        {
           "theme": "Time extensions & conditions",
           "count": 4,
           "avgSentiment": 0.375
-        },
-        {
-          "theme": "Process & procedure",
-          "count": 3,
-          "avgSentiment": -0.033
         },
         {
           "theme": "Bonding & maintenance",
@@ -35821,8 +36021,8 @@
       "byCase": [
         {
           "caseId": "3-north-castle-drive-eagle-ridge",
-          "count": 4,
-          "avgSentiment": 0.1
+          "count": 5,
+          "avgSentiment": 0.18
         },
         {
           "caseId": "12-maple-avenue",
@@ -36321,6 +36521,21 @@
         },
         {
           "caseId": "6-massaro-court",
+          "count": 1,
+          "avgSentiment": 0.3
+        },
+        {
+          "caseId": "379-main-street",
+          "count": 1,
+          "avgSentiment": 0.5
+        },
+        {
+          "caseId": "355-main-street",
+          "count": 1,
+          "avgSentiment": 0.4
+        },
+        {
+          "caseId": "1-troy-lane",
           "count": 1,
           "avgSentiment": 0.3
         }
@@ -37921,6 +38136,55 @@
           ],
           "evidence": "Invited by the chair to weigh in \u2014 \"You've been quiet as a church mouse\" \u2014 and declined to take a position: \"I have no opinion. I'm saying neutral.\" The intervening argument that the payment was seed money the applicant volunteered rather than a duplicate charge (\"You agreed to throw seed money in knowing that you could then participate later\") most likely came from him, but the recording has no speaker labels and the voice says \"I wasn't there,\" which fits Crispi equally.",
           "confidence": "low"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "379 Main Street \u2014 Bobo's Cafe Change of Use (site plan public hearing)",
+          "caseId": "379-main-street",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Parking, traffic & access"
+          ],
+          "evidence": "Called on by name (\"Go ahead Steve\", then \"Thank you, Steve\"), he described running a similar store for 28 years where about 70% of business was pickup, suggested striping pickup-only spaces once the district is in force, and concluded: \"just knowing this town, the way I do, I do think it's valid where they are and the amount of parking in the back and in the surrounding areas will be sufficient.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "355 Main Street \u2014 Alpha / Anywhere Center Tutoring Use (site plan, change of use)",
+          "caseId": "355-main-street",
+          "stance": "supportive",
+          "score": 0.4,
+          "themes": [
+            "Parking, traffic & access"
+          ],
+          "evidence": "Asked \"Steve?\" after Kaufman's recommendation that 21 spaces is the appropriate parking requirement, replied \"I agree.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "1 Troy Lane \u2014 New Residence (public hearing)",
+          "caseId": "1-troy-lane",
+          "stance": "supportive",
+          "score": 0.3,
+          "themes": [
+            "Process & procedure"
+          ],
+          "evidence": "Read the notice of public hearing at the chairman's request (\"Steve Soros is going to read the notice\" \u2014 ASR for Sauro).",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-09-28",
+          "case": "Eagle Ridge (3 North Castle Drive / clubhouse)",
+          "caseId": "3-north-castle-drive-eagle-ridge",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Retaining walls",
+            "Tree removal & screening"
+          ],
+          "evidence": "Asked \"Steve, anything from you?\", replied \"No, it's a good improvement.\"",
+          "confidence": "medium"
         }
       ]
     },
@@ -70866,6 +71130,302 @@
       ],
       "attributionCoverage": "fair",
       "attributionNote": "No speaker labels in the recording. Christopher Carthy presided and is identifiable throughout, and he names members before inviting them to speak, which fixes Lawrence Ruisi reading the hearing notice and voting no on the text amendment, Thomas Crispi seconding and abstaining, and Steven Sauro declining to take a position. Michael Pollack was absent and carries no positions. The weak point is the 12 Maple discussion, where two non-chair voices alternate for several minutes and the ASR gives no reliable way to separate Sauro from Crispi \u2014 both say they were not present for the original negotiations. The seed-money argument is attributed to Sauro at low confidence for that reason. Several substantive remarks in the 31 Sorrell Street discussion are left unattributed rather than guessed at."
+    },
+    {
+      "date": "2026-09-28",
+      "meetingSummary": "A short meeting, about 75 minutes of business. More than half of it went on one public hearing: the site plan for Bobo's Cafe's change of use at 379 Main Street, the former Cherry Blossom space. The applicant came back with a Zoning Board of Appeals variance for 40 of the 47 required parking spaces, which its counsel described as a \"bridge variance\" until the new Main Street parking district gets the State Comptroller's sign-off. An adjoining property owner, Michael Ferrari, and his attorney Kristen Wilson objected. Their points were that the district is not yet approved and has no rules, that nobody enforces parking on Main Street, that two changes of use (this one and 12 Maple Avenue) would use up most of the roughly 65 spaces the district adds, and that the site plan standard on safe circulation still applies whatever the ZBA decided. Lawrence Ruisi questioned the operator at length about peak-hour volume and got no number. He argued the real demand is closer to the code's 47 spaces than to the 22 that a seats-only count would give. Steven Sauro drew on his own years running a similar store and said the parking nearby will be sufficient, since much of the trade is quick pickup. Michael Pollack said that with the ZBA approval in hand, the board's ability to deny the change of use is limited. Town Attorney Mary Desmond suggested a condition requiring an interim parking-flow plan if the cafe opens before the district's rules exist. Chairman Carthy, who called the neighbours' concerns legitimate but mainly a Town and parking-district problem, steered the board toward a narrower site-plan condition. The site plan was approved with three spaces behind the building reserved for pickup and delivery drivers until the district's rules are in place, and that condition is to be passed on to the Town Board. The other four items were routine. There was an extension of time for 40 High Street. The site plan for the Alpha / Anywhere Center tutoring use at 355 Main Street was approved, with the board finding the existing 21 spaces appropriate because the code does not list the use. A new house at 1 Troy Lane was approved after the Town Planner relayed a neighbour's question about well impacts. The scaled-back Eagle Ridge clubhouse plan, with its courts removed and two tiered 10-foot walls planted between, drew no major concerns and was scheduled for a public hearing on October 15. A further extension of time, apparently for Eagle Ridge's plat and master-site-plan conditions, was granted at the end.",
+      "durationNote": "Christopher Carthy chaired (greeted as \"Christopher\" at the start and addressed as \"Mr. Karthi\" by a speaker from the public). Michael Pollack read the Bobo's Cafe hearing notice, Lawrence Ruisi the 355 Main Street notice and Steven Sauro the 1 Troy Lane notice, and each was named by the chairman. Thomas Crispi is not named or addressed anywhere in the recording, so his attendance cannot be confirmed from the transcript and he carries no positions. Town Planner Adam Kaufman and Town Attorney Mary Desmond took part, and John Cooper of the Conservation Board was acknowledged at the start. Two members of the public spoke on Bobo's Cafe: Michael Ferrari, an adjoining property owner (not the board member), and his attorney Kristen Wilson. The recording runs about 79 minutes, with business from about 00:03:38 to 01:18:20.",
+      "cases": [
+        {
+          "id": "40-high-street",
+          "name": "40 High Street \u2014 Extension of Time",
+          "address": "40 High Street",
+          "applicationType": "extension of time",
+          "applicant": "Represented by Corey [surname not reliably rendered] of Zarin & Steinmetz; engineer Pete Gregory",
+          "status": "extension of time granted",
+          "summary": "Another extension. Corey reported that the Department of Health returned grading comments about three weeks earlier, that the engineer Pete Gregory had revised the plans, and that the resubmission went to the Health Department late the previous week, with answers hoped for that week. Asked whether that was the only holdup, he said yes. The chairman moved the extension and it carried with no discussion.",
+          "themes": [
+            "Process & procedure",
+            "Septic & water supply",
+            "Time extensions & conditions"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.2,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.2,
+              "themes": [
+                "extension of time"
+              ],
+              "evidence": "Asked \"is that the only holdup?\" and on hearing yes moved \"to grant the extension of time for 40 High Street.\"",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "379-main-street-bobos-cafe",
+          "name": "379 Main Street \u2014 Bobo's Cafe Change of Use (site plan public hearing)",
+          "address": "379 Main Street (formerly the Cherry Blossom Farm site)",
+          "applicationType": "site plan (change of use)",
+          "applicant": "Bobo's Cafe (owner addressed as Mr. Bernardi; his self-introduction is garbled in the ASR), represented by Corey [surname not reliably rendered] of Zarin & Steinmetz, with Adriana of Joseph Thompson Architect",
+          "status": "public hearing closed; site plan for the change of use approved with a condition reserving three spaces behind the building for pickup/delivery drivers until the parking district's rules and regulations are established, condition to be conveyed to the Town Board",
+          "summary": "Site plan approval to turn 3,530 square feet of former retail space (the Cherry Blossom store) into a cafe with 66 seats and about ten employees. The property is tax lot 108.03-1-5 in the Main Street business district. The chairman summarised the background. Under the code the use needs 47 spaces against 7 on site, and the ZBA had granted a variance for 40 spaces a couple of weeks earlier on the argument that the new parking district makes this a \"bridge variance.\" Counsel explained that a change of use comes to the board only when the parking requirement rises, and that the requirement is the greater of one space per three seats (22) or one per 75 square feet including back-of-house (47). Once the State Comptroller approves the district, he said, a case like this would not come before the board at all. Michael Ferrari, an adjoining owner, said he was in favour of filling the vacancy but not of the parking. He argued that the district is not yet approved and has no published rules, and that nobody has enforced Main Street parking since the parking officer post was cut. He also said the district adds only about 65 spaces, which 12 Maple Avenue and this cafe would largely consume, and that changes of use inside the existing Armonk Square district escape review even when demand rises. His attorney Kristen Wilson cited the site plan standard requiring adequate, convenient and safe vehicle and pedestrian circulation. She raised DoorDash/Uber Eats double-parking at a busy corner and asked the board to require the applicant to mitigate short-term parking. Counsel replied with the Town's own parking study: the west-side lot is 70\u201385% full at peak, and 481 of 1,126 hamlet spaces were occupied. He also pointed to the ZBA's finding, said rules will follow approval, and offered two or three spaces for delivery drivers. Ruisi pressed the operator for peak-hour order volume. The operator said it was speculative and offered point-of-sale data, and the architect added a list of nearby residences and the foot traffic they generate. Sauro said from experience that pickup trade comes in short bursts and that nearby parking will be sufficient. Ruisi countered that real demand is closer to 47 than 22 and that some 400 new rooftops are coming to town. Kaufman confirmed that the district's rules will be set by its commissioners, the Town Board, with no requirement to send them to the Planning Board. Desmond suggested a condition requiring an interim parking/delivery plan if the cafe opens before the district's regulations take effect. One member, not identifiable in the recording, objected that this would set a precedent and put an unfair burden on the applicant. The chairman focused instead on sending delivery drivers to the rear entrance using spaces the applicant controls. The operator described three signed 15-minute pickup spaces at its Chappaqua store and offered A-frame signs. The hearing was closed and the site plan approved with the three-space condition. No dissent can be heard in the recording, but the ASR does not record individual votes.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Time extensions & conditions",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.1,
+          "publicComment": "Two speakers against. Michael Ferrari, an adjoining property owner and resident of more than 50 years, said he supported the use but not the parking. Kristen Wilson, his attorney, asked the board to require short-term pickup/delivery mitigation. A third speaker from the applicant's side, not clearly identified, said much of the trade at a comparable store is school students who walk.",
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "leaning-supportive",
+              "score": 0.3,
+              "themes": [
+                "parking, traffic & access",
+                "neighbor concerns & safety",
+                "conditions"
+              ],
+              "evidence": "Said the neighbours \"aren't raising points that are totally egregious... they have some legitimate concern\" but that the parking district \"will go a long way towards ameliorating the parking concerns.\" He called the open-ended intensification problem \"the town of North Castle's problem\" rather than the applicant's. He pressed the operator to route delivery drivers to the rear (\"I'm trying to get the site plan regulations as opposed to good intentions\") and moved approval with three reserved rear spaces as a condition.",
+              "confidence": "high"
+            },
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "concerned",
+              "score": -0.4,
+              "themes": [
+                "parking, traffic & access"
+              ],
+              "evidence": "Invited to open the board's discussion (\"Larry, why don't I open it up with you?\"), he questioned the operator repeatedly about peak-hour orders: \"I don't think it's unfair to ask the question as to what is your peak volume going to be when we're having a discussion about the traffic flow in the parking.\" Said the back-of-house figure \"has some validity... I think it's closer to the 47 than it is the 22\", and cited roughly 400 new rooftops coming to town. A later remark that \"it really is a town board issue... my concern's longer term\", made right after the chairman says \"Larry's giving me the devil's eye\", is very likely his but cannot be confirmed from the recording.",
+              "confidence": "high"
+            },
+            {
+              "member": "Steven Sauro",
+              "stance": "supportive",
+              "score": 0.5,
+              "themes": [
+                "parking, traffic & access"
+              ],
+              "evidence": "Called on by name (\"Go ahead Steve\", then \"Thank you, Steve\"), he described running a similar store for 28 years where about 70% of business was pickup, suggested striping pickup-only spaces once the district is in force, and concluded: \"just knowing this town, the way I do, I do think it's valid where they are and the amount of parking in the back and in the surrounding areas will be sufficient.\"",
+              "confidence": "medium"
+            },
+            {
+              "member": "Michael Pollack",
+              "stance": "neutral",
+              "score": 0.0,
+              "themes": [
+                "process & procedure",
+                "zoning & land use"
+              ],
+              "evidence": "Read the notice of public hearing. When the chairman turned to him (\"Michael, I've been looking at you... Do you want to add anything?\"), he said: \"the preliminary question is the binary question. Do you approve the change of use or not?... they have their ZBA approval... So our ability to deny the change of use strikes me is limited,\" adding that he was trying to find other tools and was \"coming up empty.\" A member of the public, Michael Ferrari, was also addressed as \"Michael\". This reply is credited to Pollack because the speaker talks of the board's own powers (\"tools that are available to us\").",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "355-main-street-alpha-school",
+          "name": "355 Main Street \u2014 Alpha / Anywhere Center Tutoring Use (site plan, change of use)",
+          "address": "355 Main Street",
+          "applicationType": "site plan (change of use)",
+          "applicant": "Alpha / Anywhere Center (JC Fisher, Executive Vice President of Operations), with its engineering consultant and the building's landlord",
+          "status": "public hearing opened and closed; site plan approval for the change of use granted, with the board finding 21 off-street spaces appropriate",
+          "summary": "The follow-on to the zoning text amendment the board recommended in July, which the applicant said the Town Board adopted earlier this month for the PB-O-2A district. The proposal moves office space into a tutoring and learning-support centre for about 44 students and at most 12 staff, with no exterior construction. The applicant cited roughly 1,600 square feet, while Kaufman's figures cited about 6,867, and the difference was not resolved on the record. Kaufman explained that the code's off-street parking schedule does not list a tutoring-centre use, which leaves it to the Planning Board to set the requirement. He recommended keeping the 21 spaces the prior office use required, since a school with 12 staff should need significantly fewer, and said adopting the resolution would make that finding. The applicant asked that the resolution reference the revised parking sheets submitted September 14, which Kaufman undertook to check. After a brief false start (a motion to approve before the hearing was closed), the hearing was closed and the site plan approved.",
+          "themes": [
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.6,
+          "publicComment": "Michael Ferrari was invited up but declined to speak. No other public comment.",
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "parking, traffic & access",
+                "process & procedure"
+              ],
+              "evidence": "Moved to open and close the hearing and \"to approve the site plan approval for change of use for 355 Main Street\"; told the applicant to check with the building department about permits (\"I don't think there'll be any problem\").",
+              "confidence": "high"
+            },
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "process & procedure"
+              ],
+              "evidence": "Read the notice of public hearing at the chairman's request (\"Larry do you mind?\" ... \"Thank you, Larry.\").",
+              "confidence": "medium"
+            },
+            {
+              "member": "Steven Sauro",
+              "stance": "supportive",
+              "score": 0.4,
+              "themes": [
+                "parking, traffic & access"
+              ],
+              "evidence": "Asked \"Steve?\" after Kaufman's recommendation that 21 spaces is the appropriate parking requirement, replied \"I agree.\"",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "1-troy-lane",
+          "name": "1 Troy Lane \u2014 New Residence (public hearing)",
+          "address": "1 Troy Lane",
+          "applicationType": "residential site plan",
+          "applicant": "Owner represented by Joshua Russo (developer)",
+          "status": "public hearing opened and closed; resolution adopted (approved)",
+          "summary": "A new single-family house on tax lot 102.01-2-77 in the R-2A district, returning for its hearing after a well-received first appearance on September 14. Kaufman reported that he had spoken with a neighbour worried about well impacts. He had explained that this is an approved lot in a mid-1960s subdivision, that the new well and septic need Health Department approval, and that one new well is not expected to harm surrounding wells significantly. A board member, not identified in the recording, confirmed that the lot must meet current Health Department separation standards. The applicant offered to run a drawdown test and check the neighbour's well when drilling. Kaufman restated that the plan preserves most of the site's trees and adds screening along the side lot lines, and the engineering consultant said its remaining comments were minor clean-up. No members of the public spoke. The hearing was closed and the resolution adopted.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Septic & water supply",
+            "Tree removal & screening"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.6,
+          "publicComment": "No members of the public spoke; a neighbour's well concern was relayed by the Town Planner.",
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.6,
+              "themes": [
+                "septic & water supply"
+              ],
+              "evidence": "Moved to open and close the hearing and \"to approve the resolution for one Troy Lane\"; commented \"Always good to talk to the neighbors.\"",
+              "confidence": "high"
+            },
+            {
+              "member": "Steven Sauro",
+              "stance": "supportive",
+              "score": 0.3,
+              "themes": [
+                "process & procedure"
+              ],
+              "evidence": "Read the notice of public hearing at the chairman's request (\"Steve Soros is going to read the notice\" \u2014 ASR for Sauro).",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "eagle-ridge-clubhouse",
+          "name": "Eagle Ridge \u2014 Clubhouse (reduced amenity plan) and Extension of Time",
+          "address": "3 North Castle Drive (Eagle Ridge clubhouse)",
+          "applicationType": "amended site plan (clubhouse) / extension of time",
+          "applicant": "Eagle Ridge, represented by Corey [surname not reliably rendered] of Zarin & Steinmetz, with landscape architect John [surname unclear] and project engineer Ralph Alfonsetti",
+          "status": "no vote on the clubhouse plan \u2014 public hearing scheduled for October 15, 2026; a separate extension of time (plat signature and master-site-plan conditions) was also moved and carried",
+          "summary": "Kaufman reported that the applicant had done what it promised at the last meeting. The pickleball and bocce courts are gone, the layout is much more compact and close to the original site plan, and the walls are still high but no longer cascade down the hillside. He called the screening plan good, with planting between the walls, and said he had no major concerns. The walls are two tiers of about 10 feet each, with an aggressive native climbing hydrangea on the upper tier and existing trees screening the lower wall. The applicant's counsel asked for the public hearing to be scheduled now that the more robust landscaping plan the board asked for is in. The board agreed and set the hearing for Thursday, October 15, moved because of Columbus Day. The same counsel then raised an extension of time, heard as \"three-gourage\" in the ASR and most likely Eagle Ridge itself. All resolution conditions had been signed off that day and the plat was awaiting signatures before filing with the county clerk, with master-site-plan conditions and RPRC review of townhouse blocks to follow. He added that the ARB had approved the revised plan earlier in the month. The extension was granted.",
+          "themes": [
+            "Process & procedure",
+            "Retaining walls",
+            "Time extensions & conditions",
+            "Tree removal & screening"
+          ],
+          "overallSentiment": "supportive",
+          "sentimentScore": 0.5,
+          "memberPositions": [
+            {
+              "member": "Christopher Carthy",
+              "stance": "supportive",
+              "score": 0.5,
+              "themes": [
+                "tree removal & screening",
+                "process & procedure"
+              ],
+              "evidence": "Presiding: \"let's schedule the public hearing for October 15th. I look forward to moving along,\" and moved \"to grant the extension of time.\"",
+              "confidence": "high"
+            },
+            {
+              "member": "Steven Sauro",
+              "stance": "supportive",
+              "score": 0.5,
+              "themes": [
+                "retaining walls",
+                "tree removal & screening"
+              ],
+              "evidence": "Asked \"Steve, anything from you?\", replied \"No, it's a good improvement.\"",
+              "confidence": "medium"
+            }
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Parking, traffic & access",
+          "salience": 0.95,
+          "sentiment": -0.2,
+          "note": "Most of the meeting. The Bobo's hearing turned on whether a ZBA \"bridge variance\" and a parking district not yet approved by the Comptroller answer a 40-space shortfall at a busy corner. The board treated the district as the real answer and the delivery-driver problem as the part within its reach, and took up the same Main Street parking ledger already argued over 12 Maple Avenue on September 14. At 355 Main Street parking was settled by a board finding because the code does not list the use."
+        },
+        {
+          "theme": "Neighbor concerns & safety",
+          "salience": 0.6,
+          "sentiment": -0.3,
+          "note": "An adjoining owner and his attorney pressed concerns about overflow parking, enforcement and double-parked delivery cars. The chairman called the concerns legitimate but mostly a Town and parking-district problem. At 1 Troy Lane a neighbour's worry about well impacts was handled quietly through the Town Planner and an offered drawdown test."
+        },
+        {
+          "theme": "Zoning & land use",
+          "salience": 0.5,
+          "sentiment": 0.2,
+          "note": "Two changes of use on Main Street. Pollack framed the Bobo's decision as binary, with the board's power to deny limited once the ZBA had acted, and the tutoring centre went through on a text amendment the board had recommended in July."
+        },
+        {
+          "theme": "Time extensions & conditions",
+          "salience": 0.4,
+          "sentiment": 0.3,
+          "note": "Two routine extensions (40 High Street, held up by the Health Department; Eagle Ridge, awaiting plat signatures). The Bobo's approval turned on which condition to attach: the Town Attorney's interim-plan condition was set aside as a precedent and burden in favour of three reserved rear pickup spaces."
+        },
+        {
+          "theme": "Tree removal & screening",
+          "salience": 0.3,
+          "sentiment": 0.5,
+          "note": "Eagle Ridge's planting between two tiers of 10-foot walls and 1 Troy Lane's tree preservation and side-line screening were both received as adequate."
+        },
+        {
+          "theme": "Retaining walls",
+          "salience": 0.25,
+          "sentiment": 0.4,
+          "note": "Eagle Ridge still has high walls, but tiered and no longer cascading down the slope, which the Town Planner said removed his major concerns."
+        },
+        {
+          "theme": "Septic & water supply",
+          "salience": 0.2,
+          "sentiment": 0.3,
+          "note": "Health Department review drove the 40 High Street extension and governs the new well and septic at 1 Troy Lane."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Adam Kaufman",
+          "role": "Town Planner",
+          "summary": "Confirmed hearing paperwork for each item. On Bobo's Cafe, he explained that the parking district's rules and regulations will be approved by its commissioners (the Town Board) with no requirement to come to the Planning Board, and pointed out that the applicant controls seven on-site spaces that could serve pickup. He appeared to offer to raise reserved pickup spaces when the district rules are drafted. On 355 Main Street, he noted that the code's off-street parking schedule does not list a tutoring-centre use, leaving the requirement to the board, and recommended a finding of 21 spaces. On 1 Troy Lane, he relayed a neighbour's well-impact question and his answer (a mid-1960s approved lot, with the new well and septic subject to Health Department approval). On the Eagle Ridge clubhouse, he reported the courts removed, the walls no longer cascading and the screening plan good, with no major concerns.",
+          "cases": [
+            "379-main-street-bobos-cafe",
+            "355-main-street-alpha-school",
+            "1-troy-lane",
+            "eagle-ridge-clubhouse"
+          ]
+        },
+        {
+          "person": "Mary Desmond",
+          "role": "Town Attorney",
+          "summary": "On Bobo's Cafe, suggested a condition of approval: if the cafe opens before the parking district's regulations take effect, it would have to come back with an interim site plan showing how pickup, delivery and bicycle traffic would work, as a bridge until the regulations exist. The board instead adopted a narrower condition reserving three rear spaces for pickup until the district's rules are established.",
+          "cases": [
+            "379-main-street-bobos-cafe"
+          ]
+        }
+      ],
+      "attributionCoverage": "fair",
+      "attributionNote": "The recording has no speaker labels. Christopher Carthy presided and is identifiable throughout. He names members before handing them the floor, which anchors Michael Pollack, Lawrence Ruisi and Steven Sauro: each read a hearing notice and was named, Ruisi was repeatedly addressed as \"Larry\" during his questioning on Bobo's, and Sauro was introduced with \"Go ahead Steve\" and later asked \"Steve?\". Thomas Crispi is never named or addressed, so he carries no positions and his attendance cannot be confirmed. One complication is that the main public speaker on Bobo's, Michael Ferrari, is also addressed as \"Michael\". The \"toolbox\" remark is credited to Pollack at medium confidence only because the speaker refers to the board's own powers, and the \"Thank you, Michael\" after the minutes vote is not attributed. Several member remarks are left unattributed: the objection to Desmond's interim-plan condition as a precedent, the \"Well, Chris... the physicality is the physicality\" exchange, and the reference to current Health Department standards at 1 Troy Lane. A roughly 11-second stretch at 00:30:49\u201300:31:00, in the middle of Ruisi's exchange with the operator, was re-transcribed to remove a repeated-text artifact; nothing from it is quoted or relied on. ASR renderings resolved: \"Bubba's Cafe\"/\"Bubbles\"/\"boba's\" \u2192 Bobo's Cafe; \"379 Mean Street\" \u2192 379 Main Street; \"Zarinen Stuymans\"/\"Darren Steinmett\" \u2192 Zarin & Steinmetz (the attorney Corey's surname is rendered inconsistently here and across earlier meetings, and is not reconstructed); \"Mr. Karthi\"/\"Cathay\" \u2192 Carthy; \"Larry Ruizi\" \u2192 Ruisi; \"Steve Soros\" \u2192 Sauro; \"Michael Pollock\" \u2192 Pollack; \"one trailer\"/\"one trilane\"/\"one Joy Lane\" \u2192 1 Troy Lane; \"E.C. Ridge\" \u2192 Eagle Ridge; \"Alpha Anywhere Center, Alma\" \u2192 Alpha / Anywhere Center; \"PBO-28\"/\"PB02A\" \u2192 the PB-O-2A district; \"Raufazetti\" \u2192 Ralph Alfonsetti; \"Armanc\"/\"Armont\"/\"Harmock\" \u2192 Armonk and \"Ormung\"/\"Amung Square\" \u2192 Armonk Square; \"Chappacwa\"/\"Chappacuara\" \u2192 Chappaqua. The Bobo's owner's self-introduction (\"Gladys Bernoulli\") is garbled; Sauro calls him \"Mr. Bernardi\", which matches the July record. The extension of time at the end of the meeting is heard as \"three-gourage\". It is treated as Eagle Ridge (3 North Castle Drive) because of the same counsel, the plat awaiting signature, the master site plan conditions and the townhouse blocks, but that identification is inferred. A speaker's \"22 Maple\" in the Bobo's discussion probably means 12 Maple Avenue but is left as heard. The 12 Maple restaurant name (\"Renn\"/\"run\") is not reconstructed."
     }
   ]
 }

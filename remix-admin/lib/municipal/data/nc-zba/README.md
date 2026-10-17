@@ -1,8 +1,8 @@
 # North Castle Zoning Board of Appeals — transcript analysis dataset
 
 Same pipeline as `../nc-townboard` and `../nc-planning`, applied to the
-**Zoning Board of Appeals** over 2022–2026 (45 meeting dates, the most recent
-being 2026-08-06). Served by the board page
+**Zoning Board of Appeals** over 2022–2026 (46 meeting dates, the most recent
+being 2026-09-03). Served by the board page
 (`/admin/municipal/board?muni=nc&body=zba`) and member profiles.
 
 ## Contents

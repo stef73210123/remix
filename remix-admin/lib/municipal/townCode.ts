@@ -26,6 +26,10 @@ export interface ChapterRecommendation {
 export interface ChapterRecordFinding {
   /** Section cited, e.g. "§355-40" — omitted when the finding is chapter-wide. */
   section?: string
+  /** Whether the chapter/section was cited aloud in the meeting ("spoken") or
+   *  identified from the subject matter ("inferred"). Set on findings added by
+   *  the weekly transcript ingest; absent on the original PR #200 extraction. */
+  sectionBasis?: 'spoken' | 'inferred'
   flawType: string
   quote: string
   attribution: string
