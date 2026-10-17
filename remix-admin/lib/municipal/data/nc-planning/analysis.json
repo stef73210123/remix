@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "planning",
     "town": "Town of North Castle",
-    "meetings": 104,
-    "cases": 404,
+    "meetings": 105,
+    "cases": 406,
     "themes": 17,
-    "memberPositions": 1066,
+    "memberPositions": 1069,
     "roster": [
       "Christopher Carthy",
       "Steven Sauro",
@@ -646,6 +646,12 @@
       "cases": 5,
       "avgSentiment": 0.4,
       "attributionCoverage": "fair"
+    },
+    {
+      "date": "2026-10-15",
+      "cases": 9,
+      "avgSentiment": 0.283,
+      "attributionCoverage": "partial"
     }
   ],
   "themes": [
@@ -1432,8 +1438,8 @@
     },
     {
       "theme": "Zoning & land use",
-      "meetings": 71,
-      "avgSentiment": 0.13,
+      "meetings": 72,
+      "avgSentiment": 0.131,
       "avgSalience": 0.453,
       "timeline": [
         {
@@ -1790,14 +1796,19 @@
           "date": "2026-09-28",
           "sentiment": 0.2,
           "salience": 0.5
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.2,
+          "salience": 0.5
         }
       ]
     },
     {
       "theme": "Parking, traffic & access",
-      "meetings": 65,
-      "avgSentiment": 0.034,
-      "avgSalience": 0.463,
+      "meetings": 66,
+      "avgSentiment": 0.028,
+      "avgSalience": 0.469,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2123,14 +2134,19 @@
           "date": "2026-09-28",
           "sentiment": -0.2,
           "salience": 0.95
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": -0.35,
+          "salience": 0.85
         }
       ]
     },
     {
       "theme": "Stormwater & drainage",
-      "meetings": 52,
-      "avgSentiment": 0.048,
-      "avgSalience": 0.428,
+      "meetings": 53,
+      "avgSentiment": 0.047,
+      "avgSalience": 0.429,
       "timeline": [
         {
           "date": "2021-08-09",
@@ -2391,14 +2407,19 @@
           "date": "2026-09-14",
           "sentiment": 0.0,
           "salience": 0.4
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.0,
+          "salience": 0.45
         }
       ]
     },
     {
       "theme": "Tree removal & screening",
-      "meetings": 50,
-      "avgSentiment": 0.1,
-      "avgSalience": 0.415,
+      "meetings": 51,
+      "avgSentiment": 0.096,
+      "avgSalience": 0.418,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2649,14 +2670,19 @@
           "date": "2026-09-28",
           "sentiment": 0.5,
           "salience": 0.3
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": -0.1,
+          "salience": 0.55
         }
       ]
     },
     {
       "theme": "Neighbor concerns & safety",
-      "meetings": 38,
-      "avgSentiment": -0.159,
-      "avgSalience": 0.449,
+      "meetings": 39,
+      "avgSentiment": -0.165,
+      "avgSalience": 0.456,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -2847,6 +2873,11 @@
           "date": "2026-09-28",
           "sentiment": -0.3,
           "salience": 0.6
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": -0.4,
+          "salience": 0.75
         }
       ]
     },
@@ -3045,9 +3076,9 @@
     },
     {
       "theme": "Time extensions & conditions",
-      "meetings": 26,
-      "avgSentiment": 0.187,
-      "avgSalience": 0.283,
+      "meetings": 27,
+      "avgSentiment": 0.194,
+      "avgSalience": 0.286,
       "timeline": [
         {
           "date": "2021-03-08",
@@ -3178,14 +3209,19 @@
           "date": "2026-09-28",
           "sentiment": 0.3,
           "salience": 0.4
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.4,
+          "salience": 0.35
         }
       ]
     },
     {
       "theme": "Process & procedure",
-      "meetings": 23,
-      "avgSentiment": -0.002,
-      "avgSalience": 0.438,
+      "meetings": 24,
+      "avgSentiment": 0.002,
+      "avgSalience": 0.434,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -3301,6 +3337,11 @@
           "date": "2026-09-14",
           "sentiment": -0.1,
           "salience": 0.6
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.1,
+          "salience": 0.35
         }
       ]
     },
@@ -3724,9 +3765,9 @@
     },
     {
       "theme": "Environmental review (SEQRA)",
-      "meetings": 3,
-      "avgSentiment": 0.133,
-      "avgSalience": 0.333,
+      "meetings": 4,
+      "avgSentiment": 0.1,
+      "avgSalience": 0.375,
       "timeline": [
         {
           "date": "2024-02-26",
@@ -3742,6 +3783,11 @@
           "date": "2025-11-10",
           "sentiment": 0.0,
           "salience": 0.2
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.0,
+          "salience": 0.5
         }
       ]
     }
@@ -3769,11 +3815,11 @@
         "Tree removal & screening",
         "Zoning & land use"
       ],
-      "appearances": 23,
+      "appearances": 24,
       "firstSeen": "2022-05-23",
-      "lastSeen": "2026-09-28",
-      "lastStatus": "no vote on the clubhouse plan \u2014 public hearing scheduled for October 15, 2026; a separate extension of time (plat signature and master-site-plan conditions) was also moved and carried",
-      "avgSentiment": 0.252,
+      "lastSeen": "2026-10-15",
+      "lastStatus": "public hearing held; site plan, steep slopes permit and tree removal permit approved",
+      "avgSentiment": 0.267,
       "trajectory": [
         {
           "date": "2022-05-23",
@@ -3889,6 +3935,11 @@
           "date": "2026-09-28",
           "sentiment": 0.5,
           "status": "no vote on the clubhouse plan \u2014 public hearing scheduled for October 15, 2026; a separate extension of time (plat signature and master-site-plan conditions) was also moved and carried"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.6,
+          "status": "public hearing held; site plan, steep slopes permit and tree removal permit approved"
         }
       ],
       "timeline": [
@@ -4029,6 +4080,12 @@
           "status": "no vote on the clubhouse plan \u2014 public hearing scheduled for October 15, 2026; a separate extension of time (plat signature and master-site-plan conditions) was also moved and carried",
           "sentiment": 0.5,
           "summary": "Kaufman reported that the applicant had done what it promised at the last meeting. The pickleball and bocce courts are gone, the layout is much more compact and close to the original site plan, and the walls are still high but no longer cascade down the hillside. He called the screening plan good, with planting between the walls, and said he had no major concerns. The walls are two tiers of about 10 feet each, with an aggressive native climbing hydrangea on the upper tier and existing trees screening the lower wall. The applicant's counsel asked for the public hearing to be scheduled now that the more robust landscaping plan the board asked for is in. The board agreed and set the hearing for Thursday, October 15, moved because of Columbus Day. The same counsel then raised an extension of time, heard as \"three-gourage\" in the ASR and most likely Eagle Ridge itself. All resolution conditions had been signed off that day and the plat was awaiting signatures before filing with the county clerk, with master-site-plan conditions and RPRC review of townhouse blocks to follow. He added that the ARB had approved the revised plan earlier in the month. The extension was granted."
+        },
+        {
+          "date": "2026-10-15",
+          "status": "public hearing held; site plan, steep slopes permit and tree removal permit approved",
+          "sentiment": 0.6,
+          "summary": "This was the public hearing scheduled at the September 28 meeting. The hearing notice described a two-story recreational clubhouse with a patio, pool and outdoor lawn on tax lot 108.03-1-62.1 in the R-MF-A district. Counsel said the clubhouse is about 5,100 square feet. The bocce and tennis courts that ran down the slopes were removed, and the ARB had approved the plan. Of the 51 parking spaces required, 25 are provided, under a variance for the other 26. No member of the public spoke. Adam Kaufman said the revised plan significantly reduces impacts on steep slopes and tree removal, and that the board had already found it reasonable. Counsel noted that some resolution conditions repeat the master site plan's conditions. Kaufman said that was deliberate, so they can be tracked, and that nothing needed to change. The site plan, steep slopes and tree removal approvals were moved, seconded and carried."
         }
       ]
     },
@@ -4327,6 +4384,158 @@
       ]
     },
     {
+      "id": "45-bedford-road",
+      "name": "45 Bedford Road \u2014 NCD Acquisitions / Gateway Residential (re-approval public hearing)",
+      "address": "45 Bedford Road",
+      "applicationType": "site plan and wetlands permit re-approval",
+      "applicant": "Represented by John Sbrudy (contractor)",
+      "themes": [
+        "Bonding & maintenance",
+        "Environmental review (SEQRA)",
+        "Historic & scenic character",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Tree removal & screening",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 11,
+      "firstSeen": "2023-01-30",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "public hearing opened and closed; site plan and wetlands permit re-approved as amended (resolution to name NCD Acquisitions as both owner and applicant)",
+      "avgSentiment": 0.245,
+      "trajectory": [
+        {
+          "date": "2023-01-30",
+          "sentiment": 0.4,
+          "status": "approved as amended"
+        },
+        {
+          "date": "2023-05-22",
+          "sentiment": 0.1,
+          "status": "referred (town board holds public hearing June 14)"
+        },
+        {
+          "date": "2023-06-12",
+          "sentiment": -0.1,
+          "status": "referred / deferred \u2014 board declined to vote on a recommendation this meeting"
+        },
+        {
+          "date": "2023-06-26",
+          "sentiment": 0.5,
+          "status": "referred \u2014 board voted to send Town Board a positive recommendation with conditions"
+        },
+        {
+          "date": "2023-09-11",
+          "sentiment": 0.5,
+          "status": "board voted to refer applicant to ZBA for FAR and building-coverage variances"
+        },
+        {
+          "date": "2023-10-23",
+          "sentiment": -0.1,
+          "status": "discussion only; working toward a public hearing"
+        },
+        {
+          "date": "2023-11-27",
+          "sentiment": 0.4,
+          "status": "referred to ZBA with a positive recommendation"
+        },
+        {
+          "date": "2024-06-10",
+          "sentiment": 0.6,
+          "status": "approved"
+        },
+        {
+          "date": "2025-05-29",
+          "sentiment": 0.1,
+          "status": "approved"
+        },
+        {
+          "date": "2026-07-27",
+          "sentiment": 0.1,
+          "status": "referred to the Zoning Board of Appeals to renew expired variances"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.2,
+          "status": "public hearing opened and closed; site plan and wetlands permit re-approved as amended (resolution to name NCD Acquisitions as both owner and applicant)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2023-01-30",
+          "status": "approved as amended",
+          "sentiment": 0.4,
+          "summary": "Ahead of redeveloping the site, the applicant sought to crush existing building foundations and concrete features in place (separating out rebar) to backfill basement voids and create a level, structurally engineered pad rather than hauling material off-site, with a nearby crusher location chosen for being relatively removed from residential receptors. Board members probed whether importing fill to supplement the crushed material and whether stockpiling near the site's two water courses would require additional safeguards, and whether reusing on-site debris constituted a landfill/construction-demolition-debris situation requiring separate permitting (staff did not believe so, since material stays on-site). The board approved the permit with added conditions requiring a sediment/erosion control plan reviewed by the Town Engineer, a defined limited-disturbance work-area boundary, a stop-work condition if the dust-suppression system fails, and a daily street-sweeping requirement."
+        },
+        {
+          "date": "2023-05-22",
+          "status": "referred (town board holds public hearing June 14)",
+          "sentiment": 0.1,
+          "summary": "Extensive review of a revised 34-unit townhouse concept (down from 43) ahead of the Town Board's June 14 special-use-permit hearing, with the applicant reorienting buildings to eliminate a loop road along Maple, splitting four-unit buildings into pairs to look like single-family homes, and citing a roughly $1-1.25 million cumulative community benefit agreement (CBA) with the town. The board pushed hard on front/back orientation so backyards wouldn't face Maple Avenue at the town's \"gateway,\" screening while preserving the church view, whether open (uncounted-FAR) carport parking versus town-board-requested fully enclosed garages would require a new FAR variance or a code amendment, a 10% fair-and-affordable housing component, traffic/turning-lane and fire-truck circulation concerns, and a requested pedestrian crosswalk to the shopping center. The board agreed to send the Town Board a recommendation rather than requiring new renderings first, given the June 12/14 deadlines."
+        },
+        {
+          "date": "2023-06-12",
+          "status": "referred / deferred \u2014 board declined to vote on a recommendation this meeting",
+          "sentiment": -0.1,
+          "summary": "Applicant presented a revised layout (loop road along Maple eliminated, buildings split into two-four-two unit groupings, all units facing one direction) and pushed for a same-night board recommendation ahead of a Wednesday Town Board special-permit hearing. Several board members, led by Lawrence Ruisi, objected strongly to reviewing a just-submitted plan \"on the fly\" and setting a precedent for rushed reviews, while also debating whether enclosed garages (versus open carports) would require a zoning text amendment or an area variance given FAR limits. The board ultimately asked the applicant to formally submit plans and return in two weeks rather than issuing an immediate recommendation, over the applicant's objection about deadline pressure."
+        },
+        {
+          "date": "2023-06-26",
+          "status": "referred \u2014 board voted to send Town Board a positive recommendation with conditions",
+          "sentiment": 0.5,
+          "summary": "After extensive review of the revised plan (loop road removed, units regrouped into two-four-two clusters facing away from Maple, back facades redesigned to look front-like), the board formally endorsed the design and voted to send the Town Board a special-use-permit recommendation. Conditions/asks included: pursuing enclosed garages via a ZBA variance or code text change to resolve the FAR conflict, upgraded landscaping/screening of backyard vistas along Maple, an easement for a future right-turn lane and sidewalk to the bus stop plus a crosswalk toward Armonk Square, coordinating the unit bedroom count (flagging a den/office with a full bath as a de facto bedroom against the environmental review's unit-count benchmark), and support for a roughly 3.7%-over building/lot coverage variance. James Jensen separately cautioned that unresolved floodplain/compensatory-storage engineering could force the applicant to materially alter the layout after Town Board approval, which the applicant and Town Attorney Roland agreed would be handled at site plan review."
+        },
+        {
+          "date": "2023-09-11",
+          "status": "board voted to refer applicant to ZBA for FAR and building-coverage variances",
+          "sentiment": 0.5,
+          "summary": "Applicant finalized the garage-enclosure design the board had previously requested: fully enclosing parking garages on all five affected buildings, raising FAR from 0.40 to 0.477 and building coverage from a 20% code maximum to 23.7% (both requiring ZBA variances). In exchange, the \"tucked-under-car\" open-garage look is eliminated town-wide across the project, with field-stone and clapboard detailing to break up massing. The board discussed redirecting community-benefit funds (potentially $100,000+) toward a sidewalk/crosswalk connection to the county bus stop across Bedford Road, and agreed the dense evergreen screening along the shared boundary with the adjacent town-owned parcel could be relaxed now that the site is being redeveloped from a construction/storage use into a residential community (no longer needing to be hidden). The board voted to refer the applicant to the ZBA for the two variances, with next steps including the ARB, a Conservation Board wetland-buffer-impact review, and a targeted return by the September 28 meeting."
+        },
+        {
+          "date": "2023-10-23",
+          "status": "discussion only; working toward a public hearing",
+          "sentiment": -0.1,
+          "summary": "Continued site plan review of this gateway-to-town townhouse project, following resolution of an earlier floor-area-ratio issue via ZBA variance. Roughly 20 mostly stormwater-related engineering comments from the town's consultant were largely deemed resolvable, including upsizing a sewer line and floodplain-related adjustments. The dominant concern was aesthetic: a large stormwater detention area integrated along the Maple Avenue-facing frontage and behind unit patios was described by board members as resembling a dry \"moat,\" a significant departure from the park-like open space originally envisioned, prompting suggestions of a landscaped wall to soften the appearance; a proposed $100,000 pledge from the applicant (made during the earlier town board rezoning) toward Bedford Road sidewalks/crosswalk was also discussed as needing to be finalized. No vote was taken; the applicant continues revising plans toward a public hearing."
+        },
+        {
+          "date": "2023-11-27",
+          "status": "referred to ZBA with a positive recommendation",
+          "sentiment": 0.4,
+          "summary": "Continued review of the gateway-to-town townhouse project, with the board clarifying the approval sequence needed: ZBA variance first, then Town Board special use permit, then a return to the Planning Board. The board voted to send the applicant to the ZBA with a positive recommendation."
+        },
+        {
+          "date": "2024-06-10",
+          "status": "approved",
+          "sentiment": 0.6,
+          "summary": "Applicant reported completing the required off-site mitigation (Town Board license along Maple/municipal lot, modified deed and CBA); board resolved the affordable-unit count (30 market-rate plus 4 affordable of 34 total), reviewed stormwater/floodplain and wetland-mitigation conditions, then closed the hearing and approved the site plan and wetlands permit."
+        },
+        {
+          "date": "2025-05-29",
+          "status": "approved",
+          "sentiment": 0.1,
+          "summary": "The board granted a site-plan extension of time to August 11, 2025, mirroring the town board's special-use-permit extension. Discussion centered on the town's dissatisfaction with the property's appearance ('an eyesore' at the town entrance) and a 'gentleman's agreement' for the applicant to clean up the site; the board also pressed on why the permitted on-site rock crushing hadn't occurred (the crushed material is intended for reuse in the project)."
+        },
+        {
+          "date": "2026-07-27",
+          "status": "referred to the Zoning Board of Appeals to renew expired variances",
+          "sentiment": 0.1,
+          "summary": "The project, approved a few years earlier, lapsed when its approvals expired on June 10th, which is why an extension of time could no longer be granted. The applicant returned with what it and the town planner agreed were no material changes \u2014 including no change to the EAF \u2014 asking to be referred back to the ZBA to renew the variances, after which the project can be re-approved and go to fresh public hearings before both boards. Counsel confirmed the procedure had been recommended by the town's outside attorneys. Ruisi asked whether anything else had changed; Pollack asked specifically about the community benefits agreement negotiated with the town, and was told it is unchanged and does not expire, taking effect when the developer proceeds. A member of the public was allowed to ask, as a courtesy outside a hearing, what the next steps were and raised the possibility of the parcel figuring in a larger Town Hall campus scheme; the applicant noted it does not own that lot. The special use permit was noted as extended to July 23, 2027. The referral passed."
+        },
+        {
+          "date": "2026-10-15",
+          "status": "public hearing opened and closed; site plan and wetlands permit re-approved as amended (resolution to name NCD Acquisitions as both owner and applicant)",
+          "sentiment": 0.2,
+          "summary": "Thomas Crispi read the notice for re-approval of a 34-unit, 68-bedroom multifamily project on the former Mariani Gardens property (lot 108.03-1-65, R-MF-DA). Counsel said the ZBA had extended the variances by two years and that the Town Board had extended the special use permit to July 2027 after the owner agreed informally to restrict access, upgrade fencing and clean up the site. The earlier approvals lapsed because the board never actually voted on an extension resolution that was on its agenda. Counsel argued that nothing had changed, which under case law entitles the applicant to re-approval, and the full original package of about 430 pages was resubmitted. A member asked why there had been almost no activity in about two and a half years. Counsel cited internal business issues, market and financing changes, and the arrival of a new developer, and said the plan itself is not changing. He also noted soil sampling planned for October 27. Kristen Wilson, attorney for Michael Ferrari, who owns nearby downtown properties, argued that circumstances have changed. Her points were that DEC stormwater rules have changed and the DEC permit cited expired in 2025, that the EAF form is new and none was filed, and that the Town's recently amended wetlands law is not addressed. She added that the resolution relies on a 2019 negative declaration and a traffic study that are not in the packet, that county referral under the General Municipal Law is not shown, and that a construction-phasing plan should be required. Mary Desmond, who had reviewed Wilson's cases that afternoon, said most concerned confirming prior negative declarations and that a SEQRA negative declaration has no expiration, so a substantive environmental change must be shown. She said the new EAF is a change of form, not of the underlying criteria, and that a resolution condition already requires compliance with current law. Kaufman read the county's earlier referral comments. Buss replied that there is no case law behind Wilson's position and said Ferrari has repeatedly tried to buy the property. The hearing was closed. Desmond said she saw no reason not to re-approve, and the re-approvals were moved, seconded and carried as amended."
+        }
+      ]
+    },
+    {
       "id": "124-old-mount-kisco-road",
       "name": "124 Old Mount Kisco Road",
       "address": "124 Old Mount Kisco Road, North Castle, NY",
@@ -4456,146 +4665,6 @@
           "status": "extension of time granted",
           "sentiment": 0.3,
           "summary": "Brief update on a subdivision still awaiting the county Health Department, which was reported to have signed off with the town engineer now finalizing review. The board granted an extension of time."
-        }
-      ]
-    },
-    {
-      "id": "45-bedford-road",
-      "name": "45 Bedford Road \u2014 NCD Acquisitions / Gateway Residential (renewal of expired approvals)",
-      "address": "45 Bedford Road",
-      "applicationType": "referral to ZBA (variance renewal)",
-      "applicant": "Represented by John Sbrudy (contractor)",
-      "themes": [
-        "Bonding & maintenance",
-        "Historic & scenic character",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Time extensions & conditions",
-        "Tree removal & screening",
-        "Wetlands & buffers",
-        "Zoning & land use"
-      ],
-      "appearances": 10,
-      "firstSeen": "2023-01-30",
-      "lastSeen": "2026-07-27",
-      "lastStatus": "referred to the Zoning Board of Appeals to renew expired variances",
-      "avgSentiment": 0.25,
-      "trajectory": [
-        {
-          "date": "2023-01-30",
-          "sentiment": 0.4,
-          "status": "approved as amended"
-        },
-        {
-          "date": "2023-05-22",
-          "sentiment": 0.1,
-          "status": "referred (town board holds public hearing June 14)"
-        },
-        {
-          "date": "2023-06-12",
-          "sentiment": -0.1,
-          "status": "referred / deferred \u2014 board declined to vote on a recommendation this meeting"
-        },
-        {
-          "date": "2023-06-26",
-          "sentiment": 0.5,
-          "status": "referred \u2014 board voted to send Town Board a positive recommendation with conditions"
-        },
-        {
-          "date": "2023-09-11",
-          "sentiment": 0.5,
-          "status": "board voted to refer applicant to ZBA for FAR and building-coverage variances"
-        },
-        {
-          "date": "2023-10-23",
-          "sentiment": -0.1,
-          "status": "discussion only; working toward a public hearing"
-        },
-        {
-          "date": "2023-11-27",
-          "sentiment": 0.4,
-          "status": "referred to ZBA with a positive recommendation"
-        },
-        {
-          "date": "2024-06-10",
-          "sentiment": 0.6,
-          "status": "approved"
-        },
-        {
-          "date": "2025-05-29",
-          "sentiment": 0.1,
-          "status": "approved"
-        },
-        {
-          "date": "2026-07-27",
-          "sentiment": 0.1,
-          "status": "referred to the Zoning Board of Appeals to renew expired variances"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2023-01-30",
-          "status": "approved as amended",
-          "sentiment": 0.4,
-          "summary": "Ahead of redeveloping the site, the applicant sought to crush existing building foundations and concrete features in place (separating out rebar) to backfill basement voids and create a level, structurally engineered pad rather than hauling material off-site, with a nearby crusher location chosen for being relatively removed from residential receptors. Board members probed whether importing fill to supplement the crushed material and whether stockpiling near the site's two water courses would require additional safeguards, and whether reusing on-site debris constituted a landfill/construction-demolition-debris situation requiring separate permitting (staff did not believe so, since material stays on-site). The board approved the permit with added conditions requiring a sediment/erosion control plan reviewed by the Town Engineer, a defined limited-disturbance work-area boundary, a stop-work condition if the dust-suppression system fails, and a daily street-sweeping requirement."
-        },
-        {
-          "date": "2023-05-22",
-          "status": "referred (town board holds public hearing June 14)",
-          "sentiment": 0.1,
-          "summary": "Extensive review of a revised 34-unit townhouse concept (down from 43) ahead of the Town Board's June 14 special-use-permit hearing, with the applicant reorienting buildings to eliminate a loop road along Maple, splitting four-unit buildings into pairs to look like single-family homes, and citing a roughly $1-1.25 million cumulative community benefit agreement (CBA) with the town. The board pushed hard on front/back orientation so backyards wouldn't face Maple Avenue at the town's \"gateway,\" screening while preserving the church view, whether open (uncounted-FAR) carport parking versus town-board-requested fully enclosed garages would require a new FAR variance or a code amendment, a 10% fair-and-affordable housing component, traffic/turning-lane and fire-truck circulation concerns, and a requested pedestrian crosswalk to the shopping center. The board agreed to send the Town Board a recommendation rather than requiring new renderings first, given the June 12/14 deadlines."
-        },
-        {
-          "date": "2023-06-12",
-          "status": "referred / deferred \u2014 board declined to vote on a recommendation this meeting",
-          "sentiment": -0.1,
-          "summary": "Applicant presented a revised layout (loop road along Maple eliminated, buildings split into two-four-two unit groupings, all units facing one direction) and pushed for a same-night board recommendation ahead of a Wednesday Town Board special-permit hearing. Several board members, led by Lawrence Ruisi, objected strongly to reviewing a just-submitted plan \"on the fly\" and setting a precedent for rushed reviews, while also debating whether enclosed garages (versus open carports) would require a zoning text amendment or an area variance given FAR limits. The board ultimately asked the applicant to formally submit plans and return in two weeks rather than issuing an immediate recommendation, over the applicant's objection about deadline pressure."
-        },
-        {
-          "date": "2023-06-26",
-          "status": "referred \u2014 board voted to send Town Board a positive recommendation with conditions",
-          "sentiment": 0.5,
-          "summary": "After extensive review of the revised plan (loop road removed, units regrouped into two-four-two clusters facing away from Maple, back facades redesigned to look front-like), the board formally endorsed the design and voted to send the Town Board a special-use-permit recommendation. Conditions/asks included: pursuing enclosed garages via a ZBA variance or code text change to resolve the FAR conflict, upgraded landscaping/screening of backyard vistas along Maple, an easement for a future right-turn lane and sidewalk to the bus stop plus a crosswalk toward Armonk Square, coordinating the unit bedroom count (flagging a den/office with a full bath as a de facto bedroom against the environmental review's unit-count benchmark), and support for a roughly 3.7%-over building/lot coverage variance. James Jensen separately cautioned that unresolved floodplain/compensatory-storage engineering could force the applicant to materially alter the layout after Town Board approval, which the applicant and Town Attorney Roland agreed would be handled at site plan review."
-        },
-        {
-          "date": "2023-09-11",
-          "status": "board voted to refer applicant to ZBA for FAR and building-coverage variances",
-          "sentiment": 0.5,
-          "summary": "Applicant finalized the garage-enclosure design the board had previously requested: fully enclosing parking garages on all five affected buildings, raising FAR from 0.40 to 0.477 and building coverage from a 20% code maximum to 23.7% (both requiring ZBA variances). In exchange, the \"tucked-under-car\" open-garage look is eliminated town-wide across the project, with field-stone and clapboard detailing to break up massing. The board discussed redirecting community-benefit funds (potentially $100,000+) toward a sidewalk/crosswalk connection to the county bus stop across Bedford Road, and agreed the dense evergreen screening along the shared boundary with the adjacent town-owned parcel could be relaxed now that the site is being redeveloped from a construction/storage use into a residential community (no longer needing to be hidden). The board voted to refer the applicant to the ZBA for the two variances, with next steps including the ARB, a Conservation Board wetland-buffer-impact review, and a targeted return by the September 28 meeting."
-        },
-        {
-          "date": "2023-10-23",
-          "status": "discussion only; working toward a public hearing",
-          "sentiment": -0.1,
-          "summary": "Continued site plan review of this gateway-to-town townhouse project, following resolution of an earlier floor-area-ratio issue via ZBA variance. Roughly 20 mostly stormwater-related engineering comments from the town's consultant were largely deemed resolvable, including upsizing a sewer line and floodplain-related adjustments. The dominant concern was aesthetic: a large stormwater detention area integrated along the Maple Avenue-facing frontage and behind unit patios was described by board members as resembling a dry \"moat,\" a significant departure from the park-like open space originally envisioned, prompting suggestions of a landscaped wall to soften the appearance; a proposed $100,000 pledge from the applicant (made during the earlier town board rezoning) toward Bedford Road sidewalks/crosswalk was also discussed as needing to be finalized. No vote was taken; the applicant continues revising plans toward a public hearing."
-        },
-        {
-          "date": "2023-11-27",
-          "status": "referred to ZBA with a positive recommendation",
-          "sentiment": 0.4,
-          "summary": "Continued review of the gateway-to-town townhouse project, with the board clarifying the approval sequence needed: ZBA variance first, then Town Board special use permit, then a return to the Planning Board. The board voted to send the applicant to the ZBA with a positive recommendation."
-        },
-        {
-          "date": "2024-06-10",
-          "status": "approved",
-          "sentiment": 0.6,
-          "summary": "Applicant reported completing the required off-site mitigation (Town Board license along Maple/municipal lot, modified deed and CBA); board resolved the affordable-unit count (30 market-rate plus 4 affordable of 34 total), reviewed stormwater/floodplain and wetland-mitigation conditions, then closed the hearing and approved the site plan and wetlands permit."
-        },
-        {
-          "date": "2025-05-29",
-          "status": "approved",
-          "sentiment": 0.1,
-          "summary": "The board granted a site-plan extension of time to August 11, 2025, mirroring the town board's special-use-permit extension. Discussion centered on the town's dissatisfaction with the property's appearance ('an eyesore' at the town entrance) and a 'gentleman's agreement' for the applicant to clean up the site; the board also pressed on why the permitted on-site rock crushing hadn't occurred (the crushed material is intended for reuse in the project)."
-        },
-        {
-          "date": "2026-07-27",
-          "status": "referred to the Zoning Board of Appeals to renew expired variances",
-          "sentiment": 0.1,
-          "summary": "The project, approved a few years earlier, lapsed when its approvals expired on June 10th, which is why an extension of time could no longer be granted. The applicant returned with what it and the town planner agreed were no material changes \u2014 including no change to the EAF \u2014 asking to be referred back to the ZBA to renew the variances, after which the project can be re-approved and go to fresh public hearings before both boards. Counsel confirmed the procedure had been recommended by the town's outside attorneys. Ruisi asked whether anything else had changed; Pollack asked specifically about the community benefits agreement negotiated with the town, and was told it is unchanged and does not expire, taking effect when the developer proceeds. A member of the public was allowed to ask, as a courtesy outside a hearing, what the next steps were and raised the possibility of the parcel figuring in a larger Town Hall campus scheme; the applicant noted it does not own that lot. The special use permit was noted as extended to July 23, 2027. The referral passed."
         }
       ]
     },
@@ -5985,6 +6054,90 @@
       ]
     },
     {
+      "id": "176-virginia-road",
+      "name": "176 Virginia Road (Mercedes Properties) \u2014 Revised Plan with Fence and Screening",
+      "address": "176 Virginia Road",
+      "applicationType": "amended site plan (discussion)",
+      "applicant": "Mister Properties Inc.",
+      "themes": [
+        "Historic & scenic character",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Retaining walls",
+        "Signage",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Tree removal & screening"
+      ],
+      "appearances": 5,
+      "firstSeen": "2022-04-25",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "discussion; the board is ready for a public hearing once the ARB approves",
+      "avgSentiment": 0.12,
+      "trajectory": [
+        {
+          "date": "2022-04-25",
+          "sentiment": 0.0,
+          "status": "approved (public hearing closed, resolution readopted largely unchanged)"
+        },
+        {
+          "date": "2023-10-23",
+          "sentiment": 0.5,
+          "status": "approved"
+        },
+        {
+          "date": "2024-11-14",
+          "sentiment": -0.2,
+          "status": "conditional approval"
+        },
+        {
+          "date": "2026-07-27",
+          "sentiment": -0.1,
+          "status": "no vote \u2014 board direction given ahead of ARB review and a future public hearing"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.4,
+          "status": "discussion; the board is ready for a public hearing once the ARB approves"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2022-04-25",
+          "status": "approved (public hearing closed, resolution readopted largely unchanged)",
+          "sentiment": 0.0,
+          "summary": "Public hearing to re-approve a previously-approved (now expired) site plan for two ~5,000 sq ft metal prefab buildings used as parking/wash bays for private contract mail trucks, near the historic, recently-restored Miller House. At an earlier meeting the board had asked the applicant to reconsider the buildings' height/appearance for better compatibility with Miller House; the applicant's architect reported the client opted to keep the design as originally approved, and the Architectural Review Board (whose approvals the town treats as non-expiring) had already re-approved it unchanged. The Chair expressed frustration at effectively 'changing the game in the middle of the game' against an already-approved design, and after discussion the board declined to press further, closed the hearing (no public comment), removed resolution language referencing a possible design change, and re-adopted the resolution as amended."
+        },
+        {
+          "date": "2023-10-23",
+          "status": "approved",
+          "sentiment": 0.5,
+          "summary": "Continuation from the prior meeting's inquiry into unpermitted excavation/site work; staff confirmed the building department found some violations but no active summons, and that work is proceeding through the normal permitting process. With that clarified, the board closed the hearing and approved the draft resolution."
+        },
+        {
+          "date": "2024-11-14",
+          "status": "conditional approval",
+          "sentiment": -0.2,
+          "summary": "Instead of a one-year extension, the board granted only a three-month extension of time at the building inspector's recommendation, because the mail-delivery property owner is storing trucks and excavated without a permit, not in conformance with the approved site plan; the short window is meant to pressure compliance."
+        },
+        {
+          "date": "2026-07-27",
+          "status": "no vote \u2014 board direction given ahead of ARB review and a future public hearing",
+          "sentiment": -0.1,
+          "summary": "The applicant revised a previously approved plan of two roughly 5,000-square-foot out-buildings for vehicle storage down to a single 200-square-foot building for a bathroom and dispatch, plus 20 parking spaces including one accessible space. Disturbance is about the same and the truck count unchanged. The board's interest turned almost entirely to the Virginia Road frontage. Kaufman invoked the comprehensive plan, which names Virginia Road and Lafayette Avenue specifically and asks the planning board to take proactive measures where it can. The applicant, who owns several properties in the corridor, pushed back that no one else along that stretch has fencing and that his site would stand out; the board's answer was that improvement has to start somewhere. Discussion ranged over removing versus replacing the gate and fence, shrub screening, height limits and sight lines, and a suggestion of artificial turf on the fence that did not land. Carthy's direction was to spend real effort on an attractive Virginia Road frontage before the ARB and to bring that plan back \u2014 \"it doesn't have to be the Taj Mahal, just appealing.\""
+        },
+        {
+          "date": "2026-10-15",
+          "status": "discussion; the board is ready for a public hearing once the ARB approves",
+          "sentiment": 0.4,
+          "summary": "Adam Kaufman recapped the plan. Enclosed storage of mail trucks has been dropped in favour of a small site-management office. At the last meeting the board asked for screening along Virginia Road, and the applicant came back with a solid six-foot wood fence with planting in front. The presiding member asked about the boxwoods proposed about 10 feet apart, worried that they do not tolerate road salt on a heavily travelled road, and asked the applicant to consult someone knowledgeable about a hardier species. The applicant still needs ARB approval, and the hearing will be scheduled once that is obtained. Kaufman noted that the same owner holds the Amazon site at 111 Lafayette Avenue, so mail trucks that do not fit there can be parked here."
+        }
+      ]
+    },
+    {
       "id": "78-lafayette-avenue",
       "name": "78 Lafayette Avenue",
       "address": "78 Lafayette Avenue",
@@ -6399,6 +6552,169 @@
       ]
     },
     {
+      "id": "73-whippoorwill-road",
+      "name": "73 Whippoorwill Road Subdivision",
+      "address": "73 Whippoorwill Road, North Castle, NY",
+      "applicationType": "subdivision",
+      "applicant": "Wellness Estates LLC / Alice Gasky (engineer Louis de Marzo)",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Septic & water supply",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 5,
+      "firstSeen": "2024-12-09",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "extension of time granted",
+      "avgSentiment": 0.36,
+      "trajectory": [
+        {
+          "date": "2024-12-09",
+          "sentiment": 0.3,
+          "status": "discussed"
+        },
+        {
+          "date": "2025-02-24",
+          "sentiment": 0.3,
+          "status": "held open"
+        },
+        {
+          "date": "2025-10-27",
+          "sentiment": 0.6,
+          "status": "approved with conditions"
+        },
+        {
+          "date": "2026-04-13",
+          "sentiment": 0.4,
+          "status": "approved"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.2,
+          "status": "extension of time granted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2024-12-09",
+          "status": "discussed",
+          "sentiment": 0.3,
+          "summary": "Preliminary two-lot subdivision of an 8.8-acre parcel (Lot A 5.5 ac keeping the existing house, Lot B 3.3 ac conceptual new home); soils passed for septic and drainage. The board asked the applicant to either deed-restrict/conservation-easement Lot A or demonstrate a third lot isn't feasible given frontage/pond/steep slopes, and to detail any tree removal needed for the 200-ft sight line."
+        },
+        {
+          "date": "2025-02-24",
+          "status": "held open",
+          "sentiment": 0.3,
+          "summary": "Public hearing on subdividing an 8.8-acre lot into a 5.5-acre Lot A and a 3.3-acre Lot B; the applicant's engineer addressed the 11 staff comments (school-bus pickup area, road-widening reservation, no-further-subdivision note, archaeological survey), the board kept site-plan jurisdiction over future development, and it asked the applicant to tighten the 21-condition resolution for later administrative approval."
+        },
+        {
+          "date": "2025-10-27",
+          "status": "approved with conditions",
+          "sentiment": 0.6,
+          "summary": "Conditions-review for a subdivision where the hearing had been closed but too many conditions remained. Working with the engineering department, the applicant reduced the preliminary plat conditions from 15 to 3 and the final subdivision conditions from 21 to 10, all remaining items being tasks to complete rather than plan changes. The board adopted the NEG DEC and both the preliminary and final subdivision resolutions."
+        },
+        {
+          "date": "2026-04-13",
+          "status": "approved",
+          "sentiment": 0.4,
+          "summary": "Request for an extension of time on the subdivision, with the applicant dealing primarily with the Board of Health. The board granted the extension of time."
+        },
+        {
+          "date": "2026-10-15",
+          "status": "extension of time granted",
+          "sentiment": 0.2,
+          "summary": "A routine extension of time for the subdivision approval (heard as \"Whipple-Will Road\"). Nobody appeared for the applicant. Adam Kaufman said there was nothing unusual about it. Thomas Crispi and Lawrence Ruisi were each asked for comments and had none. The extension was moved, seconded and carried."
+        }
+      ]
+    },
+    {
+      "id": "111-lafayette-avenue",
+      "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (site plan public hearing)",
+      "address": "111 Lafayette Avenue",
+      "applicationType": "site plan",
+      "applicant": "Property owner operating a postal mail-hauling business",
+      "themes": [
+        "Lighting",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Tree removal & screening",
+        "Zoning & land use"
+      ],
+      "appearances": 5,
+      "firstSeen": "2025-01-13",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now",
+      "avgSentiment": -0.01,
+      "trajectory": [
+        {
+          "date": "2025-01-13",
+          "sentiment": 0.0,
+          "status": "discussed"
+        },
+        {
+          "date": "2025-06-09",
+          "sentiment": 0.5,
+          "status": "conditional approval"
+        },
+        {
+          "date": "2026-07-27",
+          "sentiment": -0.2,
+          "status": "sent back for a complete site plan showing all uses"
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.1,
+          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": -0.25,
+          "status": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2025-01-13",
+          "status": "discussed",
+          "sentiment": 0.0,
+          "summary": "Preliminary discussion of converting the property into the main office/operations base for a bulk-mail hauling business; the board needed floor plans, truck-parking layout, storage and access details and directed the applicant to meet with the town planner and engineer before proceeding."
+        },
+        {
+          "date": "2025-06-09",
+          "status": "conditional approval",
+          "sentiment": 0.5,
+          "summary": "Public hearing on a site plan to allow overnight commercial truck parking accessory to a warehouse/office building; the board worked through the parking table (9 office spaces required, 15 truck spaces, 24 provided), closed the hearing, and approved the resolution as amended to add conditions for a replacement fence and code-compliant lighting, plus floor plans to support the parking count."
+        },
+        {
+          "date": "2026-07-27",
+          "status": "sent back for a complete site plan showing all uses",
+          "sentiment": -0.2,
+          "summary": "The applicant described an Amazon quick-commerce delivery operation: customers order online, on-site staff package the orders, and a separate driver collects and delivers, typically within about three minutes and to addresses within roughly a fifteen-minute drive. Operations would run 24/7, with two to six drivers on site depending on demand and four to five nightly resupply deliveries by 26-foot box trucks rather than tractor-trailers. Adam Kaufman confirmed warehouse and distribution is a permitted use in the industrial district, but pressed on whether the new use occupies the whole site \u2014 it does not, and the previously approved uses remain. Since those earlier approvals included a significant number of trucks occupying much of the building, he told the applicant the plan as submitted does not show how everything fits together and that a full plan depicting all uses is required before the board can evaluate it. Carthy summed it up: \"I think we're looking at half a plan here... let's get a full plan together, we'll reevaluate.\" No vote."
+        },
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
+          "sentiment": -0.1,
+          "summary": "A second round of planning review comments, focused on parking, where delivery trucks will be stored, and improving the Lafayette Avenue street frontage. The sticking point is that the site also hosts mail truck parking, and the plan still does not show how the two uses coexist or demonstrate enough off-street parking for both. Carthy noted this had been discussed at the previous meeting and asked why it had not been reconciled; told \"it just hasn't been,\" he replied that it seemed like it should have been. On noise he asked for a bird's eye view given the overnight loading, and was satisfied: the site is on the railroad side, the nearest houses are roughly 300 feet away and above it in elevation, and the operation is small-truck delivery with no foot traffic. No substantive objection to the use itself, only to the missing reconciliation."
+        },
+        {
+          "date": "2026-10-15",
+          "status": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now",
+          "sentiment": -0.25,
+          "summary": "Larry Ruisi read the hearing notice for an Amazon Quick Commerce retail distribution centre. The applicant described a 24/7 operation. Four to five box trucks, not 53-footers, bring inventory between about 10 p.m. and 8 a.m. Amazon Flex drivers, independent contractors in their own cars, scan in and collect bagged orders for 30-minute delivery within a 15\u201320 minute radius. Pickups take two to four minutes, two to six drivers can be handled at once, and the peak is about 50 deliveries an hour in late morning and around dinner time. Two to four employees work on site, leaving about 20 of the roughly 22\u201324 front spaces for drivers. The template floor plan shows a small public retail entry. Adam Kaufman said retail is not permitted in the industrial zone, and the applicant said it will not happen. North White Plains residents objected strongly. Marilyn Marrow asked how trucks would reach a dead-end street by the Bronx River and called round-the-clock operation unconscionable. A Washington Avenue resident named Rich said each truck would pass his house twice going to and from the turnaround at the end of Lafayette. Michael Bellantoni, who owns several Lafayette Avenue properties and runs a business there, described a quiet street at night with one way in and out. He put Flex traffic at 250 or more cars a day and was worried about queuing, his trucks being blocked in and cut-through traffic on Washington Avenue. Another speaker raised diesel pollution near the Cranberry Lake Preserve. The applicant said idling is against policy, that most of the roughly 250 daily trips fall in normal hours, and that below-grade parking serves the landlord's other trucks. Kaufman said the industrial zone sets no operating hours but the board can regulate the site plan. Mary Desmond pointed out that the site's ZBA variance to back out across the sidewalk onto Lafayette was granted last year with five or six daytime commuter cars in mind, not this volume. She also noted that parking on a strip in front of the property is under a revocable licence with the Town, which may need to be revisited if the activity is substantially different. Ruisi said the night truck numbers seemed reasonable. He wanted the Police Department's opinion on the backing-out, and suggested the matter might be better decided with a full board. Thomas Crispi agreed. The presiding member floated limiting box-truck deliveries to roughly 11 p.m.\u20135 a.m., covered unloading, and on-site circulation so drivers exit head-first. He asked for activity data from a comparable facility, said nighttime impacts on neighbours were his main concern, and decided against requiring a traffic study at this stage. The hearing was adjourned."
+        }
+      ]
+    },
+    {
       "id": "12-seymour-place-east",
       "name": "12 Seymour Place East",
       "address": "12 Seymour Place East, Armonk, NY",
@@ -6560,79 +6876,6 @@
           "status": "public hearing closed | approved",
           "sentiment": 0.6,
           "summary": "This was a continuation of a public hearing on a wetlands permit that the board had previously declined to treat as a minor permit, sending the applicant back to the Conservation Board. The Conservation Board reviewed the home mitigation plan, found the structure could not be moved out of the buffer, judged the mitigation (slightly more than 2:1) adequate, and recommended approval. The applicant also confirmed via SHIPO that the project would not impact the African American historic cemetery across the street, and a previously missing page of engineering conditions was now reflected in the draft resolution. The board closed the public hearing and approved the resolution."
-        }
-      ]
-    },
-    {
-      "id": "176-virginia-road",
-      "name": "176 Virginia Road (Mercedes Properties) \u2014 Revised Plan: Parking Lot in Place of Out-Buildings",
-      "address": "176 Virginia Road",
-      "applicationType": "amended site plan",
-      "applicant": "Mister Properties Inc.",
-      "themes": [
-        "Historic & scenic character",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Retaining walls",
-        "Signage",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Time extensions & conditions",
-        "Tree removal & screening"
-      ],
-      "appearances": 4,
-      "firstSeen": "2022-04-25",
-      "lastSeen": "2026-07-27",
-      "lastStatus": "no vote \u2014 board direction given ahead of ARB review and a future public hearing",
-      "avgSentiment": 0.05,
-      "trajectory": [
-        {
-          "date": "2022-04-25",
-          "sentiment": 0.0,
-          "status": "approved (public hearing closed, resolution readopted largely unchanged)"
-        },
-        {
-          "date": "2023-10-23",
-          "sentiment": 0.5,
-          "status": "approved"
-        },
-        {
-          "date": "2024-11-14",
-          "sentiment": -0.2,
-          "status": "conditional approval"
-        },
-        {
-          "date": "2026-07-27",
-          "sentiment": -0.1,
-          "status": "no vote \u2014 board direction given ahead of ARB review and a future public hearing"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2022-04-25",
-          "status": "approved (public hearing closed, resolution readopted largely unchanged)",
-          "sentiment": 0.0,
-          "summary": "Public hearing to re-approve a previously-approved (now expired) site plan for two ~5,000 sq ft metal prefab buildings used as parking/wash bays for private contract mail trucks, near the historic, recently-restored Miller House. At an earlier meeting the board had asked the applicant to reconsider the buildings' height/appearance for better compatibility with Miller House; the applicant's architect reported the client opted to keep the design as originally approved, and the Architectural Review Board (whose approvals the town treats as non-expiring) had already re-approved it unchanged. The Chair expressed frustration at effectively 'changing the game in the middle of the game' against an already-approved design, and after discussion the board declined to press further, closed the hearing (no public comment), removed resolution language referencing a possible design change, and re-adopted the resolution as amended."
-        },
-        {
-          "date": "2023-10-23",
-          "status": "approved",
-          "sentiment": 0.5,
-          "summary": "Continuation from the prior meeting's inquiry into unpermitted excavation/site work; staff confirmed the building department found some violations but no active summons, and that work is proceeding through the normal permitting process. With that clarified, the board closed the hearing and approved the draft resolution."
-        },
-        {
-          "date": "2024-11-14",
-          "status": "conditional approval",
-          "sentiment": -0.2,
-          "summary": "Instead of a one-year extension, the board granted only a three-month extension of time at the building inspector's recommendation, because the mail-delivery property owner is storing trucks and excavated without a permit, not in conformance with the approved site plan; the short window is meant to pressure compliance."
-        },
-        {
-          "date": "2026-07-27",
-          "status": "no vote \u2014 board direction given ahead of ARB review and a future public hearing",
-          "sentiment": -0.1,
-          "summary": "The applicant revised a previously approved plan of two roughly 5,000-square-foot out-buildings for vehicle storage down to a single 200-square-foot building for a bathroom and dispatch, plus 20 parking spaces including one accessible space. Disturbance is about the same and the truck count unchanged. The board's interest turned almost entirely to the Virginia Road frontage. Kaufman invoked the comprehensive plan, which names Virginia Road and Lafayette Avenue specifically and asks the planning board to take proactive measures where it can. The applicant, who owns several properties in the corridor, pushed back that no one else along that stretch has fencing and that his site would stand out; the board's answer was that improvement has to start somewhere. Discussion ranged over removing versus replacing the gate and fence, shrub screening, height limits and sight lines, and a suggestion of artificial turf on the fence that did not land. Carthy's direction was to spend real effort on an attractive Virginia Road frontage before the ARB and to bring that plan back \u2014 \"it doesn't have to be the Taj Mahal, just appealing.\""
         }
       ]
     },
@@ -7654,147 +7897,6 @@
       ]
     },
     {
-      "id": "73-whippoorwill-road",
-      "name": "73 Whippoorwill Road Subdivision",
-      "address": "73 Whippoorwill Road, North Castle, NY",
-      "applicationType": "subdivision",
-      "applicant": "Wellness Estates LLC / Alice Gasky (engineer Louis de Marzo)",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Septic & water supply",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Time extensions & conditions",
-        "Wetlands & buffers",
-        "Zoning & land use"
-      ],
-      "appearances": 4,
-      "firstSeen": "2024-12-09",
-      "lastSeen": "2026-04-13",
-      "lastStatus": "approved",
-      "avgSentiment": 0.4,
-      "trajectory": [
-        {
-          "date": "2024-12-09",
-          "sentiment": 0.3,
-          "status": "discussed"
-        },
-        {
-          "date": "2025-02-24",
-          "sentiment": 0.3,
-          "status": "held open"
-        },
-        {
-          "date": "2025-10-27",
-          "sentiment": 0.6,
-          "status": "approved with conditions"
-        },
-        {
-          "date": "2026-04-13",
-          "sentiment": 0.4,
-          "status": "approved"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2024-12-09",
-          "status": "discussed",
-          "sentiment": 0.3,
-          "summary": "Preliminary two-lot subdivision of an 8.8-acre parcel (Lot A 5.5 ac keeping the existing house, Lot B 3.3 ac conceptual new home); soils passed for septic and drainage. The board asked the applicant to either deed-restrict/conservation-easement Lot A or demonstrate a third lot isn't feasible given frontage/pond/steep slopes, and to detail any tree removal needed for the 200-ft sight line."
-        },
-        {
-          "date": "2025-02-24",
-          "status": "held open",
-          "sentiment": 0.3,
-          "summary": "Public hearing on subdividing an 8.8-acre lot into a 5.5-acre Lot A and a 3.3-acre Lot B; the applicant's engineer addressed the 11 staff comments (school-bus pickup area, road-widening reservation, no-further-subdivision note, archaeological survey), the board kept site-plan jurisdiction over future development, and it asked the applicant to tighten the 21-condition resolution for later administrative approval."
-        },
-        {
-          "date": "2025-10-27",
-          "status": "approved with conditions",
-          "sentiment": 0.6,
-          "summary": "Conditions-review for a subdivision where the hearing had been closed but too many conditions remained. Working with the engineering department, the applicant reduced the preliminary plat conditions from 15 to 3 and the final subdivision conditions from 21 to 10, all remaining items being tasks to complete rather than plan changes. The board adopted the NEG DEC and both the preliminary and final subdivision resolutions."
-        },
-        {
-          "date": "2026-04-13",
-          "status": "approved",
-          "sentiment": 0.4,
-          "summary": "Request for an extension of time on the subdivision, with the applicant dealing primarily with the Board of Health. The board granted the extension of time."
-        }
-      ]
-    },
-    {
-      "id": "111-lafayette-avenue",
-      "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (\"dark store\")",
-      "address": "111 Lafayette Avenue",
-      "applicationType": "site plan",
-      "applicant": "Property owner operating a postal mail-hauling business",
-      "themes": [
-        "Lighting",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Tree removal & screening",
-        "Zoning & land use"
-      ],
-      "appearances": 4,
-      "firstSeen": "2025-01-13",
-      "lastSeen": "2026-09-14",
-      "lastStatus": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
-      "avgSentiment": 0.05,
-      "trajectory": [
-        {
-          "date": "2025-01-13",
-          "sentiment": 0.0,
-          "status": "discussed"
-        },
-        {
-          "date": "2025-06-09",
-          "sentiment": 0.5,
-          "status": "conditional approval"
-        },
-        {
-          "date": "2026-07-27",
-          "sentiment": -0.2,
-          "status": "sent back for a complete site plan showing all uses"
-        },
-        {
-          "date": "2026-09-14",
-          "sentiment": -0.1,
-          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2025-01-13",
-          "status": "discussed",
-          "sentiment": 0.0,
-          "summary": "Preliminary discussion of converting the property into the main office/operations base for a bulk-mail hauling business; the board needed floor plans, truck-parking layout, storage and access details and directed the applicant to meet with the town planner and engineer before proceeding."
-        },
-        {
-          "date": "2025-06-09",
-          "status": "conditional approval",
-          "sentiment": 0.5,
-          "summary": "Public hearing on a site plan to allow overnight commercial truck parking accessory to a warehouse/office building; the board worked through the parking table (9 office spaces required, 15 truck spaces, 24 provided), closed the hearing, and approved the resolution as amended to add conditions for a replacement fence and code-compliant lighting, plus floor plans to support the parking count."
-        },
-        {
-          "date": "2026-07-27",
-          "status": "sent back for a complete site plan showing all uses",
-          "sentiment": -0.2,
-          "summary": "The applicant described an Amazon quick-commerce delivery operation: customers order online, on-site staff package the orders, and a separate driver collects and delivers, typically within about three minutes and to addresses within roughly a fifteen-minute drive. Operations would run 24/7, with two to six drivers on site depending on demand and four to five nightly resupply deliveries by 26-foot box trucks rather than tractor-trailers. Adam Kaufman confirmed warehouse and distribution is a permitted use in the industrial district, but pressed on whether the new use occupies the whole site \u2014 it does not, and the previously approved uses remain. Since those earlier approvals included a significant number of trucks occupying much of the building, he told the applicant the plan as submitted does not show how everything fits together and that a full plan depicting all uses is required before the board can evaluate it. Carthy summed it up: \"I think we're looking at half a plan here... let's get a full plan together, we'll reevaluate.\" No vote."
-        },
-        {
-          "date": "2026-09-14",
-          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
-          "sentiment": -0.1,
-          "summary": "A second round of planning review comments, focused on parking, where delivery trucks will be stored, and improving the Lafayette Avenue street frontage. The sticking point is that the site also hosts mail truck parking, and the plan still does not show how the two uses coexist or demonstrate enough off-street parking for both. Carthy noted this had been discussed at the previous meeting and asked why it had not been reconciled; told \"it just hasn't been,\" he replied that it seemed like it should have been. On noise he asked for a bird's eye view given the overnight loading, and was satisfied: the site is on the railroad side, the nearest houses are roughly 300 feet away and above it in elevation, and the operation is small-truck delivery with no foot traffic. No substantive objection to the use itself, only to the missing reconciliation."
-        }
-      ]
-    },
-    {
       "id": "700-bedford-road",
       "name": "700 Bedford Road (new house)",
       "address": "700 Bedford Road, North Castle, NY",
@@ -8072,6 +8174,76 @@
           "status": "public hearing opened and adjourned with the hearing left open; chairman stated there is no board consensus to move it forward and raised preparing a denial resolution",
           "sentiment": -0.7,
           "summary": "The applicant returned with a revised design after the board's negative reception at the previous meeting. The northeast corner walls are now tiered \u2014 the lower wall capped at six feet six inches because it sits within the setback for principal and accessory structures \u2014 and the northern section was lowered four feet, so what was described as a 20-foot wall is now a maximum of about 11 feet 8 inches on the two lower walls, with the upper wall against the driveway varying from half a foot to roughly 14 and a half feet because the driveway grade must be maintained for garage access. Evergreens are proposed along the full length of the middle and lower walls. The engineer said the 1993 septic system \u2014 which he personally designed at a prior firm \u2014 is over-built by roughly 200 feet, so the health department's required 15-foot separation between wall and septic still leaves the reserve area intact, though the health department has not formally been approached because the owner did not want to incur that cost before the board accepted the concept. He cited an approved comparable at 850 North Broadway, also under this board's jurisdiction, with similar stepped walls now masked by vegetation. Three neighbors spoke against. Andrew Rushaft of 37 Marcus Lake Drive, a resident since July 2004, said a much smaller home once stood there, that they can now clearly see the backyard and a very large home when leaves are off the trees, and that a large concrete retaining wall \u2014 whether 14 or 20 feet \u2014 would be unsightly and inconsistent with what they have come to expect in North Castle. George Henry of 66 Whippoorwill Road identified himself for the record. A third resident, there since 1991, objected that a concrete wall is an eyesore and recalled being required by the town to install a white fence and tall trees at considerable expense merely to screen a generator visible only to her own son. The applicant's contractor answered at length that the owner volunteered the evergreens unprompted, that the arborvitae green giants will be planted taller than the highest wall and grow two to three feet a year, that the blocks are decorative and laid like brick rather than smooth concrete, and that the project began after the owner's youngest daughter fell down the hill and sprained an ankle. The board was unmoved. Carthy summed up that he was not hearing consensus to move the application forward, asked what a denial would look like and was told he would direct counsel to prepare a resolution for the board to consider, and separately rejected the idea of a maintenance covenant on the walls \u2014 the town should not set up conditions that leave enforcement burdens on North Castle in perpetuity. Rather than force a denial, the board granted the applicant's request to adjourn so the concerns could be taken back to the client; Carthy said explicitly he did not want to reconvene only to have the identical discussion again. Ruisi supported extending the courtesy. The hearing stays open, and the chairman told the public they will get no further notice and should follow the agenda on the town website or sign up for town clerk alerts."
+        }
+      ]
+    },
+    {
+      "id": "31-sorrell-street",
+      "name": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+      "address": "31 Sorrell Street (formerly lot 16 of the Hammond Ridge subdivision)",
+      "applicationType": "residential site plan",
+      "applicant": "Owner (surname rendered by the ASR as \"Duguardly\"/\"DiGuardi\" and not confidently reconstructable); engineer Ralph Alfonsetti",
+      "themes": [
+        "Bonding & maintenance",
+        "Neighbor concerns & safety",
+        "Process & procedure",
+        "Septic & water supply",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Tree removal & screening",
+        "Zoning & land use"
+      ],
+      "appearances": 4,
+      "firstSeen": "2026-07-27",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "continued public hearing reopened and closed over the neighbours' request to keep it open; site plan, tree removal permit and amended clearing-and-grading limit line approved",
+      "avgSentiment": 0.05,
+      "trajectory": [
+        {
+          "date": "2026-07-27",
+          "sentiment": 0.05,
+          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow"
+        },
+        {
+          "date": "2026-08-17",
+          "sentiment": 0.15,
+          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open"
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.1,
+          "status": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.1,
+          "status": "continued public hearing reopened and closed over the neighbours' request to keep it open; site plan, tree removal permit and amended clearing-and-grading limit line approved"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-07-27",
+          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow",
+          "sentiment": 0.05,
+          "summary": "A vacant lot with a front conservation easement and clearing-and-grading limit lines, on which the applicant proposes a house essentially identical in siting to the approved subdivision plan, with the septic in the same location and county health department approval for five bedrooms. The application reached the board only because Lawrence Ruisi, sitting as the Planning Board's representative on the Residential Project Review Committee, referred it here rather than letting it go straight to the building department \u2014 a decision Carthy praised on the record as giving neighbors a chance to see the plan rather than discovering construction from a window. No landscape plan has been submitted; the board said one is required and should be robust. An abutting neighbor's detailed objection letter was walked through point by point, with Carthy telling her candidly which concerns the board could act on and which it could not: erosion and stormwater is a fair concern the town engineer will hold the applicant to; the side-yard setback objection fails because the applicant is meeting the R-2A 30-foot setback and it is not the board's job to demand more; the house's position follows the original approved subdivision layout; there are no variances requested and the plan is compliant with FAR, coverage and setbacks, so there is little basis to demand a different house; and the suggestion that the applicant is misrepresenting bedroom count would not carry weight, since the health department sizes the septic to the plans and the building inspector checks the built house against them. Privacy and screening, he said, is the concern the board can actually address, through an ambitious landscape plan. The neighbor pressed that there is no buffer at all along the south edge, that the pool, drainage and a 3,000-gallon septic tank sit on the property line where nothing can be planted, and that substantial clearing has already occurred. Chipping versus blasting was clarified \u2014 blasting is unlikely, chipping likely and permitted separately, not subject to a public hearing, with limited hours and no weekend work. The board asked for the landscape plan, then ARB, then a public hearing."
+        },
+        {
+          "date": "2026-08-17",
+          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open",
+          "sentiment": 0.15,
+          "summary": "The applicant returned with the landscape plan the board asked for at the previous meeting: ornamental planting near the house, screening around the generator, pool equipment and AC units, and a long line of evergreens down the property line facing the neighbor at 33 Sorrell Street who objected last time. Kaufman confirmed the house, driveway and septic sit within the tight clearing-and-grading limit line established when the Hammond Ridge subdivision was approved, and that the plan is entirely consistent with it. Carthy, who had walked the property, argued the new screening is largely redundant and possibly harmful: the neighbor at 33 already has a healthy, mature evergreen line, the 31-side of those trees already looks starved of light and less healthy than the 33-side, and planting twenty-odd more evergreens back-to-back against them would crowd and damage what is already there. He characterised part of the plan as done \"because it's protocol\" rather than because it produces the best result, and said the money would be better spent where screening is actually thin \u2014 the corner. His larger proposal was procedural: the planning board has authority to move a clearing-and-grading limit line, a limit line drawn at subdivision stage is \"an approximation\" drawn with a wide brush, and moving this one back toward the 50-foot rear-yard setback would let the pool shift further from the neighbor and give the plan real breathing room. Kaufman cautioned against pushing so far back as to intrude on the rear neighbor at number eight; Carthy agreed and said he was looking for a middle ground. Counsel Mary Desmond was asked what is required to modify a limit line recorded on a filed subdivision map rather than on a site plan; the board recalled doing exactly this for 12 Dellwood Farm Way and will look at that precedent, with Desmond noting the conservation easement carries metes and bounds while the clearing limit line does not. Told the applicant is about to spend a large sum on the project anyway, Carthy said perfecting the plan is \"the least of it.\" The board agreed to schedule the public hearing and keep it open, so the interested neighbors get notice and can be heard on whatever revised plan comes back."
+        },
+        {
+          "date": "2026-09-14",
+          "status": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement",
+          "sentiment": -0.1,
+          "summary": "The applicant returned having pulled the clearing-and-grading limit line back roughly 50 feet on average and up to 90 at its widest, moved the house back about 10 feet and the pool about 25, and shifted spruce plantings from the lower driveway curve to the upper slope. The neighbours at the adjoining lot \u2014 Jennifer Kimball McGreevy and David McGreevy, who identified their address as 33 Sorrell Street and referred to 29 Sorrell Street on the other side, settling a street name the automatic transcription had been rendering as \"Sorrow\" \u2014 delivered a long and specific objection: that the revised plans went online only five days before the hearing rather than seven; that the plans carry no dimensions for how far the cut line, house or pool actually moved; that tree removal has risen from 87 to 117 trees replaced by only 27 saplings, ten of them on the higher south side where they do nothing for runoff; that the 31.9-foot side yard setback, though compliant, is out of character with neighbouring setbacks of 50 to 60 feet and that \u00a7355-14K lets the board require more; that the gross land coverage sheet was never updated and the front-yard-setback bonus was miscalculated; that six drains are too few given the grade; that Norway spruce are drawn on top of a 3,000-gallon septic tank; that basement floor plans have never been produced; and that driveway columns, lighting and trenching would violate the recorded Hammond Ridge conservation easement to which the Town is a party. Alfonsetti answered that the sight-line note is a standard catch-all and no neighbour's trees or walls would be touched, that coverage rose but will stay within the allowable, that the septic constrains how many drains he can place and a third infiltration system is under discussion with the Town Engineer's office, and that nothing would in fact be planted over the tank. Carthy pressed the applicant on the bonus calculation \u2014 telling him to recheck whether the mandated 50-foot front setback had wrongly been counted \u2014 and agreed the dimensioning should be better, but otherwise said he was \"having a hard time trying to find ways to improve this plan that isn't, I think, overstepping,\" noting the house position was largely dictated by the subdivision's own limit lines and that a driveway crossing the easement is inherent to a lot the subdivision always contemplated building on. He proposed closing the hearing; when the neighbours objected, he reversed on the spot and kept it open. Desmond advised that plans and backup need not be posted with the notice, so the notice itself was adequate, and agreed to read the conservation easement."
+        },
+        {
+          "date": "2026-10-15",
+          "status": "continued public hearing reopened and closed over the neighbours' request to keep it open; site plan, tree removal permit and amended clearing-and-grading limit line approved",
+          "sentiment": 0.1,
+          "summary": "The hearing was reopened. Alfonsetti said the plans now carry the dimensions the board asked for, the drainage had been adjusted, and the Town Engineer's questions were answered. The adjoining owners at 33 Sorrell Street, Jennifer Kimball McGreevy and David McGreevy, objected at length for the third time. They said tree removal has grown from 85 trees in July to 117 in September and 155 now, with 37 trees outside the cut lines, and that no revised landscape plan matches the moved cut lines. They argued that the cut lines are fixed by the Hammond Ridge plat and declarations and are not the developer's to move. They also said no drainage was added, the driveway has grown to 11,145 square feet, and a 3,136-square-foot coverage bonus pushes the house further behind their home. The north side yard of 31 feet is barely over the 30-foot minimum, while neighbouring houses sit 55 feet or more back. They read \u00a7355-14K in full to argue that the board can require larger special setbacks, citing steep slopes, a stone wall and the adjacent houses. They said the conservation easement bars the driveway pillars, gate, lighting and trenching, called the house a speculative build by an LLC, and asked that the hearing stay open until revised plans are public. Alfonsetti said the house needs no variances and is within coverage and setbacks, that it is being built for a family, and that there is no increase in runoff. The drainage was moved back to improve infiltration. The roof, pool and driveway each drain to infiltration systems, and the area that now drains toward the neighbours will instead go to the system and overflow to a stream at the back. The Town Engineer's representative said soil and percolation testing are still to be done because the system will sit in fill. Cut-and-fill figures (over 2,000 cubic yards imported, about 1,000 of it for the septic) are to be updated to the latest plans and signed off by the Town Engineer. The 'septic tank' under the proposed screening trees is a stormwater pretreatment tank, and trees and tank will be separated. Adam Kaufman explained that the board can amend the clearing-and-grading line and decides what driveway-related work is allowed in the conservation easement. Mary Desmond later confirmed that any disturbance in the easement needs this board's approval, which is what stops an owner doing cut and fill there unilaterally. A member asked whether the house could slide toward the 66-foot side to widen the 31.9-foot side yard. Alfonsetti said slope, rock and a neighbour's wall limit that, and he might gain a couple of feet. The presiding member saw no benefit in moving the house a foot or two. He said the board cannot weigh speculation about the owner's motives, and that in his opinion the screening, landscaping and stormwater work is sufficient and consistent with the Hammond Ridge subdivision. Thomas Crispi agreed. The hearing was closed, a neighbour's request to make a further statement came after the vote, and the approvals were moved, seconded and carried."
         }
       ]
     },
@@ -9421,64 +9593,6 @@
           "status": "approved",
           "sentiment": 0.6,
           "summary": "The board took up the change-of-use site plan for the Social Life members club and cigar lounge. The planner explained the applicant already obtained its special use permit and, because the prior use was a bakery, the off-street parking calculation for the shopping center showed no parking variance was needed (17 spaces under the one-space-per-three-seats standard). With no physical changes to the site, this was a simple change of use. Members joked about the concept, asked about liquor licensing and membership tiers, then closed the hearing and approved the change-of-use site development plan."
-        }
-      ]
-    },
-    {
-      "id": "31-sorrell-street",
-      "name": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
-      "address": "31 Sorrell Street (formerly lot 16 of the Hammond Ridge subdivision)",
-      "applicationType": "residential site plan",
-      "applicant": "Owner (surname rendered by the ASR as \"Duguardly\"/\"DiGuardi\" and not confidently reconstructable); engineer Ralph Alfonsetti",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Process & procedure",
-        "Septic & water supply",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Tree removal & screening",
-        "Zoning & land use"
-      ],
-      "appearances": 3,
-      "firstSeen": "2026-07-27",
-      "lastSeen": "2026-09-14",
-      "lastStatus": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement",
-      "avgSentiment": 0.033,
-      "trajectory": [
-        {
-          "date": "2026-07-27",
-          "sentiment": 0.05,
-          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow"
-        },
-        {
-          "date": "2026-08-17",
-          "sentiment": 0.15,
-          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open"
-        },
-        {
-          "date": "2026-09-14",
-          "sentiment": -0.1,
-          "status": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-07-27",
-          "status": "no vote \u2014 landscape plan required before the board will proceed; public hearing to follow",
-          "sentiment": 0.05,
-          "summary": "A vacant lot with a front conservation easement and clearing-and-grading limit lines, on which the applicant proposes a house essentially identical in siting to the approved subdivision plan, with the septic in the same location and county health department approval for five bedrooms. The application reached the board only because Lawrence Ruisi, sitting as the Planning Board's representative on the Residential Project Review Committee, referred it here rather than letting it go straight to the building department \u2014 a decision Carthy praised on the record as giving neighbors a chance to see the plan rather than discovering construction from a window. No landscape plan has been submitted; the board said one is required and should be robust. An abutting neighbor's detailed objection letter was walked through point by point, with Carthy telling her candidly which concerns the board could act on and which it could not: erosion and stormwater is a fair concern the town engineer will hold the applicant to; the side-yard setback objection fails because the applicant is meeting the R-2A 30-foot setback and it is not the board's job to demand more; the house's position follows the original approved subdivision layout; there are no variances requested and the plan is compliant with FAR, coverage and setbacks, so there is little basis to demand a different house; and the suggestion that the applicant is misrepresenting bedroom count would not carry weight, since the health department sizes the septic to the plans and the building inspector checks the built house against them. Privacy and screening, he said, is the concern the board can actually address, through an ambitious landscape plan. The neighbor pressed that there is no buffer at all along the south edge, that the pool, drainage and a 3,000-gallon septic tank sit on the property line where nothing can be planted, and that substantial clearing has already occurred. Chipping versus blasting was clarified \u2014 blasting is unlikely, chipping likely and permitted separately, not subject to a public hearing, with limited hours and no weekend work. The board asked for the landscape plan, then ARB, then a public hearing."
-        },
-        {
-          "date": "2026-08-17",
-          "status": "no vote \u2014 applicant directed to revise; public hearing to be scheduled and held open",
-          "sentiment": 0.15,
-          "summary": "The applicant returned with the landscape plan the board asked for at the previous meeting: ornamental planting near the house, screening around the generator, pool equipment and AC units, and a long line of evergreens down the property line facing the neighbor at 33 Sorrell Street who objected last time. Kaufman confirmed the house, driveway and septic sit within the tight clearing-and-grading limit line established when the Hammond Ridge subdivision was approved, and that the plan is entirely consistent with it. Carthy, who had walked the property, argued the new screening is largely redundant and possibly harmful: the neighbor at 33 already has a healthy, mature evergreen line, the 31-side of those trees already looks starved of light and less healthy than the 33-side, and planting twenty-odd more evergreens back-to-back against them would crowd and damage what is already there. He characterised part of the plan as done \"because it's protocol\" rather than because it produces the best result, and said the money would be better spent where screening is actually thin \u2014 the corner. His larger proposal was procedural: the planning board has authority to move a clearing-and-grading limit line, a limit line drawn at subdivision stage is \"an approximation\" drawn with a wide brush, and moving this one back toward the 50-foot rear-yard setback would let the pool shift further from the neighbor and give the plan real breathing room. Kaufman cautioned against pushing so far back as to intrude on the rear neighbor at number eight; Carthy agreed and said he was looking for a middle ground. Counsel Mary Desmond was asked what is required to modify a limit line recorded on a filed subdivision map rather than on a site plan; the board recalled doing exactly this for 12 Dellwood Farm Way and will look at that precedent, with Desmond noting the conservation easement carries metes and bounds while the clearing limit line does not. Told the applicant is about to spend a large sum on the project anyway, Carthy said perfecting the plan is \"the least of it.\" The board agreed to schedule the public hearing and keep it open, so the interested neighbors get notice and can be heard on whatever revised plan comes back."
-        },
-        {
-          "date": "2026-09-14",
-          "status": "public hearing opened and kept open at the neighbours' request; applicant to dimension the plans and go to the ARB; Town Attorney to review the conservation easement",
-          "sentiment": -0.1,
-          "summary": "The applicant returned having pulled the clearing-and-grading limit line back roughly 50 feet on average and up to 90 at its widest, moved the house back about 10 feet and the pool about 25, and shifted spruce plantings from the lower driveway curve to the upper slope. The neighbours at the adjoining lot \u2014 Jennifer Kimball McGreevy and David McGreevy, who identified their address as 33 Sorrell Street and referred to 29 Sorrell Street on the other side, settling a street name the automatic transcription had been rendering as \"Sorrow\" \u2014 delivered a long and specific objection: that the revised plans went online only five days before the hearing rather than seven; that the plans carry no dimensions for how far the cut line, house or pool actually moved; that tree removal has risen from 87 to 117 trees replaced by only 27 saplings, ten of them on the higher south side where they do nothing for runoff; that the 31.9-foot side yard setback, though compliant, is out of character with neighbouring setbacks of 50 to 60 feet and that \u00a7355-14K lets the board require more; that the gross land coverage sheet was never updated and the front-yard-setback bonus was miscalculated; that six drains are too few given the grade; that Norway spruce are drawn on top of a 3,000-gallon septic tank; that basement floor plans have never been produced; and that driveway columns, lighting and trenching would violate the recorded Hammond Ridge conservation easement to which the Town is a party. Alfonsetti answered that the sight-line note is a standard catch-all and no neighbour's trees or walls would be touched, that coverage rose but will stay within the allowable, that the septic constrains how many drains he can place and a third infiltration system is under discussion with the Town Engineer's office, and that nothing would in fact be planted over the tank. Carthy pressed the applicant on the bonus calculation \u2014 telling him to recheck whether the mandated 50-foot front setback had wrongly been counted \u2014 and agreed the dimensioning should be better, but otherwise said he was \"having a hard time trying to find ways to improve this plan that isn't, I think, overstepping,\" noting the house position was largely dictated by the subdivision's own limit lines and that a driveway crossing the easement is inherent to a lot the subdivision always contemplated building on. He proposed closing the hearing; when the neighbours objected, he reversed on the spot and kept it open. Desmond advised that plans and backup need not be posted with the notice, so the notice itself was adequate, and agreed to read the conservation easement."
         }
       ]
     },
@@ -11934,6 +12048,54 @@
           "status": "approved",
           "sentiment": 0.6,
           "summary": "This application had its public hearing previously closed, but action was pending the applicant's ARB review. With ARB complete and a fill issue resolved (the applicant is removing the fill) plus a revised plan addressing town-engineer comments, the board proceeded. There were no outstanding board concerns. The board approved the site plan and tree-removal permit."
+        }
+      ]
+    },
+    {
+      "id": "8-rosanne-drive",
+      "name": "Shapiro Residence, 8 Rosanne Drive \u2014 Field Change",
+      "address": "8 Rosanne Drive",
+      "applicationType": "field change",
+      "applicant": "Shapiro (represented by Kory Salomone, Zarin & Steinman)",
+      "themes": [
+        "Lighting",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Tree removal & screening",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 2,
+      "firstSeen": "2024-11-25",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "field change approved as de minimis",
+      "avgSentiment": 0.3,
+      "trajectory": [
+        {
+          "date": "2024-11-25",
+          "sentiment": 0.2,
+          "status": "referred"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.4,
+          "status": "field change approved as de minimis"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2024-11-25",
+          "status": "referred",
+          "sentiment": 0.2,
+          "summary": "New application on a 17.9-acre R1A property for recreational amenities (tennis/hard-tru court, padel court, grass field, central activity building, pergola) plus legalizing a pre-1984 accessory apartment; the board referred it to the ZBA, conservation board, and ARB, with the intensity of sport-court lighting the principal unresolved concern."
+        },
+        {
+          "date": "2026-10-15",
+          "status": "field change approved as de minimis",
+          "sentiment": 0.4,
+          "summary": "The house was approved about a year earlier. The owners asked to slide one building, heard as the \"activity building\", about four feet forward. The work stays inside the approved limits of disturbance, and it was described as a very minor, de minimis change. The Town Engineer's representative, Rick, had no concerns. The presiding member moved the approval, it was seconded, and it carried with no discussion."
         }
       ]
     },
@@ -19045,42 +19207,6 @@
       ]
     },
     {
-      "id": "8-rosanne-drive",
-      "name": "Shapiro residence, 8 Rosanne Drive",
-      "address": "8 Rosanne Drive",
-      "applicationType": "site plan",
-      "applicant": "Shapiro (represented by Kory Salomone, Zarin & Steinman)",
-      "themes": [
-        "Lighting",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Tree removal & screening",
-        "Wetlands & buffers",
-        "Zoning & land use"
-      ],
-      "appearances": 1,
-      "firstSeen": "2024-11-25",
-      "lastSeen": "2024-11-25",
-      "lastStatus": "referred",
-      "avgSentiment": 0.2,
-      "trajectory": [
-        {
-          "date": "2024-11-25",
-          "sentiment": 0.2,
-          "status": "referred"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2024-11-25",
-          "status": "referred",
-          "sentiment": 0.2,
-          "summary": "New application on a 17.9-acre R1A property for recreational amenities (tennis/hard-tru court, padel court, grass field, central activity building, pergola) plus legalizing a pre-1984 accessory apartment; the board referred it to the ZBA, conservation board, and ARB, with the intensity of sport-court lighting the principal unresolved concern."
-        }
-      ]
-    },
-    {
       "id": "35-whippoorwill-road",
       "name": "35 Whippoorwill Road pond restoration",
       "address": "35 Whippoorwill Road",
@@ -21089,6 +21215,70 @@
           "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard",
           "sentiment": 0.6,
           "summary": "A four-acre corner lot at Cedar Hill and East Middle Patent Road, before the board because of the scenic road requirement. The proposal renovates the house, removes a dilapidated garage at the awkward east end and builds a new one at the southwest corner, and realigns the driveway along the front so cars no longer have to back out. Seven trees come down, all interior to the lot, none within the 25-foot regulated setback, and the wetland in the northern portion and its buffer are untouched. Impervious coverage rises and will be handled with cultec chambers, calculations to follow. The substantive question was whether the backup area in front of the new garage counts as a \"courtyard,\" which Kaufman explained must be three times the minimum principal-structure setback when in a front yard, and so would need a variance. Filch argued it is a backup space rather than a courtyard. Rather than push the applicant to shrink it, the board advised the opposite: Carthy told him to spend five minutes with the building inspector and, if it is called a courtyard, to go to the ZBA rather than compromise \u2014 \"why compromise hundreds of thousands of dollars of what you've had value added to the home for the sake of not going to the ZBA if we need it\" \u2014 with Kaufman agreeing the grade separation and existing vegetation make it a strong variance case. The architect explained time pressure: a demolition permit is imminent and the clients, currently renting, want to start before winter, so they would take the single backup area now and revisit later. Kaufman's note about sparse planting along East Middle Patent turned out to align with what the owners wanted anyway, and was added to the plan."
+        }
+      ]
+    },
+    {
+      "id": "35-bedford-banksville-road",
+      "name": "35 Bedford-Banksville Road \u2014 Private Stable Special Permit Amendment (Town Board referral)",
+      "address": "35 Bedford Banksville Road",
+      "applicationType": "special use permit referral / lead agency declaration",
+      "applicant": "Owner of the private stable, represented by an attorney whose name and firm are garbled in the recording, with a project manager and landscape architect",
+      "themes": [
+        "Environmental review (SEQRA)",
+        "Process & procedure",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-10-15",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "board declared its intent to be SEQRA lead agency; positive recommendation sent to the Town Board for limited boarding and training by horse owners (not open to the public, no shows, not a riding academy) and an increase from 20 to 29 horses; site plan review to follow",
+      "avgSentiment": 0.5,
+      "trajectory": [
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.5,
+          "status": "board declared its intent to be SEQRA lead agency; positive recommendation sent to the Town Board for limited boarding and training by horse owners (not open to the public, no shows, not a riding academy) and an increase from 20 to 29 horses; site plan review to follow"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-10-15",
+          "status": "board declared its intent to be SEQRA lead agency; positive recommendation sent to the Town Board for limited boarding and training by horse owners (not open to the public, no shows, not a riding academy) and an increase from 20 to 29 horses; site plan review to follow",
+          "sentiment": 0.5,
+          "summary": "This was a Town Board referral. The Town Board heard the application the night before and has set its own hearing for November 4. The owner wants to amend the 2004 special permit and site plan for a private stable on a 25-acre site with two barns, a small house and a groom's apartment. The main change is removing a condition that limits the horses to the residents' non-commercial use and replacing it with the code's private-stable standard, under which horses are for the use of their owners. That would allow boarding and training for horse owners, with no shows and no lessons to the public. The owner also wants to raise the horse limit from 20 to 29, as the 2004 permit anticipated, and to enlarge the paddocks from 2.42 to 3.94 acres while moving 0.41 acres of paddock out of wetland buffers, off the septic area and out of the supplemental setback. Counsel stressed that the site is surrounded by a nursery, the fire department, contractors and the Banksville business area, and that the comprehensive plan lists it as an equestrian facility. The board first declared its intent to be lead agency, as the Town Board preferred. Kaufman said the Town Board wants the board's view on the operations, with paddock expansion, tree removal and wetlands to be handled at site plan. Members said 29 horses was not an issue given the surroundings but wanted tight language on the uses. The applicant confirmed there would be no new disturbance in the buffer. The positive recommendation was moved, seconded and carried."
+        }
+      ]
+    },
+    {
+      "id": "145-bedford-road",
+      "name": "145 Bedford Road \u2014 Freestanding Sign",
+      "address": "145 Bedford Road",
+      "applicationType": "sign approval",
+      "applicant": "Applicant's sign representative (name not given)",
+      "themes": [
+        "Process & procedure",
+        "Signage"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-10-15",
+      "lastSeen": "2026-10-15",
+      "lastStatus": "no action; the applicant must get ARB approval first and then return for Planning Board approval",
+      "avgSentiment": 0.4,
+      "trajectory": [
+        {
+          "date": "2026-10-15",
+          "sentiment": 0.4,
+          "status": "no action; the applicant must get ARB approval first and then return for Planning Board approval"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-10-15",
+          "status": "no action; the applicant must get ARB approval first and then return for Planning Board approval",
+          "sentiment": 0.4,
+          "summary": "A new freestanding sign. Freestanding signs need Planning Board approval and must also go to the ARB. Members had no issues with the design, but the applicant had not yet been to the ARB, so the board told him to get ARB approval and come back, and said he would be put first on that agenda."
         }
       ]
     }
@@ -27822,11 +28012,11 @@
     },
     {
       "member": "Lawrence Ruisi",
-      "totalPositions": 194,
-      "avgSentiment": 0.057,
+      "totalPositions": 195,
+      "avgSentiment": 0.056,
       "confidenceMix": {
         "medium": 81,
-        "high": 93,
+        "high": 94,
         "low": 20
       },
       "byTheme": [
@@ -27837,8 +28027,8 @@
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 48,
-          "avgSentiment": 0.039
+          "count": 49,
+          "avgSentiment": 0.032
         },
         {
           "theme": "Zoning & land use",
@@ -27852,8 +28042,8 @@
         },
         {
           "theme": "Neighbor concerns & safety",
-          "count": 22,
-          "avgSentiment": -0.143
+          "count": 23,
+          "avgSentiment": -0.15
         },
         {
           "theme": "Process & procedure",
@@ -27983,6 +28173,11 @@
           "avgSentiment": 0.2
         },
         {
+          "caseId": "111-lafayette-avenue",
+          "count": 3,
+          "avgSentiment": -0.033
+        },
+        {
           "caseId": "2-israel-townsend-hill-lot-1",
           "count": 3,
           "avgSentiment": 0.233
@@ -28056,11 +28251,6 @@
           "caseId": "111-round-hill-road",
           "count": 2,
           "avgSentiment": 0.25
-        },
-        {
-          "caseId": "111-lafayette-avenue",
-          "count": 2,
-          "avgSentiment": 0.1
         },
         {
           "caseId": "70-lafayette-avenue",
@@ -31011,6 +31201,19 @@
           ],
           "evidence": "Read the notice of public hearing at the chairman's request (\"Larry do you mind?\" ... \"Thank you, Larry.\").",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-10-15",
+          "case": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (site plan public hearing)",
+          "caseId": "111-lafayette-avenue",
+          "stance": "concerned",
+          "score": -0.3,
+          "themes": [
+            "Neighbor concerns & safety",
+            "Parking, traffic & access"
+          ],
+          "evidence": "Asked \"Tom any questions? Okay, Larry,\" he said \"four to five trucks at night doesn't seem unreasonable\" but that he had been concerned about the queuing. Later, \"going off of what Mary just said,\" he said there would be \"a lot more\" backing out onto Lafayette, asked \"should we be going back to the police,\" and said \"maybe it's better when we have full contention on this board,\" which drew \"Thank you, Larry.\" The presiding member later credited him with tightening the box-truck delivery schedule (\"like Larry said\").",
+          "confidence": "high"
         }
       ]
     },
@@ -38190,11 +38393,11 @@
     },
     {
       "member": "Thomas Crispi",
-      "totalPositions": 32,
-      "avgSentiment": 0.081,
+      "totalPositions": 34,
+      "avgSentiment": 0.085,
       "confidenceMix": {
         "low": 6,
-        "medium": 16,
+        "medium": 18,
         "high": 10
       },
       "byTheme": [
@@ -38205,8 +38408,8 @@
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 6,
-          "avgSentiment": 0.042
+          "count": 7,
+          "avgSentiment": 0.007
         },
         {
           "theme": "Wetlands & buffers",
@@ -38234,14 +38437,19 @@
           "avgSentiment": -0.133
         },
         {
+          "theme": "Tree removal & screening",
+          "count": 3,
+          "avgSentiment": 0.133
+        },
+        {
           "theme": "Zoning & land use",
           "count": 3,
           "avgSentiment": 0.233
         },
         {
-          "theme": "Tree removal & screening",
+          "theme": "Stormwater & drainage",
           "count": 2,
-          "avgSentiment": -0.05
+          "avgSentiment": 0.3
         },
         {
           "theme": "Bonding & maintenance",
@@ -38257,11 +38465,6 @@
           "theme": "Septic & water supply",
           "count": 1,
           "avgSentiment": 0.4
-        },
-        {
-          "theme": "Stormwater & drainage",
-          "count": 1,
-          "avgSentiment": 0.1
         }
       ],
       "byCase": [
@@ -38404,6 +38607,16 @@
           "caseId": "12-maple-avenue",
           "count": 1,
           "avgSentiment": 0.0
+        },
+        {
+          "caseId": "31-sorrell-street",
+          "count": 1,
+          "avgSentiment": 0.5
+        },
+        {
+          "caseId": "111-lafayette-avenue",
+          "count": 1,
+          "avgSentiment": -0.2
         }
       ],
       "evidence": [
@@ -38800,6 +39013,31 @@
             "Process & procedure"
           ],
           "evidence": "Seconded the text amendment motion. On the community benefits agreement: \"I'm going to have to abstain. I wasn't here at the... I don't understand the background.\" Separately offered New Canaan as an example of a town that expands centralized lots as they fill.",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-10-15",
+          "case": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "caseId": "31-sorrell-street",
+          "stance": "supportive",
+          "score": 0.5,
+          "themes": [
+            "Stormwater & drainage",
+            "Tree removal & screening"
+          ],
+          "evidence": "Moved to reopen the hearing (\"Tom did\"), and seconded closing it (\"Second by Tom\"). When the presiding member gave his view that the landscaping, screening and stormwater work was sufficient and then asked \"Tom?\", he answered \"I agree.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-10-15",
+          "case": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (site plan public hearing)",
+          "caseId": "111-lafayette-avenue",
+          "stance": "concerned",
+          "score": -0.2,
+          "themes": [
+            "Parking, traffic & access"
+          ],
+          "evidence": "Asked \"Tom?\" right after Ruisi's call for police input on the backing-out issue, he replied \"I understand. I agree.\"",
           "confidence": "medium"
         }
       ]
@@ -71426,6 +71664,295 @@
       ],
       "attributionCoverage": "fair",
       "attributionNote": "The recording has no speaker labels. Christopher Carthy presided and is identifiable throughout. He names members before handing them the floor, which anchors Michael Pollack, Lawrence Ruisi and Steven Sauro: each read a hearing notice and was named, Ruisi was repeatedly addressed as \"Larry\" during his questioning on Bobo's, and Sauro was introduced with \"Go ahead Steve\" and later asked \"Steve?\". Thomas Crispi is never named or addressed, so he carries no positions and his attendance cannot be confirmed. One complication is that the main public speaker on Bobo's, Michael Ferrari, is also addressed as \"Michael\". The \"toolbox\" remark is credited to Pollack at medium confidence only because the speaker refers to the board's own powers, and the \"Thank you, Michael\" after the minutes vote is not attributed. Several member remarks are left unattributed: the objection to Desmond's interim-plan condition as a precedent, the \"Well, Chris... the physicality is the physicality\" exchange, and the reference to current Health Department standards at 1 Troy Lane. A roughly 11-second stretch at 00:30:49\u201300:31:00, in the middle of Ruisi's exchange with the operator, was re-transcribed to remove a repeated-text artifact; nothing from it is quoted or relied on. ASR renderings resolved: \"Bubba's Cafe\"/\"Bubbles\"/\"boba's\" \u2192 Bobo's Cafe; \"379 Mean Street\" \u2192 379 Main Street; \"Zarinen Stuymans\"/\"Darren Steinmett\" \u2192 Zarin & Steinmetz (the attorney Corey's surname is rendered inconsistently here and across earlier meetings, and is not reconstructed); \"Mr. Karthi\"/\"Cathay\" \u2192 Carthy; \"Larry Ruizi\" \u2192 Ruisi; \"Steve Soros\" \u2192 Sauro; \"Michael Pollock\" \u2192 Pollack; \"one trailer\"/\"one trilane\"/\"one Joy Lane\" \u2192 1 Troy Lane; \"E.C. Ridge\" \u2192 Eagle Ridge; \"Alpha Anywhere Center, Alma\" \u2192 Alpha / Anywhere Center; \"PBO-28\"/\"PB02A\" \u2192 the PB-O-2A district; \"Raufazetti\" \u2192 Ralph Alfonsetti; \"Armanc\"/\"Armont\"/\"Harmock\" \u2192 Armonk and \"Ormung\"/\"Amung Square\" \u2192 Armonk Square; \"Chappacwa\"/\"Chappacuara\" \u2192 Chappaqua. The Bobo's owner's self-introduction (\"Gladys Bernoulli\") is garbled; Sauro calls him \"Mr. Bernardi\", which matches the July record. The extension of time at the end of the meeting is heard as \"three-gourage\". It is treated as Eagle Ridge (3 North Castle Drive) because of the same counsel, the plat awaiting signature, the master site plan conditions and the townhouse blocks, but that identification is inferred. A speaker's \"22 Maple\" in the Bobo's discussion probably means 12 Maple Avenue but is left as heard. The 12 Maple restaurant name (\"Renn\"/\"run\") is not reconstructed."
+    },
+    {
+      "date": "2026-10-15",
+      "meetingSummary": "Chairman Carthy was absent, and with only three members present the meeting ran for about two hours twenty minutes under a presiding member who is not identified by name in the recording. The September 28 minutes were held over because Thomas Crispi had missed that meeting. Two routine items passed quickly: a field change at 8 Rosanne Drive and an extension of time for 73 Whippoorwill Road. With no public comment, the Eagle Ridge clubhouse site plan, steep slopes and tree removal permits were approved at its public hearing. The 31 Sorrell Street hearing was reopened, and the neighbours at 33 Sorrell objected for a third time. They pointed to tree removal now at 155 trees, cut lines moved twice, no matching landscape plan, a minimal side yard, driveway features in the conservation easement, and the board's own \u00a7355-14K power to require larger setbacks, and asked that the hearing stay open. The board closed the hearing and approved, finding the stormwater engineering and screening sufficient, subject to the Town Engineer's sign-off. Most of the evening went on the Amazon Quick Commerce hearing at 111 Lafayette Avenue. North White Plains residents and a Lafayette Avenue business owner objected to 24/7 operation, overnight box trucks on a dead-end street, about 250 driver trips a day and cars backing out onto Lafayette. The Town Attorney noted the backing-out variance was granted for far less traffic. Lawrence Ruisi wanted police input and a full board, and the hearing was adjourned with the applicant asked to quantify its logistics and tighten the delivery window. At 45 Bedford Road, a neighbouring owner's attorney argued the old environmental record could not support re-approval. On the Town Attorney's advice that nothing substantive had changed, the site plan and wetlands permit were re-approved. The board also reviewed fence screening at 176 Virginia Road ahead of a hearing. It declared lead agency on a private-stable permit amendment at 35 Bedford-Banksville Road and sent the Town Board a positive recommendation for limited boarding and 29 horses. A freestanding sign at 145 Bedford Road was sent to the ARB first.",
+      "durationNote": "The recording runs about 2 hours 26 minutes, with business from 00:01:54 to the motion to close at 02:25:24. Chairman Christopher Carthy was absent; an objector said \"I know Mr. Carthy's not here this evening.\" The opening says \"We're a couple of members short,\" and the presiding member introduces Thomas Crispi (heard as \"Tom Christie\") and Larry Ruisi alongside him. The presiding member is never named, so he is not identified here. Town Planner Adam Kaufman, Town Attorney Mary Desmond and \"Rick\" from the Town Engineer's office took part. The presiding member noted no conservation board member at the start, and a conservation representative addressed as \"Vincent\" arrived later. 873 North Broadway was removed from the agenda.",
+      "cases": [
+        {
+          "id": "8-rosanne-drive",
+          "name": "Shapiro Residence, 8 Rosanne Drive \u2014 Field Change",
+          "address": "8 Rosanne Drive",
+          "applicationType": "field change",
+          "applicant": "Shapiro (owners); the representative's name and firm are garbled in the recording and are not reconstructed",
+          "status": "field change approved as de minimis",
+          "summary": "The house was approved about a year earlier. The owners asked to slide one building, heard as the \"activity building\", about four feet forward. The work stays inside the approved limits of disturbance, and it was described as a very minor, de minimis change. The Town Engineer's representative, Rick, had no concerns. The presiding member moved the approval, it was seconded, and it carried with no discussion.",
+          "themes": [
+            "Process & procedure"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.4,
+          "memberPositions": []
+        },
+        {
+          "id": "73-whippoorwill-road-subdivision",
+          "name": "73 Whippoorwill Road Subdivision \u2014 Extension of Time",
+          "address": "73 Whippoorwill Road",
+          "applicationType": "extension of time",
+          "applicant": "Not represented at the meeting",
+          "status": "extension of time granted",
+          "summary": "A routine extension of time for the subdivision approval (heard as \"Whipple-Will Road\"). Nobody appeared for the applicant. Adam Kaufman said there was nothing unusual about it. Thomas Crispi and Lawrence Ruisi were each asked for comments and had none. The extension was moved, seconded and carried.",
+          "themes": [
+            "Time extensions & conditions"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.2,
+          "memberPositions": []
+        },
+        {
+          "id": "eagle-ridge-clubhouse",
+          "name": "Eagle Ridge \u2014 Clubhouse Site Plan (public hearing)",
+          "address": "3 North Castle Drive (Eagle Ridge clubhouse)",
+          "applicationType": "site plan / steep slopes permit / tree removal permit",
+          "applicant": "Eagle Ridge, represented by Corey [surname not reliably rendered] of Zarin & Steinmetz, with the project architect, landscape architect and project engineer (names heard but not reliably rendered)",
+          "status": "public hearing held; site plan, steep slopes permit and tree removal permit approved",
+          "summary": "This was the public hearing scheduled at the September 28 meeting. The hearing notice described a two-story recreational clubhouse with a patio, pool and outdoor lawn on tax lot 108.03-1-62.1 in the R-MF-A district. Counsel said the clubhouse is about 5,100 square feet. The bocce and tennis courts that ran down the slopes were removed, and the ARB had approved the plan. Of the 51 parking spaces required, 25 are provided, under a variance for the other 26. No member of the public spoke. Adam Kaufman said the revised plan significantly reduces impacts on steep slopes and tree removal, and that the board had already found it reasonable. Counsel noted that some resolution conditions repeat the master site plan's conditions. Kaufman said that was deliberate, so they can be tracked, and that nothing needed to change. The site plan, steep slopes and tree removal approvals were moved, seconded and carried.",
+          "themes": [
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Steep slopes & rock removal",
+            "Tree removal & screening"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.6,
+          "memberPositions": []
+        },
+        {
+          "id": "31-sorrell-street-residence",
+          "name": "31 Sorrell Street \u2014 New Residence on a Hammond Ridge Subdivision Lot",
+          "address": "31 Sorrell Street (formerly lot 16 of the Hammond Ridge subdivision)",
+          "applicationType": "site plan / tree removal permit / amended clearing-and-grading limit line",
+          "applicant": "Owner represented by engineer Ralph Alfonsetti",
+          "status": "continued public hearing reopened and closed over the neighbours' request to keep it open; site plan, tree removal permit and amended clearing-and-grading limit line approved",
+          "summary": "The hearing was reopened. Alfonsetti said the plans now carry the dimensions the board asked for, the drainage had been adjusted, and the Town Engineer's questions were answered. The adjoining owners at 33 Sorrell Street, Jennifer Kimball McGreevy and David McGreevy, objected at length for the third time. They said tree removal has grown from 85 trees in July to 117 in September and 155 now, with 37 trees outside the cut lines, and that no revised landscape plan matches the moved cut lines. They argued that the cut lines are fixed by the Hammond Ridge plat and declarations and are not the developer's to move. They also said no drainage was added, the driveway has grown to 11,145 square feet, and a 3,136-square-foot coverage bonus pushes the house further behind their home. The north side yard of 31 feet is barely over the 30-foot minimum, while neighbouring houses sit 55 feet or more back. They read \u00a7355-14K in full to argue that the board can require larger special setbacks, citing steep slopes, a stone wall and the adjacent houses. They said the conservation easement bars the driveway pillars, gate, lighting and trenching, called the house a speculative build by an LLC, and asked that the hearing stay open until revised plans are public. Alfonsetti said the house needs no variances and is within coverage and setbacks, that it is being built for a family, and that there is no increase in runoff. The drainage was moved back to improve infiltration. The roof, pool and driveway each drain to infiltration systems, and the area that now drains toward the neighbours will instead go to the system and overflow to a stream at the back. The Town Engineer's representative said soil and percolation testing are still to be done because the system will sit in fill. Cut-and-fill figures (over 2,000 cubic yards imported, about 1,000 of it for the septic) are to be updated to the latest plans and signed off by the Town Engineer. The 'septic tank' under the proposed screening trees is a stormwater pretreatment tank, and trees and tank will be separated. Adam Kaufman explained that the board can amend the clearing-and-grading line and decides what driveway-related work is allowed in the conservation easement. Mary Desmond later confirmed that any disturbance in the easement needs this board's approval, which is what stops an owner doing cut and fill there unilaterally. A member asked whether the house could slide toward the 66-foot side to widen the 31.9-foot side yard. Alfonsetti said slope, rock and a neighbour's wall limit that, and he might gain a couple of feet. The presiding member saw no benefit in moving the house a foot or two. He said the board cannot weigh speculation about the owner's motives, and that in his opinion the screening, landscaping and stormwater work is sufficient and consistent with the Hammond Ridge subdivision. Thomas Crispi agreed. The hearing was closed, a neighbour's request to make a further statement came after the vote, and the approvals were moved, seconded and carried.",
+          "themes": [
+            "Bonding & maintenance",
+            "Neighbor concerns & safety",
+            "Process & procedure",
+            "Steep slopes & rock removal",
+            "Stormwater & drainage",
+            "Tree removal & screening",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.1,
+          "publicComment": "Jennifer Kimball McGreevy and David McGreevy (33 Sorrell Street) objected: rising tree removal (85 \u2192 117 \u2192 155), cut lines moved twice, no landscape plan matching the latest plans, no added drainage, outdated cut-and-fill figures, a 31-foot side yard against neighbours' 55 feet or more, and driveway pillars, gate, lighting and trenching inside the conservation easement. They asked that the hearing be kept open until revised plans are public.",
+          "memberPositions": [
+            {
+              "member": "Thomas Crispi",
+              "stance": "supportive",
+              "score": 0.5,
+              "themes": [
+                "tree removal & screening",
+                "stormwater & drainage"
+              ],
+              "evidence": "Moved to reopen the hearing (\"Tom did\"), and seconded closing it (\"Second by Tom\"). When the presiding member gave his view that the landscaping, screening and stormwater work was sufficient and then asked \"Tom?\", he answered \"I agree.\"",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "111-lafayette-avenue-amazon",
+          "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (site plan public hearing)",
+          "address": "111 Lafayette Avenue",
+          "applicationType": "site plan",
+          "applicant": "Amazon, represented by an agent for Seven Multi-Site (name not given here) and an Amazon economic development manager (name heard as \"Danielle Larissi\"; spelling unconfirmed)",
+          "status": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now",
+          "summary": "Larry Ruisi read the hearing notice for an Amazon Quick Commerce retail distribution centre. The applicant described a 24/7 operation. Four to five box trucks, not 53-footers, bring inventory between about 10 p.m. and 8 a.m. Amazon Flex drivers, independent contractors in their own cars, scan in and collect bagged orders for 30-minute delivery within a 15\u201320 minute radius. Pickups take two to four minutes, two to six drivers can be handled at once, and the peak is about 50 deliveries an hour in late morning and around dinner time. Two to four employees work on site, leaving about 20 of the roughly 22\u201324 front spaces for drivers. The template floor plan shows a small public retail entry. Adam Kaufman said retail is not permitted in the industrial zone, and the applicant said it will not happen. North White Plains residents objected strongly. Marilyn Marrow asked how trucks would reach a dead-end street by the Bronx River and called round-the-clock operation unconscionable. A Washington Avenue resident named Rich said each truck would pass his house twice going to and from the turnaround at the end of Lafayette. Michael Bellantoni, who owns several Lafayette Avenue properties and runs a business there, described a quiet street at night with one way in and out. He put Flex traffic at 250 or more cars a day and was worried about queuing, his trucks being blocked in and cut-through traffic on Washington Avenue. Another speaker raised diesel pollution near the Cranberry Lake Preserve. The applicant said idling is against policy, that most of the roughly 250 daily trips fall in normal hours, and that below-grade parking serves the landlord's other trucks. Kaufman said the industrial zone sets no operating hours but the board can regulate the site plan. Mary Desmond pointed out that the site's ZBA variance to back out across the sidewalk onto Lafayette was granted last year with five or six daytime commuter cars in mind, not this volume. She also noted that parking on a strip in front of the property is under a revocable licence with the Town, which may need to be revisited if the activity is substantially different. Ruisi said the night truck numbers seemed reasonable. He wanted the Police Department's opinion on the backing-out, and suggested the matter might be better decided with a full board. Thomas Crispi agreed. The presiding member floated limiting box-truck deliveries to roughly 11 p.m.\u20135 a.m., covered unloading, and on-site circulation so drivers exit head-first. He asked for activity data from a comparable facility, said nighttime impacts on neighbours were his main concern, and decided against requiring a traffic study at this stage. The hearing was adjourned.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.25,
+          "publicComment": "North White Plains residents and a Lafayette Avenue business owner objected to 24/7 operation, overnight truck noise heard twice per trip because of the dead-end turnaround, 250+ daily driver trips, queuing and backing onto a narrow one-way-out street, cut-through traffic on Washington Avenue, Route 22 congestion, and diesel pollution near the Cranberry Lake Preserve. One speaker said North White Plains is treated as an afterthought.",
+          "memberPositions": [
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "concerned",
+              "score": -0.3,
+              "themes": [
+                "parking, traffic & access",
+                "neighbor concerns & safety"
+              ],
+              "evidence": "Asked \"Tom any questions? Okay, Larry,\" he said \"four to five trucks at night doesn't seem unreasonable\" but that he had been concerned about the queuing. Later, \"going off of what Mary just said,\" he said there would be \"a lot more\" backing out onto Lafayette, asked \"should we be going back to the police,\" and said \"maybe it's better when we have full contention on this board,\" which drew \"Thank you, Larry.\" The presiding member later credited him with tightening the box-truck delivery schedule (\"like Larry said\").",
+              "confidence": "high"
+            },
+            {
+              "member": "Thomas Crispi",
+              "stance": "concerned",
+              "score": -0.2,
+              "themes": [
+                "parking, traffic & access"
+              ],
+              "evidence": "Asked \"Tom?\" right after Ruisi's call for police input on the backing-out issue, he replied \"I understand. I agree.\"",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "45-bedford-road",
+          "name": "45 Bedford Road \u2014 NCD Acquisitions / Gateway Residential (re-approval public hearing)",
+          "address": "45 Bedford Road",
+          "applicationType": "site plan and wetlands permit re-approval",
+          "applicant": "NCD Acquisitions (owner and applicant), represented by attorney Jeffrey Buss (Smith, Buss & Jacobs); a new development partner was introduced, with the firm and principal's names heard as \"RMA Associates\" and \"Rob Rossi\" (the July record heard the principal as Ralph Rossi)",
+          "status": "public hearing opened and closed; site plan and wetlands permit re-approved as amended (resolution to name NCD Acquisitions as both owner and applicant)",
+          "summary": "Thomas Crispi read the notice for re-approval of a 34-unit, 68-bedroom multifamily project on the former Mariani Gardens property (lot 108.03-1-65, R-MF-DA). Counsel said the ZBA had extended the variances by two years and that the Town Board had extended the special use permit to July 2027 after the owner agreed informally to restrict access, upgrade fencing and clean up the site. The earlier approvals lapsed because the board never actually voted on an extension resolution that was on its agenda. Counsel argued that nothing had changed, which under case law entitles the applicant to re-approval, and the full original package of about 430 pages was resubmitted. A member asked why there had been almost no activity in about two and a half years. Counsel cited internal business issues, market and financing changes, and the arrival of a new developer, and said the plan itself is not changing. He also noted soil sampling planned for October 27. Kristen Wilson, attorney for Michael Ferrari, who owns nearby downtown properties, argued that circumstances have changed. Her points were that DEC stormwater rules have changed and the DEC permit cited expired in 2025, that the EAF form is new and none was filed, and that the Town's recently amended wetlands law is not addressed. She added that the resolution relies on a 2019 negative declaration and a traffic study that are not in the packet, that county referral under the General Municipal Law is not shown, and that a construction-phasing plan should be required. Mary Desmond, who had reviewed Wilson's cases that afternoon, said most concerned confirming prior negative declarations and that a SEQRA negative declaration has no expiration, so a substantive environmental change must be shown. She said the new EAF is a change of form, not of the underlying criteria, and that a resolution condition already requires compliance with current law. Kaufman read the county's earlier referral comments. Buss replied that there is no case law behind Wilson's position and said Ferrari has repeatedly tried to buy the property. The hearing was closed. Desmond said she saw no reason not to re-approve, and the re-approvals were moved, seconded and carried as amended.",
+          "themes": [
+            "Environmental review (SEQRA)",
+            "Process & procedure",
+            "Stormwater & drainage",
+            "Time extensions & conditions",
+            "Wetlands & buffers",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.2,
+          "publicComment": "Kristen Wilson, for adjoining property owner Michael Ferrari, argued that the record is incomplete. She pointed to changed DEC stormwater rules and an expired DEC permit, no new EAF, the amended Town wetlands law, a 2019 negative declaration and traffic study missing from the packet, no evidence of county referral, and no phasing plan, and asked the board not to adopt the resolution.",
+          "memberPositions": []
+        },
+        {
+          "id": "176-virginia-road-ind",
+          "name": "176 Virginia Road (Mercedes Properties) \u2014 Revised Plan with Fence and Screening",
+          "address": "176 Virginia Road",
+          "applicationType": "amended site plan (discussion)",
+          "applicant": "Mercedes Properties Inc., with a representative whose name is not clear in the recording",
+          "status": "discussion; the board is ready for a public hearing once the ARB approves",
+          "summary": "Adam Kaufman recapped the plan. Enclosed storage of mail trucks has been dropped in favour of a small site-management office. At the last meeting the board asked for screening along Virginia Road, and the applicant came back with a solid six-foot wood fence with planting in front. The presiding member asked about the boxwoods proposed about 10 feet apart, worried that they do not tolerate road salt on a heavily travelled road, and asked the applicant to consult someone knowledgeable about a hardier species. The applicant still needs ARB approval, and the hearing will be scheduled once that is obtained. Kaufman noted that the same owner holds the Amazon site at 111 Lafayette Avenue, so mail trucks that do not fit there can be parked here.",
+          "themes": [
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Tree removal & screening"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.4,
+          "memberPositions": []
+        },
+        {
+          "id": "35-bedford-banksville-road",
+          "name": "35 Bedford-Banksville Road \u2014 Private Stable Special Permit Amendment (Town Board referral)",
+          "address": "35 Bedford Banksville Road",
+          "applicationType": "special use permit referral / lead agency declaration",
+          "applicant": "Owner of the private stable, represented by an attorney whose name and firm are garbled in the recording, with a project manager and landscape architect",
+          "status": "board declared its intent to be SEQRA lead agency; positive recommendation sent to the Town Board for limited boarding and training by horse owners (not open to the public, no shows, not a riding academy) and an increase from 20 to 29 horses; site plan review to follow",
+          "summary": "This was a Town Board referral. The Town Board heard the application the night before and has set its own hearing for November 4. The owner wants to amend the 2004 special permit and site plan for a private stable on a 25-acre site with two barns, a small house and a groom's apartment. The main change is removing a condition that limits the horses to the residents' non-commercial use and replacing it with the code's private-stable standard, under which horses are for the use of their owners. That would allow boarding and training for horse owners, with no shows and no lessons to the public. The owner also wants to raise the horse limit from 20 to 29, as the 2004 permit anticipated, and to enlarge the paddocks from 2.42 to 3.94 acres while moving 0.41 acres of paddock out of wetland buffers, off the septic area and out of the supplemental setback. Counsel stressed that the site is surrounded by a nursery, the fire department, contractors and the Banksville business area, and that the comprehensive plan lists it as an equestrian facility. The board first declared its intent to be lead agency, as the Town Board preferred. Kaufman said the Town Board wants the board's view on the operations, with paddock expansion, tree removal and wetlands to be handled at site plan. Members said 29 horses was not an issue given the surroundings but wanted tight language on the uses. The applicant confirmed there would be no new disturbance in the buffer. The positive recommendation was moved, seconded and carried.",
+          "themes": [
+            "Environmental review (SEQRA)",
+            "Process & procedure",
+            "Wetlands & buffers",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.5,
+          "memberPositions": []
+        },
+        {
+          "id": "145-bedford-road",
+          "name": "145 Bedford Road \u2014 Freestanding Sign",
+          "address": "145 Bedford Road",
+          "applicationType": "sign approval",
+          "applicant": "Applicant's sign representative (name not given)",
+          "status": "no action; the applicant must get ARB approval first and then return for Planning Board approval",
+          "summary": "A new freestanding sign. Freestanding signs need Planning Board approval and must also go to the ARB. Members had no issues with the design, but the applicant had not yet been to the ARB, so the board told him to get ARB approval and come back, and said he would be put first on that agenda.",
+          "themes": [
+            "Process & procedure",
+            "Signage"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.4,
+          "memberPositions": []
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Parking, traffic & access",
+          "salience": 0.85,
+          "sentiment": -0.35,
+          "note": "Most of the meeting was the Amazon Quick Commerce hearing at 111 Lafayette Avenue. Overnight box trucks, roughly 250 driver trips a day, and cars backing out onto a narrow dead-end industrial street under an older ZBA variance drew sustained objections from North White Plains. The board asked for police input and better logistics data rather than a traffic study. Eagle Ridge's clubhouse parking was already covered by a variance."
+        },
+        {
+          "theme": "Neighbor concerns & safety",
+          "salience": 0.75,
+          "sentiment": -0.4,
+          "note": "There were two sets of determined objectors. North White Plains residents opposed 24/7 truck activity near their homes, and the 31 Sorrell Street neighbours objected for a third time, over tree loss, runoff and privacy. The board was sympathetic to the nighttime concerns at Lafayette, but approved Sorrell after finding the engineering and screening sufficient."
+        },
+        {
+          "theme": "Tree removal & screening",
+          "salience": 0.55,
+          "sentiment": -0.1,
+          "note": "Tree removal at 31 Sorrell Street was reported as having risen to 155 trees with no matching landscape revision, and the board accepted the existing screening plan. At 176 Virginia Road the board pressed for a salt-tolerant species in front of the new fence."
+        },
+        {
+          "theme": "Environmental review (SEQRA)",
+          "salience": 0.5,
+          "sentiment": 0.0,
+          "note": "At 45 Bedford Road an objector argued that a 2019 negative declaration, an old EAF and an expired DEC permit could not support re-approval. The Town Attorney advised that a negative declaration does not expire without a substantive change. The board also declared its intent to be lead agency on 35 Bedford-Banksville Road."
+        },
+        {
+          "theme": "Zoning & land use",
+          "salience": 0.5,
+          "sentiment": 0.2,
+          "note": "The Planner confirmed that the industrial zone permits the Amazon use with no operating-hour limits, leaving site plan conditions as the lever. The board endorsed loosening a private-stable condition at 35 Bedford-Banksville Road to match the code's standard. The Sorrell neighbours invoked \u00a7355-14K special setbacks, which the board did not apply."
+        },
+        {
+          "theme": "Stormwater & drainage",
+          "salience": 0.45,
+          "sentiment": 0.0,
+          "note": "Runoff onto the lower Sorrell Street lot was answered with infiltration systems, pending soil testing and updated cut-and-fill figures for the Town Engineer. Changed DEC stormwater rules were raised against the 45 Bedford Road re-approval and left to a compliance condition."
+        },
+        {
+          "theme": "Time extensions & conditions",
+          "salience": 0.35,
+          "sentiment": 0.4,
+          "note": "A routine extension for 73 Whippoorwill Road, and re-approval of the lapsed 45 Bedford Road approvals on an unchanged record."
+        },
+        {
+          "theme": "Process & procedure",
+          "salience": 0.35,
+          "sentiment": 0.1,
+          "note": "With only three members present and the chairman absent, the September 28 minutes were held over because Thomas Crispi had missed that meeting. Ruisi suggested the Amazon decision might wait for a full board. Two items were told to get ARB approval before coming back, and 873 North Broadway was removed from the agenda."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Adam Kaufman",
+          "role": "Town Planner",
+          "summary": "Confirmed hearing paperwork for each item. On Eagle Ridge he said the revised clubhouse plan significantly reduces the impact on steep slopes and trees, and that the resolution repeats some master-site-plan conditions on purpose so they can be tracked. On 31 Sorrell Street he explained that the board had suggested amending the clearing-and-grading line so the house could move back, and that the board decides what driveway-related work (curbing, lighting, utilities, drainage) is acceptable in the conservation easement. On Amazon he said retail is not permitted in the industrial zone, that the zone sets no hours for permitted industrial uses but the board can regulate the site plan if it articulates specific concerns, and that a traffic study, if wanted, would be scoped by the Town, commissioned by the applicant and reviewed by the Town's traffic consultant. He recapped the 176 Virginia Road fence and planting revision and noted the shared ownership with 111 Lafayette Avenue. He framed the Town Board's question on 35 Bedford-Banksville Road as operational, with site matters to follow at site plan. He read the county's earlier referral comments on 45 Bedford Road.",
+          "cases": [
+            "eagle-ridge-clubhouse",
+            "31-sorrell-street-residence",
+            "111-lafayette-avenue-amazon",
+            "176-virginia-road-ind",
+            "35-bedford-banksville-road",
+            "45-bedford-road",
+            "73-whippoorwill-road-subdivision"
+          ]
+        },
+        {
+          "person": "Mary Desmond",
+          "role": "Town Attorney",
+          "summary": "On 31 Sorrell Street, she confirmed after reviewing the conservation easement that any disturbance in it needs Planning Board approval, so the owner cannot cut and fill there unilaterally. On Amazon, she pointed out that the site's ZBA variance to back out onto Lafayette Avenue was granted for five or six daytime commuter cars, and that front parking sits on a revocable Town licence that may need revisiting if the activity changes substantially. On 45 Bedford Road, she questioned the objector's SEQRA cases, which she said mostly concerned confirming prior negative declarations. She advised that a negative declaration does not expire without a substantive change, that the new EAF is a change of form only, and that a resolution condition requires compliance with current law. She saw no reason not to re-approve, and had the resolution amended to name NCD Acquisitions as owner and applicant.",
+          "cases": [
+            "31-sorrell-street-residence",
+            "111-lafayette-avenue-amazon",
+            "45-bedford-road"
+          ]
+        },
+        {
+          "person": "Rick (Town Engineer's office; surname not given)",
+          "role": "Town Engineer",
+          "summary": "Had no concerns about the 8 Rosanne Drive field change. On 31 Sorrell Street he said his office and the applicant's engineer agree on drainage. Soil and percolation testing are still needed because the infiltration system will sit in fill, which he called standard practice, and stormwater approval will be worked out through his office. He was asked to look, with the applicant's engineer, at whether the house could shift to widen the narrow side yard.",
+          "cases": [
+            "8-rosanne-drive",
+            "31-sorrell-street-residence"
+          ]
+        }
+      ],
+      "attributionCoverage": "partial",
+      "attributionNote": "This is an unverified machine (ASR) transcript with no speaker labels. It is not the minutes. Three members sat, and Chairman Carthy was absent. The presiding member chaired, made most motions and gave most of the board's views, but he is never named or addressed by name, so he carries no positions. Whether he is Steven Sauro or Michael Pollack cannot be determined from the recording and is not guessed. His remarks are described in the case summaries as \"the presiding member\". Lawrence Ruisi is credited on Amazon because he was handed the floor by name (\"Okay, Larry\") and thanked by name after his call for police input (\"Thank you, Larry\"), and the presiding member later referred back to \"like Larry said\". Thomas Crispi is credited only where he answered \"I agree\" right after being asked \"Tom?\" (31 Sorrell Street, Amazon). He was named as moving to reopen the Sorrell hearing and seconding its closing, and he read the 45 Bedford Road notice. Left unattributed: the member who asked whether the Sorrell house could slide toward its wider side yard; the member who asked why 45 Bedford Road had seen no activity for two and a half years; and the members' remarks on 29 horses at 35 Bedford-Banksville Road. On Amazon, \"Michael\" is the public speaker Michael Bellantoni, not Michael Pollack, and \"Mike\" and \"Seth\" are also addressed to public speakers. No votes were tallied aloud, so motions are recorded as carried, not by member. ASR renderings resolved: \"Salt Street\"/\"Sorrow Street\"/\"33SARL Street\" \u2192 Sorrell Street; \"Jen Kim, Bela Nogrevi\"/\"Jennifer Kimball\"/\"David McGreeby\" \u2192 Jennifer Kimball McGreevy and David McGreevy, as identified at the September 14 hearing; \"Alpandadi\"/\"Alfenzani\"/\"Altonzani\" \u2192 Ralph Alfonsetti; \"People Rage\"/\"North Council Drive\" \u2192 Eagle Ridge, 3 North Castle Drive; \"Zarinen Stymitz\" \u2192 Zarin & Steinmetz (Corey's surname is heard as \"Salomon\" here and inconsistently elsewhere, and is not reconstructed); \"Whipple-Will\" \u2192 Whippoorwill; \"Roseanne\"/\"Rosie and Dry\" \u2192 Rosanne Drive (matching the November 2024 approval); \"Adam Kwokman\" \u2192 Adam Kaufman; \"Larry Ruizi\" \u2192 Ruisi; \"Tom Crispy\"/\"Tom Christie\" \u2192 Thomas Crispi; \"Chris Wilson\"/\"Kristin\"/\"Spilsen\" \u2192 Kristen Wilson; \"Mr. Farari\" \u2192 Michael Ferrari; \"Bus\"/\"Buster\"/\"Buskin\" \u2192 Jeffrey Buss; \"Tulapia\"/\"Latvia Avenue\"/\"telepha yet\" \u2192 Lafayette Avenue. Not reconstructed: the 8 Rosanne Drive representative, the 35 Bedford-Banksville Road attorney and firm, the Amazon manager's surname, the surnames of the Washington Avenue resident and the second North White Plains speaker, and \"Rick\"'s surname."
     }
   ]
 }

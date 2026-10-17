@@ -31,7 +31,7 @@ provisions that never came up for debate). `crossCuttingFindings` holds
 findings that span multiple chapters or lie between provisions (e.g. sign
 code interacting with a permitted use in a different chapter), which no
 single chapter's evidence list can surface alone. Since then the weekly transcript ingest folds new meetings in with
-`merge_record_evidence.py` (corpus now 267 transcripts; merged meetings are
+`merge_record_evidence.py` (corpus now 269 transcripts; merged meetings are
 listed in `record_ingest_log.json`). Only citations actually *spoken* in a
 meeting count toward `citingUtterances`/`meetingsCiting`, and every finding
 added this way carries `sectionBasis` — `spoken` when the chapter/section
