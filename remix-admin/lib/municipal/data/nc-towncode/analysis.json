@@ -1216,8 +1216,8 @@
       "recordEvidence": {
         "verdict": "Noted as split across two provisions",
         "criticismEpisodes": 0,
-        "citingUtterances": 2,
-        "meetingsCiting": 1,
+        "citingUtterances": 3,
+        "meetingsCiting": 2,
         "findings": [],
         "note": "A Planning Board speaker (July 11, 2022) observed the subject is split across two places in the code: “We have chapter 210 noise, which is your general [standard]” — distinct from the zoning performance standards at Chapter 355 Article X, Performance Standards (§§355-60–355-64). A structural observation, not a criticism, but relevant to whether performance standards are coherently located."
       }
@@ -2441,8 +2441,8 @@
       "recordEvidence": {
         "verdict": "Heaviest criticism and heaviest amendment traffic",
         "criticismEpisodes": 26,
-        "citingUtterances": 47,
-        "meetingsCiting": 35,
+        "citingUtterances": 48,
+        "meetingsCiting": 36,
         "amendmentTraffic": "35 meetings cite this chapter — the heaviest traffic of any chapter — concentrated in §355-27 (airport-campus density, 5 meetings in 2023), §355-32B (Golf Course Community Floating Overlay District, 3 meetings), §355-28 (R-MF district additions, 3 meetings), §355-21 (8 meetings), and §355-40's special-permit-use table, grown to 28 lettered subsections, several written for a single site or use (“PBO-2A Zone,” “DOB-20A Zone,” “IND-AA Zoning District”).",
         "findings": [
           {
@@ -2625,10 +2625,10 @@
     }
   ],
   "recordCorpus": {
-    "totalTranscripts": 267,
+    "totalTranscripts": 269,
     "byBoard": {
-      "Planning Board": 106,
-      "Town Board": 115,
+      "Planning Board": 107,
+      "Town Board": 116,
       "Zoning Board of Appeals": 45,
       "Architectural Review Board": 1
     },
