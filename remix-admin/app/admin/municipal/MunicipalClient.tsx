@@ -28,6 +28,7 @@ const JurisdictionMap = dynamic(() => import('./JurisdictionMap'), {
 })
 import TranscriptAnalysis from './board/TranscriptAnalysis'
 import CaseExplorer, { type MeetingDoc } from './board/CaseExplorer'
+import { sessionLabel, type SessionKind } from '@/lib/municipal/meetings'
 import BoardStaffCards from './board/BoardStaffCards'
 import BoardKeyDocs from './board/BoardKeyDocs'
 import MeetingAnalysisList from './board/MeetingAnalysisList'
@@ -70,6 +71,10 @@ interface Meeting {
   source_url: string | null
   assets: Asset[]
   text_count: number
+  /** Set by the API's de-duplication — labels anything that isn't the
+   *  board's ordinary meeting, so two cards on one date read as two
+   *  different sessions rather than as a duplicate. */
+  sessionKind?: SessionKind
 }
 interface Summary {
   municipalities: Municipality[]
@@ -357,12 +362,26 @@ export default function MunicipalClient({
   // One combined timeline: past meetings (per meeting) on the left, the next
   // meeting per board on the right, oldest → newest.
   const timelineItems = useMemo<TimelineItem[]>(() => {
+    // The composite key below is shared with MeetingAnalysisList so a selection
+    // in one view highlights the other, but it is not unique: a board can hold
+    // a work session and its regular meeting on one evening, and a town whose
+    // minutes carry no real date (see lib/municipal/meetings) can land ten real
+    // meetings on one day. React needs distinct keys regardless, so repeats get
+    // a suffix — the first occurrence keeps the plain key, which is the one
+    // analysis selection matches on.
+    const keySeen = new Map<string, number>()
+    const uniqueKey = (base: string) => {
+      const n = (keySeen.get(base) ?? 0) + 1
+      keySeen.set(base, n)
+      return n === 1 ? base : `${base}#${n}`
+    }
     const hist: TimelineItem[] = history
       .map((mtg) => {
         const hasDocs = (mtg.assets || []).some((a) => !RECORDING_KINDS.has(a.kind))
         const hasRec = !!recordingHref(mtg.assets)
-        const itemKey = `${mtg.muni_key}_${mtg.body_key}_${mtg.scheduled_at.slice(0, 10)}`
-        const analysis = meetingAnalysisByKey.get(itemKey)
+        const baseKey = `${mtg.muni_key}_${mtg.body_key}_${mtg.scheduled_at.slice(0, 10)}`
+        const analysis = meetingAnalysisByKey.get(baseKey)
+        const itemKey = uniqueKey(baseKey)
         return {
           // Composite muni+body+date key, matching MeetingAnalysisList's row
           // keys, so selecting a meeting in either view (the board tab's
@@ -378,6 +397,7 @@ export default function MunicipalClient({
           board: mtg.body_name,
           boardHref: `/admin/municipal/board?muni=${mtg.muni_key}&body=${mtg.body_key}`,
           town: mtg.muni_name,
+          subtitle: sessionLabel(mtg.sessionKind || 'regular') || undefined,
           past: true,
           links:
             hasDocs || hasRec ? (
