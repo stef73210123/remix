@@ -18,6 +18,7 @@ import { NextResponse } from 'next/server'
 import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { MUNICIPALITIES } from '@/lib/municipal/registry'
 import { isOpen } from '@/lib/flavor'
+import { dedupeMeetings } from '@/lib/municipal/meetings'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -118,6 +119,9 @@ export async function GET() {
       ORDER BY m.scheduled_at DESC
       LIMIT 500
     `) as MeetingRow[]
+    // The portal lists one evening under two event records; collapse them
+    // before anything downstream counts or renders meetings.
+    meetings = dedupeMeetings(meetings)
     dbOk = true
 
     // Rows are newest-first, so the first sighting per town is its latest meeting.

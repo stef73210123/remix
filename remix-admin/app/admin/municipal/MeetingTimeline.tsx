@@ -82,8 +82,17 @@ export default function MeetingTimeline({
     // Further-out projected meetings (a board's full remaining-year schedule)
     // sit past the right edge, reachable by scrolling right. If everything is
     // in the past, show the most recent by scrolling fully right instead.
-    const next = boundary >= 0 ? itemRefs.current.get(items[boundary].key) : undefined
-    el.scrollLeft = next ? Math.max(0, next.offsetLeft + next.offsetWidth - el.clientWidth) : el.scrollWidth
+    const place = () => {
+      const next = boundary >= 0 ? itemRefs.current.get(items[boundary].key) : undefined
+      el.scrollLeft = next ? Math.max(0, next.offsetLeft + next.offsetWidth - el.clientWidth) : el.scrollWidth
+    }
+    // Two frames, not one: card widths are still settling on the first (badges
+    // and async meeting summaries land after mount), and measuring then left
+    // the anchor a few hundred pixels short, so the next meeting drifted in
+    // from the right edge instead of sitting on it.
+    let second = 0
+    const first = requestAnimationFrame(() => { second = requestAnimationFrame(place) })
+    return () => { cancelAnimationFrame(first); cancelAnimationFrame(second) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length, boundary])
 

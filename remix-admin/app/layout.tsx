@@ -5,6 +5,8 @@ import './opennorthcastle.css'
 import TopoBackground from './TopoBackground'
 import SiteFooter from './SiteFooter'
 import ScrollToTop from './ScrollToTop'
+import InstallPrompt from './InstallPrompt'
+import RegisterSW from './RegisterSW'
 import PreventOverscrollBounce from './PreventOverscrollBounce'
 import PinBottomBar from './PinBottomBar'
 import { FLAVOR, isOpen } from '@/lib/flavor'
@@ -14,6 +16,10 @@ export const metadata: Metadata = isOpen
       title: 'OpenNorthCastle',
       description:
         'A free, nonpartisan dashboard tracking North Castle town meetings, officials, budgets, and land-use applications.',
+      // Makes the site installable: Android offers "Install app", and iOS
+      // launches it chrome-less once it's on the home screen.
+      manifest: '/manifest.webmanifest',
+      appleWebApp: { capable: true, title: 'OpenNorthCastle', statusBarStyle: 'default' },
       // The town-seal eagle from the wordmark, cropped onto a white square.
       icons: {
         icon: [
@@ -66,6 +72,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {!isOpen && <TopoBackground />}
         {isOpen ? (
           <div className="onc-shell">
+            {/* Above the masthead: pushes the page down rather than covering
+                it, and scrolls away with the rest. */}
+            <InstallPrompt />
             <div className="onc-shell-content">{children}</div>
             <SiteFooter />
           </div>
@@ -75,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {isOpen && <PreventOverscrollBounce />}
         {isOpen && <PinBottomBar />}
         <ScrollToTop />
+        {isOpen && <RegisterSW />}
         <Analytics />
       </body>
     </html>

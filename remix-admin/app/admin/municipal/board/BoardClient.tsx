@@ -12,6 +12,7 @@ import ParksMap from './ParksMap'
 import BoardStaffCards from './BoardStaffCards'
 import BoardContactActions from './BoardContactActions'
 import { track } from '@/lib/analytics'
+import { sessionLabel, type SessionKind } from '@/lib/municipal/meetings'
 import BoardKeyDocs from './BoardKeyDocs'
 import DeptTimeline from '../DeptTimeline'
 import RecreationStats from '../RecreationStats'
@@ -32,6 +33,9 @@ interface Meeting {
   source_url: string | null
   assets: Asset[]
   text_count: number
+  /** See lib/municipal/meetings — distinguishes a work session from the
+   *  regular meeting held the same evening. */
+  sessionKind?: SessionKind
 }
 interface Member {
   id: string
@@ -166,6 +170,16 @@ export default function BoardClient({ userName }: { userName: string }) {
   // on the right. Each card carries its document + transcript links.
   const timelineItems = useMemo<TimelineItem[]>(() => {
     const t0 = startOfToday()
+    // A board can hold a work session and its regular meeting on one evening,
+    // so the date-composite key below is not unique. React needs distinct keys;
+    // the first occurrence keeps the plain key, which is what analysis
+    // selection matches on, and any repeat gets a suffix.
+    const keySeen = new Map<string, number>()
+    const uniqueKey = (base: string) => {
+      const n = (keySeen.get(base) ?? 0) + 1
+      keySeen.set(base, n)
+      return n === 1 ? base : `${base}#${n}`
+    }
     const items: TimelineItem[] = (data?.meetings || [])
       .map((mtg) => {
         const past = new Date(mtg.scheduled_at).getTime() < t0
@@ -176,8 +190,9 @@ export default function BoardClient({ userName }: { userName: string }) {
           // Composite muni+body+date key, matching MeetingAnalysisList's row
           // keys, so selecting a meeting in either view highlights/scrolls to
           // the same entry in the other.
-          key: `${muni}_${body}_${dateKey}`,
+          key: uniqueKey(`${muni}_${body}_${dateKey}`),
           date: new Date(mtg.scheduled_at),
+          subtitle: sessionLabel(mtg.sessionKind || 'regular') || undefined,
           past,
           links: hasDocs ? <DocLinks assets={mtg.assets} /> : undefined,
           transcriptLink: hasTranscript ? (

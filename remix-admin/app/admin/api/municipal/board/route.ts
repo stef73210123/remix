@@ -10,6 +10,7 @@
 import { NextResponse } from 'next/server'
 import { authorizeMunicipalRead } from '@/lib/municipal/auth'
 import { findMunicipality } from '@/lib/municipal/registry'
+import { dedupeMeetings } from '@/lib/municipal/meetings'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -74,6 +75,8 @@ export async function GET(req: Request) {
       ORDER BY m.scheduled_at DESC
       LIMIT 200
     `) as any[]
+    // Same portal duplication as the dashboard — see lib/municipal/meetings.
+    meetings = dedupeMeetings(meetings as any)
 
     members = (await sql`
       SELECT o.id, o.full_name, o.title, o.kind, o.email, o.active

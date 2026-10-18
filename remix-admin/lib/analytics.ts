@@ -39,6 +39,7 @@ export type EventName =
   | 'sort_change'
   | 'chart_interact'      // map, timeline, donut, sankey, spectrum…
   | 'tab_change'
+  | 'install_prompt'      // add-to-home-screen bumper: shown / dismissed / installed
 
 /**
  * Event properties. Scalars only — Vercel flattens anything else, and a shared
