@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Josefin_Sans } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import { Analytics } from '@vercel/analytics/next'
 
 const josefin = Josefin_Sans({
   variable: '--font-josefin',
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={`${josefin.variable} font-sans antialiased`}>
         {children}
         <Toaster />
+        <Analytics />
       </body>
     </html>
   )
