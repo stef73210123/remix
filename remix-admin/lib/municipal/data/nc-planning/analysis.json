@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "planning",
     "town": "Town of North Castle",
-    "meetings": 105,
-    "cases": 406,
+    "meetings": 106,
+    "cases": 407,
     "themes": 17,
-    "memberPositions": 1069,
+    "memberPositions": 1072,
     "roster": [
       "Christopher Carthy",
       "Steven Sauro",
@@ -651,6 +651,12 @@
       "date": "2026-10-15",
       "cases": 9,
       "avgSentiment": 0.283,
+      "attributionCoverage": "partial"
+    },
+    {
+      "date": "2026-10-26",
+      "cases": 5,
+      "avgSentiment": 0.24,
       "attributionCoverage": "partial"
     }
   ],
@@ -1438,9 +1444,9 @@
     },
     {
       "theme": "Zoning & land use",
-      "meetings": 72,
-      "avgSentiment": 0.131,
-      "avgSalience": 0.453,
+      "meetings": 73,
+      "avgSentiment": 0.136,
+      "avgSalience": 0.451,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -1801,14 +1807,19 @@
           "date": "2026-10-15",
           "sentiment": 0.2,
           "salience": 0.5
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.5,
+          "salience": 0.25
         }
       ]
     },
     {
       "theme": "Parking, traffic & access",
-      "meetings": 66,
-      "avgSentiment": 0.028,
-      "avgSalience": 0.469,
+      "meetings": 67,
+      "avgSentiment": 0.025,
+      "avgSalience": 0.47,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2139,6 +2150,11 @@
           "date": "2026-10-15",
           "sentiment": -0.35,
           "salience": 0.85
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": -0.2,
+          "salience": 0.55
         }
       ]
     },
@@ -3076,9 +3092,9 @@
     },
     {
       "theme": "Time extensions & conditions",
-      "meetings": 27,
-      "avgSentiment": 0.194,
-      "avgSalience": 0.286,
+      "meetings": 28,
+      "avgSentiment": 0.191,
+      "avgSalience": 0.301,
       "timeline": [
         {
           "date": "2021-03-08",
@@ -3214,14 +3230,19 @@
           "date": "2026-10-15",
           "sentiment": 0.4,
           "salience": 0.35
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.1,
+          "salience": 0.7
         }
       ]
     },
     {
       "theme": "Process & procedure",
-      "meetings": 24,
-      "avgSentiment": 0.002,
-      "avgSalience": 0.434,
+      "meetings": 25,
+      "avgSentiment": 0.006,
+      "avgSalience": 0.433,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -3342,14 +3363,19 @@
           "date": "2026-10-15",
           "sentiment": 0.1,
           "salience": 0.35
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.1,
+          "salience": 0.4
         }
       ]
     },
     {
       "theme": "Septic & water supply",
-      "meetings": 20,
-      "avgSentiment": 0.022,
-      "avgSalience": 0.369,
+      "meetings": 21,
+      "avgSentiment": 0.026,
+      "avgSalience": 0.359,
       "timeline": [
         {
           "date": "2022-01-24",
@@ -3450,6 +3476,11 @@
           "date": "2026-09-28",
           "sentiment": 0.3,
           "salience": 0.2
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.1,
+          "salience": 0.15
         }
       ]
     },
@@ -3732,9 +3763,9 @@
     },
     {
       "theme": "Signage",
-      "meetings": 5,
-      "avgSentiment": 0.09,
-      "avgSalience": 0.52,
+      "meetings": 6,
+      "avgSentiment": 0.142,
+      "avgSalience": 0.475,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -3760,6 +3791,11 @@
           "date": "2025-01-27",
           "sentiment": 0.0,
           "salience": 0.5
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.4,
+          "salience": 0.25
         }
       ]
     },
@@ -4669,6 +4705,144 @@
       ]
     },
     {
+      "id": "summit-golf-club",
+      "name": "Summit Golf Club",
+      "address": "Summit Golf Club, North Castle, NY",
+      "applicationType": "subdivision",
+      "applicant": "Represented by Janet Keras (Del Bello, Donnellan) and architect Ken Anderson",
+      "themes": [
+        "Bonding & maintenance",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Septic & water supply",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Tree removal & screening",
+        "Zoning & land use"
+      ],
+      "appearances": 10,
+      "firstSeen": "2022-11-14",
+      "lastSeen": "2026-10-26",
+      "lastStatus": "90-day subdivision extension and one-year site plan extension granted as one motion",
+      "avgSentiment": 0.245,
+      "trajectory": [
+        {
+          "date": "2022-11-14",
+          "sentiment": 0.6,
+          "status": "positive recommendation to Town Board to amend the special use permit"
+        },
+        {
+          "date": "2023-01-17",
+          "sentiment": 0.5,
+          "status": "positive recommendations to Town Board on two of three requests; permanent special use permit deferred pending more information"
+        },
+        {
+          "date": "2023-02-13",
+          "sentiment": 0.3,
+          "status": "referred"
+        },
+        {
+          "date": "2023-07-10",
+          "sentiment": 0.5,
+          "status": "public hearing reconvened and kept open pending final resolution language"
+        },
+        {
+          "date": "2025-07-28",
+          "sentiment": 0.15,
+          "status": "approved"
+        },
+        {
+          "date": "2025-10-27",
+          "sentiment": 0.0,
+          "status": "extensions of time granted (site plan and 8th/final subdivision 90-day)"
+        },
+        {
+          "date": "2026-05-11",
+          "sentiment": 0.1,
+          "status": "extension of time granted"
+        },
+        {
+          "date": "2026-07-13",
+          "sentiment": 0.1,
+          "status": "extension of time granted (third 90-day extension)"
+        },
+        {
+          "date": "2026-08-17",
+          "sentiment": 0.1,
+          "status": "both extensions granted"
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.1,
+          "status": "90-day subdivision extension and one-year site plan extension granted as one motion"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2022-11-14",
+          "status": "positive recommendation to Town Board to amend the special use permit",
+          "sentiment": 0.6,
+          "summary": "The applicant presented a new roughly 6,000-square-foot, two-story golf-course maintenance building to replace the existing facility, which sits in the way of active construction on the residential component and cannot practically coexist with ongoing golf operations. Because tying the maintenance building to the golf course's special use permit (rather than the residential site plan) requires Town Board action, the board voted a positive recommendation referring the special use permit amendment to the Town Board."
+        },
+        {
+          "date": "2023-01-17",
+          "status": "positive recommendations to Town Board on two of three requests; permanent special use permit deferred pending more information",
+          "sentiment": 0.5,
+          "summary": "Responding to a Town Board referral, the board recommended a six-month extension of the golf course's expired temporary special use permit and endorsed a request to allow public (non-member) golf bookings during the residential construction period to help the club's finances, while asking the Town Board to have counsel review the specific zoning code amendment language needed. The board also endorsed, in concept, locating a new maintenance and storage building on the golf course lot (relocating it out of the path of residential construction) as part of the eventual special use permit, but declined to recommend the permanent special use permit itself, since Town Planner Kauffman's memo still had open questions about club operations, membership caps, and chemical storage that the applicant agreed to address promptly."
+        },
+        {
+          "date": "2023-02-13",
+          "status": "referred",
+          "sentiment": 0.3,
+          "summary": "Reopened public hearing on a permanent special use permit for club operations (membership caps, golf outings, social events, day camp for members' children, guest cottages, surface water sampling). The Board extensively negotiated operational parameters \u2014 a 500-member cap, member-sponsored golf outings, undefined \"social events\" left uncodified at the applicant's request, and a 100-child day camp \u2014 before voting to positively refer the permit to the Town Board, which holds final approval authority."
+        },
+        {
+          "date": "2023-07-10",
+          "status": "public hearing reconvened and kept open pending final resolution language",
+          "sentiment": 0.5,
+          "summary": "Applicant summarized roughly two years of design changes made in response to board and public comment (eliminating a seventh building and its access road, relocating tennis courts and parking outside the 100-foot buffer, dropping the standalone clubhouse in favor of the amenities building) and presented final engineering changes tied to the six-building layout. The board discussed clarifying resolution language distinguishing between on-site recreational amenities and a recreation fee payment tied to any recreational programming deficiency, then adjourned (kept open) the hearing to finalize that language rather than close it that night."
+        },
+        {
+          "date": "2025-07-28",
+          "status": "approved",
+          "sentiment": 0.15,
+          "summary": "The board considered two extensions of time for the Summit Club: one for the final subdivision plat approval and one for the site plan (with steep slopes and tree-removal permit approvals). Staff explained the applicant is working through the approval process and is reportedly taking deposits/listing units for sale, with the county Board of Health notoriously slow on the substantial infrastructure (including a sewage treatment plant). The board granted both extensions of time."
+        },
+        {
+          "date": "2025-10-27",
+          "status": "extensions of time granted (site plan and 8th/final subdivision 90-day)",
+          "sentiment": 0.0,
+          "summary": "The project is awaiting Westchester County Health Department approval for a pump station, tank and water/sewer system, expected to be approved together. The board granted an extension of time on the site plan approval and the eighth (final) 90-day extension on the final subdivision plat."
+        },
+        {
+          "date": "2026-05-11",
+          "status": "extension of time granted",
+          "sentiment": 0.1,
+          "summary": "No representative was present. The chair and planner gave an update noting background activity on water infrastructure: a water-line extension easement is already in place, but the timeline may accelerate so that water could be brought through the club and interconnected (potentially reaching Windmill), rather than the development operating as its own on-site water district. The board granted an extension of time."
+        },
+        {
+          "date": "2026-07-13",
+          "status": "extension of time granted (third 90-day extension)",
+          "sentiment": 0.1,
+          "summary": "Routine extension request for the ongoing Summit Club subdivision: the original approval carried a 180-day window, followed by a first 90-day extension, and this was a second 90-day extension (third overall grant). Staff reported the applicant is still working with the Westchester County Department of Health on wastewater and well-system technical submissions and is making diligent progress. The board granted the extension with brief discussion and no objection."
+        },
+        {
+          "date": "2026-08-17",
+          "status": "both extensions granted",
+          "sentiment": 0.1,
+          "summary": "No representative appeared and none was expected. Adam Kaufman reported the applicant is still working through health department conditions, the usual cause of delay on the subdivision. The board adopted both draft resolutions \u2014 one for the site plan, one for the subdivision \u2014 without discussion."
+        },
+        {
+          "date": "2026-10-26",
+          "status": "90-day subdivision extension and one-year site plan extension granted as one motion",
+          "sentiment": 0.1,
+          "summary": "Nobody appeared for the applicant. Adam Kaufman had heard only that the club is finalising its health department approval and looking to secure funding. Asked whether there was still a water issue, he said it was settled; the applicant had talked about waiting for a possible water main to come up that way, which would save building a water treatment plant, and the town's water department is working towards that. Kaufman explained that the board grants 90-day extensions on the subdivision and one year on the site plan. Lawrence Ruisi moved both extensions, it was seconded and carried, and Kaufman recorded one vote for both. Kaufman then noted the applicant had asked for two years on each: state town law does not permit that for the subdivision, and a one-year site plan extension is typical. A member said \"we'll see them again\" and expected another extension before the project is built. Asked whether there comes a point to stop, members noted the applicant pays for each extension and that the board can act when the reasons are no longer reasonable or circumstances change."
+        }
+      ]
+    },
+    {
       "id": "100-business-park-drive",
       "name": "100 Business Park Drive \u2014 Self-Storage/Warehouse & Recreation Facility (Pickleball)",
       "address": "100 Business Park Drive",
@@ -4790,133 +4964,6 @@
           "status": "advancing toward public hearing, scheduled for October 28",
           "sentiment": 0.5,
           "summary": "Following the Town Board's grant of the special use permit for the recreation uses, the board worked through remaining minor site plan conditions (outdoor storage restricted to the Jantile tenant only, with permission expiring; an overnight-truck-parking note to be added) and discussed traffic-flow/signage separation between truck traffic, the Jantile business, and pickleball-court visitors. The board scheduled the public hearing for the October 28 meeting."
-        }
-      ]
-    },
-    {
-      "id": "summit-golf-club",
-      "name": "Summit Golf Club",
-      "address": "Summit Golf Club, North Castle, NY",
-      "applicationType": "subdivision",
-      "applicant": "Represented by Janet Keras (Del Bello, Donnellan) and architect Ken Anderson",
-      "themes": [
-        "Bonding & maintenance",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Septic & water supply",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Time extensions & conditions",
-        "Tree removal & screening",
-        "Zoning & land use"
-      ],
-      "appearances": 9,
-      "firstSeen": "2022-11-14",
-      "lastSeen": "2026-08-17",
-      "lastStatus": "both extensions granted",
-      "avgSentiment": 0.261,
-      "trajectory": [
-        {
-          "date": "2022-11-14",
-          "sentiment": 0.6,
-          "status": "positive recommendation to Town Board to amend the special use permit"
-        },
-        {
-          "date": "2023-01-17",
-          "sentiment": 0.5,
-          "status": "positive recommendations to Town Board on two of three requests; permanent special use permit deferred pending more information"
-        },
-        {
-          "date": "2023-02-13",
-          "sentiment": 0.3,
-          "status": "referred"
-        },
-        {
-          "date": "2023-07-10",
-          "sentiment": 0.5,
-          "status": "public hearing reconvened and kept open pending final resolution language"
-        },
-        {
-          "date": "2025-07-28",
-          "sentiment": 0.15,
-          "status": "approved"
-        },
-        {
-          "date": "2025-10-27",
-          "sentiment": 0.0,
-          "status": "extensions of time granted (site plan and 8th/final subdivision 90-day)"
-        },
-        {
-          "date": "2026-05-11",
-          "sentiment": 0.1,
-          "status": "extension of time granted"
-        },
-        {
-          "date": "2026-07-13",
-          "sentiment": 0.1,
-          "status": "extension of time granted (third 90-day extension)"
-        },
-        {
-          "date": "2026-08-17",
-          "sentiment": 0.1,
-          "status": "both extensions granted"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2022-11-14",
-          "status": "positive recommendation to Town Board to amend the special use permit",
-          "sentiment": 0.6,
-          "summary": "The applicant presented a new roughly 6,000-square-foot, two-story golf-course maintenance building to replace the existing facility, which sits in the way of active construction on the residential component and cannot practically coexist with ongoing golf operations. Because tying the maintenance building to the golf course's special use permit (rather than the residential site plan) requires Town Board action, the board voted a positive recommendation referring the special use permit amendment to the Town Board."
-        },
-        {
-          "date": "2023-01-17",
-          "status": "positive recommendations to Town Board on two of three requests; permanent special use permit deferred pending more information",
-          "sentiment": 0.5,
-          "summary": "Responding to a Town Board referral, the board recommended a six-month extension of the golf course's expired temporary special use permit and endorsed a request to allow public (non-member) golf bookings during the residential construction period to help the club's finances, while asking the Town Board to have counsel review the specific zoning code amendment language needed. The board also endorsed, in concept, locating a new maintenance and storage building on the golf course lot (relocating it out of the path of residential construction) as part of the eventual special use permit, but declined to recommend the permanent special use permit itself, since Town Planner Kauffman's memo still had open questions about club operations, membership caps, and chemical storage that the applicant agreed to address promptly."
-        },
-        {
-          "date": "2023-02-13",
-          "status": "referred",
-          "sentiment": 0.3,
-          "summary": "Reopened public hearing on a permanent special use permit for club operations (membership caps, golf outings, social events, day camp for members' children, guest cottages, surface water sampling). The Board extensively negotiated operational parameters \u2014 a 500-member cap, member-sponsored golf outings, undefined \"social events\" left uncodified at the applicant's request, and a 100-child day camp \u2014 before voting to positively refer the permit to the Town Board, which holds final approval authority."
-        },
-        {
-          "date": "2023-07-10",
-          "status": "public hearing reconvened and kept open pending final resolution language",
-          "sentiment": 0.5,
-          "summary": "Applicant summarized roughly two years of design changes made in response to board and public comment (eliminating a seventh building and its access road, relocating tennis courts and parking outside the 100-foot buffer, dropping the standalone clubhouse in favor of the amenities building) and presented final engineering changes tied to the six-building layout. The board discussed clarifying resolution language distinguishing between on-site recreational amenities and a recreation fee payment tied to any recreational programming deficiency, then adjourned (kept open) the hearing to finalize that language rather than close it that night."
-        },
-        {
-          "date": "2025-07-28",
-          "status": "approved",
-          "sentiment": 0.15,
-          "summary": "The board considered two extensions of time for the Summit Club: one for the final subdivision plat approval and one for the site plan (with steep slopes and tree-removal permit approvals). Staff explained the applicant is working through the approval process and is reportedly taking deposits/listing units for sale, with the county Board of Health notoriously slow on the substantial infrastructure (including a sewage treatment plant). The board granted both extensions of time."
-        },
-        {
-          "date": "2025-10-27",
-          "status": "extensions of time granted (site plan and 8th/final subdivision 90-day)",
-          "sentiment": 0.0,
-          "summary": "The project is awaiting Westchester County Health Department approval for a pump station, tank and water/sewer system, expected to be approved together. The board granted an extension of time on the site plan approval and the eighth (final) 90-day extension on the final subdivision plat."
-        },
-        {
-          "date": "2026-05-11",
-          "status": "extension of time granted",
-          "sentiment": 0.1,
-          "summary": "No representative was present. The chair and planner gave an update noting background activity on water infrastructure: a water-line extension easement is already in place, but the timeline may accelerate so that water could be brought through the club and interconnected (potentially reaching Windmill), rather than the development operating as its own on-site water district. The board granted an extension of time."
-        },
-        {
-          "date": "2026-07-13",
-          "status": "extension of time granted (third 90-day extension)",
-          "sentiment": 0.1,
-          "summary": "Routine extension request for the ongoing Summit Club subdivision: the original approval carried a 180-day window, followed by a first 90-day extension, and this was a second 90-day extension (third overall grant). Staff reported the applicant is still working with the Westchester County Department of Health on wastewater and well-system technical submissions and is making diligent progress. The board granted the extension with brief discussion and no objection."
-        },
-        {
-          "date": "2026-08-17",
-          "status": "both extensions granted",
-          "sentiment": 0.1,
-          "summary": "No representative appeared and none was expected. Adam Kaufman reported the applicant is still working through health department conditions, the usual cause of delay on the subdivision. The board adopted both draft resolutions \u2014 one for the site plan, one for the subdivision \u2014 without discussion."
         }
       ]
     },
@@ -5792,6 +5839,99 @@
       ]
     },
     {
+      "id": "263-bedford-banksville-road",
+      "name": "263 Bedford-Banksville Road (equestrian property)",
+      "address": "263 Bedford-Banksville Road, North Castle, NY",
+      "applicationType": "other",
+      "applicant": "Michael & Chloe Gasserowski / Merengo Farms (represented by Jerry Torrella, Torrella & Wexstein; site plan by 'Jay')",
+      "themes": [
+        "Environmental review (SEQRA)",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Tree removal & screening",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 6,
+      "firstSeen": "2022-07-11",
+      "lastSeen": "2026-10-26",
+      "lastStatus": "one-year extension of site plan approval granted",
+      "avgSentiment": 0.45,
+      "trajectory": [
+        {
+          "date": "2022-07-11",
+          "sentiment": 0.1,
+          "status": "workshop/introduction; referrals pending"
+        },
+        {
+          "date": "2022-10-13",
+          "sentiment": 0.7,
+          "status": "positive recommendation to Town Board; referred to ARB and Conservation Board; board declared itself SEQRA lead agency"
+        },
+        {
+          "date": "2023-02-27",
+          "sentiment": 0.5,
+          "status": "referred"
+        },
+        {
+          "date": "2025-12-08",
+          "sentiment": 0.5,
+          "status": "approved (one-year extension of time granted)"
+        },
+        {
+          "date": "2026-05-11",
+          "sentiment": 0.5,
+          "status": "approved (field change amendment; pergola and fence changes to return as amended planning board approval)"
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.4,
+          "status": "one-year extension of site plan approval granted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2022-07-11",
+          "status": "workshop/introduction; referrals pending",
+          "sentiment": 0.1,
+          "summary": "Introductory presentation on converting a long-vacant, historically-equestrian property (indoor riding ring dating to a 1974 Town Board approval) into the family's primary residence with up to 20 horses \u2014 within the zoning ordinance's non-commercial accessory-horse formula and consistent with the previously-approved 20 stalls. Counsel pre-emptively argued against characterizing the use as commercial (no boarding of others' horses, no for-profit shows) and flagged open questions about whether existing paddocks encroaching on wetland buffers can continue as a legal non-conforming use or need variances. The applicant reached out to roughly 21 neighbors ahead of the meeting. No site plan detail was finalized; next step is Town Board special-permit review and further referrals."
+        },
+        {
+          "date": "2022-10-13",
+          "status": "positive recommendation to Town Board; referred to ARB and Conservation Board; board declared itself SEQRA lead agency",
+          "sentiment": 0.7,
+          "summary": "The applicant negotiated extensively with neighbors before and after filing, agreeing to conditions including capping the horse count at 20 (with room to accommodate up to 23 including foals), maintaining strictly residential (non-commercial) equestrian use with no rentals or shows, a 150-foot landscape buffer, and a mechanism binding future property owners to the same conditions on transfer of title. A neighbor spoke strongly in favor, describing the roughly 70-acre property's role as a wildlife corridor connecting the Mianus River to Butler Sanctuary. The board voted a positive recommendation to the Town Board on the special use permit change, referred the applicant to the ARB and Conservation Board, and declared itself lead agency for SEQRA review."
+        },
+        {
+          "date": "2023-02-27",
+          "status": "referred",
+          "sentiment": 0.5,
+          "summary": "Revised horse-facility expansion (indoor riding arena, ten-stall stable, garage with grooms' quarters) that eliminated a caretaker's cottage, reduced the main house from roughly 10,000 to 7,500 square feet, and reduced CEA disturbance, following positive referrals from the Architectural Review Board and Conservation Board. Existing paddocks and buildings require variances for wetland-buffer setbacks and double agricultural setback requirements from residential neighbors, and accessory structures now exceed the 25% floor-area limit due to the smaller main house. The Board adopted a SEQRA negative declaration and voted to refer the applicant to the Zoning Board of Appeals for the necessary variances before proceeding to the Town Board for the special permit."
+        },
+        {
+          "date": "2025-12-08",
+          "status": "approved (one-year extension of time granted)",
+          "sentiment": 0.5,
+          "summary": "An extension-of-time request for a large equestrian property with a new residence, pool/pool house, renovated exercise barn, second stable, and garage with room quarters above. Counsel explained construction is proceeding in good faith without compliance issues but cannot finish within the original 18-month window, and sought clarification that the completion deadline runs co-terminus with the building permit. The board granted a one-year extension."
+        },
+        {
+          "date": "2026-05-11",
+          "status": "approved (field change amendment; pergola and fence changes to return as amended planning board approval)",
+          "sentiment": 0.5,
+          "summary": "A new landscape architect proposed relatively minor tweaks to the previously approved plan on this former horse-farm property: shifting the pool closer to the house, reducing patio and retaining-wall extents, adding planting to manage runoff, minor driveway curve/gate changes, and asking to use asphalt instead of gravel on a steep driveway segment. Drainage remains as previously engineered. The board treated most items as a field change but determined the pergola and fence changes require returning to the Planning Board (rather than being handled by the RPRC) since new structures can't be approved as a field change. Conservation liaison input was sought given the site's wetland-buffer history. The board adopted the field-change amendment resolution."
+        },
+        {
+          "date": "2026-10-26",
+          "status": "one-year extension of site plan approval granted",
+          "sentiment": 0.4,
+          "summary": "Counsel referred to a letter dated October 9 and said site plan approval would expire on November 13, 2026. Many of the approved buildings are under construction, but not all; the owner wants to finish the house and move in, then regroup on the remaining buildings rather than spread effort across several at once. The Town Board recently extended the special use permit to September 13, 2027. He said work had gone ahead without problems. The presiding member moved a one-year extension, it was seconded and the ayes were heard."
+        }
+      ]
+    },
+    {
       "id": "23-bedford-banksville-road",
       "name": "23 Bedford Banksville Road zoning text amendment",
       "address": "23 Bedford Banksville Road",
@@ -5974,6 +6114,97 @@
           "status": "public hearing opened and closed; approved with conditions",
           "sentiment": 0.6,
           "summary": "Change of use of a legal non-conforming home to office use, treating three existing non-conforming parcels together by moving a property line, removing one dwelling and converting another to an office, plus commercial truck storage. The long-standing sticking point was parking; the board reaffirmed acceptance of six parallel spaces in front and required the plan to clearly show the nine off-street spaces needed for the office kept truck-free, with the balance available for overnight truck storage. It was determined ARB review was unnecessary (no exterior changes) and that whether ZBA approval is needed turns on a building-inspector determination of whether the nonconformity is increased. The board struck a condition, adopted the NegDec, the site-plan resolution, and the preliminary and final subdivision resolutions."
+        }
+      ]
+    },
+    {
+      "id": "111-lafayette-avenue",
+      "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (status discussion)",
+      "address": "111 Lafayette Avenue",
+      "applicationType": "site plan (hearing adjourned October 15)",
+      "applicant": "Property owner operating a postal mail-hauling business",
+      "themes": [
+        "Lighting",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Tree removal & screening",
+        "Zoning & land use"
+      ],
+      "appearances": 6,
+      "firstSeen": "2025-01-13",
+      "lastSeen": "2026-10-26",
+      "lastStatus": "no action; waiting for the applicant's response to the board's information checklist and for emergency-service input before deciding whether to require a traffic study",
+      "avgSentiment": -0.042,
+      "trajectory": [
+        {
+          "date": "2025-01-13",
+          "sentiment": 0.0,
+          "status": "discussed"
+        },
+        {
+          "date": "2025-06-09",
+          "sentiment": 0.5,
+          "status": "conditional approval"
+        },
+        {
+          "date": "2026-07-27",
+          "sentiment": -0.2,
+          "status": "sent back for a complete site plan showing all uses"
+        },
+        {
+          "date": "2026-09-14",
+          "sentiment": -0.1,
+          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled"
+        },
+        {
+          "date": "2026-10-15",
+          "sentiment": -0.25,
+          "status": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now"
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": -0.2,
+          "status": "no action; waiting for the applicant's response to the board's information checklist and for emergency-service input before deciding whether to require a traffic study"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2025-01-13",
+          "status": "discussed",
+          "sentiment": 0.0,
+          "summary": "Preliminary discussion of converting the property into the main office/operations base for a bulk-mail hauling business; the board needed floor plans, truck-parking layout, storage and access details and directed the applicant to meet with the town planner and engineer before proceeding."
+        },
+        {
+          "date": "2025-06-09",
+          "status": "conditional approval",
+          "sentiment": 0.5,
+          "summary": "Public hearing on a site plan to allow overnight commercial truck parking accessory to a warehouse/office building; the board worked through the parking table (9 office spaces required, 15 truck spaces, 24 provided), closed the hearing, and approved the resolution as amended to add conditions for a replacement fence and code-compliant lighting, plus floor plans to support the parking count."
+        },
+        {
+          "date": "2026-07-27",
+          "status": "sent back for a complete site plan showing all uses",
+          "sentiment": -0.2,
+          "summary": "The applicant described an Amazon quick-commerce delivery operation: customers order online, on-site staff package the orders, and a separate driver collects and delivers, typically within about three minutes and to addresses within roughly a fifteen-minute drive. Operations would run 24/7, with two to six drivers on site depending on demand and four to five nightly resupply deliveries by 26-foot box trucks rather than tractor-trailers. Adam Kaufman confirmed warehouse and distribution is a permitted use in the industrial district, but pressed on whether the new use occupies the whole site \u2014 it does not, and the previously approved uses remain. Since those earlier approvals included a significant number of trucks occupying much of the building, he told the applicant the plan as submitted does not show how everything fits together and that a full plan depicting all uses is required before the board can evaluate it. Carthy summed it up: \"I think we're looking at half a plan here... let's get a full plan together, we'll reevaluate.\" No vote."
+        },
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
+          "sentiment": -0.1,
+          "summary": "A second round of planning review comments, focused on parking, where delivery trucks will be stored, and improving the Lafayette Avenue street frontage. The sticking point is that the site also hosts mail truck parking, and the plan still does not show how the two uses coexist or demonstrate enough off-street parking for both. Carthy noted this had been discussed at the previous meeting and asked why it had not been reconciled; told \"it just hasn't been,\" he replied that it seemed like it should have been. On noise he asked for a bird's eye view given the overnight loading, and was satisfied: the site is on the railroad side, the nearest houses are roughly 300 feet away and above it in elevation, and the operation is small-truck delivery with no foot traffic. No substantive objection to the use itself, only to the missing reconciliation."
+        },
+        {
+          "date": "2026-10-15",
+          "status": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now",
+          "sentiment": -0.25,
+          "summary": "Larry Ruisi read the hearing notice for an Amazon Quick Commerce retail distribution centre. The applicant described a 24/7 operation. Four to five box trucks, not 53-footers, bring inventory between about 10 p.m. and 8 a.m. Amazon Flex drivers, independent contractors in their own cars, scan in and collect bagged orders for 30-minute delivery within a 15\u201320 minute radius. Pickups take two to four minutes, two to six drivers can be handled at once, and the peak is about 50 deliveries an hour in late morning and around dinner time. Two to four employees work on site, leaving about 20 of the roughly 22\u201324 front spaces for drivers. The template floor plan shows a small public retail entry. Adam Kaufman said retail is not permitted in the industrial zone, and the applicant said it will not happen. North White Plains residents objected strongly. Marilyn Marrow asked how trucks would reach a dead-end street by the Bronx River and called round-the-clock operation unconscionable. A Washington Avenue resident named Rich said each truck would pass his house twice going to and from the turnaround at the end of Lafayette. Michael Bellantoni, who owns several Lafayette Avenue properties and runs a business there, described a quiet street at night with one way in and out. He put Flex traffic at 250 or more cars a day and was worried about queuing, his trucks being blocked in and cut-through traffic on Washington Avenue. Another speaker raised diesel pollution near the Cranberry Lake Preserve. The applicant said idling is against policy, that most of the roughly 250 daily trips fall in normal hours, and that below-grade parking serves the landlord's other trucks. Kaufman said the industrial zone sets no operating hours but the board can regulate the site plan. Mary Desmond pointed out that the site's ZBA variance to back out across the sidewalk onto Lafayette was granted last year with five or six daytime commuter cars in mind, not this volume. She also noted that parking on a strip in front of the property is under a revocable licence with the Town, which may need to be revisited if the activity is substantially different. Ruisi said the night truck numbers seemed reasonable. He wanted the Police Department's opinion on the backing-out, and suggested the matter might be better decided with a full board. Thomas Crispi agreed. The presiding member floated limiting box-truck deliveries to roughly 11 p.m.\u20135 a.m., covered unloading, and on-site circulation so drivers exit head-first. He asked for activity data from a comparable facility, said nighttime impacts on neighbours were his main concern, and decided against requiring a traffic study at this stage. The hearing was adjourned."
+        },
+        {
+          "date": "2026-10-26",
+          "status": "no action; waiting for the applicant's response to the board's information checklist and for emergency-service input before deciding whether to require a traffic study",
+          "sentiment": -0.2,
+          "summary": "Raised off-agenda by Lawrence Ruisi, who said the board had moved toward sending the application to the Police Department because of the roughly 200 vehicles a day the applicant estimates, and had discussed a traffic study of the area including Route 22 in North White Plains, given concerns about cut-through traffic. Asked whether he wanted a work session, he said sending it to the police is easy, but a traffic study needs a clear scope. A member asked whether this should affect the re-approval of the 154 Lafayette Avenue mail-truck site plan on the next agenda; another answered that the earlier approval rested on the circumstances at the time and that the mail trucks can instead be counted in Amazon's traffic picture. Adam Kaufman said he had sent the board's concerns about traffic volume and cars backing out to the emergency service providers, and that Amazon had asked for a checklist of the information the board wants. He advised waiting for the response and was uncomfortable discussing the application without the applicant present. He added that, given neighbourhood concern, requiring a modest traffic study scoped by the town's consultants would be a wise choice, with the applicant doing it. The board agreed to wait."
         }
       ]
     },
@@ -6214,88 +6445,6 @@
           "status": "public hearing continued to January 10, 2024 (board declined to adopt resolution)",
           "sentiment": -0.4,
           "summary": "A reopened public hearing that the board had previously declined to close because the draft resolution carried roughly 20 unresolved conditions. The applicant's team brought updated engineering plans but, by their own admission, had not resubmitted current architectural elevations to the board (only the original ARB submission), and had not brought details of a proposed roughly 20-foot \"ReadyRock\" retaining wall - including a needed temporary construction easement from a neighbor, top-of-wall fencing, a guide rail to stop vehicles, drainage/regrading behind the wall, and tree-health/removal near the wall - despite these being flagged as outstanding in staff review memos. After extended, increasingly frustrated back-and-forth about which plan versions had actually been submitted, the board concluded it was not comfortable adopting a resolution with this many open technical items and continued the public hearing to the January 10, 2024 meeting, directing the applicant to meet directly with the town engineer beforehand."
-        }
-      ]
-    },
-    {
-      "id": "263-bedford-banksville-road",
-      "name": "263 Bedford-Banksville Road (equestrian property)",
-      "address": "263 Bedford-Banksville Road, North Castle, NY",
-      "applicationType": "other",
-      "applicant": "Michael & Chloe Gasserowski / Merengo Farms (represented by Jerry Torrella, Torrella & Wexstein; site plan by 'Jay')",
-      "themes": [
-        "Environmental review (SEQRA)",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Stormwater & drainage",
-        "Time extensions & conditions",
-        "Tree removal & screening",
-        "Wetlands & buffers",
-        "Zoning & land use"
-      ],
-      "appearances": 5,
-      "firstSeen": "2022-07-11",
-      "lastSeen": "2026-05-11",
-      "lastStatus": "approved (field change amendment; pergola and fence changes to return as amended planning board approval)",
-      "avgSentiment": 0.46,
-      "trajectory": [
-        {
-          "date": "2022-07-11",
-          "sentiment": 0.1,
-          "status": "workshop/introduction; referrals pending"
-        },
-        {
-          "date": "2022-10-13",
-          "sentiment": 0.7,
-          "status": "positive recommendation to Town Board; referred to ARB and Conservation Board; board declared itself SEQRA lead agency"
-        },
-        {
-          "date": "2023-02-27",
-          "sentiment": 0.5,
-          "status": "referred"
-        },
-        {
-          "date": "2025-12-08",
-          "sentiment": 0.5,
-          "status": "approved (one-year extension of time granted)"
-        },
-        {
-          "date": "2026-05-11",
-          "sentiment": 0.5,
-          "status": "approved (field change amendment; pergola and fence changes to return as amended planning board approval)"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2022-07-11",
-          "status": "workshop/introduction; referrals pending",
-          "sentiment": 0.1,
-          "summary": "Introductory presentation on converting a long-vacant, historically-equestrian property (indoor riding ring dating to a 1974 Town Board approval) into the family's primary residence with up to 20 horses \u2014 within the zoning ordinance's non-commercial accessory-horse formula and consistent with the previously-approved 20 stalls. Counsel pre-emptively argued against characterizing the use as commercial (no boarding of others' horses, no for-profit shows) and flagged open questions about whether existing paddocks encroaching on wetland buffers can continue as a legal non-conforming use or need variances. The applicant reached out to roughly 21 neighbors ahead of the meeting. No site plan detail was finalized; next step is Town Board special-permit review and further referrals."
-        },
-        {
-          "date": "2022-10-13",
-          "status": "positive recommendation to Town Board; referred to ARB and Conservation Board; board declared itself SEQRA lead agency",
-          "sentiment": 0.7,
-          "summary": "The applicant negotiated extensively with neighbors before and after filing, agreeing to conditions including capping the horse count at 20 (with room to accommodate up to 23 including foals), maintaining strictly residential (non-commercial) equestrian use with no rentals or shows, a 150-foot landscape buffer, and a mechanism binding future property owners to the same conditions on transfer of title. A neighbor spoke strongly in favor, describing the roughly 70-acre property's role as a wildlife corridor connecting the Mianus River to Butler Sanctuary. The board voted a positive recommendation to the Town Board on the special use permit change, referred the applicant to the ARB and Conservation Board, and declared itself lead agency for SEQRA review."
-        },
-        {
-          "date": "2023-02-27",
-          "status": "referred",
-          "sentiment": 0.5,
-          "summary": "Revised horse-facility expansion (indoor riding arena, ten-stall stable, garage with grooms' quarters) that eliminated a caretaker's cottage, reduced the main house from roughly 10,000 to 7,500 square feet, and reduced CEA disturbance, following positive referrals from the Architectural Review Board and Conservation Board. Existing paddocks and buildings require variances for wetland-buffer setbacks and double agricultural setback requirements from residential neighbors, and accessory structures now exceed the 25% floor-area limit due to the smaller main house. The Board adopted a SEQRA negative declaration and voted to refer the applicant to the Zoning Board of Appeals for the necessary variances before proceeding to the Town Board for the special permit."
-        },
-        {
-          "date": "2025-12-08",
-          "status": "approved (one-year extension of time granted)",
-          "sentiment": 0.5,
-          "summary": "An extension-of-time request for a large equestrian property with a new residence, pool/pool house, renovated exercise barn, second stable, and garage with room quarters above. Counsel explained construction is proceeding in good faith without compliance issues but cannot finish within the original 18-month window, and sought clarification that the completion deadline runs co-terminus with the building permit. The board granted a one-year extension."
-        },
-        {
-          "date": "2026-05-11",
-          "status": "approved (field change amendment; pergola and fence changes to return as amended planning board approval)",
-          "sentiment": 0.5,
-          "summary": "A new landscape architect proposed relatively minor tweaks to the previously approved plan on this former horse-farm property: shifting the pool closer to the house, reducing patio and retaining-wall extents, adding planting to manage runoff, minor driveway curve/gate changes, and asking to use asphalt instead of gravel on a steep driveway segment. Drainage remains as previously engineered. The board treated most items as a field change but determined the pergola and fence changes require returning to the Planning Board (rather than being handled by the RPRC) since new structures can't be approved as a field change. Conservation liaison input was sought given the site's wetland-buffer history. The board adopted the field-change amendment resolution."
         }
       ]
     },
@@ -6631,86 +6780,6 @@
           "status": "extension of time granted",
           "sentiment": 0.2,
           "summary": "A routine extension of time for the subdivision approval (heard as \"Whipple-Will Road\"). Nobody appeared for the applicant. Adam Kaufman said there was nothing unusual about it. Thomas Crispi and Lawrence Ruisi were each asked for comments and had none. The extension was moved, seconded and carried."
-        }
-      ]
-    },
-    {
-      "id": "111-lafayette-avenue",
-      "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (site plan public hearing)",
-      "address": "111 Lafayette Avenue",
-      "applicationType": "site plan",
-      "applicant": "Property owner operating a postal mail-hauling business",
-      "themes": [
-        "Lighting",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Process & procedure",
-        "Tree removal & screening",
-        "Zoning & land use"
-      ],
-      "appearances": 5,
-      "firstSeen": "2025-01-13",
-      "lastSeen": "2026-10-15",
-      "lastStatus": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now",
-      "avgSentiment": -0.01,
-      "trajectory": [
-        {
-          "date": "2025-01-13",
-          "sentiment": 0.0,
-          "status": "discussed"
-        },
-        {
-          "date": "2025-06-09",
-          "sentiment": 0.5,
-          "status": "conditional approval"
-        },
-        {
-          "date": "2026-07-27",
-          "sentiment": -0.2,
-          "status": "sent back for a complete site plan showing all uses"
-        },
-        {
-          "date": "2026-09-14",
-          "sentiment": -0.1,
-          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled"
-        },
-        {
-          "date": "2026-10-15",
-          "sentiment": -0.25,
-          "status": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2025-01-13",
-          "status": "discussed",
-          "sentiment": 0.0,
-          "summary": "Preliminary discussion of converting the property into the main office/operations base for a bulk-mail hauling business; the board needed floor plans, truck-parking layout, storage and access details and directed the applicant to meet with the town planner and engineer before proceeding."
-        },
-        {
-          "date": "2025-06-09",
-          "status": "conditional approval",
-          "sentiment": 0.5,
-          "summary": "Public hearing on a site plan to allow overnight commercial truck parking accessory to a warehouse/office building; the board worked through the parking table (9 office spaces required, 15 truck spaces, 24 provided), closed the hearing, and approved the resolution as amended to add conditions for a replacement fence and code-compliant lighting, plus floor plans to support the parking count."
-        },
-        {
-          "date": "2026-07-27",
-          "status": "sent back for a complete site plan showing all uses",
-          "sentiment": -0.2,
-          "summary": "The applicant described an Amazon quick-commerce delivery operation: customers order online, on-site staff package the orders, and a separate driver collects and delivers, typically within about three minutes and to addresses within roughly a fifteen-minute drive. Operations would run 24/7, with two to six drivers on site depending on demand and four to five nightly resupply deliveries by 26-foot box trucks rather than tractor-trailers. Adam Kaufman confirmed warehouse and distribution is a permitted use in the industrial district, but pressed on whether the new use occupies the whole site \u2014 it does not, and the previously approved uses remain. Since those earlier approvals included a significant number of trucks occupying much of the building, he told the applicant the plan as submitted does not show how everything fits together and that a full plan depicting all uses is required before the board can evaluate it. Carthy summed it up: \"I think we're looking at half a plan here... let's get a full plan together, we'll reevaluate.\" No vote."
-        },
-        {
-          "date": "2026-09-14",
-          "status": "no vote \u2014 held over; parking and mail-truck layout still unreconciled",
-          "sentiment": -0.1,
-          "summary": "A second round of planning review comments, focused on parking, where delivery trucks will be stored, and improving the Lafayette Avenue street frontage. The sticking point is that the site also hosts mail truck parking, and the plan still does not show how the two uses coexist or demonstrate enough off-street parking for both. Carthy noted this had been discussed at the previous meeting and asked why it had not been reconciled; told \"it just hasn't been,\" he replied that it seemed like it should have been. On noise he asked for a bird's eye view given the overnight loading, and was satisfied: the site is on the railroad side, the nearest houses are roughly 300 feet away and above it in elevation, and the operation is small-truck delivery with no foot traffic. No substantive objection to the use itself, only to the missing reconciliation."
-        },
-        {
-          "date": "2026-10-15",
-          "status": "public hearing opened and adjourned (kept open); the applicant is to quantify its logistics and tighten the box-truck delivery window, and the board is to seek the Police Department's view on vehicles backing out onto Lafayette Avenue; no traffic study required for now",
-          "sentiment": -0.25,
-          "summary": "Larry Ruisi read the hearing notice for an Amazon Quick Commerce retail distribution centre. The applicant described a 24/7 operation. Four to five box trucks, not 53-footers, bring inventory between about 10 p.m. and 8 a.m. Amazon Flex drivers, independent contractors in their own cars, scan in and collect bagged orders for 30-minute delivery within a 15\u201320 minute radius. Pickups take two to four minutes, two to six drivers can be handled at once, and the peak is about 50 deliveries an hour in late morning and around dinner time. Two to four employees work on site, leaving about 20 of the roughly 22\u201324 front spaces for drivers. The template floor plan shows a small public retail entry. Adam Kaufman said retail is not permitted in the industrial zone, and the applicant said it will not happen. North White Plains residents objected strongly. Marilyn Marrow asked how trucks would reach a dead-end street by the Bronx River and called round-the-clock operation unconscionable. A Washington Avenue resident named Rich said each truck would pass his house twice going to and from the turnaround at the end of Lafayette. Michael Bellantoni, who owns several Lafayette Avenue properties and runs a business there, described a quiet street at night with one way in and out. He put Flex traffic at 250 or more cars a day and was worried about queuing, his trucks being blocked in and cut-through traffic on Washington Avenue. Another speaker raised diesel pollution near the Cranberry Lake Preserve. The applicant said idling is against policy, that most of the roughly 250 daily trips fall in normal hours, and that below-grade parking serves the landlord's other trucks. Kaufman said the industrial zone sets no operating hours but the board can regulate the site plan. Mary Desmond pointed out that the site's ZBA variance to back out across the sidewalk onto Lafayette was granted last year with five or six daytime commuter cars in mind, not this volume. She also noted that parking on a strip in front of the property is under a revocable licence with the Town, which may need to be revisited if the activity is substantially different. Ruisi said the night truck numbers seemed reasonable. He wanted the Police Department's opinion on the backing-out, and suggested the matter might be better decided with a full board. Thomas Crispi agreed. The presiding member floated limiting box-truck deliveries to roughly 11 p.m.\u20135 a.m., covered unloading, and on-site circulation so drivers exit head-first. He asked for activity data from a comparable facility, said nighttime impacts on neighbours were his main concern, and decided against requiring a traffic study at this stage. The hearing was adjourned."
         }
       ]
     },
@@ -8032,6 +8101,77 @@
           "status": "approved",
           "sentiment": 0.6,
           "summary": "Amended site plan and tree-removal permit for relocating the 16th tee box (~24 ft north, ~18 ft east) with adjusted grading and added screening plantings; 34 new plantings against 39 trees removed, most work outside the NYC DEP conservation easement (DEP permits removal of healthy trees within the easement). Added plan notes commit the club to coordinate final plantings with the neighbor/town and to remedy any future stormwater/drainage impacts on abutting properties, with disputes returning to the planning board. The public hearing was reopened and closed and the application approved."
+        }
+      ]
+    },
+    {
+      "id": "2-4-massaro-court",
+      "name": "2 Massaro Court \u2014 Resolution of Approval (after ARB)",
+      "address": "2 & 4 Massaro Court",
+      "applicationType": "site plan",
+      "applicant": "Nicholas Shari, Hudson Engineering & Consulting",
+      "themes": [
+        "Historic & scenic character",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Retaining walls",
+        "Steep slopes & rock removal",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Zoning & land use"
+      ],
+      "appearances": 4,
+      "firstSeen": "2025-10-27",
+      "lastSeen": "2026-10-26",
+      "lastStatus": "resolution of approval for 2 Massaro Court adopted",
+      "avgSentiment": 0.287,
+      "trajectory": [
+        {
+          "date": "2025-10-27",
+          "sentiment": -0.05,
+          "status": "discussion only | revised plans requested"
+        },
+        {
+          "date": "2026-01-12",
+          "sentiment": 0.5,
+          "status": "approved with conditions"
+        },
+        {
+          "date": "2026-05-11",
+          "sentiment": 0.2,
+          "status": "discussion only (to ARB, then public hearing)"
+        },
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.5,
+          "status": "resolution of approval for 2 Massaro Court adopted"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2025-10-27",
+          "status": "discussion only | revised plans requested",
+          "sentiment": -0.05,
+          "summary": "Two proposed two-family dwellings on the first two lots of a recently approved three-lot subdivision. Much of the driveway, utilities and stormwater remain unchanged from the subdivision plans; updates add the buildings and elevated decks (at-grade rear terraces to be removed). Outstanding items include structural plans and protective barriers for tall retaining walls, a driveway revision to add a required parking space per unit, and a possible gross land coverage variance the applicant expects to avoid by converting a turnaround area to parking. Chairman Carthy strongly pressed for tiered, more attractive retaining walls (some near 10-11 ft) rather than a single tall wall. No hearing yet; revised plans to follow."
+        },
+        {
+          "date": "2026-01-12",
+          "status": "approved with conditions",
+          "sentiment": 0.5,
+          "summary": "The applicant presented revised site/steep-slope plans for two two-family residences, addressing prior comments by adding a terraced retaining wall to soften the driveway wall's appearance, providing two dedicated parking spaces per unit, reworking side/rear grading, and clarifying overland footing-drain discharge. Outstanding engineering memo items (landscape plan revisions, planting detail, drain pipe sizes/inverts, peak flows) were deemed handleable administratively. The board approved the resolution for 4 Massaro Court that night; since the buildings are identical, 2 Massaro Court would be approved administratively at a future meeting once the applicant obtains ARB approval, without needing to return. The board flagged that any rock encountered on the up-hill site would require checking back."
+        },
+        {
+          "date": "2026-05-11",
+          "status": "discussion only (to ARB, then public hearing)",
+          "sentiment": 0.2,
+          "summary": "This is the last of a previously approved three-lot, two-family subdivision, with the first two lots already built. The town engineer raised concerns about the proposed house footprint's proximity and view-shed impact on the adjacent home, plus an exposed-foundation/grade drop-off at the rear northwest corner. The applicant's engineer agreed to regrade that corner (up to about 372) and consider shifting the house, while noting retaining walls are less substantial than the prior lots and structural wall designs are under town review. The board was generally comfortable and directed the project to the ARB and a revised grading plan before a public hearing."
+        },
+        {
+          "date": "2026-10-26",
+          "status": "resolution of approval for 2 Massaro Court adopted",
+          "sentiment": 0.5,
+          "summary": "This follows the January 12 meeting, where 4 Massaro Court was approved and 2 Massaro Court was to follow once the applicant had ARB approval. Adam Kaufman said the board had been fine with the application and sent the applicant to the ARB; meanwhile the applicant also addressed several of the Town Engineer's conditions. A few conditions remain. A question about the gross land coverage worksheet's treatment of the driveway was resolved: the applicant had been taking too little credit, not too much. With no further questions, the presiding member moved the resolution, it was seconded and approved. The representative said they expect a building permit for lot 4 first, then clearing, and hope to break ground and perhaps pour a foundation before winter if the weather stays mild."
         }
       ]
     },
@@ -9423,65 +9563,6 @@
           "status": "approved (draft resolution adopted)",
           "sentiment": 0.6,
           "summary": "The board had previously closed the public hearing and instructed the applicant to obtain ARB approval before returning for adoption. With ARB approval now in hand, the board adopted the draft resolution without the applicant needing to appear."
-        }
-      ]
-    },
-    {
-      "id": "2-4-massaro-court",
-      "name": "2 & 4 Massaro Court (two-family residences)",
-      "address": "2 & 4 Massaro Court, North Castle, NY",
-      "applicationType": "site plan",
-      "applicant": "Nicholas Shari, Hudson Engineering & Consulting",
-      "themes": [
-        "Historic & scenic character",
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Retaining walls",
-        "Steep slopes & rock removal",
-        "Stormwater & drainage",
-        "Zoning & land use"
-      ],
-      "appearances": 3,
-      "firstSeen": "2025-10-27",
-      "lastSeen": "2026-05-11",
-      "lastStatus": "discussion only (to ARB, then public hearing)",
-      "avgSentiment": 0.217,
-      "trajectory": [
-        {
-          "date": "2025-10-27",
-          "sentiment": -0.05,
-          "status": "discussion only | revised plans requested"
-        },
-        {
-          "date": "2026-01-12",
-          "sentiment": 0.5,
-          "status": "approved with conditions"
-        },
-        {
-          "date": "2026-05-11",
-          "sentiment": 0.2,
-          "status": "discussion only (to ARB, then public hearing)"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2025-10-27",
-          "status": "discussion only | revised plans requested",
-          "sentiment": -0.05,
-          "summary": "Two proposed two-family dwellings on the first two lots of a recently approved three-lot subdivision. Much of the driveway, utilities and stormwater remain unchanged from the subdivision plans; updates add the buildings and elevated decks (at-grade rear terraces to be removed). Outstanding items include structural plans and protective barriers for tall retaining walls, a driveway revision to add a required parking space per unit, and a possible gross land coverage variance the applicant expects to avoid by converting a turnaround area to parking. Chairman Carthy strongly pressed for tiered, more attractive retaining walls (some near 10-11 ft) rather than a single tall wall. No hearing yet; revised plans to follow."
-        },
-        {
-          "date": "2026-01-12",
-          "status": "approved with conditions",
-          "sentiment": 0.5,
-          "summary": "The applicant presented revised site/steep-slope plans for two two-family residences, addressing prior comments by adding a terraced retaining wall to soften the driveway wall's appearance, providing two dedicated parking spaces per unit, reworking side/rear grading, and clarifying overland footing-drain discharge. Outstanding engineering memo items (landscape plan revisions, planting detail, drain pipe sizes/inverts, peak flows) were deemed handleable administratively. The board approved the resolution for 4 Massaro Court that night; since the buildings are identical, 2 Massaro Court would be approved administratively at a future meeting once the applicant obtains ARB approval, without needing to return. The board flagged that any rock encountered on the up-hill site would require checking back."
-        },
-        {
-          "date": "2026-05-11",
-          "status": "discussion only (to ARB, then public hearing)",
-          "sentiment": 0.2,
-          "summary": "This is the last of a previously approved three-lot, two-family subdivision, with the first two lots already built. The town engineer raised concerns about the proposed house footprint's proximity and view-shed impact on the adjacent home, plus an exposed-foundation/grade drop-off at the rear northwest corner. The applicant's engineer agreed to regrade that corner (up to about 372) and consider shifting the house, while noting retaining walls are less substantial than the prior lots and structural wall designs are under town review. The board was generally comfortable and directed the project to the ARB and a revised grading plan before a public hearing."
         }
       ]
     },
@@ -21281,6 +21362,38 @@
           "summary": "A new freestanding sign. Freestanding signs need Planning Board approval and must also go to the ARB. Members had no issues with the design, but the applicant had not yet been to the ARB, so the board told him to get ARB approval and come back, and said he would be put first on that agenda."
         }
       ]
+    },
+    {
+      "id": "world-s-best-cheese",
+      "name": "World's Best Cheese \u2014 Replacement Freestanding Sign",
+      "address": "",
+      "applicationType": "site plan amendment (sign)",
+      "applicant": "World's Best Cheese (not present; presented by the Town Planner at the applicant's request)",
+      "themes": [
+        "Parking, traffic & access",
+        "Process & procedure",
+        "Signage"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-10-26",
+      "lastSeen": "2026-10-26",
+      "lastStatus": "no vote; board comfortable with the location; public hearing to be scheduled and approval to follow once the ARB approves the sign",
+      "avgSentiment": 0.4,
+      "trajectory": [
+        {
+          "date": "2026-10-26",
+          "sentiment": 0.4,
+          "status": "no vote; board comfortable with the location; public hearing to be scheduled and approval to follow once the ARB approves the sign"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-10-26",
+          "status": "no vote; board comfortable with the location; public hearing to be scheduled and approval to follow once the ARB approves the sign",
+          "sentiment": 0.4,
+          "summary": "Adam Kaufman presented a new freestanding sign near the driveway at the front of the property. The business had an old sign that was never shown on a site plan, so replacing it needs Planning Board approval; the sign design itself needs ARB approval. Asked about line of sight, he said the location will not affect it, though a member wanted the Town Engineer to confirm. The board agreed informally, with no vote, that the hearing can be scheduled and the sign approved after the ARB acts. The property's address is not stated in the recording."
+        }
+      ]
     }
   ],
   "members": [
@@ -28012,10 +28125,10 @@
     },
     {
       "member": "Lawrence Ruisi",
-      "totalPositions": 195,
-      "avgSentiment": 0.056,
+      "totalPositions": 197,
+      "avgSentiment": 0.055,
       "confidenceMix": {
-        "medium": 81,
+        "medium": 83,
         "high": 94,
         "low": 20
       },
@@ -28027,8 +28140,8 @@
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 49,
-          "avgSentiment": 0.032
+          "count": 50,
+          "avgSentiment": 0.025
         },
         {
           "theme": "Zoning & land use",
@@ -28036,14 +28149,14 @@
           "avgSentiment": 0.209
         },
         {
+          "theme": "Neighbor concerns & safety",
+          "count": 24,
+          "avgSentiment": -0.156
+        },
+        {
           "theme": "Tree removal & screening",
           "count": 24,
           "avgSentiment": 0.217
-        },
-        {
-          "theme": "Neighbor concerns & safety",
-          "count": 23,
-          "avgSentiment": -0.15
         },
         {
           "theme": "Process & procedure",
@@ -28077,8 +28190,8 @@
         },
         {
           "theme": "Time extensions & conditions",
-          "count": 6,
-          "avgSentiment": -0.0
+          "count": 7,
+          "avgSentiment": 0.029
         },
         {
           "theme": "Lighting",
@@ -28148,6 +28261,16 @@
           "avgSentiment": -0.0
         },
         {
+          "caseId": "111-lafayette-avenue",
+          "count": 4,
+          "avgSentiment": -0.1
+        },
+        {
+          "caseId": "summit-golf-club",
+          "count": 3,
+          "avgSentiment": 0.233
+        },
+        {
           "caseId": "100-business-park-drive",
           "count": 3,
           "avgSentiment": 0.0
@@ -28171,11 +28294,6 @@
           "caseId": "130-old-mount-kisco-road",
           "count": 3,
           "avgSentiment": 0.2
-        },
-        {
-          "caseId": "111-lafayette-avenue",
-          "count": 3,
-          "avgSentiment": -0.033
         },
         {
           "caseId": "2-israel-townsend-hill-lot-1",
@@ -28216,11 +28334,6 @@
           "caseId": "35-edgar-road",
           "count": 2,
           "avgSentiment": 0.2
-        },
-        {
-          "caseId": "summit-golf-club",
-          "count": 2,
-          "avgSentiment": 0.25
         },
         {
           "caseId": "360-main-street",
@@ -31214,6 +31327,31 @@
           ],
           "evidence": "Asked \"Tom any questions? Okay, Larry,\" he said \"four to five trucks at night doesn't seem unreasonable\" but that he had been concerned about the queuing. Later, \"going off of what Mary just said,\" he said there would be \"a lot more\" backing out onto Lafayette, asked \"should we be going back to the police,\" and said \"maybe it's better when we have full contention on this board,\" which drew \"Thank you, Larry.\" The presiding member later credited him with tightening the box-truck delivery schedule (\"like Larry said\").",
           "confidence": "high"
+        },
+        {
+          "date": "2026-10-26",
+          "case": "Summit Golf Club",
+          "caseId": "summit-golf-club",
+          "stance": "supportive of the extensions, while questioning how long they can continue",
+          "score": 0.2,
+          "themes": [
+            "Time extensions & conditions"
+          ],
+          "evidence": "The presiding member asked \"What do you say, Larry, you want to do it?\" and he answered \"Sure\" before the motion \"to approve the extension of time for the Summit Golf Club for the site plan and the subdivision\" (00:04:52\u201300:05:04). After Kaufman's note on the two-year request, a member asked \"Is there a point in time where we just...\", and the presiding member's reply was addressed to him: \"I think Larry, when we think that there are arguments and no longer reasonable\" (00:06:06).",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-10-26",
+          "case": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (status discussion)",
+          "caseId": "111-lafayette-avenue",
+          "stance": "concerned; wants police input and possibly an area traffic study",
+          "score": -0.3,
+          "themes": [
+            "Neighbor concerns & safety",
+            "Parking, traffic & access"
+          ],
+          "evidence": "After a member recalled sending the application \"to the police department to get their input because all those 200 vehicles\" and \"a traffic study in those area and 22 on North White Plains\" (00:13:09\u201300:13:30), the presiding member asked \"So Larry, are you suggesting that you want to do a work session on that?\" (00:13:43). The answer: \"one sending it to the PD I think is pretty easy. If we're going to do a traffic study, I think we need to understand exactly what we're studying.\" The presiding member later said \"Larry, if you feel like we should discuss it at a higher level. We can talk about that too\" (00:17:30).",
+          "confidence": "medium"
         }
       ]
     },
@@ -36127,12 +36265,12 @@
     },
     {
       "member": "Steven Sauro",
-      "totalPositions": 131,
-      "avgSentiment": 0.231,
+      "totalPositions": 132,
+      "avgSentiment": 0.228,
       "confidenceMix": {
         "medium": 63,
         "high": 57,
-        "low": 11
+        "low": 12
       },
       "byTheme": [
         {
@@ -36142,8 +36280,8 @@
         },
         {
           "theme": "Parking, traffic & access",
-          "count": 21,
-          "avgSentiment": 0.333
+          "count": 22,
+          "avgSentiment": 0.314
         },
         {
           "theme": "Tree removal & screening",
@@ -36191,14 +36329,14 @@
           "avgSentiment": 0.03
         },
         {
+          "theme": "Process & procedure",
+          "count": 5,
+          "avgSentiment": 0.02
+        },
+        {
           "theme": "Lighting",
           "count": 4,
           "avgSentiment": -0.075
-        },
-        {
-          "theme": "Process & procedure",
-          "count": 4,
-          "avgSentiment": 0.05
         },
         {
           "theme": "Time extensions & conditions",
@@ -36301,6 +36439,11 @@
           "caseId": "50-east-middle-patent-road",
           "count": 2,
           "avgSentiment": 0.5
+        },
+        {
+          "caseId": "111-lafayette-avenue",
+          "count": 2,
+          "avgSentiment": 0.05
         },
         {
           "caseId": "1613-old-orchard-street",
@@ -36586,11 +36729,6 @@
           "caseId": "60-cox-avenue-breezemont",
           "count": 1,
           "avgSentiment": 0.5
-        },
-        {
-          "caseId": "111-lafayette-avenue",
-          "count": 1,
-          "avgSentiment": 0.2
         },
         {
           "caseId": "111-round-hill-road",
@@ -38388,6 +38526,19 @@
           ],
           "evidence": "Asked \"Steve, anything from you?\", replied \"No, it's a good improvement.\"",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-10-26",
+          "case": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (status discussion)",
+          "caseId": "111-lafayette-avenue",
+          "stance": "cautious about linking Amazon to the 154 Lafayette Avenue re-approval",
+          "score": -0.1,
+          "themes": [
+            "Parking, traffic & access",
+            "Process & procedure"
+          ],
+          "evidence": "A member raised whether the board would hold up \"the reapproval of a mail\" application because of the traffic question, saying \"That was my concern.\" The reply was addressed to him: \"Steve, when we signed off on that, we signed off on the facts and circumstances that existed at that point in time\" (00:15:43), after which he said he did not want to be \"muddying the waters\". The turn boundaries in the recording are loose.",
+          "confidence": "low"
         }
       ]
     },
@@ -71953,6 +72104,180 @@
       ],
       "attributionCoverage": "partial",
       "attributionNote": "This is an unverified machine (ASR) transcript with no speaker labels. It is not the minutes. Three members sat, and Chairman Carthy was absent. The presiding member chaired, made most motions and gave most of the board's views, but he is never named or addressed by name, so he carries no positions. Whether he is Steven Sauro or Michael Pollack cannot be determined from the recording and is not guessed. His remarks are described in the case summaries as \"the presiding member\". Lawrence Ruisi is credited on Amazon because he was handed the floor by name (\"Okay, Larry\") and thanked by name after his call for police input (\"Thank you, Larry\"), and the presiding member later referred back to \"like Larry said\". Thomas Crispi is credited only where he answered \"I agree\" right after being asked \"Tom?\" (31 Sorrell Street, Amazon). He was named as moving to reopen the Sorrell hearing and seconding its closing, and he read the 45 Bedford Road notice. Left unattributed: the member who asked whether the Sorrell house could slide toward its wider side yard; the member who asked why 45 Bedford Road had seen no activity for two and a half years; and the members' remarks on 29 horses at 35 Bedford-Banksville Road. On Amazon, \"Michael\" is the public speaker Michael Bellantoni, not Michael Pollack, and \"Mike\" and \"Seth\" are also addressed to public speakers. No votes were tallied aloud, so motions are recorded as carried, not by member. ASR renderings resolved: \"Salt Street\"/\"Sorrow Street\"/\"33SARL Street\" \u2192 Sorrell Street; \"Jen Kim, Bela Nogrevi\"/\"Jennifer Kimball\"/\"David McGreeby\" \u2192 Jennifer Kimball McGreevy and David McGreevy, as identified at the September 14 hearing; \"Alpandadi\"/\"Alfenzani\"/\"Altonzani\" \u2192 Ralph Alfonsetti; \"People Rage\"/\"North Council Drive\" \u2192 Eagle Ridge, 3 North Castle Drive; \"Zarinen Stymitz\" \u2192 Zarin & Steinmetz (Corey's surname is heard as \"Salomon\" here and inconsistently elsewhere, and is not reconstructed); \"Whipple-Will\" \u2192 Whippoorwill; \"Roseanne\"/\"Rosie and Dry\" \u2192 Rosanne Drive (matching the November 2024 approval); \"Adam Kwokman\" \u2192 Adam Kaufman; \"Larry Ruizi\" \u2192 Ruisi; \"Tom Crispy\"/\"Tom Christie\" \u2192 Thomas Crispi; \"Chris Wilson\"/\"Kristin\"/\"Spilsen\" \u2192 Kristen Wilson; \"Mr. Farari\" \u2192 Michael Ferrari; \"Bus\"/\"Buster\"/\"Buskin\" \u2192 Jeffrey Buss; \"Tulapia\"/\"Latvia Avenue\"/\"telepha yet\" \u2192 Lafayette Avenue. Not reconstructed: the 8 Rosanne Drive representative, the 35 Bedford-Banksville Road attorney and firm, the Amazon manager's surname, the surnames of the Washington Avenue resident and the second North White Plains speaker, and \"Rick\"'s surname."
+    },
+    {
+      "date": "2026-10-26",
+      "meetingSummary": "A short meeting of about eighteen minutes, with no public hearings. The minutes of September 28 and October 15 were approved, with Michael Pollack abstaining on October 15 because he had not attended. Three routine items passed. 263 Bedford-Banksville Road got a one-year extension of its site plan approval, which was due to expire on November 13, 2026; its attorney said construction is under way on some of the approved buildings and the Town Board had already extended the special use permit to September 13, 2027. The Summit Club got its 90-day subdivision extension and one-year site plan extension in a single motion moved by Lawrence Ruisi. Town Planner Adam Kaufman noted the applicant had asked for two years on each, which state town law does not allow for the subdivision, and members expected the club back for further extensions. The resolution for 2 Massaro Court was approved now that the applicant has its ARB approval and has addressed the Town Engineer's conditions; the landowner's representative hopes to break ground on the first lot before winter. A replacement freestanding sign for World's Best Cheese was presented by Kaufman in the applicant's absence; members were comfortable with the location and will schedule the hearing once the ARB has approved the sign. In an off-agenda discussion, Lawrence Ruisi revisited the Amazon Quick Commerce application at 111 Lafayette Avenue, backing police input and possibly a traffic study of the area including Route 22 in North White Plains. Kaufman said he had already sent the emergency service providers the board's concerns, that Amazon has asked for a checklist of the information the board wants, and advised waiting for the response rather than discussing the application without the applicant present. The board also agreed to start its next meeting at 6:30 p.m. for a short Board of Ethics presentation.",
+      "durationNote": "The recording runs about 19 minutes (1,159 seconds), with business from 00:01:13 to the motion to close at 00:18:46. No roll call was taken and the presiding member is never named. Lawrence Ruisi (\"Larry\"), Steven Sauro (\"Steve\") and Michael Pollack (\"Michael will abstain\") are named; Chairman Carthy and Thomas Crispi are not named, so whether either sat is not determined. A speaker referred to the previous meeting as \"Steve's chair\" (00:12:58), which suggests Steven Sauro presided on October 15; that is not confirmed and the October 15 record is left as it was. Town Planner Adam Kaufman took part. Attorney Jerry Tortorilla (as rendered) appeared for 263 Bedford-Banksville Road and Dino Yetidis (as rendered) for the 2 Massaro Court landowner. Kaufman previewed the next agenda: 4 Cedar Hill, 22 Nethermont (re-approval), 154 Lafayette Avenue (re-approval of the mail-truck site plan, which expired) and 873 North Broadway. The recording says both \"November 7th\" and \"November 9th\" for the next meeting date; it is left as rendered.",
+      "cases": [
+        {
+          "id": "263-bedford-banksville-road",
+          "name": "263 Bedford-Banksville Road \u2014 Extension of Time (site plan)",
+          "address": "263 Bedford Banksville Road",
+          "applicationType": "extension of time",
+          "applicant": "Owner of 263 Bedford-Banksville Road, represented by attorney Jerry Tortorilla (as rendered; firm name garbled in the recording)",
+          "status": "one-year extension of site plan approval granted",
+          "summary": "Counsel referred to a letter dated October 9 and said site plan approval would expire on November 13, 2026. Many of the approved buildings are under construction, but not all; the owner wants to finish the house and move in, then regroup on the remaining buildings rather than spread effort across several at once. The Town Board recently extended the special use permit to September 13, 2027. He said work had gone ahead without problems. The presiding member moved a one-year extension, it was seconded and the ayes were heard.",
+          "themes": [
+            "Time extensions & conditions"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.4,
+          "publicComment": "No public comment.",
+          "memberPositions": []
+        },
+        {
+          "id": "summit-golf-club",
+          "name": "Summit Club \u2014 Extensions of Time (site plan and subdivision)",
+          "address": "",
+          "applicationType": "extension of time",
+          "applicant": "Summit Club (not represented at the meeting)",
+          "status": "90-day subdivision extension and one-year site plan extension granted as one motion",
+          "summary": "Nobody appeared for the applicant. Adam Kaufman had heard only that the club is finalising its health department approval and looking to secure funding. Asked whether there was still a water issue, he said it was settled; the applicant had talked about waiting for a possible water main to come up that way, which would save building a water treatment plant, and the town's water department is working towards that. Kaufman explained that the board grants 90-day extensions on the subdivision and one year on the site plan. Lawrence Ruisi moved both extensions, it was seconded and carried, and Kaufman recorded one vote for both. Kaufman then noted the applicant had asked for two years on each: state town law does not permit that for the subdivision, and a one-year site plan extension is typical. A member said \"we'll see them again\" and expected another extension before the project is built. Asked whether there comes a point to stop, members noted the applicant pays for each extension and that the board can act when the reasons are no longer reasonable or circumstances change.",
+          "themes": [
+            "Septic & water supply",
+            "Time extensions & conditions"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.1,
+          "publicComment": "No public comment.",
+          "memberPositions": [
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "supportive of the extensions, while questioning how long they can continue",
+              "score": 0.2,
+              "themes": [
+                "time extensions & conditions"
+              ],
+              "evidence": "The presiding member asked \"What do you say, Larry, you want to do it?\" and he answered \"Sure\" before the motion \"to approve the extension of time for the Summit Golf Club for the site plan and the subdivision\" (00:04:52\u201300:05:04). After Kaufman's note on the two-year request, a member asked \"Is there a point in time where we just...\", and the presiding member's reply was addressed to him: \"I think Larry, when we think that there are arguments and no longer reasonable\" (00:06:06).",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "2-4-massaro-court",
+          "name": "2 Massaro Court \u2014 Resolution of Approval (after ARB)",
+          "address": "2 & 4 Massaro Court",
+          "applicationType": "site plan",
+          "applicant": "Landowner, represented by Dino Yetidis (as rendered), who will be project manager; the project engineer could not attend",
+          "status": "resolution of approval for 2 Massaro Court adopted",
+          "summary": "This follows the January 12 meeting, where 4 Massaro Court was approved and 2 Massaro Court was to follow once the applicant had ARB approval. Adam Kaufman said the board had been fine with the application and sent the applicant to the ARB; meanwhile the applicant also addressed several of the Town Engineer's conditions. A few conditions remain. A question about the gross land coverage worksheet's treatment of the driveway was resolved: the applicant had been taking too little credit, not too much. With no further questions, the presiding member moved the resolution, it was seconded and approved. The representative said they expect a building permit for lot 4 first, then clearing, and hope to break ground and perhaps pour a foundation before winter if the weather stays mild.",
+          "themes": [
+            "Time extensions & conditions",
+            "Zoning & land use"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.5,
+          "publicComment": "No public comment.",
+          "memberPositions": []
+        },
+        {
+          "id": "world-s-best-cheese-sign",
+          "name": "World's Best Cheese \u2014 Replacement Freestanding Sign",
+          "address": "",
+          "applicationType": "site plan amendment (sign)",
+          "applicant": "World's Best Cheese (not present; presented by the Town Planner at the applicant's request)",
+          "status": "no vote; board comfortable with the location; public hearing to be scheduled and approval to follow once the ARB approves the sign",
+          "summary": "Adam Kaufman presented a new freestanding sign near the driveway at the front of the property. The business had an old sign that was never shown on a site plan, so replacing it needs Planning Board approval; the sign design itself needs ARB approval. Asked about line of sight, he said the location will not affect it, though a member wanted the Town Engineer to confirm. The board agreed informally, with no vote, that the hearing can be scheduled and the sign approved after the ARB acts. The property's address is not stated in the recording.",
+          "themes": [
+            "Parking, traffic & access",
+            "Process & procedure",
+            "Signage"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.4,
+          "publicComment": "No public comment.",
+          "memberPositions": []
+        },
+        {
+          "id": "111-lafayette-avenue",
+          "name": "111 Lafayette Avenue \u2014 Amazon Quick Commerce (status discussion)",
+          "address": "111 Lafayette Avenue",
+          "applicationType": "site plan (hearing adjourned October 15)",
+          "applicant": "Amazon Quick Commerce (not present; not on this agenda)",
+          "status": "no action; waiting for the applicant's response to the board's information checklist and for emergency-service input before deciding whether to require a traffic study",
+          "summary": "Raised off-agenda by Lawrence Ruisi, who said the board had moved toward sending the application to the Police Department because of the roughly 200 vehicles a day the applicant estimates, and had discussed a traffic study of the area including Route 22 in North White Plains, given concerns about cut-through traffic. Asked whether he wanted a work session, he said sending it to the police is easy, but a traffic study needs a clear scope. A member asked whether this should affect the re-approval of the 154 Lafayette Avenue mail-truck site plan on the next agenda; another answered that the earlier approval rested on the circumstances at the time and that the mail trucks can instead be counted in Amazon's traffic picture. Adam Kaufman said he had sent the board's concerns about traffic volume and cars backing out to the emergency service providers, and that Amazon had asked for a checklist of the information the board wants. He advised waiting for the response and was uncomfortable discussing the application without the applicant present. He added that, given neighbourhood concern, requiring a modest traffic study scoped by the town's consultants would be a wise choice, with the applicant doing it. The board agreed to wait.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Parking, traffic & access",
+            "Process & procedure"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.2,
+          "publicComment": "None; not a hearing.",
+          "memberPositions": [
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "concerned; wants police input and possibly an area traffic study",
+              "score": -0.3,
+              "themes": [
+                "parking, traffic & access",
+                "neighbor concerns & safety"
+              ],
+              "evidence": "After a member recalled sending the application \"to the police department to get their input because all those 200 vehicles\" and \"a traffic study in those area and 22 on North White Plains\" (00:13:09\u201300:13:30), the presiding member asked \"So Larry, are you suggesting that you want to do a work session on that?\" (00:13:43). The answer: \"one sending it to the PD I think is pretty easy. If we're going to do a traffic study, I think we need to understand exactly what we're studying.\" The presiding member later said \"Larry, if you feel like we should discuss it at a higher level. We can talk about that too\" (00:17:30).",
+              "confidence": "medium"
+            },
+            {
+              "member": "Steven Sauro",
+              "stance": "cautious about linking Amazon to the 154 Lafayette Avenue re-approval",
+              "score": -0.1,
+              "themes": [
+                "process & procedure",
+                "parking, traffic & access"
+              ],
+              "evidence": "A member raised whether the board would hold up \"the reapproval of a mail\" application because of the traffic question, saying \"That was my concern.\" The reply was addressed to him: \"Steve, when we signed off on that, we signed off on the facts and circumstances that existed at that point in time\" (00:15:43), after which he said he did not want to be \"muddying the waters\". The turn boundaries in the recording are loose.",
+              "confidence": "low"
+            }
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Time extensions & conditions",
+          "salience": 0.7,
+          "sentiment": 0.1,
+          "note": "Two of the three votes were extensions. 263 Bedford-Banksville Road got a year to finish building, and the Summit Club got another round of extensions, with members openly expecting more and asking when repeated extensions stop being reasonable."
+        },
+        {
+          "theme": "Parking, traffic & access",
+          "salience": 0.55,
+          "sentiment": -0.2,
+          "note": "Amazon Quick Commerce at 111 Lafayette Avenue came back off-agenda. Lawrence Ruisi wants police input and possibly an area traffic study; the Town Planner advised waiting for Amazon's response to the board's checklist. Line of sight was checked for the World's Best Cheese sign."
+        },
+        {
+          "theme": "Process & procedure",
+          "salience": 0.4,
+          "sentiment": 0.1,
+          "note": "The board declined to discuss Amazon in the applicant's absence, sequenced a sign approval behind the ARB, and moved its next meeting to 6:30 p.m. for a Board of Ethics presentation."
+        },
+        {
+          "theme": "Signage",
+          "salience": 0.25,
+          "sentiment": 0.4,
+          "note": "A replacement freestanding sign for World's Best Cheese, never on a site plan before, will be heard once the ARB approves it."
+        },
+        {
+          "theme": "Zoning & land use",
+          "salience": 0.25,
+          "sentiment": 0.5,
+          "note": "The 2 Massaro Court resolution was approved after ARB sign-off, completing the pair approved in January."
+        },
+        {
+          "theme": "Septic & water supply",
+          "salience": 0.15,
+          "sentiment": 0.1,
+          "note": "The Summit Club may wait for a town water main rather than build its own treatment plant."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Adam Kaufman",
+          "role": "Town Planner",
+          "summary": "Reported no recent word from the Summit Club beyond health department approval and funding, explained the 90-day subdivision and one-year site plan extension limits, and noted the club had asked for two years on each. Presented the World's Best Cheese sign for the absent applicant. On 2 Massaro Court, said the board had sent the applicant to the ARB and the applicant also addressed the Town Engineer's conditions. On Amazon, said he had sent the board's traffic and backing-out concerns to the emergency service providers, that Amazon had asked for a checklist of the information wanted, and advised waiting for the response before deciding on a traffic study, which he said would be a wise, modestly scoped requirement. Previewed the next agenda."
+        }
+      ],
+      "attributionCoverage": "partial",
+      "attributionNote": "This is an unverified machine (ASR) transcript with no speaker labels. It is not the minutes. No roll call was taken and the presiding member is never named, so he carries no positions and is not identified; the presiding voice is not assumed to be Chairman Carthy, who is not named anywhere in the recording. Lawrence Ruisi is credited on the Summit Club because he was asked by name to make the motion and on Amazon because he was asked by name about a work session and later referred back to. Steven Sauro is credited at low confidence only, from a reply addressed to \"Steve\". Michael Pollack is named only as abstaining on the October 15 minutes and carries no positions. Thomas Crispi is not named. Seconders and voice votes are not attributed."
     }
   ]
 }
