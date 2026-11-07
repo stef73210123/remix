@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "town_board",
     "town": "Town of North Castle",
-    "meetings": 115,
-    "cases": 758,
+    "meetings": 116,
+    "cases": 763,
     "themes": 18,
-    "memberPositions": 1599,
+    "memberPositions": 1609,
     "roster": [
       "Joseph Rende",
       "Michael Schiliro",
@@ -714,13 +714,19 @@
       "cases": 18,
       "avgSentiment": 0.308,
       "attributionCoverage": "good"
+    },
+    {
+      "date": "2026-11-04",
+      "cases": 12,
+      "avgSentiment": 0.192,
+      "attributionCoverage": "good"
     }
   ],
   "themes": [
     {
       "theme": "Other",
-      "meetings": 89,
-      "avgSentiment": 0.422,
+      "meetings": 90,
+      "avgSentiment": 0.426,
       "avgSalience": 0.234,
       "timeline": [
         {
@@ -1167,14 +1173,19 @@
           "date": "2026-10-28",
           "sentiment": 0.8,
           "salience": 0.2
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.8,
+          "salience": 0.25
         }
       ]
     },
     {
       "theme": "Land use, zoning & special permits",
-      "meetings": 87,
-      "avgSentiment": 0.211,
-      "avgSalience": 0.331,
+      "meetings": 88,
+      "avgSentiment": 0.206,
+      "avgSalience": 0.338,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -1610,14 +1621,19 @@
           "date": "2026-10-28",
           "sentiment": 0.1,
           "salience": 0.35
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.26,
+          "salience": 0.95
         }
       ]
     },
     {
       "theme": "Budget, taxes & finance",
-      "meetings": 64,
-      "avgSentiment": 0.269,
-      "avgSalience": 0.24,
+      "meetings": 65,
+      "avgSentiment": 0.262,
+      "avgSalience": 0.241,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -1938,14 +1954,19 @@
           "date": "2026-10-14",
           "sentiment": -0.1,
           "salience": 0.35
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.15,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Open government & procedure",
-      "meetings": 56,
-      "avgSentiment": 0.068,
-      "avgSalience": 0.22,
+      "meetings": 57,
+      "avgSentiment": 0.065,
+      "avgSalience": 0.226,
       "timeline": [
         {
           "date": "2022-05-04",
@@ -2226,14 +2247,19 @@
           "date": "2026-10-28",
           "sentiment": -0.2,
           "salience": 0.5
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.11,
+          "salience": 0.55
         }
       ]
     },
     {
       "theme": "Public safety & police",
-      "meetings": 55,
-      "avgSentiment": 0.445,
-      "avgSalience": 0.186,
+      "meetings": 56,
+      "avgSentiment": 0.433,
+      "avgSalience": 0.188,
       "timeline": [
         {
           "date": "2022-02-16",
@@ -2509,6 +2535,11 @@
           "date": "2026-10-28",
           "sentiment": 0.1,
           "salience": 0.35
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.22,
+          "salience": 0.3
         }
       ]
     },
@@ -3039,6 +3070,264 @@
       ]
     },
     {
+      "theme": "Personnel & appointments",
+      "meetings": 50,
+      "avgSentiment": 0.48,
+      "avgSalience": 0.121,
+      "timeline": [
+        {
+          "date": "2022-01-12",
+          "sentiment": 0.1,
+          "salience": 0.4
+        },
+        {
+          "date": "2024-01-10",
+          "sentiment": 0.3,
+          "salience": 0.1
+        },
+        {
+          "date": "2024-02-14",
+          "sentiment": 0.9,
+          "salience": 0.08
+        },
+        {
+          "date": "2024-02-28",
+          "sentiment": 0.7,
+          "salience": 0.3
+        },
+        {
+          "date": "2024-03-13",
+          "sentiment": 0.3,
+          "salience": 0.25
+        },
+        {
+          "date": "2024-04-10",
+          "sentiment": 0.3,
+          "salience": 0.22
+        },
+        {
+          "date": "2024-05-08",
+          "sentiment": 0.5,
+          "salience": 0.08
+        },
+        {
+          "date": "2024-05-22",
+          "sentiment": 0.9,
+          "salience": 0.08
+        },
+        {
+          "date": "2024-06-12",
+          "sentiment": 0.3,
+          "salience": 0.04
+        },
+        {
+          "date": "2024-06-26",
+          "sentiment": 0.4,
+          "salience": 0.06
+        },
+        {
+          "date": "2024-07-10",
+          "sentiment": 0.8,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-07-24",
+          "sentiment": 0.8,
+          "salience": 0.07
+        },
+        {
+          "date": "2024-08-14",
+          "sentiment": 0.8,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-09-25",
+          "sentiment": 0.9,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-10-09",
+          "sentiment": 0.5,
+          "salience": 0.1
+        },
+        {
+          "date": "2024-11-20",
+          "sentiment": 0.2,
+          "salience": 0.04
+        },
+        {
+          "date": "2024-12-11",
+          "sentiment": 0.3,
+          "salience": 0.07
+        },
+        {
+          "date": "2025-01-08",
+          "sentiment": 0.5,
+          "salience": 0.16
+        },
+        {
+          "date": "2025-01-22",
+          "sentiment": 0.35,
+          "salience": 0.08
+        },
+        {
+          "date": "2025-02-26",
+          "sentiment": 0.3,
+          "salience": 0.03
+        },
+        {
+          "date": "2025-03-12",
+          "sentiment": 0.5,
+          "salience": 0.09
+        },
+        {
+          "date": "2025-03-26",
+          "sentiment": 0.3,
+          "salience": 0.04
+        },
+        {
+          "date": "2025-04-09",
+          "sentiment": -0.2,
+          "salience": 0.08
+        },
+        {
+          "date": "2025-04-23",
+          "sentiment": 0.4,
+          "salience": 0.06
+        },
+        {
+          "date": "2025-05-14",
+          "sentiment": 0.4,
+          "salience": 0.04
+        },
+        {
+          "date": "2025-06-11",
+          "sentiment": 0.1,
+          "salience": 0.15
+        },
+        {
+          "date": "2025-06-25",
+          "sentiment": 0.7,
+          "salience": 0.18
+        },
+        {
+          "date": "2025-08-13",
+          "sentiment": 0.2,
+          "salience": 0.13
+        },
+        {
+          "date": "2025-09-10",
+          "sentiment": 0.4,
+          "salience": 0.1
+        },
+        {
+          "date": "2025-09-30",
+          "sentiment": 0.5,
+          "salience": 0.05
+        },
+        {
+          "date": "2025-10-08",
+          "sentiment": 0.4,
+          "salience": 0.06
+        },
+        {
+          "date": "2025-10-22",
+          "sentiment": 0.6,
+          "salience": 0.06
+        },
+        {
+          "date": "2025-11-12",
+          "sentiment": 0.4,
+          "salience": 0.05
+        },
+        {
+          "date": "2025-11-19",
+          "sentiment": 0.5,
+          "salience": 0.06
+        },
+        {
+          "date": "2025-12-10",
+          "sentiment": 0.75,
+          "salience": 0.09
+        },
+        {
+          "date": "2026-01-14",
+          "sentiment": 0.7,
+          "salience": 0.6
+        },
+        {
+          "date": "2026-01-28",
+          "sentiment": 0.6,
+          "salience": 0.12
+        },
+        {
+          "date": "2026-02-11",
+          "sentiment": 0.5,
+          "salience": 0.05
+        },
+        {
+          "date": "2026-02-25",
+          "sentiment": 0.3,
+          "salience": 0.18
+        },
+        {
+          "date": "2026-03-11",
+          "sentiment": 0.4,
+          "salience": 0.04
+        },
+        {
+          "date": "2026-03-25",
+          "sentiment": 0.55,
+          "salience": 0.22
+        },
+        {
+          "date": "2026-04-08",
+          "sentiment": 0.6,
+          "salience": 0.12
+        },
+        {
+          "date": "2026-04-22",
+          "sentiment": 0.6,
+          "salience": 0.1
+        },
+        {
+          "date": "2026-05-13",
+          "sentiment": 0.65,
+          "salience": 0.1
+        },
+        {
+          "date": "2026-05-27",
+          "sentiment": 0.6,
+          "salience": 0.05
+        },
+        {
+          "date": "2026-06-10",
+          "sentiment": 0.45,
+          "salience": 0.08
+        },
+        {
+          "date": "2026-06-24",
+          "sentiment": 0.75,
+          "salience": 0.18
+        },
+        {
+          "date": "2026-10-14",
+          "sentiment": 0.5,
+          "salience": 0.2
+        },
+        {
+          "date": "2026-10-28",
+          "sentiment": 0.5,
+          "salience": 0.15
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.2,
+          "salience": 0.1
+        }
+      ]
+    },
+    {
       "theme": "Parks, recreation & trails",
       "meetings": 49,
       "avgSentiment": 0.442,
@@ -3545,263 +3834,10 @@
       ]
     },
     {
-      "theme": "Personnel & appointments",
-      "meetings": 49,
-      "avgSentiment": 0.486,
-      "avgSalience": 0.121,
-      "timeline": [
-        {
-          "date": "2022-01-12",
-          "sentiment": 0.1,
-          "salience": 0.4
-        },
-        {
-          "date": "2024-01-10",
-          "sentiment": 0.3,
-          "salience": 0.1
-        },
-        {
-          "date": "2024-02-14",
-          "sentiment": 0.9,
-          "salience": 0.08
-        },
-        {
-          "date": "2024-02-28",
-          "sentiment": 0.7,
-          "salience": 0.3
-        },
-        {
-          "date": "2024-03-13",
-          "sentiment": 0.3,
-          "salience": 0.25
-        },
-        {
-          "date": "2024-04-10",
-          "sentiment": 0.3,
-          "salience": 0.22
-        },
-        {
-          "date": "2024-05-08",
-          "sentiment": 0.5,
-          "salience": 0.08
-        },
-        {
-          "date": "2024-05-22",
-          "sentiment": 0.9,
-          "salience": 0.08
-        },
-        {
-          "date": "2024-06-12",
-          "sentiment": 0.3,
-          "salience": 0.04
-        },
-        {
-          "date": "2024-06-26",
-          "sentiment": 0.4,
-          "salience": 0.06
-        },
-        {
-          "date": "2024-07-10",
-          "sentiment": 0.8,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-07-24",
-          "sentiment": 0.8,
-          "salience": 0.07
-        },
-        {
-          "date": "2024-08-14",
-          "sentiment": 0.8,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-09-25",
-          "sentiment": 0.9,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-10-09",
-          "sentiment": 0.5,
-          "salience": 0.1
-        },
-        {
-          "date": "2024-11-20",
-          "sentiment": 0.2,
-          "salience": 0.04
-        },
-        {
-          "date": "2024-12-11",
-          "sentiment": 0.3,
-          "salience": 0.07
-        },
-        {
-          "date": "2025-01-08",
-          "sentiment": 0.5,
-          "salience": 0.16
-        },
-        {
-          "date": "2025-01-22",
-          "sentiment": 0.35,
-          "salience": 0.08
-        },
-        {
-          "date": "2025-02-26",
-          "sentiment": 0.3,
-          "salience": 0.03
-        },
-        {
-          "date": "2025-03-12",
-          "sentiment": 0.5,
-          "salience": 0.09
-        },
-        {
-          "date": "2025-03-26",
-          "sentiment": 0.3,
-          "salience": 0.04
-        },
-        {
-          "date": "2025-04-09",
-          "sentiment": -0.2,
-          "salience": 0.08
-        },
-        {
-          "date": "2025-04-23",
-          "sentiment": 0.4,
-          "salience": 0.06
-        },
-        {
-          "date": "2025-05-14",
-          "sentiment": 0.4,
-          "salience": 0.04
-        },
-        {
-          "date": "2025-06-11",
-          "sentiment": 0.1,
-          "salience": 0.15
-        },
-        {
-          "date": "2025-06-25",
-          "sentiment": 0.7,
-          "salience": 0.18
-        },
-        {
-          "date": "2025-08-13",
-          "sentiment": 0.2,
-          "salience": 0.13
-        },
-        {
-          "date": "2025-09-10",
-          "sentiment": 0.4,
-          "salience": 0.1
-        },
-        {
-          "date": "2025-09-30",
-          "sentiment": 0.5,
-          "salience": 0.05
-        },
-        {
-          "date": "2025-10-08",
-          "sentiment": 0.4,
-          "salience": 0.06
-        },
-        {
-          "date": "2025-10-22",
-          "sentiment": 0.6,
-          "salience": 0.06
-        },
-        {
-          "date": "2025-11-12",
-          "sentiment": 0.4,
-          "salience": 0.05
-        },
-        {
-          "date": "2025-11-19",
-          "sentiment": 0.5,
-          "salience": 0.06
-        },
-        {
-          "date": "2025-12-10",
-          "sentiment": 0.75,
-          "salience": 0.09
-        },
-        {
-          "date": "2026-01-14",
-          "sentiment": 0.7,
-          "salience": 0.6
-        },
-        {
-          "date": "2026-01-28",
-          "sentiment": 0.6,
-          "salience": 0.12
-        },
-        {
-          "date": "2026-02-11",
-          "sentiment": 0.5,
-          "salience": 0.05
-        },
-        {
-          "date": "2026-02-25",
-          "sentiment": 0.3,
-          "salience": 0.18
-        },
-        {
-          "date": "2026-03-11",
-          "sentiment": 0.4,
-          "salience": 0.04
-        },
-        {
-          "date": "2026-03-25",
-          "sentiment": 0.55,
-          "salience": 0.22
-        },
-        {
-          "date": "2026-04-08",
-          "sentiment": 0.6,
-          "salience": 0.12
-        },
-        {
-          "date": "2026-04-22",
-          "sentiment": 0.6,
-          "salience": 0.1
-        },
-        {
-          "date": "2026-05-13",
-          "sentiment": 0.65,
-          "salience": 0.1
-        },
-        {
-          "date": "2026-05-27",
-          "sentiment": 0.6,
-          "salience": 0.05
-        },
-        {
-          "date": "2026-06-10",
-          "sentiment": 0.45,
-          "salience": 0.08
-        },
-        {
-          "date": "2026-06-24",
-          "sentiment": 0.75,
-          "salience": 0.18
-        },
-        {
-          "date": "2026-10-14",
-          "sentiment": 0.5,
-          "salience": 0.2
-        },
-        {
-          "date": "2026-10-28",
-          "sentiment": 0.5,
-          "salience": 0.15
-        }
-      ]
-    },
-    {
       "theme": "Environment & conservation",
-      "meetings": 47,
-      "avgSentiment": 0.401,
-      "avgSalience": 0.229,
+      "meetings": 48,
+      "avgSentiment": 0.384,
+      "avgSalience": 0.24,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -4037,13 +4073,18 @@
           "date": "2026-10-28",
           "sentiment": 0.6,
           "salience": 0.35
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.41,
+          "salience": 0.75
         }
       ]
     },
     {
       "theme": "Local laws & legislation",
-      "meetings": 29,
-      "avgSentiment": 0.095,
+      "meetings": 30,
+      "avgSentiment": 0.088,
       "avgSalience": 0.286,
       "timeline": [
         {
@@ -4190,14 +4231,19 @@
           "date": "2026-10-28",
           "sentiment": 0.1,
           "salience": 0.1
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.1,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Roads, highway & sidewalks",
-      "meetings": 26,
-      "avgSentiment": 0.317,
-      "avgSalience": 0.19,
+      "meetings": 27,
+      "avgSentiment": 0.293,
+      "avgSalience": 0.197,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -4328,14 +4374,19 @@
           "date": "2026-09-23",
           "sentiment": -0.5,
           "salience": 0.25
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.35,
+          "salience": 0.4
         }
       ]
     },
     {
       "theme": "Intermunicipal & county/state",
-      "meetings": 25,
-      "avgSentiment": 0.248,
-      "avgSalience": 0.139,
+      "meetings": 26,
+      "avgSentiment": 0.25,
+      "avgSalience": 0.142,
       "timeline": [
         {
           "date": "2022-05-19",
@@ -4461,14 +4512,19 @@
           "date": "2026-09-23",
           "sentiment": 0.4,
           "salience": 0.25
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.3,
+          "salience": 0.2
         }
       ]
     },
     {
       "theme": "Resident concerns & quality of life",
-      "meetings": 20,
-      "avgSentiment": -0.068,
-      "avgSalience": 0.21,
+      "meetings": 21,
+      "avgSentiment": -0.091,
+      "avgSalience": 0.233,
       "timeline": [
         {
           "date": "2023-09-27",
@@ -4569,6 +4625,11 @@
           "date": "2026-10-28",
           "sentiment": -0.1,
           "salience": 0.55
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.57,
+          "salience": 0.7
         }
       ]
     },
@@ -4744,6 +4805,149 @@
   ],
   "cases": [
     {
+      "id": "personnel",
+      "name": "Personnel: Library Board Appointment (Deborah Trope, as rendered) and Terminal Leave Payment (Police Department)",
+      "address": "",
+      "applicationType": "personnel / appointments",
+      "applicant": "Town of North Castle",
+      "themes": [
+        "Open government & procedure",
+        "Personnel & appointments",
+        "Public safety & police",
+        "Water & sewer districts"
+      ],
+      "appearances": 11,
+      "firstSeen": "2024-01-10",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "approved by voice votes",
+      "avgSentiment": 0.427,
+      "trajectory": [
+        {
+          "date": "2024-01-10",
+          "sentiment": 0.7,
+          "status": "adopted"
+        },
+        {
+          "date": "2024-01-25",
+          "sentiment": 0.4,
+          "status": "adopted"
+        },
+        {
+          "date": "2024-06-12",
+          "sentiment": 0.3,
+          "status": "adopted"
+        },
+        {
+          "date": "2025-05-14",
+          "sentiment": 0.4,
+          "status": "adopted"
+        },
+        {
+          "date": "2025-07-23",
+          "sentiment": 0.1,
+          "status": "adopted"
+        },
+        {
+          "date": "2025-09-30",
+          "sentiment": 0.6,
+          "status": "adopted"
+        },
+        {
+          "date": "2026-01-14",
+          "sentiment": 0.6,
+          "status": "adopted"
+        },
+        {
+          "date": "2026-09-23",
+          "sentiment": 0.5,
+          "status": "resignation received with regret; probationary appointment approved; highway vacancy announced"
+        },
+        {
+          "date": "2026-10-14",
+          "sentiment": 0.5,
+          "status": "approved / received"
+        },
+        {
+          "date": "2026-10-28",
+          "sentiment": 0.5,
+          "status": "all approved by voice vote"
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.1,
+          "status": "approved by voice votes"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2024-01-10",
+          "status": "adopted",
+          "sentiment": 0.7,
+          "summary": "The board approved the appointment of Josephine Egan as Confidential Secretary to the Supervisor (effective January 1, 2024) and J. Carvey as Hourly Librarian (effective January 16, 2024), and accepted resignations from Susan Kramer (library, Jan 2), Kevin Mills (library, Dec 7, 2023) and Adam Woodruff (highway department, Dec 30, 2023). Members welcomed Egan warmly, with the Supervisor and colleagues expressing confidence she would be an asset to the whole board."
+        },
+        {
+          "date": "2024-01-25",
+          "status": "adopted",
+          "sentiment": 0.4,
+          "summary": "The board approved three personnel items by voice vote: appointing Arthur Ellis as an alternate to the Board of Ethics (5-year term to Jan 11, 2028); appointing Linda Cervich as Librarian 1 (hourly, effective Jan 29, 2024); and authorizing Finance Director Abbas to attend the 2024 NYS Government Finance Officers Association conference (April 17-19). Routine and uncontested."
+        },
+        {
+          "date": "2024-06-12",
+          "status": "adopted",
+          "sentiment": 0.3,
+          "summary": "Accepted the retirement resignation of Detective Sergeant Kevin Finetti (effective July 30, 2024); approved the probationary appointment of Danielle D. Thomas as Senior Office Assistant in the Building Department (effective June 13, 2024); and accepted, with regrets, the resignation of Melissa Horowitz from the Landmark Preservation Committee (effective June 23, 2024). The board noted thank-you letters are sent to departing volunteers."
+        },
+        {
+          "date": "2025-05-14",
+          "status": "adopted",
+          "sentiment": 0.4,
+          "summary": "The board unanimously appointed Alfonso D'Abruzio as a seasonal road maintainer in the Highway Department, effective May 19, 2025, and reappointed Adam Barnett to the Conservation Board for a two-year term expiring May 14, 2027, thanking him for his service. The consensus agenda was also approved."
+        },
+        {
+          "date": "2025-07-23",
+          "status": "adopted",
+          "sentiment": 0.1,
+          "summary": "The board received the resignation of Irwin Hernandez from the Water and Sewer Department (effective June 18, 2025) and of Michael Calderola from the Police Department (effective July 1, 2025), and approved court office personnel attending the 2025 NYS Association of Magistrates Court Clerks annual conference in Albany (Sept 28-Oct 1, 2025). All approved by voice vote as routine personnel items."
+        },
+        {
+          "date": "2025-09-30",
+          "status": "adopted",
+          "sentiment": 0.6,
+          "summary": "The board acted on four personnel items, each by motion, second, and unanimous voice vote: appointment of Jennifer Paglieli as Librarian (effective Sept. 25, 2025); acceptance 'with regret' of Mary Jacobs's resignation as hourly Library Clerk (effective Oct. 18, 2025); reappointment of Beira Bull Tata to the Architectural Review Board for a five-year term ending Sept. 30, 2030; and appointment of Eric Bell to the Library Board for a five-year term ending Dec. 31, 2030. The consensus agenda was also approved."
+        },
+        {
+          "date": "2026-01-14",
+          "status": "adopted",
+          "sentiment": 0.6,
+          "summary": "The board acted on several personnel matters by voice vote: accepted the retirement/resignation of Assistant Building Inspector Michael Cromwell (eff. Jan 31, 2026, with thanks for long service) and the resignation of full-time librarian Diana Wendell; made the probationary appointments of Elizabeth Esposito (part-time assistant court clerk and part-time intermediate police clerk, eff. Jan 12) and Henry Sieno (part-time fire inspector, eff. Jan 19); and approved a terminal-leave pay plan for retiring Police Chief Peter Simonson, whom Rende reported is doing well in retirement."
+        },
+        {
+          "date": "2026-09-23",
+          "status": "resignation received with regret; probationary appointment approved; highway vacancy announced",
+          "sentiment": 0.5,
+          "summary": "The board received with regret the resignation of Craig Benedict from the Conservation Board. Members praised him as a long-serving, valuable contributor who is moving away. The board approved the probationary appointment of Emily Arriaga Sandoval (as rendered by the ASR) as office assistant in the Building Department, effective September 28, 2026. In the administrator's update, the town administrator announced an open Highway Department position that requires or leads to a CDL."
+        },
+        {
+          "date": "2026-10-14",
+          "status": "approved / received",
+          "sentiment": 0.5,
+          "summary": "Christopher Tuzo was reappointed to the Architectural Review Board for a five-year term to October 14, 2031, and Denise Lombardi to the Board of Assessment Review for a five-year term to September 30, 2030. Members thanked both. The board received resignations from Anthony Leconte of the Highway Department, effective October 5, 2026, and Christine Morrow of the Assessor's Department, effective September 30, 2026. Names are as rendered in the ASR."
+        },
+        {
+          "date": "2026-10-28",
+          "status": "all approved by voice vote",
+          "sentiment": 0.5,
+          "summary": "The board made a probationary appointment of Jocelyn Herda (as rendered) as part-time intermediate clerk in the Building Department, effective November 3, 2026. It reappointed Chris Carti (as rendered) to the Planning Board for a five-year term (the end date is rendered 'December 31st, 2023', evidently an ASR error), Vincent Giordano to the Conservation Board for a two-year term to October 28, 2028, and Norman Hill to the Parks and Recreation Advisory Board for a three-year term to December 31, 2029. Members praised the appointees ('He does a great job. Thank you, Chris')."
+        },
+        {
+          "date": "2026-11-04",
+          "status": "approved by voice votes",
+          "sentiment": 0.1,
+          "summary": "Deborah Trope (as rendered) was appointed to the Library Board for a five-year term ending December 31, 2031. A terminal leave payment for William McClure (as rendered) of the Police Department was approved. Both passed by voice vote without discussion."
+        }
+      ]
+    },
+    {
       "id": "local-law",
       "name": "Local Law \u2014 Short-Term Rental Regulations",
       "address": "",
@@ -4880,138 +5084,6 @@
           "status": "adopted",
           "sentiment": 0.85,
           "summary": "The board held a public hearing on a proposed local law creating a regulatory framework for short-term rentals, requiring a building-department permit plus an operating permit, occupancy/vehicle limits, a 120-day annual cap, noise restrictions, and a notarized affidavit or affirmation of primary residence. Town Planner Adam Kaufman summarized the draft and Attorney Roland answered questions on enforcement (police can issue violations) and affirmation forms. After public comment, the board closed the hearing, received the Planning Board memo (dated March 10), adopted a negative declaration, and adopted the local law by voice vote. Enforcement, public education, and a license-fee schedule were flagged as follow-up items."
-        }
-      ]
-    },
-    {
-      "id": "personnel",
-      "name": "Personnel \u2014 Building Department Clerk Appointment; Planning Board, Conservation Board and Parks & Recreation Advisory Board Reappointments",
-      "address": "",
-      "applicationType": "personnel",
-      "applicant": "Town of North Castle",
-      "themes": [
-        "Open government & procedure",
-        "Personnel & appointments",
-        "Public safety & police",
-        "Water & sewer districts"
-      ],
-      "appearances": 10,
-      "firstSeen": "2024-01-10",
-      "lastSeen": "2026-10-28",
-      "lastStatus": "all approved by voice vote",
-      "avgSentiment": 0.46,
-      "trajectory": [
-        {
-          "date": "2024-01-10",
-          "sentiment": 0.7,
-          "status": "adopted"
-        },
-        {
-          "date": "2024-01-25",
-          "sentiment": 0.4,
-          "status": "adopted"
-        },
-        {
-          "date": "2024-06-12",
-          "sentiment": 0.3,
-          "status": "adopted"
-        },
-        {
-          "date": "2025-05-14",
-          "sentiment": 0.4,
-          "status": "adopted"
-        },
-        {
-          "date": "2025-07-23",
-          "sentiment": 0.1,
-          "status": "adopted"
-        },
-        {
-          "date": "2025-09-30",
-          "sentiment": 0.6,
-          "status": "adopted"
-        },
-        {
-          "date": "2026-01-14",
-          "sentiment": 0.6,
-          "status": "adopted"
-        },
-        {
-          "date": "2026-09-23",
-          "sentiment": 0.5,
-          "status": "resignation received with regret; probationary appointment approved; highway vacancy announced"
-        },
-        {
-          "date": "2026-10-14",
-          "sentiment": 0.5,
-          "status": "approved / received"
-        },
-        {
-          "date": "2026-10-28",
-          "sentiment": 0.5,
-          "status": "all approved by voice vote"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2024-01-10",
-          "status": "adopted",
-          "sentiment": 0.7,
-          "summary": "The board approved the appointment of Josephine Egan as Confidential Secretary to the Supervisor (effective January 1, 2024) and J. Carvey as Hourly Librarian (effective January 16, 2024), and accepted resignations from Susan Kramer (library, Jan 2), Kevin Mills (library, Dec 7, 2023) and Adam Woodruff (highway department, Dec 30, 2023). Members welcomed Egan warmly, with the Supervisor and colleagues expressing confidence she would be an asset to the whole board."
-        },
-        {
-          "date": "2024-01-25",
-          "status": "adopted",
-          "sentiment": 0.4,
-          "summary": "The board approved three personnel items by voice vote: appointing Arthur Ellis as an alternate to the Board of Ethics (5-year term to Jan 11, 2028); appointing Linda Cervich as Librarian 1 (hourly, effective Jan 29, 2024); and authorizing Finance Director Abbas to attend the 2024 NYS Government Finance Officers Association conference (April 17-19). Routine and uncontested."
-        },
-        {
-          "date": "2024-06-12",
-          "status": "adopted",
-          "sentiment": 0.3,
-          "summary": "Accepted the retirement resignation of Detective Sergeant Kevin Finetti (effective July 30, 2024); approved the probationary appointment of Danielle D. Thomas as Senior Office Assistant in the Building Department (effective June 13, 2024); and accepted, with regrets, the resignation of Melissa Horowitz from the Landmark Preservation Committee (effective June 23, 2024). The board noted thank-you letters are sent to departing volunteers."
-        },
-        {
-          "date": "2025-05-14",
-          "status": "adopted",
-          "sentiment": 0.4,
-          "summary": "The board unanimously appointed Alfonso D'Abruzio as a seasonal road maintainer in the Highway Department, effective May 19, 2025, and reappointed Adam Barnett to the Conservation Board for a two-year term expiring May 14, 2027, thanking him for his service. The consensus agenda was also approved."
-        },
-        {
-          "date": "2025-07-23",
-          "status": "adopted",
-          "sentiment": 0.1,
-          "summary": "The board received the resignation of Irwin Hernandez from the Water and Sewer Department (effective June 18, 2025) and of Michael Calderola from the Police Department (effective July 1, 2025), and approved court office personnel attending the 2025 NYS Association of Magistrates Court Clerks annual conference in Albany (Sept 28-Oct 1, 2025). All approved by voice vote as routine personnel items."
-        },
-        {
-          "date": "2025-09-30",
-          "status": "adopted",
-          "sentiment": 0.6,
-          "summary": "The board acted on four personnel items, each by motion, second, and unanimous voice vote: appointment of Jennifer Paglieli as Librarian (effective Sept. 25, 2025); acceptance 'with regret' of Mary Jacobs's resignation as hourly Library Clerk (effective Oct. 18, 2025); reappointment of Beira Bull Tata to the Architectural Review Board for a five-year term ending Sept. 30, 2030; and appointment of Eric Bell to the Library Board for a five-year term ending Dec. 31, 2030. The consensus agenda was also approved."
-        },
-        {
-          "date": "2026-01-14",
-          "status": "adopted",
-          "sentiment": 0.6,
-          "summary": "The board acted on several personnel matters by voice vote: accepted the retirement/resignation of Assistant Building Inspector Michael Cromwell (eff. Jan 31, 2026, with thanks for long service) and the resignation of full-time librarian Diana Wendell; made the probationary appointments of Elizabeth Esposito (part-time assistant court clerk and part-time intermediate police clerk, eff. Jan 12) and Henry Sieno (part-time fire inspector, eff. Jan 19); and approved a terminal-leave pay plan for retiring Police Chief Peter Simonson, whom Rende reported is doing well in retirement."
-        },
-        {
-          "date": "2026-09-23",
-          "status": "resignation received with regret; probationary appointment approved; highway vacancy announced",
-          "sentiment": 0.5,
-          "summary": "The board received with regret the resignation of Craig Benedict from the Conservation Board. Members praised him as a long-serving, valuable contributor who is moving away. The board approved the probationary appointment of Emily Arriaga Sandoval (as rendered by the ASR) as office assistant in the Building Department, effective September 28, 2026. In the administrator's update, the town administrator announced an open Highway Department position that requires or leads to a CDL."
-        },
-        {
-          "date": "2026-10-14",
-          "status": "approved / received",
-          "sentiment": 0.5,
-          "summary": "Christopher Tuzo was reappointed to the Architectural Review Board for a five-year term to October 14, 2031, and Denise Lombardi to the Board of Assessment Review for a five-year term to September 30, 2030. Members thanked both. The board received resignations from Anthony Leconte of the Highway Department, effective October 5, 2026, and Christine Morrow of the Assessor's Department, effective September 30, 2026. Names are as rendered in the ASR."
-        },
-        {
-          "date": "2026-10-28",
-          "status": "all approved by voice vote",
-          "sentiment": 0.5,
-          "summary": "The board made a probationary appointment of Jocelyn Herda (as rendered) as part-time intermediate clerk in the Building Department, effective November 3, 2026. It reappointed Chris Carti (as rendered) to the Planning Board for a five-year term (the end date is rendered 'December 31st, 2023', evidently an ASR error), Vincent Giordano to the Conservation Board for a two-year term to October 28, 2028, and Norman Hill to the Parks and Recreation Advisory Board for a three-year term to December 31, 2029. Members praised the appointees ('He does a great job. Thank you, Chris')."
         }
       ]
     },
@@ -7947,6 +8019,65 @@
           "status": "public hearing held and closed; local law adopted by voice vote",
           "sentiment": 0.55,
           "summary": "This was the public hearing on amending \u00a7233-13 to limit peddling, soliciting and canvassing to 10 a.m.\u20136 p.m. and to create a no-knock registry; the record included Chief Huffnagle's letter of July 28, 2026. The supervisor explained the background. Over the summer the clerk's and supervisor's offices had complaints about evening solicitors, including pest-control and roofing outfits, and he himself met a solicitor who said his permit was 'in the car' and never came back. A North White Plains resident asked whether the law covers political petitioners. The supervisor said political and religious canvassing is constitutionally protected and needs no town registration. A staff voice, apparently from the clerk's office, read the code's definition of canvassing and said 'it's not 100% clear what types of organizations are allowed to canvas. Perhaps we need to clarify that definition within our town code.' A member asked that the registry sign-up page tell residents plainly that it does not cover political or religious callers. Another resident asked whether the hours apply to canvassing, and counsel confirmed the same time limit applies to canvassing. A member then pointed out that canvassers do not have to come to the town, so 'no one will know this information.' The board agreed to notify the local and county political party committees and post the change on the town website. Members also noted that the adopted text says nothing about sundown, although the supervisor had described it as doing so. The hearing was closed and the law adopted by voice vote. The supervisor said the town would watch how it works and amend it if needed."
+        }
+      ]
+    },
+    {
+      "id": "1700-old-orchard-street-north-white-plains",
+      "name": "Sports Training Academy & Community Facility (STAC) District, 1700 Old Orchard Street: Agency Letters Received, Positive Declaration, Draft Scoping Document Received, December 2 Scoping Session Noticed, Motion to Return the Petition Fails",
+      "address": "1700 Old Orchard Street, North White Plains (former St. Christopher's / Jennie Clarkson campus)",
+      "applicationType": "zoning text and map amendment petition (new zoning district) / SEQRA positive declaration, draft scoping document and scoping-session notice",
+      "applicant": "Petitioning LLC (name not captured clearly by the ASR), represented by Zarin & Steinmetz counsel (surname unclear in the recording) of Zarin & Steinmetz; engineer Ed O'Hara (CHA); traffic consultant John Canning (Kimley-Horn)",
+      "themes": [
+        "Budget, taxes & finance",
+        "Environment & conservation",
+        "Land use, zoning & special permits",
+        "Open government & procedure",
+        "Public safety & police",
+        "Resident concerns & quality of life",
+        "Roads, highway & sidewalks",
+        "Water & sewer districts"
+      ],
+      "appearances": 3,
+      "firstSeen": "2026-09-09",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "Items 1\u20134 received by voice vote: letters from the County Planning Board (October 5, 2026), the NYS DEC (October 6, 2026), the 'New York State Department of Environmental Protection' (as read; context suggests NYC DEP) (October 16, 2026) and the Attorney General's Environmental Protection Bureau (October 16, 2026). Item 5, the positive declaration, adopted by voice vote. Item 6, the draft scoping document, received on a 4\u20131 roll call (Berra no). Item 7, notice of the scoping session for December 2, 2026, approved on a 3\u20132 roll call ('So motion carries'; Berra and, by elimination, DiGiacinto no). A later motion to return the petition was put to a roll call. Berra voted yes, and DiGiacinto's yes is implied. Hussain, Vataj and Rende voted no, so it failed, though the result was not announced in the recording.",
+      "avgSentiment": -0.433,
+      "trajectory": [
+        {
+          "date": "2026-09-09",
+          "sentiment": -0.25,
+          "status": "petition and submissions received; intent to act as lead agency declared and referral to the town and county planning boards approved, each on a 3\u20132 roll call (Berra and DiGiacinto no)"
+        },
+        {
+          "date": "2026-09-23",
+          "sentiment": -0.6,
+          "status": "public comment only \u2014 not on this agenda; the speaker asked for a positive declaration and a full EIS"
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.45,
+          "status": "Items 1\u20134 received by voice vote: letters from the County Planning Board (October 5, 2026), the NYS DEC (October 6, 2026), the 'New York State Department of Environmental Protection' (as read; context suggests NYC DEP) (October 16, 2026) and the Attorney General's Environmental Protection Bureau (October 16, 2026). Item 5, the positive declaration, adopted by voice vote. Item 6, the draft scoping document, received on a 4\u20131 roll call (Berra no). Item 7, notice of the scoping session for December 2, 2026, approved on a 3\u20132 roll call ('So motion carries'; Berra and, by elimination, DiGiacinto no). A later motion to return the petition was put to a roll call. Berra voted yes, and DiGiacinto's yes is implied. Hussain, Vataj and Rende voted no, so it failed, though the result was not announced in the recording."
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-09",
+          "status": "petition and submissions received; intent to act as lead agency declared and referral to the town and county planning boards approved, each on a 3\u20132 roll call (Berra and DiGiacinto no)",
+          "sentiment": -0.25,
+          "summary": "The petitioner proposes a new STAC zoning district for the roughly 36-acre former St. Christopher's / Jennie Clarkson campus, in the R-1 and R-2A districts between Route 22 and the reservoir, next to BOCES and Cranberry Lake Preserve and off the tax rolls for decades. Phase one would build five lit turf fields (one enclosed), a 2,000-seat stadium field, about 780 parking spaces and housing for 60 staff and minor-league-level players; phase two, three to five years out, would enclose a second field and add a dormitory for up to 150 of a maximum 300 academy students. Non-sporting, non-community events would need a special event permit from the town. Counsel said the code does not contemplate this use, so the petitioner drafted its own district. The principal, a Westchester resident and chair of New York Soccer Club, said the project would serve local programmes and schools as well as elite athletes, would be a tax-paying LLC, and would avoid crumb-rubber infill and add solar. A new driveway would be cut on Old Orchard Street because the existing Route 22 corner access belongs to New York City; water would come by extending the Westchester Joint Water Works main about a thousand feet, possibly picking up two homes that want service. The traffic consultant said Route 22 volumes are about 15% below their 2001 peak and peak activity would fall on weekends, though a left-turn lane would probably be needed. Supervisor Rende asked about phasing, market demand and DEP consultation. Councilman Berra objected that the project offers only incidental benefit to residents while removing 15 acres of forest in a sensitive area, with traffic, noise, lighting above 25 feet, a 13-foot wall on Route 22, 85\u201390-foot buildings the volunteer fire department cannot ladder, and limited tax yield from fields. Councilwoman DiGiacinto, a former teacher, praised the mix of academics and athletics but said the location was wrong, recalling a 40-minute jam near the County Center during a graduation. Rende urged the board to look at the petition closely rather than with a narrow mind, suggested North White Plains businesses could benefit, and said the Valhalla school district is more worried about residential redevelopment of the site, such as the earlier Vue proposal. After the receipt vote, Old Orchard Street neighbour Brad Aiken said the applicant's traffic counts seemed to have been taken in summer, missing BOCES traffic on a road that ices over, and that no neighbour had been contacted."
+        },
+        {
+          "date": "2026-09-23",
+          "status": "public comment only \u2014 not on this agenda; the speaker asked for a positive declaration and a full EIS",
+          "sentiment": -0.6,
+          "summary": "A resident of 9 William Street, whose name was not captured, spoke against the petition to create a STAC zoning district on the former St. Christopher's/Jennie Clarkson property at 1700 Old Orchard Street, which the board received on September 9. She asked the board to issue a positive declaration and require a full environmental impact statement. Her argument was that a stadium seating about 3,000 would bring thousands of cars, buses and pedestrians onto residential streets in Old Orchard Street and Cory Heights that the town has only just placed under new one-way and no-parking controls. She said Route 22's pavement, sight lines, speed and volume are already dangerous, and described witnessing a fatal motorcycle crash on Route 22 last year. In her view, the applicant's environmental assessment form and assumed traffic counts do not study real event-night volumes. She also contrasted staff time spent on a private stadium review with Quarry Heights families who still lack finished water service, and asked that the land not be rezoned until the full study is done and the public has been heard. The board did not respond on the merits."
+        },
+        {
+          "date": "2026-11-04",
+          "status": "Items 1\u20134 received by voice vote: letters from the County Planning Board (October 5, 2026), the NYS DEC (October 6, 2026), the 'New York State Department of Environmental Protection' (as read; context suggests NYC DEP) (October 16, 2026) and the Attorney General's Environmental Protection Bureau (October 16, 2026). Item 5, the positive declaration, adopted by voice vote. Item 6, the draft scoping document, received on a 4\u20131 roll call (Berra no). Item 7, notice of the scoping session for December 2, 2026, approved on a 3\u20132 roll call ('So motion carries'; Berra and, by elimination, DiGiacinto no). A later motion to return the petition was put to a roll call. Berra voted yes, and DiGiacinto's yes is implied. Hussain, Vataj and Rende voted no, so it failed, though the result was not announced in the recording.",
+          "sentiment": -0.45,
+          "summary": "Preface (before the agenda): Before the agenda, the supervisor noted that many people were present for item 4B. He said it is not a public hearing and no votes would be taken. The Town Planner, Adam Kaufman, would explain the item, the board would receive documents already on the website, and a date would be set for a full scoping session. That session will be a public hearing with a court stenographer, followed by about 30 days for written comments, all of which the applicant must answer in its environmental assessment. Asked whether the board could just return the petition, he said it could do so at any point by a 'concurrent decision', without a formal vote. He said the applicant would have no Article 78 remedy, which answers social-media claims that the town would be sued. He said 'there's been a lot of misinformation circulated'. He believed most members were 'very concerned about this project' but felt it deserved to go through the process as 'a fact-finding exercise'. One member preferred to comment after hearing the public. Another wanted to wait for the agenda item but said 'I would not oppose returning the petition.' A third was okay waiting. A fourth raised the entry point, fire department capacity and mutual aid (having met with North White Plains), and traffic as the three issues to resolve early. Item 4B: The supervisor took up item B, the STAC zoning district and its mapping on 1700 Old Orchard Street. Town Clerk Allison Simon read the four agency letters. Before the motions, a member identified from a later reference as Councilman Berra asked that the draft scoping document be received separately: 'that implies that we're moving forward with that.' Another member asked counsel whether receiving it was a vote to move forward. Town Attorney Roland Baroni (addressed as 'Roland') said item 7 would be the indication, 'because there you're setting a date', and that item 5, the positive declaration, should also be taken separately. Items 1\u20134 were received. The scoping document was received 4\u20131, with Berra voting no ('I wouldn't move ahead with that'), and the positive declaration was then adopted by voice vote. On item 7, a member credited at medium confidence as Councilman Hussain said the vote was about giving the community a forum and that 'any of us 100% disagreeing with this project is fully compatible with us voting yes.' A staff voice clarified that scoping decides only what is to be studied. It is not a forum for or against the application, and returning the petition 'would be the mechanism' for that. The scoping document, roughly 43\u201345 pages, lists alternatives including scaling back, building height and a residential development. The supervisor then asked Director of Planning Adam Kaufman to explain the process. Kaufman said the board is lead agency after 30 days with no objections. The positive declaration means an EIS is required, the draft scope goes to involved and interested agencies for a month, and there will be a public scoping meeting. The board then votes on a final scope, and later comes a hearing on the draft EIS and responses in a final EIS. The board does not have to adopt the scope. Councilman Vataj's suggestion to hear the public and the applicant first was welcomed by another member, who said the public could tell the board 'it's a non-starter for us, and we should return the petition.' Item 7 then carried 3\u20132 on a roll call. Nearly an hour and a half of public comment followed, almost all of it opposed (see publicComment). The supervisor answered residents at length. He said the agency letters say what the board is saying, that 'unless the applicant can find ways to resolve those concerns \u2026 we're not going to approve it', and that he would be 'the first one to hand back the petition' if sensitive resources were in jeopardy, but that returning it now would be 'myopic'. He recalled Jennie Clarkson's drain on police, fire and ambulance services and its illegal landfill, and said the current owners pay taxes and are funding the cleanup. He also said two DEP representatives meeting him and the Town Administrator about another parcel had told him the DEP was not interested in this one. Two residents disputed that, and one said a bankruptcy filing shows DEP interest frustrated by a government shutdown. A woman resident asked members to raise their hands if they would want the complex two miles from home. A member who had voted yes objected to the tactic and said 'I'm definitely not for against this project yet'; that member is not credited. Councilwoman DiGiacinto said that in her years on the board since 2014 she had never seen such site-specific agency letters. She quoted the County Planning Board ('may not be appropriate for this site'), the DEP and the watershed inspector general, and said she saw no benefit justifying going forward. Councilman Berra said the DEP had been interested but lacked budget, and that the seller bore much of the cleanup cost. He argued that the EIS process gains momentum and carries real opportunity costs in residents' and staff time. He cited the town hall project and the budget, and estimated that one more police officer would cost about $250,000, or a 1% tax increase. Councilman Hussain told Berra he agreed the proposal is 'very much off the mark as it stands' but had not yet heard the other side. Councilman Vataj asked the applicant to respond to the residents, warning that otherwise 'this thing is gonna go nowhere.' The principal said the scale was not final and there is no indoor stadium, only covered fields and one field with up to 2,000 seats. He said the turf would contain no crumb rubber or PFAS and that traffic studies are under way. He said he would hire on-site security rather than rely on town police, that a 90-foot phase-two building might never be built, and that he had built facilities at Manhattanville. He offered to meet residents. The supervisor cut off further back-and-forth, stressing that this was not a public hearing. A suggestion that the applicant attend Councilwoman DiGiacinto's gathering was rejected as 'not a town board thing'. The motion to return the petition then failed on a roll call."
         }
       ]
     },
@@ -12078,49 +12209,46 @@
       ]
     },
     {
-      "id": "1700-old-orchard-street-north-white-plains",
-      "name": "Public Comment \u2014 Cranberry Lake STAC (Sports Training Academy & Community Facility) Zoning Petition, 1700 Old Orchard Street",
-      "address": "1700 Old Orchard Street, North White Plains",
-      "applicationType": "zoning text and map amendment petition (public comment only)",
-      "applicant": "Petitioning LLC (name not captured clearly by the ASR), represented by Zarin & Steinmetz counsel (surname unclear in the recording) of Zarin & Steinmetz; engineer Ed O'Hara (CHA); traffic consultant John Canning (Kimley-Horn)",
+      "id": "35-bedford-banksville-road",
+      "name": "35 Bedford Banksville Road \u2014 Private Stable Special Use Permit Amendment: Public Hearing Opened and Adjourned Without Date",
+      "address": "35 Bedford Banksville Road",
+      "applicationType": "special use permit amendment / site plan \u2014 public hearing",
+      "applicant": "ASG and W Enterprise LLC (as rendered), represented by Adam [surname rendered 'Weckenstein'/'Weixstein'] of firm rendered 'Hockman, Tortella, and Weckenstein LLP' LLP; project manager and landscape architect also present (names not clearly captured)",
       "themes": [
-        "Budget, taxes & finance",
         "Environment & conservation",
         "Land use, zoning & special permits",
-        "Public safety & police",
-        "Resident concerns & quality of life",
-        "Roads, highway & sidewalks",
-        "Water & sewer districts"
+        "Local laws & legislation",
+        "Resident concerns & quality of life"
       ],
       "appearances": 2,
-      "firstSeen": "2026-09-09",
-      "lastSeen": "2026-09-23",
-      "lastStatus": "public comment only \u2014 not on this agenda; the speaker asked for a positive declaration and a full EIS",
-      "avgSentiment": -0.425,
+      "firstSeen": "2026-10-14",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "public hearing opened and the documents read by the Town Clerk received, both by voice vote; at the applicant's request (the Planning Board's 30-day SEQRA lead-agency period has not run), the hearing was kept open and adjourned to a date uncertain by voice vote. The applicant is to coordinate a return date with the Planning Department and re-notice the neighbours within 250 feet by letter. Town counsel is to look at the easement and at the cases the applicant's attorney supplied. A poll on adding ownership-change or duration limits was not pursued after members said no.",
+      "avgSentiment": 0.075,
       "trajectory": [
         {
-          "date": "2026-09-09",
-          "sentiment": -0.25,
-          "status": "petition and submissions received; intent to act as lead agency declared and referral to the town and county planning boards approved, each on a 3\u20132 roll call (Berra and DiGiacinto no)"
+          "date": "2026-10-14",
+          "sentiment": 0.1,
+          "status": "application, attorney's September 3, 2026 letter, short EAF and the Planning Department's September 29, 2026 staff report received; Planning Board declared lead agency per counsel's advice; circulated and referred to town and county planning boards; public hearing scheduled for November 4"
         },
         {
-          "date": "2026-09-23",
-          "sentiment": -0.6,
-          "status": "public comment only \u2014 not on this agenda; the speaker asked for a positive declaration and a full EIS"
+          "date": "2026-11-04",
+          "sentiment": 0.05,
+          "status": "public hearing opened and the documents read by the Town Clerk received, both by voice vote; at the applicant's request (the Planning Board's 30-day SEQRA lead-agency period has not run), the hearing was kept open and adjourned to a date uncertain by voice vote. The applicant is to coordinate a return date with the Planning Department and re-notice the neighbours within 250 feet by letter. Town counsel is to look at the easement and at the cases the applicant's attorney supplied. A poll on adding ownership-change or duration limits was not pursued after members said no."
         }
       ],
       "timeline": [
         {
-          "date": "2026-09-09",
-          "status": "petition and submissions received; intent to act as lead agency declared and referral to the town and county planning boards approved, each on a 3\u20132 roll call (Berra and DiGiacinto no)",
-          "sentiment": -0.25,
-          "summary": "The petitioner proposes a new STAC zoning district for the roughly 36-acre former St. Christopher's / Jennie Clarkson campus, in the R-1 and R-2A districts between Route 22 and the reservoir, next to BOCES and Cranberry Lake Preserve and off the tax rolls for decades. Phase one would build five lit turf fields (one enclosed), a 2,000-seat stadium field, about 780 parking spaces and housing for 60 staff and minor-league-level players; phase two, three to five years out, would enclose a second field and add a dormitory for up to 150 of a maximum 300 academy students. Non-sporting, non-community events would need a special event permit from the town. Counsel said the code does not contemplate this use, so the petitioner drafted its own district. The principal, a Westchester resident and chair of New York Soccer Club, said the project would serve local programmes and schools as well as elite athletes, would be a tax-paying LLC, and would avoid crumb-rubber infill and add solar. A new driveway would be cut on Old Orchard Street because the existing Route 22 corner access belongs to New York City; water would come by extending the Westchester Joint Water Works main about a thousand feet, possibly picking up two homes that want service. The traffic consultant said Route 22 volumes are about 15% below their 2001 peak and peak activity would fall on weekends, though a left-turn lane would probably be needed. Supervisor Rende asked about phasing, market demand and DEP consultation. Councilman Berra objected that the project offers only incidental benefit to residents while removing 15 acres of forest in a sensitive area, with traffic, noise, lighting above 25 feet, a 13-foot wall on Route 22, 85\u201390-foot buildings the volunteer fire department cannot ladder, and limited tax yield from fields. Councilwoman DiGiacinto, a former teacher, praised the mix of academics and athletics but said the location was wrong, recalling a 40-minute jam near the County Center during a graduation. Rende urged the board to look at the petition closely rather than with a narrow mind, suggested North White Plains businesses could benefit, and said the Valhalla school district is more worried about residential redevelopment of the site, such as the earlier Vue proposal. After the receipt vote, Old Orchard Street neighbour Brad Aiken said the applicant's traffic counts seemed to have been taken in summer, missing BOCES traffic on a road that ices over, and that no neighbour had been contacted."
+          "date": "2026-10-14",
+          "status": "application, attorney's September 3, 2026 letter, short EAF and the Planning Department's September 29, 2026 staff report received; Planning Board declared lead agency per counsel's advice; circulated and referred to town and county planning boards; public hearing scheduled for November 4",
+          "sentiment": 0.1,
+          "summary": "The owner of a 25-acre R-2A private stable on the edge of Conyers Farm asked to amend its 2004 special permit in four ways. First, remove the condition that the horses are solely for the non-commercial use of the residents. Second, move 0.41 acres of paddock out of the wetland buffer and setbacks. Third, increase paddock area from 2.42 to 3.94 acres (16 paddocks instead of 10, including four all-weather paddocks). Fourth, raise the permitted horses from 20 to 29, which the 2004 permit anticipated. There would be no new or expanded buildings. Counsel said the condition came from a different use in the code (additional horses as an accessory use) and makes little sense for a site whose only house is about 1,400 square feet. The intent is boarding and training, not public lessons, shows or events, and he said the site is listed in the comprehensive plan as an equestrian facility. Town Planner Adam Kaufman explained that the 2004 board had worried about commercial impacts and the then owner accepted the condition, and he asked for a precise description of the activities. Members asked how many owners would share horses, how the tree line along the road would change (about 85 trees would come out for paddocks), how the cottage is used, and whether grooms' housing would grow; the code allows one bedroom per five horses. They also asked about wetland trails in the staff report, and the applicant committed on the record not to use them. Fred Cohen of Round Hill Road supported most of the plan but warned that lifting the commercial restriction would be a slippery slope for other Conyers Farm horse properties. Counsel floated making the relief non-transferable, and the applicant's attorney said he would ask his client."
         },
         {
-          "date": "2026-09-23",
-          "status": "public comment only \u2014 not on this agenda; the speaker asked for a positive declaration and a full EIS",
-          "sentiment": -0.6,
-          "summary": "A resident of 9 William Street, whose name was not captured, spoke against the petition to create a STAC zoning district on the former St. Christopher's/Jennie Clarkson property at 1700 Old Orchard Street, which the board received on September 9. She asked the board to issue a positive declaration and require a full environmental impact statement. Her argument was that a stadium seating about 3,000 would bring thousands of cars, buses and pedestrians onto residential streets in Old Orchard Street and Cory Heights that the town has only just placed under new one-way and no-parking controls. She said Route 22's pavement, sight lines, speed and volume are already dangerous, and described witnessing a fatal motorcycle crash on Route 22 last year. In her view, the applicant's environmental assessment form and assumed traffic counts do not study real event-night volumes. She also contrasted staff time spent on a private stadium review with Quarry Heights families who still lack finished water service, and asked that the land not be rezoned until the full study is done and the public has been heard. The board did not respond on the merits."
+          "date": "2026-11-04",
+          "status": "public hearing opened and the documents read by the Town Clerk received, both by voice vote; at the applicant's request (the Planning Board's 30-day SEQRA lead-agency period has not run), the hearing was kept open and adjourned to a date uncertain by voice vote. The applicant is to coordinate a return date with the Planning Department and re-notice the neighbours within 250 feet by letter. Town counsel is to look at the easement and at the cases the applicant's attorney supplied. A poll on adding ownership-change or duration limits was not pursued after members said no.",
+          "sentiment": 0.05,
+          "summary": "The documents received included the public notice and affidavits, the September 3, 2026 application, the Planning Department's September 29, 2026 staff report, an email from Lauren Pinkis (as rendered) dated November 2, 2026, the County Planning Board recommendation and letters, a Town Planning Board circulation letter, and a conceptual operating statement dated October 28, 2026. The applicant's attorney restated the four requests. First, remove the 2004 condition that the horses be solely for the non-commercial use of the residents and their guests. He said this comes from the additional-horses provision and is not in the code definition of a private stable. Second, take 0.41 acres of paddock out of the wetland buffer, supplemental setback and septic area. Third, increase paddock area to 3.94 acres (16 paddocks). Fourth, raise the permitted horses from 20 to 29, which he said the 2004 approval anticipated. The intended use is boarding and training for horse owners only, with no public lessons, no horses for hire and no new buildings. Trails through the wetland buffer would be closed and replanted. He noted the Planning Board's favourable recommendation and the County's request for a DEC jurisdictional determination. He also said the board had considered barring boarding at private stables in 2009, and the Planning Board advised against it. Fred Cohen (57 Round Hill Road, as rendered) argued that prior boards intended no commercial use, including boarding and training. He said a special permit can impose any restriction and called lifting it a 'dangerous precedent'. He suggested rezoning the site commercial instead, said the site is boarding and training now in breach of its permit, raised a five-acre passive-recreation easement for a neighbour, and read the code as capping it at 26 horses. Director of Planning Adam Kaufman said the Lindemann farm Cohen cited was approved as additional horses, a different special permit ('not apples to apples'). He said the building inspector's fire-inspection programme had flagged the issue and led to this application. Jeff Brown (56 Bedford Banksville Road, as rendered), directly across the street, asked where 29 came from, and about construction hours, the roadside fence and setback, paddock surfaces and the north house. Later he asked whether the permit transfers with a new owner, and about lessons, lighting and noise. The applicant's team answered: grass paddocks, two sand all-weather paddocks near the barn, the operator living in the north house, the easement lying in DEC wetland and buffer, and the roadside trees kept. Councilwoman DiGiacinto pressed the County's tree concern: 111 trees in paddocks 16 and 14. The site planner agreed to restudy paddocks 13 and 14 to save trees. Other members asked about usable acreage (29 horses on about four acres of turnout), the open inspection items, training only for boarders, retired horses, shared ownership and 26 versus 29 horses. One member visited the site as a fireman and said he was skeptical of the commercial element. Counsel said any permit can be amended and the Lindemann comparison does not hold. He also said owner-change or durational limits would need to be in the code first, citing North Salem's 10-year limit. The applicant's attorney 'strenuously' disagreed, saying New York's highest court bars conditions tied to the owner. Councilman Hussain said compliance checks matter more than an ownership condition, and another member agreed."
         }
       ]
     },
@@ -31404,38 +31532,6 @@
       ]
     },
     {
-      "id": "35-bedford-banksville-road",
-      "name": "35 Bedford Banksville Road \u2014 Amendment of Private Stable Special Use Permit (boarding and training, 20 to 29 horses)",
-      "address": "35 Bedford Banksville Road",
-      "applicationType": "special use permit amendment / site plan",
-      "applicant": "ASG and W Enterprise LLC (as rendered), represented by Adam [surname rendered 'Weckenstein'/'Weixstein'] of firm rendered 'Hockman, Tortella, and Weckenstein LLP' LLP; project manager and landscape architect also present (names not clearly captured)",
-      "themes": [
-        "Environment & conservation",
-        "Land use, zoning & special permits",
-        "Resident concerns & quality of life"
-      ],
-      "appearances": 1,
-      "firstSeen": "2026-10-14",
-      "lastSeen": "2026-10-14",
-      "lastStatus": "application, attorney's September 3, 2026 letter, short EAF and the Planning Department's September 29, 2026 staff report received; Planning Board declared lead agency per counsel's advice; circulated and referred to town and county planning boards; public hearing scheduled for November 4",
-      "avgSentiment": 0.1,
-      "trajectory": [
-        {
-          "date": "2026-10-14",
-          "sentiment": 0.1,
-          "status": "application, attorney's September 3, 2026 letter, short EAF and the Planning Department's September 29, 2026 staff report received; Planning Board declared lead agency per counsel's advice; circulated and referred to town and county planning boards; public hearing scheduled for November 4"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-10-14",
-          "status": "application, attorney's September 3, 2026 letter, short EAF and the Planning Department's September 29, 2026 staff report received; Planning Board declared lead agency per counsel's advice; circulated and referred to town and county planning boards; public hearing scheduled for November 4",
-          "sentiment": 0.1,
-          "summary": "The owner of a 25-acre R-2A private stable on the edge of Conyers Farm asked to amend its 2004 special permit in four ways. First, remove the condition that the horses are solely for the non-commercial use of the residents. Second, move 0.41 acres of paddock out of the wetland buffer and setbacks. Third, increase paddock area from 2.42 to 3.94 acres (16 paddocks instead of 10, including four all-weather paddocks). Fourth, raise the permitted horses from 20 to 29, which the 2004 permit anticipated. There would be no new or expanded buildings. Counsel said the condition came from a different use in the code (additional horses as an accessory use) and makes little sense for a site whose only house is about 1,400 square feet. The intent is boarding and training, not public lessons, shows or events, and he said the site is listed in the comprehensive plan as an equestrian facility. Town Planner Adam Kaufman explained that the 2004 board had worried about commercial impacts and the then owner accepted the condition, and he asked for a precise description of the activities. Members asked how many owners would share horses, how the tree line along the road would change (about 85 trees would come out for paddocks), how the cottage is used, and whether grooms' housing would grow; the code allows one bedroom per five horses. They also asked about wetland trails in the staff report, and the applicant committed on the record not to use them. Fred Cohen of Round Hill Road supported most of the plan but warned that lifting the commercial restriction would be a slippery slope for other Conyers Farm horse properties. Counsel floated making the relief non-transferable, and the applicant's attorney said he would ask his client."
-        }
-      ]
-    },
-    {
       "id": "3-mcdonald-avenue-armonk",
       "name": "3 McDonald Avenue \u2014 Request for Zoning Amendment from Commercial to Multifamily Residential",
       "address": "3 McDonald Avenue, Armonk",
@@ -31716,22 +31812,178 @@
           "summary": "During liaison updates, a member read the Sustainability Committee's request, sent at the end of September, for a work session on possible regulations for two-stroke gas leaf blowers. The member stressed that it is not a ban, and that it includes a transition period and allowances for spring and fall clean-ups and weather emergencies. The supervisor said his office had answered that it would be fitted in as soon as possible, but the November budget hearings and year-end interviews meant probably January, which would also give residents advance notice."
         }
       ]
+    },
+    {
+      "id": "2027-town-tentative-budget",
+      "name": "2027 Town Tentative Budget \u2014 Received; Public Hearing Set for November 18, 2026",
+      "address": "",
+      "applicationType": "budget receipt / public hearing scheduling",
+      "applicant": "Town of North Castle",
+      "themes": [
+        "Budget, taxes & finance",
+        "Grants & capital projects"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-04",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "tentative budget received and public hearing scheduled for November 18, 2026, by voice vote",
+      "avgSentiment": 0.0,
+      "trajectory": [
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.0,
+          "status": "tentative budget received and public hearing scheduled for November 18, 2026, by voice vote"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-04",
+          "status": "tentative budget received and public hearing scheduled for November 18, 2026, by voice vote",
+          "sentiment": 0.0,
+          "summary": "Under item 4A the board received the tentative 2027 town budget (the year is rendered '2020-27') and scheduled a public hearing for November 18, 2026. On the motion, a member said that although the budget was not being discussed that night, 'we really need to look to tightening our belts because there's a decent-sized increase for another year', with bigger expenses coming for the town hall projects. A voice (not identified) asked whether to also set a date for a possible hearing in case the levy exceeds the tax cap. That led to the separate motion recorded as its own item."
+        }
+      ]
+    },
+    {
+      "id": "possible-override-of-the-tax-levy-limit-for-the-2027-budget",
+      "name": "Possible Override of the Tax Levy Limit for the 2027 Budget \u2014 Public Hearing Set for November 18, 2026",
+      "address": "",
+      "applicationType": "public hearing scheduling (tax cap override)",
+      "applicant": "Town of North Castle",
+      "themes": [
+        "Budget, taxes & finance",
+        "Local laws & legislation"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-04",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "public hearing on a possible resolution to exceed the tax cap set for November 18, 2026; motion made and seconded, and carried by voice vote just after this range (a roll call was asked about and judged unnecessary)",
+      "avgSentiment": 0.1,
+      "trajectory": [
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.1,
+          "status": "public hearing on a possible resolution to exceed the tax cap set for November 18, 2026; motion made and seconded, and carried by voice vote just after this range (a roll call was asked about and judged unnecessary)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-04",
+          "status": "public hearing on a possible resolution to exceed the tax cap set for November 18, 2026; motion made and seconded, and carried by voice vote just after this range (a roll call was asked about and judged unnecessary)",
+          "sentiment": 0.1,
+          "summary": "A voice not identified in the recording raised setting a precautionary hearing date in case the 2027 levy exceeds the tax cap. The supervisor said he had thought the town was within the cap, but that at his last meeting with other county supervisors 'a lot of towns automatically set that irrespective of whether or not they're anticipating exceeding', so 'I think it's a prudent thing to do, but it's entirely up to the board.' A voice (apparently staff or counsel; not identified) cautioned against waiting until December 9 or 10, because the budget must be adopted before the 20th, and suggested the same November 18 date. The board first voted on receiving the budget, then took up a motion to set the November 18 hearing 'understanding that potentially we may have to have a resolution to exceed the tax cap.'"
+        }
+      ]
+    },
+    {
+      "id": "nys-route-22-and-route-120",
+      "name": "Route 22 Condition \u2014 Public Comment and the Supervisor's Update on NYSDOT Region 8 Repaving of Routes 22 and 120",
+      "address": "NYS Route 22 (Virginia Road to Route 120) and Route 120 (Harrison line to Mount Pleasant line)",
+      "applicationType": "public comment / supervisor's update",
+      "applicant": "Mariana Panova (resident, 13 Freedom Road, as rendered)",
+      "themes": [
+        "Intermunicipal & county/state",
+        "Resident concerns & quality of life",
+        "Roads, highway & sidewalks"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-04",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "public comment; no action",
+      "avgSentiment": 0.2,
+      "trajectory": [
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.2,
+          "status": "public comment; no action"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-04",
+          "status": "public comment; no action",
+          "sentiment": 0.2,
+          "summary": "A resident asked whether there is a plan to fix Route 22, which is in bad condition. The supervisor said it is a state road the DOT had kept patching. Working with State Senator Shelley Mayer, Assemblyman Chris Burdick and Majority Leader Andrea Stewart-Cousins, the town had found that DOT Region 8 was underfunded by about 33% compared with other regions for 10 to 12 years, with no clear basis. Funding has since been increased. Specifications are being developed to repave Route 22 from the Virginia Road intersection in North White Plains to the Route 120 intersection, with new drainage and milling, because water crossing the road delaminates the pavement. The same Region 8 project will repave Route 120 from the Harrison line (near King Street and the airport) to the Mount Pleasant line. Town Administrator Kevin Hay confirmed this. The work is to be bid for the 2027 construction cycle, so residents face one more winter as is."
+        }
+      ]
+    },
+    {
+      "id": "armonk-close-condominium-armonk",
+      "name": "Armonk Close Condominium v. Town of North Castle Assessor: Notice of Entry and Approval of Refund under the Consent Judgment (Assessment Year 2025)",
+      "address": "Armonk Close Condominium, Armonk",
+      "applicationType": "tax certiorari consent judgment / refund approval",
+      "applicant": "Armonk Close Condominium et al. (as read)",
+      "themes": [
+        "Budget, taxes & finance",
+        "Legal, litigation & contracts"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-04",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "notice of entry received and refund approved by voice vote",
+      "avgSentiment": 0.0,
+      "trajectory": [
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.0,
+          "status": "notice of entry received and refund approved by voice vote"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-04",
+          "status": "notice of entry received and refund approved by voice vote",
+          "sentiment": 0.0,
+          "summary": "The board received a notice of entry and approved a refund under the consent judgment in Armonk Close Condominium et al. v. the Town of North Castle Assessor for assessment year 2025. A member asked how it came to this. A staff voice, not named in the recording, said the units were only recently sold and the initial assessments 'may have been overly optimistic'. Because they are condominiums, they must be valued on market rentals, not sale prices, and 'Gigi (as rendered) and I agreed' the adjustment was proper to bring the 20 units into line. There are 18 market units, and the two affordable units are still vacant and taxed as AFFH units."
+        }
+      ]
+    },
+    {
+      "id": "conservation-board-request",
+      "name": "Conservation Board Request: Work Session on a Revised Tree Code",
+      "address": "",
+      "applicationType": "board/committee request (work session)",
+      "applicant": "North Castle Conservation Board",
+      "themes": [
+        "Environment & conservation",
+        "Local laws & legislation"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-04",
+      "lastSeen": "2026-11-04",
+      "lastStatus": "request relayed in liaison updates; no date set",
+      "avgSentiment": 0.3,
+      "trajectory": [
+        {
+          "date": "2026-11-04",
+          "sentiment": 0.3,
+          "status": "request relayed in liaison updates; no date set"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-04",
+          "status": "request relayed in liaison updates; no date set",
+          "sentiment": 0.3,
+          "summary": "During liaison updates, a member (not identified by name) reminded the board that the Conservation Board has been asking 'for a few months now' for a work session on its revised tree code. He said it had done more homework since appearing before the board and asked that it be given a sense of when the session could happen. He also said the Conservation Board had been in touch with a 'Josephine' (as rendered). No date was set."
+        }
+      ]
     }
   ],
   "members": [
     {
       "member": "Joseph Rende",
-      "totalPositions": 410,
-      "avgSentiment": 0.508,
+      "totalPositions": 414,
+      "avgSentiment": 0.506,
       "confidenceMix": {
-        "high": 343,
+        "high": 347,
         "medium": 67
       },
       "byTheme": [
         {
           "theme": "Open government & procedure",
-          "count": 78,
-          "avgSentiment": 0.276
+          "count": 80,
+          "avgSentiment": 0.274
         },
         {
           "theme": "Grants & capital projects",
@@ -31740,8 +31992,8 @@
         },
         {
           "theme": "Budget, taxes & finance",
-          "count": 56,
-          "avgSentiment": 0.516
+          "count": 57,
+          "avgSentiment": 0.512
         },
         {
           "theme": "Public safety & police",
@@ -31755,8 +32007,8 @@
         },
         {
           "theme": "Land use, zoning & special permits",
-          "count": 49,
-          "avgSentiment": 0.364
+          "count": 51,
+          "avgSentiment": 0.358
         },
         {
           "theme": "Water & sewer districts",
@@ -31779,24 +32031,24 @@
           "avgSentiment": 0.606
         },
         {
+          "theme": "Environment & conservation",
+          "count": 26,
+          "avgSentiment": 0.487
+        },
+        {
           "theme": "Resident concerns & quality of life",
           "count": 26,
           "avgSentiment": 0.429
         },
         {
-          "theme": "Environment & conservation",
-          "count": 25,
-          "avgSentiment": 0.494
-        },
-        {
           "theme": "Intermunicipal & county/state",
-          "count": 22,
-          "avgSentiment": 0.609
+          "count": 23,
+          "avgSentiment": 0.6
         },
         {
           "theme": "Roads, highway & sidewalks",
-          "count": 19,
-          "avgSentiment": 0.561
+          "count": 20,
+          "avgSentiment": 0.552
         },
         {
           "theme": "Local laws & legislation",
@@ -32009,6 +32261,16 @@
           "caseId": "77-lafayette-avenue-or-901-north-broadway-north-white-plains",
           "count": 2,
           "avgSentiment": 0.05
+        },
+        {
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "count": 2,
+          "avgSentiment": 0.3
+        },
+        {
+          "caseId": "35-bedford-banksville-road",
+          "count": 2,
+          "avgSentiment": 0.15
         },
         {
           "caseId": "2024-appointment-of-departmental-and-committee-liaisons",
@@ -33541,11 +33803,6 @@
           "avgSentiment": 0.5
         },
         {
-          "caseId": "1700-old-orchard-street-north-white-plains",
-          "count": 1,
-          "avgSentiment": 0.3
-        },
-        {
           "caseId": "summer-intern-presentation",
           "count": 1,
           "avgSentiment": 0.7
@@ -33596,11 +33853,6 @@
           "avgSentiment": 0.5
         },
         {
-          "caseId": "35-bedford-banksville-road",
-          "count": 1,
-          "avgSentiment": 0.2
-        },
-        {
           "caseId": "3-mcdonald-avenue-armonk",
           "count": 1,
           "avgSentiment": 0.0
@@ -33619,6 +33871,16 @@
           "caseId": "sustainability-committee-request",
           "count": 1,
           "avgSentiment": 0.2
+        },
+        {
+          "caseId": "possible-override-of-the-tax-levy-limit-for-the-2027-budget",
+          "count": 1,
+          "avgSentiment": 0.3
+        },
+        {
+          "caseId": "nys-route-22-and-route-120",
+          "count": 1,
+          "avgSentiment": 0.4
         }
       ],
       "evidence": [
@@ -38803,17 +39065,69 @@
           ],
           "evidence": "'We finally got the crosswalk done design and built \u2026 The signs are up, it's done.'",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "35 Bedford Banksville Road \u2014 Private Stable Special Use Permit Amendment: Public Hearing Opened and Adjourned Without Date",
+          "caseId": "35-bedford-banksville-road",
+          "stance": "procedurally even-handed; keep the hearing open and focused on this site; explored what 'commercial' means in practice",
+          "score": 0.1,
+          "themes": [
+            "Land use, zoning & special permits",
+            "Open government & procedure"
+          ],
+          "evidence": "Presiding. To Cohen: 'I am not personally aware of that. I'm familiar with the site because I happen to live very close by the site' and 'for the purpose of tonight's public hearing, we should stick to this site and this site only.' Posed the grandparent scenario ('if I as a grandparent \u2026 decided that I wanted to buy a horse for my granddaughter \u2026 I can rent space and board my horse at your location'), which a member then called 'Joe's question'. Closing: 'Let's leave the public hearing open, right? We've got some areas that the town attorney has to research.'",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "Possible Override of the Tax Levy Limit for the 2027 Budget \u2014 Public Hearing Set for November 18, 2026",
+          "caseId": "possible-override-of-the-tax-levy-limit-for-the-2027-budget",
+          "stance": "supports setting a precautionary tax-cap hearing date",
+          "score": 0.3,
+          "themes": [
+            "Budget, taxes & finance"
+          ],
+          "evidence": "Presiding: 'I actually thought that we were good at that here \u2026 a lot of towns automatically set that irrespective of whether or not they're anticipating exceeding. So I think it's a prudent thing to do, but it's entirely up to the board. I'm happy to do that.'",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "Route 22 Condition \u2014 Public Comment and the Supervisor's Update on NYSDOT Region 8 Repaving of Routes 22 and 120",
+          "caseId": "nys-route-22-and-route-120",
+          "stance": "pressing the state; reassured that repaving is funded for 2027",
+          "score": 0.4,
+          "themes": [
+            "Intermunicipal & county/state",
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "'Region eight had been underfunded for probably 10 or 12 years \u2026 we were receiving about 33% less than most of the other DOT regions,' 'they've given us every reassurance that it's going to get done in the 2027 cycle,' and 'the bad news is we're going to go through another winter the way it is.'",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "Sports Training Academy & Community Facility (STAC) District, 1700 Old Orchard Street: Agency Letters Received, Positive Declaration, Draft Scoping Document Received, December 2 Scoping Session Noticed, Motion to Return the Petition Fails",
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "stance": "wants the SEQRA review to run its course before deciding; voted for the scoping document and session and against returning the petition, while saying he would return it if the concerns cannot be resolved",
+          "score": 0.3,
+          "themes": [
+            "Environment & conservation",
+            "Land use, zoning & special permits",
+            "Open government & procedure"
+          ],
+          "evidence": "Preface: 'I personally think that it's a worthwhile endeavor to allow the applicant to go through the process and find out all the information,' 'this is really, I think, a fact-finding exercise,' and the board could 'return the petition' with 'no recourse or \u2026 no remedy for the applicant'. Item 4B: Presiding. 'I think to return it now prior to us being able to hear all the information would not be the prudent thing to do \u2026 we would be making a decision with a very myopic view,' and 'I know I would be the first one to hand back the petition' if sensitive resources were in jeopardy. To Terry Loveman ('I took the time, Joe'): 'unless the applicant can find ways to resolve those concerns and ensure us that none of that is occurring, we're not going to approve it.' On benefit: 'I am of the opinion that it's worthwhile, even though it's gonna take time.' A resident addressed him as 'the supervisor' about his DEP remarks. Roll calls: 'Supervisor Rundi. Yes' (item 6), 'Supervisor Randy? Yes' (item 7), 'Supervisor Andy. No' (return the petition).",
+          "confidence": "high"
         }
       ]
     },
     {
       "member": "Barbara DiGiacinto",
-      "totalPositions": 334,
-      "avgSentiment": 0.221,
+      "totalPositions": 336,
+      "avgSentiment": 0.217,
       "confidenceMix": {
         "low": 2,
-        "high": 232,
-        "medium": 100
+        "high": 233,
+        "medium": 101
       },
       "byTheme": [
         {
@@ -38838,8 +39152,8 @@
         },
         {
           "theme": "Land use, zoning & special permits",
-          "count": 41,
-          "avgSentiment": 0.015
+          "count": 43,
+          "avgSentiment": -0.006
         },
         {
           "theme": "Public safety & police",
@@ -38872,14 +39186,14 @@
           "avgSentiment": 0.228
         },
         {
+          "theme": "Environment & conservation",
+          "count": 23,
+          "avgSentiment": 0.143
+        },
+        {
           "theme": "Water & sewer districts",
           "count": 22,
           "avgSentiment": 0.391
-        },
-        {
-          "theme": "Environment & conservation",
-          "count": 21,
-          "avgSentiment": 0.198
         },
         {
           "theme": "Roads, highway & sidewalks",
@@ -38892,14 +39206,14 @@
           "avgSentiment": 0.164
         },
         {
+          "theme": "Intermunicipal & county/state",
+          "count": 8,
+          "avgSentiment": 0.375
+        },
+        {
           "theme": "Permits & licensing",
           "count": 8,
           "avgSentiment": 0.413
-        },
-        {
-          "theme": "Intermunicipal & county/state",
-          "count": 7,
-          "avgSentiment": 0.55
         },
         {
           "theme": "Technology & communications",
@@ -39067,6 +39381,11 @@
           "caseId": "tie-the-town-pink-campaign",
           "count": 2,
           "avgSentiment": 0.925
+        },
+        {
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "count": 2,
+          "avgSentiment": -0.725
         },
         {
           "caseId": "deputy-supervisor-annual-stipend",
@@ -40359,14 +40678,14 @@
           "avgSentiment": -0.4
         },
         {
-          "caseId": "1700-old-orchard-street-north-white-plains",
-          "count": 1,
-          "avgSentiment": -0.6
-        },
-        {
           "caseId": "north-white-plains-saturday-meetings",
           "count": 1,
           "avgSentiment": 0.1
+        },
+        {
+          "caseId": "35-bedford-banksville-road",
+          "count": 1,
+          "avgSentiment": 0.0
         }
       ],
       "evidence": [
@@ -44566,28 +44885,55 @@
           ],
           "evidence": "Thanked by name ('I want to thank Barbara \u2026 for having her Saturday meetings'), she replied that they 'started as a campaign promise \u2026 that I made in 2013', that 'I do it as an individual town board member. I do not speak for the town board, absolutely not,' and 'let me look into it and see what it'll entail.'",
           "confidence": "high"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "35 Bedford Banksville Road \u2014 Private Stable Special Use Permit Amendment: Public Hearing Opened and Adjourned Without Date",
+          "caseId": "35-bedford-banksville-road",
+          "stance": "wants as many trees saved as possible and no horse shows or events",
+          "score": 0.0,
+          "themes": [
+            "Environment & conservation",
+            "Land use, zoning & special permits"
+          ],
+          "evidence": "Called on first ('I don't know, Barbara, you want to go first? Sure.'): 'paddock number 16, 26 trees are going to be removed. And paddock number 14, 85 trees. So that's a total of 111. And the County Planning Board, and I would share this suggestion \u2026 to preserve as many trees as possible,' and 'the commercial use will basically be restricted to boarding and training, but not horse shows or anything of that nature.'",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "Sports Training Academy & Community Facility (STAC) District, 1700 Old Orchard Street: Agency Letters Received, Positive Declaration, Draft Scoping Document Received, December 2 Scoping Session Noticed, Motion to Return the Petition Fails",
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "stance": "opposed; wants the petition returned, citing the agencies' site-specific warnings",
+          "score": -0.85,
+          "themes": [
+            "Environment & conservation",
+            "Intermunicipal & county/state",
+            "Land use, zoning & special permits"
+          ],
+          "evidence": "'I've been on the town board since 2014 \u2026 I have never seen county planning say this application is not appropriate for this site,' and 'when I have chosen to say I would like to return the petition tonight, it's because I don't see any benefit to this site, to North White Plains, to North Castle period.' Councilman Berra then referred back to it ('Barbara's saying these letters are kind of the most critical'). Roll calls: 'Councilman DiGicinto. Aye' on receiving the scoping document; on item 7 the one 'No' called as 'Councilor Mende, did you send down?' (as rendered) is hers by elimination.",
+          "confidence": "medium"
         }
       ]
     },
     {
       "member": "Jose Berra",
-      "totalPositions": 303,
-      "avgSentiment": 0.225,
+      "totalPositions": 304,
+      "avgSentiment": 0.221,
       "confidenceMix": {
-        "high": 194,
+        "high": 195,
         "medium": 96,
         "low": 13
       },
       "byTheme": [
         {
           "theme": "Land use, zoning & special permits",
-          "count": 65,
-          "avgSentiment": 0.054
+          "count": 66,
+          "avgSentiment": 0.039
         },
         {
           "theme": "Budget, taxes & finance",
-          "count": 63,
-          "avgSentiment": 0.102
+          "count": 64,
+          "avgSentiment": 0.086
         },
         {
           "theme": "Legal, litigation & contracts",
@@ -44596,8 +44942,8 @@
         },
         {
           "theme": "Open government & procedure",
-          "count": 48,
-          "avgSentiment": 0.199
+          "count": 49,
+          "avgSentiment": 0.177
         },
         {
           "theme": "Other",
@@ -44835,6 +45181,11 @@
           "caseId": "town-pool-greenway-road",
           "count": 2,
           "avgSentiment": -0.15
+        },
+        {
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "count": 2,
+          "avgSentiment": -0.825
         },
         {
           "caseId": "business-park-drive-armonk",
@@ -45970,11 +46321,6 @@
           "caseId": "north-castle-pba",
           "count": 1,
           "avgSentiment": -0.2
-        },
-        {
-          "caseId": "1700-old-orchard-street-north-white-plains",
-          "count": 1,
-          "avgSentiment": -0.75
         },
         {
           "caseId": "summer-intern-presentation",
@@ -49812,6 +50158,20 @@
           ],
           "evidence": "Given the floor ('So Jose de Flores [the floor is] yours'; 'let Jose please go through his thoughts'): 'So I'm generally okay with a bunch of this.' On 2B he said neighbours want the chain down in rough winter weather; on item 3 'it should be after public hearing'; on item 11's yearly tree inspection, 'there's a cost to it.' After the supervisor said 'Councilman Bearer had raised the point' of year-round court access, a member speaking as the one 'credited with the suggestion' said 'we were never made aware of the fact that residents were right there' and urged the neighbours to 'be very vigilant' about the walkway.",
           "confidence": "high"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "Sports Training Academy & Community Facility (STAC) District, 1700 Old Orchard Street: Agency Letters Received, Positive Declaration, Draft Scoping Document Received, December 2 Scoping Session Noticed, Motion to Return the Petition Fails",
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "stance": "opposed; wants the petition returned rather than put through an EIS",
+          "score": -0.9,
+          "themes": [
+            "Budget, taxes & finance",
+            "Land use, zoning & special permits",
+            "Open government & procedure"
+          ],
+          "evidence": "Roll calls: 'Councilman Bearer. No. I wouldn't move ahead with that' (item 6); 'Councilman, I'm better. I think we have tons of information here that first concluded that we should return to petition. So I would say no' (item 7); 'Councilman Vera. I' (return the petition). In debate: 'I don't think the EIS process is appropriate when there's something that is this off the mark,' 'when you go down that route, it gains momentum,' and one more officer at '$250,000 \u2026 It's a 1% tax increase.' Councilman Hussain answered him directly ('I actually fully agree, Jose, on most of your points'). His earlier request to receive the scoping document separately ('that implies that we're moving forward') is credited from the following 'to Jose's point'.",
+          "confidence": "high"
         }
       ]
     },
@@ -53465,18 +53825,18 @@
     },
     {
       "member": "Saleem Hussain",
-      "totalPositions": 206,
-      "avgSentiment": 0.355,
+      "totalPositions": 208,
+      "avgSentiment": 0.353,
       "confidenceMix": {
-        "medium": 82,
-        "high": 115,
+        "medium": 83,
+        "high": 116,
         "low": 9
       },
       "byTheme": [
         {
           "theme": "Open government & procedure",
-          "count": 48,
-          "avgSentiment": 0.256
+          "count": 49,
+          "avgSentiment": 0.253
         },
         {
           "theme": "Other",
@@ -53490,8 +53850,8 @@
         },
         {
           "theme": "Land use, zoning & special permits",
-          "count": 23,
-          "avgSentiment": 0.211
+          "count": 25,
+          "avgSentiment": 0.21
         },
         {
           "theme": "Parks, recreation & trails",
@@ -53519,14 +53879,14 @@
           "avgSentiment": 0.404
         },
         {
+          "theme": "Local laws & legislation",
+          "count": 12,
+          "avgSentiment": -0.062
+        },
+        {
           "theme": "Personnel & appointments",
           "count": 12,
           "avgSentiment": 0.475
-        },
-        {
-          "theme": "Local laws & legislation",
-          "count": 11,
-          "avgSentiment": -0.095
         },
         {
           "theme": "Resident concerns & quality of life",
@@ -53654,6 +54014,11 @@
           "caseId": "town-pool-greenway-road",
           "count": 2,
           "avgSentiment": 0.5
+        },
+        {
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "count": 2,
+          "avgSentiment": 0.2
         },
         {
           "caseId": "north-castle-pool-and-tennis-club",
@@ -54486,11 +54851,6 @@
           "avgSentiment": 0.3
         },
         {
-          "caseId": "1700-old-orchard-street-north-white-plains",
-          "count": 1,
-          "avgSentiment": 0.3
-        },
-        {
           "caseId": "technology-committee",
           "count": 1,
           "avgSentiment": 0.5
@@ -54499,6 +54859,11 @@
           "caseId": "12-maple-avenue-armonk",
           "count": 1,
           "avgSentiment": 0.5
+        },
+        {
+          "caseId": "35-bedford-banksville-road",
+          "count": 1,
+          "avgSentiment": 0.3
         }
       ],
       "evidence": [
@@ -57066,6 +57431,32 @@
           ],
           "evidence": "Introduced right after the supervisor said 'we didn't let Selene' speak: 'I'm 100% open to either release or like conditionally release or lower your payment \u2026 we have clarity from council on exactly who's paying what amount.'",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "35 Bedford Banksville Road \u2014 Private Stable Special Use Permit Amendment: Public Hearing Opened and Adjourned Without Date",
+          "caseId": "35-bedford-banksville-road",
+          "stance": "against adding owner-change conditions or code changes; prefers regular compliance checks on what is approved",
+          "score": 0.3,
+          "themes": [
+            "Land use, zoning & special permits",
+            "Local laws & legislation"
+          ],
+          "evidence": "'I don't see there being a need for role and to look into that \u2026 I think the more important thing is ensuring that there's like appropriate compliance \u2026 I would rather not add the overhead and delay what we're doing here to put these changes in the town code,' and 'I don't think the town board should be making laws and like passing things based on who the owner is.' The supervisor then said 'But, Celine said no' and another member 'No, I agree with Celine.'",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "Sports Training Academy & Community Facility (STAC) District, 1700 Old Orchard Street: Agency Letters Received, Positive Declaration, Draft Scoping Document Received, December 2 Scoping Session Noticed, Motion to Return the Petition Fails",
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "stance": "supports the scoping session as a forum for public input; says the proposal is 'very much off the mark as it stands' but wants to hear the other side",
+          "score": 0.1,
+          "themes": [
+            "Land use, zoning & special permits",
+            "Open government & procedure"
+          ],
+          "evidence": "A member said 'disagreeing, like any of us 100% disagreeing with this project is fully compatible with us voting yes to do this scoping session' and 'after we have that session, we can absolutely stop moving forward.' The supervisor then said 'Councilman Saleem probably said it best that through this process\u2026', and Councilman Berra said 'I have a different view of the EIS process than Celine does.' The same voice later told Berra: 'I also think it's very much off the mark as it stands \u2026 the one place where I do differ with you, Jose, is just that I haven't heard the other side yet.' Roll calls (high): 'Councilman Hussain. Aye' (item 6), 'Councilor Hussain? Hi' (item 7), 'Councilman Hussain. No' (return the petition).",
+          "confidence": "medium"
         }
       ]
     },
@@ -58881,14 +59272,19 @@
     },
     {
       "member": "Sonny Vataj",
-      "totalPositions": 32,
-      "avgSentiment": 0.342,
+      "totalPositions": 33,
+      "avgSentiment": 0.335,
       "confidenceMix": {
-        "high": 15,
+        "high": 16,
         "low": 2,
         "medium": 15
       },
       "byTheme": [
+        {
+          "theme": "Open government & procedure",
+          "count": 5,
+          "avgSentiment": 0.1
+        },
         {
           "theme": "Parks, recreation & trails",
           "count": 5,
@@ -58913,11 +59309,6 @@
           "theme": "Legal, litigation & contracts",
           "count": 4,
           "avgSentiment": 0.325
-        },
-        {
-          "theme": "Open government & procedure",
-          "count": 4,
-          "avgSentiment": 0.1
         },
         {
           "theme": "Local laws & legislation",
@@ -58968,6 +59359,11 @@
           "theme": "Permits & licensing",
           "count": 1,
           "avgSentiment": 0.4
+        },
+        {
+          "theme": "Resident concerns & quality of life",
+          "count": 1,
+          "avgSentiment": 0.1
         }
       ],
       "byCase": [
@@ -58975,6 +59371,11 @@
           "caseId": "west-side-of-main-street-armonk",
           "count": 2,
           "avgSentiment": 0.375
+        },
+        {
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "count": 2,
+          "avgSentiment": 0.2
         },
         {
           "caseId": "2026-reorganization",
@@ -59103,11 +59504,6 @@
         },
         {
           "caseId": "north-castle-pba",
-          "count": 1,
-          "avgSentiment": 0.3
-        },
-        {
-          "caseId": "1700-old-orchard-street-north-white-plains",
           "count": 1,
           "avgSentiment": 0.3
         },
@@ -59523,6 +59919,19 @@
           ],
           "evidence": "'We can't vote on something we don't know 100% it's coming,' 'this board is not in the business to harm local businesses,' and the applicant could ask for 'a ten payment plan' instead of five. He referred to 'like Barbara said'; the supervisor then said 'I think now you're hearing from Sonny that it's a reasonable request.'",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-11-04",
+          "case": "Sports Training Academy & Community Facility (STAC) District, 1700 Old Orchard Street: Agency Letters Received, Positive Declaration, Draft Scoping Document Received, December 2 Scoping Session Noticed, Motion to Return the Petition Fails",
+          "caseId": "1700-old-orchard-street-north-white-plains",
+          "stance": "voted to proceed with scoping and against returning the petition; wanted the public and then the applicant heard, warning the applicant it must answer the concerns",
+          "score": 0.1,
+          "themes": [
+            "Open government & procedure",
+            "Resident concerns & quality of life"
+          ],
+          "evidence": "Given the floor ('Wait, I think Sonny had a question'): 'After you've heard this body of public that really, we work for them. What do you have to say? \u2026 if you don't have these concerns in mind, then it's a very easy. You're going to lose this vote,' and 'I could tell you right now and this thing is gonna go nowhere.' The supervisor confirmed: 'it's sunny was the one that asked that if the applicant wanted to get up.' Earlier a member said 'So I think Sonny's idea is a good one to listen to the public and the applicant too.' Roll calls: 'Councilman Vittage. Aye' (item 6), 'Councilman, Vittage? Yes' (item 7), 'Councilman Visage. No' (return the petition).",
+          "confidence": "high"
         }
       ]
     }
@@ -107622,6 +108031,477 @@
       ],
       "attributionCoverage": "good",
       "attributionNote": "This is an unverified machine (ASR) transcript with no speaker labels. It is not the official minutes. The presiding voice is Supervisor Joseph Rende (2024\u2013 era). Other members are credited only where a name cue ties a statement to them. Jose Berra: given the floor ('So Jose de Flores, yours', i.e. 'Jose, the floor is yours') and referred to while speaking ('let Jose please go through his thoughts'). The earlier remarks by the member 'credited with the suggestion' of year-round access, which the supervisor had just attributed to 'Councilman Bearer', are folded into his position. Barbara DiGiacinto: thanked by name for her Saturday meetings and answering; credited by the supervisor for the Friday-noon comments suggestion ('I think Barbara brought up a good suggestion'); called on by name on the activity-area memo; and on 12 Maple, referred back to by Councilman Vataj ('like Barbara said, 20 something years') and by the supervisor ('Barbara and myself'). Her Breast Cancer Awareness remarks are credited at medium confidence: the speaker is a woman and a breast cancer survivor, she is the only councilwoman, and she referred back to the October 14 remarks that the earlier recording ties to her by name. Sonny Vataj: medium, from the supervisor's 'now you're hearing from Sonny' right after his 12 Maple remarks. Saleem Hussain: medium. On 12 Maple he spoke right after the supervisor said 'we didn't let Selene'. On the pool, the supervisor later credited 'Selim' with the suggestion to involve the Parks & Recreation advisers, which matches the unnamed member's earlier remarks. Left unattributed for lack of a name cue: the member who opposed releasing 12 Maple's payment and told the supervisor 'I think you're projecting again, Joe' (not credited, even though only one member remains unnamed in that exchange); the member who argued against rushing the pool guidelines in one week ('the people's land'); the member who asked whether the Saturday forum is a town board function; the member who asked about the low sewer-main bidder; the member who raised AFFF testing with Sal; the member who read the Sustainability Committee request; and the member who spoke about firefighters' blue lights. The last speaks of the volunteer service as 'us', but after Councilman Berra's 'I don't have an update' the turn boundary is unclear. Movers and seconders are not credited. One exchange ('I believe it was Jose and then Sony who seconded it. No, I second') was itself contradictory. All votes were voice votes; the transcript usually captures only 'Aye' and does not record individual votes or dissents. ASR renderings resolved: 'Renday/Randy/Joe' \u2192 Rende; 'Bearer/Jose de Flores' \u2192 Berra; 'Selim/Selene' \u2192 Saleem Hussain; 'Sony' \u2192 Sonny Vataj; 'Matt trainer' \u2192 Matt Traynor; 'Pickle Law/Pickable' \u2192 pickleball; 'Fave a favor/Fava' \u2192 John Fava; 'Barham/Barram Hills' \u2192 Byram Hills; 'armunk' \u2192 Armonk; 'Chamelli/Trumelli' \u2192 the town engineer as rendered. 'Seider Mill' is noted as likely Cider Mill, the name on earlier agendas. Not reconstructed: the 12 Maple applicant's surname ('Mount Chernovic'/'Martoon Beach'); the student ('Pasha/Basha Goodes'); the resident 'Sue Kapola'; 'Angel Mendelsohn'; the DEC official ('Kelly Tatura'); the Open Space Committee chair ('Paul'/'Perry'); the sewer contractor ('Scrap tech, landscape technology'); appointees 'Jocelyn Herda' and 'Chris Carti'; and the crosswalk location ('opposite behind')."
+    },
+    {
+      "date": "2026-11-04",
+      "meetingSummary": "A meeting of about four hours twenty minutes, most of it spent on two land-use matters. The only public hearing, on amending the 2004 private-stable special permit at 35 Bedford Banksville Road, ran about an hour and a half. The owner seeks to drop the non-commercial condition so it can offer boarding and training to horse owners, to move paddocks out of the wetland buffer, to enlarge them and to go from 20 to 29 horses. Fred Cohen called it a dangerous precedent and argued for a cap of 26. A neighbour raised buffer, noise and future-owner concerns. Councilwoman DiGiacinto pressed to save more of the 111 trees slated for removal and ruled out horse shows. Counsel said limits tied to an owner change would first need criteria in the code, and Councilman Hussain declined to pursue them. The hearing was kept open and adjourned to a date uncertain while the Planning Board finishes its SEQRA lead-agency period, and neighbours are to be re-noticed by letter. The 2027 tentative budget was received, with a hearing set for November 18 and a precautionary tax-cap override hearing the same night. The STAC rezoning petition for 1700 Old Orchard Street (the former Jennie Clarkson site) took more than two hours. The board received the County Planning Board, DEC, DEP and Attorney General letters and adopted a positive declaration. It received the draft scoping document 4\u20131 on a roll call (Berra no) and, 3\u20132 (Berra and DiGiacinto no), noticed a public scoping session for December 2, 2026. About 15 residents, almost all from North White Plains, then spoke against the project, citing Kensico runoff, PFAS, traffic and property values, and many urged the board to return the petition. A motion to return it failed on a roll call, with Hussain, Vataj and Rende voting no. The clerk did not announce the result. Also approved: an Armonk Close Condominium tax-certiorari refund, a Library Board appointment and a police terminal leave payment. The supervisor reported that NYSDOT will repave Routes 22 and 120 in its 2027 cycle. The meeting closed in memory of 16-year-old Emily Levy-Smith.",
+      "durationNote": "The public recording runs about 4 hours 22 minutes, from about 00:01:28 to 04:23:18. Before that the meeting opened at 5:30 p.m. and went into executive session on board and committee interviews, personnel and advice of counsel on real estate. Supervisor Joseph Rende presided ('Joe', 'Supervisor Randy/Rundi/Andy', as rendered). No opening roll call of members was taken, but the clerk took named roll calls on three STAC questions: receipt of the draft scoping document (item 6), notice of the scoping session (item 7), and the motion to return the petition. All four council members were named: Barbara DiGiacinto ('Barbara'), Jose Berra ('Jose', 'Councilman Bearer/Vera'), Saleem Hussain ('Saleem', 'Celine') and Sonny Vataj ('Sonny', 'Vittage/Visage'). Staff who spoke were Town Clerk Allison Simon, Director of Planning Adam Kaufman, Town Attorney Roland Baroni and, with a one-word confirmation, Town Administrator Kevin Hay. The 35 Bedford Banksville Road hearing ran from about 00:33:34 to 02:04:18. The STAC item ran from about 02:07:26 to 04:15:53, including roughly 1 hour 47 minutes of public comment, member statements and the applicant's response after the item 7 vote.",
+      "cases": [
+        {
+          "id": "35-bedford-banksville-road-private-stable-sup-amendment-2026",
+          "name": "35 Bedford Banksville Road \u2014 Private Stable Special Use Permit Amendment: Public Hearing Opened and Adjourned Without Date",
+          "address": "35 Bedford Banksville Road",
+          "applicationType": "special use permit amendment / site plan \u2014 public hearing",
+          "applicant": "ASG NW Enterprises LLC (as rendered), represented by Adam Wexstein (rendered 'Wexian'/'Wexting'/'Wexstein') of the firm rendered 'Hockerman, Tortella and Wexstein LLP'; with Rose Hirsch (general counsel), Jim Best (project manager), Jerry Barrett/Bartlett (site planner and landscape architect; both renderings occur) and Eric Hasbrok (horse professional, Carmel, NY)",
+          "status": "public hearing opened and the documents read by the Town Clerk received, both by voice vote; at the applicant's request (the Planning Board's 30-day SEQRA lead-agency period has not run), the hearing was kept open and adjourned to a date uncertain by voice vote. The applicant is to coordinate a return date with the Planning Department and re-notice the neighbours within 250 feet by letter. Town counsel is to look at the easement and at the cases the applicant's attorney supplied. A poll on adding ownership-change or duration limits was not pursued after members said no.",
+          "summary": "The documents received included the public notice and affidavits, the September 3, 2026 application, the Planning Department's September 29, 2026 staff report, an email from Lauren Pinkis (as rendered) dated November 2, 2026, the County Planning Board recommendation and letters, a Town Planning Board circulation letter, and a conceptual operating statement dated October 28, 2026. The applicant's attorney restated the four requests. First, remove the 2004 condition that the horses be solely for the non-commercial use of the residents and their guests. He said this comes from the additional-horses provision and is not in the code definition of a private stable. Second, take 0.41 acres of paddock out of the wetland buffer, supplemental setback and septic area. Third, increase paddock area to 3.94 acres (16 paddocks). Fourth, raise the permitted horses from 20 to 29, which he said the 2004 approval anticipated. The intended use is boarding and training for horse owners only, with no public lessons, no horses for hire and no new buildings. Trails through the wetland buffer would be closed and replanted. He noted the Planning Board's favourable recommendation and the County's request for a DEC jurisdictional determination. He also said the board had considered barring boarding at private stables in 2009, and the Planning Board advised against it. Fred Cohen (57 Round Hill Road, as rendered) argued that prior boards intended no commercial use, including boarding and training. He said a special permit can impose any restriction and called lifting it a 'dangerous precedent'. He suggested rezoning the site commercial instead, said the site is boarding and training now in breach of its permit, raised a five-acre passive-recreation easement for a neighbour, and read the code as capping it at 26 horses. Director of Planning Adam Kaufman said the Lindemann farm Cohen cited was approved as additional horses, a different special permit ('not apples to apples'). He said the building inspector's fire-inspection programme had flagged the issue and led to this application. Jeff Brown (56 Bedford Banksville Road, as rendered), directly across the street, asked where 29 came from, and about construction hours, the roadside fence and setback, paddock surfaces and the north house. Later he asked whether the permit transfers with a new owner, and about lessons, lighting and noise. The applicant's team answered: grass paddocks, two sand all-weather paddocks near the barn, the operator living in the north house, the easement lying in DEC wetland and buffer, and the roadside trees kept. Councilwoman DiGiacinto pressed the County's tree concern: 111 trees in paddocks 16 and 14. The site planner agreed to restudy paddocks 13 and 14 to save trees. Other members asked about usable acreage (29 horses on about four acres of turnout), the open inspection items, training only for boarders, retired horses, shared ownership and 26 versus 29 horses. One member visited the site as a fireman and said he was skeptical of the commercial element. Counsel said any permit can be amended and the Lindemann comparison does not hold. He also said owner-change or durational limits would need to be in the code first, citing North Salem's 10-year limit. The applicant's attorney 'strenuously' disagreed, saying New York's highest court bars conditions tied to the owner. Councilman Hussain said compliance checks matter more than an ownership condition, and another member agreed.",
+          "themes": [
+            "Environment & conservation",
+            "Land use, zoning & special permits",
+            "Local laws & legislation",
+            "Resident concerns & quality of life"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.05,
+          "publicComment": "Fred Cohen (57 Round Hill Road, as rendered) opposed lifting the non-commercial condition as a precedent for other horse properties, said the site is already boarding and training in violation, suggested rezoning it commercial, cited a five-acre neighbour easement (Liber 10922 page 257), and argued for a 26-horse cap. Jeff Brown (56 Bedford Banksville Road, as rendered; directly across the street) asked about the 29-horse figure, construction hours, the roadside buffer and fence, paddock surfaces and dust, the north house, Conyers Farm rules, permit transfer on sale, lessons, night lighting and a weekend party he heard. He asked that a new permit be required for a new owner.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "procedurally even-handed; keep the hearing open and focused on this site; explored what 'commercial' means in practice",
+              "score": 0.1,
+              "themes": [
+                "land use, zoning & special permits",
+                "open government & procedure"
+              ],
+              "evidence": "Presiding. To Cohen: 'I am not personally aware of that. I'm familiar with the site because I happen to live very close by the site' and 'for the purpose of tonight's public hearing, we should stick to this site and this site only.' Posed the grandparent scenario ('if I as a grandparent \u2026 decided that I wanted to buy a horse for my granddaughter \u2026 I can rent space and board my horse at your location'), which a member then called 'Joe's question'. Closing: 'Let's leave the public hearing open, right? We've got some areas that the town attorney has to research.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "wants as many trees saved as possible and no horse shows or events",
+              "score": 0.0,
+              "themes": [
+                "environment & conservation",
+                "land use, zoning & special permits"
+              ],
+              "evidence": "Called on first ('I don't know, Barbara, you want to go first? Sure.'): 'paddock number 16, 26 trees are going to be removed. And paddock number 14, 85 trees. So that's a total of 111. And the County Planning Board, and I would share this suggestion \u2026 to preserve as many trees as possible,' and 'the commercial use will basically be restricted to boarding and training, but not horse shows or anything of that nature.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "against adding owner-change conditions or code changes; prefers regular compliance checks on what is approved",
+              "score": 0.3,
+              "themes": [
+                "land use, zoning & special permits",
+                "local laws & legislation"
+              ],
+              "evidence": "'I don't see there being a need for role and to look into that \u2026 I think the more important thing is ensuring that there's like appropriate compliance \u2026 I would rather not add the overhead and delay what we're doing here to put these changes in the town code,' and 'I don't think the town board should be making laws and like passing things based on who the owner is.' The supervisor then said 'But, Celine said no' and another member 'No, I agree with Celine.'",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "2027-tentative-budget-receipt-public-hearing-nov-18-2026",
+          "name": "2027 Town Tentative Budget \u2014 Received; Public Hearing Set for November 18, 2026",
+          "address": "",
+          "applicationType": "budget receipt / public hearing scheduling",
+          "applicant": "Town of North Castle",
+          "status": "tentative budget received and public hearing scheduled for November 18, 2026, by voice vote",
+          "summary": "Under item 4A the board received the tentative 2027 town budget (the year is rendered '2020-27') and scheduled a public hearing for November 18, 2026. On the motion, a member said that although the budget was not being discussed that night, 'we really need to look to tightening our belts because there's a decent-sized increase for another year', with bigger expenses coming for the town hall projects. A voice (not identified) asked whether to also set a date for a possible hearing in case the levy exceeds the tax cap. That led to the separate motion recorded as its own item.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.0,
+          "memberPositions": []
+        },
+        {
+          "id": "2027-tax-levy-limit-override-public-hearing-nov-18-2026",
+          "name": "Possible Override of the Tax Levy Limit for the 2027 Budget \u2014 Public Hearing Set for November 18, 2026",
+          "address": "",
+          "applicationType": "public hearing scheduling (tax cap override)",
+          "applicant": "Town of North Castle",
+          "status": "public hearing on a possible resolution to exceed the tax cap set for November 18, 2026; motion made and seconded, and carried by voice vote just after this range (a roll call was asked about and judged unnecessary)",
+          "summary": "A voice not identified in the recording raised setting a precautionary hearing date in case the 2027 levy exceeds the tax cap. The supervisor said he had thought the town was within the cap, but that at his last meeting with other county supervisors 'a lot of towns automatically set that irrespective of whether or not they're anticipating exceeding', so 'I think it's a prudent thing to do, but it's entirely up to the board.' A voice (apparently staff or counsel; not identified) cautioned against waiting until December 9 or 10, because the budget must be adopted before the 20th, and suggested the same November 18 date. The board first voted on receiving the budget, then took up a motion to set the November 18 hearing 'understanding that potentially we may have to have a resolution to exceed the tax cap.'",
+          "themes": [
+            "Budget, taxes & finance",
+            "Local laws & legislation"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.1,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supports setting a precautionary tax-cap hearing date",
+              "score": 0.3,
+              "themes": [
+                "budget, taxes & finance"
+              ],
+              "evidence": "Presiding: 'I actually thought that we were good at that here \u2026 a lot of towns automatically set that irrespective of whether or not they're anticipating exceeding. So I think it's a prudent thing to do, but it's entirely up to the board. I'm happy to do that.'",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "route-22-route-120-state-repaving-public-comment-2026",
+          "name": "Route 22 Condition \u2014 Public Comment and the Supervisor's Update on NYSDOT Region 8 Repaving of Routes 22 and 120",
+          "address": "NYS Route 22 (Virginia Road to Route 120) and Route 120 (Harrison line to Mount Pleasant line)",
+          "applicationType": "public comment / supervisor's update",
+          "applicant": "Mariana Panova (resident, 13 Freedom Road, as rendered)",
+          "status": "public comment; no action",
+          "summary": "A resident asked whether there is a plan to fix Route 22, which is in bad condition. The supervisor said it is a state road the DOT had kept patching. Working with State Senator Shelley Mayer, Assemblyman Chris Burdick and Majority Leader Andrea Stewart-Cousins, the town had found that DOT Region 8 was underfunded by about 33% compared with other regions for 10 to 12 years, with no clear basis. Funding has since been increased. Specifications are being developed to repave Route 22 from the Virginia Road intersection in North White Plains to the Route 120 intersection, with new drainage and milling, because water crossing the road delaminates the pavement. The same Region 8 project will repave Route 120 from the Harrison line (near King Street and the airport) to the Mount Pleasant line. Town Administrator Kevin Hay confirmed this. The work is to be bid for the 2027 construction cycle, so residents face one more winter as is.",
+          "themes": [
+            "Intermunicipal & county/state",
+            "Resident concerns & quality of life",
+            "Roads, highway & sidewalks"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.2,
+          "publicComment": "Mariana Panova (13 Freedom Road, as rendered) asked whether there is a plan to fix the deteriorating Route 22.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "pressing the state; reassured that repaving is funded for 2027",
+              "score": 0.4,
+              "themes": [
+                "roads, highway & sidewalks",
+                "intermunicipal & county/state"
+              ],
+              "evidence": "'Region eight had been underfunded for probably 10 or 12 years \u2026 we were receiving about 33% less than most of the other DOT regions,' 'they've given us every reassurance that it's going to get done in the 2027 cycle,' and 'the bad news is we're going to go through another winter the way it is.'",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "community-announcements-nov-4-2026",
+          "name": "Community Announcements \u2014 Election-Day Thanks, Mobile Shredder, Art Show Pop-up, Fire Department Christmas Party, Veterans Day",
+          "address": "",
+          "applicationType": "announcements",
+          "applicant": "",
+          "status": "announced",
+          "summary": "Town Clerk Allison Simon thanked residents, election inspectors, her staff, the police (who delivered the ballots) and the Recreation Department after the previous day's election, when the voting machines were down. She announced a mobile shredder on Tuesday, November 10 (10 a.m. to 1 p.m.) at the North Castle Town Park on Business Park Drive, Armonk. She also announced an Armonk Outdoor Art Show pop-up with a Larchmont gallery (rendered 'Tilly A. Modern'), with a share of sales going to the Friends of the Library and the show online through January 3. The North White Plains Volunteer Fire Department's children's Christmas party is Sunday, December 13, 1\u20134 p.m. She reminded residents of the do-not-solicit registry, the county clerk's property alert, Nixle and E-News. A resident came to the microphone to say that the room audio is hard to hear, though it is clear at home. The clerk then said she would keep working on it and speak louder. The supervisor announced the American Legion post's Veterans Day service on November 11 at 11 a.m., noting the post's revival. He thanked the clerk's office as the link to the County Board of Elections, said the board of elections was still counting ballots after a glitch, and urged residents to vote, recalling that his father could vote only after becoming a U.S. citizen.",
+          "themes": [
+            "Ceremonial & community",
+            "Open government & procedure",
+            "Technology & communications"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.6,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "thanked the clerk's office and voters; promoted Veterans Day",
+              "score": 0.7,
+              "themes": [
+                "ceremonial & community"
+              ],
+              "evidence": "'I'd like to thank Alison, the clerk's office \u2026 her office is the link between Westchester County Board of Elections and what happens here locally,' and 'my dad came from a country that he wasn't able to vote until he came and became a citizen here.' A resident later said 'I know the supervisor mentioned it.'",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "public-comment-announcements-nov-4-2026",
+          "name": "Public Comment \u2014 Miller Hill Rededication and 250th, Interfaith Thanksgiving Service, Election Thanks and Honour for Councilman Vataj",
+          "address": "",
+          "applicationType": "public comment",
+          "applicant": "Residents (Ed, surname not stated; Michael Gackavan, as rendered)",
+          "status": "public comment; no action",
+          "summary": "A resident named Ed announced the rededication of the Miller Hill battlefield that Sunday at 2 p.m. It marks the battle's 250th anniversary and will have a new flagpole and signage, followed by a 3 p.m. program at Miller House on John Glover. He also announced the ecumenical Thanksgiving interfaith service at St. Patrick's on Thursday, November 19 at 7 p.m. It involves St. Ursula, St. Stephen's, Congregation B'nai Israel (rendered 'Benet, Israel') and St. Pat's, and he called it the county's second oldest at over 50 years. Michael Gackavan (as rendered; 58 Chestnut Ridge Road) congratulated the candidates. He thanked Town Clerk Allison Simon, who he said is also president of the Westchester County association of town and city clerks, and the police officers who worked about 20 hours taking ballots to Ardsley ('Arzley'). He announced that Councilman Sonny Vataj (rendered 'sunny pitaage') will be honoured by the County Board of Legislators for Albanian American Heritage Month the following Monday at 7 p.m.",
+          "themes": [
+            "Ceremonial & community"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.8,
+          "publicComment": "Ed (surname not stated) announced the Miller Hill rededication and the interfaith Thanksgiving service; Michael Gackavan (as rendered) thanked the clerk and police for election-day work and announced the County's honour for Councilman Vataj.",
+          "memberPositions": []
+        },
+        {
+          "id": "stac-old-orchard-street-jennie-clarkson-2026",
+          "name": "Sports Training Academy & Community Facility (STAC) District, 1700 Old Orchard Street: Agency Letters Received, Positive Declaration, Draft Scoping Document Received, December 2 Scoping Session Noticed, Motion to Return the Petition Fails",
+          "address": "1700 Old Orchard Street, North White Plains (former St. Christopher's / Jennie Clarkson campus)",
+          "applicationType": "zoning text and map amendment petition (new zoning district) / SEQRA positive declaration, draft scoping document and scoping-session notice",
+          "applicant": "Petitioner for the STAC district (entity name not captured); principal Stephen Felvos (as rendered), chair of the board of New York Soccer Club; a member of the applicant team addressed as 'Cory' (as rendered)",
+          "status": "Items 1\u20134 received by voice vote: letters from the County Planning Board (October 5, 2026), the NYS DEC (October 6, 2026), the 'New York State Department of Environmental Protection' (as read; context suggests NYC DEP) (October 16, 2026) and the Attorney General's Environmental Protection Bureau (October 16, 2026). Item 5, the positive declaration, adopted by voice vote. Item 6, the draft scoping document, received on a 4\u20131 roll call (Berra no). Item 7, notice of the scoping session for December 2, 2026, approved on a 3\u20132 roll call ('So motion carries'; Berra and, by elimination, DiGiacinto no). A later motion to return the petition was put to a roll call. Berra voted yes, and DiGiacinto's yes is implied. Hussain, Vataj and Rende voted no, so it failed, though the result was not announced in the recording.",
+          "summary": "Preface (before the agenda): Before the agenda, the supervisor noted that many people were present for item 4B. He said it is not a public hearing and no votes would be taken. The Town Planner, Adam Kaufman, would explain the item, the board would receive documents already on the website, and a date would be set for a full scoping session. That session will be a public hearing with a court stenographer, followed by about 30 days for written comments, all of which the applicant must answer in its environmental assessment. Asked whether the board could just return the petition, he said it could do so at any point by a 'concurrent decision', without a formal vote. He said the applicant would have no Article 78 remedy, which answers social-media claims that the town would be sued. He said 'there's been a lot of misinformation circulated'. He believed most members were 'very concerned about this project' but felt it deserved to go through the process as 'a fact-finding exercise'. One member preferred to comment after hearing the public. Another wanted to wait for the agenda item but said 'I would not oppose returning the petition.' A third was okay waiting. A fourth raised the entry point, fire department capacity and mutual aid (having met with North White Plains), and traffic as the three issues to resolve early. Item 4B: The supervisor took up item B, the STAC zoning district and its mapping on 1700 Old Orchard Street. Town Clerk Allison Simon read the four agency letters. Before the motions, a member identified from a later reference as Councilman Berra asked that the draft scoping document be received separately: 'that implies that we're moving forward with that.' Another member asked counsel whether receiving it was a vote to move forward. Town Attorney Roland Baroni (addressed as 'Roland') said item 7 would be the indication, 'because there you're setting a date', and that item 5, the positive declaration, should also be taken separately. Items 1\u20134 were received. The scoping document was received 4\u20131, with Berra voting no ('I wouldn't move ahead with that'), and the positive declaration was then adopted by voice vote. On item 7, a member credited at medium confidence as Councilman Hussain said the vote was about giving the community a forum and that 'any of us 100% disagreeing with this project is fully compatible with us voting yes.' A staff voice clarified that scoping decides only what is to be studied. It is not a forum for or against the application, and returning the petition 'would be the mechanism' for that. The scoping document, roughly 43\u201345 pages, lists alternatives including scaling back, building height and a residential development. The supervisor then asked Director of Planning Adam Kaufman to explain the process. Kaufman said the board is lead agency after 30 days with no objections. The positive declaration means an EIS is required, the draft scope goes to involved and interested agencies for a month, and there will be a public scoping meeting. The board then votes on a final scope, and later comes a hearing on the draft EIS and responses in a final EIS. The board does not have to adopt the scope. Councilman Vataj's suggestion to hear the public and the applicant first was welcomed by another member, who said the public could tell the board 'it's a non-starter for us, and we should return the petition.' Item 7 then carried 3\u20132 on a roll call. Nearly an hour and a half of public comment followed, almost all of it opposed (see publicComment). The supervisor answered residents at length. He said the agency letters say what the board is saying, that 'unless the applicant can find ways to resolve those concerns \u2026 we're not going to approve it', and that he would be 'the first one to hand back the petition' if sensitive resources were in jeopardy, but that returning it now would be 'myopic'. He recalled Jennie Clarkson's drain on police, fire and ambulance services and its illegal landfill, and said the current owners pay taxes and are funding the cleanup. He also said two DEP representatives meeting him and the Town Administrator about another parcel had told him the DEP was not interested in this one. Two residents disputed that, and one said a bankruptcy filing shows DEP interest frustrated by a government shutdown. A woman resident asked members to raise their hands if they would want the complex two miles from home. A member who had voted yes objected to the tactic and said 'I'm definitely not for against this project yet'; that member is not credited. Councilwoman DiGiacinto said that in her years on the board since 2014 she had never seen such site-specific agency letters. She quoted the County Planning Board ('may not be appropriate for this site'), the DEP and the watershed inspector general, and said she saw no benefit justifying going forward. Councilman Berra said the DEP had been interested but lacked budget, and that the seller bore much of the cleanup cost. He argued that the EIS process gains momentum and carries real opportunity costs in residents' and staff time. He cited the town hall project and the budget, and estimated that one more police officer would cost about $250,000, or a 1% tax increase. Councilman Hussain told Berra he agreed the proposal is 'very much off the mark as it stands' but had not yet heard the other side. Councilman Vataj asked the applicant to respond to the residents, warning that otherwise 'this thing is gonna go nowhere.' The principal said the scale was not final and there is no indoor stadium, only covered fields and one field with up to 2,000 seats. He said the turf would contain no crumb rubber or PFAS and that traffic studies are under way. He said he would hire on-site security rather than rely on town police, that a 90-foot phase-two building might never be built, and that he had built facilities at Manhattanville. He offered to meet residents. The supervisor cut off further back-and-forth, stressing that this was not a public hearing. A suggestion that the applicant attend Councilwoman DiGiacinto's gathering was rejected as 'not a town board thing'. The motion to return the petition then failed on a roll call.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Environment & conservation",
+            "Land use, zoning & special permits",
+            "Open government & procedure",
+            "Public safety & police",
+            "Resident concerns & quality of life",
+            "Roads, highway & sidewalks"
+          ],
+          "overallSentiment": "negative",
+          "sentimentScore": -0.45,
+          "publicComment": "Nico Moreno (9 William Street, the quarry) asked who pays for the environmental studies. The answer was that the applicant pays all fees, with professional and attorney time billed against an escrow. Carolyn Cooper (North White Plains, five generations) opposed the 'stadium complex'. She cited traffic from I-287 onto Route 22 and through downtown Armonk, noise and air pollution, impervious surfaces and runoff threatening Cranberry Lake Preserve (a 10,000-year-old fen, rare orchids), lower property values from rezoning, a 90-foot building and lights near Westchester County Airport's approach, and the Valhalla School District; she called it 'a disgrace'. Carolyn Hoffman (5 Rockledge Road) raised runoff, PFAS from artificial turf and coliform reaching the Kensico Reservoir ('Cenzico/Kansico' as rendered), steep slopes and tree loss, and asked the petitioners to drop the stadium. Terry Loveman (as rendered; North White Plains) said none of the agencies' letters supported the project. An unnamed resident called Route 22 a rush-hour bottleneck and the project 'a non-starter'. Malenka (as rendered; Church Street) described waiting about 35 minutes for an ambulance after a fatal accident on October 15. Frank Malasha (as rendered) said there is no room for new roads. A 65-year resident addressed as 'Ed' argued that the board can deny the rezoning at any stage on non-environmental, zoning grounds without completing SEQRA, citing case law he had given counsel. He asked for a motion that night. Brad Aiken (1610 Old Orchard Street) cited the cost of residents' time (he noted it was 10:47 p.m.) and challenged a board member to move to return the petition. A Zoom caller and another resident asked the board to return it. A woman resident about two miles away pressed members on why they voted yes. Marilyn Morrow (as rendered; North White Plains) said North White Plains could vote to merge with Mount Pleasant, taking the reservoir and the property with it. Courtney Akin (1610 Old Orchard Street) said the bankruptcy sale record shows the DEP was interested but could not act during a government shutdown. She said the supervisor's statements had 'unfairly tipped the scale'. Gladys Veda (as rendered; 53 'healing the avenue', as rendered) said the project would undo the Route 22 improvements and contrasted it with the cancelled pool pickleball courts. A final speaker asked the board to keep the land residential ('Keep it or to', as rendered). The applicant's principal, Stephen Felvos (as rendered), spoke at Councilman Vataj's request (see summary).",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "wants the SEQRA review to run its course before deciding; voted for the scoping document and session and against returning the petition, while saying he would return it if the concerns cannot be resolved",
+              "score": 0.3,
+              "themes": [
+                "land use, zoning & special permits",
+                "environment & conservation",
+                "open government & procedure"
+              ],
+              "evidence": "Preface: 'I personally think that it's a worthwhile endeavor to allow the applicant to go through the process and find out all the information,' 'this is really, I think, a fact-finding exercise,' and the board could 'return the petition' with 'no recourse or \u2026 no remedy for the applicant'. Item 4B: Presiding. 'I think to return it now prior to us being able to hear all the information would not be the prudent thing to do \u2026 we would be making a decision with a very myopic view,' and 'I know I would be the first one to hand back the petition' if sensitive resources were in jeopardy. To Terry Loveman ('I took the time, Joe'): 'unless the applicant can find ways to resolve those concerns and ensure us that none of that is occurring, we're not going to approve it.' On benefit: 'I am of the opinion that it's worthwhile, even though it's gonna take time.' A resident addressed him as 'the supervisor' about his DEP remarks. Roll calls: 'Supervisor Rundi. Yes' (item 6), 'Supervisor Randy? Yes' (item 7), 'Supervisor Andy. No' (return the petition).",
+              "confidence": "high"
+            },
+            {
+              "member": "Jose Berra",
+              "stance": "opposed; wants the petition returned rather than put through an EIS",
+              "score": -0.9,
+              "themes": [
+                "land use, zoning & special permits",
+                "budget, taxes & finance",
+                "open government & procedure"
+              ],
+              "evidence": "Roll calls: 'Councilman Bearer. No. I wouldn't move ahead with that' (item 6); 'Councilman, I'm better. I think we have tons of information here that first concluded that we should return to petition. So I would say no' (item 7); 'Councilman Vera. I' (return the petition). In debate: 'I don't think the EIS process is appropriate when there's something that is this off the mark,' 'when you go down that route, it gains momentum,' and one more officer at '$250,000 \u2026 It's a 1% tax increase.' Councilman Hussain answered him directly ('I actually fully agree, Jose, on most of your points'). His earlier request to receive the scoping document separately ('that implies that we're moving forward') is credited from the following 'to Jose's point'.",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "opposed; wants the petition returned, citing the agencies' site-specific warnings",
+              "score": -0.85,
+              "themes": [
+                "land use, zoning & special permits",
+                "environment & conservation",
+                "intermunicipal & county/state"
+              ],
+              "evidence": "'I've been on the town board since 2014 \u2026 I have never seen county planning say this application is not appropriate for this site,' and 'when I have chosen to say I would like to return the petition tonight, it's because I don't see any benefit to this site, to North White Plains, to North Castle period.' Councilman Berra then referred back to it ('Barbara's saying these letters are kind of the most critical'). Roll calls: 'Councilman DiGicinto. Aye' on receiving the scoping document; on item 7 the one 'No' called as 'Councilor Mende, did you send down?' (as rendered) is hers by elimination.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "supports the scoping session as a forum for public input; says the proposal is 'very much off the mark as it stands' but wants to hear the other side",
+              "score": 0.1,
+              "themes": [
+                "open government & procedure",
+                "land use, zoning & special permits"
+              ],
+              "evidence": "A member said 'disagreeing, like any of us 100% disagreeing with this project is fully compatible with us voting yes to do this scoping session' and 'after we have that session, we can absolutely stop moving forward.' The supervisor then said 'Councilman Saleem probably said it best that through this process\u2026', and Councilman Berra said 'I have a different view of the EIS process than Celine does.' The same voice later told Berra: 'I also think it's very much off the mark as it stands \u2026 the one place where I do differ with you, Jose, is just that I haven't heard the other side yet.' Roll calls (high): 'Councilman Hussain. Aye' (item 6), 'Councilor Hussain? Hi' (item 7), 'Councilman Hussain. No' (return the petition).",
+              "confidence": "medium"
+            },
+            {
+              "member": "Sonny Vataj",
+              "stance": "voted to proceed with scoping and against returning the petition; wanted the public and then the applicant heard, warning the applicant it must answer the concerns",
+              "score": 0.1,
+              "themes": [
+                "resident concerns & quality of life",
+                "open government & procedure"
+              ],
+              "evidence": "Given the floor ('Wait, I think Sonny had a question'): 'After you've heard this body of public that really, we work for them. What do you have to say? \u2026 if you don't have these concerns in mind, then it's a very easy. You're going to lose this vote,' and 'I could tell you right now and this thing is gonna go nowhere.' The supervisor confirmed: 'it's sunny was the one that asked that if the applicant wanted to get up.' Earlier a member said 'So I think Sonny's idea is a good one to listen to the public and the applicant too.' Roll calls: 'Councilman Vittage. Aye' (item 6), 'Councilman, Vittage? Yes' (item 7), 'Councilman Visage. No' (return the petition).",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "armonk-close-condominium-tax-certiorari-refund-2026",
+          "name": "Armonk Close Condominium v. Town of North Castle Assessor: Notice of Entry and Approval of Refund under the Consent Judgment (Assessment Year 2025)",
+          "address": "Armonk Close Condominium, Armonk",
+          "applicationType": "tax certiorari consent judgment / refund approval",
+          "applicant": "Armonk Close Condominium et al. (as read)",
+          "status": "notice of entry received and refund approved by voice vote",
+          "summary": "The board received a notice of entry and approved a refund under the consent judgment in Armonk Close Condominium et al. v. the Town of North Castle Assessor for assessment year 2025. A member asked how it came to this. A staff voice, not named in the recording, said the units were only recently sold and the initial assessments 'may have been overly optimistic'. Because they are condominiums, they must be valued on market rentals, not sale prices, and 'Gigi (as rendered) and I agreed' the adjustment was proper to bring the 20 units into line. There are 18 market units, and the two affordable units are still vacant and taxed as AFFH units.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Legal, litigation & contracts"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.0,
+          "memberPositions": []
+        },
+        {
+          "id": "personnel-nov-4-2026",
+          "name": "Personnel: Library Board Appointment (Deborah Trope, as rendered) and Terminal Leave Payment (Police Department)",
+          "address": "",
+          "applicationType": "personnel / appointments",
+          "applicant": "",
+          "status": "approved by voice votes",
+          "summary": "Deborah Trope (as rendered) was appointed to the Library Board for a five-year term ending December 31, 2031. A terminal leave payment for William McClure (as rendered) of the Police Department was approved. Both passed by voice vote without discussion.",
+          "themes": [
+            "Personnel & appointments"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.1,
+          "memberPositions": []
+        },
+        {
+          "id": "consensus-agenda-minutes-exec-session-nov-4-2026",
+          "name": "Executive Session, Reconvening, Receipt of the October 28 Minutes, Consensus Agenda and Adjournment in Memory of Emily Levy-Smith",
+          "address": "",
+          "applicationType": "procedural",
+          "applicant": "",
+          "status": "reconvened by voice vote; October 28, 2026 minutes received by voice vote; consensus agenda approved; adjourned",
+          "summary": "The supervisor said the meeting opened promptly at 5:30 p.m. and went into executive session on board and committee interviews, personnel matters and advice of counsel on real estate. The board then reconvened in public by voice vote, followed by the Pledge of Allegiance. Under old business, the October 28, 2026 Town Board minutes were received by voice vote. The consensus agenda was approved by voice vote after a brief mix-up over the motion and second. The meeting closed in memory of Emily Levy-Smith, a 16-year-old who had been diagnosed with a rare cancer at age 11. The remarks were made in the presiding voice, which called it 'the saddest close in memory'. The board adjourned by voice vote at about 4 hours 23 minutes into the recording.",
+          "themes": [
+            "Ceremonial & community",
+            "Open government & procedure"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.0,
+          "memberPositions": []
+        },
+        {
+          "id": "liaison-updates-nov-4-2026",
+          "name": "Liaison Updates: Library Website Launch and John Fava Nature Preserve Grant Submitted",
+          "address": "",
+          "applicationType": "liaison updates",
+          "applicant": "",
+          "status": "reported",
+          "summary": "A member (not identified by name) announced the launch of the redesigned library website, with a new logo and design. The member credited the library board, especially 'Annie', and said the board is tracking usage and seeing strong interest in event content. A second member (not identified by name) praised the John Fava Nature Preserve grant application, submitted 'today, I think'. He described it as non-contributory, able to cover 100% of the cost, and a request 'north of $400,000', which another voice corrected to 520. He credited Doug Mancis (as rendered), Ellie, Kerry K. Zack (as rendered), Town Administrator Kevin Hay and grant writer John Atdias (as rendered). He noted the preserve's road noise from I-684 but its ecological value. The same member relayed the Conservation Board's request for a work session on a revised tree code (see its own item). Other members had no updates.",
+          "themes": [
+            "Environment & conservation",
+            "Grants & capital projects",
+            "Personnel & appointments"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.6,
+          "memberPositions": []
+        },
+        {
+          "id": "conservation-board-tree-code-work-session-request-2026",
+          "name": "Conservation Board Request: Work Session on a Revised Tree Code",
+          "address": "",
+          "applicationType": "board/committee request (work session)",
+          "applicant": "North Castle Conservation Board",
+          "status": "request relayed in liaison updates; no date set",
+          "summary": "During liaison updates, a member (not identified by name) reminded the board that the Conservation Board has been asking 'for a few months now' for a work session on its revised tree code. He said it had done more homework since appearing before the board and asked that it be given a sense of when the session could happen. He also said the Conservation Board had been in touch with a 'Josephine' (as rendered). No date was set.",
+          "themes": [
+            "Environment & conservation",
+            "Local laws & legislation"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.3,
+          "memberPositions": []
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Land use, zoning & special permits",
+          "salience": 0.95,
+          "sentiment": -0.26,
+          "note": "Most of the first two hours went on the 35 Bedford Banksville Road private stable hearing. The questions were whether boarding and training are 'commercial', whether to go from 20 to 29 horses or cap at 26, how much acreage is usable, the precedent for other horse properties, and whether a permit can be limited by owner or duration. The supervisor also prefaced item 4B (1700 Old Orchard Street), stressing that no vote was being taken and that the board could return the petition. Most of this half went on the STAC rezoning petition for 1700 Old Orchard Street. The board adopted the positive declaration, received the draft scoping document 4\u20131, noticed a December 2, 2026 scoping session 3\u20132, and then defeated a motion to return the petition. Residents and two members argued the rezoning of residential (R-2) land should be refused outright. A resident argued that a denial on zoning grounds needs no SEQRA review."
+        },
+        {
+          "theme": "Environment & conservation",
+          "salience": 0.75,
+          "sentiment": -0.41,
+          "note": "Removing 111 regulated trees in paddocks 14 and 16 (a County concern pressed by Councilwoman DiGiacinto), moving paddocks out of the wetland buffer with filter strips, closing and replanting wetland trails, and a DEC jurisdictional determination. Kensico Reservoir runoff, PFAS from turf, Cranberry Lake Preserve, steep slopes, tree loss and the site's illegal-landfill history. Councilwoman DiGiacinto read the County Planning Board, DEP and watershed inspector general letters as 'sounding an alarm'. The applicant promised PFAS-free turf. Separately, the John Fava preserve grant was submitted and the Conservation Board asked for a tree-code work session."
+        },
+        {
+          "theme": "Resident concerns & quality of life",
+          "salience": 0.7,
+          "sentiment": -0.57,
+          "note": "Neighbours across the road worried about construction noise, the roadside buffer, dust, lighting, parties and future owners. Fred Cohen's precedent argument. A resident's complaint that the meeting audio is hard to hear in the room. The condition of Route 22. About 15 speakers, almost all opposed, raised noise, lights, property values, the character of North White Plains, the cost of residents' time ('the second bedtime that I have missed'), and even secession to Mount Pleasant. One resident said the supervisor's remarks had 'unfairly tipped the scale'."
+        },
+        {
+          "theme": "Open government & procedure",
+          "salience": 0.55,
+          "sentiment": -0.11,
+          "note": "The supervisor's ground rules for public comment (three minutes, address the board, don't repeat others). He gave a long explanation of the scoping-hearing process for item 4B and of the board's power to return a petition, and rebutted 'misinformation' on social media. The hearing was re-noticed by letter because it was adjourned without a date. There was confusion over what receiving the scoping document implies and over the motion and second on item 7, with the clerk's recap and later 'I stand corrected'. Roll calls were requested on items 6 and 7 and on returning the petition. Members disputed whether scoping is a forum for or against the project. The supervisor stressed 'this was not a public hearing', and a suggestion to use Councilwoman DiGiacinto's gathering was rejected as 'not a town board thing'."
+        },
+        {
+          "theme": "Roads, highway & sidewalks",
+          "salience": 0.4,
+          "sentiment": -0.35,
+          "note": "The supervisor's account of NYSDOT Region 8 underfunding and the planned 2027 repaving and drainage work on Route 22 (Virginia Road to Route 120) and Route 120 (Harrison line to Mount Pleasant). Route 22 and I-287 congestion, traffic through downtown Armonk on Routes 120/128, and doubt that new roads can be built. The applicant said traffic consultants are counting cars and events would avoid rush hour."
+        },
+        {
+          "theme": "Local laws & legislation",
+          "salience": 0.3,
+          "sentiment": -0.1,
+          "note": "Counsel said owner-change or durational limits on special permits would first need code criteria (North Salem was the example). The applicant's attorney called such conditions unlawful. Councilman Hussain and another member declined to pursue a code change. Also the possible tax-cap override hearing."
+        },
+        {
+          "theme": "Budget, taxes & finance",
+          "salience": 0.3,
+          "sentiment": -0.15,
+          "note": "The 2027 tentative budget was received and the hearing set for November 18, with a precautionary tax-cap override hearing the same night. A member warned of 'a decent-sized increase for another year' and town hall costs ahead. Who pays for the review (the applicant, through escrow); Councilman Berra's opportunity-cost and tax argument tied to the town hall project; the Armonk Close tax-certiorari refund."
+        },
+        {
+          "theme": "Public safety & police",
+          "salience": 0.3,
+          "sentiment": -0.22,
+          "note": "Police thanked for ballot delivery; a member raised fire department mutual-aid capacity for item 4B. A 35-minute ambulance wait at a fatal accident; Jennie Clarkson's past drain on police, fire and ambulance; Councilman Berra's estimate that one more officer costs about $250,000 a year; the applicant's pledge of private on-site security and fire-department ladder limits on a 90-foot building."
+        },
+        {
+          "theme": "Ceremonial & community",
+          "salience": 0.25,
+          "sentiment": 0.8,
+          "note": "Election-day thanks to the clerk, inspectors and police; Veterans Day at the American Legion; the Miller Hill 250th rededication; the interfaith Thanksgiving service; and the County's honour for Councilman Vataj."
+        },
+        {
+          "theme": "Intermunicipal & county/state",
+          "salience": 0.2,
+          "sentiment": 0.3,
+          "note": "Work with Senator Mayer, Assemblyman Burdick and Majority Leader Stewart-Cousins on DOT funding; County Planning Board comments on the stable."
+        },
+        {
+          "theme": "Personnel & appointments",
+          "salience": 0.1,
+          "sentiment": 0.2,
+          "note": "Library Board appointment and a Police Department terminal leave payment."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Adam Kaufman",
+          "role": "Director of Planning",
+          "summary": "On the private stable, said the town code has two horse special permits, additional horses and private stable. The Lindemann farm was approved as additional horses, whose non-commercial restriction went 'above and beyond what was required by the code', so 'it's not apples to apples'. He said the building inspector's new fire-inspection programme had reviewed the prior approvals and told the applicant the issue had to be addressed, which led to this application, and that he had been on site with the building inspector as open issues were dealt with. The supervisor said he would explain item 4B to the public. Later: Called on by the supervisor ('I wanted to take the time for Adam, who's truly the absolute expert'), he explained the SEQRA stage the board had reached. The board is lead agency after 30 days with no objections. The positive declaration means an EIS is required. The draft scope goes to involved and interested agencies for a month, alongside a public scoping meeting. The board then votes on a final scope that becomes the applicant's 'blueprint', followed by a hearing on the draft EIS and responses in a final EIS. Asked ('Adam, you said\u2026') whether the board had to adopt the scope that night, he said no, and that the board can decline to adopt it. A staff voice, apparently his, said the scoping document covers the agencies' topics and has an alternatives section (scaling back, building height, a residential alternative).",
+          "cases": [
+            "35-bedford-banksville-road-private-stable-sup-amendment-2026",
+            "stac-old-orchard-street-jennie-clarkson-2026"
+          ]
+        },
+        {
+          "person": "Roland Baroni",
+          "role": "Town Attorney",
+          "summary": "Addressed as 'Roland' (and 'Mr. Baroni' by a resident). Said he had no recollection of the earlier Lindemann discussions Fred Cohen attributed to him. On precedent, said 'Any permit can be amended by proper application' and that the Lindemann comparison was not apples to apples. He said a special permit transfers with the property unless conditioned, but that on cases the applicant's attorney supplied, a re-permitting or durational limit must be in the code's special permit criteria, as in North Salem, so the application might have to wait for a code amendment. He advised adjourning without a date and re-noticing neighbours by letter, and is to research the easement and the cases. Later: Addressed as 'Roland', he advised that receiving the scoping document is not itself a vote to proceed and that item 7 'would be the indication that you're moving forward, because there you're setting a date'. He said the positive declaration (item 5) should be taken separately. Asked whether a member could move to return the petition, he said 'You don't have to give a reason.' A resident said he had given counsel a copy of his legal argument in advance.",
+          "cases": [
+            "35-bedford-banksville-road-private-stable-sup-amendment-2026",
+            "stac-old-orchard-street-jennie-clarkson-2026"
+          ]
+        },
+        {
+          "person": "Allison Simon",
+          "role": "Town Clerk",
+          "summary": "Gave the community announcements and election-day thanks, managed the public comment sign-up list (non-agenda topics first), and read into the record the documents for the 35 Bedford Banksville Road hearing. Later: Read the four agency letters received on the STAC petition and took the roll calls. When asked ('Alison, where are we'), she recapped that items 1\u20134 and 6 had been received, the positive declaration adopted, and item 7 moved but not yet seconded or voted.",
+          "cases": [
+            "community-announcements-nov-4-2026",
+            "public-comment-announcements-nov-4-2026",
+            "35-bedford-banksville-road-private-stable-sup-amendment-2026",
+            "stac-old-orchard-street-jennie-clarkson-2026"
+          ]
+        },
+        {
+          "person": "Kevin Hay",
+          "role": "Town Administrator",
+          "summary": "Confirmed ('Correct') the supervisor's description of the Route 120 repaving limits.",
+          "cases": [
+            "route-22-route-120-state-repaving-public-comment-2026"
+          ]
+        },
+        {
+          "person": "Adam Wexstein (rendered 'Wexian'/'Wexting'/'Wexstein'), Hockerman, Tortella and Wexstein LLP (as rendered)",
+          "role": "Attorney for applicant (35 Bedford Banksville Road), not town staff",
+          "summary": "Presented the four requested amendments and asked that the hearing stay open pending the Planning Board's SEQRA lead-agency period. He said the private stable ratio is two horses per acre (up to 50), that only boarders would train on site, and that operating conditions could be itemised in the resolution. He objected 'strenuously' to owner or durational conditions as beyond the board's power and said 'if there's any site in this municipality where this is appropriate, this is it.'",
+          "cases": [
+            "35-bedford-banksville-road-private-stable-sup-amendment-2026"
+          ]
+        },
+        {
+          "person": "Eric Hasbrok (as rendered)",
+          "role": "Applicant's horse professional (35 Bedford Banksville Road), not town staff",
+          "summary": "Said 29 horses is sustainable with the enlarged, mostly grass paddocks and rotation, with two sand all-weather paddocks by the barn. He said the 3.94 acres is only turnout area beside the barn and two riding arenas, and that retired horses may be about a quarter of the total.",
+          "cases": [
+            "35-bedford-banksville-road-private-stable-sup-amendment-2026"
+          ]
+        },
+        {
+          "person": "Jerry Barrett (also rendered 'Bartlett')",
+          "role": "Applicant's site planner / landscape architect (35 Bedford Banksville Road), not town staff",
+          "summary": "Showed that the easement lies in DEC wetland and buffer between Conyers Farm and the stable, that old trails will be abandoned and replanted, that all new work is outside regulated areas, and that the roadside trees are untouched. He said paddock 16 is mostly invasives and that tree removal in paddocks 13 and 14 will be restudied, with a planting plan to come at the Planning Board.",
+          "cases": [
+            "35-bedford-banksville-road-private-stable-sup-amendment-2026"
+          ]
+        }
+      ],
+      "attributionCoverage": "good",
+      "attributionNote": "Lines 1\u20132240 (00:01:28\u201302:07:09). This is an unverified machine (ASR) transcript with no speaker labels. It is not the official minutes. The presiding voice is Supervisor Joseph Rende. That voice runs the agenda, gives the item-4B preface, answers the Route 22 question and poses the grandparent scenario, which a member then calls 'Joe's question'. Barbara DiGiacinto is credited at high confidence on the stable: the supervisor gave her the floor ('I don't know, Barbara, you want to go first? Sure.') and her tree and horse-show questions follow directly. Saleem Hussain is credited at high confidence for his closing comment against looking into owner-change limits: the supervisor summarised it as 'But, Celine said no' and another member said 'No, I agree with Celine'; 'Celine' is an established ASR rendering of Saleem. The earlier member who began 'Okay, so I have a few things' (01:27:12) asked about the tree plan, usable acreage, inspection items and lessons. That member opens the later comment with 'I do have one last comment' and speaks in the same style, so is probably Hussain, but is not credited for lack of a direct cue. Left unattributed: the four members who spoke during the item-4B preface (including the one who said 'I would not oppose returning the petition' and the one who raised the entry point, fire department and traffic); the member introduced by the garbled 'Close eye' who asked about retired horses, shared ownership and the Red House; the member who visited the site 'as a fireman' and was skeptical of the commercial element (no name cue, though the fire-service reference recurs); the member who asked 'Just on Joe's question' about competition-grade owners; the member who asked counsel ('Roland') about precedent; the member who recommended letters to homes within 500 feet; the member who agreed with 'Celine'; and the member who urged 'tightening our belts' on the 2027 budget. Kevin Hay's only contribution is a one-word confirmation after 'Look at that, Kevin.' The voice that raised the tax-cap hearing date and the one that warned about the December 20 adoption deadline are not identified. Movers and seconders are not credited, and all votes were voice votes ('Aye'); no roll call was taken. ASR renderings resolved: 'Rowan/Roland/role and' \u2192 Town Attorney Roland Baroni ('Mr. Baroni'); 'Celine' \u2192 Saleem Hussain; 'sunny pitaage' \u2192 Councilman Sonny Vataj; 'Alison/Allison' \u2192 Allison Simon; 'Kanye's form' \u2192 Conyers Farm; 'Bedford Bank School Road/Bedford Bank Hill Road/Bedford Bank, Silver' \u2192 Bedford Banksville Road; 'Armunk/Armock/our monk' \u2192 Armonk; 'Arzley' \u2192 Ardsley; '555-40' \u2192 \u00a7 355-40 (the only plausible chapter); 'in a question facility' \u2192 equestrian facility; 'Lindenman/Lindemann' farm kept as rendered. Not reconstructed: the applicant LLC ('ASG NW Enterprises'); the attorney's and firm's spelling ('Wexian/Wexting/Wexstein', 'Hockerman, Turutella/Tortella/Tortorilla'); 'Lauren Pinkis'; 'Rose Hirsch'; 'Jim Best'; 'Jerry Barrett/Bartlett'; 'Eric Hasbrok'; 'Castellan horse farm'; 'Michael Gackavan'; 'Mariana Panova'; the gallery 'Tilly A. Modern'; 'Cory/Corey' (who reminded counsel about re-noticing); and 'Ed', whose surname was not given. This note covers 02:06:44\u201304:23:18. The presiding voice is Supervisor Joseph Rende. He is addressed as 'Joe' by a resident and as 'the supervisor' by another, and is called in roll calls as 'Supervisor Rundi/Randy/Andy'. Roll calls were taken by name on three questions: receiving the draft scoping document (item 6), noticing the scoping session (item 7) and returning the petition. Individual votes are credited only from those roll calls. On item 6 all five names are clear. On item 7 the one 'No' called as 'Councilor Mende, did you send down?' (as rendered) is credited to Barbara DiGiacinto by elimination. On the return motion the clerk's call to her ('Councilman, did you send it out?') runs into 'So a vote of yes would be to return the petition. I,'. Her yes is therefore inferred from that and from her stated wish to return the petition. The clerk did not announce a result. Jose Berra: high. His roll-call explanations name him ('Councilman Bearer', 'Councilman, I'm better', 'Councilman Vera'), and Councilman Hussain answered his long speech directly ('I actually fully agree, Jose'). His request to receive the scoping document separately is folded in via the next speaker's 'to Jose's point'. Barbara DiGiacinto: medium. Her 'on the town board since 2014' speech is credited from Berra's immediate back-reference ('Barbara's saying these letters are kind of the most critical'). Saleem Hussain: medium. The scoping-as-forum remarks are credited from the supervisor's 'Councilman Saleem probably said it best' and Berra's 'a different view of the EIS process than Celine does'. The later reply to 'Jose' uses the same voice and argument. Sonny Vataj: high. He was given the floor ('I think Sonny had a question') and the supervisor confirmed it ('it's sunny was the one that asked'). The earlier request to hear the public before voting is credited to him through 'So I think Sonny's idea is a good one'. Left unattributed for lack of a name cue: the member who asked counsel whether receiving the scoping document was a vote to move forward; the member who said a member opposed to the residential rezoning 'would not be interested in the scope in document'; the member who asked whether agency concerns would be addressed and whether the project could be downsized (it follows 'Sonny wants to also', but the turn boundary is unclear); the member who called Vataj's idea good and said the public might call it 'a non-starter'; the member who objected to the residents' raise-your-hand question and said 'I'm definitely not for against this project yet' (the content matches Hussain's position, but there is no cue); the member who asked counsel about a motion to return, and the movers and seconders of every motion; the voice that said 'Barbara's meeting is not a town board thing' and the one that called it 'an informal gathering'; the member who asked about the Armonk Close refund; and both liaison speakers. The library-website speaker matches the library liaison role that earlier 2026 recordings tie to Hussain, and the John Fava / tree-code speaker is male, but neither is credited. The 02:14 statement that scoping 'is not the hearing on the EIS' is treated as a staff voice, as are the answers on alternatives. The answer that the applicant pays all review fees through escrow is not attributed. ASR renderings resolved: 'Rundi/Randy/Andy' \u2192 Rende; 'Bearer/I'm better/Vera' \u2192 Berra; 'DiGicinto' and 'Mende' (by elimination) \u2192 DiGiacinto; 'Celine'/'Saleem' \u2192 Hussain; 'Vittage/Visage/sunny' \u2192 Sonny Vataj; 'Cran Lake Berry Academic and Community Facility Zoning District' and 'North Sports Complex' \u2192 the STAC district; 'secret' \u2192 SEQRA; 'positive definition/direction' \u2192 positive declaration; 'FBIIUS' \u2192 FEIS; 'Kensuko/Kenzico/Cansico/Cenzico/Pensacao' \u2192 Kensico; 'Crownbury/cranberry lake' \u2192 Cranberry Lake Preserve; 'armock/armunk' \u2192 Armonk; 'Northway Plains/North Lake Plains/Norway place' \u2192 North White Plains; 'Robert Millow' \u2192 Rob Melillo; 'trainer' \u2192 Matt Traynor; 'Jamie norisam' \u2192 Jamie Norris; 'Reagan Huffnagle' \u2192 Chief Reagan Huffnagle (each only read from the scoping document's distribution list); 'John Fave' \u2192 John Fava. Names kept as rendered and not reconstructed: Stephen Felvos, Cory, Terry Loveman, Malenka, Frank Malasha, Marilyn Morrow, Gladys Veda, Deborah Trope, William McClure, Gigi, Annie, Doug Mancis, Kerry K. Zack, John Atdias, Josephine, Emily Levy-Smith."
     }
   ]
 }
