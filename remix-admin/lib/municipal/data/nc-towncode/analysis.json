@@ -181,7 +181,7 @@
       "peerComparison": "Based on general professional knowledge of New York municipal ethics codes rather than a document-to-document comparison, North Castle's Code of Ethics is more developed than the bare General Municipal Law Article 18 floor that some small Westchester towns still rely on without a standing local Board of Ethics or codified gift schedule. Its five-member Board of Ethics with staggered terms and a defined complaint-to-hearing timeline (§27-19, §27-20) is more procedurally rigorous than many peer towns' ethics codes, which often lack specific investigation deadlines. The campaign-contribution-triggered recusal rule (§27-6B) and the political-party-leadership eligibility bar for land-use boards (§27-22) are relatively uncommon anti-corruption features that exceed the state-law baseline. Where North Castle's financial-disclosure regime is comparatively narrow is in limiting the mandatory annual disclosure statement (§27-6D) to elected officials and four specific boards rather than requiring broader annual financial disclosure (e.g., outside income or real property interests) from all officers and employees, as some larger Westchester municipalities and NYS Public Officers Law-influenced codes do.",
       "recordEvidence": {
         "verdict": "Sustained structural criticism, partly remediated",
-        "criticismEpisodes": 10,
+        "criticismEpisodes": 11,
         "citingUtterances": 28,
         "meetingsCiting": 7,
         "amendmentTraffic": "A 2022 revision cycle ran August 10, September 14, September 28, October 12, and October 26, 2022 (amending §27-2 and §27-6); a further cycle ran December 13, 2023.",
@@ -221,6 +221,14 @@
             "quote": "This is not the way to amend town code. [It is] too important … [I] don't want [to] after [the] fact see [the] amended code and say, 'I miss[ed] this.'",
             "attribution": "Unattributed Town Board member",
             "meeting": "Town Board, September 14, 2022, 03:10:00"
+          },
+          {
+            "sectionBasis": "inferred",
+            "flawType": "silent/gap",
+            "quote": "There is nothing in the ethics code, nothing in the code of judicial conduct that says, now shall not sit on it. It's to some extent your conscience … Yes, if you know someone well enough to say hello, I don't see why you can't sit on it. If you just had a dinner of eight people and they were part of it, I would question whether it's appropriate. But there's nothing in the code that answers that.",
+            "attribution": "Board of Ethics chair Susan Shimer (as rendered; introduced herself at 00:00:37 and was thanked as 'Sue' after this answer), replying to Planning Board member Thomas Crispi's question about applicants who are neighbours, friends or fellow congregants",
+            "meeting": "Planning Board, November 9, 2026, 00:13:59",
+            "corroboration": "Comes from the body that administers the chapter. Whether to recuse over social acquaintance (as opposed to a defined 'interest') is left to the member's judgement; the chair pointed members to confidential advisory opinions instead."
           }
         ]
       }
@@ -2647,9 +2655,9 @@
     }
   ],
   "recordCorpus": {
-    "totalTranscripts": 272,
+    "totalTranscripts": 273,
     "byBoard": {
-      "Planning Board": 108,
+      "Planning Board": 109,
       "Town Board": 118,
       "Zoning Board of Appeals": 45,
       "Architectural Review Board": 1
