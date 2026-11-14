@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "planning",
     "town": "Town of North Castle",
-    "meetings": 106,
-    "cases": 407,
+    "meetings": 107,
+    "cases": 409,
     "themes": 17,
-    "memberPositions": 1072,
+    "memberPositions": 1077,
     "roster": [
       "Christopher Carthy",
       "Steven Sauro",
@@ -657,6 +657,12 @@
       "date": "2026-10-26",
       "cases": 5,
       "avgSentiment": 0.24,
+      "attributionCoverage": "partial"
+    },
+    {
+      "date": "2026-11-09",
+      "cases": 6,
+      "avgSentiment": 0.417,
       "attributionCoverage": "partial"
     }
   ],
@@ -1817,9 +1823,9 @@
     },
     {
       "theme": "Parking, traffic & access",
-      "meetings": 67,
-      "avgSentiment": 0.025,
-      "avgSalience": 0.47,
+      "meetings": 68,
+      "avgSentiment": 0.027,
+      "avgSalience": 0.471,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2155,14 +2161,19 @@
           "date": "2026-10-26",
           "sentiment": -0.2,
           "salience": 0.55
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.2,
+          "salience": 0.5
         }
       ]
     },
     {
       "theme": "Stormwater & drainage",
-      "meetings": 53,
-      "avgSentiment": 0.047,
-      "avgSalience": 0.429,
+      "meetings": 54,
+      "avgSentiment": 0.056,
+      "avgSalience": 0.426,
       "timeline": [
         {
           "date": "2021-08-09",
@@ -2428,14 +2439,19 @@
           "date": "2026-10-15",
           "sentiment": 0.0,
           "salience": 0.45
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.5,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Tree removal & screening",
-      "meetings": 51,
-      "avgSentiment": 0.096,
-      "avgSalience": 0.418,
+      "meetings": 52,
+      "avgSentiment": 0.104,
+      "avgSalience": 0.413,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -2691,14 +2707,19 @@
           "date": "2026-10-15",
           "sentiment": -0.1,
           "salience": 0.55
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.5,
+          "salience": 0.15
         }
       ]
     },
     {
       "theme": "Neighbor concerns & safety",
-      "meetings": 39,
-      "avgSentiment": -0.165,
-      "avgSalience": 0.456,
+      "meetings": 40,
+      "avgSentiment": -0.154,
+      "avgSalience": 0.453,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -2894,14 +2915,19 @@
           "date": "2026-10-15",
           "sentiment": -0.4,
           "salience": 0.75
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.3,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Steep slopes & rock removal",
-      "meetings": 37,
-      "avgSentiment": -0.127,
-      "avgSalience": 0.509,
+      "meetings": 38,
+      "avgSentiment": -0.111,
+      "avgSalience": 0.505,
       "timeline": [
         {
           "date": "2021-03-08",
@@ -3087,13 +3113,18 @@
           "date": "2026-09-14",
           "sentiment": 0.1,
           "salience": 0.4
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.5,
+          "salience": 0.35
         }
       ]
     },
     {
       "theme": "Time extensions & conditions",
-      "meetings": 28,
-      "avgSentiment": 0.191,
+      "meetings": 29,
+      "avgSentiment": 0.198,
       "avgSalience": 0.301,
       "timeline": [
         {
@@ -3235,14 +3266,19 @@
           "date": "2026-10-26",
           "sentiment": 0.1,
           "salience": 0.7
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.4,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Process & procedure",
-      "meetings": 25,
-      "avgSentiment": 0.006,
-      "avgSalience": 0.433,
+      "meetings": 26,
+      "avgSentiment": 0.013,
+      "avgSalience": 0.439,
       "timeline": [
         {
           "date": "2021-02-08",
@@ -3368,6 +3404,11 @@
           "date": "2026-10-26",
           "sentiment": 0.1,
           "salience": 0.4
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.2,
+          "salience": 0.6
         }
       ]
     },
@@ -3486,9 +3527,9 @@
     },
     {
       "theme": "Historic & scenic character",
-      "meetings": 20,
-      "avgSentiment": 0.135,
-      "avgSalience": 0.288,
+      "meetings": 21,
+      "avgSentiment": 0.152,
+      "avgSalience": 0.28,
       "timeline": [
         {
           "date": "2018-07-30",
@@ -3589,6 +3630,11 @@
           "date": "2026-09-14",
           "sentiment": 0.7,
           "salience": 0.3
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.5,
+          "salience": 0.1
         }
       ]
     },
@@ -7825,6 +7871,75 @@
       ]
     },
     {
+      "id": "60-cox-avenue-breezemont",
+      "name": "60 Cox Avenue (Breezemont Day Camp)",
+      "address": "60 Cox Avenue, North Castle, NY",
+      "applicationType": "amended site plan",
+      "applicant": "Breezemont day camp (Walter, with engineer Dan Holt)",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Stormwater & drainage",
+        "Time extensions & conditions",
+        "Tree removal & screening",
+        "Wetlands & buffers"
+      ],
+      "appearances": 4,
+      "firstSeen": "2024-09-09",
+      "lastSeen": "2026-11-09",
+      "lastStatus": "public hearing opened and closed; resolution adopted (re-approved)",
+      "avgSentiment": 0.275,
+      "trajectory": [
+        {
+          "date": "2024-09-09",
+          "sentiment": -0.1,
+          "status": "held open"
+        },
+        {
+          "date": "2025-05-29",
+          "sentiment": 0.7,
+          "status": "approved"
+        },
+        {
+          "date": "2025-11-24",
+          "sentiment": 0.1,
+          "status": "discussion only"
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.4,
+          "status": "public hearing opened and closed; resolution adopted (re-approved)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2024-09-09",
+          "status": "held open",
+          "sentiment": -0.1,
+          "summary": "Referred back from the Town Board, the board discussed legalizing the existing day camp via site plan, focusing on the required 15-foot landscaped screening buffer adjacent to residences and summer vehicle parking/traffic; no approval tonight, and a site walk was scheduled (the 18th) before setting a public hearing."
+        },
+        {
+          "date": "2025-05-29",
+          "status": "approved",
+          "sentiment": 0.7,
+          "summary": "Public hearing held on a site plan memorializing the existing day camp (now a permitted special-use); the only new construction is a front parking lot with a pervious paver section for drainage. After discussion of a discretionary conservation-board referral for parcels over 10 acres (deemed inapplicable since this is not a new subdivision/development), the hearing was closed and the resolution approved."
+        },
+        {
+          "date": "2025-11-24",
+          "status": "discussion only",
+          "sentiment": 0.1,
+          "summary": "The board discussed a proposed site plan amendment to formalize on-site overflow parking for special events and staff training days at the Breezemont camp, prompted by the building department. The applicant emphasized nothing changes for the regular camp season, when hundreds of attendees are still shuttled in by bus, and the extra spaces would be used only a few days a year. Members raised concerns about spaces directly on Cox Avenue being visible and unscreened, and asked that the newly added spaces be clearly marked in color on a revised map so they can be distinguished from previously approved spaces. The matter will proceed to a noticed public hearing."
+        },
+        {
+          "date": "2026-11-09",
+          "status": "public hearing opened and closed; resolution adopted (re-approved)",
+          "sentiment": 0.4,
+          "summary": "Thomas Crispi read the notice for the day camp site plan in the R-1A district. Town Planner Adam Kaufman explained that the board had passed two resolutions. The second changed how cars park and drop off in front of the old hotel for events and for early or late pick-ups, and the camp let it expire by mistake. The plan before the board was the same as before, and nothing had changed. There were no member questions and no public comment. Crispi moved the draft resolution, it was seconded and the ayes carried."
+        }
+      ]
+    },
+    {
       "id": "22-whippoorwill-road-east",
       "name": "22 Whippoorwill Road East",
       "address": "22 Whippoorwill Road East, North Castle, NY",
@@ -8501,6 +8616,63 @@
       ]
     },
     {
+      "id": "873-north-broadway",
+      "name": "873 North Broadway \u2014 Exterior stairs (gym and martial arts studio)",
+      "address": "873 North Broadway",
+      "applicationType": "site plan",
+      "applicant": "Zach Goldstein (represented by attorney Daniel Patrick, Cody & Fader; engineer Rich Williams)",
+      "themes": [
+        "Bonding & maintenance",
+        "Neighbor concerns & safety",
+        "Other",
+        "Parking, traffic & access",
+        "Stormwater & drainage",
+        "Zoning & land use"
+      ],
+      "appearances": 3,
+      "firstSeen": "2022-03-14",
+      "lastSeen": "2026-11-09",
+      "lastStatus": "public hearing opened and closed; resolution adopted (approved)",
+      "avgSentiment": 0.367,
+      "trajectory": [
+        {
+          "date": "2022-03-14",
+          "sentiment": 0.1,
+          "status": "public hearing closed; decision pending (applicant still awaiting ABC/liquor authority approval)"
+        },
+        {
+          "date": "2022-03-28",
+          "sentiment": 0.5,
+          "status": "approved (resolution adopted as amended)"
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.5,
+          "status": "public hearing opened and closed; resolution adopted (approved)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2022-03-14",
+          "status": "public hearing closed; decision pending (applicant still awaiting ABC/liquor authority approval)",
+          "sentiment": 0.1,
+          "summary": "Adaptive reuse of a ~3,435 sq ft commercial building into a 45-seat fine-dining restaurant with a small accessory brewing operation, offsite parking arrangements, and an 18-seat rear outdoor dining area; the applicant had already obtained a ZBA parking variance for 26 spaces. The owner of the adjacent non-conforming two-family residential rental (877 North Broadway) vehemently objected, citing traffic, noise, parking spillover onto tenant amenity, and incompatibility of a brewery/restaurant use next to a pre-1923 residence. After extended negotiation over outdoor-seating hours, screening/fencing/planters behind the patio, and location of outdoor dining (front vs. rear), the board and applicant agreed to last outdoor seating at 8 p.m. Monday-Thursday and 9 p.m. Friday-Sunday, no live music, and evergreen/planter screening; the public hearing was then closed but a vote was deferred because the applicant had not yet secured required ABC (liquor authority) approval."
+        },
+        {
+          "date": "2022-03-28",
+          "status": "approved (resolution adopted as amended)",
+          "sentiment": 0.5,
+          "summary": "The board finalized and adopted the site plan resolution. Key negotiated points: because the required NYSDOT highway work permit/easement (a multi-year Attorney General review process) could delay the sidewalk/frontage work well past occupancy, the board substituted a performance bond (new bond in the new owner's name, amount set by the Town Engineer, work completed within one year of DOT permit issuance) for a strict pre-CO completion requirement, with proof of a submitted DOT application required before CO issuance; condition 12 was revised to track whatever on-site inspection frequency DOT's permit actually requires; a prior no-left-turn restriction onto Washington Place was removed at the applicant's request (already reflected on the site plan); and the outdoor dining hours were locked in at last seating 8 p.m. Monday-Thursday and 9 p.m. Friday-Sunday, with a landscaping/planter screening commitment toward the rear-yard neighbor."
+        },
+        {
+          "date": "2026-11-09",
+          "status": "public hearing opened and closed; resolution adopted (approved)",
+          "sentiment": 0.5,
+          "summary": "The presiding member read the notice for exterior stairs from the parking lot to the front of the building in the CB district. The applicant said the owner split the first floor from the lower floor, a gym and a martial arts studio. The stairs on the south side let people move between the two without walking into the street. The ARB has already approved them. Members asked whether the stairs would be covered. They will not, so the owner has to clear snow and ice as for a sidewalk. A member noted this is a significant flight, not four or five steps. The applicant said they could be covered but are easier to maintain this way, and they will be solid masonry, concrete or pavers (rendered \"paper\"), not wood or metal. Asked whether a flow-through material had been considered, the applicant said no. The hearing was closed and the presiding member moved the draft resolution, which was seconded and carried."
+        }
+      ]
+    },
+    {
       "id": "215-business-park-drive",
       "name": "215 Business Park Drive extension (former CarQuest warehouse)",
       "address": "215 Business Park Drive",
@@ -9102,63 +9274,6 @@
           "status": "approved",
           "sentiment": 0.3,
           "summary": "The board granted an additional three-month extension of time at the request of the building inspector, noting the applicant is due before the town board Wednesday."
-        }
-      ]
-    },
-    {
-      "id": "60-cox-avenue-breezemont",
-      "name": "60 Cox Avenue (Breezemont Day Camp)",
-      "address": "60 Cox Avenue, North Castle, NY",
-      "applicationType": "amended site plan",
-      "applicant": "Breezemont day camp (Walter, with engineer Dan Holt)",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Stormwater & drainage",
-        "Tree removal & screening",
-        "Wetlands & buffers"
-      ],
-      "appearances": 3,
-      "firstSeen": "2024-09-09",
-      "lastSeen": "2025-11-24",
-      "lastStatus": "discussion only",
-      "avgSentiment": 0.233,
-      "trajectory": [
-        {
-          "date": "2024-09-09",
-          "sentiment": -0.1,
-          "status": "held open"
-        },
-        {
-          "date": "2025-05-29",
-          "sentiment": 0.7,
-          "status": "approved"
-        },
-        {
-          "date": "2025-11-24",
-          "sentiment": 0.1,
-          "status": "discussion only"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2024-09-09",
-          "status": "held open",
-          "sentiment": -0.1,
-          "summary": "Referred back from the Town Board, the board discussed legalizing the existing day camp via site plan, focusing on the required 15-foot landscaped screening buffer adjacent to residences and summer vehicle parking/traffic; no approval tonight, and a site walk was scheduled (the 18th) before setting a public hearing."
-        },
-        {
-          "date": "2025-05-29",
-          "status": "approved",
-          "sentiment": 0.7,
-          "summary": "Public hearing held on a site plan memorializing the existing day camp (now a permitted special-use); the only new construction is a front parking lot with a pervious paver section for drainage. After discussion of a discretionary conservation-board referral for parcels over 10 acres (deemed inapplicable since this is not a new subdivision/development), the hearing was closed and the resolution approved."
-        },
-        {
-          "date": "2025-11-24",
-          "status": "discussion only",
-          "sentiment": 0.1,
-          "summary": "The board discussed a proposed site plan amendment to formalize on-site overflow parking for special events and staff training days at the Breezemont camp, prompted by the building department. The applicant emphasized nothing changes for the regular camp season, when hundreds of attendees are still shuttled in by bus, and the extra spaces would be used only a few days a year. Members raised concerns about spaces directly on Cox Avenue being visible and unscreened, and asked that the newly added spaces be clearly marked in color on a revised map so they can be distinguished from previously approved spaces. The matter will proceed to a noticed public hearing."
         }
       ]
     },
@@ -10117,51 +10232,6 @@
           "status": "positive recommendation adopted and sent to Town Board",
           "sentiment": 0.5,
           "summary": "Continuing from the prior meeting, the board finalized its recommendation on the Town Board's draft local law requiring a Town Board special use permit (with supplemental standards on buffers, setbacks, and access to major/collector roads) for commercial recreation centers in industrial districts. James Jensen's broader, APA-derived definition of 'recreation, commercial indoor/outdoor' was incorporated, along with clarifying language allowing accessory cafes/limited retail sales within a recreation center. The board voted unanimously to send the positive recommendation, including the expanded definition, to the Town Board."
-        }
-      ]
-    },
-    {
-      "id": "873-north-broadway",
-      "name": "873 North Broadway \u2014 Restaurant & Accessory Brewing Adaptive Reuse",
-      "address": "873 North Broadway",
-      "applicationType": "site plan",
-      "applicant": "Zach Goldstein (represented by attorney Daniel Patrick, Cody & Fader; engineer Rich Williams)",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Other",
-        "Parking, traffic & access",
-        "Stormwater & drainage",
-        "Zoning & land use"
-      ],
-      "appearances": 2,
-      "firstSeen": "2022-03-14",
-      "lastSeen": "2022-03-28",
-      "lastStatus": "approved (resolution adopted as amended)",
-      "avgSentiment": 0.3,
-      "trajectory": [
-        {
-          "date": "2022-03-14",
-          "sentiment": 0.1,
-          "status": "public hearing closed; decision pending (applicant still awaiting ABC/liquor authority approval)"
-        },
-        {
-          "date": "2022-03-28",
-          "sentiment": 0.5,
-          "status": "approved (resolution adopted as amended)"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2022-03-14",
-          "status": "public hearing closed; decision pending (applicant still awaiting ABC/liquor authority approval)",
-          "sentiment": 0.1,
-          "summary": "Adaptive reuse of a ~3,435 sq ft commercial building into a 45-seat fine-dining restaurant with a small accessory brewing operation, offsite parking arrangements, and an 18-seat rear outdoor dining area; the applicant had already obtained a ZBA parking variance for 26 spaces. The owner of the adjacent non-conforming two-family residential rental (877 North Broadway) vehemently objected, citing traffic, noise, parking spillover onto tenant amenity, and incompatibility of a brewery/restaurant use next to a pre-1923 residence. After extended negotiation over outdoor-seating hours, screening/fencing/planters behind the patio, and location of outdoor dining (front vs. rear), the board and applicant agreed to last outdoor seating at 8 p.m. Monday-Thursday and 9 p.m. Friday-Sunday, no live music, and evergreen/planter screening; the public hearing was then closed but a vote was deferred because the applicant had not yet secured required ABC (liquor authority) approval."
-        },
-        {
-          "date": "2022-03-28",
-          "status": "approved (resolution adopted as amended)",
-          "sentiment": 0.5,
-          "summary": "The board finalized and adopted the site plan resolution. Key negotiated points: because the required NYSDOT highway work permit/easement (a multi-year Attorney General review process) could delay the sidewalk/frontage work well past occupancy, the board substituted a performance bond (new bond in the new owner's name, amount set by the Town Engineer, work completed within one year of DOT permit issuance) for a strict pre-CO completion requirement, with proof of a submitted DOT application required before CO issuance; condition 12 was revised to track whatever on-site inspection frequency DOT's permit actually requires; a prior no-left-turn restriction onto Washington Place was removed at the applicant's request (already reflected on the site plan); and the outdoor dining hours were locked in at last seating 8 p.m. Monday-Thursday and 9 p.m. Friday-Sunday, with a landscaping/planter screening commitment toward the rear-yard neighbor."
         }
       ]
     },
@@ -12960,6 +13030,51 @@
       ]
     },
     {
+      "id": "22-nethermont-avenue",
+      "name": "22 Nethermont Avenue \u2014 New house (re-approval of an expired approval)",
+      "address": "22 Nethermont Avenue",
+      "applicationType": "site plan and tree removal permit",
+      "applicant": "Doug Winston, successor owner (also owns 24 Nethermont Avenue)",
+      "themes": [
+        "Neighbor concerns & safety",
+        "Process & procedure",
+        "Retaining walls",
+        "Steep slopes & rock removal",
+        "Time extensions & conditions"
+      ],
+      "appearances": 2,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-11-09",
+      "lastStatus": "public hearing opened and closed; site plan and tree removal permit resolution adopted (approved)",
+      "avgSentiment": 0.45,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.3,
+          "status": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented"
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.6,
+          "status": "public hearing opened and closed; site plan and tree removal permit resolution adopted (approved)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented",
+          "sentiment": 0.3,
+          "summary": "Winston bought the property after the original approval lapsed and wants the resolution brought back to life, with one change: retaining walls and some cut and fill to level a backyard that had been sloping toward his adjoining lot at 24 Nethermont. The board was content with the substance but firm on process. Carthy recalled that the chipping permit had taken a great deal of the board's time first time round \u2014 this was the application where pattern drilling rather than hammering was worked out, with a geotechnical report, a chipping plan, and vibration sensors reporting to the building department \u2014 and asked for all of it to be re-presented at the hearing, both because Crispi is new to the board and because \"collectively the memory of the planning board is pretty good, but not perfect.\" Winston noted an earlier conversation suggesting this was simply an expiration of a fully approved project; Carthy agreed that was true but said a fresh public hearing is still required, pointing out that neighbours on the street may have changed and are entitled to a full explanation. The applicant was told to assemble the previous material and the public notice."
+        },
+        {
+          "date": "2026-11-09",
+          "status": "public hearing opened and closed; site plan and tree removal permit resolution adopted (approved)",
+          "sentiment": 0.6,
+          "summary": "Lawrence Ruisi read the notice: a new four-bedroom house of 2,134 sq ft with driveway and yard areas on a vacant lot in the R-5 district. The project was reviewed and approved in 2021, expired in 2022 and was resubmitted in 2026 with minor changes; the 2021 record was incorporated. Nobody from the public spoke. The applicant, who owns the lot next door and is building the house for his daughter, said the approved plan had the backyard sloping toward his own yard. The new plan uses cut and fill with two retaining walls to level it, across a grade change of about five feet from the southern to the northern property line. There is a lot of rock removal, done by line drilling and pattern drilling and then hammering, with no blasting. A geotechnical report and a rock chipping and vibration monitoring plan were submitted at the board's request, and the neighbouring foundation gets a pre-construction survey. Members recalled spending a lot of time on the monitoring plan, one of the board's first, and were glad to carry it over. Ruisi moved the resolution, it was seconded and the ayes carried."
+        }
+      ]
+    },
+    {
       "id": "1-troy-lane",
       "name": "1 Troy Lane \u2014 New Residence (public hearing)",
       "address": "1 Troy Lane",
@@ -13000,6 +13115,52 @@
           "status": "public hearing opened and closed; resolution adopted (approved)",
           "sentiment": 0.6,
           "summary": "A new single-family house on tax lot 102.01-2-77 in the R-2A district, returning for its hearing after a well-received first appearance on September 14. Kaufman reported that he had spoken with a neighbour worried about well impacts. He had explained that this is an approved lot in a mid-1960s subdivision, that the new well and septic need Health Department approval, and that one new well is not expected to harm surrounding wells significantly. A board member, not identified in the recording, confirmed that the lot must meet current Health Department separation standards. The applicant offered to run a drawdown test and check the neighbour's well when drilling. Kaufman restated that the plan preserves most of the site's trees and adds screening along the side lot lines, and the engineering consultant said its remaining comments were minor clean-up. No members of the public spoke. The hearing was closed and the resolution adopted."
+        }
+      ]
+    },
+    {
+      "id": "4-cedar-hill-road",
+      "name": "4 Cedar Hill Road \u2014 Site Plan (house renovation and driveway realignment)",
+      "address": "4 Cedar Hill Road",
+      "applicationType": "site plan",
+      "applicant": "Owner represented by Alan Filch (ALP Engineering) and architect Darren Mercer",
+      "themes": [
+        "Historic & scenic character",
+        "Parking, traffic & access",
+        "Stormwater & drainage",
+        "Tree removal & screening",
+        "Wetlands & buffers",
+        "Zoning & land use"
+      ],
+      "appearances": 2,
+      "firstSeen": "2026-09-14",
+      "lastSeen": "2026-11-09",
+      "lastStatus": "public hearing opened and closed; resolution adopted (approved)",
+      "avgSentiment": 0.6,
+      "trajectory": [
+        {
+          "date": "2026-09-14",
+          "sentiment": 0.6,
+          "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard"
+        },
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.6,
+          "status": "public hearing opened and closed; resolution adopted (approved)"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-09-14",
+          "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard",
+          "sentiment": 0.6,
+          "summary": "A four-acre corner lot at Cedar Hill and East Middle Patent Road, before the board because of the scenic road requirement. The proposal renovates the house, removes a dilapidated garage at the awkward east end and builds a new one at the southwest corner, and realigns the driveway along the front so cars no longer have to back out. Seven trees come down, all interior to the lot, none within the 25-foot regulated setback, and the wetland in the northern portion and its buffer are untouched. Impervious coverage rises and will be handled with cultec chambers, calculations to follow. The substantive question was whether the backup area in front of the new garage counts as a \"courtyard,\" which Kaufman explained must be three times the minimum principal-structure setback when in a front yard, and so would need a variance. Filch argued it is a backup space rather than a courtyard. Rather than push the applicant to shrink it, the board advised the opposite: Carthy told him to spend five minutes with the building inspector and, if it is called a courtyard, to go to the ZBA rather than compromise \u2014 \"why compromise hundreds of thousands of dollars of what you've had value added to the home for the sake of not going to the ZBA if we need it\" \u2014 with Kaufman agreeing the grade separation and existing vegetation make it a strong variance case. The architect explained time pressure: a demolition permit is imminent and the clients, currently renting, want to start before winter, so they would take the single backup area now and revisit later. Kaufman's note about sparse planting along East Middle Patent turned out to align with what the owners wanted anyway, and was added to the plan."
+        },
+        {
+          "date": "2026-11-09",
+          "status": "public hearing opened and closed; resolution adopted (approved)",
+          "sentiment": 0.6,
+          "summary": "Michael Pollack read the notice: renovation of the existing house and a realigned driveway to a new freestanding garage on a lot fronting East Middle Patent Road, a designated scenic road, in the R-4A district (rendered \"R for a\"). The engineer described a 4-acre lot with a wetland of about 3,187 sq ft in its northern part. The driveway is being realigned because the existing garage forces cars to back out into Cedar Hill Road. The project adds 2,242 sq ft of impervious surface, offset by 22 Cultec 360 chambers (rendered \"cul-deck\") in the rear yard. Deep-hole tests on October 2 found 12 inches of topsoil over fine sand to about 90 inches; percolation was just over 35 inches an hour, modelled at 1 inch an hour. Nine trees come out and nine go back in (seven evergreen and two deciduous) between the house and East Middle Patent Road. There is no work in the wetland or its 100-foot buffer. Nobody from the public spoke. Before the vote a member asked about condition 5: the applicant's qualified professional does a weekly review and reports to the building and planning departments and to \"KSCJ\" (as rendered). Pollack moved the resolution, it was seconded and the ayes carried. Two residents who arrived during the next item were told it had just been approved and that they could watch the recording."
         }
       ]
     },
@@ -21233,73 +21394,6 @@
       ]
     },
     {
-      "id": "22-nethermont-avenue",
-      "name": "22 Nethermont Avenue \u2014 Revival of an Expired Approval",
-      "address": "22 Nethermont Avenue",
-      "applicationType": "site plan (expired approval)",
-      "applicant": "Doug Winston, successor owner (also owns 24 Nethermont Avenue)",
-      "themes": [
-        "Neighbor concerns & safety",
-        "Process & procedure",
-        "Steep slopes & rock removal",
-        "Time extensions & conditions"
-      ],
-      "appearances": 1,
-      "firstSeen": "2026-09-14",
-      "lastSeen": "2026-09-14",
-      "lastStatus": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented",
-      "avgSentiment": 0.3,
-      "trajectory": [
-        {
-          "date": "2026-09-14",
-          "sentiment": 0.3,
-          "status": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-09-14",
-          "status": "no vote \u2014 to be re-noticed for a public hearing, with the rock chipping plan re-presented",
-          "sentiment": 0.3,
-          "summary": "Winston bought the property after the original approval lapsed and wants the resolution brought back to life, with one change: retaining walls and some cut and fill to level a backyard that had been sloping toward his adjoining lot at 24 Nethermont. The board was content with the substance but firm on process. Carthy recalled that the chipping permit had taken a great deal of the board's time first time round \u2014 this was the application where pattern drilling rather than hammering was worked out, with a geotechnical report, a chipping plan, and vibration sensors reporting to the building department \u2014 and asked for all of it to be re-presented at the hearing, both because Crispi is new to the board and because \"collectively the memory of the planning board is pretty good, but not perfect.\" Winston noted an earlier conversation suggesting this was simply an expiration of a fully approved project; Carthy agreed that was true but said a fresh public hearing is still required, pointing out that neighbours on the street may have changed and are entitled to a full explanation. The applicant was told to assemble the previous material and the public notice."
-        }
-      ]
-    },
-    {
-      "id": "4-cedar-hill-road",
-      "name": "4 Cedar Hill Road \u2014 Renovation and Driveway Realignment on a Scenic Road",
-      "address": "4 Cedar Hill Road",
-      "applicationType": "site plan",
-      "applicant": "Owner represented by Alan Filch (ALP Engineering) and architect Darren Mercer",
-      "themes": [
-        "Historic & scenic character",
-        "Stormwater & drainage",
-        "Tree removal & screening",
-        "Wetlands & buffers",
-        "Zoning & land use"
-      ],
-      "appearances": 1,
-      "firstSeen": "2026-09-14",
-      "lastSeen": "2026-09-14",
-      "lastStatus": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard",
-      "avgSentiment": 0.6,
-      "trajectory": [
-        {
-          "date": "2026-09-14",
-          "sentiment": 0.6,
-          "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2026-09-14",
-          "status": "no vote \u2014 sent to the ARB; building inspector to rule on whether the backup area is a courtyard",
-          "sentiment": 0.6,
-          "summary": "A four-acre corner lot at Cedar Hill and East Middle Patent Road, before the board because of the scenic road requirement. The proposal renovates the house, removes a dilapidated garage at the awkward east end and builds a new one at the southwest corner, and realigns the driveway along the front so cars no longer have to back out. Seven trees come down, all interior to the lot, none within the 25-foot regulated setback, and the wetland in the northern portion and its buffer are untouched. Impervious coverage rises and will be handled with cultec chambers, calculations to follow. The substantive question was whether the backup area in front of the new garage counts as a \"courtyard,\" which Kaufman explained must be three times the minimum principal-structure setback when in a front yard, and so would need a variance. Filch argued it is a backup space rather than a courtyard. Rather than push the applicant to shrink it, the board advised the opposite: Carthy told him to spend five minutes with the building inspector and, if it is called a courtyard, to go to the ZBA rather than compromise \u2014 \"why compromise hundreds of thousands of dollars of what you've had value added to the home for the sake of not going to the ZBA if we need it\" \u2014 with Kaufman agreeing the grade separation and existing vegetation make it a strong variance case. The architect explained time pressure: a demolition permit is imminent and the clients, currently renting, want to start before winter, so they would take the single backup area now and revisit later. Kaufman's note about sparse planting along East Middle Patent turned out to align with what the owners wanted anyway, and was added to the plan."
-        }
-      ]
-    },
-    {
       "id": "35-bedford-banksville-road",
       "name": "35 Bedford-Banksville Road \u2014 Private Stable Special Permit Amendment (Town Board referral)",
       "address": "35 Bedford Banksville Road",
@@ -21392,6 +21486,69 @@
           "status": "no vote; board comfortable with the location; public hearing to be scheduled and approval to follow once the ARB approves the sign",
           "sentiment": 0.4,
           "summary": "Adam Kaufman presented a new freestanding sign near the driveway at the front of the property. The business had an old sign that was never shown on a site plan, so replacing it needs Planning Board approval; the sign design itself needs ARB approval. Asked about line of sight, he said the location will not affect it, though a member wanted the Town Engineer to confirm. The board agreed informally, with no vote, that the hearing can be scheduled and the sign approved after the ARB acts. The property's address is not stated in the recording."
+        }
+      ]
+    },
+    {
+      "id": "board-of-ethics-presentation",
+      "name": "Board of Ethics presentation \u2014 ethics training and recusal",
+      "address": "",
+      "applicationType": "presentation",
+      "applicant": "Town of North Castle Board of Ethics (chair Susan Shimer and member Mark Schubach, as rendered)",
+      "themes": [
+        "Process & procedure"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-09",
+      "lastSeen": "2026-11-09",
+      "lastStatus": "presentation only; no action",
+      "avgSentiment": 0.2,
+      "trajectory": [
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.2,
+          "status": "presentation only; no action"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-09",
+          "status": "presentation only; no action",
+          "sentiment": 0.2,
+          "summary": "The Board of Ethics played its training video. It covers annual disclosures for Planning Board, ZBA, ARB and Board of Assessment Review members, disclosure and recusal when a member or a relative has a conflicting interest, the post-employment limits, gifts, political contributions, confidential information and confidential advisory opinions. Shimer said the video was made several years ago and has not been updated, which is why the board came in person. She stressed that \"interest\" is defined broadly: being a partner, director, officer or employee of a company, a business associate's involvement, or a significant investment all count. Schubach went over the recusal procedure. A member who becomes aware of a possible conflict notifies the chair in writing, the notice is filed with the board's papers and minutes, and the reason is stated at a public meeting; the recused member should leave the room during deliberation and the vote. He also cited General Municipal Law \u00a7 805-c, which bars a board member from being paid for services on any matter before their own board, recusal or not. Thomas Crispi asked what the board's position is on applicants who are neighbours, friends or fellow congregants. Shimer, a former town judge, said nothing in the ethics code or the code of judicial conduct answers that. It comes down to conscience and appearance: knowing someone well enough to say hello is fine, but sharing a small dinner with them might not be. She urged members to ask for confidential advisory opinions."
+        }
+      ]
+    },
+    {
+      "id": "160-lafayette-avenue",
+      "name": "160 Lafayette Avenue (as rendered) \u2014 Proposed parking lot (discussion)",
+      "address": "160 Lafayette Avenue",
+      "applicationType": "site plan",
+      "applicant": "Owner of the office building across the street, represented by \"Mark\" and Mike Cooley (as rendered)",
+      "themes": [
+        "Lighting",
+        "Neighbor concerns & safety",
+        "Parking, traffic & access",
+        "Stormwater & drainage"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-09",
+      "lastSeen": "2026-11-09",
+      "lastStatus": "discussion only; no vote. Plan to be circulated to the traffic engineer and police; applicant to return with a revised set",
+      "avgSentiment": 0.2,
+      "trajectory": [
+        {
+          "date": "2026-11-09",
+          "sentiment": 0.2,
+          "status": "discussion only; no vote. Plan to be circulated to the traffic engineer and police; applicant to return with a revised set"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-09",
+          "status": "discussion only; no vote. Plan to be circulated to the traffic engineer and police; applicant to return with a revised set",
+          "sentiment": 0.2,
+          "summary": "The applicant proposes a formal 18-space parking lot on a vacant lot for an office building across the street, which it owns, where people now park haphazardly. The plan has its own stormwater mitigation, lighting and walls, and a lighting plan has not yet been submitted. Adam Kaufman said a parking lot on its own is a permitted use in the district, so the applicant does not have to show a parking shortfall. Members asked what is next door: three recently approved properties, a multifamily building behind, and a two-family house. Their main question was pedestrian safety crossing a 30 mph commercial town road, since no crosswalk is proposed. Kaufman will send the plan to the town's traffic engineer and the police department, and the board will decide on any crosswalk once their recommendations are in. A member suggested the applicant might pay for the striping, since the cost is minimal. The engineering reviewer pointed to their memo: comments will be mostly about stormwater, the lot should show lighting and landscaping if they fit, and a highway department curb cut permit is needed. A member said no negative comments had been heard from the board."
         }
       ]
     }
@@ -28125,12 +28282,12 @@
     },
     {
       "member": "Lawrence Ruisi",
-      "totalPositions": 197,
-      "avgSentiment": 0.055,
+      "totalPositions": 199,
+      "avgSentiment": 0.057,
       "confidenceMix": {
-        "medium": 83,
+        "medium": 84,
         "high": 94,
-        "low": 20
+        "low": 21
       },
       "byTheme": [
         {
@@ -28160,8 +28317,8 @@
         },
         {
           "theme": "Process & procedure",
-          "count": 21,
-          "avgSentiment": -0.029
+          "count": 22,
+          "avgSentiment": -0.005
         },
         {
           "theme": "Wetlands & buffers",
@@ -28170,8 +28327,8 @@
         },
         {
           "theme": "Steep slopes & rock removal",
-          "count": 16,
-          "avgSentiment": 0.013
+          "count": 17,
+          "avgSentiment": 0.041
         },
         {
           "theme": "Stormwater & drainage",
@@ -28204,14 +28361,14 @@
           "avgSentiment": 0.133
         },
         {
+          "theme": "Bonding & maintenance",
+          "count": 2,
+          "avgSentiment": -0.15
+        },
+        {
           "theme": "Environmental review (SEQRA)",
           "count": 2,
           "avgSentiment": 0.35
-        },
-        {
-          "theme": "Bonding & maintenance",
-          "count": 1,
-          "avgSentiment": -0.3
         },
         {
           "theme": "Historic & scenic character",
@@ -28854,6 +29011,16 @@
           "caseId": "22-school-street",
           "count": 1,
           "avgSentiment": 0.35
+        },
+        {
+          "caseId": "22-nethermont-avenue",
+          "count": 1,
+          "avgSentiment": 0.5
+        },
+        {
+          "caseId": "873-north-broadway",
+          "count": 1,
+          "avgSentiment": 0.0
         }
       ],
       "evidence": [
@@ -31352,15 +31519,40 @@
           ],
           "evidence": "After a member recalled sending the application \"to the police department to get their input because all those 200 vehicles\" and \"a traffic study in those area and 22 on North White Plains\" (00:13:09\u201300:13:30), the presiding member asked \"So Larry, are you suggesting that you want to do a work session on that?\" (00:13:43). The answer: \"one sending it to the PD I think is pretty easy. If we're going to do a traffic study, I think we need to understand exactly what we're studying.\" The presiding member later said \"Larry, if you feel like we should discuss it at a higher level. We can talk about that too\" (00:17:30).",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-11-09",
+          "case": "22 Nethermont Avenue \u2014 New house (re-approval of an expired approval)",
+          "caseId": "22-nethermont-avenue",
+          "stance": "supportive; moved approval",
+          "score": 0.5,
+          "themes": [
+            "Process & procedure",
+            "Steep slopes & rock removal"
+          ],
+          "evidence": "\"Larry Ruizi is going to read the notice of public hearing\" (00:23:38) and \"Thank you, Larry\" after it (00:24:26). After the hearing closed, \"Does anyone want to take it from here, Larry?\" was answered \"Sure\" and a motion \"to approve the resolution for the site plan and tree removal permit regarding 22 Netherlands, the Montes, I'm sorry, new house construction\" (00:29:31\u201300:29:42).",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-09",
+          "case": "873 North Broadway \u2014 Exterior stairs (gym and martial arts studio)",
+          "caseId": "873-north-broadway",
+          "stance": "neutral; asked whether a flow-through material had been considered",
+          "score": 0.0,
+          "themes": [
+            "Bonding & maintenance"
+          ],
+          "evidence": "\"Have you looked at flow through material?\" \"No, we have not.\" was followed by \"Thanks, Larry\" (00:36:52\u201300:37:00). Which member raised the earlier cover and maintenance questions is not clear.",
+          "confidence": "low"
         }
       ]
     },
     {
       "member": "Michael Pollack",
-      "totalPositions": 147,
-      "avgSentiment": 0.082,
+      "totalPositions": 148,
+      "avgSentiment": 0.085,
       "confidenceMix": {
-        "medium": 63,
+        "medium": 64,
         "high": 71,
         "low": 13
       },
@@ -31387,8 +31579,8 @@
         },
         {
           "theme": "Process & procedure",
-          "count": 19,
-          "avgSentiment": 0.047
+          "count": 20,
+          "avgSentiment": 0.07
         },
         {
           "theme": "Steep slopes & rock removal",
@@ -32001,6 +32193,11 @@
           "caseId": "31-sorrell-street",
           "count": 1,
           "avgSentiment": 0.2
+        },
+        {
+          "caseId": "4-cedar-hill-road",
+          "count": 1,
+          "avgSentiment": 0.5
         }
       ],
       "evidence": [
@@ -33848,6 +34045,18 @@
             "Zoning & land use"
           ],
           "evidence": "Read the notice of public hearing. When the chairman turned to him (\"Michael, I've been looking at you... Do you want to add anything?\"), he said: \"the preliminary question is the binary question. Do you approve the change of use or not?... they have their ZBA approval... So our ability to deny the change of use strikes me is limited,\" adding that he was trying to find other tools and was \"coming up empty.\" A member of the public, Michael Ferrari, was also addressed as \"Michael\". This reply is credited to Pollack because the speaker talks of the board's own powers (\"tools that are available to us\").",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-09",
+          "case": "4 Cedar Hill Road \u2014 Site Plan (house renovation and driveway realignment)",
+          "caseId": "4-cedar-hill-road",
+          "stance": "supportive; moved approval",
+          "score": 0.5,
+          "themes": [
+            "Process & procedure"
+          ],
+          "evidence": "The presiding member said \"Michael Pollock will read the notice of public hearing\" (00:17:33) and later \"And then, Michael, do you want to take it from here?\" (00:21:52), followed by \"Yeah, I move\" and \"I move that we adopt the resolution approving this site plan application\u2026 at four cedar hill road\" (00:22:40\u201300:22:53).",
           "confidence": "medium"
         }
       ]
@@ -38544,11 +38753,11 @@
     },
     {
       "member": "Thomas Crispi",
-      "totalPositions": 34,
-      "avgSentiment": 0.085,
+      "totalPositions": 36,
+      "avgSentiment": 0.092,
       "confidenceMix": {
         "low": 6,
-        "medium": 18,
+        "medium": 20,
         "high": 10
       },
       "byTheme": [
@@ -38568,6 +38777,11 @@
           "avgSentiment": -0.02
         },
         {
+          "theme": "Process & procedure",
+          "count": 4,
+          "avgSentiment": -0.1
+        },
+        {
           "theme": "Retaining walls",
           "count": 4,
           "avgSentiment": -0.212
@@ -38576,11 +38790,6 @@
           "theme": "Neighbor concerns & safety",
           "count": 3,
           "avgSentiment": 0.15
-        },
-        {
-          "theme": "Process & procedure",
-          "count": 3,
-          "avgSentiment": -0.133
         },
         {
           "theme": "Steep slopes & rock removal",
@@ -38614,6 +38823,11 @@
         },
         {
           "theme": "Septic & water supply",
+          "count": 1,
+          "avgSentiment": 0.4
+        },
+        {
+          "theme": "Time extensions & conditions",
           "count": 1,
           "avgSentiment": 0.4
         }
@@ -38768,6 +38982,16 @@
           "caseId": "111-lafayette-avenue",
           "count": 1,
           "avgSentiment": -0.2
+        },
+        {
+          "caseId": "board-of-ethics-presentation",
+          "count": 1,
+          "avgSentiment": 0.0
+        },
+        {
+          "caseId": "60-cox-avenue-breezemont",
+          "count": 1,
+          "avgSentiment": 0.4
         }
       ],
       "evidence": [
@@ -39189,6 +39413,30 @@
             "Parking, traffic & access"
           ],
           "evidence": "Asked \"Tom?\" right after Ruisi's call for police input on the backing-out issue, he replied \"I understand. I agree.\"",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-09",
+          "case": "Board of Ethics presentation \u2014 ethics training and recusal",
+          "caseId": "board-of-ethics-presentation",
+          "stance": "wants clear guidance on sitting on applications from people members know",
+          "score": 0.0,
+          "themes": [
+            "Process & procedure"
+          ],
+          "evidence": "Asked for questions, the presiding member said \"Tom\" (00:13:05), and the next speaker said \"the question I've asked you before, I'll ask it again\u2026 applicants will come before this board who made me neighbors, who made me friends\u2026 I just want to make clear what is the ethics board's position on something like that\" (00:13:06\u201300:13:47).",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-09",
+          "case": "60 Cox Avenue (Breezemont Day Camp)",
+          "caseId": "60-cox-avenue-breezemont",
+          "stance": "supportive; moved re-approval",
+          "score": 0.4,
+          "themes": [
+            "Time extensions & conditions"
+          ],
+          "evidence": "\"Tom Crispies going to be the notice of public hearing\" (00:30:35) and \"Thank you, Tom\" after it (00:31:12). After the hearing closed: \"And Tommy, want to take it from here? Sure. Make a motion to approve\u2026 the draft resolution as drafted for, sorry, 60 Cox\" (00:32:51\u201300:33:06).",
           "confidence": "medium"
         }
       ]
@@ -72278,6 +72526,251 @@
       ],
       "attributionCoverage": "partial",
       "attributionNote": "This is an unverified machine (ASR) transcript with no speaker labels. It is not the minutes. No roll call was taken and the presiding member is never named, so he carries no positions and is not identified; the presiding voice is not assumed to be Chairman Carthy, who is not named anywhere in the recording. Lawrence Ruisi is credited on the Summit Club because he was asked by name to make the motion and on Amazon because he was asked by name about a work session and later referred back to. Steven Sauro is credited at low confidence only, from a reply addressed to \"Steve\". Michael Pollack is named only as abstaining on the October 15 minutes and carries no positions. Thomas Crispi is not named. Seconders and voice votes are not attributed."
+    },
+    {
+      "date": "2026-11-09",
+      "meetingSummary": "The meeting opened with a Board of Ethics presentation, as agreed at the October 26 meeting. Board of Ethics chair Susan Shimer (as rendered) played the board's ethics training video, then spoke about how broadly the code defines an \"interest\": it covers being a partner, director, officer or employee of a company and a business associate's involvement, not only what a member or a relative owns. Member Mark Schubach (as rendered) went over the recusal procedure: written notice to the chair, filed with the board's papers, plus a statement of the reason at a public meeting, and stepping out of the room while the matter is deliberated and voted on. He added that General Municipal Law \u00a7 805-c bars a board member from being paid for services on any matter before their own board, even if they recuse. Asked by Thomas Crispi about sitting on applications from neighbours, friends or fellow congregants, Shimer said nothing in the ethics code answers that; it comes down to conscience and the public's confidence in the board, and members can ask for a confidential advisory opinion. The minutes of October 26, 2026 were approved. Four public hearings were opened, closed and approved the same night, all on voice votes and with no members of the public speaking. 4 Cedar Hill Road got site plan approval for a house renovation and a realigned driveway to a new freestanding garage on a scenic road. 22 Nethermont Avenue got re-approval of its expired 2021 approval for a new house, with the rock removal and vibration monitoring plan carried over. 60 Cox Avenue (Breezemont Day Camp) got re-approval of its parking and drop-off configuration, which had lapsed. 873 North Broadway got approval for exterior stairs between the two floors of a gym and martial arts building, after the ARB had approved them. Last came a first discussion of a proposed 18-space parking lot at what the recording renders as 160 Lafayette Avenue, for an office building across the street. Members raised pedestrian safety and a crosswalk, and the Town Planner will send the plan to the town's traffic engineer and the police department. No vote was taken on it.",
+      "durationNote": "The recording runs about 46 minutes (2,758 seconds), from the motion to open at 00:00:13 to the motion to close at 00:45:39. The Board of Ethics presentation, including the video, runs from 00:00:22 to about 00:16:24, and the agenda items follow. No roll call was taken and the presiding member is never named; the 4 Cedar Hill engineer addressed him as \"Mr. Chairman\" (00:18:36). Michael Pollack, Lawrence Ruisi (\"Larry Ruizi\", as rendered) and Thomas Crispi (\"Tom\", \"Tommy\") are named. Steven Sauro is not named, so whether he sat is not determined. Town Planner Adam Kaufman took part. An engineering reviewer who refers to \"my memo\" on 160 Lafayette Avenue is not named. Vincent Girodano (as rendered) attended for the Conservation Board. Presenters for the Board of Ethics were Susan Shimer (chair) and Mark Schubach (also rendered \"Schubeck\"); the video features David Simon(s) and Brett Summers (as rendered). The 160 Lafayette Avenue address is kept as rendered; the October 26 preview listed a 154 Lafayette Avenue re-approval instead, and the discussion here describes \"the property you talked about almost two years ago\" with a different applicant, so the two are not merged.",
+      "cases": [
+        {
+          "id": "board-of-ethics-presentation",
+          "name": "Board of Ethics presentation \u2014 ethics training and recusal",
+          "address": "",
+          "applicationType": "presentation",
+          "applicant": "Town of North Castle Board of Ethics (chair Susan Shimer and member Mark Schubach, as rendered)",
+          "status": "presentation only; no action",
+          "summary": "The Board of Ethics played its training video. It covers annual disclosures for Planning Board, ZBA, ARB and Board of Assessment Review members, disclosure and recusal when a member or a relative has a conflicting interest, the post-employment limits, gifts, political contributions, confidential information and confidential advisory opinions. Shimer said the video was made several years ago and has not been updated, which is why the board came in person. She stressed that \"interest\" is defined broadly: being a partner, director, officer or employee of a company, a business associate's involvement, or a significant investment all count. Schubach went over the recusal procedure. A member who becomes aware of a possible conflict notifies the chair in writing, the notice is filed with the board's papers and minutes, and the reason is stated at a public meeting; the recused member should leave the room during deliberation and the vote. He also cited General Municipal Law \u00a7 805-c, which bars a board member from being paid for services on any matter before their own board, recusal or not. Thomas Crispi asked what the board's position is on applicants who are neighbours, friends or fellow congregants. Shimer, a former town judge, said nothing in the ethics code or the code of judicial conduct answers that. It comes down to conscience and appearance: knowing someone well enough to say hello is fine, but sharing a small dinner with them might not be. She urged members to ask for confidential advisory opinions.",
+          "themes": [
+            "Process & procedure"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.2,
+          "publicComment": "No public comment.",
+          "memberPositions": [
+            {
+              "member": "Thomas Crispi",
+              "stance": "wants clear guidance on sitting on applications from people members know",
+              "score": 0.0,
+              "themes": [
+                "process & procedure"
+              ],
+              "evidence": "Asked for questions, the presiding member said \"Tom\" (00:13:05), and the next speaker said \"the question I've asked you before, I'll ask it again\u2026 applicants will come before this board who made me neighbors, who made me friends\u2026 I just want to make clear what is the ethics board's position on something like that\" (00:13:06\u201300:13:47).",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "4-cedar-hill-road",
+          "name": "4 Cedar Hill Road \u2014 Site Plan (house renovation and driveway realignment)",
+          "address": "4 Cedar Hill Road",
+          "applicationType": "site plan",
+          "applicant": "Property owner, represented by engineer Alan Pilch (\"L.P. Engineering\", as rendered) and project architect Darren Mercer (as rendered)",
+          "status": "public hearing opened and closed; resolution adopted (approved)",
+          "summary": "Michael Pollack read the notice: renovation of the existing house and a realigned driveway to a new freestanding garage on a lot fronting East Middle Patent Road, a designated scenic road, in the R-4A district (rendered \"R for a\"). The engineer described a 4-acre lot with a wetland of about 3,187 sq ft in its northern part. The driveway is being realigned because the existing garage forces cars to back out into Cedar Hill Road. The project adds 2,242 sq ft of impervious surface, offset by 22 Cultec 360 chambers (rendered \"cul-deck\") in the rear yard. Deep-hole tests on October 2 found 12 inches of topsoil over fine sand to about 90 inches; percolation was just over 35 inches an hour, modelled at 1 inch an hour. Nine trees come out and nine go back in (seven evergreen and two deciduous) between the house and East Middle Patent Road. There is no work in the wetland or its 100-foot buffer. Nobody from the public spoke. Before the vote a member asked about condition 5: the applicant's qualified professional does a weekly review and reports to the building and planning departments and to \"KSCJ\" (as rendered). Pollack moved the resolution, it was seconded and the ayes carried. Two residents who arrived during the next item were told it had just been approved and that they could watch the recording.",
+          "themes": [
+            "Historic & scenic character",
+            "Parking, traffic & access",
+            "Stormwater & drainage",
+            "Tree removal & screening",
+            "Wetlands & buffers"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.6,
+          "publicComment": "No public comment at the hearing. Two residents arrived after the vote, asked what the project was and were told to watch the recording.",
+          "memberPositions": [
+            {
+              "member": "Michael Pollack",
+              "stance": "supportive; moved approval",
+              "score": 0.5,
+              "themes": [
+                "process & procedure"
+              ],
+              "evidence": "The presiding member said \"Michael Pollock will read the notice of public hearing\" (00:17:33) and later \"And then, Michael, do you want to take it from here?\" (00:21:52), followed by \"Yeah, I move\" and \"I move that we adopt the resolution approving this site plan application\u2026 at four cedar hill road\" (00:22:40\u201300:22:53).",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "22-nethermont-avenue",
+          "name": "22 Nethermont Avenue \u2014 New house (re-approval of an expired approval)",
+          "address": "22 Nethermont Avenue",
+          "applicationType": "site plan and tree removal permit",
+          "applicant": "The adjacent property owner (not named), who is building the house for his daughter",
+          "status": "public hearing opened and closed; site plan and tree removal permit resolution adopted (approved)",
+          "summary": "Lawrence Ruisi read the notice: a new four-bedroom house of 2,134 sq ft with driveway and yard areas on a vacant lot in the R-5 district. The project was reviewed and approved in 2021, expired in 2022 and was resubmitted in 2026 with minor changes; the 2021 record was incorporated. Nobody from the public spoke. The applicant, who owns the lot next door and is building the house for his daughter, said the approved plan had the backyard sloping toward his own yard. The new plan uses cut and fill with two retaining walls to level it, across a grade change of about five feet from the southern to the northern property line. There is a lot of rock removal, done by line drilling and pattern drilling and then hammering, with no blasting. A geotechnical report and a rock chipping and vibration monitoring plan were submitted at the board's request, and the neighbouring foundation gets a pre-construction survey. Members recalled spending a lot of time on the monitoring plan, one of the board's first, and were glad to carry it over. Ruisi moved the resolution, it was seconded and the ayes carried.",
+          "themes": [
+            "Neighbor concerns & safety",
+            "Retaining walls",
+            "Steep slopes & rock removal",
+            "Time extensions & conditions"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.6,
+          "publicComment": "No public comment.",
+          "memberPositions": [
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "supportive; moved approval",
+              "score": 0.5,
+              "themes": [
+                "steep slopes & rock removal",
+                "process & procedure"
+              ],
+              "evidence": "\"Larry Ruizi is going to read the notice of public hearing\" (00:23:38) and \"Thank you, Larry\" after it (00:24:26). After the hearing closed, \"Does anyone want to take it from here, Larry?\" was answered \"Sure\" and a motion \"to approve the resolution for the site plan and tree removal permit regarding 22 Netherlands, the Montes, I'm sorry, new house construction\" (00:29:31\u201300:29:42).",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "60-cox-avenue-breezemont",
+          "name": "60 Cox Avenue (Breezemont Day Camp) \u2014 Re-approval of parking and drop-off configuration",
+          "address": "60 Cox Avenue",
+          "applicationType": "amended site plan",
+          "applicant": "Breezemont Day Camp (its representative, Walter, could not attend; an observer sat in)",
+          "status": "public hearing opened and closed; resolution adopted (re-approved)",
+          "summary": "Thomas Crispi read the notice for the day camp site plan in the R-1A district. Town Planner Adam Kaufman explained that the board had passed two resolutions. The second changed how cars park and drop off in front of the old hotel for events and for early or late pick-ups, and the camp let it expire by mistake. The plan before the board was the same as before, and nothing had changed. There were no member questions and no public comment. Crispi moved the draft resolution, it was seconded and the ayes carried.",
+          "themes": [
+            "Parking, traffic & access",
+            "Time extensions & conditions"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.4,
+          "publicComment": "No public comment.",
+          "memberPositions": [
+            {
+              "member": "Thomas Crispi",
+              "stance": "supportive; moved re-approval",
+              "score": 0.4,
+              "themes": [
+                "time extensions & conditions"
+              ],
+              "evidence": "\"Tom Crispies going to be the notice of public hearing\" (00:30:35) and \"Thank you, Tom\" after it (00:31:12). After the hearing closed: \"And Tommy, want to take it from here? Sure. Make a motion to approve\u2026 the draft resolution as drafted for, sorry, 60 Cox\" (00:32:51\u201300:33:06).",
+              "confidence": "medium"
+            }
+          ]
+        },
+        {
+          "id": "873-north-broadway",
+          "name": "873 North Broadway \u2014 Exterior stairs (gym and martial arts studio)",
+          "address": "873 North Broadway",
+          "applicationType": "site plan",
+          "applicant": "Building owner, represented by an applicant's representative (not named)",
+          "status": "public hearing opened and closed; resolution adopted (approved)",
+          "summary": "The presiding member read the notice for exterior stairs from the parking lot to the front of the building in the CB district. The applicant said the owner split the first floor from the lower floor, a gym and a martial arts studio. The stairs on the south side let people move between the two without walking into the street. The ARB has already approved them. Members asked whether the stairs would be covered. They will not, so the owner has to clear snow and ice as for a sidewalk. A member noted this is a significant flight, not four or five steps. The applicant said they could be covered but are easier to maintain this way, and they will be solid masonry, concrete or pavers (rendered \"paper\"), not wood or metal. Asked whether a flow-through material had been considered, the applicant said no. The hearing was closed and the presiding member moved the draft resolution, which was seconded and carried.",
+          "themes": [
+            "Bonding & maintenance",
+            "Neighbor concerns & safety"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.5,
+          "publicComment": "No public comment.",
+          "memberPositions": [
+            {
+              "member": "Lawrence Ruisi",
+              "stance": "neutral; asked whether a flow-through material had been considered",
+              "score": 0.0,
+              "themes": [
+                "bonding & maintenance"
+              ],
+              "evidence": "\"Have you looked at flow through material?\" \"No, we have not.\" was followed by \"Thanks, Larry\" (00:36:52\u201300:37:00). Which member raised the earlier cover and maintenance questions is not clear.",
+              "confidence": "low"
+            }
+          ]
+        },
+        {
+          "id": "160-lafayette-avenue",
+          "name": "160 Lafayette Avenue (as rendered) \u2014 Proposed parking lot (discussion)",
+          "address": "160 Lafayette Avenue",
+          "applicationType": "site plan",
+          "applicant": "Owner of the office building across the street, represented by \"Mark\" and Mike Cooley (as rendered)",
+          "status": "discussion only; no vote. Plan to be circulated to the traffic engineer and police; applicant to return with a revised set",
+          "summary": "The applicant proposes a formal 18-space parking lot on a vacant lot for an office building across the street, which it owns, where people now park haphazardly. The plan has its own stormwater mitigation, lighting and walls, and a lighting plan has not yet been submitted. Adam Kaufman said a parking lot on its own is a permitted use in the district, so the applicant does not have to show a parking shortfall. Members asked what is next door: three recently approved properties, a multifamily building behind, and a two-family house. Their main question was pedestrian safety crossing a 30 mph commercial town road, since no crosswalk is proposed. Kaufman will send the plan to the town's traffic engineer and the police department, and the board will decide on any crosswalk once their recommendations are in. A member suggested the applicant might pay for the striping, since the cost is minimal. The engineering reviewer pointed to their memo: comments will be mostly about stormwater, the lot should show lighting and landscaping if they fit, and a highway department curb cut permit is needed. A member said no negative comments had been heard from the board.",
+          "themes": [
+            "Lighting",
+            "Neighbor concerns & safety",
+            "Parking, traffic & access",
+            "Stormwater & drainage"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.2,
+          "publicComment": "No public comment (discussion item).",
+          "memberPositions": []
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Process & procedure",
+          "salience": 0.6,
+          "sentiment": 0.2,
+          "note": "The Board of Ethics briefed the board on what counts as an interest, on recusal procedure, and on General Municipal Law \u00a7 805-c. Asked about applicants members know socially, it said the code gives no answer and pointed members to confidential advisory opinions."
+        },
+        {
+          "theme": "Parking, traffic & access",
+          "salience": 0.5,
+          "sentiment": 0.2,
+          "note": "A crosswalk for a proposed 18-space lot at 160 Lafayette Avenue goes to the traffic engineer and police. Breezemont's drop-off configuration was re-approved, and 4 Cedar Hill's driveway was realigned so cars no longer back into the road."
+        },
+        {
+          "theme": "Steep slopes & rock removal",
+          "salience": 0.35,
+          "sentiment": 0.5,
+          "note": "22 Nethermont Avenue carried over its rock chipping and vibration monitoring plan, with no blasting and a pre-construction survey of the neighbour's foundation."
+        },
+        {
+          "theme": "Stormwater & drainage",
+          "salience": 0.3,
+          "sentiment": 0.5,
+          "note": "4 Cedar Hill offsets 2,242 sq ft of new impervious surface with 22 infiltration chambers, sized very conservatively. Stormwater is the main engineering comment expected on 160 Lafayette Avenue."
+        },
+        {
+          "theme": "Time extensions & conditions",
+          "salience": 0.3,
+          "sentiment": 0.4,
+          "note": "Two lapsed approvals were revived unchanged or nearly unchanged: 22 Nethermont Avenue (expired in 2022) and Breezemont's second resolution."
+        },
+        {
+          "theme": "Neighbor concerns & safety",
+          "salience": 0.3,
+          "sentiment": 0.3,
+          "note": "Pedestrian crossing at 160 Lafayette Avenue, winter upkeep of uncovered exterior stairs at 873 North Broadway, and protecting the neighbouring foundation at 22 Nethermont."
+        },
+        {
+          "theme": "Tree removal & screening",
+          "salience": 0.15,
+          "sentiment": 0.5,
+          "note": "4 Cedar Hill removes nine trees and replants nine along East Middle Patent Road."
+        },
+        {
+          "theme": "Historic & scenic character",
+          "salience": 0.1,
+          "sentiment": 0.5,
+          "note": "4 Cedar Hill fronts East Middle Patent Road, a designated scenic road."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Adam Kaufman",
+          "role": "Town Planner",
+          "summary": "Confirmed the applicants' paperwork was in order. Presented the Breezemont re-approval in the applicant's absence, explaining that the second resolution on parking and drop-off had lapsed by mistake and nothing had changed. On 160 Lafayette Avenue, said a parking lot is a permitted use on its own, so the applicant need not show a parking shortfall. Agreed to send the plan to the town's traffic engineer and the police department the next day, and told the applicant to address the comments and return with a revised set."
+        },
+        {
+          "person": "Engineering reviewer (not named)",
+          "role": "Town engineering review",
+          "summary": "On 160 Lafayette Avenue, said the crossing question was in their memo and that engineering comments would be mostly about stormwater. Asked the applicant to show lighting and landscaping if they fit, and noted that a highway department curb cut permit is needed."
+        },
+        {
+          "person": "Susan Shimer (as rendered)",
+          "role": "Chair, Board of Ethics",
+          "summary": "Presented the ethics training video and explained the broad definition of interest. Said the ethics code does not answer whether a member may sit on an application from someone they know socially, and urged members to request confidential advisory opinions."
+        },
+        {
+          "person": "Mark Schubach (as rendered)",
+          "role": "Member, Board of Ethics",
+          "summary": "Went over the written-notice and on-the-record recusal procedure and the need to leave the room. Cited General Municipal Law \u00a7 805-c's bar on board members being paid for services on matters before their own board, even if they recuse."
+        }
+      ],
+      "attributionCoverage": "partial",
+      "attributionNote": "This is an unverified machine (ASR) transcript with no speaker labels. It is not the minutes. No roll call was taken, and every vote was a voice vote, so no individual votes are credited and seconders are not attributed. The presiding member is never named. He was addressed once as \"Mr. Chairman\" but carries no positions here, consistent with the October 26 record. Michael Pollack (4 Cedar Hill), Lawrence Ruisi (22 Nethermont) and Thomas Crispi (60 Cox) are each credited because the presiding member named them to read the notice and then handed them the motion by name. Crispi is also credited on the ethics question, because he was called on by name just before it. Ruisi's 873 North Broadway position is low confidence and rests on a \"Thanks, Larry\" after one question. No member is credited on 160 Lafayette Avenue, where the questioners are not identifiable. Steven Sauro and Christopher Carthy are not named anywhere in the recording."
     }
   ]
 }
