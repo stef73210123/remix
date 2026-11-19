@@ -77,14 +77,34 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
     return list
   }, [items, query, category])
 
-  // Auto-advance one card at a time; loops back to the start at the end.
-  // Paused on hover/touch/focus so it never fights a reader mid-interaction,
-  // and skipped entirely for reduced-motion users. Runs above the early
-  // returns below since hooks can't follow a conditional return.
+  // Only start auto-advancing once the rail is actually on screen — no point
+  // (and it's disorienting) to scroll cards nobody can see yet. Stops again
+  // when it scrolls out of view.
+  const [inView, setInView] = useState(false)
+  const hasCards = filtered.length > 0
   useEffect(() => {
-    if (paused || filtered.length < 2) return
+    const el = scrollRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.6 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [hasCards])
+
+  // Auto-advance one card at a time; loops back to the start at the end.
+  // Holds for HOLD_MS after the rail comes into view (so the first cards can
+  // be read) before the first move, then steps every STEP_MS. Paused on
+  // hover/touch/focus so it never fights a reader mid-interaction, and skipped
+  // entirely for reduced-motion users. Runs above the early returns below
+  // since hooks can't follow a conditional return.
+  useEffect(() => {
+    if (!inView || paused || filtered.length < 2) return
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const id = setInterval(() => {
+    const HOLD_MS = 4000
+    const STEP_MS = 5000
+    const advance = () => {
       const el = scrollRef.current
       if (!el) return
       const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4
@@ -95,9 +115,17 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
         const step = (card?.offsetWidth ?? 280) + 12
         el.scrollBy({ left: step, behavior: 'smooth' })
       }
-    }, 5000)
-    return () => clearInterval(id)
-  }, [paused, filtered.length])
+    }
+    let intervalId: ReturnType<typeof setInterval> | undefined
+    const holdId = setTimeout(() => {
+      advance()
+      intervalId = setInterval(advance, STEP_MS)
+    }, HOLD_MS)
+    return () => {
+      clearTimeout(holdId)
+      if (intervalId) clearInterval(intervalId)
+    }
+  }, [inView, paused, filtered.length])
 
   if (loading) return null
   if (!items || items.length === 0) return null
@@ -137,7 +165,7 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
             aria-label="Search news"
             style={{ fontSize: 13, padding: '5px 10px', borderRadius: 6, background: 'var(--panel-2)', border: '1px solid var(--border)', color: 'var(--text)', minWidth: 150 }}
           />
-          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+          <div className="carousel-arrows" style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
             <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
             <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
           </div>
@@ -206,8 +234,11 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
                     src={n.imageUrl}
                     alt=""
                     loading="lazy"
+                    // Collapsed until the image actually arrives, so a slow or
+                    // hotlink-blocked thumbnail never leaves an empty grey block.
+                    onLoad={(e) => { e.currentTarget.style.maxHeight = 'none'; e.currentTarget.style.opacity = '1' }}
                     onError={(e) => { e.currentTarget.style.display = 'none' }}
-                    style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', background: 'var(--panel-2)' }}
+                    style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', maxHeight: 0, opacity: 0, transition: 'opacity 0.2s' }}
                   />
                 )}
               </a>
@@ -215,9 +246,6 @@ export default function InTheNews({ muniKey }: { muniKey: string }) {
           })}
         </div>
       )}
-      <p className="muted" style={{ fontSize: 11, marginTop: 8 }}>
-        Local news coverage of North Castle and its hamlets (Armonk, Banksville, North White Plains).
-      </p>
     </div>
   )
 }

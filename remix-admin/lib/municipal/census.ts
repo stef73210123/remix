@@ -11,11 +11,16 @@
 import type { TownDemographics, IncomeBracket, HousingType, HomeValueBracket, DemoSeriesPoint, AgeVintage } from './demographics'
 import { ageBinsFromCounts } from './demographics'
 
-const ACS_YEAR = '2022'
+// Newest ACS 5-year vintage first; the snapshot falls back down this list if a
+// vintage isn't published yet (the 5-year release lands each December).
+const ACS_YEARS = [2024, 2023, 2022]
 // ACS 5-year vintages to pull for the trend sparklines (oldest → newest).
-const SERIES_YEARS = [2018, 2019, 2020, 2021, 2022]
+// Unpublished years are simply skipped.
+const SERIES_YEARS = [2018, 2019, 2020, 2021, 2022, 2023, 2024]
 // ACS 5-year vintages for the age-distribution "over time" chart (~decade apart).
-const AGE_YEARS = [2013, 2018, 2022]
+const AGE_YEARS = [2014, 2019, 2024]
+// The Census API rejects (HTTP 400) any request for more than 50 variables.
+const MAX_VARS_PER_CALL = 49 // + NAME
 
 // muniKey → Census geography (state + county FIPS) and the town name to match.
 const CENSUS_GEO: Record<string, { state: string; county: string; nameStartsWith: string }> = {
@@ -44,6 +49,43 @@ const VARS = [
   ...B25075,
 ]
 
+/**
+ * Fetch one county-subdivision row for `vars`, split across as many calls as
+ * the API's 50-variable limit requires, merged into a name → value map.
+ * Null when the vintage or the town's row isn't available.
+ */
+async function fetchAcsRow(
+  year: number,
+  vars: string[],
+  key: string,
+  geo: { state: string; county: string; nameStartsWith: string },
+  timeoutMs = 15000,
+): Promise<Record<string, string> | null> {
+  const fields = vars.filter((v) => v !== 'NAME')
+  const chunks: string[][] = []
+  for (let i = 0; i < fields.length; i += MAX_VARS_PER_CALL) chunks.push(fields.slice(i, i + MAX_VARS_PER_CALL))
+  const tables = await Promise.all(
+    chunks.map(async (chunk) => {
+      const url =
+        `https://api.census.gov/data/${year}/acs/acs5?get=NAME,${chunk.join(',')}` +
+        `&for=county%20subdivision:*&in=state:${geo.state}%20county:${geo.county}&key=${key}`
+      const res = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) })
+      if (!res.ok) throw new Error(`census HTTP ${res.status}`)
+      return (await res.json()) as string[][]
+    }),
+  )
+  const out: Record<string, string> = {}
+  for (const table of tables) {
+    if (!Array.isArray(table) || table.length < 2) return null
+    const header = table[0]
+    const nameI = header.indexOf('NAME')
+    const row = table.slice(1).find((r) => (r[nameI] || '').startsWith(geo.nameStartsWith))
+    if (!row) return null
+    header.forEach((h, i) => { out[h] = row[i] })
+  }
+  return out
+}
+
 /** ACS null sentinels are large negatives; coerce to a safe number. */
 function num(v: string | undefined): number {
   const n = Number(v)
@@ -58,22 +100,24 @@ export async function fetchCensusDemographics(
   const geo = CENSUS_GEO[muniKey]
   if (!key || !geo) return null
 
-  const url =
-    `https://api.census.gov/data/${ACS_YEAR}/acs/acs5?get=${VARS.join(',')}` +
-    `&for=county%20subdivision:*&in=state:${geo.state}%20county:${geo.county}&key=${key}`
-
-  const res = await fetch(url, { signal: AbortSignal.timeout(15000) })
-  if (!res.ok) throw new Error(`census HTTP ${res.status}`)
-  const table = (await res.json()) as string[][]
-  if (!Array.isArray(table) || table.length < 2) return null
-
-  const header = table[0]
-  const idx = (name: string) => header.indexOf(name)
-  const nameI = idx('NAME')
-  const row = table.slice(1).find((r) => (r[nameI] || '').startsWith(geo.nameStartsWith))
-  if (!row) return null
-
-  const get = (v: string) => num(row[idx(v)])
+  let row: Record<string, string> | null = null
+  let acsYear = 0
+  let lastErr: unknown = null
+  for (const y of ACS_YEARS) {
+    try {
+      row = await fetchAcsRow(y, VARS, key, geo)
+    } catch (e) {
+      lastErr = e
+      row = null
+    }
+    if (row) { acsYear = y; break }
+  }
+  if (!row) {
+    if (lastErr) throw lastErr
+    return null
+  }
+  const r = row
+  const get = (v: string) => num(r[v])
 
   const households = get('B11001_001E')
   const occupied = get('B25003_001E')
@@ -125,7 +169,7 @@ export async function fetchCensusDemographics(
     townKey: muniKey,
     townName,
     approximate: false,
-    source: `U.S. Census ACS 5-year (${ACS_YEAR})`,
+    source: `U.S. Census ACS 5-year (${acsYear - 4}–${acsYear})`,
     population: get('B01003_001E'),
     households,
     medianIncomeUsd: get('B19013_001E'),

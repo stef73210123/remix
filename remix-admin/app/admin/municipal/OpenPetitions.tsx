@@ -30,7 +30,7 @@ export default function OpenPetitions({ muniKey }: { muniKey: string }) {
           Open petitions
           <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {petitions.length}</span>
         </h2>
-        <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+        <div className="carousel-arrows" style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
           <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
           <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
         </div>

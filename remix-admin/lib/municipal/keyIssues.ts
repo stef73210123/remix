@@ -31,7 +31,7 @@ const KEY_ISSUES: Record<string, TownKeyIssues> = {
         title: 'Open government & procedure',
         icon: 'landmark',
         insight:
-          'The board spends more time on process, transparency and proper procedure than on any other single topic — a sensitivity heightened after the 2023 supervisor race decided by roughly four votes.',
+          'The board spends more time on process, transparency and proper procedure than on any other single topic — a sensitivity heightened after the 2023 supervisor race decided by three votes.',
         evidence:
           'Open government & procedure surfaced in 43 Town Board meetings — the most-discussed theme — yet sits near-neutral (+0.8), reflecting unresolved tension over how decisions get made rather than what they are.',
       },

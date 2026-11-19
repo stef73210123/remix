@@ -39,8 +39,13 @@ function fmtDate(iso: string | null): string {
   return fmtDateShort(d)
 }
 
-function TermDetails({ term }: { term: MemberTerm }) {
+function TermDetails({ term: raw }: { term: MemberTerm }) {
   const now = new Date().getFullYear()
+  // A re-elected incumbent's next term becomes the current one once it starts.
+  const rolled = raw.nextTerm != null && raw.nextTerm.start <= now
+  const term: MemberTerm = rolled
+    ? { ...raw, start: raw.nextTerm!.start, end: raw.nextTerm!.end, lengthYears: raw.nextTerm!.end - raw.nextTerm!.start + 1, note: undefined, nextTerm: undefined }
+    : raw
   const verb = term.type === 'appointed' ? 'appointed' : 'elected'
   const rows: { label: string; value: string }[] = []
   if (term.firstYear) rows.push({ label: `First ${verb}`, value: String(term.firstYear) })
@@ -61,8 +66,14 @@ function TermDetails({ term }: { term: MemberTerm }) {
           {ended
             ? `Term ended Dec 31, ${term.end}`
             : `Term expires Dec 31, ${term.end}` +
-              (remaining != null && remaining > 0 ? ` · ~${remaining} yr${remaining === 1 ? '' : 's'} remaining` : ' · up this year')}
+              (term.nextTerm
+                ? ` · re-elected for ${term.nextTerm.start}–${term.nextTerm.end}`
+                : remaining != null && remaining > 0 ? ` · ~${remaining} yr${remaining === 1 ? '' : 's'} remaining` : ' · up this year')}
+          {term.nextTerm?.note && <div style={{ fontSize: 11, marginTop: 2 }}>{term.nextTerm.note}</div>}
         </div>
+      )}
+      {term.note && (
+        <div className="muted" style={{ fontSize: 12, lineHeight: 1.4 }}>{term.note}</div>
       )}
     </div>
   )

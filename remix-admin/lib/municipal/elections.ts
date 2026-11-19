@@ -36,6 +36,8 @@ export interface ElectionRace {
   candidates: ElectionCandidate[]
   /** Notable context — recounts, litigation, unusually close margins. */
   note?: string
+  /** True while the Board of Elections count is not yet certified. */
+  unofficial?: boolean
 }
 
 export interface MunicipalElections {
@@ -57,30 +59,43 @@ const ELECTIONS: Record<string, MunicipalElections> = {
       'Democrat Michael Schiliro held the Supervisor seat for five terms through 2023, winning a ' +
       'fifth term unopposed in 2021 before declining to seek re-election. In November 2023 Democrat ' +
       'Joseph A. (Joe) Rende won the open seat over Republican Councilwoman Barbara DiGiacinto — ' +
-      'decided by roughly four votes after absentee canvassing, a manual recount and litigation — and ' +
-      'took office in January 2024. In June 2025 Rende turned back a Democratic primary challenge ' +
-      'from sitting Councilman Jose Berra with roughly 53% of the vote, then was re-elected unopposed ' +
-      '(Democratic and Conservative lines) that November. New York\'s 2023 Even-Year Election Law ' +
-      '(upheld by the Court of Appeals in October 2025) recalculated that November 2025 win as a ' +
-      'one-year transitional term, so Rende and Berra faced each other again in a June 2026 Democratic ' +
-      'primary — Rende prevailed a second time — before the seat settles into the normal even-year ' +
-      'cycle going forward.',
+      'decided by a handful of votes after absentee canvassing, a manual recount and litigation — and ' +
+      'took office in January 2024. He was re-elected unopposed in November 2025 (Democratic and ' +
+      'Conservative lines). New York\'s 2023 Even-Year Election Law (upheld by the Court of Appeals in ' +
+      'October 2025) turned that win into a one-year transitional term, so the seat was on the ballot ' +
+      'again in 2026: Rende beat sitting Councilman Jose Berra 456–402 in the June 23 Democratic ' +
+      'primary, then defeated Republican Melvin Orellana about 57% to 43% on November 3, 2026.',
     primaryNote:
       'No contested town primary (June) was held for Supervisor or Town Board in this cycle — ' +
       'the fall general election was the only town-level contest.',
     sources: [
       'https://www.westchestergov.com/boe99/',
       'https://citizenparticipation.westchestercountyny.gov/election-results',
+      'https://app.enhancedvoting.com/results/public/westchester-county-ny/elections/2026GeneralElection',
+      'https://citizenparticipation.westchestercountyny.gov/images/stories/pdfs/2025/2025-general-election-canvass.pdf',
+      'https://citizenparticipation.westchestercountyny.gov/images/stories/pdfs/2025/2025_June_Primary_Election_Canvass.pdf',
+      'https://westfaironline.com/latest-news/ballot-scanning-finished-and-westchester-election-results-known/',
       'https://www.cbsnews.com/newyork/news/democrat-declares-victory-in-westchester-county-supervisors-race-decided-by-3-votes/',
       'https://www.theexaminernews.com/rende-certified-as-north-castle-supervisor-winner-amidst-fraud-allegations/',
       'https://www.theexaminernews.com/milim-surprises-in-north-castle-incumbents-re-elected-in-mt-pleasant/',
-      'https://patch.com/new-york/chappaqua/polls-have-closed-new-castle-mount-kisco-north-castle-election-day-2025-early',
       'https://www.theexaminernews.com/near-dead-heat-in-race-for-north-castle-supervisor/',
-      'https://westfaironline.com/elections/conley-feiner-among-the-winners-in-democrat-primary-contests/',
-      'https://www.blackwestchester.com/your-vote-your-voice-meet-the-candidates-in-westchester-countys-2026-primary-election/',
       'https://www.brennancenter.org/our-work/research-reports/new-york-even-year-election-law',
     ],
     races: [
+      {
+        year: 2026,
+        type: 'general',
+        date: '2026-11-03',
+        office: 'Supervisor',
+        seatsUp: 1,
+        unofficial: true,
+        candidates: [
+          { name: 'Joseph A. Rende', parties: ['Democratic'], votes: 3219, won: true, incumbent: true },
+          { name: 'Melvin D. Orellana', parties: ['Republican', 'Conservative'], votes: 2461, won: false, incumbent: false },
+        ],
+        note: 'Unofficial Board of Elections count as of Nov 18, 2026 (Orellana: 2,277 REP + 184 CON; ' +
+          '6 write-ins). Certified totals may differ slightly. No Town Board seats were on the 2026 ballot.',
+      },
       {
         year: 2026,
         type: 'primary',
@@ -88,27 +103,11 @@ const ELECTIONS: Record<string, MunicipalElections> = {
         office: 'Supervisor',
         seatsUp: 1,
         candidates: [
-          { name: 'Joseph A. Rende', parties: ['Democratic'], votes: null, won: true, incumbent: true },
-          { name: 'Jose Berra', parties: ['Democratic'], votes: null, won: false, incumbent: false },
+          { name: 'Joseph A. Rende', parties: ['Democratic'], votes: 456, won: true, incumbent: true },
+          { name: 'Jose Berra', parties: ['Democratic'], votes: 402, won: false, incumbent: false },
         ],
-        note: 'Democratic primary, a rematch of 2025. Under New York\'s 2023 Even-Year Election Law, ' +
-          'supervisors elected in November 2025 serve only a one-year transitional term and stand again ' +
-          'in 2026 before the cycle moves permanently to even years; Rende again turned back Berra for ' +
-          'the Democratic line. Vote totals pending BOE certification transcription.',
-      },
-      {
-        year: 2025,
-        type: 'primary',
-        date: '2025-06-24',
-        office: 'Supervisor',
-        seatsUp: 1,
-        candidates: [
-          { name: 'Joseph A. Rende', parties: ['Democratic'], votes: null, won: true, incumbent: true },
-          { name: 'Jose Berra', parties: ['Democratic'], votes: null, won: false, incumbent: false },
-        ],
-        note: 'Democratic primary. Sitting Councilman Jose Berra challenged first-term Supervisor Joe ' +
-          'Rende for the Democratic line; Rende won the nomination with roughly 53% of the vote and went ' +
-          'on to run unopposed in November. Vote totals pending BOE certification transcription.',
+        note: 'Democratic primary (certified). Sitting Councilman Jose Berra challenged Rende for the ' +
+          'Democratic line; Rende won with about 53% of the vote.',
       },
       {
         year: 2025,
@@ -117,9 +116,10 @@ const ELECTIONS: Record<string, MunicipalElections> = {
         office: 'Supervisor',
         seatsUp: 1,
         candidates: [
-          { name: 'Joseph A. Rende', parties: ['Democratic', 'Conservative'], votes: null, won: true, incumbent: true },
+          { name: 'Joseph A. Rende', parties: ['Democratic', 'Conservative'], votes: 2359, won: true, incumbent: true },
         ],
-        note: 'Rende ran unopposed for re-election, appearing on both the Democratic and Conservative lines.',
+        note: 'Rende ran unopposed (1,899 DEM + 460 CON). Under the Even-Year Election Law this became a ' +
+          'one-year term, putting the seat back on the ballot in 2026.',
       },
       {
         year: 2025,
@@ -128,14 +128,13 @@ const ELECTIONS: Record<string, MunicipalElections> = {
         office: 'Town Board',
         seatsUp: 2,
         candidates: [
-          { name: 'Barbara DiGiacinto', parties: ['Republican', 'Conservative'], votes: 1864, won: true, incumbent: true },
-          { name: 'Sonny Vataj', parties: ['Democratic', 'Conservative'], votes: 1794, won: true, incumbent: false },
-          { name: 'Michael Akavan', parties: ['Democratic'], votes: 1773, won: false, incumbent: false },
-          { name: 'Melvin Orellana', parties: ['Republican'], votes: 1468, won: false, incumbent: false },
+          { name: 'Barbara DiGiacinto', parties: ['Republican', 'Conservative'], votes: 1875, won: true, incumbent: true },
+          { name: 'Sonny Vataj', parties: ['Democratic', 'Conservative'], votes: 1814, won: true, incumbent: false },
+          { name: 'Michael Akavan', parties: ['Democratic'], votes: 1787, won: false, incumbent: false },
+          { name: 'Melvin Orellana', parties: ['Republican'], votes: 1480, won: false, incumbent: false },
         ],
-        note: 'Four candidates, two seats — a split result decided by the future of Town Hall. ' +
-          'Republican incumbent DiGiacinto (1,659 REP + 205 CON) and Democrat Sonny Vataj, a first-time ' +
-          'candidate and Armonk volunteer firefighter (1,621 DEM + 173 CON), won; Akavan (D) and Orellana (R) fell short.',
+        note: 'Four candidates, two seats (certified canvass). DiGiacinto (1,670 REP + 205 CON) and ' +
+          'first-time candidate Sonny Vataj (1,640 DEM + 174 CON) won; Akavan finished 27 votes behind Vataj.',
       },
       {
         year: 2023,
@@ -149,7 +148,7 @@ const ELECTIONS: Record<string, MunicipalElections> = {
         ],
         note: 'One of the closest town races in Westchester history for this open seat. Election night: ' +
           'Rende led 1,569–1,568 (one vote); after absentees, 1,585–1,582. Rende was certified the winner ' +
-          'by four votes following a manual recount and litigation over challenged absentee ballots. ' +
+          'by three votes following a manual recount and litigation over challenged absentee ballots. ' +
           'DiGiacinto, a sitting councilwoman, kept her Town Board seat; Rende succeeded retiring Democrat Michael Schiliro.',
       },
       {

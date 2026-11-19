@@ -293,6 +293,11 @@ export interface MemberTerm {
   lengthYears?: number
   /** 'elected' or 'appointed' — appointed boards (Planning/ZBA) differ. */
   type?: 'elected' | 'appointed'
+  /** Plain-language caveat, e.g. a transitional term under the Even-Year Election Law. */
+  note?: string
+  /** Already won the following term (e.g. re-elected in November, sworn in
+   *  January) — shown alongside the current term's expiry. */
+  nextTerm?: { start: number; end: number; note?: string }
 }
 
 export interface MemberDossier {

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { HelpToggle, HelpPanel, useHelpToggle } from './HelpToggle'
 import type {
   ServiceRequestCategory,
   ServiceRequestMeta,
@@ -38,6 +39,7 @@ const THIN = 5
  */
 export default function ServiceRequests({ muni, compact = false }: { muni: string; compact?: boolean }) {
   const [data, setData] = useState<Payload | null>(null)
+  const help = useHelpToggle()
 
   useEffect(() => {
     if (!muni) return
@@ -64,15 +66,21 @@ export default function ServiceRequests({ muni, compact = false }: { muni: strin
 
   return (
     <div className="card" style={{ padding: 16, marginBottom: 24 }}>
-      <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
-        Service requests
-        <span style={{ textTransform: 'none', letterSpacing: 0 }}> · {summary.totalRequests}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+        <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          Service requests
+          <span style={{ textTransform: 'none', letterSpacing: 0 }}> · {fmtMonth(meta.periodStart)} – {fmtMonth(meta.periodEnd)}</span>
+        </div>
+        <HelpToggle {...help} label="About service requests" />
       </div>
-      <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.5, marginBottom: 14, maxWidth: 700 }}>
+      <HelpPanel open={help.open} id={help.id}>
         What residents reported through the Town&apos;s SeeClickFix system between{' '}
         {fmtMonth(meta.periodStart)} and {fmtMonth(meta.periodEnd)}, and how it did against the
-        response times it sets for itself.
-      </div>
+        response times it sets for itself. The bar shows how many requests each category received;
+        the figure beside it is the share closed within the Town&apos;s target for that category.
+        Categories with fewer than {THIN} requests are listed but not rated.
+      </HelpPanel>
+      <div style={{ height: 10 }} />
 
       <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap', marginBottom: 16 }}>
         <Stat value={String(summary.totalRequests)} label="requests" />
@@ -93,7 +101,7 @@ export default function ServiceRequests({ muni, compact = false }: { muni: strin
           const rate = c.pctClosedWithinSla
           const rateShown = rate !== null && c.created >= THIN
           return (
-            <div key={c.category} style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: 10, alignItems: 'center' }}>
+            <div key={c.category} className="sr-row">
               <div style={{ fontSize: 12, lineHeight: 1.3 }}>
                 {c.category}
                 <span className="muted"> · {c.created}</span>
@@ -118,7 +126,7 @@ export default function ServiceRequests({ muni, compact = false }: { muni: strin
                     }}
                   />
                 </div>
-                <div className="muted" style={{ fontSize: 11.5, minWidth: 190, textAlign: 'right' }}>
+                <div className="muted sr-rate">
                   {rateShown ? (
                     <>
                       <strong style={{ color: 'var(--text)' }}>{rate}%</strong> within {c.slaLabel}
@@ -137,10 +145,7 @@ export default function ServiceRequests({ muni, compact = false }: { muni: strin
       </div>
 
       <div className="muted" style={{ fontSize: 10.5, lineHeight: 1.5, marginTop: 14, maxWidth: 720 }}>
-        The Town&apos;s own figures, unedited — released under FOIL request 26-559. The bar shows how
-        many requests each category received; the figure beside it is the share closed within the
-        Town&apos;s target for that category. Categories with fewer than {THIN} requests are listed
-        but not rated.
+        The Town&apos;s own figures, unedited — released under FOIL request 26-559.
       </div>
     </div>
   )

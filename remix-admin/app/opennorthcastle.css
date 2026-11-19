@@ -265,3 +265,40 @@ html[data-flavor='opennorthcastle'] body {
 [data-flavor='opennorthcastle'] .scroll-to-top-btn {
   bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
+
+/* ── Phone layout ─────────────────────────────────────────────────────────
+   The sticky masthead + tab strip + bottom action bar were taking roughly a
+   third of a phone screen. Shrink the wordmark, keep the four tabs on one row,
+   and give the search box its own full-width line. */
+@media (max-width: 640px) {
+  [data-flavor='opennorthcastle'] .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  [data-flavor='opennorthcastle'] .muni-header {
+    padding: 4px 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  [data-flavor='opennorthcastle'] .muni-header img {
+    height: 34px !important;
+  }
+  [data-flavor='opennorthcastle'] .board-tabs-sticky {
+    gap: 5px !important;
+    padding: 8px 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  [data-flavor='opennorthcastle'] .board-tabs-sticky .btn {
+    padding: 6px 9px !important;
+    font-size: 12.5px !important;
+  }
+  [data-flavor='opennorthcastle'] .board-tabs-sticky .site-search {
+    flex: 1 1 100% !important;
+    max-width: none !important;
+  }
+  [data-flavor='opennorthcastle'] .civic-bottom-bar {
+    padding-top: 6px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+}

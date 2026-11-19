@@ -173,7 +173,7 @@ export default function MuniTabs({ muni, active }: { muni: string; active: 'dash
   return (
     <div className="board-tabs-sticky" style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 22, top: headerH }}>
       <a href="/" className={active === 'dashboard' ? 'btn' : 'btn secondary'} style={{ padding: '6px 12px', fontSize: 13, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-        Dashboard
+        <span className="lbl-long">Dashboard</span><span className="lbl-short">Home</span>
       </a>
       <a
         href={`/admin/municipal/towncode?muni=${muni}`}
