@@ -11,6 +11,7 @@ import ServiceRequests from './ServiceRequests'
 import KeyIssues from './KeyIssues'
 import BoardFilterDropdown from './BoardFilterDropdown'
 import ElectionResults from './ElectionResults'
+import MarketTrends from './MarketTrends'
 import CommunityCalendar from './CommunityCalendar'
 import CommunityOrgs from './CommunityOrgs'
 import InTheNews from './InTheNews'
@@ -587,6 +588,9 @@ export default function MunicipalClient({
 
           {/* Demographics — Dashboard tab only, for the selected town. */}
           {board === 'ALL' && town !== 'ALL' && <Demographics muniKey={town} />}
+
+          {/* Home sales & market trends — renders nothing until a Sales Web import lands. */}
+          {board === 'ALL' && town !== 'ALL' && <MarketTrends muniKey={town} />}
 
           {/* School district context — Dashboard tab only. */}
           {board === 'ALL' && town !== 'ALL' && <SchoolDistrict muniKey={town} />}
