@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { SectionHeading } from './HelpToggle'
 import type { AggregateThemeStat, MonthlyIssueVolume } from '@/lib/municipal/analysis'
 import { sentimentColor, sentimentChipStyle, fmtSent } from './sentiment'
 import Sparkline from './Sparkline'
@@ -126,9 +127,15 @@ export default function IssuesOverview({ muni }: { muni: string }) {
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>What the town talked about</h2>
-        <select
+      <SectionHeading
+        title="What the town talked about"
+        help={<>
+          Topics raised across the meetings we have recordings for, in the year you pick. The number is how
+          many meetings touched on it; the colored value is how the discussion read, from critical to
+          supportive. It&apos;s an automated read of the recordings, so treat it as a rough guide to where
+          attention went — not a measure of what was decided.
+        </>}
+        right={<select
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
           aria-label="Calendar year"
@@ -137,15 +144,8 @@ export default function IssuesOverview({ muni }: { muni: string }) {
           {agg.years.map((y) => (
             <option key={y} value={y}>{y}</option>
           ))}
-        </select>
-      </div>
-
-      <div className="muted" style={{ fontSize: 12, lineHeight: 1.5, maxWidth: 660, margin: '-4px 0 12px' }}>
-        Topics raised across the meetings we have recordings for, in the year you pick. The number is how
-        many meetings touched on it; the colored value is how the discussion read, from critical to
-        supportive. It&apos;s an automated read of the recordings, so treat it as a rough guide to where
-        attention went — not a measure of what was decided.
-      </div>
+        </select>}
+      />
 
       {themes.length === 0 ? (
         <div className="card"><div className="muted" style={{ padding: 20, fontSize: 13 }}>We don&apos;t have any meeting recordings analyzed for {year} yet.</div></div>

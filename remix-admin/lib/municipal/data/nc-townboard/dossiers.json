@@ -10,15 +10,16 @@
         "end": 2026,
         "lengthYears": 1,
         "type": "elected",
-        "note": "Even-Year Election Law: terms won in Nov 2025 were cut by one year so the seat moves to even-year elections. Re-elected Nov 3, 2026 (unofficial) to a full two-year term.",
-        "next": {
+        "note": "Even-Year Election Law: the Nov 2025 win was cut to a one-year term so the seat moves to even-year elections.",
+        "nextTerm": {
           "start": 2027,
-          "end": 2028
+          "end": 2028,
+          "note": "Re-elected Nov 3, 2026 (unofficial count)"
         }
       },
       "email": "supervisor@northcastleny.gov",
       "emailSource": "Town of North Castle official Town Board roster, Members table (northcastleny.gov)",
-      "bio": "Joseph A. Rende (Joe Rende) is the Democratic Town Supervisor of North Castle, NY (serving Armonk, Banksville and North White Plains), in office since January 2024 after narrowly defeating Republican Councilwoman Barbara DiGiacinto by roughly three votes in a contested, recount-and-litigation election. Professionally he is Director of Business Development at Judicial Title Insurance Agency; earlier he ran and operated his family's home heating oil business, Rende Economy Fuel, alongside his father before selling it to Robison Oil and taking a management role there. Raised in and long a resident of Port Chester, he began his public service in that village's government (planning commission, chairman of the village planning board, elected trustee, deputy mayor) and later served as Westchester County's deputy director of emergency planning and management. He has lived in Armonk for more than ten years with his partner, the Hon. Linda S. Jamieson, a Justice of the Westchester Supreme Court. As Supervisor he has emphasized public safety, fiscal responsibility, and collaborative, cost-saving problem-solving (e.g., organizing local business partners to restore the vandalized North Castle Eagle landmark at no cost to the town), and is running for re-election.",
+      "bio": "Joseph A. Rende (Joe Rende) is the Democratic Town Supervisor of North Castle, NY (serving Armonk, Banksville and North White Plains), in office since January 2024 after narrowly defeating Republican Councilwoman Barbara DiGiacinto by roughly three votes in a contested, recount-and-litigation election. Professionally he is Director of Business Development at Judicial Title Insurance Agency; earlier he ran and operated his family's home heating oil business, Rende Economy Fuel, alongside his father before selling it to Robison Oil and taking a management role there. Raised in and long a resident of Port Chester, he began his public service in that village's government (planning commission, chairman of the village planning board, elected trustee, deputy mayor) and later served as Westchester County's deputy director of emergency planning and management. He has lived in Armonk for more than ten years with his partner, the Hon. Linda S. Jamieson, a Justice of the Westchester Supreme Court. As Supervisor he has emphasized public safety, fiscal responsibility, and collaborative, cost-saving problem-solving (e.g., organizing local business partners to restore the vandalized North Castle Eagle landmark at no cost to the town), and won re-election over Republican Melvin Orellana in November 2026 (about 57% to 43%, unofficial count).",
       "bioConfidence": "high",
       "engagement": {
         "keyIssues": [

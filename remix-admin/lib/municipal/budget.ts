@@ -101,7 +101,7 @@ const NORTH_CASTLE: TownBudget = {
   townName: 'Town of North Castle',
   placeholder: false,
   sourceNote:
-    'Source: Town of North Castle 2025 Annual Comprehensive Financial Report (year ended 12/31/2025) — Statement of Revenues, Expenditures and Changes in Fund Balance (all governmental funds) and the General Fund comparative schedule. Figures are actuals; the FY2026 adopted budget provided as a scanned PDF is not yet machine-readable and is pending.',
+    'Source: Town of North Castle 2025 Annual Comprehensive Financial Report (year ended 12/31/2025) — Statement of Revenues, Expenditures and Changes in Fund Balance (all governmental funds) and the General Fund comparative schedule. Figures are actuals — the 2026 adopted and 2027 proposed budgets are shown separately on this page.',
   years: [
     {
       key: "allfunds-2025",
