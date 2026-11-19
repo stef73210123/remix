@@ -413,3 +413,132 @@ code {
 [data-flavor='remix'] .scroll-to-top-btn {
   bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
+
+/* ── Section help (HelpToggle.tsx) ─────────────────────────────────────────
+   Small ⓘ button beside a heading that reveals the section's explanatory
+   copy. Keeps helper text one tap away instead of always on screen. */
+.help-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.help-toggle:hover,
+.help-toggle[data-open] {
+  color: var(--primary-light, var(--primary));
+  border-color: var(--border);
+  background: var(--panel-2);
+}
+.help-panel {
+  font-size: 12px;
+  line-height: 1.55;
+  max-width: 720px;
+  margin: -4px 0 12px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--border);
+  background: var(--panel-2);
+  border-radius: 0 6px 6px 0;
+}
+
+/* Service-request category rows: label | bar + rate. On phones the rate text
+   drops under the bar instead of overflowing the card. */
+.sr-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.sr-row > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.sr-rate {
+  font-size: 11.5px;
+  min-width: 190px;
+  text-align: right;
+}
+@media (max-width: 640px) {
+  .sr-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .sr-row > div:last-child {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+  .sr-row > div:last-child > div:first-child {
+    flex: 1 1 100%;
+  }
+  .sr-rate {
+    min-width: 0;
+    text-align: left;
+  }
+}
+
+/* Responsive label swap: show the long form on wider screens, short on phones. */
+.lbl-short { display: none; }
+@media (max-width: 640px) {
+  .lbl-long { display: none; }
+  .lbl-short { display: inline; }
+}
+
+/* Dashboard "jump to section" chips (MunicipalClient). */
+.section-jump {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.section-jump::-webkit-scrollbar { display: none; }
+.section-jump a {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 12.5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  text-decoration: none;
+}
+.section-jump a:hover { border-color: var(--primary); }
+[id^='sec-'] { scroll-margin-top: 140px; }
+
+.town-carousel { height: 320px; }
+@media (max-width: 640px) { .town-carousel { height: 210px; } }
+
+/* Prev/next arrows on horizontal card rails: phones swipe, so hide them there. */
+@media (max-width: 640px) {
+  .carousel-arrows { display: none !important; }
+}
+
+/* 2027 budget (Budget2027.tsx) */
+.budget-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .budget-kpis { grid-template-columns: 1fr; gap: 12px; }
+}
+.budget-callout {
+  font-size: 12.5px;
+  line-height: 1.5;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: rgba(199, 107, 42, 0.1);
+  border: 1px solid rgba(199, 107, 42, 0.3);
+}
+a.budget-snapshot:hover { border-color: var(--primary); }

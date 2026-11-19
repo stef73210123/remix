@@ -118,6 +118,7 @@ export async function GET() {
       ORDER BY m.scheduled_at DESC
       LIMIT 500
     `) as MeetingRow[]
+    meetings = mergeSameSlot(meetings)
     dbOk = true
 
     // Rows are newest-first, so the first sighting per town is its latest meeting.
@@ -132,4 +133,48 @@ export async function GET() {
   }
 
   return NextResponse.json({ municipalities, meetings, counts, dbOk, dbError })
+}
+
+/**
+ * CivicClerk often lists the same evening two or three times — a "Work
+ * Session" or "One Time Event" placeholder beside the real meeting, or an old
+ * agenda-only event — all for the same board at the same start time. Shown
+ * as-is they read as separate meetings. Collapse each board + start-time slot
+ * into one row: keep the row with the most documents as the base and fill in
+ * any document kinds it lacks from the others. Input order (newest first) is
+ * preserved.
+ */
+function mergeSameSlot(rows: MeetingRow[]): MeetingRow[] {
+  const bySlot = new Map<string, MeetingRow[]>()
+  const order: string[] = []
+  for (const r of rows) {
+    const slot = `${r.muni_key}|${r.body_key}|${new Date(r.scheduled_at).toISOString()}`
+    if (!bySlot.has(slot)) { bySlot.set(slot, []); order.push(slot) }
+    bySlot.get(slot)!.push(r)
+  }
+  const out: MeetingRow[] = []
+  for (const slot of order) {
+    const group = bySlot.get(slot)!
+    if (group.length === 1) { out.push(group[0]); continue }
+    const assetCount = (r: MeetingRow) => (Array.isArray(r.assets) ? r.assets.length : 0)
+    const sorted = [...group].sort((a, b) => assetCount(b) - assetCount(a) || (b.text_count ?? 0) - (a.text_count ?? 0))
+    const base = { ...sorted[0], assets: [...(sorted[0].assets || [])] }
+    const extra: MeetingRow[] = []
+    for (const other of sorted.slice(1)) {
+      // Two rows that each carry their own minutes (or recording) for the
+      // same slot are genuinely different meetings — e.g. several sets of
+      // minutes filed under one upload date — so keep those apart. A second
+      // agenda alone is just an older revision of the same meeting's agenda.
+      const DISTINCT_KINDS = new Set(['minutes', 'video_mp4', 'audio_mp3'])
+      const clash = (other.assets || []).some((a) => DISTINCT_KINDS.has(a.kind) &&
+        base.assets.some((b) => b.kind === a.kind && (b.sourceUrl || b.blobUrl) !== (a.sourceUrl || a.blobUrl)))
+      if (clash) { extra.push(other); continue }
+      for (const a of other.assets || []) {
+        if (!base.assets.some((b) => b.kind === a.kind)) base.assets.push(a)
+      }
+      base.text_count = Math.max(base.text_count ?? 0, other.text_count ?? 0)
+    }
+    out.push(base, ...extra)
+  }
+  return out
 }

@@ -16,6 +16,8 @@ import {
   NC_2026_BUDGET_SOURCE_NOTE, NC_BOND_SOURCE_NOTE,
 } from './FinanceCharts'
 import { BondSimulator } from './BondSimulator'
+import Budget2027 from '../budget/Budget2027'
+import { SectionHeading } from '../HelpToggle'
 
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
@@ -57,12 +59,13 @@ export default function FinanceClient({ userName, muni, budgets }: {
       {!isOpen && <div style={{ marginBottom: 12 }}><Breadcrumbs items={crumbs} /></div>}
       <h1 className="page-title" style={{ marginBottom: 6 }}>Finance</h1>
 
-      <BoardStaffCards muni={activeTown || muni} bodyKey="finance" />
-      <DeptTimeline muni={activeTown || muni} deptKey="finance" label="Finance" />
-      <BoardKeyDocs muni={activeTown || muni} bodyKey="finance" />
+      {/* The budget cycle in progress leads the page — it's what most people
+          arrive here for. Staff, podium history and documents follow the
+          numbers instead of sitting in front of them. */}
+      {(activeTown || muni) === 'nc' && <Budget2027 />}
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>Financial analysis</h2>
+        <h2 style={{ fontSize: 16, margin: 0 }}>Where the money went · 2025 actuals</h2>
         {budgetTowns.length > 1 && (
           <div className="pill-strip" style={{ display: 'flex', gap: 6, flexWrap: 'nowrap' }}>
             {budgetTowns.map((m) => (
@@ -87,8 +90,7 @@ export default function FinanceClient({ userName, muni, budgets }: {
           distinct from the FY2025 ACFR actuals driving the Sankey above. */}
       {activeTown === 'nc' && (
         <div style={{ marginBottom: 26 }}>
-          <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>2026 Adopted Budget</h2>
-          <div className="muted" style={{ fontSize: 12, marginBottom: 14, lineHeight: 1.5, maxWidth: 760 }}>{NC_2026_BUDGET_SOURCE_NOTE}</div>
+          <SectionHeading title="2026 Adopted Budget" help={NC_2026_BUDGET_SOURCE_NOTE} />
 
           <div style={{ marginBottom: 20 }}>
             <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
@@ -130,6 +132,11 @@ export default function FinanceClient({ userName, muni, budgets }: {
           </div>
         </div>
       )}
+
+      <h2 style={{ fontSize: 16, margin: '8px 0 12px' }}>Finance Department</h2>
+      <BoardStaffCards muni={activeTown || muni} bodyKey="finance" />
+      <DeptTimeline muni={activeTown || muni} deptKey="finance" label="Finance" />
+      <BoardKeyDocs muni={activeTown || muni} bodyKey="finance" />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import type { TownBudget, BudgetYear } from '@/lib/municipal/budget'
 import { yearToSankey } from '@/lib/municipal/budget'
 import Sankey from './Sankey'
+import { HelpToggle, HelpPanel, useHelpToggle } from '../HelpToggle'
 
 /**
  * Financial-analysis body for one town: a fiscal-year toggle and the revenue→
@@ -35,6 +36,7 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
   }
 
   const { nodes, links } = useMemo(() => (sel ? yearToSankey(sel) : { nodes: [], links: [] }), [sel])
+  const help = useHelpToggle()
 
   if (!sel) return <div className="muted" style={{ fontSize: 13, padding: 16 }}>No budget data.</div>
 
@@ -84,11 +86,14 @@ export default function BudgetPanel({ budget }: { budget: TownBudget }) {
       ) : (
         // Attribution, always visible. Numbers about someone's taxes need to say
         // where they came from without the reader having to ask.
-        <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.55, marginBottom: 18, maxWidth: 760 }}>
-          {budget.sourceNote} Figures are re-keyed from the Town&apos;s published reports and rounded for the
-          diagram, so small differences from the source document are expected — use the Town&apos;s own filings
-          for anything official.
-        </div>
+        // The short line stays visible; the full provenance is one tap away.
+        <>
+          <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.55, marginBottom: 10, maxWidth: 760, display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+            <span>Source: the Town&apos;s audited financial report, re-keyed and rounded — use the Town&apos;s own filings for anything official.</span>
+            <HelpToggle {...help} label="Full source details" />
+          </div>
+          <HelpPanel open={help.open} id={help.id}>{budget.sourceNote}</HelpPanel>
+        </>
       )}
 
       <div className="card" style={{ padding: 20 }}>

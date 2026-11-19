@@ -1,5 +1,6 @@
 'use client'
 
+import { SectionHeading } from './HelpToggle'
 import { useRef } from 'react'
 import { Landmark, Droplet, HardHat, TreePine, Shield, DollarSign } from 'lucide-react'
 import { getKeyIssues, type KeyIssueIcon } from '@/lib/municipal/keyIssues'
@@ -35,17 +36,22 @@ export default function KeyIssues({ muniKey }: { muniKey: string }) {
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', margin: '0 0 12px' }}>
-        <h2 style={{ fontSize: 16, margin: 0 }}>Key issues</h2>
-        <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-          <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
-          <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
-        </div>
-      </div>
-      <div className="muted" style={{ fontSize: 12, lineHeight: 1.5, maxWidth: 660, margin: '-4px 0 12px' }}>
-        Themes that keep coming up across the public record, with the meetings or documents they came
-        from. These are summaries written by software, not the Town&apos;s positions — read the underlying
-        records before relying on any of them.
+      <SectionHeading
+        style={{ marginBottom: 6 }}
+        title="Key issues"
+        help={<>
+          Themes that keep coming up across the public record, with the meetings or documents they came
+          from. Read the underlying records before relying on any of them.
+        </>}
+        right={
+          <div className="carousel-arrows" style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+            <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
+            <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
+          </div>
+        }
+      />
+      <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.5, maxWidth: 660, margin: '0 0 12px' }}>
+        Summaries written by software, not the Town&apos;s positions.
       </div>
       <div
         ref={scrollRef}

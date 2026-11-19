@@ -61,7 +61,10 @@ function TermDetails({ term }: { term: MemberTerm }) {
           {ended
             ? `Term ended Dec 31, ${term.end}`
             : `Term expires Dec 31, ${term.end}` +
-              (remaining != null && remaining > 0 ? ` · ~${remaining} yr${remaining === 1 ? '' : 's'} remaining` : ' · up this year')}
+              (term.nextTerm
+                ? ` · re-elected for ${term.nextTerm.start}–${term.nextTerm.end}`
+                : remaining != null && remaining > 0 ? ` · ~${remaining} yr${remaining === 1 ? '' : 's'} remaining` : ' · up this year')}
+          {term.nextTerm?.note && <div style={{ fontSize: 11, marginTop: 2 }}>{term.nextTerm.note}</div>}
         </div>
       )}
     </div>

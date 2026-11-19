@@ -35,6 +35,7 @@ import type { AnalysisDataset, MeetingAnalysis } from '@/lib/municipal/analysis'
 import MeetingTimeline, { type TimelineItem } from './MeetingTimeline'
 import MeetingList from './MeetingList'
 import TownBackground from './TownBackground'
+import { BudgetSnapshot } from './budget/Budget2027'
 
 
 interface Body {
@@ -529,6 +530,16 @@ export default function MunicipalClient({
             <>
               <MuniTabs muni={town} active="dashboard" />
               {board === 'ALL' && <SiteIntro />}
+              {board === 'ALL' && town !== 'ALL' && (
+                <nav className="section-jump" aria-label="Jump to section">
+                  <a href="#sec-meetings">Meetings</a>
+                  {town === 'nc' && <a href="#sec-budget">2027 budget</a>}
+                  <a href="#sec-elections">Elections</a>
+                  <a href="#sec-issues">Issues</a>
+                  <a href="#sec-town">Town &amp; schools</a>
+                  <a href="#sec-community">Events &amp; news</a>
+                </nav>
+              )}
             </>
           ) : (
             <div ref={tabScrollRef} style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 22 }}>
@@ -566,9 +577,15 @@ export default function MunicipalClient({
           {/* Meetings — sits just above the board-sentiment roll-up on the "All"
               dashboard tab. (On a specific board tab, this same block already
               rendered above, right under that board's case map.) */}
-          {board === 'ALL' && meetingsBlock}
+          {board === 'ALL' && <div id="sec-meetings">{meetingsBlock}</div>}
+
+          {/* Timely items right under Meetings: the budget cycle in progress and
+              the latest town election. */}
+          {board === 'ALL' && town === 'nc' && isOpen && <BudgetSnapshot muni={town} />}
+          {board === 'ALL' && town !== 'ALL' && <div id="sec-elections"><ElectionResults muniKey={town} /></div>}
 
           {/* Consolidated per-board sentiment spectrums — Dashboard tab only. */}
+          <div id="sec-issues" />
           {board === 'ALL' && town !== 'ALL' && <BoardSentiment muniKey={town} boards={boardScores} loading={scoresLoading} />}
 
           {/* Narrative key-issue synopsis, above the sorted theme bars. */}
@@ -582,10 +599,8 @@ export default function MunicipalClient({
               dashboard; the Highway page carries the full breakdown. */}
           {board === 'ALL' && town !== 'ALL' && <ServiceRequests muni={town} compact />}
 
-          {/* Town election results (Supervisor & Town Board) — Dashboard tab only. */}
-          {board === 'ALL' && town !== 'ALL' && <ElectionResults muniKey={town} />}
-
           {/* Demographics — Dashboard tab only, for the selected town. */}
+          <div id="sec-town" />
           {board === 'ALL' && town !== 'ALL' && <Demographics muniKey={town} />}
 
           {/* School district context — Dashboard tab only. */}
@@ -593,6 +608,7 @@ export default function MunicipalClient({
 
           {/* Community events calendar + the orgs behind them — Dashboard tab
               only. Sits at the bottom, after the town's own civic/financial data. */}
+          <div id="sec-community" />
           {board === 'ALL' && town !== 'ALL' && <CommunityCalendar muniKey={town} />}
           {board === 'ALL' && town !== 'ALL' && <CommunityOrgs muniKey={town} />}
           {board === 'ALL' && town !== 'ALL' && <InTheNews muniKey={town} />}

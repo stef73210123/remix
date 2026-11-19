@@ -735,11 +735,18 @@ const NC_KEY_DOCS: Record<string, KeyDoc[]> = {
 
   finance: [
     {
-      label: 'Adopted budgets, 2007 to present',
+      label: '2027 proposed budget (Nov 18 hearing packet)',
+      href: 'https://northcastleny.api.civicclerk.com/v1/Meetings/GetMeetingFileStream(fileId=2639,plainText=false)',
+      sub: 'PDF · scanned',
+      date: '2027',
+      note: 'The tentative/preliminary budget the Town Board took to public hearing — tax-cap worksheet, homeowner impact, line-item detail and the draft local law to exceed the cap.',
+    },
+    {
+      label: 'Budgets & financial reports, 2007 to present',
       href: 'https://www.northcastleny.gov/160/Budgets-Annual-Financial-Reports',
-      sub: 'Archive · 21 budgets',
+      sub: 'Archive · 21 budgets · 19 reports',
       date: 'Annual',
-      note: "Every adopted budget the Town has published. The budget sets the tax levy and what each department may spend for the year ahead.",
+      note: "Every adopted budget and audited financial report the Town has published, for comparing across years.",
     },
     {
       label: 'Adopted budget',
@@ -754,12 +761,6 @@ const NC_KEY_DOCS: Record<string, KeyDoc[]> = {
       sub: 'PDF',
       date: '2025',
       note: 'The audited statements — what the Town actually took in and spent, with the independent auditor’s opinion and any findings.',
-    },
-    {
-      label: "Financial report archive, 2007 to present",
-      href: 'https://www.northcastleny.gov/160/Budgets-Annual-Financial-Reports',
-      sub: 'Archive · 19 reports',
-      note: 'Prior years of audited financial statements, for comparing across time rather than one year in isolation.',
     },
     {
       label: 'Taxation',

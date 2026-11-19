@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { getKeyDocs } from '@/lib/municipal/keyDocs'
 import { track } from '@/lib/analytics'
+import { HelpToggle, HelpPanel, useHelpToggle } from '../HelpToggle'
 
 /** Shown before the list expands. Enough to see what's there without a wall of
  *  text on a page whose main content is below. */
@@ -24,6 +25,7 @@ const COLLAPSED = 6
 export default function BoardKeyDocs({ muni, bodyKey }: { muni: string; bodyKey: string }) {
   const docs = getKeyDocs(muni, bodyKey)
   const [expanded, setExpanded] = useState(false)
+  const help = useHelpToggle()
   if (docs.length === 0) return null
 
   const visible = expanded ? docs : docs.slice(0, COLLAPSED)
@@ -31,21 +33,22 @@ export default function BoardKeyDocs({ muni, bodyKey }: { muni: string; bodyKey:
 
   return (
     <div className="card" style={{ padding: 16, marginBottom: 24 }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 4 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
         <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Key documents
           <span style={{ textTransform: 'none', letterSpacing: 0 }}> · {docs.length}</span>
         </div>
+        <HelpToggle {...help} label="About these documents" />
       </div>
-      <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.5, marginBottom: 12, maxWidth: 680 }}>
+      <HelpPanel open={help.open} id={help.id}>
         Published by the Town, except where a row is marked <em>obtained by FOIL</em> — those
         are records the Town does not publish anywhere, released on request and hosted here
         exactly as received. Nothing on this list has been edited.
-      </div>
+      </HelpPanel>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {visible.map((d) => (
-          <div key={d.href} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <div key={`${d.href}|${d.label}`} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
               <a
                 href={d.href}

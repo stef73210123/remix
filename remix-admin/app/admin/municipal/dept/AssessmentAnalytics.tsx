@@ -280,7 +280,7 @@ const ROW_SIDE_W = ROW_LABEL_W + 8 + 8 + ROW_VALUE_W
  *  green) for increase/decrease, consistent with the rest of this page;
  *  checkpoints get a third, distinct color, and the benchmark line a
  *  fourth, since they're each a different kind of thing. */
-function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
+export function LevyWaterfallChart({ steps, overrideVoted = true }: { steps: WaterfallStep[]; overrideVoted?: boolean }) {
   const [domainMin, domainMax] = waterfallDomain(steps)
   const domainSpan = domainMax - domainMin
   const { rows, benchmarks } = toWaterfallRows(steps, domainMin)
@@ -371,7 +371,7 @@ function LevyWaterfallChart({ steps }: { steps: WaterfallStep[] }) {
         <span style={{ width: ROW_VALUE_W, flexShrink: 0 }} />
       </div>
       <div className="muted" style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.4 }}>
-        Bars are scaled to {fmtUSD(domainMin)}–{fmtUSD(domainMax)}, not from $0, so each step in the walk is visible. The dashed line marks the state-calculated Tax Levy Limit the Town Board voted to override.
+        Bars are scaled to {fmtUSD(domainMin)}–{fmtUSD(domainMax)}, not from $0, so each step in the walk is visible. The dashed line marks the state-calculated Tax Levy Limit{overrideVoted ? ' the Town Board voted to override' : ' — going above it needs a separate Board vote'}.
       </div>
     </div>
   )

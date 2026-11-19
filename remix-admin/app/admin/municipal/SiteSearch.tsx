@@ -99,7 +99,7 @@ export default function SiteSearch({ muni }: { muni: string }) {
   const showPanel = open && q.trim().length >= 2
 
   return (
-    <div ref={boxRef} style={{ position: 'relative', flex: '1 1 220px', minWidth: 180, maxWidth: 360 }}>
+    <div ref={boxRef} className="site-search" style={{ position: 'relative', flex: '1 1 220px', minWidth: 180, maxWidth: 360 }}>
       <div style={{ position: 'relative' }}>
         <Search
           size={14}

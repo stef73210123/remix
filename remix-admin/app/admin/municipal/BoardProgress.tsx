@@ -2,6 +2,7 @@
 
 import ProgressSpectrum from './ProgressSpectrum'
 import TranscriptCaveat from './TranscriptCaveat'
+import { SectionHeading } from './HelpToggle'
 import { sentimentLabel } from './sentiment'
 
 export interface BoardScore {
@@ -34,15 +35,18 @@ export default function BoardSentiment({ muniKey, boards, loading }: { muniKey: 
 
   return (
     <div style={{ marginBottom: 30 }}>
-      <h2 style={{ fontSize: 16, margin: '0 0 4px' }}>
-        Discussion tone by board
-        <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {analyzed.length} of {boards.length} boards covered</span>
-      </h2>
-      <div className="muted" style={{ fontSize: 11, marginBottom: 10, lineHeight: 1.5, maxWidth: 720 }}>
-        Across the meetings we have recordings for, how each board&apos;s comments read overall —
-        from mostly critical (−10) to mostly supportive (+10). Boards we don&apos;t yet have
-        recordings for aren&apos;t shown.
-      </div>
+      <SectionHeading
+        style={{ marginBottom: 6 }}
+        title={<>
+          Discussion tone by board
+          <span className="muted" style={{ fontSize: 13, fontWeight: 400 }}> · {analyzed.length} of {boards.length} boards covered</span>
+        </>}
+        help={<>
+          Across the meetings we have recordings for, how each board&apos;s comments read overall —
+          from mostly critical (−10) to mostly supportive (+10). Boards we don&apos;t yet have
+          recordings for aren&apos;t shown.
+        </>}
+      />
       <TranscriptCaveat />
       <div className="card" style={{ padding: 0 }}>
         {analyzed.map((b, i) => (

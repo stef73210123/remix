@@ -41,11 +41,11 @@ function Carousel({ slides }: { slides: CarouselSlide[] }) {
   return (
     <div
       className="card"
-      style={{ padding: 0, overflow: 'hidden', position: 'relative', height: '100%', minHeight: 260 }}
+      style={{ padding: 0, overflow: 'hidden', position: 'relative', height: '100%', minHeight: 200 }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div style={{ position: 'relative', height: '100%', minHeight: 260, background: `linear-gradient(155deg, ${s.from}, ${s.to})`, transition: 'background 0.4s ease' }}>
+      <div style={{ position: 'relative', height: '100%', minHeight: 200, background: `linear-gradient(155deg, ${s.from}, ${s.to})`, transition: 'background 0.4s ease' }}>
         {showImg ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -123,17 +123,21 @@ function navBtnStyle(side: 'left' | 'right'): React.CSSProperties {
  */
 export default function TownBackground({ muniKey, townName }: { muniKey: string; townName: string }) {
   const bg = getTownBackground(muniKey)
+  // Four paragraphs of background pushed the map and meetings a full phone
+  // screen down. Show the first section; the rest is one tap away.
+  const [expanded, setExpanded] = useState(false)
   if (!bg) return null
+  const shown = expanded ? bg.sections : bg.sections.slice(0, 1)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 30 }}>
-      <div style={{ height: 320 }}>
+      <div className="town-carousel">
         <Carousel slides={bg.slides} />
       </div>
       <div className="card" style={{ padding: 20 }}>
         <h2 style={{ fontSize: 16, margin: '0 0 14px' }}>About {townName}</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {bg.sections.map((sec) => {
+          {shown.map((sec) => {
             const SectionIcon = ICONS[sec.icon]
             return (
             <div key={sec.key}>
@@ -145,6 +149,16 @@ export default function TownBackground({ muniKey, townName }: { muniKey: string;
             )
           })}
         </div>
+        {bg.sections.length > 1 && (
+          <button
+            type="button"
+            onClick={() => setExpanded((e) => !e)}
+            aria-expanded={expanded}
+            style={{ marginTop: 10, font: 'inherit', fontSize: 13, color: 'var(--primary-light)', background: 'none', border: 'none', padding: 0, cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            {expanded ? 'Show less' : `More about ${townName.replace(/^Town of /, '')} — ${bg.sections.slice(1).map((s) => s.label.toLowerCase()).join(', ')}`}
+          </button>
+        )}
       </div>
     </div>
   )

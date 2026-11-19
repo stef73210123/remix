@@ -57,26 +57,31 @@ function CandidateRow({ c, max, share }: { c: ElectionCandidate; max: number; sh
   const width = max > 0 && c.votes != null ? Math.max(2, (c.votes / max) * 100) : 0
   return (
     <div style={{ padding: '9px 0', borderTop: '1px solid var(--border)' }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+      {/* Name + badges wrap inside the left column; the vote count and share
+          stay pinned right so they never drop onto their own line on phones. */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
         <span style={{ width: 14, flexShrink: 0, color: 'var(--primary)', fontWeight: 700 }}>
           {c.won ? '✓' : ''}
         </span>
-        <span style={{ fontWeight: c.won ? 700 : 500, fontSize: 14 }}>{c.name}</span>
-        {c.incumbent && (
-          <span className="badge" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Incumbent
+        <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          <span style={{ fontWeight: c.won ? 700 : 500, fontSize: 14 }}>{c.name}</span>
+          {c.incumbent && (
+            <span className="badge" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Incumbent
+            </span>
+          )}
+          <PartyPills parties={c.parties} />
+        </div>
+        <div style={{ flexShrink: 0, textAlign: 'right', whiteSpace: 'nowrap' }}>
+          <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: c.won ? 700 : 500, fontSize: 14 }}>
+            {fmtVotes(c.votes)}
           </span>
-        )}
-        <PartyPills parties={c.parties} />
-        <span style={{ flex: 1 }} />
-        <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: c.won ? 700 : 500, fontSize: 14 }}>
-          {fmtVotes(c.votes)}
-        </span>
-        {share != null && (
-          <span className="muted" style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, width: 46, textAlign: 'right' }}>
-            {share.toFixed(1)}%
-          </span>
-        )}
+          {share != null && (
+            <span className="muted" style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, display: 'inline-block', width: 46, textAlign: 'right' }}>
+              {share.toFixed(1)}%
+            </span>
+          )}
+        </div>
       </div>
       <div style={{ marginLeft: 24, marginTop: 6, height: 6, background: 'var(--panel-2)', borderRadius: 3, overflow: 'hidden' }}>
         <div style={{ width: `${width}%`, height: '100%', borderRadius: 3, background: c.won ? 'var(--primary)' : 'var(--c)' }} />
@@ -100,6 +105,11 @@ function RaceBlock({ race }: { race: ElectionRace }) {
         <span className="muted" style={{ fontSize: 12 }}>
           {race.seatsUp > 1 ? `vote for ${race.seatsUp}` : 'one seat'}
         </span>
+        {race.unofficial && (
+          <span className="badge" title="Board of Elections count not yet certified" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Unofficial
+          </span>
+        )}
       </div>
       <div style={{ paddingBottom: 2 }}>
         {cands.map((c) => (
@@ -151,30 +161,30 @@ export default function ElectionResults({ muniKey }: { muniKey: string }) {
       </div>
 
       <div className="card" style={{ padding: 16 }}>
-        {/* Primary (June) shown before General (November) — chronological order
-            within the election year. */}
+        {/* Most recent contest first: the November general leads, with that
+            year's June primary beneath it. */}
+        {general.length > 0 && (
+          <>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 6px' }}>
+              General election{general[0].date ? ` · ${fmtElectionDate(general[0].date)}` : ` · November ${activeYear}`}
+            </div>
+            {general.map((r) => <RaceBlock key={`g-${r.office}`} race={r} />)}
+          </>
+        )}
         {primary.length > 0 && (
           <>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', margin: general.length > 0 ? '10px 0 6px' : '0 0 6px' }}>
               Primary election{primary[0].date ? ` · ${fmtElectionDate(primary[0].date)}` : ''}
             </div>
             {primary.map((r) => <RaceBlock key={`p-${r.office}`} race={r} />)}
           </>
         )}
         {elections.primaryNote && primary.length === 0 && (
-          <div className="muted" style={{ fontSize: 12, marginBottom: 12 }}>{elections.primaryNote}</div>
-        )}
-        {general.length > 0 && (
-          <>
-            <div className="muted" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', margin: primary.length > 0 || elections.primaryNote ? '10px 0 6px' : '0 0 6px' }}>
-              General election{general[0].date ? ` · ${fmtElectionDate(general[0].date)}` : ` · November ${activeYear}`}
-            </div>
-            {general.map((r) => <RaceBlock key={`g-${r.office}`} race={r} />)}
-          </>
+          <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>{elections.primaryNote}</div>
         )}
         <div className="muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5 }}>
-          Town offices only (Supervisor &amp; Town Board); county, state and federal races omitted.
-          Unofficial results as reported by the Westchester County Board of Elections and local outlets.
+          Town offices only (Supervisor &amp; Town Board). Source: Westchester County Board of Elections
+          canvass; races marked unofficial are not yet certified.
         </div>
       </div>
     </div>

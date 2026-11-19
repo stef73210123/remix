@@ -255,7 +255,7 @@ export default function Demographics({ muniKey }: { muniKey: string }) {
         </h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           {demo.approximate && <span className="muted" style={{ fontSize: 11 }}>{demo.source}</span>}
-          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+          <div className="carousel-arrows" style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
             <button onClick={() => scrollByCard(-1)} aria-label="Previous" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>‹</button>
             <button onClick={() => scrollByCard(1)} aria-label="Next" className="btn secondary" style={{ padding: '4px 10px', fontSize: 14 }}>›</button>
           </div>
