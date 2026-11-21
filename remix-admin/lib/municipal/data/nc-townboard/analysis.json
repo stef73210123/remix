@@ -4,10 +4,10 @@
     "muniKey": "nc",
     "bodyKey": "town_board",
     "town": "Town of North Castle",
-    "meetings": 116,
-    "cases": 763,
+    "meetings": 117,
+    "cases": 770,
     "themes": 18,
-    "memberPositions": 1609,
+    "memberPositions": 1617,
     "roster": [
       "Joseph Rende",
       "Michael Schiliro",
@@ -720,14 +720,20 @@
       "cases": 12,
       "avgSentiment": 0.192,
       "attributionCoverage": "good"
+    },
+    {
+      "date": "2026-11-18",
+      "cases": 15,
+      "avgSentiment": 0.177,
+      "attributionCoverage": "good"
     }
   ],
   "themes": [
     {
       "theme": "Other",
-      "meetings": 90,
-      "avgSentiment": 0.426,
-      "avgSalience": 0.234,
+      "meetings": 91,
+      "avgSentiment": 0.43,
+      "avgSalience": 0.235,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -1178,6 +1184,11 @@
           "date": "2026-11-04",
           "sentiment": 0.8,
           "salience": 0.25
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.8,
+          "salience": 0.35
         }
       ]
     },
@@ -1631,9 +1642,9 @@
     },
     {
       "theme": "Budget, taxes & finance",
-      "meetings": 65,
-      "avgSentiment": 0.262,
-      "avgSalience": 0.241,
+      "meetings": 66,
+      "avgSentiment": 0.254,
+      "avgSalience": 0.253,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -1959,14 +1970,19 @@
           "date": "2026-11-04",
           "sentiment": -0.15,
           "salience": 0.3
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.29,
+          "salience": 1.0
         }
       ]
     },
     {
       "theme": "Open government & procedure",
-      "meetings": 57,
-      "avgSentiment": 0.065,
-      "avgSalience": 0.226,
+      "meetings": 58,
+      "avgSentiment": 0.061,
+      "avgSalience": 0.227,
       "timeline": [
         {
           "date": "2022-05-04",
@@ -2252,14 +2268,19 @@
           "date": "2026-11-04",
           "sentiment": -0.11,
           "salience": 0.55
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.14,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Public safety & police",
-      "meetings": 56,
-      "avgSentiment": 0.433,
-      "avgSalience": 0.188,
+      "meetings": 57,
+      "avgSentiment": 0.423,
+      "avgSalience": 0.19,
       "timeline": [
         {
           "date": "2022-02-16",
@@ -2540,14 +2561,19 @@
           "date": "2026-11-04",
           "sentiment": -0.22,
           "salience": 0.3
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.12,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Grants & capital projects",
-      "meetings": 51,
-      "avgSentiment": 0.42,
-      "avgSalience": 0.261,
+      "meetings": 52,
+      "avgSentiment": 0.407,
+      "avgSalience": 0.264,
       "timeline": [
         {
           "date": "2022-02-09",
@@ -2803,14 +2829,19 @@
           "date": "2026-10-28",
           "sentiment": 0.5,
           "salience": 0.3
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.23,
+          "salience": 0.4
         }
       ]
     },
     {
       "theme": "Water & sewer districts",
-      "meetings": 51,
-      "avgSentiment": 0.463,
-      "avgSalience": 0.193,
+      "meetings": 52,
+      "avgSentiment": 0.462,
+      "avgSalience": 0.194,
       "timeline": [
         {
           "date": "2022-05-24",
@@ -3066,14 +3097,19 @@
           "date": "2026-10-28",
           "sentiment": 0.4,
           "salience": 0.4
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.4,
+          "salience": 0.25
         }
       ]
     },
     {
       "theme": "Personnel & appointments",
-      "meetings": 50,
-      "avgSentiment": 0.48,
-      "avgSalience": 0.121,
+      "meetings": 51,
+      "avgSentiment": 0.469,
+      "avgSalience": 0.128,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -3324,14 +3360,19 @@
           "date": "2026-11-04",
           "sentiment": 0.2,
           "salience": 0.1
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.06,
+          "salience": 0.5
         }
       ]
     },
     {
       "theme": "Parks, recreation & trails",
-      "meetings": 49,
-      "avgSentiment": 0.442,
-      "avgSalience": 0.254,
+      "meetings": 50,
+      "avgSentiment": 0.436,
+      "avgSalience": 0.256,
       "timeline": [
         {
           "date": "2022-01-26",
@@ -3577,14 +3618,272 @@
           "date": "2026-10-28",
           "sentiment": 0.2,
           "salience": 0.8
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.17,
+          "salience": 0.35
+        }
+      ]
+    },
+    {
+      "theme": "Environment & conservation",
+      "meetings": 49,
+      "avgSentiment": 0.376,
+      "avgSalience": 0.241,
+      "timeline": [
+        {
+          "date": "2022-01-12",
+          "sentiment": -0.1,
+          "salience": 0.3
+        },
+        {
+          "date": "2022-03-09",
+          "sentiment": 0.2,
+          "salience": 0.4
+        },
+        {
+          "date": "2022-03-14",
+          "sentiment": -0.1,
+          "salience": 0.8
+        },
+        {
+          "date": "2022-07-13",
+          "sentiment": 0.9,
+          "salience": 0.25
+        },
+        {
+          "date": "2022-07-27",
+          "sentiment": 0.9,
+          "salience": 0.25
+        },
+        {
+          "date": "2022-08-10",
+          "sentiment": 0.6,
+          "salience": 0.15
+        },
+        {
+          "date": "2023-03-22",
+          "sentiment": 0.1,
+          "salience": 0.3
+        },
+        {
+          "date": "2023-04-12",
+          "sentiment": 0.2,
+          "salience": 0.35
+        },
+        {
+          "date": "2023-04-26",
+          "sentiment": 0.0,
+          "salience": 0.35
+        },
+        {
+          "date": "2023-05-10",
+          "sentiment": 0.6,
+          "salience": 0.3
+        },
+        {
+          "date": "2023-06-14",
+          "sentiment": 0.6,
+          "salience": 0.9
+        },
+        {
+          "date": "2023-06-28",
+          "sentiment": 0.4,
+          "salience": 0.35
+        },
+        {
+          "date": "2023-07-26",
+          "sentiment": 0.4,
+          "salience": 0.5
+        },
+        {
+          "date": "2023-08-09",
+          "sentiment": 0.0,
+          "salience": 0.2
+        },
+        {
+          "date": "2023-09-13",
+          "sentiment": 0.5,
+          "salience": 0.2
+        },
+        {
+          "date": "2023-09-27",
+          "sentiment": 0.8,
+          "salience": 0.2
+        },
+        {
+          "date": "2024-01-10",
+          "sentiment": 0.4,
+          "salience": 0.05
+        },
+        {
+          "date": "2024-01-25",
+          "sentiment": -0.2,
+          "salience": 0.2
+        },
+        {
+          "date": "2024-02-14",
+          "sentiment": 0.8,
+          "salience": 0.05
+        },
+        {
+          "date": "2024-03-13",
+          "sentiment": 0.5,
+          "salience": 0.3
+        },
+        {
+          "date": "2024-04-24",
+          "sentiment": 0.5,
+          "salience": 0.08
+        },
+        {
+          "date": "2024-05-08",
+          "sentiment": 0.6,
+          "salience": 0.06
+        },
+        {
+          "date": "2024-06-12",
+          "sentiment": 0.25,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-06-26",
+          "sentiment": 0.3,
+          "salience": 0.12
+        },
+        {
+          "date": "2024-07-24",
+          "sentiment": 0.4,
+          "salience": 0.16
+        },
+        {
+          "date": "2024-08-14",
+          "sentiment": 0.3,
+          "salience": 0.1
+        },
+        {
+          "date": "2024-10-09",
+          "sentiment": 0.4,
+          "salience": 0.1
+        },
+        {
+          "date": "2025-01-08",
+          "sentiment": 0.4,
+          "salience": 0.03
+        },
+        {
+          "date": "2025-01-22",
+          "sentiment": 0.45,
+          "salience": 0.08
+        },
+        {
+          "date": "2025-02-12",
+          "sentiment": 0.1,
+          "salience": 0.1
+        },
+        {
+          "date": "2025-03-26",
+          "sentiment": 0.3,
+          "salience": 0.06
+        },
+        {
+          "date": "2025-04-23",
+          "sentiment": 0.6,
+          "salience": 0.1
+        },
+        {
+          "date": "2025-05-14",
+          "sentiment": 0.3,
+          "salience": 0.18
+        },
+        {
+          "date": "2025-06-11",
+          "sentiment": 0.8,
+          "salience": 0.12
+        },
+        {
+          "date": "2025-07-23",
+          "sentiment": 0.3,
+          "salience": 0.07
+        },
+        {
+          "date": "2025-08-13",
+          "sentiment": 0.6,
+          "salience": 0.04
+        },
+        {
+          "date": "2025-09-30",
+          "sentiment": 0.85,
+          "salience": 0.16
+        },
+        {
+          "date": "2025-12-10",
+          "sentiment": 0.5,
+          "salience": 0.08
+        },
+        {
+          "date": "2026-01-14",
+          "sentiment": 0.7,
+          "salience": 0.3
+        },
+        {
+          "date": "2026-02-25",
+          "sentiment": 0.5,
+          "salience": 0.22
+        },
+        {
+          "date": "2026-03-25",
+          "sentiment": 0.75,
+          "salience": 0.06
+        },
+        {
+          "date": "2026-05-13",
+          "sentiment": -0.1,
+          "salience": 0.22
+        },
+        {
+          "date": "2026-06-16",
+          "sentiment": 0.1,
+          "salience": 0.2
+        },
+        {
+          "date": "2026-08-12",
+          "sentiment": 0.45,
+          "salience": 0.45
+        },
+        {
+          "date": "2026-09-09",
+          "sentiment": 0.1,
+          "salience": 0.5
+        },
+        {
+          "date": "2026-10-14",
+          "sentiment": 0.3,
+          "salience": 0.3
+        },
+        {
+          "date": "2026-10-28",
+          "sentiment": 0.6,
+          "salience": 0.35
+        },
+        {
+          "date": "2026-11-04",
+          "sentiment": -0.41,
+          "salience": 0.75
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.02,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Legal, litigation & contracts",
       "meetings": 49,
-      "avgSentiment": 0.23,
-      "avgSalience": 0.182,
+      "avgSentiment": 0.227,
+      "avgSalience": 0.184,
       "timeline": [
         {
           "date": "2022-04-06",
@@ -3828,264 +4127,16 @@
         },
         {
           "date": "2026-10-28",
-          "sentiment": 0.15,
-          "salience": 0.35
-        }
-      ]
-    },
-    {
-      "theme": "Environment & conservation",
-      "meetings": 48,
-      "avgSentiment": 0.384,
-      "avgSalience": 0.24,
-      "timeline": [
-        {
-          "date": "2022-01-12",
-          "sentiment": -0.1,
-          "salience": 0.3
-        },
-        {
-          "date": "2022-03-09",
-          "sentiment": 0.2,
-          "salience": 0.4
-        },
-        {
-          "date": "2022-03-14",
-          "sentiment": -0.1,
-          "salience": 0.8
-        },
-        {
-          "date": "2022-07-13",
-          "sentiment": 0.9,
-          "salience": 0.25
-        },
-        {
-          "date": "2022-07-27",
-          "sentiment": 0.9,
-          "salience": 0.25
-        },
-        {
-          "date": "2022-08-10",
-          "sentiment": 0.6,
-          "salience": 0.15
-        },
-        {
-          "date": "2023-03-22",
-          "sentiment": 0.1,
-          "salience": 0.3
-        },
-        {
-          "date": "2023-04-12",
-          "sentiment": 0.2,
-          "salience": 0.35
-        },
-        {
-          "date": "2023-04-26",
           "sentiment": 0.0,
-          "salience": 0.35
-        },
-        {
-          "date": "2023-05-10",
-          "sentiment": 0.6,
-          "salience": 0.3
-        },
-        {
-          "date": "2023-06-14",
-          "sentiment": 0.6,
-          "salience": 0.9
-        },
-        {
-          "date": "2023-06-28",
-          "sentiment": 0.4,
-          "salience": 0.35
-        },
-        {
-          "date": "2023-07-26",
-          "sentiment": 0.4,
-          "salience": 0.5
-        },
-        {
-          "date": "2023-08-09",
-          "sentiment": 0.0,
-          "salience": 0.2
-        },
-        {
-          "date": "2023-09-13",
-          "sentiment": 0.5,
-          "salience": 0.2
-        },
-        {
-          "date": "2023-09-27",
-          "sentiment": 0.8,
-          "salience": 0.2
-        },
-        {
-          "date": "2024-01-10",
-          "sentiment": 0.4,
-          "salience": 0.05
-        },
-        {
-          "date": "2024-01-25",
-          "sentiment": -0.2,
-          "salience": 0.2
-        },
-        {
-          "date": "2024-02-14",
-          "sentiment": 0.8,
-          "salience": 0.05
-        },
-        {
-          "date": "2024-03-13",
-          "sentiment": 0.5,
-          "salience": 0.3
-        },
-        {
-          "date": "2024-04-24",
-          "sentiment": 0.5,
-          "salience": 0.08
-        },
-        {
-          "date": "2024-05-08",
-          "sentiment": 0.6,
-          "salience": 0.06
-        },
-        {
-          "date": "2024-06-12",
-          "sentiment": 0.25,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-06-26",
-          "sentiment": 0.3,
-          "salience": 0.12
-        },
-        {
-          "date": "2024-07-24",
-          "sentiment": 0.4,
-          "salience": 0.16
-        },
-        {
-          "date": "2024-08-14",
-          "sentiment": 0.3,
-          "salience": 0.1
-        },
-        {
-          "date": "2024-10-09",
-          "sentiment": 0.4,
-          "salience": 0.1
-        },
-        {
-          "date": "2025-01-08",
-          "sentiment": 0.4,
-          "salience": 0.03
-        },
-        {
-          "date": "2025-01-22",
-          "sentiment": 0.45,
-          "salience": 0.08
-        },
-        {
-          "date": "2025-02-12",
-          "sentiment": 0.1,
-          "salience": 0.1
-        },
-        {
-          "date": "2025-03-26",
-          "sentiment": 0.3,
-          "salience": 0.06
-        },
-        {
-          "date": "2025-04-23",
-          "sentiment": 0.6,
-          "salience": 0.1
-        },
-        {
-          "date": "2025-05-14",
-          "sentiment": 0.3,
-          "salience": 0.18
-        },
-        {
-          "date": "2025-06-11",
-          "sentiment": 0.8,
-          "salience": 0.12
-        },
-        {
-          "date": "2025-07-23",
-          "sentiment": 0.3,
-          "salience": 0.07
-        },
-        {
-          "date": "2025-08-13",
-          "sentiment": 0.6,
-          "salience": 0.04
-        },
-        {
-          "date": "2025-09-30",
-          "sentiment": 0.85,
-          "salience": 0.16
-        },
-        {
-          "date": "2025-12-10",
-          "sentiment": 0.5,
-          "salience": 0.08
-        },
-        {
-          "date": "2026-01-14",
-          "sentiment": 0.7,
-          "salience": 0.3
-        },
-        {
-          "date": "2026-02-25",
-          "sentiment": 0.5,
-          "salience": 0.22
-        },
-        {
-          "date": "2026-03-25",
-          "sentiment": 0.75,
-          "salience": 0.06
-        },
-        {
-          "date": "2026-05-13",
-          "sentiment": -0.1,
-          "salience": 0.22
-        },
-        {
-          "date": "2026-06-16",
-          "sentiment": 0.1,
-          "salience": 0.2
-        },
-        {
-          "date": "2026-08-12",
-          "sentiment": 0.45,
           "salience": 0.45
-        },
-        {
-          "date": "2026-09-09",
-          "sentiment": 0.1,
-          "salience": 0.5
-        },
-        {
-          "date": "2026-10-14",
-          "sentiment": 0.3,
-          "salience": 0.3
-        },
-        {
-          "date": "2026-10-28",
-          "sentiment": 0.6,
-          "salience": 0.35
-        },
-        {
-          "date": "2026-11-04",
-          "sentiment": -0.41,
-          "salience": 0.75
         }
       ]
     },
     {
       "theme": "Local laws & legislation",
-      "meetings": 30,
-      "avgSentiment": 0.088,
-      "avgSalience": 0.286,
+      "meetings": 31,
+      "avgSentiment": 0.082,
+      "avgSalience": 0.298,
       "timeline": [
         {
           "date": "2022-01-26",
@@ -4236,14 +4287,19 @@
           "date": "2026-11-04",
           "sentiment": -0.1,
           "salience": 0.3
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.1,
+          "salience": 0.65
         }
       ]
     },
     {
       "theme": "Roads, highway & sidewalks",
-      "meetings": 27,
-      "avgSentiment": 0.293,
-      "avgSalience": 0.197,
+      "meetings": 28,
+      "avgSentiment": 0.275,
+      "avgSalience": 0.198,
       "timeline": [
         {
           "date": "2022-01-12",
@@ -4379,6 +4435,11 @@
           "date": "2026-11-04",
           "sentiment": -0.35,
           "salience": 0.4
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.2,
+          "salience": 0.2
         }
       ]
     },
@@ -4522,9 +4583,9 @@
     },
     {
       "theme": "Resident concerns & quality of life",
-      "meetings": 21,
-      "avgSentiment": -0.091,
-      "avgSalience": 0.233,
+      "meetings": 22,
+      "avgSentiment": -0.096,
+      "avgSalience": 0.236,
       "timeline": [
         {
           "date": "2023-09-27",
@@ -4630,14 +4691,19 @@
           "date": "2026-11-04",
           "sentiment": -0.57,
           "salience": 0.7
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.2,
+          "salience": 0.3
         }
       ]
     },
     {
       "theme": "Ethics & governance",
-      "meetings": 13,
-      "avgSentiment": 0.331,
-      "avgSalience": 0.301,
+      "meetings": 14,
+      "avgSentiment": 0.279,
+      "avgSalience": 0.304,
       "timeline": [
         {
           "date": "2022-02-16",
@@ -4703,6 +4769,11 @@
           "date": "2026-07-15",
           "sentiment": 0.7,
           "salience": 0.2
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.4,
+          "salience": 0.35
         }
       ]
     },
@@ -4806,21 +4877,24 @@
   "cases": [
     {
       "id": "personnel",
-      "name": "Personnel: Library Board Appointment (Deborah Trope, as rendered) and Terminal Leave Payment (Police Department)",
+      "name": "Personnel: Two Highway Department Appointments, Board of Ethics Appointment, Parks and Recreation Advisory Board Appointments",
       "address": "",
-      "applicationType": "personnel / appointments",
+      "applicationType": "personnel / board appointments",
       "applicant": "Town of North Castle",
       "themes": [
+        "Ethics & governance",
         "Open government & procedure",
+        "Parks, recreation & trails",
         "Personnel & appointments",
         "Public safety & police",
+        "Roads, highway & sidewalks",
         "Water & sewer districts"
       ],
-      "appearances": 11,
+      "appearances": 12,
       "firstSeen": "2024-01-10",
-      "lastSeen": "2026-11-04",
-      "lastStatus": "approved by voice votes",
-      "avgSentiment": 0.427,
+      "lastSeen": "2026-11-18",
+      "lastStatus": "all approved by voice votes",
+      "avgSentiment": 0.433,
       "trajectory": [
         {
           "date": "2024-01-10",
@@ -4876,6 +4950,11 @@
           "date": "2026-11-04",
           "sentiment": 0.1,
           "status": "approved by voice votes"
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.5,
+          "status": "all approved by voice votes"
         }
       ],
       "timeline": [
@@ -4944,6 +5023,12 @@
           "status": "approved by voice votes",
           "sentiment": 0.1,
           "summary": "Deborah Trope (as rendered) was appointed to the Library Board for a five-year term ending December 31, 2031. A terminal leave payment for William McClure (as rendered) of the Police Department was approved. Both passed by voice vote without discussion."
+        },
+        {
+          "date": "2026-11-18",
+          "status": "all approved by voice votes",
+          "sentiment": 0.5,
+          "summary": "(A) Probationary promotional appointment of Michael Farucci (as rendered) to motor equipment operator, Highway Department, effective November 23. (B) Probationary appointment of John D. Benedict (as rendered) as road maintainer, Highway Department, effective November 23, 2026. (C) Appointment of David Simons (as rendered) to the Board of Ethics for a five-year term ending November 18, 2031. (D) Reappointment of Jeff Scott to the Parks and Recreation Advisory Board for a three-year term ending December 31, 2029. (E) Appointment of Catherine Rhodes to the Parks and Recreation Advisory Board for a three-year term ending December 31, 2029. The supervisor said 'we're fortunate to have all these.'"
         }
       ]
     },
@@ -11593,6 +11678,48 @@
           "status": "approved; supervisor authorised to sign",
           "sentiment": 0.4,
           "summary": "The board approved CAI's proposal for tax-map maintenance processing the 2027 data year and authorised the supervisor to sign the agreement, without discussion."
+        }
+      ]
+    },
+    {
+      "id": "wampus-brook-park-armonk-miller-park-north-white-plains",
+      "name": "Holiday Displays at Wampus Brook Park and Miller Park, North White Plains \u2014 Approved",
+      "address": "Wampus Brook Park, Armonk; Miller Park, North White Plains",
+      "applicationType": "approval of request (holiday displays)",
+      "applicant": "Community requestors",
+      "themes": [
+        "Other",
+        "Parks, recreation & trails"
+      ],
+      "appearances": 2,
+      "firstSeen": "2025-11-12",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "approved by voice vote",
+      "avgSentiment": 0.4,
+      "trajectory": [
+        {
+          "date": "2025-11-12",
+          "sentiment": 0.4,
+          "status": "adopted"
+        },
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.4,
+          "status": "approved by voice vote"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2025-11-12",
+          "status": "adopted",
+          "sentiment": 0.4,
+          "summary": "Approval of requests for holiday displays: a minor nativity creche and a Star and Crescent, at both Wampus Brook Park in Armonk and Miller Park in North White Plains. Approved on a voice vote."
+        },
+        {
+          "date": "2026-11-18",
+          "status": "approved by voice vote",
+          "sentiment": 0.4,
+          "summary": "Item F: approval of a request for holiday displays (the description is garbled: 'in the work and activity crunched') at Wampus Brook Park ('wampas group part') and, corrected by the supervisor, Miller Park in North White Plains. Approved by voice vote without discussion."
         }
       ]
     },
@@ -26832,37 +26959,6 @@
       ]
     },
     {
-      "id": "wampus-brook-park-armonk-miller-park-north-white-plains",
-      "name": "Approval of Holiday Displays (Creche and Star & Crescent)",
-      "address": "Wampus Brook Park, Armonk; Miller Park, North White Plains",
-      "applicationType": "resolution",
-      "applicant": "Community requestors",
-      "themes": [
-        "Other",
-        "Parks, recreation & trails"
-      ],
-      "appearances": 1,
-      "firstSeen": "2025-11-12",
-      "lastSeen": "2025-11-12",
-      "lastStatus": "adopted",
-      "avgSentiment": 0.4,
-      "trajectory": [
-        {
-          "date": "2025-11-12",
-          "sentiment": 0.4,
-          "status": "adopted"
-        }
-      ],
-      "timeline": [
-        {
-          "date": "2025-11-12",
-          "status": "adopted",
-          "sentiment": 0.4,
-          "summary": "Approval of requests for holiday displays: a minor nativity creche and a Star and Crescent, at both Wampus Brook Park in Armonk and Miller Park in North White Plains. Approved on a voice vote."
-        }
-      ]
-    },
-    {
       "id": "library-solutions-llc-agreements",
       "name": "Library Solutions LLC Agreements \u2014 Website/Calendar and Branding/Logo",
       "address": "",
@@ -31968,32 +32064,260 @@
           "summary": "During liaison updates, a member (not identified by name) reminded the board that the Conservation Board has been asking 'for a few months now' for a work session on its revised tree code. He said it had done more homework since appearing before the board and asked that it be given a sense of when the session could happen. He also said the Conservation Board had been in touch with a 'Josephine' (as rendered). No date was set."
         }
       ]
+    },
+    {
+      "id": "golf",
+      "name": "Golf-Course Chemical Use Near Schools: Fairways Initiative Asks for Published Application Logs, a Town Drinking-Water Test and Neighbour Notification",
+      "address": "",
+      "applicationType": "public comment",
+      "applicant": "Jacqueline Paley-No-Gattigan (as rendered), founder of the Fairways Initiative",
+      "themes": [
+        "Environment & conservation",
+        "Resident concerns & quality of life",
+        "Water & sewer districts"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-18",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "public comment; no board response beyond thanks; no action",
+      "avgSentiment": -0.4,
+      "trajectory": [
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.4,
+          "status": "public comment; no board response beyond thanks; no action"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-18",
+          "status": "public comment; no board response beyond thanks; no action",
+          "sentiment": -0.4,
+          "summary": "Jacqueline Paley-No-Gattigan (as rendered) said she lives in North Castle near the Bedford border, has daughters who are or will be in the district's schools, and founded the Fairways Initiative. She has been building a database and map of chemicals used on golf courses across Westchester and Fairfield counties. She said courses can use over 300,000 gallons of water a day in season, applying chemicals that reach wells. She said Whippoorwill Club (rendered 'Whipper World Club') is within three miles of seven Armonk schools, including Wampus Elementary, the middle school and Byram Hills High School. Brynwood, also called the Summit Club, has 14 schools within three miles, and one school's boundary touches it. Courses rendered 'Tarramack' and 'Standwich' are within three miles of one or more district schools. Schools test water on a state panel whose pesticide list dates from the 1990s and covers only six of the 87 chemicals she has tracked locally. Of those, 13 have been found in regional water, and only one is on any drinking-water panel. She said she was 'not claiming the water's unsafe', only that the test 'was not built from what is sprayed here'. She said Armonk application records are not yet public and that Brynwood's records are the subject of a records request to the town, due about November 20. She asked for three things. First, that every course within three miles of a school publish a complete application log (date, product, ingredient) that schools can link to. Second, that the town build its own drinking-water test from the chemicals actually used by golf courses and landscapers and run it several times a year, since timing after rain matters. Third, that the town remove, locally, the golf-course exemption from New York's neighbour spray-notification requirement, so courses notify neighbours and especially schools and preschools. She also said neighbours and schools should have a say before spraying. She described the chemicals as endocrine disruptors and carcinogens and cited a study linking living near golf courses with Parkinson's disease. The supervisor thanked her; no member responded."
+        }
+      ]
+    },
+    {
+      "id": "wampus-brook-park-to-the-town-pool-via-the-town-well-property-on-school-street-a",
+      "name": "Wampus Brook Trail / Downtown Armonk-to-Pool Walking Path: Public Comment Urging Renewed Consideration",
+      "address": "Wampus Brook Park to the town pool via the town well property on School Street, Armonk",
+      "applicationType": "public comment",
+      "applicant": "Stephane Martinovich (Meadow Hill Place, Armonk; as rendered)",
+      "themes": [
+        "Budget, taxes & finance",
+        "Grants & capital projects",
+        "Parks, recreation & trails"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-18",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "public comment; no board response beyond thanks; no action",
+      "avgSentiment": 0.3,
+      "trajectory": [
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.3,
+          "status": "public comment; no board response beyond thanks; no action"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-18",
+          "status": "public comment; no board response beyond thanks; no action",
+          "sentiment": 0.3,
+          "summary": "Stephane Martinovich (as rendered) thanked the board for the pool renovation, noting the bid came in 'significantly lower than was authorized'. He asked the board to renew consideration of a walking path from downtown Armonk to the pool and traced its history. The 1996 comprehensive plan called for a path through central Armonk from Wampus Brook Park. A 2000 state grant of $156,000 (80% of cost) went unspent. The 2001 Main Street study recommended the connection. A 2007\u201308 Conservation Board and Town Engineer design from Wampus Brook Park to Sands Mill was shelved in 2013. A bike study mapped a 10-foot path along Cox Avenue and Greenway Road past the pool, and the 2018 comprehensive plan adopted it. In January 2025 'this very board' supported a Greenway grant for an eight-foot multi-use path with a wetland boardwalk from the Wampus Brook Park bridge across the town well property on School Street to the pool. He said the supervisor had said it would keep children off Route 128 (rendered 'Route 28'). That grant and a later sidewalk grant were not won. He said rough figures a year ago were about $1 million for School Street to Sands Mill, and that by waiting 26 years the town had added about $150,000 in cost. He said the town can afford it without a grant, citing an assigned fund balance of $13 million at the end of 2025. To cut cost he suggested a natural surface, the town's new maintenance department (which built the dog park), recycled asphalt millings from the highway department, and leftover pool funds, checked with bond counsel. He addressed 'Adam' (not confirmed which Adam) about clearing the overgrown utility-line corridor this winter so something is usable by spring. He asked for the town engineer's updated cost estimate and phased construction. Parks and Rec survey respondents rank trails among their top priorities, he said, and he cited Pound Ridge and the North County Trailway as models."
+        }
+      ]
+    },
+    {
+      "id": "2027-town-and-special-district-preliminary-budgets",
+      "name": "2027 Town and Special District Preliminary Budgets \u2014 Public Hearing Opened, Heard and Adjourned to December 9, 2026",
+      "address": "",
+      "applicationType": "public hearing (budget)",
+      "applicant": "Town of North Castle",
+      "themes": [
+        "Budget, taxes & finance",
+        "Grants & capital projects",
+        "Land use, zoning & special permits",
+        "Open government & procedure",
+        "Personnel & appointments",
+        "Public safety & police",
+        "Roads, highway & sidewalks",
+        "Water & sewer districts"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-18",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "public hearing kept open and adjourned to December 9, 2026 (the board's only December meeting) by voice vote; no roll call. Counsel advised no new notice is needed while the hearing stays open. Abbas Sura is to prepare a breakdown of the increase, a one-time vs recurring split of the fund-balance draw, and a long-term capital list. The tax-cap override (hearing B) is to be voted on before the budget is adopted.",
+      "avgSentiment": -0.34,
+      "trajectory": [
+        {
+          "date": "2026-11-18",
+          "sentiment": -0.34,
+          "status": "public hearing kept open and adjourned to December 9, 2026 (the board's only December meeting) by voice vote; no roll call. Counsel advised no new notice is needed while the hearing stays open. Abbas Sura is to prepare a breakdown of the increase, a one-time vs recurring split of the fund-balance draw, and a long-term capital list. The tax-cap override (hearing B) is to be voted on before the budget is adopted."
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-18",
+          "status": "public hearing kept open and adjourned to December 9, 2026 (the board's only December meeting) by voice vote; no roll call. Counsel advised no new notice is needed while the hearing stays open. Abbas Sura is to prepare a breakdown of the increase, a one-time vs recurring split of the fund-balance draw, and a long-term capital list. The tax-cap override (hearing B) is to be voted on before the budget is adopted.",
+          "sentiment": -0.34,
+          "summary": "The supervisor opened the hearing on 'the adoption of the 2027 town and special district preliminary budgets' by voice vote and gave the floor to the Finance Officer (rendered 'Mr. Basser'). Abbas Sura (rendered 'Abasura'), Director of Finance, said the process starts in summer with department heads and the town administrator, Kevin. He said the 2027 budget is about $46.5 million (later $46.6 million in total appropriations), about a 6.29% increase from 2026, mostly in the general fund. Highway is about 19%, and the independent water and sewer district funds about 13%. 2025 costs were higher because fund balance paid for the turf field, the pool and the parking lot next to the library. The 2026\u201327 increase is mainly personnel and benefit costs. On revenue: the tax levy is about 60.7% of revenue. Sales tax is budgeted up about $200,000 to about $3.6 million, and building department revenue at about $2.2\u20132.3 million. Rising interest rates raise interest income but may dampen mortgage activity. The Engel Burman (rendered 'Engel Berman') PILOT has, he believed, ended, next year is the last year of IBM's PILOT, and a contract is being negotiated. On costs: payroll and benefits are about 65% of the total, within a 60\u201380% municipal range. Operating costs cover trash, maintenance, vehicles, legal and engineering, insurance and IT. Capital equipment is moderate and is mainly paving funded from highway fund balance or earlier borrowing. After revenues and fund balance, the levy is $28.3 million, of which $24 million is the town-wide levy (general, highway and library). The rate rises 5.71%, about $206 for a median $1.2 million home, and 'We will be overriding the tax levy as set by the New York State by about 1.7 million.' Projects completed in 2025\u201326 included the community park turf fields, the Clover Road ballfield rehabilitation, Quarry Park improvements and the School Street water line extension. Also completed were the demolition of a building at Lombardi Park, roof replacements at the community centre (rendered 'Hurgenheim') and the highway mechanics garage, the dog park and a parking lot (rendered 'Verizon Parking Lot'). The pool improvement project and wastewater efficiency projects are expected in 2027. The supervisor asked speakers to keep to three to five minutes and address the board. Ed Lubb (as rendered; North White Plains; he said he is 93) got the finance director to confirm that $1.3 million of general fund balance was used. The director said each roughly $230,000 is about 1% of the levy, so the $1.3 million is worth about 5.65 points. Ed concluded this meant 'almost a 12% increase', which was answered 'Correct.' The supervisor interrupted, saying public comment is for comments to the board, not back-and-forth questioning. Ed protested ('to interrupt me isn't fair'), and the supervisor answered 'You can call me Joe.' A voice, apparently the finance director, added that a zero increase would need roughly $1.7 million more of fund balance. Ed reviewed the 2011 2% tax cap law and said a 60% supermajority means only three of five town board votes. He said 2026 was 4.81% (about 9% without fund balance) and called 5.71% 'almost three times over the tax cap limit' and a 'financial calamity'. He urged starting from the 2026 levy plus 2% and allocating that to departments, keeping fund balance for emergencies, imposing a temporary hiring freeze, and resisting 'small groups' pushing projects. He cited Councilman Berra's earlier estimate that a new police officer costs about a quarter of a million dollars a year at top pay, and warned that town hall bonds will hit future budgets and the cap. Neil Bauman (38-year Armonk resident, 40 years in municipal bonds) thanked the board and Abbas. He said he is not against a healthy fund balance, but that using non-recurring money for recurring bills is unsustainable ('the arithmetic becomes very, very ugly'). He said the '15%' reserve ceiling is 'a fallacy' taken from a December 2021 Comptroller presentation example. He said a high fund balance does not jeopardise the bond rating, while drawing it down for recurring costs can. He asked the board to publish, for recent budgets, beginning and ending unrestricted fund balance, the amount appropriated and actually used, capital and one-time uses, support for recurring costs, and the levy increase without fund balance. Robert Parletta (as rendered; about 50 years in Armonk) asked what caused the rise from zero and about 4% to 5.7%. The supervisor said the rate was zero for about five years by using larger amounts of fund balance. He said health benefits budgeted at a 5% increase actually rose 9%, and that the board is budgeting closer to actual on 'a glide path of weaning ourselves off of using fund balance'. That requires increases above 'the arbitrary tax cap of 2%'. The finance director said the 5.71% comes from using less fund balance (a little over $2 million last year; with it the rise would be about 2.5\u20132.7%) plus standard personnel and benefit increases. After further back-and-forth, which the supervisor stopped, a member (not identified) gave examples. Equipment costs have risen about 40% since 2019, vehicles need replacing, and police costs for events are not reimbursed, with overtime up. Parletta concluded it was 'a lot of little items', and that was agreed. Bonnie Fine (as rendered; North White Plains) was told it is incorrect that fund balance had only recently been drawn on. The finance director explained that one-time revenue surges had been returned to taxpayers to hold rates at zero: interest, a county sales tax change worth about $500,000, and building fees of $400,000\u2013500,000 from IBM and Citibank renovations. Those surges have ended, hence the glide path. She asked whether the board was looking at the 'stadium project' for revenue. A board voice said no, and that 'it's not a stadium project' but a sports training and educational facility on land not on the tax rolls. Any development there would, it hoped, be fully taxed. A board voice explained unforeseen 2026 costs: two failed roofs at about $200,000 each and a $20,000 air-conditioning unit, met from fund balance. The finance director said revenue running higher means the town will 'pretty much' meet its budget. Fine urged that budgets go back to departments for belt-tightening. Betty San Chorico (as rendered; North White Plains, 50+ years) agreed with Ed and Neil. She saw a pattern of exceeding the cap that 'can get out of control very easily' and was dismayed at the 5-versus-12% figures. She suggested employees pay a larger share of benefits, as she did at IBM and the town. She said an email by Mike Ferreri (as rendered) put the increase at about $200 on a $1.2 million home, while her own town taxes are about $4,800. She was told that her bill includes county and special district charges, and that the $200 (about $206) is the town portion only. She warned that none of the figures include 'one dollar' for renovating or rebuilding the town hall ('That's scary'). A board voice replied that such issues had been neglected for several years. Mike Schiliro (rendered 'Mike Shaliro'; 26-year resident; a former supervisor, cued by 'when I served' and 'when you were supervisor Mike') confirmed that about $2.2 million of fund balance ($1.3 million general, about $1 million highway) was budgeted for 2026, with the variance projected near level, around $100,000. Asked what role the Budget and Finance Committee had, a voice said 'It didn't' and that it had not been used for a few years. A member said 'I've requested it, but I did not get the support of the rest of the board.' Schiliro said it had been a useful private-sector resource. Another member said it had been used selectively under Schiliro and that they would be 'absolutely for utilizing it if there's a need.' The exchange continues past this range. Later: The second half of the hearing on the 2027 town and special district preliminary budgets, from about 01:28:30 to its adjournment at about 02:38:53. Former supervisor Mike Schiliro ('Mike Shaliro', as rendered) finished his comment. He asked that the Budget and Finance Committee review this or future budgets, as it had when he served, and named Larry Ruisi (rendered 'Larry Ramese') as a valued member. A member said the committee had been used only selectively under Schiliro and that he had not needed its advice this year. A member who said 'I'm only here 10 months, 11 months' said no one had told him there was a budget committee. Supervisor Rende said that when he took office in January 2024 the board decided collectively not to continue the committee. He said the fund balance had grown to 75\u201380% of the operating budget partly because the town budgeted for 34 police officers while 26 were on the payroll, and partly because of mortgage-tax windfalls. He said a 10\u201315% fund balance is wise practice, that this budget still leaves it at 'almost 30%' of the operating budget, and that the town keeps a AAA bond rating. Neil Bauman returned to read unrestricted fund balance figures: 12.9 million in 2020 rising to 21 million in 2024, then 12.9 million in 2025 after spending on the turf fields (4.5 million per Abbas) and the pool. A Zoom caller, Peter Jack (as rendered), said a 6% increase was harmful to families on a strict budget and urged belt-tightening. The supervisor said Zoom chat questions would not be taken. Councilwoman DiGiacinto asked Abbas Sura to explain the NY CLASS investment co-op he had recommended. He said it had earned roughly 80 to 100 basis points more than the banks. She said the department now has 33 police officers and asked the board to look hard at new and replacement hires. She listed a vacant assistant court clerk, a proposed full-time HR position, a finance title change (which Abbas said adds no headcount), the assessor's request for a full-time assistant (not in the budget), two detective promotions, two senior rec leader positions and a library request. She said the department heads had submitted 'needs, not wants', and she asked that the budget binder go to the Budget and Finance Committee before the hearing reconvenes in December. Councilman Berra said the 2022 budget appropriated about $1.3 million of fund balance for a 0% increase, yet fund equity rose from about $14.9 million to $17.6 million. Abbas said this was partly right, because surplus revenue was being passed through. Berra also said bonding about $4 million for the pool and parking district at 3.5% over 15 years would add roughly $350,000 a year in debt service, about 1.5% on the town tax. He cited paving spending well over budget, partly from leftover and bond money, and called the increases 'unsustainable'. The supervisor said the vote was not that night and the budget had to pass by December 31. He said the tax-cap override must be in place before the budget is adopted, which is the next agenda item. Councilman Vataj said he could cut about $900,000 (4%) and get close to 2% by freezing new hires, cutting overtime and dropping vehicles. He pointed to fewer trucks and workers once departments merge, and he predicted a double-digit increase ahead. A fifth member, not identified by name in the recording, asked Abbas for three things before adoption: a plain-language breakdown of the $2.82 million increase by category; the fund-balance draw split into one-time and recurring costs; and a multi-year list of large capital items. He said the Budget and Finance Committee could help with long-term planning. Water and sewer superintendent Sal Mesiti explained that the general fund lent the Water District 4 well project money internally, avoiding $80,000\u2013$90,000 in bond costs, and the district is repaying it with interest. The supervisor put the loan at $3.2 million. In closing, the supervisor cited state comptroller data that the town's levy growth over 2016\u20132026 was fourth lowest of 15 Westchester towns. He said health insurance rose about 9.4% against a 5% assumption, and he explained the roughly half-million-dollar pool spending in 2024 to avoid a Health Department closure, which he said was to be recovered from the $5 million bond. He put the citizen task force's town hall estimate at $70\u201380 million, more than the town could absorb. The hearing was adjourned to December 9, 2026 by voice vote. Abbas offered to meet residents with questions, and the supervisor thanked the department heads who attended."
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "name": "Letter from Bonnie Fayette (as rendered) on Expanding the Food-Scrap Programme; Disclosure of Surplus Bin Sale to the Town of Harrison",
+      "address": "Food-scrap drop-off (currently Lombardi Park); proposed North White Plains community center site",
+      "applicationType": "correspondence receipt (miscellaneous item B)",
+      "applicant": "Bonnie Fayette (as rendered; letter dated November 12, 2026); sustainability committee representative addressed as 'Neil'",
+      "themes": [
+        "Environment & conservation",
+        "Ethics & governance",
+        "Grants & capital projects",
+        "Parks, recreation & trails"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-18",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "motion to receive made and seconded (the supervisor later said Barbara seconded); put to a vote ('armory favor', apparently 'all in favor') with no response captured. A state food-scrap grant application (25% match, three-year) is to go on the next meeting's agenda. No action on further bin sales; the supervisor asked that such decisions be reported to the board through the town administrator.",
+      "avgSentiment": 0.1,
+      "trajectory": [
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.1,
+          "status": "motion to receive made and seconded (the supervisor later said Barbara seconded); put to a vote ('armory favor', apparently 'all in favor') with no response captured. A state food-scrap grant application (25% match, three-year) is to go on the next meeting's agenda. No action on further bin sales; the supervisor asked that such decisions be reported to the board through the town administrator."
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-18",
+          "status": "motion to receive made and seconded (the supervisor later said Barbara seconded); put to a vote ('armory favor', apparently 'all in favor') with no response captured. A state food-scrap grant application (25% match, three-year) is to go on the next meeting's agenda. No action on further bin sales; the supervisor asked that such decisions be reported to the board through the town administrator.",
+          "sentiment": 0.1,
+          "summary": "Item B was receipt of a letter from Bonnie Fayette (as rendered) asking to expand the town food-scrap programme to additional locations. A member credited at medium confidence as Councilwoman DiGiacinto called it 'a great idea' but said Parks and Recreation and the library should be consulted on the suggested North White Plains community center site. She noted that the sustainability committee could apply for a grant with a 25% match that might fund the expansion, and that the programme had not been embraced as widely as hoped. About 800 bins were bought (because of a minimum order), with perhaps 120 to 200 or more in use. A committee representative said participation is well below Scarsdale's roughly 30%, residents at the north and south ends find the drop-off too far, and a three-year state grant would fund expansion and education. The supervisor said the grant application would be on the next agenda and go to the town's grant writers. A voice concerned about open sites (Lombardi) was told the bins are self-sealing and washed by a contractor, and that Parks staff time could serve as the match. Another member asked why North White Plains could not have a site regardless of the grant. The representative said committee cost savings might allow it without raising the budget. It then emerged that about 20 kits had been sold to the Town of Harrison for about $25 each ($400 was mentioned) to free storage space at the police department records room, with the check given to the town clerk's office. The supervisor objected that the board had not been told: 'Rather than a unilateral decision to sell something that's a town property'. He said that 'It should have gone to Kevin Hay and Kevin Hay should have made us aware', and that individual members sometimes obtain information from department heads that is not shared with the whole board. He said he was not objecting to the sale itself. The representative apologised ('OK, that's my fault. I'm sorry.') and said he would come to the supervisor next time. Another member, worried about rats, said he would rather all surplus bins were sold. The clerk confirmed the check was received. A member summarised that the decision rests with the sustainability committee, which must keep the town administrator informed, and the administrator must inform the board; the supervisor said the board should have been aware because it is town property."
+        }
+      ]
+    },
+    {
+      "id": "water-district-no-4-well-site",
+      "name": "Water District No. 4 Well Project \u2014 Payment Application No. 11 (Papitto Construction, rendered 'Pepito')",
+      "address": "Water District No. 4 well site",
+      "applicationType": "contract payment approval",
+      "applicant": "Pepito Construction Company, Incorporated (as rendered; earlier records render the contractor Papatito/Papito)",
+      "themes": [
+        "Grants & capital projects",
+        "Water & sewer districts"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-18",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "approved by voice vote",
+      "avgSentiment": 0.1,
+      "trajectory": [
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.1,
+          "status": "approved by voice vote"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-18",
+          "status": "approved by voice vote",
+          "sentiment": 0.1,
+          "summary": "Item D: approval of payment application number 11 from 'Pepito Construction Company, Incorporated' (as rendered) for site work on the Water District number 4 well project. The amount was not read. Moved, seconded and approved by voice vote without discussion."
+        }
+      ]
+    },
+    {
+      "id": "188-king-street-armonk-454-main-street-armonk",
+      "name": "Notices of New Liquor Licences \u2014 Aramark Services (188 King Street) and Kaku Armonk (454 Main Street), as rendered",
+      "address": "188 King Street, Armonk; 454 Main Street, Armonk",
+      "applicationType": "receipt of liquor licence notices",
+      "applicant": "'Armark Services Incorporated' (as rendered; catering facility, private events only, at the guest house conference center one and two); 'Kaku Arma Inc.' (as rendered)",
+      "themes": [
+        "Other"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-18",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "both received by voice vote",
+      "avgSentiment": 0.0,
+      "trajectory": [
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.0,
+          "status": "both received by voice vote"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-18",
+          "status": "both received by voice vote",
+          "sentiment": 0.0,
+          "summary": "Item E: receipt of three notices of a new liquor licence for 'Armark Services Incorporated' (as rendered) for a catering facility, private events only, at 188 King Street, Armonk ('the guest house conference center one and two'). Item G: receipt of notice of a new liquor licence for 'Kaku Arma Inc.' (as rendered), 454 Main Street, Armonk. Both were received by voice vote without discussion."
+        }
+      ]
+    },
+    {
+      "id": "winkler-park-ibm-park-lombardi-park",
+      "name": "Pickleball Courts \u2014 Parks and Recreation Advisory Board Options (Winkler Park Conversion, IBM Park Platform Courts) Referred to a Work Session",
+      "address": "Winkler Park; IBM Park (platform tennis courts); Lombardi Park (684 side, suggested)",
+      "applicationType": "liaison update / work session request",
+      "applicant": "Parks and Recreation Advisory Board (with Rec and Parks Superintendent Matt Traynor)",
+      "themes": [
+        "Legal, litigation & contracts",
+        "Parks, recreation & trails",
+        "Resident concerns & quality of life",
+        "Water & sewer districts"
+      ],
+      "appearances": 1,
+      "firstSeen": "2026-11-18",
+      "lastSeen": "2026-11-18",
+      "lastStatus": "no action; the liaison is to work with 'Josephine' (as rendered) to schedule a work session, with nearby residents invited",
+      "avgSentiment": 0.1,
+      "trajectory": [
+        {
+          "date": "2026-11-18",
+          "sentiment": 0.1,
+          "status": "no action; the liaison is to work with 'Josephine' (as rendered) to schedule a work session, with nearby residents invited"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-11-18",
+          "status": "no action; the liaison is to work with 'Josephine' (as rendered) to schedule a work session, with nearby residents invited",
+          "sentiment": 0.1,
+          "summary": "The liaison said the Parks and Recreation Advisory Board, with Matt Traynor ('Matt trainer/Treanor'), had sent the town board a September 2 letter with pickleball location options and asked for a work session or the board's guidance. The supervisor said the town has cost estimates to resurface the tennis courts and convert one Winkler Park tennis court to pickleball. Those came from 'Duroza' (as rendered), who did the turf field and Clove Road Park ('Clog Road Park') work, but it was determined legally that the work must be bid instead of using the cooperative contract. Councilwoman DiGiacinto (medium confidence) agreed the neighbours must be brought in 'this time' because the Winkler homes are much closer than at the previous location. The supervisor said the board's other recommendation, replacing the two IBM Park platform tennis courts, faces a possible deed restriction from IBM's transfer (which the town attorney thinks possible but has not checked) and underground well infrastructure that would prevent excavation and drainage. Another member said pickleball is already played on the raised platforms. A member (unattributed) asked what lies underground and whether courts could shift toward the parking lot. That member also said Winkler is too close to residents if a 250-foot buffer is wanted, and suggested the 684 side of Lombardi Park, 500 feet from homes. The supervisor said Winkler did not need a work session but neighbours identified through the assessor's office should be informed. The liaison proposed a work session with the advisory board and neighbours. The supervisor said his office sets the agenda, not Kevin, and noted other groups' pending work-session requests."
+        }
+      ]
     }
   ],
   "members": [
     {
       "member": "Joseph Rende",
-      "totalPositions": 414,
-      "avgSentiment": 0.506,
+      "totalPositions": 417,
+      "avgSentiment": 0.503,
       "confidenceMix": {
-        "high": 347,
+        "high": 350,
         "medium": 67
       },
       "byTheme": [
         {
           "theme": "Open government & procedure",
-          "count": 80,
-          "avgSentiment": 0.274
+          "count": 81,
+          "avgSentiment": 0.276
         },
         {
           "theme": "Grants & capital projects",
-          "count": 72,
-          "avgSentiment": 0.656
+          "count": 74,
+          "avgSentiment": 0.641
         },
         {
           "theme": "Budget, taxes & finance",
-          "count": 57,
-          "avgSentiment": 0.512
+          "count": 58,
+          "avgSentiment": 0.511
         },
         {
           "theme": "Public safety & police",
@@ -32012,13 +32336,13 @@
         },
         {
           "theme": "Water & sewer districts",
-          "count": 43,
-          "avgSentiment": 0.585
+          "count": 44,
+          "avgSentiment": 0.574
         },
         {
           "theme": "Parks, recreation & trails",
-          "count": 39,
-          "avgSentiment": 0.587
+          "count": 40,
+          "avgSentiment": 0.575
         },
         {
           "theme": "Ceremonial & community",
@@ -32072,8 +32396,8 @@
         },
         {
           "theme": "Ethics & governance",
-          "count": 6,
-          "avgSentiment": 0.367
+          "count": 7,
+          "avgSentiment": 0.286
         },
         {
           "theme": "Development agreements & land deals",
@@ -33881,6 +34205,21 @@
           "caseId": "nys-route-22-and-route-120",
           "count": 1,
           "avgSentiment": 0.4
+        },
+        {
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "count": 1,
+          "avgSentiment": 0.43
+        },
+        {
+          "caseId": "food",
+          "count": 1,
+          "avgSentiment": -0.2
+        },
+        {
+          "caseId": "winkler-park-ibm-park-lombardi-park",
+          "count": 1,
+          "avgSentiment": 0.1
         }
       ],
       "evidence": [
@@ -39117,38 +39456,78 @@
           ],
           "evidence": "Preface: 'I personally think that it's a worthwhile endeavor to allow the applicant to go through the process and find out all the information,' 'this is really, I think, a fact-finding exercise,' and the board could 'return the petition' with 'no recourse or \u2026 no remedy for the applicant'. Item 4B: Presiding. 'I think to return it now prior to us being able to hear all the information would not be the prudent thing to do \u2026 we would be making a decision with a very myopic view,' and 'I know I would be the first one to hand back the petition' if sensitive resources were in jeopardy. To Terry Loveman ('I took the time, Joe'): 'unless the applicant can find ways to resolve those concerns and ensure us that none of that is occurring, we're not going to approve it.' On benefit: 'I am of the opinion that it's worthwhile, even though it's gonna take time.' A resident addressed him as 'the supervisor' about his DEP remarks. Roll calls: 'Supervisor Rundi. Yes' (item 6), 'Supervisor Randy? Yes' (item 7), 'Supervisor Andy. No' (return the petition).",
           "confidence": "high"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "2027 Town and Special District Preliminary Budgets \u2014 Public Hearing Opened, Heard and Adjourned to December 9, 2026",
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "stance": "defends the 5.71% increase as part of a deliberate glide path off fund balance and budgeting to actual; calls the 2% cap arbitrary; kept public comment from becoming a back-and-forth; defends the budget as lean and the town as financially healthy; open to cuts if the board collectively agrees; favours bringing finance volunteers in for the town hall borrowing",
+          "score": 0.43,
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects",
+            "Open government & procedure"
+          ],
+          "evidence": "Presiding: 'So again it's public comment time.' and, when addressed 'Mr. Supervisor.', 'You can call me Joe, but that's your.' Answering Parletta after 'I could have our finance officer answer it.': 'we plugged in a 5% increase for health benefits.', 'is to budget more accurately to actual and try to wean ourselves off of the dependency of the use of the excessive use of fund balance.', 'And we're working into a glide path of weaning ourselves off of using fund balance.' and 'over and above what the arbitrary tax cap of 2% on the overall levy is mandated by, well, recommended by the state.' Schiliro later refers back to 'what the supervisor said earlier was budget to actual'. Later: Presiding. Said 'I took office in January of 24' and that it was 'a collective decision on the entire board at that time' not to continue the Budget and Finance Committee; 'We were budgeting for 34 police officers and only had on the payroll 26.' Told the public 'we are not bound to approve this budget' and that 'Preliminary does not mean final.' Cited levy growth 'Fourth lowest of 15 Westchester towns', called the budget 'for the most part lean', and said 'No one is out there spending money foolishly.' On the town hall borrowing: 'I think we should look to re-institute some of the folks' and named 'Larry Ruisi's'. Moved the adjournment ('So we're going to adjourn the public hearing until December 9th.').",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "Letter from Bonnie Fayette (as rendered) on Expanding the Food-Scrap Programme; Disclosure of Surplus Bin Sale to the Town of Harrison",
+          "caseId": "food",
+          "stance": "supports the grant; objected that the board was not told of the bin sale and that information is not shared equally",
+          "score": -0.2,
+          "themes": [
+            "Ethics & governance",
+            "Grants & capital projects"
+          ],
+          "evidence": "Addressed as 'Joe' ('Joe, let me address.', 'Joe, I'll come to you next time in town.'): 'Rather than a unilateral decision' / 'to sell something that's a town property,' 'I'm not objecting to selling them.' 'It should have gone to Kevin Hay and Kevin Hay should have made us aware' and 'at times individuals go to different department heads extract information discuss things with someone'.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "Pickleball Courts \u2014 Parks and Recreation Advisory Board Options (Winkler Park Conversion, IBM Park Platform Courts) Referred to a Work Session",
+          "caseId": "winkler-park-ibm-park-lombardi-park",
+          "stance": "Winkler conversion possible but must be bid and neighbours informed; IBM Park platform-court site doubtful (deed restriction, well infrastructure)",
+          "score": 0.1,
+          "themes": [
+            "Parks, recreation & trails",
+            "Water & sewer districts"
+          ],
+          "evidence": "Addressed by the liaison: 'sorry to interrupt you Joe,'. He said 'it was determined legally that we would have to put that out to bid', 'eliminate the two platform tennis courts at IBM Park.', 'there may be a deed restriction', 'the well system that's there.' and 'I think Barbara raises a good point.' Also 'We would schedule a work session, not Kevin.'",
+          "confidence": "high"
         }
       ]
     },
     {
       "member": "Barbara DiGiacinto",
-      "totalPositions": 336,
+      "totalPositions": 339,
       "avgSentiment": 0.217,
       "confidenceMix": {
         "low": 2,
-        "high": 233,
-        "medium": 101
+        "high": 234,
+        "medium": 103
       },
       "byTheme": [
         {
           "theme": "Budget, taxes & finance",
-          "count": 65,
-          "avgSentiment": 0.091
+          "count": 66,
+          "avgSentiment": 0.088
         },
         {
           "theme": "Open government & procedure",
-          "count": 56,
-          "avgSentiment": 0.001
+          "count": 57,
+          "avgSentiment": -0.001
+        },
+        {
+          "theme": "Resident concerns & quality of life",
+          "count": 49,
+          "avgSentiment": 0.116
         },
         {
           "theme": "Other",
           "count": 48,
           "avgSentiment": 0.077
-        },
-        {
-          "theme": "Resident concerns & quality of life",
-          "count": 48,
-          "avgSentiment": 0.119
         },
         {
           "theme": "Land use, zoning & special permits",
@@ -39157,8 +39536,8 @@
         },
         {
           "theme": "Public safety & police",
-          "count": 30,
-          "avgSentiment": 0.318
+          "count": 31,
+          "avgSentiment": 0.305
         },
         {
           "theme": "Legal, litigation & contracts",
@@ -39166,29 +39545,29 @@
           "avgSentiment": 0.03
         },
         {
+          "theme": "Parks, recreation & trails",
+          "count": 27,
+          "avgSentiment": 0.348
+        },
+        {
+          "theme": "Personnel & appointments",
+          "count": 27,
+          "avgSentiment": 0.309
+        },
+        {
           "theme": "Ceremonial & community",
           "count": 26,
           "avgSentiment": 0.652
         },
         {
-          "theme": "Parks, recreation & trails",
-          "count": 26,
-          "avgSentiment": 0.362
-        },
-        {
-          "theme": "Personnel & appointments",
-          "count": 26,
-          "avgSentiment": 0.325
-        },
-        {
           "theme": "Grants & capital projects",
-          "count": 25,
-          "avgSentiment": 0.228
+          "count": 26,
+          "avgSentiment": 0.238
         },
         {
           "theme": "Environment & conservation",
-          "count": 23,
-          "avgSentiment": 0.143
+          "count": 24,
+          "avgSentiment": 0.158
         },
         {
           "theme": "Water & sewer districts",
@@ -40684,6 +41063,21 @@
         },
         {
           "caseId": "35-bedford-banksville-road",
+          "count": 1,
+          "avgSentiment": 0.0
+        },
+        {
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "count": 1,
+          "avgSentiment": -0.1
+        },
+        {
+          "caseId": "food",
+          "count": 1,
+          "avgSentiment": 0.5
+        },
+        {
+          "caseId": "winkler-park-ibm-park-lombardi-park",
           "count": 1,
           "avgSentiment": 0.0
         }
@@ -44912,15 +45306,56 @@
           ],
           "evidence": "'I've been on the town board since 2014 \u2026 I have never seen county planning say this application is not appropriate for this site,' and 'when I have chosen to say I would like to return the petition tonight, it's because I don't see any benefit to this site, to North White Plains, to North Castle period.' Councilman Berra then referred back to it ('Barbara's saying these letters are kind of the most critical'). Roll calls: 'Councilman DiGicinto. Aye' on receiving the scoping document; on item 7 the one 'No' called as 'Councilor Mende, did you send down?' (as rendered) is hers by elimination.",
           "confidence": "medium"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "2027 Town and Special District Preliminary Budgets \u2014 Public Hearing Opened, Heard and Adjourned to December 9, 2026",
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "stance": "wants the board to scrutinise new and replacement positions and to send the budget binder to the Budget and Finance Committee before December; credits the department heads with lean requests and Abbas with the NY CLASS investment gains",
+          "score": -0.1,
+          "themes": [
+            "Budget, taxes & finance",
+            "Open government & procedure",
+            "Personnel & appointments",
+            "Public safety & police"
+          ],
+          "evidence": "Given the floor ('Is there any board members? Barbara.') and addressing the supervisor ('I also, Joe, you said that when you first came on the board, how many police officers'): 'right now we have 33 police officers', 'One way that we can tighten our belts is to really look very carefully at new hires', 'We need needs, not wants', 'I didn't see a lot of wants I saw needs', and 'I'd love this binder to go to budget and finance.' The earlier line 'I did not this year ask for budget and finance because I have not gotten any support in the past' (01:31:07) is in her voice by content but has no name cue.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "Letter from Bonnie Fayette (as rendered) on Expanding the Food-Scrap Programme; Disclosure of Surplus Bin Sale to the Town of Harrison",
+          "caseId": "food",
+          "stance": "supports expansion but wants process, with Parks and Recreation and the library consulted, and the grant pursued",
+          "score": 0.5,
+          "themes": [
+            "Environment & conservation",
+            "Grants & capital projects"
+          ],
+          "evidence": "'I think it's a great idea.' and 'I think we need to talk to Parks and Recs.' A later speaker refers back: 'Because like what Barbara's saying, I think is the concern would be,' and the supervisor: 'I believe that it was Barbara who seconded it.'",
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "Pickleball Courts \u2014 Parks and Recreation Advisory Board Options (Winkler Park Conversion, IBM Park Platform Courts) Referred to a Work Session",
+          "caseId": "winkler-park-ibm-park-lombardi-park",
+          "stance": "neighbours near Winkler Park must be involved this time",
+          "score": 0.0,
+          "themes": [
+            "Parks, recreation & trails",
+            "Resident concerns & quality of life"
+          ],
+          "evidence": "'I agree 100% this time.' 'Because those homes are a lot closer.' The supervisor then says 'I think Barbara raises a good point.' and restates the inform-the-neighbours point.",
+          "confidence": "medium"
         }
       ]
     },
     {
       "member": "Jose Berra",
-      "totalPositions": 304,
-      "avgSentiment": 0.221,
+      "totalPositions": 305,
+      "avgSentiment": 0.219,
       "confidenceMix": {
-        "high": 195,
+        "high": 196,
         "medium": 96,
         "low": 13
       },
@@ -44932,8 +45367,8 @@
         },
         {
           "theme": "Budget, taxes & finance",
-          "count": 64,
-          "avgSentiment": 0.086
+          "count": 65,
+          "avgSentiment": 0.077
         },
         {
           "theme": "Legal, litigation & contracts",
@@ -44957,8 +45392,8 @@
         },
         {
           "theme": "Grants & capital projects",
-          "count": 30,
-          "avgSentiment": 0.285
+          "count": 31,
+          "avgSentiment": 0.26
         },
         {
           "theme": "Parks, recreation & trails",
@@ -44976,14 +45411,14 @@
           "avgSentiment": 0.347
         },
         {
+          "theme": "Roads, highway & sidewalks",
+          "count": 16,
+          "avgSentiment": 0.147
+        },
+        {
           "theme": "Water & sewer districts",
           "count": 16,
           "avgSentiment": 0.475
-        },
-        {
-          "theme": "Roads, highway & sidewalks",
-          "count": 15,
-          "avgSentiment": 0.19
         },
         {
           "theme": "Local laws & legislation",
@@ -46331,6 +46766,11 @@
           "caseId": "fund-balance-transfer-for-conservation-of-historic-town-records",
           "count": 1,
           "avgSentiment": 0.3
+        },
+        {
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "count": 1,
+          "avgSentiment": -0.5
         }
       ],
       "evidence": [
@@ -50171,6 +50611,20 @@
             "Open government & procedure"
           ],
           "evidence": "Roll calls: 'Councilman Bearer. No. I wouldn't move ahead with that' (item 6); 'Councilman, I'm better. I think we have tons of information here that first concluded that we should return to petition. So I would say no' (item 7); 'Councilman Vera. I' (return the petition). In debate: 'I don't think the EIS process is appropriate when there's something that is this off the mark,' 'when you go down that route, it gains momentum,' and one more officer at '$250,000 \u2026 It's a 1% tax increase.' Councilman Hussain answered him directly ('I actually fully agree, Jose, on most of your points'). His earlier request to receive the scoping document separately ('that implies that we're moving forward') is credited from the following 'to Jose's point'.",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "2027 Town and Special District Preliminary Budgets \u2014 Public Hearing Opened, Heard and Adjourned to December 9, 2026",
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "stance": "says past fund-balance appropriations were not actually used, warns that bonding the pool and parking district adds about 1.5% to the tax, and calls the increases unsustainable; wants more spending discipline",
+          "score": -0.5,
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects",
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "Called on by the supervisor ('Jose, do you have anything you want to go ahead?'), then 'I was thanking Abbas profusely for all the work he did first.' 'we didn't actually use that fund balance to keep the taxes low'; 'that's going to be debt service over roughly $350,000 for 15 years, which amounts to roughly 1.5% additional property tax for the town'; 'They're also our shareholders'; 'These increases are unsustainable'; handed off with 'Sunny is chomping at the bit here.'",
           "confidence": "high"
         }
       ]
@@ -59272,14 +59726,24 @@
     },
     {
       "member": "Sonny Vataj",
-      "totalPositions": 33,
-      "avgSentiment": 0.335,
+      "totalPositions": 34,
+      "avgSentiment": 0.307,
       "confidenceMix": {
-        "high": 16,
+        "high": 17,
         "low": 2,
         "medium": 15
       },
       "byTheme": [
+        {
+          "theme": "Personnel & appointments",
+          "count": 6,
+          "avgSentiment": 0.383
+        },
+        {
+          "theme": "Budget, taxes & finance",
+          "count": 5,
+          "avgSentiment": -0.01
+        },
         {
           "theme": "Open government & procedure",
           "count": 5,
@@ -59289,16 +59753,6 @@
           "theme": "Parks, recreation & trails",
           "count": 5,
           "avgSentiment": 0.02
-        },
-        {
-          "theme": "Personnel & appointments",
-          "count": 5,
-          "avgSentiment": 0.58
-        },
-        {
-          "theme": "Budget, taxes & finance",
-          "count": 4,
-          "avgSentiment": 0.138
         },
         {
           "theme": "Land use, zoning & special permits",
@@ -59311,24 +59765,24 @@
           "avgSentiment": 0.325
         },
         {
+          "theme": "Public safety & police",
+          "count": 4,
+          "avgSentiment": 0.0
+        },
+        {
           "theme": "Local laws & legislation",
           "count": 3,
           "avgSentiment": 0.467
         },
         {
-          "theme": "Public safety & police",
+          "theme": "Roads, highway & sidewalks",
           "count": 3,
-          "avgSentiment": 0.2
+          "avgSentiment": 0.133
         },
         {
           "theme": "Water & sewer districts",
           "count": 3,
           "avgSentiment": 0.667
-        },
-        {
-          "theme": "Roads, highway & sidewalks",
-          "count": 2,
-          "avgSentiment": 0.5
         },
         {
           "theme": "Technology & communications",
@@ -59521,6 +59975,11 @@
           "caseId": "12-maple-avenue-armonk",
           "count": 1,
           "avgSentiment": 0.1
+        },
+        {
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "count": 1,
+          "avgSentiment": -0.6
         }
       ],
       "evidence": [
@@ -59931,6 +60390,21 @@
             "Resident concerns & quality of life"
           ],
           "evidence": "Given the floor ('Wait, I think Sonny had a question'): 'After you've heard this body of public that really, we work for them. What do you have to say? \u2026 if you don't have these concerns in mind, then it's a very easy. You're going to lose this vote,' and 'I could tell you right now and this thing is gonna go nowhere.' The supervisor confirmed: 'it's sunny was the one that asked that if the applicant wanted to get up.' Earlier a member said 'So I think Sonny's idea is a good one to listen to the public and the applicant too.' Roll calls: 'Councilman Vittage. Aye' (item 6), 'Councilman, Vittage? Yes' (item 7), 'Councilman Visage. No' (return the petition).",
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-18",
+          "case": "2027 Town and Special District Preliminary Budgets \u2014 Public Hearing Opened, Heard and Adjourned to December 9, 2026",
+          "caseId": "2027-town-and-special-district-preliminary-budgets",
+          "stance": "opposes the 5.7% increase; says about $900,000 (4%) can be cut by freezing new hires, cutting overtime and vehicles without hurting employees; dismissive of reviving committees",
+          "score": -0.6,
+          "themes": [
+            "Budget, taxes & finance",
+            "Personnel & appointments",
+            "Public safety & police",
+            "Roads, highway & sidewalks"
+          ],
+          "evidence": "Handed the floor by Berra ('Sunny is chomping at the bit here') and refers to himself ('our snow is no longer going to get cleared because Sunny cut the budget'): 'I'm not okay with maybe raising that 5.7% number. I could probably do it in 2% just by simply freezing the new higher ease, cutting down the overtime'; 'I think I could cut 900,000 out of this budget, which is 4% of this budget without hurting anyone'; 'we had committees, we don't have committees, we don't need the committees'. Earlier, a member who said 'I'm only here 10 months, 11 months' (Vataj's 2026 tenure) said 'I've never been approached by any of the board members here, nor was I ever told that there was a budget committee'; that remark is credited to him by tenure only.",
           "confidence": "high"
         }
       ]
@@ -108502,6 +108976,627 @@
       ],
       "attributionCoverage": "good",
       "attributionNote": "Lines 1\u20132240 (00:01:28\u201302:07:09). This is an unverified machine (ASR) transcript with no speaker labels. It is not the official minutes. The presiding voice is Supervisor Joseph Rende. That voice runs the agenda, gives the item-4B preface, answers the Route 22 question and poses the grandparent scenario, which a member then calls 'Joe's question'. Barbara DiGiacinto is credited at high confidence on the stable: the supervisor gave her the floor ('I don't know, Barbara, you want to go first? Sure.') and her tree and horse-show questions follow directly. Saleem Hussain is credited at high confidence for his closing comment against looking into owner-change limits: the supervisor summarised it as 'But, Celine said no' and another member said 'No, I agree with Celine'; 'Celine' is an established ASR rendering of Saleem. The earlier member who began 'Okay, so I have a few things' (01:27:12) asked about the tree plan, usable acreage, inspection items and lessons. That member opens the later comment with 'I do have one last comment' and speaks in the same style, so is probably Hussain, but is not credited for lack of a direct cue. Left unattributed: the four members who spoke during the item-4B preface (including the one who said 'I would not oppose returning the petition' and the one who raised the entry point, fire department and traffic); the member introduced by the garbled 'Close eye' who asked about retired horses, shared ownership and the Red House; the member who visited the site 'as a fireman' and was skeptical of the commercial element (no name cue, though the fire-service reference recurs); the member who asked 'Just on Joe's question' about competition-grade owners; the member who asked counsel ('Roland') about precedent; the member who recommended letters to homes within 500 feet; the member who agreed with 'Celine'; and the member who urged 'tightening our belts' on the 2027 budget. Kevin Hay's only contribution is a one-word confirmation after 'Look at that, Kevin.' The voice that raised the tax-cap hearing date and the one that warned about the December 20 adoption deadline are not identified. Movers and seconders are not credited, and all votes were voice votes ('Aye'); no roll call was taken. ASR renderings resolved: 'Rowan/Roland/role and' \u2192 Town Attorney Roland Baroni ('Mr. Baroni'); 'Celine' \u2192 Saleem Hussain; 'sunny pitaage' \u2192 Councilman Sonny Vataj; 'Alison/Allison' \u2192 Allison Simon; 'Kanye's form' \u2192 Conyers Farm; 'Bedford Bank School Road/Bedford Bank Hill Road/Bedford Bank, Silver' \u2192 Bedford Banksville Road; 'Armunk/Armock/our monk' \u2192 Armonk; 'Arzley' \u2192 Ardsley; '555-40' \u2192 \u00a7 355-40 (the only plausible chapter); 'in a question facility' \u2192 equestrian facility; 'Lindenman/Lindemann' farm kept as rendered. Not reconstructed: the applicant LLC ('ASG NW Enterprises'); the attorney's and firm's spelling ('Wexian/Wexting/Wexstein', 'Hockerman, Turutella/Tortella/Tortorilla'); 'Lauren Pinkis'; 'Rose Hirsch'; 'Jim Best'; 'Jerry Barrett/Bartlett'; 'Eric Hasbrok'; 'Castellan horse farm'; 'Michael Gackavan'; 'Mariana Panova'; the gallery 'Tilly A. Modern'; 'Cory/Corey' (who reminded counsel about re-noticing); and 'Ed', whose surname was not given. This note covers 02:06:44\u201304:23:18. The presiding voice is Supervisor Joseph Rende. He is addressed as 'Joe' by a resident and as 'the supervisor' by another, and is called in roll calls as 'Supervisor Rundi/Randy/Andy'. Roll calls were taken by name on three questions: receiving the draft scoping document (item 6), noticing the scoping session (item 7) and returning the petition. Individual votes are credited only from those roll calls. On item 6 all five names are clear. On item 7 the one 'No' called as 'Councilor Mende, did you send down?' (as rendered) is credited to Barbara DiGiacinto by elimination. On the return motion the clerk's call to her ('Councilman, did you send it out?') runs into 'So a vote of yes would be to return the petition. I,'. Her yes is therefore inferred from that and from her stated wish to return the petition. The clerk did not announce a result. Jose Berra: high. His roll-call explanations name him ('Councilman Bearer', 'Councilman, I'm better', 'Councilman Vera'), and Councilman Hussain answered his long speech directly ('I actually fully agree, Jose'). His request to receive the scoping document separately is folded in via the next speaker's 'to Jose's point'. Barbara DiGiacinto: medium. Her 'on the town board since 2014' speech is credited from Berra's immediate back-reference ('Barbara's saying these letters are kind of the most critical'). Saleem Hussain: medium. The scoping-as-forum remarks are credited from the supervisor's 'Councilman Saleem probably said it best' and Berra's 'a different view of the EIS process than Celine does'. The later reply to 'Jose' uses the same voice and argument. Sonny Vataj: high. He was given the floor ('I think Sonny had a question') and the supervisor confirmed it ('it's sunny was the one that asked'). The earlier request to hear the public before voting is credited to him through 'So I think Sonny's idea is a good one'. Left unattributed for lack of a name cue: the member who asked counsel whether receiving the scoping document was a vote to move forward; the member who said a member opposed to the residential rezoning 'would not be interested in the scope in document'; the member who asked whether agency concerns would be addressed and whether the project could be downsized (it follows 'Sonny wants to also', but the turn boundary is unclear); the member who called Vataj's idea good and said the public might call it 'a non-starter'; the member who objected to the residents' raise-your-hand question and said 'I'm definitely not for against this project yet' (the content matches Hussain's position, but there is no cue); the member who asked counsel about a motion to return, and the movers and seconders of every motion; the voice that said 'Barbara's meeting is not a town board thing' and the one that called it 'an informal gathering'; the member who asked about the Armonk Close refund; and both liaison speakers. The library-website speaker matches the library liaison role that earlier 2026 recordings tie to Hussain, and the John Fava / tree-code speaker is male, but neither is credited. The 02:14 statement that scoping 'is not the hearing on the EIS' is treated as a staff voice, as are the answers on alternatives. The answer that the applicant pays all review fees through escrow is not attributed. ASR renderings resolved: 'Rundi/Randy/Andy' \u2192 Rende; 'Bearer/I'm better/Vera' \u2192 Berra; 'DiGicinto' and 'Mende' (by elimination) \u2192 DiGiacinto; 'Celine'/'Saleem' \u2192 Hussain; 'Vittage/Visage/sunny' \u2192 Sonny Vataj; 'Cran Lake Berry Academic and Community Facility Zoning District' and 'North Sports Complex' \u2192 the STAC district; 'secret' \u2192 SEQRA; 'positive definition/direction' \u2192 positive declaration; 'FBIIUS' \u2192 FEIS; 'Kensuko/Kenzico/Cansico/Cenzico/Pensacao' \u2192 Kensico; 'Crownbury/cranberry lake' \u2192 Cranberry Lake Preserve; 'armock/armunk' \u2192 Armonk; 'Northway Plains/North Lake Plains/Norway place' \u2192 North White Plains; 'Robert Millow' \u2192 Rob Melillo; 'trainer' \u2192 Matt Traynor; 'Jamie norisam' \u2192 Jamie Norris; 'Reagan Huffnagle' \u2192 Chief Reagan Huffnagle (each only read from the scoping document's distribution list); 'John Fave' \u2192 John Fava. Names kept as rendered and not reconstructed: Stephen Felvos, Cory, Terry Loveman, Malenka, Frank Malasha, Marilyn Morrow, Gladys Veda, Deborah Trope, William McClure, Gigi, Annie, Doug Mancis, Kerry K. Zack, John Atdias, Josephine, Emily Levy-Smith."
+    },
+    {
+      "date": "2026-11-18",
+      "meetingSummary": "A meeting of just under four hours (about 00:00:12 to 03:57:44), most of it on the 2027 budget. The recording opens at 00:00:12 with the supervisor saying the board had met at 5:30 p.m. and gone into executive session on personnel, advice of counsel and real estate. The public meeting was reconvened by voice vote and the Pledge was said. The supervisor then asked for a moment of silence for a young life lost in a tragic accident the past week and for the families of three injured children. Under community announcements, Town Clerk Allison Simon first introduced Mason Blum (as rendered), a Byram Hills High School sophomore. He gave a 'moment in history' for the North Castle Historical Society on the town's Revolutionary War markers, refurbished by Tom Rice's 250th steering committee project. The supervisor praised the talk and proposed Miller Hill-style signage and benches at the Wright's Mill (Andr\u00e9) site. The clerk announced a mobile passport unit (Saturday, December 5, new passports only), the Frosty Parade (Sunday, December 6), the North White Plains Volunteer Fire Department children's Christmas party (December 13), the winter overnight parking ban, and E-News and Nixle sign-ups. In opening public comment, Ed (surname not clear) promoted Frosty parade entries and the ecumenical Thanksgiving service at St. Patrick's the next night. Jacqueline Paley-No-Gattigan (as rendered) of the Fairways Initiative asked the town to require golf courses near schools to publish their chemical application logs, to build its own drinking-water test and to remove the golf-course exemption from neighbour spray notification. Stephane Martinovich (Meadow Hill Place) thanked the board for the pool renovation and urged renewed consideration of the long-planned Wampus Brook walking path from downtown Armonk to the pool, possibly built in phases in-house or with leftover pool funds. The board did not respond to these speakers beyond thanks. At 00:30:56 the supervisor opened the public hearing on the 2027 town and special district preliminary budgets (voice vote). Director of Finance Abbas Sura presented it. Appropriations are about $46.5\u201346.6 million, up about 6.29%, with a $28.3 million levy. The town-wide rate rises 5.71%, about $206 on a $1.2 million median home, and he said the levy will exceed the state tax cap by about $1.7 million. Personnel and benefits are about 65% of costs, and the IBM PILOT is in its last year. Ed Lubb (as rendered; North White Plains) established that, without the $1.3 million of general-fund balance, the increase would be almost 12%. He called the budget almost three times the 2% cap and urged a budget built from last year's levy plus 2%, an end to using fund balance for operations, a temporary hiring freeze, and caution on town hall borrowing. The supervisor twice cut off his back-and-forth questioning. Neil Bauman (Armonk; 40 years in municipal bonds) said using non-recurring fund balance for recurring costs is unsustainable. He called the '15%' fund-balance ceiling a fallacy, said a high balance does not hurt the bond rating, and asked for a seven-part published schedule of fund-balance use. Robert Parletta (as rendered) asked what drove the jump from zero and 4-point-something to 5.7%. The supervisor and the finance director cited health benefits (budgeted at 5%, actual 9%), budgeting to actual, and a 'glide path' off fund balance. Bonnie Fine (as rendered; North White Plains) asked how the fund balance was built and whether the board backed the 'stadium' project for revenue. A board voice said it is a sports training and educational facility on untaxed land, not a stadium. She urged belt-tightening. Betty San Chorico (as rendered; North White Plains) saw a pattern of exceeding the cap, suggested employees pay more toward benefits, disputed an email's $200 example, and warned that no town hall costs are yet in the figures. Former Supervisor Mike Schiliro (rendered 'Mike Shaliro') confirmed about $2.2 million of fund balance was budgeted for 2026, with a near-level variance projected. He asked what role the Budget and Finance Committee played and was told 'It didn't'. One member said they had requested it without the board's support. Former supervisor Mike Schiliro ('Mike Shaliro', as rendered) finished his comment. He asked that the Budget and Finance Committee review this or future budgets, as it had when he served, and named Larry Ruisi (rendered 'Larry Ramese') as a valued member. A member said the committee had been used only selectively under Schiliro and that he had not needed its advice this year. A member who said 'I'm only here 10 months, 11 months' said no one had told him there was a budget committee. Supervisor Rende said that when he took office in January 2024 the board decided collectively not to continue the committee. He said the fund balance had grown to 75\u201380% of the operating budget partly because the town budgeted for 34 police officers while 26 were on the payroll, and partly because of mortgage-tax windfalls. He said a 10\u201315% fund balance is wise practice, that this budget still leaves it at 'almost 30%' of the operating budget, and that the town keeps a AAA bond rating. Neil Bauman returned to read unrestricted fund balance figures: 12.9 million in 2020 rising to 21 million in 2024, then 12.9 million in 2025 after spending on the turf fields (4.5 million per Abbas) and the pool. A Zoom caller, Peter Jack (as rendered), said a 6% increase was harmful to families on a strict budget and urged belt-tightening. The supervisor said Zoom chat questions would not be taken. Councilwoman DiGiacinto asked Abbas Sura to explain the NY CLASS investment co-op he had recommended. He said it had earned roughly 80 to 100 basis points more than the banks. She said the department now has 33 police officers and asked the board to look hard at new and replacement hires. She listed a vacant assistant court clerk, a proposed full-time HR position, a finance title change (which Abbas said adds no headcount), the assessor's request for a full-time assistant (not in the budget), two detective promotions, two senior rec leader positions and a library request. She said the department heads had submitted 'needs, not wants', and she asked that the budget binder go to the Budget and Finance Committee before the hearing reconvenes in December. Councilman Berra said the 2022 budget appropriated about $1.3 million of fund balance for a 0% increase, yet fund equity rose from about $14.9 million to $17.6 million. Abbas said this was partly right, because surplus revenue was being passed through. Berra also said bonding about $4 million for the pool and parking district at 3.5% over 15 years would add roughly $350,000 a year in debt service, about 1.5% on the town tax. He cited paving spending well over budget, partly from leftover and bond money, and called the increases 'unsustainable'. The supervisor said the vote was not that night and the budget had to pass by December 31. He said the tax-cap override must be in place before the budget is adopted, which is the next agenda item. Councilman Vataj said he could cut about $900,000 (4%) and get close to 2% by freezing new hires, cutting overtime and dropping vehicles. He pointed to fewer trucks and workers once departments merge, and he predicted a double-digit increase ahead. A fifth member, not identified by name in the recording, asked Abbas for three things before adoption: a plain-language breakdown of the $2.82 million increase by category; the fund-balance draw split into one-time and recurring costs; and a multi-year list of large capital items. He said the Budget and Finance Committee could help with long-term planning. Water and sewer superintendent Sal Mesiti explained that the general fund lent the Water District 4 well project money internally, avoiding $80,000\u2013$90,000 in bond costs, and the district is repaying it with interest. The supervisor put the loan at $3.2 million. In closing, the supervisor cited state comptroller data that the town's levy growth over 2016\u20132026 was fourth lowest of 15 Westchester towns. He said health insurance rose about 9.4% against a 5% assumption, and he explained the roughly half-million-dollar pool spending in 2024 to avoid a Health Department closure, which he said was to be recovered from the $5 million bond. He put the citizen task force's town hall estimate at $70\u201380 million, more than the town could absorb. The hearing was adjourned to December 9, 2026 by voice vote. Abbas offered to meet residents with questions, and the supervisor thanked the department heads who attended. After thanking the department heads who had stayed for the budget hearing, the supervisor opened public hearing B at 02:40:12, on a local law to override the tax levy limit under General Municipal Law 3-c, by voice vote. One resident, Betty Centuri of North White Plains (as rendered), asked whether the local law would be permanent. The town attorney said it authorises the board to exceed the cap for this year only and would be needed again each budget year. The supervisor urged adopting it that night while the full board was present. He noted that exceeding the cap needs 60% of the five-member board (three votes), that passing the law does not oblige the town to exceed the cap, and that the cap is 2% of the levy, not of the budget. Councilman Berra (called on as 'Jose') said he would rather hold off and keep pressure on the board to make the budget more manageable. Councilman Vataj argued that roughly $930,000 to $1.8 million could be found through cuts (overtime, a freeze on five new hires, benefits/health insurance and DPW changes he expects within four to six months) and said he was not in favour of the law yet. A sharp exchange over fund balance and how much must be cut followed. Another member saw no downside to waiting. The hearing was adjourned on a 4\u20131 roll call (DiGiacinto, Berra, Vataj and Hussain aye; Rende no); no return date was stated in the motion. The supervisor then asked Vataj for written specifics of his proposed cuts. Vataj warned that new facilities would bring double-digit increases, and the supervisor rejected this as scaring the public, saying a town hall or highway garage financed over 35 to 40 years would not. Under miscellaneous business, the November 4, 2026 minutes were received. Item A was tabled at the attorney's request (not described). Item B, a letter from Bonnie Fayette (as rendered) asking to expand the food-scrap programme to more drop-off sites, led to a long discussion: Councilwoman DiGiacinto (medium confidence) wanted Parks and Recreation and the library consulted, a state grant with a 25% match is to be put on the next agenda, and participation was said to be well below Scarsdale's 30%. It emerged that about 20 surplus kits (of some 800 bins bought to meet a minimum order) had been sold to the Town of Harrison. The supervisor objected that the board had not been told and that information is not shared equally among members; the sustainability committee representative addressed as 'Neil' apologised and the clerk confirmed the check had been received. The receipt vote itself was not clearly captured. Item C, a proposed local law amending \u00a7 355-21 (permitted accessory uses) to prohibit roosters, split the board. The supervisor said complaints bounce between the building department and police unanswered and that the police chief recommended a hens-only rule like most Westchester municipalities; Councilman Vataj said there had been three complaints in six years (confirmed by 'Rob') and that the town should deal with the owner instead of making laws. Four roll calls followed: receipt of the law and short EAF (DiGiacinto aye, Vataj no, Rende yes; Berra and Hussain not captured), and 3\u20132 votes (DiGiacinto, Hussain and Rende for; Berra and Vataj against) to declare intent to be lead agency, to circulate to agencies and to schedule a public hearing for December 9, 2026. Then, by voice vote: payment application 11 to Papitto Construction (rendered 'Pepito') for the Water District 4 well project; receipt of notices of new liquor licences for Aramark Services (188 King Street, guest house conference centres) and Kaku Armonk (as rendered, 454 Main Street); holiday displays at Wampus Brook Park and Miller Park; two highway department appointments, a Board of Ethics appointment and two Parks and Recreation Advisory Board appointments; and the consensus agenda. In liaison updates a member reported the library board wants to progress an MOU with the town and relayed the Parks and Recreation Advisory Board's September 2 pickleball options. The supervisor said cost estimates exist to convert a Winkler Park tennis court but the work must go to bid, and that replacing the IBM Park platform tennis courts may be blocked by a possible deed restriction and underground well infrastructure. After calls to notify neighbours, the liaison agreed to arrange a work session. Councilwoman DiGiacinto closed in memory of two long-time Armonk residents, and the meeting adjourned at about 03:57.",
+      "durationNote": "The public recording runs about 3 hours 58 minutes, from 00:00:12 to 03:57:44. Before that the meeting opened at 5:30 p.m. and went into executive session on personnel, advice of counsel and real estate. Supervisor Joseph Rende presided ('Supervisor Rendi/Randy/Reddy/Andy', 'Joe', as rendered). No opening roll call of members was taken. The clerk took five named roll calls, all after 03:00: adjourning hearing B (4\u20131, Rende no), receiving the rooster local law and short EAF (only DiGiacinto, Vataj and Rende audible), and three 3\u20132 rooster votes (lead-agency intent, circulation, scheduling a December 9, 2026 hearing). Every other action was a voice vote. Public hearing A, on the 2027 town and special district preliminary budgets, was opened at about 00:30:56 and adjourned to December 9, 2026 by voice vote at about 02:38:51. Its parts were the Director of Finance's presentation (about 00:32:03\u201300:39:59), public comment from 00:40:01, and the member round from about 01:41:17. Public hearing B, on a local law to override the tax levy limit, ran from 02:40:12 to the roll call ending at 03:00:50. Staff who spoke were Town Clerk Allison Simon, Director of Finance Abbas Sura, Water/Sewer Superintendent Sal Mesiti, the Town Attorney (not named in the recording), 'Rob' (apparently Building Inspector Rob Melillo) and a deputy or assistant town administrator (name rendered 'Ileana/Iliana/Eliana' and 'only on the Diaz'). Town Administrator Kevin Hay was said not to be present. Former Supervisor Michael Schiliro ('Mike Shaliro', as rendered) spoke as a resident during the budget hearing.",
+      "cases": [
+        {
+          "id": "community-announcements-nov-18-2026",
+          "name": "Community Announcements: Student History Moment on North Castle's Revolutionary War Markers, Mobile Passport Unit, Frosty Parade, Fire Department Christmas Party, Winter Parking Ban",
+          "address": "",
+          "applicationType": "announcements",
+          "applicant": "",
+          "status": "announced",
+          "summary": "Before the announcements the supervisor asked for a moment of silence for a young life lost in a tragic accident the past week and for the families of three injured children. Town Clerk Allison Simon introduced Mason Blum (also rendered 'Blom'), a Byram Hills High School sophomore (rendered 'Byron Hills'), to give a moment in history for the North Castle Historical Society, with thanks to Sharon Tomak (as rendered). He described the metal historical markers installed in 1976. For the nation's 250th, Historical Society member Tom Rice headed a Revolutionary War steering committee project that, with board help, refurbished four of the five markers and added a new sign at Mount Misery (rendered 'Mount Mistry/Mizzori'), installed October 1, 2025. The sites he covered were: Thomas Wright's Mill (rendered 'Thomas Ray's Mill'), the Andr\u00e9 monument site at High Street and Cox Avenue in Armonk where Major John Andr\u00e9 was held after his capture; the Miller House at 140 Virginia Road, North White Plains, associated with Washington, whose sign he understood had been removed; and Miller Hill, the last shots of the Battle of White Plains, with new signage, benches, a flagpole and plantings rededicated on November 8. He also covered the Middle Patent Rural Cemetery (rendered 'Middle Patton'), established 1743 and the burial place of at least 15 Revolutionary soldiers, and Smith's Tavern near North Greenwich Road and Route 22, bought by the Historical Society in 1977. The supervisor praised the student and recalled the board's visit to Miller Hill. He said he had asked Tom Rice about similar signage and perhaps benches at the Wright's Mill site, noted a recent cleanup of that area through private generosity (names rendered 'Jose Wilton' and 'Steve Dempsey') working with the Historical Society, and said the town has committed to maintain it. Two other members (not identified) thanked the student. The clerk then announced: a mobile passport unit in the Town Hall parking lot on Saturday, December 5, 10 a.m.\u20132 p.m., for new passports only, with renewals online; the annual Frosty Parade on Sunday, December 6, with activities from noon, the parade at 4 p.m. down Main Street and a lighting ceremony at 4:30 p.m.; and the North White Plains Volunteer Fire Department children's Christmas party at the firehouse on Sunday, December 13, 1\u20134 p.m. She also reminded residents that overnight parking is not allowed in the winter months so roads stay clear for snow vehicles, and urged sign-up for E-News and Nixle (rendered 'NYXL') alerts.",
+          "themes": [
+            "Other",
+            "Roads, highway & sidewalks"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.75,
+          "publicComment": "Mason Blum (as rendered), a Byram Hills High School sophomore, presented a moment in history on North Castle's Revolutionary War markers on behalf of the North Castle Historical Society.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "praised the student and the Historical Society; proposed Miller Hill-style signage and benches at the Wright's Mill site",
+              "score": 0.8,
+              "themes": [
+                "ceremonial & community",
+                "parks, recreation & trails"
+              ],
+              "evidence": "Presiding voice (thanked by the student as 'Supervisor Rendi'; hands the floor on with 'I don't know if any other board members have any comments.'): 'I thought it would be very appropriate that we look to do the same type of signage and maybe benches at the Wright's Mill site' and 'We've committed as a town that we're going to continue to maintain it and not see it get overgrown.'",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "public-comment-announcements-nov-18-2026",
+          "name": "Public Comment: Frosty Parade Entries and the Ecumenical Thanksgiving Service",
+          "address": "",
+          "applicationType": "public comment",
+          "applicant": "Resident 'Ed' (rendered 'Edward Deard' in the clerk's announcement)",
+          "status": "public comment; no action",
+          "summary": "The supervisor opened public comment by reminding the public that anyone wishing to speak on a public hearing could wait for that hearing, and called on Ed to speak about Frosty. Ed said community groups, individuals and committees can still sign up for the Frosty Parade with a float or costumes at armonkfrosty.com (rendered 'armockfrosty.com'). He also announced the Ecumenical Thanksgiving Service the next night (Thursday) at 7 p.m. at St. Patrick's, with four houses of worship and refreshments afterwards. He said it has run for over 50 years, and that Thanksgiving is 'not only it's about the American family, but it's about America as family.' A board voice (not identified) added that the service rotates among congregations; after some back-and-forth over whether last year's was at the Armenian Seminary or Congregation B'nai Israel (rendered 'Benet Azir'), the voice encouraged everyone to attend.",
+          "themes": [
+            "Other"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.8,
+          "publicComment": "Ed (the clerk rendered him 'Edward Deard') promoted Frosty Parade entries at armonkfrosty.com and the Ecumenical Thanksgiving Service at St. Patrick's the next night at 7 p.m.",
+          "memberPositions": []
+        },
+        {
+          "id": "golf-course-pesticide-disclosure-public-comment-2026",
+          "name": "Golf-Course Chemical Use Near Schools: Fairways Initiative Asks for Published Application Logs, a Town Drinking-Water Test and Neighbour Notification",
+          "address": "",
+          "applicationType": "public comment",
+          "applicant": "Jacqueline Paley-No-Gattigan (as rendered), founder of the Fairways Initiative",
+          "status": "public comment; no board response beyond thanks; no action",
+          "summary": "Jacqueline Paley-No-Gattigan (as rendered) said she lives in North Castle near the Bedford border, has daughters who are or will be in the district's schools, and founded the Fairways Initiative. She has been building a database and map of chemicals used on golf courses across Westchester and Fairfield counties. She said courses can use over 300,000 gallons of water a day in season, applying chemicals that reach wells. She said Whippoorwill Club (rendered 'Whipper World Club') is within three miles of seven Armonk schools, including Wampus Elementary, the middle school and Byram Hills High School. Brynwood, also called the Summit Club, has 14 schools within three miles, and one school's boundary touches it. Courses rendered 'Tarramack' and 'Standwich' are within three miles of one or more district schools. Schools test water on a state panel whose pesticide list dates from the 1990s and covers only six of the 87 chemicals she has tracked locally. Of those, 13 have been found in regional water, and only one is on any drinking-water panel. She said she was 'not claiming the water's unsafe', only that the test 'was not built from what is sprayed here'. She said Armonk application records are not yet public and that Brynwood's records are the subject of a records request to the town, due about November 20. She asked for three things. First, that every course within three miles of a school publish a complete application log (date, product, ingredient) that schools can link to. Second, that the town build its own drinking-water test from the chemicals actually used by golf courses and landscapers and run it several times a year, since timing after rain matters. Third, that the town remove, locally, the golf-course exemption from New York's neighbour spray-notification requirement, so courses notify neighbours and especially schools and preschools. She also said neighbours and schools should have a say before spraying. She described the chemicals as endocrine disruptors and carcinogens and cited a study linking living near golf courses with Parkinson's disease. The supervisor thanked her; no member responded.",
+          "themes": [
+            "Environment & conservation",
+            "Resident concerns & quality of life",
+            "Water & sewer districts"
+          ],
+          "overallSentiment": "negative",
+          "sentimentScore": -0.4,
+          "publicComment": "Jacqueline Paley-No-Gattigan (as rendered; Fairways Initiative) asked for published golf-course chemical application logs near schools, a town drinking-water test built from locally used chemicals, and removal of the golf-course exemption from neighbour spray notification.",
+          "memberPositions": []
+        },
+        {
+          "id": "wampus-brook-greenway-trail-grant",
+          "name": "Wampus Brook Trail / Downtown Armonk-to-Pool Walking Path: Public Comment Urging Renewed Consideration",
+          "address": "Wampus Brook Park to the town pool via the town well property on School Street, Armonk",
+          "applicationType": "public comment",
+          "applicant": "Stephane Martinovich (Meadow Hill Place, Armonk; as rendered)",
+          "status": "public comment; no board response beyond thanks; no action",
+          "summary": "Stephane Martinovich (as rendered) thanked the board for the pool renovation, noting the bid came in 'significantly lower than was authorized'. He asked the board to renew consideration of a walking path from downtown Armonk to the pool and traced its history. The 1996 comprehensive plan called for a path through central Armonk from Wampus Brook Park. A 2000 state grant of $156,000 (80% of cost) went unspent. The 2001 Main Street study recommended the connection. A 2007\u201308 Conservation Board and Town Engineer design from Wampus Brook Park to Sands Mill was shelved in 2013. A bike study mapped a 10-foot path along Cox Avenue and Greenway Road past the pool, and the 2018 comprehensive plan adopted it. In January 2025 'this very board' supported a Greenway grant for an eight-foot multi-use path with a wetland boardwalk from the Wampus Brook Park bridge across the town well property on School Street to the pool. He said the supervisor had said it would keep children off Route 128 (rendered 'Route 28'). That grant and a later sidewalk grant were not won. He said rough figures a year ago were about $1 million for School Street to Sands Mill, and that by waiting 26 years the town had added about $150,000 in cost. He said the town can afford it without a grant, citing an assigned fund balance of $13 million at the end of 2025. To cut cost he suggested a natural surface, the town's new maintenance department (which built the dog park), recycled asphalt millings from the highway department, and leftover pool funds, checked with bond counsel. He addressed 'Adam' (not confirmed which Adam) about clearing the overgrown utility-line corridor this winter so something is usable by spring. He asked for the town engineer's updated cost estimate and phased construction. Parks and Rec survey respondents rank trails among their top priorities, he said, and he cited Pound Ridge and the North County Trailway as models.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects",
+            "Parks, recreation & trails"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.3,
+          "publicComment": "Stephane Martinovich (as rendered; Meadow Hill Place, Armonk) praised the pool renovation and urged the board to build the long-planned Wampus Brook path to the pool in phases, cheaply and in-house if possible.",
+          "memberPositions": []
+        },
+        {
+          "id": "2027-tentative-budget-receipt-public-hearing-nov-18-2026",
+          "name": "2027 Town and Special District Preliminary Budgets \u2014 Public Hearing Opened, Heard and Adjourned to December 9, 2026",
+          "address": "",
+          "applicationType": "public hearing (budget)",
+          "applicant": "Town of North Castle",
+          "status": "public hearing kept open and adjourned to December 9, 2026 (the board's only December meeting) by voice vote; no roll call. Counsel advised no new notice is needed while the hearing stays open. Abbas Sura is to prepare a breakdown of the increase, a one-time vs recurring split of the fund-balance draw, and a long-term capital list. The tax-cap override (hearing B) is to be voted on before the budget is adopted.",
+          "summary": "The supervisor opened the hearing on 'the adoption of the 2027 town and special district preliminary budgets' by voice vote and gave the floor to the Finance Officer (rendered 'Mr. Basser'). Abbas Sura (rendered 'Abasura'), Director of Finance, said the process starts in summer with department heads and the town administrator, Kevin. He said the 2027 budget is about $46.5 million (later $46.6 million in total appropriations), about a 6.29% increase from 2026, mostly in the general fund. Highway is about 19%, and the independent water and sewer district funds about 13%. 2025 costs were higher because fund balance paid for the turf field, the pool and the parking lot next to the library. The 2026\u201327 increase is mainly personnel and benefit costs. On revenue: the tax levy is about 60.7% of revenue. Sales tax is budgeted up about $200,000 to about $3.6 million, and building department revenue at about $2.2\u20132.3 million. Rising interest rates raise interest income but may dampen mortgage activity. The Engel Burman (rendered 'Engel Berman') PILOT has, he believed, ended, next year is the last year of IBM's PILOT, and a contract is being negotiated. On costs: payroll and benefits are about 65% of the total, within a 60\u201380% municipal range. Operating costs cover trash, maintenance, vehicles, legal and engineering, insurance and IT. Capital equipment is moderate and is mainly paving funded from highway fund balance or earlier borrowing. After revenues and fund balance, the levy is $28.3 million, of which $24 million is the town-wide levy (general, highway and library). The rate rises 5.71%, about $206 for a median $1.2 million home, and 'We will be overriding the tax levy as set by the New York State by about 1.7 million.' Projects completed in 2025\u201326 included the community park turf fields, the Clover Road ballfield rehabilitation, Quarry Park improvements and the School Street water line extension. Also completed were the demolition of a building at Lombardi Park, roof replacements at the community centre (rendered 'Hurgenheim') and the highway mechanics garage, the dog park and a parking lot (rendered 'Verizon Parking Lot'). The pool improvement project and wastewater efficiency projects are expected in 2027. The supervisor asked speakers to keep to three to five minutes and address the board. Ed Lubb (as rendered; North White Plains; he said he is 93) got the finance director to confirm that $1.3 million of general fund balance was used. The director said each roughly $230,000 is about 1% of the levy, so the $1.3 million is worth about 5.65 points. Ed concluded this meant 'almost a 12% increase', which was answered 'Correct.' The supervisor interrupted, saying public comment is for comments to the board, not back-and-forth questioning. Ed protested ('to interrupt me isn't fair'), and the supervisor answered 'You can call me Joe.' A voice, apparently the finance director, added that a zero increase would need roughly $1.7 million more of fund balance. Ed reviewed the 2011 2% tax cap law and said a 60% supermajority means only three of five town board votes. He said 2026 was 4.81% (about 9% without fund balance) and called 5.71% 'almost three times over the tax cap limit' and a 'financial calamity'. He urged starting from the 2026 levy plus 2% and allocating that to departments, keeping fund balance for emergencies, imposing a temporary hiring freeze, and resisting 'small groups' pushing projects. He cited Councilman Berra's earlier estimate that a new police officer costs about a quarter of a million dollars a year at top pay, and warned that town hall bonds will hit future budgets and the cap. Neil Bauman (38-year Armonk resident, 40 years in municipal bonds) thanked the board and Abbas. He said he is not against a healthy fund balance, but that using non-recurring money for recurring bills is unsustainable ('the arithmetic becomes very, very ugly'). He said the '15%' reserve ceiling is 'a fallacy' taken from a December 2021 Comptroller presentation example. He said a high fund balance does not jeopardise the bond rating, while drawing it down for recurring costs can. He asked the board to publish, for recent budgets, beginning and ending unrestricted fund balance, the amount appropriated and actually used, capital and one-time uses, support for recurring costs, and the levy increase without fund balance. Robert Parletta (as rendered; about 50 years in Armonk) asked what caused the rise from zero and about 4% to 5.7%. The supervisor said the rate was zero for about five years by using larger amounts of fund balance. He said health benefits budgeted at a 5% increase actually rose 9%, and that the board is budgeting closer to actual on 'a glide path of weaning ourselves off of using fund balance'. That requires increases above 'the arbitrary tax cap of 2%'. The finance director said the 5.71% comes from using less fund balance (a little over $2 million last year; with it the rise would be about 2.5\u20132.7%) plus standard personnel and benefit increases. After further back-and-forth, which the supervisor stopped, a member (not identified) gave examples. Equipment costs have risen about 40% since 2019, vehicles need replacing, and police costs for events are not reimbursed, with overtime up. Parletta concluded it was 'a lot of little items', and that was agreed. Bonnie Fine (as rendered; North White Plains) was told it is incorrect that fund balance had only recently been drawn on. The finance director explained that one-time revenue surges had been returned to taxpayers to hold rates at zero: interest, a county sales tax change worth about $500,000, and building fees of $400,000\u2013500,000 from IBM and Citibank renovations. Those surges have ended, hence the glide path. She asked whether the board was looking at the 'stadium project' for revenue. A board voice said no, and that 'it's not a stadium project' but a sports training and educational facility on land not on the tax rolls. Any development there would, it hoped, be fully taxed. A board voice explained unforeseen 2026 costs: two failed roofs at about $200,000 each and a $20,000 air-conditioning unit, met from fund balance. The finance director said revenue running higher means the town will 'pretty much' meet its budget. Fine urged that budgets go back to departments for belt-tightening. Betty San Chorico (as rendered; North White Plains, 50+ years) agreed with Ed and Neil. She saw a pattern of exceeding the cap that 'can get out of control very easily' and was dismayed at the 5-versus-12% figures. She suggested employees pay a larger share of benefits, as she did at IBM and the town. She said an email by Mike Ferreri (as rendered) put the increase at about $200 on a $1.2 million home, while her own town taxes are about $4,800. She was told that her bill includes county and special district charges, and that the $200 (about $206) is the town portion only. She warned that none of the figures include 'one dollar' for renovating or rebuilding the town hall ('That's scary'). A board voice replied that such issues had been neglected for several years. Mike Schiliro (rendered 'Mike Shaliro'; 26-year resident; a former supervisor, cued by 'when I served' and 'when you were supervisor Mike') confirmed that about $2.2 million of fund balance ($1.3 million general, about $1 million highway) was budgeted for 2026, with the variance projected near level, around $100,000. Asked what role the Budget and Finance Committee had, a voice said 'It didn't' and that it had not been used for a few years. A member said 'I've requested it, but I did not get the support of the rest of the board.' Schiliro said it had been a useful private-sector resource. Another member said it had been used selectively under Schiliro and that they would be 'absolutely for utilizing it if there's a need.' The exchange continues past this range. Later: The second half of the hearing on the 2027 town and special district preliminary budgets, from about 01:28:30 to its adjournment at about 02:38:53. Former supervisor Mike Schiliro ('Mike Shaliro', as rendered) finished his comment. He asked that the Budget and Finance Committee review this or future budgets, as it had when he served, and named Larry Ruisi (rendered 'Larry Ramese') as a valued member. A member said the committee had been used only selectively under Schiliro and that he had not needed its advice this year. A member who said 'I'm only here 10 months, 11 months' said no one had told him there was a budget committee. Supervisor Rende said that when he took office in January 2024 the board decided collectively not to continue the committee. He said the fund balance had grown to 75\u201380% of the operating budget partly because the town budgeted for 34 police officers while 26 were on the payroll, and partly because of mortgage-tax windfalls. He said a 10\u201315% fund balance is wise practice, that this budget still leaves it at 'almost 30%' of the operating budget, and that the town keeps a AAA bond rating. Neil Bauman returned to read unrestricted fund balance figures: 12.9 million in 2020 rising to 21 million in 2024, then 12.9 million in 2025 after spending on the turf fields (4.5 million per Abbas) and the pool. A Zoom caller, Peter Jack (as rendered), said a 6% increase was harmful to families on a strict budget and urged belt-tightening. The supervisor said Zoom chat questions would not be taken. Councilwoman DiGiacinto asked Abbas Sura to explain the NY CLASS investment co-op he had recommended. He said it had earned roughly 80 to 100 basis points more than the banks. She said the department now has 33 police officers and asked the board to look hard at new and replacement hires. She listed a vacant assistant court clerk, a proposed full-time HR position, a finance title change (which Abbas said adds no headcount), the assessor's request for a full-time assistant (not in the budget), two detective promotions, two senior rec leader positions and a library request. She said the department heads had submitted 'needs, not wants', and she asked that the budget binder go to the Budget and Finance Committee before the hearing reconvenes in December. Councilman Berra said the 2022 budget appropriated about $1.3 million of fund balance for a 0% increase, yet fund equity rose from about $14.9 million to $17.6 million. Abbas said this was partly right, because surplus revenue was being passed through. Berra also said bonding about $4 million for the pool and parking district at 3.5% over 15 years would add roughly $350,000 a year in debt service, about 1.5% on the town tax. He cited paving spending well over budget, partly from leftover and bond money, and called the increases 'unsustainable'. The supervisor said the vote was not that night and the budget had to pass by December 31. He said the tax-cap override must be in place before the budget is adopted, which is the next agenda item. Councilman Vataj said he could cut about $900,000 (4%) and get close to 2% by freezing new hires, cutting overtime and dropping vehicles. He pointed to fewer trucks and workers once departments merge, and he predicted a double-digit increase ahead. A fifth member, not identified by name in the recording, asked Abbas for three things before adoption: a plain-language breakdown of the $2.82 million increase by category; the fund-balance draw split into one-time and recurring costs; and a multi-year list of large capital items. He said the Budget and Finance Committee could help with long-term planning. Water and sewer superintendent Sal Mesiti explained that the general fund lent the Water District 4 well project money internally, avoiding $80,000\u2013$90,000 in bond costs, and the district is repaying it with interest. The supervisor put the loan at $3.2 million. In closing, the supervisor cited state comptroller data that the town's levy growth over 2016\u20132026 was fourth lowest of 15 Westchester towns. He said health insurance rose about 9.4% against a 5% assumption, and he explained the roughly half-million-dollar pool spending in 2024 to avoid a Health Department closure, which he said was to be recovered from the $5 million bond. He put the citizen task force's town hall estimate at $70\u201380 million, more than the town could absorb. The hearing was adjourned to December 9, 2026 by voice vote. Abbas offered to meet residents with questions, and the supervisor thanked the department heads who attended.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects",
+            "Land use, zoning & special permits",
+            "Open government & procedure",
+            "Personnel & appointments",
+            "Public safety & police",
+            "Roads, highway & sidewalks",
+            "Water & sewer districts"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.34,
+          "publicComment": "Ed Lubb (as rendered; North White Plains) said the 5.71% increase is almost three times the 2% cap and would be almost 12% without fund balance. He urged a cap-level budget, no fund balance for operations, a hiring freeze and caution on town hall bonds. Neil Bauman (Armonk; municipal bond professional) warned against using non-recurring fund balance for recurring costs, called the 15% ceiling a fallacy and asked for a published seven-part fund-balance schedule. Robert Parletta (as rendered; Armonk) asked what drove the 5.7% and accepted that it was 'a lot of little items'. Bonnie Fine (as rendered; North White Plains) asked about the fund balance history and the 'stadium project', and urged belt-tightening. Betty San Chorico (as rendered; North White Plains) objected to a pattern of exceeding the cap, suggested higher employee benefit contributions, disputed an email's $200 example and warned that town hall costs are not yet included. Former Supervisor Mike Schiliro (rendered 'Mike Shaliro') asked about 2026 fund-balance use and urged involving the Budget and Finance Committee. Mike Schiliro ('Mike Shaliro', as rendered; 26-year resident and former supervisor) urged that the Budget and Finance Committee take part in this or future budgets, as it had when he served. He praised Larry Ruisi ('Larry Ramese', as rendered) for his objectivity and his budget-to-actual emphasis, and said he was not volunteering himself. Neil Bauman returned to ask whether the general, highway and library fund balances are restricted. He read unrestricted fund balance figures for 2020\u20132025 and confirmed the turf-field figure of 4.5 million. Peter Jack (as rendered; on Zoom, apparently from North White Plains, 'what planes' as rendered) said a 6% increase hurts families and retirees on a strict budget and that the town should tighten its belt. A Zoom chat question (from a name rendered 'Chris Katarina, Alexandria') was not taken; the supervisor said Zoom callers must raise their hand and speak live.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "defends the 5.71% increase as part of a deliberate glide path off fund balance and budgeting to actual; calls the 2% cap arbitrary; kept public comment from becoming a back-and-forth; defends the budget as lean and the town as financially healthy; open to cuts if the board collectively agrees; favours bringing finance volunteers in for the town hall borrowing",
+              "score": 0.43,
+              "themes": [
+                "budget, taxes & finance",
+                "grants & capital projects",
+                "open government & procedure"
+              ],
+              "evidence": "Presiding: 'So again it's public comment time.' and, when addressed 'Mr. Supervisor.', 'You can call me Joe, but that's your.' Answering Parletta after 'I could have our finance officer answer it.': 'we plugged in a 5% increase for health benefits.', 'is to budget more accurately to actual and try to wean ourselves off of the dependency of the use of the excessive use of fund balance.', 'And we're working into a glide path of weaning ourselves off of using fund balance.' and 'over and above what the arbitrary tax cap of 2% on the overall levy is mandated by, well, recommended by the state.' Schiliro later refers back to 'what the supervisor said earlier was budget to actual'. Later: Presiding. Said 'I took office in January of 24' and that it was 'a collective decision on the entire board at that time' not to continue the Budget and Finance Committee; 'We were budgeting for 34 police officers and only had on the payroll 26.' Told the public 'we are not bound to approve this budget' and that 'Preliminary does not mean final.' Cited levy growth 'Fourth lowest of 15 Westchester towns', called the budget 'for the most part lean', and said 'No one is out there spending money foolishly.' On the town hall borrowing: 'I think we should look to re-institute some of the folks' and named 'Larry Ruisi's'. Moved the adjournment ('So we're going to adjourn the public hearing until December 9th.').",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "wants the board to scrutinise new and replacement positions and to send the budget binder to the Budget and Finance Committee before December; credits the department heads with lean requests and Abbas with the NY CLASS investment gains",
+              "score": -0.1,
+              "themes": [
+                "budget, taxes & finance",
+                "personnel & appointments",
+                "public safety & police",
+                "open government & procedure"
+              ],
+              "evidence": "Given the floor ('Is there any board members? Barbara.') and addressing the supervisor ('I also, Joe, you said that when you first came on the board, how many police officers'): 'right now we have 33 police officers', 'One way that we can tighten our belts is to really look very carefully at new hires', 'We need needs, not wants', 'I didn't see a lot of wants I saw needs', and 'I'd love this binder to go to budget and finance.' The earlier line 'I did not this year ask for budget and finance because I have not gotten any support in the past' (01:31:07) is in her voice by content but has no name cue.",
+              "confidence": "high"
+            },
+            {
+              "member": "Jose Berra",
+              "stance": "says past fund-balance appropriations were not actually used, warns that bonding the pool and parking district adds about 1.5% to the tax, and calls the increases unsustainable; wants more spending discipline",
+              "score": -0.5,
+              "themes": [
+                "budget, taxes & finance",
+                "roads, highway & sidewalks",
+                "grants & capital projects"
+              ],
+              "evidence": "Called on by the supervisor ('Jose, do you have anything you want to go ahead?'), then 'I was thanking Abbas profusely for all the work he did first.' 'we didn't actually use that fund balance to keep the taxes low'; 'that's going to be debt service over roughly $350,000 for 15 years, which amounts to roughly 1.5% additional property tax for the town'; 'They're also our shareholders'; 'These increases are unsustainable'; handed off with 'Sunny is chomping at the bit here.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Sonny Vataj",
+              "stance": "opposes the 5.7% increase; says about $900,000 (4%) can be cut by freezing new hires, cutting overtime and vehicles without hurting employees; dismissive of reviving committees",
+              "score": -0.6,
+              "themes": [
+                "budget, taxes & finance",
+                "personnel & appointments",
+                "roads, highway & sidewalks",
+                "public safety & police"
+              ],
+              "evidence": "Handed the floor by Berra ('Sunny is chomping at the bit here') and refers to himself ('our snow is no longer going to get cleared because Sunny cut the budget'): 'I'm not okay with maybe raising that 5.7% number. I could probably do it in 2% just by simply freezing the new higher ease, cutting down the overtime'; 'I think I could cut 900,000 out of this budget, which is 4% of this budget without hurting anyone'; 'we had committees, we don't have committees, we don't need the committees'. Earlier, a member who said 'I'm only here 10 months, 11 months' (Vataj's 2026 tenure) said 'I've never been approached by any of the board members here, nor was I ever told that there was a budget committee'; that remark is credited to him by tenure only.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "2027-tax-levy-limit-override-public-hearing-nov-18-2026",
+          "name": "Local Law to Override the Tax Levy Limit (GML 3-c) for 2027 \u2014 Public Hearing Opened and Adjourned 4\u20131 on a Roll Call",
+          "address": "",
+          "applicationType": "public hearing \u2014 local law (tax levy limit override)",
+          "applicant": "Town of North Castle",
+          "status": "public hearing opened by voice vote; after one public question and a board debate, adjourned on a 4\u20131 roll call (DiGiacinto, Berra, Vataj, Hussain aye; Rende no). No return date was stated in the motion; the supervisor had described the option as adjourning 'to a future date' and voting with the budget.",
+          "summary": "The supervisor opened public hearing B on a local law to override the tax levy limit in General Municipal Law 3-c. When asked whether the clerk should read the postings, the clerk listed the public notice, affidavits, the publication in the Journal News and the local law. Betty Centuri (North White Plains, as rendered) asked whether a local law to exceed the cap would be permanent. The supervisor deferred to the town attorney, who said 'It's a local law that says the board is authorized to exceed the cap this year' and that it applies to one year only, 'just like last year's was for last year's'. The supervisor said passing it does not oblige the town to exceed the cap ('It's just a right'). He said many municipalities pass it while still trying to come in under the cap, and that doing it with a full board guards against a later vote failing for lack of the 60% (three of five members) needed. He said that otherwise the only alternatives would be cutting services or going deeper into fund balance. He stressed the cap is 2% of the levy, not a 2% budget increase. Councilman Berra, called on first, argued that if three members would not back the override they would not back the budget either, and preferred to hold off and keep pressure on the board to cut. Councilman Vataj said he was not in favour 'at this point' and that the board must decide whether to make the cuts he had raised. The supervisor said about $1.8 million would have to be cut to stay within the cap; Vataj countered with figures including $930,000, $480,000 ('your 2% automatically on your levy'), a 'million three' and a million off the highway budget. An exchange on fund balance (about $13.7 million cited) versus cash on hand followed. The supervisor said the question was only whether to vote now or adjourn, offered another budget work session and meeting with department heads before December, and said he would go along with the majority. One member said there was no downside to waiting. Members then debated whether the budget, needing a simple majority, and the override, needing 60%, could diverge if a member were absent; the members concluded both still need three votes. The hearing was adjourned on a roll call. Afterwards the supervisor asked Vataj ('Sunny') for specifics on his ideas: cutting overtime, expected DPW changes in the next six months, $900,000 in cuts and lower benefit (health insurance) costs. Vataj said he had found eight areas, including not adding five new employees and using part-timers, and warned that without cuts the board would return 'with a double digit' increase. The supervisor objected to telling the public to expect double-digit increases. He said a town hall or highway garage borrowed 'over a 35 to 40 year period' would not cause one, and that it could be done for well under $40 million. Vataj said expenses would rise regardless and the cap could be broken several times over, and they agreed to 'wait and see'.",
+          "themes": [
+            "Budget, taxes & finance",
+            "Grants & capital projects",
+            "Local laws & legislation",
+            "Personnel & appointments"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.1,
+          "publicComment": "Betty Centuri (North White Plains, as rendered) asked whether a local law to exceed the tax cap would be permanent or a one-time resolution; the answer was that it applies to this budget year only.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "favoured adopting the override law that night as a precaution while still cutting the budget; voted no on adjourning; rejected warnings of double-digit increases",
+              "score": 0.4,
+              "themes": [
+                "budget, taxes & finance",
+                "grants & capital projects"
+              ],
+              "evidence": "Presiding ('Jose, you want to go first?'): 'I think it's prudent to do it now while there's a full compliment', 'we would not have the necessary 60% in order to pass it and that would put the town at greater jeopardy', 'I'm certainly willing to vote on it with the understanding that we're still going to try to reduce the budget'. Roll call 'Supervisor Reddy.' \u2014 'No.' Later: 'I don't understand why board members want to scare the public' and 'You shouldn't paint a picture that's not accurate.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Jose Berra",
+              "stance": "preferred to hold off on the override to keep pressure on the board to cut the budget; voted aye to adjourn",
+              "score": -0.3,
+              "themes": [
+                "budget, taxes & finance"
+              ],
+              "evidence": "Called on by name ('Jose, you want to go first?' then 'Sure, I got a question'): 'So I'm not sure that's reason to pass it today.' and 'I'd rather hold off or rather keep the pressure on the board and everybody else to go ahead and work on the budget to make it more manageable.' Roll call 'Councilman Vera.' \u2014 'Aye.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Sonny Vataj",
+              "stance": "opposed passing the override yet; wants deeper cuts (overtime, hiring freeze, benefits) and warned of future double-digit increases; voted aye to adjourn",
+              "score": -0.5,
+              "themes": [
+                "budget, taxes & finance",
+                "personnel & appointments"
+              ],
+              "evidence": "The supervisor's follow-up names him and recaps his points: 'Sunny, I really would appreciate,' / 'I noted down what your suggestions were for cutting severely,'. Earlier: 'I'm not in favor at this point of voting in favor of this law because I think we have to work more.' and 'I'm not going to listen to the new kid in the block'. His reply: 'there's eight areas that I've looked into,' 'there's no reason for me to add an extra five employees to this town' and 'we're gonna have to hit him with a double digit.' Roll call 'Councilman Vittage.' \u2014 'Aye.' The earlier remarks are credited because the supervisor's recap matches them; the reply to 'Sunny' is direct.",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "voted to adjourn the hearing; no recorded remarks on it",
+              "score": 0.0,
+              "themes": [
+                "budget, taxes & finance"
+              ],
+              "evidence": "Roll call only: 'Councilman Di Giacinto.' \u2014 'Aye.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "voted to adjourn the hearing; the member who saw 'I don't see any downside to waiting' is not credited for lack of a cue",
+              "score": 0.0,
+              "themes": [
+                "budget, taxes & finance"
+              ],
+              "evidence": "Roll call only: 'Councilman Hussain.' \u2014 'Aye.'",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "food-scrap-program-expansion-letter-bin-sale-2026",
+          "name": "Letter from Bonnie Fayette (as rendered) on Expanding the Food-Scrap Programme; Disclosure of Surplus Bin Sale to the Town of Harrison",
+          "address": "Food-scrap drop-off (currently Lombardi Park); proposed North White Plains community center site",
+          "applicationType": "correspondence receipt (miscellaneous item B)",
+          "applicant": "Bonnie Fayette (as rendered; letter dated November 12, 2026); sustainability committee representative addressed as 'Neil'",
+          "status": "motion to receive made and seconded (the supervisor later said Barbara seconded); put to a vote ('armory favor', apparently 'all in favor') with no response captured. A state food-scrap grant application (25% match, three-year) is to go on the next meeting's agenda. No action on further bin sales; the supervisor asked that such decisions be reported to the board through the town administrator.",
+          "summary": "Item B was receipt of a letter from Bonnie Fayette (as rendered) asking to expand the town food-scrap programme to additional locations. A member credited at medium confidence as Councilwoman DiGiacinto called it 'a great idea' but said Parks and Recreation and the library should be consulted on the suggested North White Plains community center site. She noted that the sustainability committee could apply for a grant with a 25% match that might fund the expansion, and that the programme had not been embraced as widely as hoped. About 800 bins were bought (because of a minimum order), with perhaps 120 to 200 or more in use. A committee representative said participation is well below Scarsdale's roughly 30%, residents at the north and south ends find the drop-off too far, and a three-year state grant would fund expansion and education. The supervisor said the grant application would be on the next agenda and go to the town's grant writers. A voice concerned about open sites (Lombardi) was told the bins are self-sealing and washed by a contractor, and that Parks staff time could serve as the match. Another member asked why North White Plains could not have a site regardless of the grant. The representative said committee cost savings might allow it without raising the budget. It then emerged that about 20 kits had been sold to the Town of Harrison for about $25 each ($400 was mentioned) to free storage space at the police department records room, with the check given to the town clerk's office. The supervisor objected that the board had not been told: 'Rather than a unilateral decision to sell something that's a town property'. He said that 'It should have gone to Kevin Hay and Kevin Hay should have made us aware', and that individual members sometimes obtain information from department heads that is not shared with the whole board. He said he was not objecting to the sale itself. The representative apologised ('OK, that's my fault. I'm sorry.') and said he would come to the supervisor next time. Another member, worried about rats, said he would rather all surplus bins were sold. The clerk confirmed the check was received. A member summarised that the decision rests with the sustainability committee, which must keep the town administrator informed, and the administrator must inform the board; the supervisor said the board should have been aware because it is town property.",
+          "themes": [
+            "Environment & conservation",
+            "Ethics & governance",
+            "Grants & capital projects",
+            "Parks, recreation & trails"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.1,
+          "publicComment": "Letter from Bonnie Fayette (as rendered), dated November 12, 2026, requesting more food-scrap drop-off locations. A sustainability committee representative addressed as 'Neil' (surname not given here) spoke at length from the floor.",
+          "memberPositions": [
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "supports expansion but wants process, with Parks and Recreation and the library consulted, and the grant pursued",
+              "score": 0.5,
+              "themes": [
+                "environment & conservation",
+                "grants & capital projects"
+              ],
+              "evidence": "'I think it's a great idea.' and 'I think we need to talk to Parks and Recs.' A later speaker refers back: 'Because like what Barbara's saying, I think is the concern would be,' and the supervisor: 'I believe that it was Barbara who seconded it.'",
+              "confidence": "medium"
+            },
+            {
+              "member": "Joseph Rende",
+              "stance": "supports the grant; objected that the board was not told of the bin sale and that information is not shared equally",
+              "score": -0.2,
+              "themes": [
+                "ethics & governance",
+                "grants & capital projects"
+              ],
+              "evidence": "Addressed as 'Joe' ('Joe, let me address.', 'Joe, I'll come to you next time in town.'): 'Rather than a unilateral decision' / 'to sell something that's a town property,' 'I'm not objecting to selling them.' 'It should have gone to Kevin Hay and Kevin Hay should have made us aware' and 'at times individuals go to different department heads extract information discuss things with someone'.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "rooster-prohibition-local-law-355-21-2026",
+          "name": "Proposed Local Law Amending \u00a7 355-21 (Permitted Accessory Uses) to Prohibit Roosters \u2014 Received, Lead Agency Intent, Circulation and December 9, 2026 Hearing Set on Split Roll Calls",
+          "address": "Town-wide (complaint cited in North White Plains)",
+          "applicationType": "local law \u2014 zoning code amendment; SEQRA (short EAF, lead agency, circulation); public hearing scheduling",
+          "applicant": "Town of North Castle (on the police chief's recommendation)",
+          "status": "Roll calls: (1) receive the proposed local law and short EAF parts 1 and 2 \u2014 DiGiacinto aye, Vataj no, Rende yes; Berra's and Hussain's responses not captured. (2) declare intent to act as lead agency \u2014 3\u20132 (DiGiacinto, Hussain, Rende aye/yes; Berra, Vataj no). (3) circulate to involved and interested agencies \u2014 3\u20132 (same split). (4) schedule the public hearing for December 9, 2026 \u2014 3\u20132 (DiGiacinto's aye run into 'I supervise your Andy'; Hussain and Rende for; Vataj and Berra no).",
+          "summary": "Item C proposed amending \u00a7 355-21 (permitted accessory uses) of the Town Code to prohibit roosters. The existing code allows 12 head of poultry. The clerk read the items: receive the local law and short EAF, declare intent to be lead agency, circulate, and schedule a hearing. Barbara moved receipt and Jose seconded. Councilman Vataj asked why the town needed a law, saying he did not know there was a rooster problem and that a 50-acre farm should be able to have one. He complained of 'laws on top of laws' and, on asking 'Rob', heard there had been three complaints in six years. He said the item should be tabled and the owner simply asked to remove the bird. The supervisor said complaints go to the building department, which treats them as noise and refers them to the police, who find the rooster silent, so they go unanswered. He said the police chief, with Adam (Planning), surveyed other codes and found most Westchester municipalities (Scarsdale, Rye Brook) allow hens but prohibit roosters, and called it a quality-of-life issue in densely populated North White Plains. He told Vataj to vote no if he wished but not to 'condemn the process'. The supervisor reported the chief had spoken with both parties and the owner intends to rehome the rooster. A member who asked about this (Berra, at medium confidence: the supervisor answered 'Please, Jose, don't tell me how to speak') wanted to state a view and was told to give it at the roll call. Berra voted no on lead agency, saying he would table it to see whether a problem remains. A voice said two residents had written, one letter calling North Castle one of few Westchester municipalities without the rule; Berra said he knew of only one letter. On circulation Berra said he was sympathetic but wanted more information, and he voted no on the hearing 'For the same reasons'.",
+          "themes": [
+            "Land use, zoning & special permits",
+            "Local laws & legislation",
+            "Public safety & police",
+            "Resident concerns & quality of life"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": -0.05,
+          "publicComment": "None at this stage. Two residents' letters were referred to (one complaint described as ongoing for several months); a taxpayer in the audience was not heard on this item.",
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "supports a hens-only rule as recommended by the police chief; defended bringing the law forward",
+              "score": 0.6,
+              "themes": [
+                "local laws & legislation",
+                "resident concerns & quality of life"
+              ],
+              "evidence": "Presiding: 'The building department then says well that's a noise issue issue and refers it to the police department.' 'The police department go there, the rooster's not crowing, so it goes unanswered.' 'most municipalities in Westchester prohibit roosters', 'This is a very densely populated hamlet.', 'don't condemn the process of presenting a law change'. Voted yes on all four roll calls ('supervisor ending. Yes.', 'Council President.' \u2014 'Yes.').",
+              "confidence": "high"
+            },
+            {
+              "member": "Sonny Vataj",
+              "stance": "opposed: three complaints in six years do not justify a town-wide law; deal with the owner instead",
+              "score": -0.7,
+              "themes": [
+                "local laws & legislation",
+                "land use, zoning & special permits"
+              ],
+              "evidence": "Named: 'Is a motion made by Barbara, second by Jose, and a question by Sonny.' and 'Sonny, the receipt is ministerial.' He said: 'I didn't know we had a rooster issue', 'I noticed that we have laws on top of laws on top of laws', 'I really should table this in my opinion.' and 'There's three people in six years that made a complaint. I would rather go to those three people say you have to remove it'. Voted no on all four roll calls ('Councilman Vintaj. No.', 'Councilman Bhattaj.' \u2014 'No.', 'Councilman Taj?' \u2014 'No.', 'Councillor Vivetaz.' \u2014 'No.').",
+              "confidence": "high"
+            },
+            {
+              "member": "Jose Berra",
+              "stance": "sympathetic but wants more information and would table; voted no on lead agency, circulation and the hearing",
+              "score": -0.3,
+              "themes": [
+                "local laws & legislation"
+              ],
+              "evidence": "Roll calls: 'Councilman Vera.' \u2014 'No, because I would table this'; 'Councilman Barra?' \u2014 'I'm sympathetic to the situation, but I want more information.'; 'Councillor Verra.' \u2014 'For the same reasons, I will vote no,'. Seconded receipt ('second by Jose'). Also 'I'm only aware of one letter.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "moved receipt; voted for each step",
+              "score": 0.4,
+              "themes": [
+                "local laws & legislation"
+              ],
+              "evidence": "'Is a motion made by Barbara,'; roll calls 'Councilman Dejecinto, hi' (receipt), the first-called 'I,' (lead agency), 'Councilman, did you just say no?' \u2014 'I.' (circulation) and 'Councilman, did you send to?' \u2014 'I supervise your Andy.' (hearing). The later three are credited by call order, as the ASR garbles her name.",
+              "confidence": "medium"
+            },
+            {
+              "member": "Saleem Hussain",
+              "stance": "voted for lead agency, circulation and the hearing; no recorded remarks",
+              "score": 0.3,
+              "themes": [
+                "local laws & legislation"
+              ],
+              "evidence": "Roll calls: 'Councilman Hussain.' \u2014 'I.' (lead agency); 'Councilman Hussain?' \u2014 'I.' (circulation); 'Councillor Hussain.' \u2014 'I.' (hearing). His response on receipt is not captured.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "water-district-4-well-project-payment-11-2026",
+          "name": "Water District No. 4 Well Project \u2014 Payment Application No. 11 (Papitto Construction, rendered 'Pepito')",
+          "address": "Water District No. 4 well site",
+          "applicationType": "contract payment approval",
+          "applicant": "Pepito Construction Company, Incorporated (as rendered; earlier records render the contractor Papatito/Papito)",
+          "status": "approved by voice vote",
+          "summary": "Item D: approval of payment application number 11 from 'Pepito Construction Company, Incorporated' (as rendered) for site work on the Water District number 4 well project. The amount was not read. Moved, seconded and approved by voice vote without discussion.",
+          "themes": [
+            "Grants & capital projects",
+            "Water & sewer districts"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.1,
+          "memberPositions": []
+        },
+        {
+          "id": "liquor-license-notices-aramark-kaku-armonk-nov-2026",
+          "name": "Notices of New Liquor Licences \u2014 Aramark Services (188 King Street) and Kaku Armonk (454 Main Street), as rendered",
+          "address": "188 King Street, Armonk; 454 Main Street, Armonk",
+          "applicationType": "receipt of liquor licence notices",
+          "applicant": "'Armark Services Incorporated' (as rendered; catering facility, private events only, at the guest house conference center one and two); 'Kaku Arma Inc.' (as rendered)",
+          "status": "both received by voice vote",
+          "summary": "Item E: receipt of three notices of a new liquor licence for 'Armark Services Incorporated' (as rendered) for a catering facility, private events only, at 188 King Street, Armonk ('the guest house conference center one and two'). Item G: receipt of notice of a new liquor licence for 'Kaku Arma Inc.' (as rendered), 454 Main Street, Armonk. Both were received by voice vote without discussion.",
+          "themes": [
+            "Other"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.0,
+          "memberPositions": []
+        },
+        {
+          "id": "holiday-displays-wampus-brook-miller-park-2026",
+          "name": "Holiday Displays at Wampus Brook Park and Miller Park, North White Plains \u2014 Approved",
+          "address": "Wampus Brook Park, Armonk; Miller Park, North White Plains",
+          "applicationType": "approval of request (holiday displays)",
+          "applicant": "not stated",
+          "status": "approved by voice vote",
+          "summary": "Item F: approval of a request for holiday displays (the description is garbled: 'in the work and activity crunched') at Wampus Brook Park ('wampas group part') and, corrected by the supervisor, Miller Park in North White Plains. Approved by voice vote without discussion.",
+          "themes": [
+            "Other",
+            "Parks, recreation & trails"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.4,
+          "memberPositions": []
+        },
+        {
+          "id": "personnel-nov-18-2026",
+          "name": "Personnel: Two Highway Department Appointments, Board of Ethics Appointment, Parks and Recreation Advisory Board Appointments",
+          "address": "",
+          "applicationType": "personnel / board appointments",
+          "applicant": "Town of North Castle",
+          "status": "all approved by voice votes",
+          "summary": "(A) Probationary promotional appointment of Michael Farucci (as rendered) to motor equipment operator, Highway Department, effective November 23. (B) Probationary appointment of John D. Benedict (as rendered) as road maintainer, Highway Department, effective November 23, 2026. (C) Appointment of David Simons (as rendered) to the Board of Ethics for a five-year term ending November 18, 2031. (D) Reappointment of Jeff Scott to the Parks and Recreation Advisory Board for a three-year term ending December 31, 2029. (E) Appointment of Catherine Rhodes to the Parks and Recreation Advisory Board for a three-year term ending December 31, 2029. The supervisor said 'we're fortunate to have all these.'",
+          "themes": [
+            "Ethics & governance",
+            "Parks, recreation & trails",
+            "Personnel & appointments",
+            "Roads, highway & sidewalks"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.5,
+          "memberPositions": []
+        },
+        {
+          "id": "consensus-agenda-minutes-exec-session-nov-18-2026",
+          "name": "Receipt of the November 4 Minutes, Item Tabled at the Attorney's Request, Consensus Agenda, and Adjournment in Memory of Antimino Giglio and Rosalynn Austerley (as rendered)",
+          "address": "",
+          "applicationType": "procedural",
+          "applicant": "",
+          "status": "November 4, 2026 minutes received by voice vote; miscellaneous item A tabled at the attorney's request; consensus agenda approved by voice vote; meeting closed by voice vote",
+          "summary": "The board received the Town Board minutes of November 4, 2026 by voice vote. Miscellaneous item A was tabled 'until future' at the attorney's request; its subject was not read. The consensus agenda was approved by voice vote. No administrator update was given when the supervisor turned to 'Iliana' (as rendered, the deputy/assistant administrator). Councilwoman DiGiacinto closed the meeting in memory of two long-time Armonk residents: Antimino Giglio (as rendered), 'known for strong work, work ethic, generous heart, and devotion to his family', and Rosalynn Austerley (as rendered), who exhibited her watercolours at the Armonk Art Show for 50 years. The meeting was adjourned by voice vote.",
+          "themes": [
+            "Open government & procedure",
+            "Other"
+          ],
+          "overallSentiment": "neutral",
+          "sentimentScore": 0.2,
+          "memberPositions": [
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "gave the closing in memory of two residents",
+              "score": 0.6,
+              "themes": [
+                "ceremonial & community"
+              ],
+              "evidence": "'So with that, I would turn it over to Barbara.' 'Always so graciously handles the closing and memory of.' followed by the closing remarks.",
+              "confidence": "high"
+            }
+          ]
+        },
+        {
+          "id": "liaison-updates-nov-18-2026",
+          "name": "Liaison Updates: Library\u2013Town MOU; Parks and Recreation Advisory Board Seeks Next Steps on Pickleball",
+          "address": "",
+          "applicationType": "liaison reports",
+          "applicant": "",
+          "status": "reported; library MOU to go on a future agenda; pickleball referred to a future work session (see dedicated-pickleball-courts-2026)",
+          "summary": "A member acting as liaison to the library board and to the Parks and Recreation Advisory Board said the library board wants to progress a memorandum of understanding with the town board. The deputy/assistant administrator (rendered 'Eliana') said there had been a meeting and it would soon be on the agenda. The same liaison then raised the Parks and Recreation Advisory Board's pickleball letter of September 2 (see the pickleball case).",
+          "themes": [
+            "Legal, litigation & contracts",
+            "Parks, recreation & trails",
+            "Personnel & appointments"
+          ],
+          "overallSentiment": "positive",
+          "sentimentScore": 0.3,
+          "memberPositions": []
+        },
+        {
+          "id": "dedicated-pickleball-courts-2026",
+          "name": "Pickleball Courts \u2014 Parks and Recreation Advisory Board Options (Winkler Park Conversion, IBM Park Platform Courts) Referred to a Work Session",
+          "address": "Winkler Park; IBM Park (platform tennis courts); Lombardi Park (684 side, suggested)",
+          "applicationType": "liaison update / work session request",
+          "applicant": "Parks and Recreation Advisory Board (with Rec and Parks Superintendent Matt Traynor)",
+          "status": "no action; the liaison is to work with 'Josephine' (as rendered) to schedule a work session, with nearby residents invited",
+          "summary": "The liaison said the Parks and Recreation Advisory Board, with Matt Traynor ('Matt trainer/Treanor'), had sent the town board a September 2 letter with pickleball location options and asked for a work session or the board's guidance. The supervisor said the town has cost estimates to resurface the tennis courts and convert one Winkler Park tennis court to pickleball. Those came from 'Duroza' (as rendered), who did the turf field and Clove Road Park ('Clog Road Park') work, but it was determined legally that the work must be bid instead of using the cooperative contract. Councilwoman DiGiacinto (medium confidence) agreed the neighbours must be brought in 'this time' because the Winkler homes are much closer than at the previous location. The supervisor said the board's other recommendation, replacing the two IBM Park platform tennis courts, faces a possible deed restriction from IBM's transfer (which the town attorney thinks possible but has not checked) and underground well infrastructure that would prevent excavation and drainage. Another member said pickleball is already played on the raised platforms. A member (unattributed) asked what lies underground and whether courts could shift toward the parking lot. That member also said Winkler is too close to residents if a 250-foot buffer is wanted, and suggested the 684 side of Lombardi Park, 500 feet from homes. The supervisor said Winkler did not need a work session but neighbours identified through the assessor's office should be informed. The liaison proposed a work session with the advisory board and neighbours. The supervisor said his office sets the agenda, not Kevin, and noted other groups' pending work-session requests.",
+          "themes": [
+            "Legal, litigation & contracts",
+            "Parks, recreation & trails",
+            "Resident concerns & quality of life",
+            "Water & sewer districts"
+          ],
+          "overallSentiment": "mixed",
+          "sentimentScore": 0.1,
+          "memberPositions": [
+            {
+              "member": "Joseph Rende",
+              "stance": "Winkler conversion possible but must be bid and neighbours informed; IBM Park platform-court site doubtful (deed restriction, well infrastructure)",
+              "score": 0.1,
+              "themes": [
+                "parks, recreation & trails",
+                "water & sewer districts"
+              ],
+              "evidence": "Addressed by the liaison: 'sorry to interrupt you Joe,'. He said 'it was determined legally that we would have to put that out to bid', 'eliminate the two platform tennis courts at IBM Park.', 'there may be a deed restriction', 'the well system that's there.' and 'I think Barbara raises a good point.' Also 'We would schedule a work session, not Kevin.'",
+              "confidence": "high"
+            },
+            {
+              "member": "Barbara DiGiacinto",
+              "stance": "neighbours near Winkler Park must be involved this time",
+              "score": 0.0,
+              "themes": [
+                "parks, recreation & trails",
+                "resident concerns & quality of life"
+              ],
+              "evidence": "'I agree 100% this time.' 'Because those homes are a lot closer.' The supervisor then says 'I think Barbara raises a good point.' and restates the inform-the-neighbours point.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      ],
+      "themes": [
+        {
+          "theme": "Budget, taxes & finance",
+          "salience": 1.0,
+          "sentiment": -0.29,
+          "note": "The 2027 preliminary budget hearing took most of the first 90 minutes. The finance director put appropriations at about $46.5\u201346.6 million (+6.29%), the levy at $28.3 million, the town-wide rate at +5.71% (about $206 on a $1.2 million home) and the levy about $1.7 million over the state cap. Residents said it would be almost 12% without fund balance, called it almost three times the cap and a 'financial calamity', and asked for a published fund-balance schedule. They called the 15% reserve ceiling a fallacy and urged belt-tightening and a cap-level budget. The supervisor defended a 'glide path' off fund balance and budgeting to actual. A resident cited the $13 million assigned fund balance as a way to pay for the trail. The whole range is the budget hearing. Topics were fund-balance dependence, whether past appropriations were actually used, the 5.71% increase against the 2% cap, debt service from the pool and parking bonds, health insurance rising 9.4% against a 5% assumption, NY CLASS interest income, a fund balance near 30% of operating costs, the AAA rating and the comparison of levy growth with other Westchester towns. Vataj proposed about $900,000 in cuts. Hussain asked for a breakdown of the increase, a one-time vs recurring split and a long-term capital view. The Budget and Finance Committee's dormancy was disputed. The tax levy override hearing turned into a debate on how much to cut from the 2027 budget: the supervisor cited $1.8 million to stay within the cap, Councilman Vataj argued for $930,000-plus in cuts, and members sparred over fund balance (about $13.7 million cited) versus cash. The hearing was adjourned 4\u20131 with the supervisor the lone no. They also argued over whether future town hall and highway garage borrowing means double-digit increases."
+        },
+        {
+          "theme": "Local laws & legislation",
+          "salience": 0.65,
+          "sentiment": -0.1,
+          "note": "Two local laws: the one-year override of the GML 3-c levy limit (needs 60%, three of five votes) and an amendment to \u00a7 355-21 to prohibit roosters, advanced 3\u20132 on each step to a December 9, 2026 hearing over Vataj's and Berra's objections ('laws on top of laws'; three complaints in six years)."
+        },
+        {
+          "theme": "Personnel & appointments",
+          "salience": 0.5,
+          "sentiment": -0.06,
+          "note": "Personnel and benefits are about 65% of costs. Residents proposed a temporary hiring freeze and higher employee benefit contributions, and health benefits rose 9% against 5% budgeted. DiGiacinto went through new and vacant positions (assistant court clerk, full-time HR, finance title swap, assessor assistant, detective promotions, senior rec leaders, library). Vataj called for a hiring freeze, less overtime and fewer workers after departments merge. Retiree benefits were described as nearly matching active employees. Two highway department appointments and three board appointments; Vataj urged not adding five new employees."
+        },
+        {
+          "theme": "Grants & capital projects",
+          "salience": 0.4,
+          "sentiment": -0.23,
+          "note": "Completed 2025\u201326 projects (turf fields, Clover Road ballfield, Quarry Park, School Street water line, roofs, dog park) and 2027 pool and wastewater projects. Residents warned that town hall borrowing is not yet in the figures; the unspent 2000 trail grant and the lost 2025 Greenway grant. The town hall and annex project: a $70\u201380 million task-force estimate the supervisor said the town could not absorb, with borrowing over 35\u201340 years. The highway facility. The $5 million pool bond and the 2024 Health Department pressure. The library and Parks and Rec boards' investment lists."
+        },
+        {
+          "theme": "Other",
+          "salience": 0.35,
+          "sentiment": 0.8,
+          "note": "A moment of silence for a young life lost in an accident; a student's history moment on the Revolutionary War markers refurbished for the 250th; Miller Hill rededication; the Frosty Parade and the Ecumenical Thanksgiving Service; the fire department children's party; the mobile passport unit."
+        },
+        {
+          "theme": "Parks, recreation & trails",
+          "salience": 0.35,
+          "sentiment": 0.17,
+          "note": "A resident urged the long-deferred Wampus Brook path from downtown Armonk to the renovated pool, built in phases and in-house if possible; the supervisor proposed signage and benches at the Wright's Mill site. Pickleball options (Winkler Park conversion needing a bid, IBM Park platform courts constrained by deed and well infrastructure, the 684 side of Lombardi suggested) referred to a work session with neighbours. Two Parks and Recreation Advisory Board appointments and holiday displays at Wampus Brook and Miller parks."
+        },
+        {
+          "theme": "Ethics & governance",
+          "salience": 0.35,
+          "sentiment": -0.4,
+          "note": "The supervisor objected that the sale of about 20 surplus food-scrap kits to Harrison was not reported to the board and that information obtained from department heads by individual members is not shared equally. Members disagreed on whether the sustainability committee could decide on its own. A Board of Ethics appointment was made."
+        },
+        {
+          "theme": "Environment & conservation",
+          "salience": 0.3,
+          "sentiment": -0.02,
+          "note": "The Fairways Initiative's call for golf-course chemical application logs near schools, a town drinking-water test and local removal of the golf-course spray-notification exemption. Request to expand food-scrap drop-off sites, with low participation compared with Scarsdale and a three-year state grant (25% match) to be put on the next agenda."
+        },
+        {
+          "theme": "Open government & procedure",
+          "salience": 0.3,
+          "sentiment": -0.14,
+          "note": "The supervisor stopped back-and-forth questioning during public comment, and a resident objected to being interrupted. A request to publish a fund-balance schedule. The unused Budget and Finance Committee: one member said their request for it lacked the board's support. Whether to revive the Budget and Finance Committee. Zoom chat questions were refused. The supervisor explained that the preliminary budget is not final, must pass by December 31 and that the override law must come first. The hearing was adjourned rather than closed, with no new notice needed. Hussain asked for written, public breakdowns. Five named roll calls; the board disputed whether a roll call was needed for ministerial receipt; minutes and consensus agenda approved."
+        },
+        {
+          "theme": "Public safety & police",
+          "salience": 0.3,
+          "sentiment": -0.12,
+          "note": "Councilman Berra's earlier estimate of a quarter-million dollars a year per new officer was cited by a resident; a member cited rising police overtime and unreimbursed event costs. Police staffing: 26 sworn officers in January 2024 against 34 budgeted, and 33 now. Police overtime for special events ('25 police officers standing at the dam'). Members praised the department."
+        },
+        {
+          "theme": "Resident concerns & quality of life",
+          "salience": 0.3,
+          "sentiment": -0.2,
+          "note": "Rooster noise in densely populated North White Plains; pickleball near homes at Winkler Park; residents finding the food-scrap site too far away."
+        },
+        {
+          "theme": "Water & sewer districts",
+          "salience": 0.25,
+          "sentiment": 0.4,
+          "note": "The $3.2 million internal loan from the general fund to Water District 4 for the well project, repaid with interest, which Sal Mesiti and the supervisor described as avoiding bond costs."
+        },
+        {
+          "theme": "Roads, highway & sidewalks",
+          "salience": 0.2,
+          "sentiment": -0.2,
+          "note": "The paving overrun (about $1\u20132 million beyond budget, partly carried over and partly bond money; School Street and Maple were deferred). Vataj's proposal to cut trucks and highway overtime except in heavy snow."
+        }
+      ],
+      "staffInput": [
+        {
+          "person": "Abbas Sura",
+          "role": "Director of Finance (Comptroller)",
+          "summary": "Introduced as the Finance Officer ('Mr. Basser', as rendered), he named himself ('my name is Abasura') as director of finance and presented the 2027 budget. Appropriations are about $46.5\u201346.6 million (+6.29%); the levy is $28.3 million, of which $24 million is the town-wide levy; the rate rises 5.71% (about $206 on a $1.2 million median home); and the levy exceeds the state cap by about $1.7 million. Personnel and benefits are about 65% of costs. Sales tax is budgeted at about $3.6 million and building revenue at $2.2\u20132.3 million. The IBM PILOT is in its last year and being renegotiated, and the Engel Burman PILOT has ended. He also listed completed and 2027 projects. Answering residents, he said each roughly $230,000 is about 1% of the levy, so the $1.3 million of general fund balance is worth about 5.65 points. He said the 5.71% reflects using about $2 million less fund balance plus personnel and benefit growth. He said past one-time revenues (sales tax, interest, building fees from IBM and Citibank work) had been returned to taxpayers to hold rates at zero, and that the town will about meet its 2026 budget. He confirmed about $2.2 million of fund balance budgeted for 2026, with a near-level variance. Answers after the presentation are attributed to him from context: he is addressed as 'boss' or 'Abbas' and refers to going over the math with Mr. Lubb (rendered 'Mr. Globe'). Later: Addressed as 'Abbas' (also rendered 'a boss'/'a bus'). Explained the NY CLASS municipal investment co-op he recommended in 2018: banks were paying about 0.5\u20130.7% while NY CLASS paid close to 1.5%, a gap of 80 to 100 basis points that continued. Said a finance title change is 'a swap-off position' that does not add to headcount and that the assessor's full-time assistant request is not in the budget. Answered Berra that his 2022 fund-balance reading was 'partially' correct because surplus revenue was being passed on to the next year. Said the paving overrun was technically about two million because part was unbudgeted, a million of it carried over from the previous year, with money from the paving bond. On Hussain's requests he said the increase is 'personal across the board' (personnel), offered six or seven categories, and agreed to prepare what was asked. After the adjournment he said 'my doors are open' to residents with questions. Confirmed turf-field spending of 4.5 million to Neil Bauman.",
+          "cases": [
+            "2027-tentative-budget-receipt-public-hearing-nov-18-2026"
+          ]
+        },
+        {
+          "person": "Allison Simon",
+          "role": "Town Clerk",
+          "summary": "Introduced the student speaker Mason Blum for the Historical Society's moment in history. She announced the mobile passport unit (December 5, new passports only, with renewals online), the Frosty Parade (December 6), the North White Plains Fire Department children's Christmas party (December 13), the winter overnight parking ban, and E-News and Nixle sign-ups. Later: Listed the hearing B record (public notice, affidavits, Journal News publication, the proposed local law). Read the rooster law items: receive the law and short EAF, lead-agency intent, circulation, and a public hearing. Called all five roll calls. On the Harrison bin sale she checked whether her office had received the check and for how much, and it was confirmed received.",
+          "cases": [
+            "community-announcements-nov-18-2026"
+          ]
+        },
+        {
+          "person": "Sal Mesiti",
+          "role": "Superintendent of Water & Sewer Operations",
+          "summary": "Called on by the supervisor ('Now do you want to make a comment, Sal?'). Said water and sewer positions are fully funded by the districts, not the general fund. He said the town 'did an internal borrowing from the General Fund' for a Water District 4 project instead of bonding, which would have cost about $80,000 to $90,000 in bond counsel and other fees, and that the district is repaying the general fund with principal and interest 'just like it was a bank'. The supervisor added that the loan was $3.2 million and will be reimbursed when later costs are rolled into an overall bond.",
+          "cases": [
+            "2027-tentative-budget-receipt-public-hearing-nov-18-2026"
+          ]
+        },
+        {
+          "person": "Roland Baroni",
+          "role": "Town Attorney",
+          "summary": "Not named in this range ('our town attorney who's here'). Answered Betty Centuri: the override is a local law authorising the board to exceed the cap for this year only, required each budget year it is needed, and done by local law, hence the public hearing. His request led to tabling miscellaneous item A. The supervisor said he thinks a deed restriction on the IBM Park platform courts is possible."
+        },
+        {
+          "person": "Rob Melillo",
+          "role": "Building Inspector",
+          "summary": "Addressed as 'Rob' by Councilman Vataj; the answer that followed was 'Three complaints the last six years' about roosters (the speaker of the answer is not certain)."
+        },
+        {
+          "person": "Deputy/Assistant Town Administrator (rendered 'Ileana/Iliana/Eliana')",
+          "role": "Deputy or Assistant Town Administrator",
+          "summary": "Thanked as present in the town administrator's absence; said there had been a meeting with the library board on the MOU and it would soon be on the agenda; asked by the supervisor for an administrator update at the close (no reply captured)."
+        }
+      ],
+      "attributionCoverage": "good",
+      "attributionNote": "Lines 1\u20131250 (00:00:12\u201301:29:16). This is an unverified machine (ASR) transcript with no speaker labels. It is not the official minutes. The presiding voice is Supervisor Joseph Rende, thanked as 'Supervisor Rendi' by the student and 'Supervisor Randy' by the finance director. He tells a resident who addressed him as 'Mr. Supervisor' that 'You can call me Joe'. He is credited at high confidence for the history-moment remarks (he passes the floor with 'I don't know if any other board members have any comments') and for the budget answers to Robert Parletta. Those follow 'I could have our finance officer answer it', and Mike Schiliro later refers to 'what the supervisor said earlier was budget to actual'. No council member is named or addressed in this range, and no roll call was taken, so no council member is credited. Left unattributed: the two members who thanked the student after the supervisor; the board voice on the Thanksgiving service rotation; the voice that gave examples of equipment cost growth (about 40% since 2019) and police overtime; the voice that answered the 'stadium project' question ('it's not a stadium project'); the voice that described the two roof replacements and the AC unit (it refers to 'a boss' in the third person, so it is not the finance director, and is probably the supervisor, but there is no direct cue); the voice that answered Betty San Chorico about the $200 email figure and the neglected town hall; the member who said 'I've requested it, but I did not get the support of the rest of the board' about the Budget and Finance Committee (just past this range, at 01:31:07, a voice says it did not ask this year for lack of support, and the supervisor's voice, 'I took office in January of 24', calls dropping the committee a collective board decision, so the requester is evidently not Rende); and the member who said 'when you were supervisor Mike, we had one person that was active from that committee'. Councilman Berra is mentioned only in a resident's citation of his earlier police-cost estimate ('Councilman Berra', 'Jose'). He is not credited with any statement here. Staff: Abbas Sura is identified from 'Mr. Basser'/'Abasura' and director of finance; later answers are his from context ('boss', 'Mr. Globe and I went over the map'). Town Clerk Allison Simon is identified from the supervisor's 'our town clerk, Allison'. 'Mike Shaliro' is former Supervisor Michael Schiliro speaking as a private resident ('when I served'; 'when you were supervisor Mike'); he is recorded under public comment, not as a member. ASR renderings resolved: 'Rendi/Randy' to Rende; 'Abasura/Basser/boss/Vos' to Abbas Sura; 'Byron Hills/Byron Hill Science School' to Byram Hills High School; 'Northway Plains/North Way Plains/North by Plains' to North White Plains; 'Armock/Armunk/Armanc/Armonque' to Armonk; 'Mount Mistry/Misery/Mizzori' to Mount Misery; 'Middle Patton' to Middle Patent; 'North Gwyneth's Road' to North Greenwich Road; 'NYXL' to Nixle; 'Whipper World Club' to Whippoorwill Club; 'Brynwood/Brinwood' to the Summit Club; 'Wampusbrook' to Wampus Brook; 'Route 28' to Route 128 (from context); 'Engel Berman' to Engel Burman; 'Citibang' to Citibank. Kept as rendered and not reconstructed: Mason Blum/Blom; Sharon Tomak; 'Thomas Ray's Mill'/'Wright's Mill'; 'Goliagia Miller House'; '74 Dunlap White'; 'Jose Wilton'; 'Steve Dempsey'; 'Edward Deard' (Frosty); Jacqueline Paley-No-Gattigan; 'Tarramack', 'Standwich'; Stephane Martinovich; Ed Lubb (also rendered 'Ed Loherman', 'Ed Lovenman', 'Mr. Loberman', 'Mr. Globe'); Neil Bauman/Baumann/Balmin; Robert Parletta; Bonnie Fine ('small wood place'); Betty San Chorico; Mike Ferreri; 'Hurgenheim Community Center'; 'Verizon Parking Lot'; Larry Ramese (just past this range). Lines 1240\u20132290 (01:28:30\u201302:40:12). This is an unverified machine (ASR) transcript with no speaker labels; it is not the minutes. The presiding voice is Supervisor Joseph Rende. He refers to taking office in January 2024, is addressed as 'Joe', and calls on members and staff. Barbara DiGiacinto: high. The supervisor gave her the floor ('Barbara.') and she addressed him as 'Joe'. Jose Berra: high. He was called on ('Jose, do you have anything') and his continuation hands off to 'Sunny'. Sonny Vataj: high. Berra handed him the floor ('Sunny is chomping at the bit here') and he refers to himself as 'Sunny'. His earlier 'I'm only here 10 months, 11 months' remark is credited by tenure. Saleem Hussain is not credited in this range: the fourth member to speak in the round after 'Let each board member make their comments' (from 02:12:46) has no name cue, and credit by elimination is not given. Left unattributed: the member at 01:28:48 who said the committee had been used only selectively 'when you were supervisor Mike'; the member at 01:31:07 who had not asked for budget and finance this year (her voice by content); the voice that said 'That's not the only reason' (01:33:35); the member who asked whether the override could be voted at the adoption meeting, and the legal voice that answered (probably the Town Attorney, not named here); the speaker of 'I pushed for the bond' and the paving back-and-forth with Berra; the speaker of 'I don't agree' (02:26:49), after the supervisor's committee remarks; and the mover and seconder of the adjournment. ASR renderings resolved: 'Mike Shaliro' and 'supervisor Mike' \u2192 former supervisor Michael Schiliro, now speaking as a resident; 'a boss', 'a bus' and 'Abasura' \u2192 Abbas Sura; 'Sal'/'Sally' \u2192 Sal Mesiti; 'Sunny' \u2192 Sonny Vataj; 'Kevin Hare' \u2192 Kevin Hay; 'Reagan' \u2192 Chief Reagan Huffnagle; 'Peters since retired' \u2192 former Chief Peter Simonson; 'NY class', 'night-class' and 'Nye class' \u2192 NY CLASS. Kept as rendered: 'Larry Ramese' / 'Larry Ruisi's' (one person); 'Peter Jack'; 'Chris Katarina, Alexandria'; 'Remarinic' (a Westchester municipality, probably Mamaroneck); 'only on the Diaz' (deputy or assistant town administrator). Lines 2280\u20133668 (02:39:57\u201303:57:44). This is an unverified machine (ASR) transcript with no speaker labels. It is not the official minutes. The presiding voice is Supervisor Joseph Rende: he runs the agenda, calls on 'Jose', is addressed as 'Joe', and is called 'Supervisor Reddy', 'supervisor ending', 'Council President', 'supervisor Rindy' and 'supervise your Andy' in roll calls. Individual votes come only from the clerk's five named roll calls. On hearing B (adjourn) all five are clear. On rooster receipt, only DiGiacinto, Vataj and Rende responses are audible. On the later three rooster roll calls, DiGiacinto's name is garbled ('Councilman, do you just end up?', 'Councilman, did you just say no?', 'Councilman, did you send to?'), so her ayes are credited by call order (medium). Jose Berra: high (called on as 'Jose'; roll-call explanations as 'Vera/Barra/Verra'; 'second by Jose'). His rooster question is credited at medium only through 'Please, Jose, don't tell me how to speak'. Sonny Vataj: high, from the supervisor's direct follow-up 'Sunny, I really would appreciate', which recaps his budget points, and from 'a question by Sonny' / 'Sonny, the receipt is ministerial' on roosters. Barbara DiGiacinto: high for the closing ('turn it over to Barbara') and medium for the food-scrap comments ('what Barbara's saying') and the Winkler neighbours point ('Barbara raises a good point'). Saleem Hussain: credited only through roll calls. Left unattributed: the member who saw 'I don't see any downside to waiting' on the override and later 'I'm good with waiting' (that voice refers to 'the point that Joe just made', which may mean Jose); the member who summarised that the decision rests with the sustainability committee and asked whose decision it is; the member worried about rats who wanted all surplus bins sold; the liaison to the library and Parks and Recreation boards (the library-liaison role matches Hussain in earlier 2026 recordings, but there is no name cue); and the member who proposed the 684 side of Lombardi and a 250-foot buffer. Movers and seconders are not credited except where named ('motion made by Barbara, second by Jose'). The sustainability committee representative addressed as 'Neil' is not a member. The supervisor's remark 'a decision made by Neil and by Jose' suggests Berra was involved in the bin sale but gives no stance. ASR renderings resolved: 'Reddy/Rindy/Andy/ending' \u2192 Rende; 'Vera/Barra/Verra' \u2192 Berra; 'Vittage/Vintaj/Bhattaj/Taj/Vivetaz/Sunny' \u2192 Vataj; 'Di Giacinto/Dejecinto' \u2192 DiGiacinto; 'attacks. Levy limit' \u2192 tax levy limit; 'Armon/Armunk' \u2192 Armonk; 'Northway Plains/North Side Plains' \u2192 North White Plains; 'Matt trainer/Treanor' \u2192 Matt Traynor. Kept as rendered: Betty Centuri, Bonnie Fayette, Neil, Pepito Construction, Armark Services, Kaku Arma Inc., Michael Farucci, John D. Benedict, David Simons, Jeff Scott, Catherine Rhodes, Duroza, Josephine, Antimino Giglio, Rosalynn Austerley, Ileana/Iliana/Eliana."
     }
   ]
 }
